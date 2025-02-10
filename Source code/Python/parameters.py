@@ -1,4 +1,6 @@
 from pprint import pprint
+import json
+from pathlib import Path
 
 
 # Set these value with trial and error once thank to the mecanical_calibration.py file.
@@ -18,71 +20,9 @@ DXL_COM = None # "COM8" # Set to None if not plugged
 class Parameters:
 
     def __init__(self):
-        self._data = {
-            "females":{
-                "names": ["female1", "female2", "female3"],
-                "share":{
-                    "motion range": 2000,
-                    },
-                },
-            "males":{
-                "names": ["male1", "male2"],
-                "share":{
-                    "motion range": 1500,
-                    },
-                },
-            "mirrors":{
-                "names": ["mirror1", "mirror2", "mirror3"],
-                "share":{
-                    "motion range": 500,
-                    },
-                },
-            "dynamixel network":{
-                "communication port": "COM8",
-                "baudrate": 57600,
-                },
-            "arduino":{
-                "communication port": "COM9",
-                "baudrate": 57600,
-                },
-            "female1": {
-                "origin": FEMALE1_ORIGIN,
-                "dynamixel id": 1,
-                "mirror": {
-                    "origin": MIRROR1_ORIGIN,
-                    "dynamixel id": 2,
-                    }
-                },
-            "female2": {
-                "origin": FEMALE2_ORIGIN,
-                "dynamixel id": 3,
-                "mirror": {
-                    "origin": MIRROR2_ORIGIN,
-                    "dynamixel id": 4,
-                    }
-                },
-            "female3": {
-                "origin": FEMALE3_ORIGIN,
-                "dynamixel id": 5,
-                "mirror": {
-                    "origin": MIRROR3_ORIGIN,
-                    "dynamixel id": 6,
-                    }
-                },
-            "male1": {
-                "origin": MALE1_ORIGIN,
-                "dynamixel id": 7,
-                },
-            "male2": {
-                "origin": MALE2_ORIGIN,
-                "dynamixel id": 8,
-                },
-            "bar": {
-                "origin": BAR_ORIGIN,
-                "dynamixel ids": [9, 10],
-                    "motion range": 10000,
-                },
-            }
+        with Path("local/parameters.json").open() as file:
+            self._data = json.load(file)
+        print(f'{self._data["dynamixel network"]["communication port"]=}')
 
         for mirror_name, female_name in zip(self._data["mirrors"]["names"], self._data["females"]["names"]):
             self._data[mirror_name] = self._data[female_name]["mirror"]

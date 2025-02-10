@@ -2,9 +2,10 @@ from dynamixel_sdk import PortHandler, PacketHandler, COMM_SUCCESS  # Uses Dynam
 from functools import wraps
 
 
-def handle_error(func):    
-    @wrap(func)
-    def wrapper(*args, **kwargs):        
+def handle_error(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        self = args[0]
         for i in range(3):
             value, dxl_comm_result, dxl_error = func(*args, **kwargs)
             if dxl_comm_result != COMM_SUCCESS:
@@ -18,8 +19,10 @@ def handle_error(func):
             raise RuntimeError(f"COM ERR: {self.packet_handler.getTxRxResult(dxl_comm_result)}")
         if dxl_error != 0:
             raise RuntimeError(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
-            
-            
+
+    return wrapper
+
+
 class DynamixelManager:
     def __init__(self, **kwargs):
         port_name = kwargs["communication port"]
@@ -32,8 +35,8 @@ class DynamixelManager:
 
         if not self.port_handler.setBaudRate(baudrate):
             raise IOError(f"Failed to set baud rate to: {baudrate}")
-    
-    @property
+
+    @handle_error
     def _read_1_byte_at(self, dxl_id, register_address):
         value, dxl_comm_result, dxl_error = self.packet_handler.read1ByteTxRx(
             self.port_handler,
@@ -45,9 +48,9 @@ class DynamixelManager:
         # if dxl_error != 0:
             # raise RuntimeError(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
 
-        return value
-    
-    @property
+        return value, dxl_comm_result, dxl_error
+
+    @handle_error
     def _read_2_bytes_at(self, dxl_id, register_address):
         value, dxl_comm_result, dxl_error = self.packet_handler.read2ByteTxRx(
             self.port_handler,
@@ -59,9 +62,9 @@ class DynamixelManager:
         # if dxl_error != 0:
             # raise RuntimeError(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
 
-        return value
-    
-    @property
+        return value, dxl_comm_result, dxl_error
+
+    @handle_error
     def _read_4_bytes_at(self, dxl_id, register_address):
         value, dxl_comm_result, dxl_error = self.packet_handler.read4ByteTxRx(
             self.port_handler,
@@ -73,9 +76,9 @@ class DynamixelManager:
         # if dxl_error != 0:
             # raise RuntimeError(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
 
-        return value
-    
-    @property
+        return value, dxl_comm_result, dxl_error
+
+    @handle_error
     def _write_1_byte_at(self, dxl_id, register_address, value):
         # Enable Dynamixel Torque
         dxl_comm_result, dxl_error = self.packet_handler.write1ByteTxRx(
@@ -84,12 +87,14 @@ class DynamixelManager:
             register_address,
             value)
 
+        return None, dxl_comm_result, dxl_error
+
         # if dxl_comm_result != COMM_SUCCESS:
             # raise RuntimeError(f"COM ERR: {self.packet_handler.getTxRxResult(dxl_comm_result)}")
         # if dxl_error != 0:
             # raise RuntimeError(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
-    
-    @property
+
+    @handle_error
     def _write_2_bytes_at(self, dxl_id, register_address, value):
         # Enable Dynamixel Torque
         dxl_comm_result, dxl_error = self.packet_handler.write2ByteTxRx(
@@ -102,8 +107,10 @@ class DynamixelManager:
             # raise RuntimeError(f"COM ERR: {self.packet_handler.getTxRxResult(dxl_comm_result)}")
         # if dxl_error != 0:
             # raise RuntimeError(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
-    
-    @property
+
+        return None, dxl_comm_result, dxl_error
+
+    @handle_error
     def _write_4_bytes_at(self, dxl_id, register_address, value):
         # Enable Dynamixel Torque
         dxl_comm_result, dxl_error = self.packet_handler.write4ByteTxRx(
@@ -111,6 +118,8 @@ class DynamixelManager:
             dxl_id,
             register_address,
             value)
+
+        return None, dxl_comm_result, dxl_error
 
         # if dxl_comm_result != COMM_SUCCESS:
             # raise RuntimeError(f"COM ERR: {self.packet_handler.getTxRxResult(dxl_comm_result)}")
