@@ -20,12 +20,14 @@ class FemaleMaleDriver(SharedDriver):
         path = f"{self.name}/neopixel"
         data = "on" # Turns the Neopixels off.
         self.arduino_manager.send(path, data)
+        self._neopixel_memory = True
         # raise NotImplementedError
 
     def turn_off_neopixel(self):
         path = f"{self.name}/neopixel"
         data = "off" # Turns the Neopixels off.
         self.arduino_manager.send(path, data)
+        self._neopixel_memory = False
 
     def turn_on_speaker(self):
         path = f"{self.name}/speaker"
@@ -41,17 +43,14 @@ class FemaleMaleDriver(SharedDriver):
     def toggle_neopixel(self):
         if self._neopixel_memory is None:
             self.turn_on_neopixel()
-            self._neopixel_memory = True
             return
 
         if self._neopixel_memory:
             self.turn_off_neopixel()
-            self._neopixel_memory = False
             return
 
         if not self._neopixel_memory:
             self.turn_on_neopixel()
-            self._neopixel_memory = True
             return
 
     def play_pacman(self,):

@@ -120,6 +120,10 @@ class ArduinoManager:
             self.port_handler.open()
             self.wait_for_reboot()
 
+    def _turn_off_all_neopixel(self):
+        raise NotImplementedError("Should give access to colloquy driver here to implement this.")
+        self.send(path="male1/neopixel", data="on")
+
     def wait_for_reboot(self):
         start = time()
         while True:

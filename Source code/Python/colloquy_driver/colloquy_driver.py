@@ -5,9 +5,18 @@ from .male_driver import MaleDriver
 from .bar_driver import BarDriver
 from time import sleep
 from parameters import Parameters
+from threading import Thread, Event
 
 
 class ColloquyDriver:
+
+    _classes = {
+        "dxl_manager": DynamixelManager,
+        "arduino_manager": ArduinoManager,
+        "female_driver": FemaleDriver,
+        "male_driver": MaleDriver,
+        "bar_driver": BarDriver,
+    }
 
     def __init__(self, params):
         print(f"Initialising Colloquy driver...")
@@ -16,54 +25,41 @@ class ColloquyDriver:
         self.bodies = []
         self.elements = []
         self.bar = None
+        self._stop_event = None
 
         self._dxl_manager = dxl_manager = None
         self._arduino_manager = arduino_manager =None
 
-        dxl_network = params.get("dynamixel network", {})
-        dxl_com = dxl_network.get("communication port")
+        dxl_network = params["dynamixel network"]
+        self._dxl_manager = dxl_manager = self._classes["dxl_manager"](**dxl_network)
 
-        if dxl_com is not None:
-            print(f"| Initialising DXL manager...")
-            self._dxl_manager = dxl_manager = DynamixelManager(**dxl_network)
-
-        arduino_params = params.get("arduino", {})
-        arduino_com = arduino_params.get("communication port")
-        if arduino_com is not None:
-            print(f"| Initialising Arduino manager...")
-            self._arduino_manager = arduino_manager = ArduinoManager(**arduino_params)
+        arduino_params = params["arduino"]
+        self._arduino_manager = arduino_manager = self._classes["arduino_manager"](**arduino_params)
 
         self.females = []
-        females_params = params.get("females", {})
-        females_names = females_params.get("names", [])
+        females_params = params["females"]
+        females_names = females_params["names"]
         for name in females_names:
-            print(f"| Initialising {name} driver...")
             fem_params = dict(params[name])
             fem_params["name"] = name
             fem_params.update( params["females"]["share"])
             fem_params["dynamixel manager"] = dxl_manager
             fem_params["arduino manager"] = arduino_manager
-
-
-            female_driver = FemaleDriver(**fem_params)
+            female_driver = self._classes["female_driver"](**fem_params)
             self.females.append(female_driver)
-
             setattr(self, name, female_driver)
-
-            if female_driver.mirror is not None:
-                self.mirrors.append(female_driver.mirror)
+            self.mirrors.append(female_driver.mirror)
 
         self.males = []
-        males_params = params.get("males", {})
-        males_names = males_params.get("names", [])
+        males_params = params["males"]
+        males_names = males_params["names"]
         for name in males_names:
-            print(f"| Initialising {name} driver...")
             male_params = dict(params[name])
             male_params["name"] = name
             male_params.update( params["males"]["share"])
             male_params["dynamixel manager"] = dxl_manager
             male_params["arduino manager"] = arduino_manager
-            male_driver = MaleDriver(**male_params)
+            male_driver = self._classes["male_driver"](**male_params)
             self.males.append(male_driver)
             setattr(self, name, male_driver)
 
@@ -82,7 +78,82 @@ class ColloquyDriver:
         bar_params["name"] = "bar"
         bar_params["dynamixel manager"] = dxl_manager
         if bar_params["origin"] is not None:
-            self.bar = BarDriver(**bar_params)
+            self.bar = self._classes["bar_driver"](**bar_params)
+
+        # print(f"Initialising Colloquy driver...")
+        # self.mirrors = []
+        # self.males = []
+        # self.bodies = []
+        # self.elements = []
+        # self.bar = None
+        # self.stop_event = None
+
+        # self._dxl_manager = dxl_manager = None
+        # self._arduino_manager = arduino_manager =None
+
+        # dxl_network = params.get("dynamixel network", {})
+        # dxl_com = dxl_network.get("communication port")
+
+        # if dxl_com is not None:
+            # print(f"| Initialising DXL manager...")
+            # self._dxl_manager = dxl_manager = DynamixelManager(**dxl_network)
+
+        # arduino_params = params.get("arduino", {})
+        # arduino_com = arduino_params.get("communication port")
+        # if arduino_com is not None:
+            # print(f"| Initialising Arduino manager...")
+            # self._arduino_manager = arduino_manager = ArduinoManager(**arduino_params)
+
+        # self.females = []
+        # females_params = params.get("females", {})
+        # females_names = females_params.get("names", [])
+        # for name in females_names:
+            # print(f"| Initialising {name} driver...")
+            # fem_params = dict(params[name])
+            # fem_params["name"] = name
+            # fem_params.update( params["females"]["share"])
+            # fem_params["dynamixel manager"] = dxl_manager
+            # fem_params["arduino manager"] = arduino_manager
+
+
+            # female_driver = FemaleDriver(**fem_params)
+            # self.females.append(female_driver)
+
+            # setattr(self, name, female_driver)
+
+            # if female_driver.mirror is not None:
+                # self.mirrors.append(female_driver.mirror)
+
+        # self.males = []
+        # males_params = params.get("males", {})
+        # males_names = males_params.get("names", [])
+        # for name in males_names:
+            # print(f"| Initialising {name} driver...")
+            # male_params = dict(params[name])
+            # male_params["name"] = name
+            # male_params.update( params["males"]["share"])
+            # male_params["dynamixel manager"] = dxl_manager
+            # male_params["arduino manager"] = arduino_manager
+            # male_driver = MaleDriver(**male_params)
+            # self.males.append(male_driver)
+            # setattr(self, name, male_driver)
+
+        # self.bodies = [
+            # *self.females,
+            # *self.males,
+            # ]
+
+        # self.elements = [
+            # *self.females,
+            # *self.mirrors,
+            # *self.males,
+        # ]
+
+        # bar_params = dict(params["bar"])
+        # bar_params["name"] = "bar"
+        # bar_params["dynamixel manager"] = dxl_manager
+        # if bar_params["origin"] is not None:
+            # self.bar = BarDriver(**bar_params)
 
     def __enter__(self):
         self.start()
@@ -90,6 +161,10 @@ class ColloquyDriver:
 
     def __exit__(self, *args):
         self.stop()
+
+    @property
+    def stop_event(self):
+        return self._stop_event
 
     @property
     def arduino(self):
@@ -157,7 +232,19 @@ class ColloquyDriver:
         code.interact(local=locals_dict, banner=CALIBRATION_BANNER)
 
     def run(self):
-        raise NotImplementedError
+        self._stop_event = Event()
+        with self:
+            print("Started Colloquy Thread.")
+            self.male1_thread = Thread(target=self.male1.run)
+            self.male1_thread.start()
+            while not self.stop_event.is_set():
+                sleep(1)
+            for element in self.elements:
+                if element.stop_event is not None:
+                    element.stop_event.set()
+
+            self.male1_thread.join()
+
 
     def start(self):
         print("Starting Colloquy...")

@@ -11,7 +11,7 @@ class VirtualSerialPort:
         return self._readline_results.pop(0)
 
     def write(self, data):
-        print(f"{data}")
+        print(f"{data=}")
         pass
 
     @property

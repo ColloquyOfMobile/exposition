@@ -10,6 +10,7 @@ class SharedDriver:
         self.dxl_origin = kwargs["origin"]
         self.motion_range = kwargs["motion range"]
         self.name = kwargs["name"]
+        self.stop_event = None
 
         if dxl_manager is not None:
             print(f"| Initialising DXL driver for ID={dxl_id}...")
@@ -53,3 +54,6 @@ class SharedDriver:
             self.turn_to_max_position()
             self._position_memory = "max"
             return
+
+    def stop(self):
+        raise NotImplementedError

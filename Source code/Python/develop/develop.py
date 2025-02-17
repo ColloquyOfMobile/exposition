@@ -5,6 +5,7 @@ from utils import CustomDoc
 from parameters import Parameters
 from pathlib import Path
 from time import sleep
+from threading import Thread, Event
 
 PARAMETERS = Parameters().as_dict()
 
@@ -18,6 +19,8 @@ class Develop():
         self._commands = {
         }
         self.run = RunCommand(owner=self)
+        self.stop = StopCommand(owner=self)
+        self.colloquy_thread = None
 
     @property
     def colloquy_driver(self):
@@ -88,8 +91,6 @@ class Develop():
                         text(log)
                     yield doc.read().encode()
 
-                with tag("div"):
-                    text(f"Finished processing command '{string_command}'")
                 yield doc.read().encode()
             with tag("h3",):
                 text("commands:")
@@ -111,81 +112,75 @@ class Develop():
 
 
 
-class RunCommand:
+                # if self._stop_event.is_set():
+                    # break
 
-    def __init__(self, owner):
-        self._name = "run"
+                # for element in elements:
+                    # if not element.is_moving:
+                        # # print(f"{element=}, {element.is_moving}")
+                        # element.toggle_position()
+
+                # if time() - neopixel_start > 0.5:
+                    # for element in bodies:
+                        # element.toggle_neopixel()
+                        # neopixel_start = time()
+
+                # if time() - speaker_start > duration:
+                    # if buzzer is None:
+                        # buzzer = buzzers.pop(0)
+                        # buzzer.turn_on_speaker()
+                        # duration = 0.7
+                    # else:
+                        # buzzer.turn_off_speaker()
+                        # buzzers.append(buzzer)
+                        # buzzer = None
+                        # duration = 10
+
+                    # speaker_start = time()
+
+                # if not bar.is_moving:
+                    # bar.toggle_position()
+
+            # for element in bodies:
+                # element.turn_off_speaker()
+                # element.turn_off_neopixel()
+
+
+class Command:
+
+    def __init__(self, owner, name):
+        self._name = name
         self._owner = owner
         self._wsgi = owner.wsgi
         owner.commands[self._name] = self
-
-    def __call__(self, **kwargs):
-        yield (f"| Running colloquy...")
-        with self._owner.colloquy_driver:
-            colloquy = self._owner.colloquy_driver
-            elements = colloquy.elements
-            females = colloquy.females
-            males = colloquy.males
-            for iteration in range(1):
-                yield (f"| {iteration=}")
-                for element in (*females, *males):
-                    yield f"|| Turning on {element.name}' speaker..."
-                    element.turn_on_speaker()
-                    sleep(0.5)
-                    element.turn_off_speaker()
-                    yield (f"|| Turned off {element.name}' speaker...")
-                    sleep(0.5)
-
 
     def write_html(self):
         doc, tag, text = self._wsgi.doc.tagtext()
         with tag("form", action="", method="post"):
             doc.stag("input", type="submit", name="command", value=self._name)
 
-    def test_speakers(self, **kwargs):
-        iterations = int(kwargs.get("iterations", [1])[0])
-        with self.colloquy_driver:
-            colloquy = self.colloquy_driver
-            elements = colloquy.elements
-            females = colloquy.females
-            males = colloquy.males
-            for iteration in range(iterations):
-                yield (f"| {iteration=}")
-                for element in (*females, *males):
-                    yield f"|| Turning on {element.name}' speaker..."
-                    element.turn_on_speaker()
-                    sleep(1)
-                    element.turn_off_speaker()
-                    yield (f"|| Turned off {element.name}' speaker...")
-                    sleep(0.5)
+class StopCommand(Command):
 
+    def __init__(self, owner):
+        Command.__init__(self, owner, name="stop")
 
-    # def _write_tests_run(self):
-        # doc, tag, text = self._doc.tagtext()
-        # with tag("form", action="", method="post"):
-            # with tag("button", type="submit", name="command", value="tests/run"):
-                # text("test colloquy")
+    def __call__(self, **kwargs):
+        owner = self._owner
+        owner.colloquy_driver.stop_event.set()
+        owner.colloquy_thread.join()
+        yield "Stopped."
 
-    # def _write_test_neopixels(self):
-        # doc, tag, text = self._doc.tagtext()
-        # with tag("form", action="", method="post"):
-            # with tag("input", type="number", name="iterations", value="1", step="1", min=1):
-                # pass
-            # with tag("button", type="submit", name="command", value="tests/neopixels"):
-                # text("test neopixels")
+class RunCommand(Command):
 
-    # def _write_test_speakers(self):
-        # doc, tag, text = self._doc.tagtext()
-        # with tag("form", action="", method="post"):
-            # with tag("input", type="number", name="iterations", value="1", step="1", min=1):
-                # pass
-            # with tag("button", type="submit", name="command", value="tests/speakers"):
-                # text("test speakers")
+    def __init__(self, owner):
+        Command.__init__(self, owner, name="run")
 
-    # def _write_test_dxls(self):
-        # doc, tag, text = self._doc.tagtext()
-        # with tag("form", action="", method="post"):
-            # with tag("input", type="number", name="iterations", value="1", step="1", min=1):
-                # pass
-            # with tag("button", type="submit", name="command", value="tests/dxls"):
-                # text("test dxls")
+    def __call__(self, **kwargs):
+        owner = self._owner
+        owner.stop_event = Event()
+        self._doc = CustomDoc()
+        doc, tag, text = self._wsgi.doc.tagtext()
+        # self._wsgi.start_response('200 OK', [('Content-Type', 'text/html')])
+        owner.colloquy_thread = Thread(target=owner.colloquy_driver.run)
+        owner.colloquy_thread.start()
+        yield "Started..."
