@@ -1,0 +1,1 @@
+from .colloquy_tests import ColloquyTests

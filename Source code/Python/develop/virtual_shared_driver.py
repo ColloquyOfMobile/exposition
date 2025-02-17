@@ -1,7 +1,7 @@
-from dxl_driver import DXLDriver
+from colloquy_driver.shared_driver import SharedDriver
 
 
-class SharedDriver:
+class VirtualSharedDriver(SharedDriver):
 
     def __init__(self, **kwargs):
         dxl_manager = kwargs["dynamixel manager"]

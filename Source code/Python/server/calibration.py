@@ -1,6 +1,7 @@
-from .utils import CustomDoc
+from utils import CustomDoc
 from colloquy_driver import ColloquyDriver
 from parameters import Parameters
+from pathlib import Path
 
 PARAMETERS = Parameters().as_dict()
 
@@ -8,6 +9,7 @@ class Calibration():
     def __init__(self, wsgi):
         self._wsgi = wsgi
         self._doc = None
+        self.wsgi_path = Path("calibration")
         self.colloquy_driver = None
         self._commands = {
             "bar/move and wait": self.bar_move_and_wait,
@@ -87,3 +89,9 @@ class Calibration():
                 pass
             with tag("button", type="submit", name="command", value="bar/move and wait"):
                 text("bar/move and wait")
+
+    def add_html_link(self):
+        doc, tag, text = self._wsgi.doc.tagtext()
+        with tag("h2",):
+            with tag("a", href=self.wsgi_path.as_posix()):
+                text("Calibration.")

@@ -1,12 +1,14 @@
 from yattag import Doc, indent
 from serial.tools import list_ports
-from colloquy_tests import ColloquyTests
-from .utils import CustomDoc
+from tests import ColloquyTests
+from utils import CustomDoc
+from pathlib import Path
 
 class Tests():
     def __init__(self, wsgi):
         self._wsgi = wsgi
         self._doc = None
+        self.wsgi_path = Path("tests")
         self._tests = ColloquyTests()
         self._commands = {
             "tests/run": self._tests.run,
@@ -153,3 +155,9 @@ class Tests():
                         text(f"{port} - {description}")
             with tag("button", type="submit", name="command", value="arduino/connect"):
                 text("connect arduino")
+
+    def add_html_link(self):
+        doc, tag, text = self._wsgi.doc.tagtext()
+        with tag("h2",):
+            with tag("a", href=self.wsgi_path.as_posix()):
+                text("Tests.")

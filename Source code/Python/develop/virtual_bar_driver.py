@@ -1,7 +1,6 @@
-from dxl_driver import DXLDriver
-from time import time, sleep
+from colloquy_driver.bar_driver import BarDriver
 
-class BarDriver:
+class VirtualBarDriver:
 
     def __init__(self, **kwargs):
         self._position_memory = None

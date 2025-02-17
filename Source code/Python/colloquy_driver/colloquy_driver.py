@@ -1,8 +1,8 @@
-from dynamixel_manager import DynamixelManager
-from arduino_manager import ArduinoManager
-from female_driver import FemaleDriver
-from male_driver import MaleDriver
-from bar_driver import BarDriver
+from .dynamixel_manager import DynamixelManager
+from .arduino_manager import ArduinoManager
+from .female_driver import FemaleDriver
+from .male_driver import MaleDriver
+from .bar_driver import BarDriver
 from time import sleep
 from parameters import Parameters
 

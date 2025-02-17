@@ -4,23 +4,35 @@ import urllib
 from wsgiref.simple_server import make_server, WSGIRequestHandler
 import mimetypes
 import os
-# from archives.upgrade_colloquy import UpgradeColloquy
 from .root import Root
 from .calibration import Calibration
 from .tests import Tests
-from .tatu import Tatu
+from .shutdown import Shutdown
+from develop import Develop
+from utils import CustomDoc
 
 class WSGI:
     def __init__(self):
         self._shut_server = False
+        self.doc = None
+        self.handlers = [
+            Shutdown(wsgi=self),
+            Calibration(wsgi=self),
+            Tests(wsgi=self),
+            Develop(wsgi=self),
+        ]
         self._path_handlers = {
-            # Path("archives/2025_01_05"): self._handle_archive,
-            Path("shutdown"): self._handle_shutdown,
             Path(""): Root(self),
-            Path("calibration"): Calibration(self),
-            Path("tests"): Tests(self),
-            Path("TATU"): Tatu(self),
-        }
+            }
+        for handler in self.handlers:
+            self._path_handlers[handler.wsgi_path] = handler
+        # self._path_handlers = {
+            # Path("shutdown"): self._handle_shutdown,
+            # Path(""): Root(self),
+            # Path("calibration"): Calibration(self),
+            # Path("tests"): Tests(self),
+            # # Path("TATU"): Tatu(self),
+        # }
         self._path_handler = None
         # self._archive_2025_01_24 = UpgradeColloquy()
         self._path = None
@@ -71,6 +83,7 @@ class WSGI:
 
     def __call__(self, environ, start_response):
         # Get the requested path from the environment
+        self.doc = CustomDoc()
         self._parse_path(environ)
         self._parse_post_data(environ)
         print(f"{self._path}, {self._data}")
@@ -123,11 +136,6 @@ class WSGI:
     # def _handle_archive(self,):
             # self._start_response('200 OK', [('Content-Type', 'text/html')])
             # return [self._archive_2025_01_24.html.encode()]
-
-    def _handle_shutdown(self):
-        self.shut_server = True
-        self._start_response('200 OK', [('Content-Type', 'text/plain')])
-        return [b'Goodbye!']
 
 
     def _handle_file(self):

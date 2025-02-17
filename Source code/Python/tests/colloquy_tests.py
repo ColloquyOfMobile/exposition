@@ -15,7 +15,7 @@ class ColloquyTests:
         self.colloquy_driver = None
 
     def open(self):
-        self.colloquy_driver = ColloquyDriver(PARAMETERS)
+        self.colloquy_driver = ColloquyMock(PARAMETERS)
 
     def close(self):
         self.colloquy_driver.stop()

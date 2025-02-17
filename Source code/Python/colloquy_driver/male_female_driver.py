@@ -1,4 +1,4 @@
-from shared_driver import SharedDriver
+from .shared_driver import SharedDriver
 from pathlib import Path
 
 class FemaleMaleDriver(SharedDriver):
