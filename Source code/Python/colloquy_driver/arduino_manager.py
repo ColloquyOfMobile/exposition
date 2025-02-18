@@ -15,11 +15,11 @@ class ArduinoManager:
         """
         Initialise la communication série avec l'Arduino.
         """
+        self._busy = Event()
         port_name = kwargs["communication port"]
         baudrate = kwargs["baudrate"]
         self.port_handler = self._classes["serial"](port=port_name, baudrate=baudrate, timeout=1)
         self.wait_for_reboot()
-        self._busy = Event()
 
         # IMPORTANT let the arduino reload
         # sleep(0.5)

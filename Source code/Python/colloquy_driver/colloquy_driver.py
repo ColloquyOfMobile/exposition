@@ -70,17 +70,18 @@ class ColloquyDriver:
             *self.males,
             ]
 
-        self.elements = [
-            *self.females,
-            *self.mirrors,
-            *self.males,
-        ]
-
         bar_params = dict(params["bar"])
         bar_params["name"] = "bar"
         bar_params["dynamixel manager"] = dxl_manager
         if bar_params["origin"] is not None:
             self.bar = self._classes["bar_driver"](**bar_params)
+
+        self.elements = [
+            *self.females,
+            *self.mirrors,
+            *self.males,
+            self.bar
+        ]
 
     def __enter__(self):
         self.start()
@@ -161,13 +162,20 @@ class ColloquyDriver:
     def run(self):
         self._stop_event = Event()
         with self:
-            print("Started Colloquy Thread.")
+            print("Started Colloquy Thread...")
             for body in self.bodies:
                 thread = Thread(target=body.run)
                 self._threads.add(thread)
                 thread.start()
+
+            thread = Thread(target=self.bar.run)
+            self._threads.add(thread)
+            thread.start()
+
+
             while not self.stop_event.is_set():
                 sleep(1)
+
             for element in self.elements:
                 if element.stop_event is not None:
                     element.stop_event.set()

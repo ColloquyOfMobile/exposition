@@ -1,5 +1,6 @@
 from .dxl_driver import DXLDriver
 from time import time, sleep
+from threading import Event
 
 class BarDriver:
 
@@ -13,6 +14,7 @@ class BarDriver:
         self.motion_range = kwargs["motion range"]
         self.name = kwargs["name"]
         self.moving_threshold = 20
+        self.stop_event = Event()
 
         if dxl_manager is not None:
             self.offset = None
@@ -166,3 +168,9 @@ class BarDriver:
             self.turn_to_max_position()
             self._position_memory = "max"
             return
+
+    def run(self, **kwargs):
+        self.stop_event.clear()
+        while not self.stop_event.is_set():
+            if not self.is_moving:
+                self.toggle_position()
