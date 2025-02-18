@@ -19,5 +19,15 @@ class FemaleDriver(FemaleMaleDriver):
             mirror_kwargs["dynamixel manager"] = dxl_manager
             self.mirror = MirrorDriver(**mirror_kwargs)
 
-        self.speaker = None
-        self.neopixel = None
+
+
+    def run(self, **kwargs):
+        self.stop_event.clear()
+
+        self.turn_on_neopixel()
+
+        while not self.stop_event.is_set():
+            if not self.is_moving:
+                self.toggle_position()
+
+        self.turn_off_neopixel()

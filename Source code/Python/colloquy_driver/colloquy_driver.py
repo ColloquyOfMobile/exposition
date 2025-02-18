@@ -162,8 +162,8 @@ class ColloquyDriver:
         self._stop_event = Event()
         with self:
             print("Started Colloquy Thread.")
-            for male in self.males:
-                thread = Thread(target=male.run)
+            for body in self.bodies:
+                thread = Thread(target=body.run)
                 self._threads.add(thread)
                 thread.start()
             while not self.stop_event.is_set():
@@ -171,7 +171,7 @@ class ColloquyDriver:
             for element in self.elements:
                 if element.stop_event is not None:
                     element.stop_event.set()
-            
+
             for thread in self._threads:
                 thread.join()
 
@@ -187,12 +187,12 @@ class ColloquyDriver:
         if self._dxl_manager is not None:
             self._dxl_manager.stop()
         if self._arduino_manager is not None:
-            self._arduino_manager.stop()        
-        
+            self._arduino_manager.stop()
+
         for element in self.elements:
             if element.stop_event is not None:
                 element.stop_event.set()
-        
+
         for thread in self._threads:
             thread.join()
         print("Colloquy stopped.")

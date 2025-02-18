@@ -1,3 +1,4 @@
+from time import sleep
 from colloquy_driver.arduino_manager import ArduinoManager
 
 class VirtualSerialPort:
@@ -7,8 +8,10 @@ class VirtualSerialPort:
         self._readline_results = self._iter_readline_results()
 
     def _iter_readline_results(self):
+        sleep(0.1)
         yield b"Hello!"
         while self.is_open:
+            sleep(0.1)
             yield b"{}"
 
     def readline(self):
@@ -31,13 +34,11 @@ class VirtualArduinoManager(ArduinoManager):
         "serial": VirtualSerialPort,
     }
 
-    def __init__(self, **kwargs):
-        """
-        Initialise la communication série avec l'Arduino.
-        """
-        port_name = kwargs["communication port"]
-        baudrate = kwargs["baudrate"]
-        self.port_handler = self._classes["serial"](port=port_name, baudrate=baudrate, timeout=1)
-        self.wait_for_reboot()
-
-
+    # def __init__(self, **kwargs):
+        # """
+        # Initialise la communication série avec l'Arduino.
+        # """
+        # port_name = kwargs["communication port"]
+        # baudrate = kwargs["baudrate"]
+        # self.port_handler = self._classes["serial"](port=port_name, baudrate=baudrate, timeout=1)
+        # self.wait_for_reboot()

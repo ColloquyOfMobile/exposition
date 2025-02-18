@@ -6,13 +6,18 @@ from time import sleep, time
 from threading import Event
 
 class ArduinoManager:
+
+    _classes = {
+        "serial": serial.Serial,
+    }
+
     def __init__(self, **kwargs):
         """
         Initialise la communication série avec l'Arduino.
         """
         port_name = kwargs["communication port"]
         baudrate = kwargs["baudrate"]
-        self.port_handler = serial.Serial(port=port_name, baudrate=baudrate, timeout=1)
+        self.port_handler = self._classes["serial"](port=port_name, baudrate=baudrate, timeout=1)
         self.wait_for_reboot()
         self._busy = Event()
 

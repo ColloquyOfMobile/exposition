@@ -24,11 +24,17 @@ def handle_error(func):
 
 
 class DynamixelManager:
+
+    _classes = {
+        "port_handler": PortHandler,
+        "packet_handler": PacketHandler,
+    }
+
     def __init__(self, **kwargs):
         port_name = kwargs["communication port"]
         baudrate = kwargs["baudrate"]
-        self.port_handler = PortHandler(port_name)
-        self.packet_handler = PacketHandler(2.0)  # Using protocol 2.0
+        self.port_handler = self._classes["port_handler"](port_name)
+        self.packet_handler = self._classes["packet_handler"](2.0)  # Using protocol 2.0
 
         if not self.port_handler.openPort():
             raise IOError(f"Failed to open the port: {port_name}")

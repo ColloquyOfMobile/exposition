@@ -24,7 +24,7 @@ class Tests:
         self._name = name
         self._wsgi = wsgi
         self.wsgi_path = Path(self._name)
-        self._colloquy_driver = self.classes["colloquy_driver"](params=PARAMETERS)
+        self._colloquy_driver = None
         self._commands = {
         }
         self.run = RunCommand(owner=self)
@@ -45,6 +45,8 @@ class Tests:
         return self._wsgi
 
     def open(self):
+        if self._colloquy_driver is None:
+            self._colloquy_driver = self.classes["colloquy_driver"](params=PARAMETERS)
         self._colloquy_driver.start()
 
     def close(self):

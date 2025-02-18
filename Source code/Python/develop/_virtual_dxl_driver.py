@@ -1,7 +1,7 @@
 from colloquy_driver.dxl_driver import DXLDriver
 
 class VirtualDXLDriver(DXLDriver):
-    pass
+
     # def __init__(self, dxl_manager, dynamixel_id):
         # # Handle hardware for serial communication.
 
