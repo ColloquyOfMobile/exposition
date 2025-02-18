@@ -12,18 +12,46 @@ class MaleDriver(FemaleMaleDriver):
             )
         self.speaker = None
         self.neopixel = None
-        self._blink_profile = [12.75, 21.45, 22.05, 22.25, 22.55, 22.70, 22.95, 23.05, 25.55]
+        self._blink_profile = [
+            #on
+            12,
+            #off
+            21,
+            #on
+            22,
+            #off
+            22.5,
+            #on
+            23.5,
+            #off
+            24,
+            #on
+            25,
+            #off
+            25.5,
+            #on
+            56.5,
+            #off
+            57
+            ]
 
     def run(self, **kwargs):
         self.stop_event = Event()
         blink_profile = list(self._blink_profile)
 
         neopixel_start = time()
-        duration = blink_profile.pop(0)
+        timestamp = blink_profile.pop(0)
 
         self.turn_on_neopixel()
 
         while not self.stop_event.is_set():
-            if time() - neopixel_start > duration:
+            if (time() - neopixel_start) > timestamp:
                 self.toggle_neopixel()
-                neopixel_start = time()
+                if not blink_profile:
+                    blink_profile.extend(self._blink_profile)
+                    neopixel_start = time()
+
+                timestamp = blink_profile.pop(0)
+                # neopixel_start = time()
+
+        self.turn_off_neopixel()

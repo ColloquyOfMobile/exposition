@@ -9,11 +9,11 @@ from colloquy_driver import ColloquyDriver
 
 
 class VirtualColloquyDriver(ColloquyDriver):
-
-    _classes = {
+    
+    _classes = ColloquyDriver._classes.copy()
+    _classes.update({
         "dxl_manager": VirtualDynamixelManager,
         "arduino_manager": VirtualArduinoManager,
-        "female_driver": VirtualFemaleDriver,
-        "male_driver": VirtualMaleDriver,
-        "bar_driver": VirtualBarDriver,
-    }
+    })
+    def __init__(self, params, ):
+        ColloquyDriver.__init__(self, params, name="Virtual Colloquy driver")

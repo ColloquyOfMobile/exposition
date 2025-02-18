@@ -1,1 +1,1 @@
-from .colloquy_tests import ColloquyTests
+from .tests import Tests

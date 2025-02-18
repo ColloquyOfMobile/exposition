@@ -18,14 +18,16 @@ class ColloquyDriver:
         "bar_driver": BarDriver,
     }
 
-    def __init__(self, params):
-        print(f"Initialising Colloquy driver...")
+    def __init__(self, params, name="Colloquy driver"):
+        print(f"Initialising {name}...")
+        self._name = name
         self.mirrors = []
         self.males = []
         self.bodies = []
         self.elements = []
         self.bar = None
         self._stop_event = None
+        self._threads = set()
 
         self._dxl_manager = dxl_manager = None
         self._arduino_manager = arduino_manager =None
@@ -79,81 +81,6 @@ class ColloquyDriver:
         bar_params["dynamixel manager"] = dxl_manager
         if bar_params["origin"] is not None:
             self.bar = self._classes["bar_driver"](**bar_params)
-
-        # print(f"Initialising Colloquy driver...")
-        # self.mirrors = []
-        # self.males = []
-        # self.bodies = []
-        # self.elements = []
-        # self.bar = None
-        # self.stop_event = None
-
-        # self._dxl_manager = dxl_manager = None
-        # self._arduino_manager = arduino_manager =None
-
-        # dxl_network = params.get("dynamixel network", {})
-        # dxl_com = dxl_network.get("communication port")
-
-        # if dxl_com is not None:
-            # print(f"| Initialising DXL manager...")
-            # self._dxl_manager = dxl_manager = DynamixelManager(**dxl_network)
-
-        # arduino_params = params.get("arduino", {})
-        # arduino_com = arduino_params.get("communication port")
-        # if arduino_com is not None:
-            # print(f"| Initialising Arduino manager...")
-            # self._arduino_manager = arduino_manager = ArduinoManager(**arduino_params)
-
-        # self.females = []
-        # females_params = params.get("females", {})
-        # females_names = females_params.get("names", [])
-        # for name in females_names:
-            # print(f"| Initialising {name} driver...")
-            # fem_params = dict(params[name])
-            # fem_params["name"] = name
-            # fem_params.update( params["females"]["share"])
-            # fem_params["dynamixel manager"] = dxl_manager
-            # fem_params["arduino manager"] = arduino_manager
-
-
-            # female_driver = FemaleDriver(**fem_params)
-            # self.females.append(female_driver)
-
-            # setattr(self, name, female_driver)
-
-            # if female_driver.mirror is not None:
-                # self.mirrors.append(female_driver.mirror)
-
-        # self.males = []
-        # males_params = params.get("males", {})
-        # males_names = males_params.get("names", [])
-        # for name in males_names:
-            # print(f"| Initialising {name} driver...")
-            # male_params = dict(params[name])
-            # male_params["name"] = name
-            # male_params.update( params["males"]["share"])
-            # male_params["dynamixel manager"] = dxl_manager
-            # male_params["arduino manager"] = arduino_manager
-            # male_driver = MaleDriver(**male_params)
-            # self.males.append(male_driver)
-            # setattr(self, name, male_driver)
-
-        # self.bodies = [
-            # *self.females,
-            # *self.males,
-            # ]
-
-        # self.elements = [
-            # *self.females,
-            # *self.mirrors,
-            # *self.males,
-        # ]
-
-        # bar_params = dict(params["bar"])
-        # bar_params["name"] = "bar"
-        # bar_params["dynamixel manager"] = dxl_manager
-        # if bar_params["origin"] is not None:
-            # self.bar = BarDriver(**bar_params)
 
     def __enter__(self):
         self.start()
@@ -235,15 +162,18 @@ class ColloquyDriver:
         self._stop_event = Event()
         with self:
             print("Started Colloquy Thread.")
-            self.male1_thread = Thread(target=self.male1.run)
-            self.male1_thread.start()
+            for male in self.males:
+                thread = Thread(target=male.run)
+                self._threads.add(thread)
+                thread.start()
             while not self.stop_event.is_set():
                 sleep(1)
             for element in self.elements:
                 if element.stop_event is not None:
                     element.stop_event.set()
-
-            self.male1_thread.join()
+            
+            for thread in self._threads:
+                thread.join()
 
 
     def start(self):
@@ -257,7 +187,14 @@ class ColloquyDriver:
         if self._dxl_manager is not None:
             self._dxl_manager.stop()
         if self._arduino_manager is not None:
-            self._arduino_manager.stop()
+            self._arduino_manager.stop()        
+        
+        for element in self.elements:
+            if element.stop_event is not None:
+                element.stop_event.set()
+        
+        for thread in self._threads:
+            thread.join()
         print("Colloquy stopped.")
 
 CALIBRATION_BANNER = """#########################################################

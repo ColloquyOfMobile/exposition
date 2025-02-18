@@ -6,7 +6,7 @@ import mimetypes
 import os
 from .root import Root
 from .calibration import Calibration
-from .tests import Tests
+from tests import Tests
 from .shutdown import Shutdown
 from develop import Develop
 from utils import CustomDoc

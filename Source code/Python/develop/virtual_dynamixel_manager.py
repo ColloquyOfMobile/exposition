@@ -46,6 +46,9 @@ class VirtualPacketHandler:
     def write4ByteTxRx(self, port_handler, dxl_id, register_address, value):
         return COMM_SUCCESS, 0
 
+    def read4ByteTxRx(self, port_handler, dxl_id, register_address):
+        return 0, COMM_SUCCESS, 0
+
     def getTxRxResult(self, result):
         raise NotImplementedError
         return None
