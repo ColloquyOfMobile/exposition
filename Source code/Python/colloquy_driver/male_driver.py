@@ -54,5 +54,6 @@ class MaleDriver(FemaleMaleDriver):
 
             if not self.is_moving:
                 self.toggle_position()
+            sleep(0.01)
 
         self.turn_off_neopixel()

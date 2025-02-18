@@ -174,3 +174,4 @@ class BarDriver:
         while not self.stop_event.is_set():
             if not self.is_moving:
                 self.toggle_position()
+            sleep(0.01)
