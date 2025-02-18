@@ -88,6 +88,7 @@ class DXLDriver:
 
     @goal_position.setter
     def goal_position(self, value):
+        print(f"dxl{self._id}/goal position={value}")
         value = int(value)
         self._dxl_manager._write_4_bytes_at(self._id, 116, value)
 

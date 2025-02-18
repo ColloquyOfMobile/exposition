@@ -84,7 +84,6 @@ class VirtualPacketHandler:
 
 
     def _write_goal_position(self, dxl_id, value):
-        print(f"dxl{dxl_id}/goal position={value}")
         self._dxl_tables[dxl_id]["goal position"] = value
         Thread(target = DxlThread(owner=self, dxl_id=dxl_id)).start()
 

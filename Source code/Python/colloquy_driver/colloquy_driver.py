@@ -161,6 +161,9 @@ class ColloquyDriver:
 
     def run(self):
         self._stop_event = Event()
+        for element in self.elements:
+            element.turn_to_origin_position()
+        self.wait_until_everything_is_still()
         with self:
             print("Started Colloquy Thread...")
             for body in self.bodies:
