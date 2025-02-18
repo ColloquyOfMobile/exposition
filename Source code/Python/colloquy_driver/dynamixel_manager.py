@@ -1,6 +1,6 @@
 from dynamixel_sdk import PortHandler, PacketHandler, COMM_SUCCESS  # Uses Dynamixel SDK library
 from functools import wraps
-from threading import Event
+from threading import Lock
 from time import sleep
 
 
@@ -9,11 +9,13 @@ def handle_error(func):
     def wrapper(*args, **kwargs):
         self = args[0]
         for i in range(3):
-            while self._busy.is_set():
-                sleep(0.01)
-            self._busy.set()
-            value, dxl_comm_result, dxl_error = func(*args, **kwargs)
-            self._busy.clear()
+            # while self._busy.is_set():
+                # sleep(0.01)
+            # self._busy.set()
+
+            with self.lock:
+                value, dxl_comm_result, dxl_error = func(*args, **kwargs)
+            #self._busy.clear()
             if dxl_comm_result != COMM_SUCCESS:
                 print(f"COM ERR: {self.packet_handler.getTxRxResult(dxl_comm_result)}")
                 continue
@@ -41,7 +43,7 @@ class DynamixelManager:
         baudrate = kwargs["baudrate"]
         self.port_handler = self._classes["port_handler"](port_name)
         self.packet_handler = self._classes["packet_handler"](2.0)  # Using protocol 2.0
-        self._busy = Event()
+        self.lock = Lock()
 
         if not self.port_handler.openPort():
             raise IOError(f"Failed to open the port: {port_name}")

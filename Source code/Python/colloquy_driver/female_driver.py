@@ -1,5 +1,6 @@
 from .male_female_driver import FemaleMaleDriver
 from .mirror_driver import MirrorDriver
+from time import sleep
 
 class FemaleDriver(FemaleMaleDriver):
 
@@ -30,5 +31,6 @@ class FemaleDriver(FemaleMaleDriver):
         while not self.stop_event.is_set():
             if not self.is_moving:
                 self.toggle_position()
+            sleep(0.01)
 
         self.turn_off_neopixel()
