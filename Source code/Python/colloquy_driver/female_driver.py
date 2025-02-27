@@ -23,6 +23,7 @@ class FemaleDriver(FemaleMaleDriver):
 
 
     def run(self, **kwargs):
+        print(f"Running {self.name}...")
         self.stop_event.clear()
 
         self.turn_on_neopixel()

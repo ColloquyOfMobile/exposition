@@ -160,12 +160,12 @@ class ColloquyDriver:
         code.interact(local=locals_dict, banner=CALIBRATION_BANNER)
 
     def run(self):
+        print(f"Running {self._name}...")
         self._stop_event = Event()
         for element in self.elements:
             element.turn_to_origin_position()
         self.wait_until_everything_is_still()
         with self:
-            print("Started Colloquy Thread...")
             for body in self.bodies:
                 thread = Thread(target=body.run)
                 self._threads.add(thread)

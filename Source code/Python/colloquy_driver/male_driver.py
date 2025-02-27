@@ -34,6 +34,7 @@ class MaleDriver(FemaleMaleDriver):
             ]
 
     def run(self, **kwargs):
+        print(f"Running {self.name}...")
         self.stop_event.clear()
         blink_profile = list(self._blink_profile)
 
