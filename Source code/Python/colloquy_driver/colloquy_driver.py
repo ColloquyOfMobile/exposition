@@ -8,27 +8,6 @@ from parameters import Parameters
 from threading import Thread, Event
 
 
-class InteractionEvents:
-
-    def __init__(self):
-        self.positions = [
-            0,
-            1600,
-            3900,
-            6500,
-            7900,
-            10200,
-            ]
-        self.from_position = {
-            0,
-            1600,
-            3900,
-            6500,
-            7900,
-            10200,
-        }
-        self.from_name = {}
-
 
 
 
@@ -181,6 +160,7 @@ class ColloquyDriver:
         )
 
     def wait_until_everything_is_still(self):
+        print(f"Waiting until everything is stopped...")
         while self.is_something_moving():
             sleep(0.1)
 
