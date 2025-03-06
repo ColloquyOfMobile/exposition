@@ -8,6 +8,30 @@ from parameters import Parameters
 from threading import Thread, Event
 
 
+class InteractionEvents:
+
+    def __init__(self):
+        self.positions = [
+            0,
+            1600,
+            3900,
+            6500,
+            7900,
+            10200,
+            ]
+        self.from_position = {
+            0,
+            1600,
+            3900,
+            6500,
+            7900,
+            10200,
+        }
+        self.from_name = {}
+
+
+
+
 class ColloquyDriver:
 
     _classes = {
@@ -28,9 +52,11 @@ class ColloquyDriver:
         self.bar = None
         self._stop_event = None
         self._threads = set()
-
-        self._dxl_manager = dxl_manager = None
+        self.females = []
+        self.males = []
         self._arduino_manager = arduino_manager =None
+        self._dxl_manager = dxl_manager = None
+
 
         dxl_network = params["dynamixel network"]
         self._dxl_manager = dxl_manager = self._classes["dxl_manager"](**dxl_network)
@@ -38,43 +64,27 @@ class ColloquyDriver:
         arduino_params = params["arduino"]
         self._arduino_manager = arduino_manager = self._classes["arduino_manager"](**arduino_params)
 
-        self.females = []
-        females_params = params["females"]
-        females_names = females_params["names"]
-        for name in females_names:
-            fem_params = dict(params[name])
-            fem_params["name"] = name
-            fem_params.update( params["females"]["share"])
-            fem_params["dynamixel manager"] = dxl_manager
-            fem_params["arduino manager"] = arduino_manager
-            female_driver = self._classes["female_driver"](**fem_params)
-            self.females.append(female_driver)
-            setattr(self, name, female_driver)
-            self.mirrors.append(female_driver.mirror)
 
-        self.males = []
-        males_params = params["males"]
-        males_names = males_params["names"]
-        for name in males_names:
-            male_params = dict(params[name])
-            male_params["name"] = name
-            male_params.update( params["males"]["share"])
-            male_params["dynamixel manager"] = dxl_manager
-            male_params["arduino manager"] = arduino_manager
-            male_driver = self._classes["male_driver"](**male_params)
-            self.males.append(male_driver)
-            setattr(self, name, male_driver)
+        self._init_females(params)
+        self._init_males(params)
+
+        # Defined at for each bar position, which female and male interacts
+        self.interactions = {
+            0: (self.male1, self.female1),
+            1600: (self.male1, self.female2),
+            3900: (self.male1, self.female3),
+            6500: (self.male2, self.female1),
+            7900: (self.male2, self.female2),
+            10200: (self.male2, self.female3),
+        }
+
+        self._init_bar(params)
 
         self.bodies = [
             *self.females,
             *self.males,
             ]
 
-        bar_params = dict(params["bar"])
-        bar_params["name"] = "bar"
-        bar_params["dynamixel manager"] = dxl_manager
-        if bar_params["origin"] is not None:
-            self.bar = self._classes["bar_driver"](**bar_params)
 
         self.elements = [
             *self.females,
@@ -97,6 +107,41 @@ class ColloquyDriver:
     @property
     def arduino(self):
         return self._arduino_manager
+
+    def _init_bar(self, params):
+        bar_params = dict(params["bar"])
+        bar_params["colloquy"] = self
+        bar_params["name"] = "bar"
+        bar_params["dynamixel manager"] = self._dxl_manager
+        if bar_params["origin"] is not None:
+            self.bar = self._classes["bar_driver"](**bar_params)
+
+    def _init_females(self, params, ):
+        females_params = params["females"]
+        females_names = females_params["names"]
+        for name in females_names:
+            fem_params = dict(params[name])
+            fem_params["name"] = name
+            fem_params.update( params["females"]["share"])
+            fem_params["dynamixel manager"] = self._dxl_manager
+            fem_params["arduino manager"] = self._arduino_manager
+            female_driver = self._classes["female_driver"](**fem_params)
+            self.females.append(female_driver)
+            setattr(self, name, female_driver)
+            self.mirrors.append(female_driver.mirror)
+
+    def _init_males(self, params, ):
+        males_params = params["males"]
+        males_names = males_params["names"]
+        for name in males_names:
+            male_params = dict(params[name])
+            male_params["name"] = name
+            male_params.update( params["males"]["share"])
+            male_params["dynamixel manager"] = self._dxl_manager
+            male_params["arduino manager"] = self._arduino_manager
+            male_driver = self._classes["male_driver"](**male_params)
+            self.males.append(male_driver)
+            setattr(self, name, male_driver)
 
     def turn_to_origin_position(self, elements):
         for element in elements:
@@ -167,11 +212,11 @@ class ColloquyDriver:
         self.wait_until_everything_is_still()
         with self:
             for body in self.bodies:
-                thread = Thread(target=body.run)
+                thread = Thread(target=body.run, name=body.name)
                 self._threads.add(thread)
                 thread.start()
 
-            thread = Thread(target=self.bar.run)
+            thread = Thread(target=self.bar.run, name="bar")
             self._threads.add(thread)
             thread.start()
 
@@ -183,7 +228,9 @@ class ColloquyDriver:
                     element.stop_event.set()
 
             for thread in self._threads:
+                print(f"Joining thread {thread.name}...")
                 thread.join()
+        print(f"... finished running {self._name}.")
 
 
     def start(self):

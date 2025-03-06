@@ -1,5 +1,6 @@
 from .shared_driver import SharedDriver
 from pathlib import Path
+from threading import Event
 
 class FemaleMaleDriver(SharedDriver):
 
@@ -9,6 +10,7 @@ class FemaleMaleDriver(SharedDriver):
         self.arduino_manager = kwargs["arduino manager"]
         self._neopixel_memory = None
         self._speaker_memory = None
+        self.interaction_event = Event()
 
     def turn_to_left_position(self):
         self.turn_to_max_position()

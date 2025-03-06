@@ -8,6 +8,7 @@ class BarDriver:
         self._position_memory = None
         dxl_manager = kwargs["dynamixel manager"]
         dxl_ids = kwargs["dynamixel ids"]
+        self.colloquy = kwargs["colloquy"]
         self.dxl = None
         assert kwargs["origin"] is not None, "Calibrate colloquy."
         self.dxl_origin = kwargs["origin"]
@@ -15,21 +16,11 @@ class BarDriver:
         self.name = kwargs["name"]
         self.moving_threshold = 20
         self.stop_event = Event()
+        self.interaction = None
 
-        self.relative_positions = [
-            0,
-            1600,
-            3900,
-            6500,
-            7900,
-            10200,
-            ]
-
-        self.positions = [
-            position + self.dxl_origin
-            for position
-            in self.relative_positions
-            ]
+        self.interact_positions = []
+        for position in sorted(self.colloquy.interactions):
+            self.interact_positions.append(position + self.dxl_origin)
 
         if dxl_manager is not None:
             self.offset = None
@@ -50,16 +41,13 @@ class BarDriver:
     def _init(self):
         """Initialise the body's position."""
         self.torque_enabled = 0
-        # Set velocity base profile.
-        self.drive_mode = 0
-        # Set expanded position operating mode.
-        self.operating_mode = 4
 
-        # set velocity and acceleration profile.
+        self.drive_mode = 0
+
+        self.operating_mode = 4
         self.profile_velocity = 16
         self.profile_acceleration = 1
 
-        # Enable torque.
         self.torque_enabled = 1
 
     @property
@@ -146,8 +134,6 @@ class BarDriver:
 
     def move_and_wait(self, position):
         """Blocking function that sets the body's goal position and wait for it to move."""
-        # raise NotImplementedError
-        # self.dxl_body.torque_enabled = 1
         self.goal_position = position
         self.wait_for_servo()
 
@@ -187,16 +173,36 @@ class BarDriver:
 
     def toggle_position(self):
         self.cursor = 0
-        position = self.positions.pop(0)
-        self.positions.append(position)
+        position = self.interact_positions.pop(0)
+        self.interact_positions.append(position)
         self.goal_position = position
-        position
+        self.interaction = self.colloquy.interactions[position]
 
 
     def run(self, **kwargs):
         self.stop_event.clear()
         while not self.stop_event.is_set():
-            if not self.is_moving:
-                sleep(10)
+            if self.is_moving:
+                continue
+
+            if self.interaction is None:
                 self.toggle_position()
+                continue
+
+            for element in self.interaction:
+                element.interaction_event.set()
+            self.wait_interaction_end()
+            self.toggle_position()
             sleep(0.01)
+
+    def wait_interaction_end(self):
+        print(f"Waiting interaction end.")
+        def still_interacting():
+            for element in self.interaction:
+                yield element.interaction_event.is_set()
+
+        while any(still_interacting()):
+            if self.stop_event.is_set():
+                break
+            sleep(0.01)
+        print(f"...Interaction finished.")

@@ -31,6 +31,18 @@ class FemaleDriver(FemaleMaleDriver):
         while not self.stop_event.is_set():
             if not self.is_moving:
                 self.toggle_position()
+
+            if self.interaction_event.is_set():
+                self._interact()
             sleep(0.01)
 
         self.turn_off_neopixel()
+
+    def _interact(self):
+        iterations = 20
+        for i in range(iterations):
+            if self.stop_event.is_set():
+                break
+            print(f"{self.name} interacting... ({(i+1)/iterations:.0%})")
+            sleep(1)
+        self.interaction_event.clear()
