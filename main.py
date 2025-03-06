@@ -8,5 +8,18 @@ sys.path.append(str(source_code.resolve()))
 
 import server
 
+
+# position = [
+    # 1100,
+    # 2700,
+    # 5000,
+    # 7600,
+    # 9000,
+    # 11300,
+    # ]
+
+# for e in position:
+    # print(e-1100)
+
 if __name__ == "__main__":
     server.run()

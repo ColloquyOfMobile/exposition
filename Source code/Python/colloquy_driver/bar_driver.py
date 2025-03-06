@@ -16,6 +16,21 @@ class BarDriver:
         self.moving_threshold = 20
         self.stop_event = Event()
 
+        self.relative_positions = [
+            0,
+            1600,
+            3900,
+            6500,
+            7900,
+            10200,
+            ]
+
+        self.positions = [
+            position + self.dxl_origin
+            for position
+            in self.relative_positions
+            ]
+
         if dxl_manager is not None:
             self.offset = None
             print(f"| Initialising DXL driver for ID={dxl_ids[0]}...")
@@ -24,6 +39,7 @@ class BarDriver:
             self.dxl2 = DXLDriver(dxl_manager, dxl_ids[1])
             self._init_offset()
             self._init()
+
 
     def _init_offset(self):
         """Initialise the offset postision between the two servos."""
@@ -153,7 +169,7 @@ class BarDriver:
     def turn_to_min_position(self):
         self.goal_position = self.dxl_origin
 
-    def toggle_position(self):
+    def toggle_max_min_position(self):
         if self._position_memory is None:
             self.turn_to_max_position()
             self._position_memory = "max"
@@ -169,9 +185,18 @@ class BarDriver:
             self._position_memory = "max"
             return
 
+    def toggle_position(self):
+        self.cursor = 0
+        position = self.positions.pop(0)
+        self.positions.append(position)
+        self.goal_position = position
+        position
+
+
     def run(self, **kwargs):
         self.stop_event.clear()
         while not self.stop_event.is_set():
             if not self.is_moving:
+                sleep(10)
                 self.toggle_position()
             sleep(0.01)
