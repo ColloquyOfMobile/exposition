@@ -175,7 +175,6 @@ class ColloquyDriver:
             self._threads.add(thread)
             thread.start()
 
-
             while not self.stop_event.is_set():
                 sleep(1)
 
