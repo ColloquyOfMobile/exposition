@@ -49,8 +49,8 @@ class ColloquyDriver:
 
         # Defined at for each bar position, which female and male interacts
         self.interactions = {
-            0: (self.male1, self.female1),
-            1600: (self.male1, self.female2),
+            0: (self.male1, self.female2),
+            1600: (self.male2, self.female1),
             3900: (self.male1, self.female3),
             6500: (self.male2, self.female1),
             7900: (self.male2, self.female2),
