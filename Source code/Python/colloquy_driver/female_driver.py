@@ -39,7 +39,11 @@ class FemaleDriver(FemaleMaleDriver):
         self.turn_off_neopixel()
 
     def _interact(self):
-        iterations = 20
+        iterations = 10
+        self.turn_to_origin_position()
+        self.turn_on_speaker()
+        sleep(0.5)
+        self.turn_off_speaker()
         for i in range(iterations):
             if self.stop_event.is_set():
                 break

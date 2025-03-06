@@ -52,8 +52,8 @@ class ColloquyDriver:
             0: (self.male1, self.female2),
             1600: (self.male2, self.female1),
             3900: (self.male1, self.female3),
-            6500: (self.male2, self.female1),
-            7900: (self.male2, self.female2),
+            6500: (self.male2, self.female2),
+            7900: (self.male1, self.female1),
             10200: (self.male2, self.female3),
         }
 

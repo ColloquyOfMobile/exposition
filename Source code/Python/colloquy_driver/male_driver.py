@@ -63,10 +63,22 @@ class MaleDriver(FemaleMaleDriver):
         self.turn_off_neopixel()
 
     def _interact(self):
-        iterations = 20
+        neopixel_state = self._neopixel_memory
+        if not neopixel_state:
+            self.turn_on_neopixel()
+            
+        iterations = 10
+        self.turn_to_origin_position()
         for i in range(iterations):
             if self.stop_event.is_set():
                 break
             print(f"{self.name} interacting... ({(i+1)/iterations:.0%})")
             sleep(1)
         self.interaction_event.clear()
+        
+        self.turn_on_speaker()
+        sleep(0.5)
+        self.turn_off_speaker()
+        
+        if neopixel_state != self._neopixel_memory:
+            self.toggle_neopixel()
