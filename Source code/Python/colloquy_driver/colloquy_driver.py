@@ -163,19 +163,15 @@ class ColloquyDriver:
         for element in elements:
             element.turn_off_neopixel()
 
-    def play_pacman(self, elements):
-        path = f"female1/pacman"
-        data = ""
-        print(f"{path=}")
-        response = self.female1.arduino_manager.send(path, data)
-        print(response)
+    # def play_pacman(self, elements):
+        # path = f"female1/pacman"
+        # data = ""
+        # response = self.female1.arduino_manager.send(path, data)
 
-    def play_pinkpanther(self,):
-        path = f"female1/pinkpanther"
-        data = ""
-        print(f"{path=}")
-        response = self.female1.arduino_manager.send(path, data)
-        print(response)
+    # def play_pinkpanther(self,):
+        # path = f"female1/pinkpanther"
+        # data = ""
+        # response = self.female1.arduino_manager.send(path, data)
 
     def is_something_moving(self):
         return any(

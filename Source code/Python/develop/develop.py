@@ -14,4 +14,3 @@ class Develop(Tests):
     def __init__(self, wsgi):
         Tests.__init__(self, wsgi, name="develop")
         # self._doc = None
-

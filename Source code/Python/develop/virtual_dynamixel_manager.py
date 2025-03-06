@@ -5,28 +5,6 @@ from time import time, sleep
 from collections import defaultdict
 from threading import Thread
 
-
-# def handle_error(func):
-    # @wraps(func)
-    # def wrapper(*args, **kwargs):
-        # self = args[0]
-        # for i in range(3):
-            # value, dxl_comm_result, dxl_error = func(*args, **kwargs)
-            # if dxl_comm_result != COMM_SUCCESS:
-                # print(f"COM ERR: {self.packet_handler.getTxRxResult(dxl_comm_result)}")
-                # continue
-            # if dxl_error != 0:
-                # print(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
-                # continue
-            # return value
-        # if dxl_comm_result != COMM_SUCCESS:
-            # raise RuntimeError(f"COM ERR: {self.packet_handler.getTxRxResult(dxl_comm_result)}")
-        # if dxl_error != 0:
-            # raise RuntimeError(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
-
-    # return wrapper
-
-
 class VirtualPortHandler:
     def __init__(self, port_name):
         pass
@@ -94,7 +72,6 @@ class VirtualPacketHandler:
         label = self._register_map[register_address]
         handler = self._register_writer.get(label, self._write_register)
         handler(dxl_id, value)
-        # print(f"dxl{dxl_id}/{label}={value}")
         return COMM_SUCCESS, 0
 
     def write4ByteTxRx(self, port_handler, dxl_id, register_address, value):
@@ -103,7 +80,6 @@ class VirtualPacketHandler:
         label = self._register_map[register_address]
         handler = self._register_writer.get(label, self._write_register)
         handler(dxl_id, value)
-        # print(f"dxl{dxl_id}/{label}={value}")
         return COMM_SUCCESS, 0
 
     def read4ByteTxRx(self, port_handler, dxl_id, register_address):
@@ -112,7 +88,6 @@ class VirtualPacketHandler:
         label = self._register_map[register_address]
         handler = self._register_reader.get(label, self._read_register)
         value = handler(dxl_id, label)
-        # print(f"dxl{dxl_id}/{label}(read)")
         return value, COMM_SUCCESS, 0
 
     def getTxRxResult(self, result):

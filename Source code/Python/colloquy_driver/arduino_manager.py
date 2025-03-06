@@ -24,21 +24,14 @@ class ArduinoManager:
         with self.lock:
             self.wait_for_reboot()
 
-        # IMPORTANT let the arduino reload
-        # sleep(0.5)
-
 
     def send(self, path, data):
         command = {"path": str(path), "data": data}
         serialized_command = f"{json.dumps(command)}\n"  # Conversion en JSON
-        # while self._busy.is_set():
-            # sleep(0.01)
-        # self._busy.set()
         with self.lock:
             self.port_handler.write(serialized_command.encode('utf-8'))  # Envoie de la commande
 
             data = self.port_handler.readline()  # Lit une ligne du port série
-        #self._busy.clear()
         if not data:
             raise TimeoutError("No response from Arduino.")
 
@@ -48,13 +41,10 @@ class ArduinoManager:
     def send_yield(self, path, data):
         command = {"path": str(path), "data": data}
         serialized_command = f"{json.dumps(command)}\n"  # Conversion en JSON
-        # print(f"{serialized_command.encode('utf-8')=}")
         self.port_handler.write(serialized_command.encode('utf-8'))  # Envoie de la commande
-        # self.port_handler.write(b'{}\n')
         while True:
             with self.lock:
                 data = self.port_handler.readline()  # Lit une ligne du port série
-                # print(f"{data=}")
             if data:
                 break
             yield f"Arduino still processing {command}..."

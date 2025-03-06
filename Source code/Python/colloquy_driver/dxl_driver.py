@@ -55,9 +55,7 @@ class DXLDriver:
         value = int(value)
         self._dxl_manager._write_1_byte_at(self._id, 64, value)
         if value:
-            # print(f"{self._id}/torque = enabled.")
             return
-        # print(f"{self._id}/torque = disabled.")
 
     @property
     def is_moving(self):
@@ -71,7 +69,6 @@ class DXLDriver:
     @profile_velocity.setter
     def profile_velocity(self, value):
         self._dxl_manager._write_4_bytes_at(self._id, 112, value)
-        # print(f"{self._id}/profile velocity = {value}.")
 
     @property
     def profile_acceleration(self):
@@ -80,7 +77,6 @@ class DXLDriver:
     @profile_acceleration.setter
     def profile_acceleration(self, value):
         self._dxl_manager._write_4_bytes_at(self._id, 108, value)
-        # print(f"{self._id}/profile acceleration = {value}.")
 
     @property
     def goal_position(self):
@@ -88,7 +84,7 @@ class DXLDriver:
 
     @goal_position.setter
     def goal_position(self, value):
-        print(f"dxl{self._id}/goal position={value}")
+        # print(f"dxl{self._id}/goal position={value}")
         value = int(value)
         self._dxl_manager._write_4_bytes_at(self._id, 116, value)
 

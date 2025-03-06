@@ -55,12 +55,6 @@ class FemaleMaleDriver(SharedDriver):
             self.turn_on_neopixel()
             return
 
-    def play_pacman(self,):
-        path = f"{self.name}/pacman"
-        data = ""
-        response = self.arduino_manager.send(path, data)
-        print(response)
-
     def toggle_speaker(self):
         print(f"{self._speaker_memory=}")
         if self._speaker_memory is None:

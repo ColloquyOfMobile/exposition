@@ -1,8 +1,9 @@
 from .dxl_driver import DXLDriver
+from .thread_driver import ThreadDriver
 from threading import Event
 
 
-class SharedDriver:
+class SharedDriver(ThreadDriver):
 
     classes = {
         "dxl_driver": DXLDriver
@@ -46,6 +47,7 @@ class SharedDriver:
         self.dxl.move_and_wait(position)
 
     def toggle_position(self):
+        # print(f"{self.name=}: toggle position.")
         if self._position_memory is None:
             self.turn_to_max_position()
             return

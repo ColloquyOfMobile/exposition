@@ -1,8 +1,9 @@
 from .dxl_driver import DXLDriver
 from time import time, sleep
 from threading import Event
+from .thread_driver import ThreadDriver
 
-class BarDriver:
+class BarDriver(ThreadDriver):
 
     def __init__(self, **kwargs):
         self._position_memory = None
@@ -24,9 +25,7 @@ class BarDriver:
 
         if dxl_manager is not None:
             self.offset = None
-            print(f"| Initialising DXL driver for ID={dxl_ids[0]}...")
             self.dxl1 = DXLDriver(dxl_manager, dxl_ids[0])
-            print(f"| Initialising DXL driver for ID={dxl_ids[1]}...")
             self.dxl2 = DXLDriver(dxl_manager, dxl_ids[1])
             self._init_offset()
             self._init()
@@ -174,6 +173,7 @@ class BarDriver:
     def toggle_position(self):
         self.cursor = 0
         position = self.interact_positions.pop(0)
+        print(f"{self.name=}: toggle position = {position=}.")
         self.interact_positions.append(position)
         self.goal_position = position
         self.interaction = self.colloquy.interactions[position]
@@ -193,7 +193,7 @@ class BarDriver:
                 element.interaction_event.set()
             self.wait_interaction_end()
             self.toggle_position()
-            sleep(0.01)
+            self.sleep_min()
 
     def wait_interaction_end(self):
         print(f"Waiting interaction end.")
@@ -204,5 +204,5 @@ class BarDriver:
         while any(still_interacting()):
             if self.stop_event.is_set():
                 break
-            sleep(0.01)
+            self.sleep_min()
         print(f"...Interaction finished.")

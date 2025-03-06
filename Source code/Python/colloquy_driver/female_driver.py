@@ -34,7 +34,7 @@ class FemaleDriver(FemaleMaleDriver):
 
             if self.interaction_event.is_set():
                 self._interact()
-            sleep(0.01)
+            self.sleep_min()
 
         self.turn_off_neopixel()
 

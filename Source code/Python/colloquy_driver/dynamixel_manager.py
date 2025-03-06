@@ -9,9 +9,6 @@ def handle_error(func):
     def wrapper(*args, **kwargs):
         self = args[0]
         for i in range(3):
-            # while self._busy.is_set():
-                # sleep(0.01)
-            # self._busy.set()
 
             with self.lock:
                 value, dxl_comm_result, dxl_error = func(*args, **kwargs)
