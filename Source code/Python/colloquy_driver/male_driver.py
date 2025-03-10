@@ -1,18 +1,31 @@
 from .male_female_driver import FemaleMaleDriver
 from time import time, sleep
-from threading import Event
+from threading import Event, Thread
+from collections import deque
 
-# From TJ's arduino code "logic35_system.ino, line 87." 
-# const bool com_pattern_I_O[com_pattern_count] = {1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-# const bool com_pattern_I_P[com_pattern_count] = {1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0};
-# const bool com_pattern_I_OP[com_pattern_count] = {1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1};
-# const bool com_pattern_II_O[com_pattern_count] = {1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0};
-# const bool com_pattern_II_P[com_pattern_count] = {1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1};
-# const bool com_pattern_II_OP[com_pattern_count] = {1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0};
+# During search the male blinks.
+# The blink pattern define 2 things:
+# - the male identity: 1 or 2
+# - which kind of interation the male is look for (drive state): "O" or "P" or both
+# Extracted from TJ's arduino code "logic35_system.ino, line 87."
+LIGHT_PATTERNS = {
+    "male1": {
+        "O":      (1, 1, 0, 0, 0, 0, 0, 1, 1, 1),
+        "P":      (1, 1, 0, 0, 0, 0, 1, 1, 1, 0),
+        "O or P": (1, 1, 0, 0, 0, 1, 0, 1, 0, 1),
+    },
+    "male2": {
+        "O":      (1, 1, 0, 0, 0, 1, 1, 1, 0, 0),
+        "I":      (1, 1, 0, 0, 1, 0, 0, 0, 1, 1),
+        "O or P": (1, 1, 0, 0, 1, 0, 1, 0, 1, 0),
+    }
+}
+
 # const bool com_pattern_I_R[com_pattern_count] = {1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1};
 # const bool com_pattern_II_R[com_pattern_count] = {1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 # const bool com_pattern_E[com_pattern_count] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 # const bool com_pattern_rejection[com_pattern_count] = {1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0};
+
 
 class MaleDriver(FemaleMaleDriver):
 
@@ -22,63 +35,82 @@ class MaleDriver(FemaleMaleDriver):
             self,
             **kwargs,
             )
-        self._blink_profile = [
-            #on
-            12,
-            #off
-            21,
-            #on
-            22,
-            #off
-            22.5,
-            #on
-            23.5,
-            #off
-            24,
-            #on
-            25,
-            #off
-            25.5,
-            #on
-            56.5,
-            #off
-            59
-            ]
+        self.light_patterns = {}
+        for k, v in LIGHT_PATTERNS[self.name].items():
+            # The deque with max_len will act as circular list
+            self.light_patterns[k] = deque(v, maxlen=len(v))
+
+
+        # self.blink_patterns["o"]
+        # self._blink_profile = [
+            # #on
+            # 12,
+            # #off
+            # 21,
+            # #on
+            # 22,
+            # #off
+            # 22.5,
+            # #on
+            # 23.5,
+            # #off
+            # 24,
+            # #on
+            # 25,
+            # #off
+            # 25.5,
+            # #on
+            # 56.5,
+            # #off
+            # 59
+            # ]
 
     def run(self, **kwargs):
         print(f"Running {self.name}...")
         self.stop_event.clear()
-        blink_profile = list(self._blink_profile)
-
-        neopixel_start = time()
-        timestamp = blink_profile.pop(0)
-
-        self.turn_on_neopixel()
+        search = Thread(target=self._search, name=f"{self.name}/search")
+        search.start()
 
         while not self.stop_event.is_set():
-            if (time() - neopixel_start) > timestamp:
-                self.toggle_neopixel()
-                if not blink_profile:
-                    blink_profile.extend(self._blink_profile)
-                    neopixel_start = time()
-
-                timestamp = blink_profile.pop(0)
-                # neopixel_start = time()
 
             if not self.is_moving:
                 self.toggle_position()
             self.sleep_min()
 
             if self.interaction_event.is_set():
+                search.join()
                 self._interact()
+                search = Thread(target=self._search, name=f"{self.name}/search")
+                search.start()
 
         self.turn_off_neopixel()
+        print(f"Joining thread {search.name}...")
+        search.join()
+
+    def _search(self):
+        light_pattern = self.light_patterns[self.drive_state]
+
+        neopixel_start = time()
+        neopixel_on_off = light_pattern.popleft()
+        light_pattern.append(neopixel_on_off)
+        self.set_neopixel(neopixel_on_off)
+
+        while not self.stop_event.is_set():
+            if (time() - neopixel_start) > 0.5:
+                neopixel_on_off = light_pattern.popleft()
+                light_pattern.append(neopixel_on_off)
+                self.set_neopixel(neopixel_on_off)
+                neopixel_start = time()
+
+            if self.interaction_event.is_set():
+                break
+            self.sleep_min()
 
     def _interact(self):
         neopixel_state = self._neopixel_memory
         if not neopixel_state:
             self.turn_on_neopixel()
-            
+
         iterations = 10
         self.turn_to_origin_position()
         for i in range(iterations):
@@ -87,10 +119,10 @@ class MaleDriver(FemaleMaleDriver):
             print(f"{self.name} interacting... ({(i+1)/iterations:.0%})")
             sleep(1)
         self.interaction_event.clear()
-        
+
         self.turn_on_speaker()
         sleep(0.5)
         self.turn_off_speaker()
-        
+
         if neopixel_state != self._neopixel_memory:
             self.toggle_neopixel()

@@ -12,18 +12,27 @@ class FemaleMaleDriver(SharedDriver):
         self._speaker_memory = None
         self.interaction_event = Event()
 
+    @property
+    def drive_state(self):
+        return "O or P"
+
     def turn_to_left_position(self):
         self.turn_to_max_position()
 
     def turn_to_right_position(self):
         self.turn_to_min_position()
 
+    def set_neopixel(self, neopixel_on_off):
+        if neopixel_on_off:
+            self.turn_on_neopixel()
+        else:
+            self.turn_off_neopixel()
+
     def turn_on_neopixel(self):
         path = f"{self.name}/neopixel"
-        data = "on" # Turns the Neopixels off.
+        data = "on"
         self.arduino_manager.send(path, data)
         self._neopixel_memory = True
-        # raise NotImplementedError
 
     def turn_off_neopixel(self):
         path = f"{self.name}/neopixel"

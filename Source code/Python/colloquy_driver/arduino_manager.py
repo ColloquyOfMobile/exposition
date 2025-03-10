@@ -4,6 +4,7 @@ from pathlib import Path
 import json
 from time import sleep, time
 from threading import Lock
+START = time()
 
 class ArduinoManager:
 
@@ -27,6 +28,7 @@ class ArduinoManager:
 
     def send(self, path, data):
         command = {"path": str(path), "data": data}
+        print(f"{round(time()-START, 2)}: {command=}")
         serialized_command = f"{json.dumps(command)}\n"  # Conversion en JSON
         with self.lock:
             self.port_handler.write(serialized_command.encode('utf-8'))  # Envoie de la commande
