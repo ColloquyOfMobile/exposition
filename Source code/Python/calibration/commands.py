@@ -31,10 +31,10 @@ class BodyMoveToOriginAndWait(Command):
         Command.__init__(self, owner, name=f"{body.name}/move to origin")
 
     def __call__(self, **kwargs):
-        yield f"Moving the {self.body.name}..."
-        position = int(kwargs["position"][0])
+        yield f"Moving the {self.body.name} to origin..."
+        # position = int(kwargs["position"][0])
         self.body.turn_to_origin_position()
-        self.body.dxl.wait_for_servo(position)
+        self.body.dxl.wait_for_servo()
         # raise NotImplementedError
         yield f"Finish moving the {self.body.name}."
 
