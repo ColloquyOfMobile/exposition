@@ -80,7 +80,7 @@ class FemaleMaleDriver(SharedDriver):
             return
 
         if self._speaker_memory:
-            self.turn_off_neopixel()
+            self.turn_off_speaker()
             self._speaker_memory = False
             return
 

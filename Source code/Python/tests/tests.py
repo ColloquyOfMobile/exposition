@@ -105,7 +105,8 @@ class Tests:
         if self.colloquy_thread is not None:
             self.colloquy_driver.stop_event.set()
             self.colloquy_thread.join()
-        self._colloquy_driver.stop()
+        if self._colloquy_driver is not None:
+            self._colloquy_driver.stop()
         if self.active is not None:
             self.active.close()
 
