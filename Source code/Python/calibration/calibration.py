@@ -2,30 +2,46 @@ from utils import CustomDoc
 from colloquy_driver import ColloquyDriver
 from parameters import Parameters
 from pathlib import Path
+from .commands import BarMoveAndWait, BodyMoveAndWait, BodyToggleNeopixel, BodyToggleSpeaker
 
 PARAMETERS = Parameters().as_dict()
 
 class Calibration():
-    def __init__(self, wsgi):
+    def __init__(self, wsgi, owner, path):
         self._wsgi = wsgi
         self._doc = None
-        self.wsgi_path = Path("calibration")
-        self.colloquy_driver = None
-        self._commands = {
-            "bar/move and wait": self.bar_move_and_wait,
-        }
+        self.path = path
+        self._owner = owner
+        self._commands = {}
+        self.add_command(
+            BarMoveAndWait(owner=self)
+            )
+
+    @property
+    def doc(self):
+        return self._doc
+
+    @property
+    def colloquy_driver(self):
+        return self._owner.colloquy_driver
+
+    @property
+    def commands(self):
+        return self._commands
+
+    def add_command(self, command):
+        self._commands[command.name] = command
 
     def open(self):
-        self.colloquy_driver = ColloquyDriver(PARAMETERS)
+        for body in self.colloquy_driver.bodies:
+            for command_class in [BodyMoveAndWait, BodyToggleNeopixel, BodyToggleSpeaker]:
+                command = command_class(owner=self, body=body)
+                self.add_command(command)
+
+        pass
 
     def close(self):
-        self.colloquy_driver.stop()
-        self.colloquy_driver = None
-
-    def bar_move_and_wait(self, **kwargs):
-        position = int(kwargs["position"][0])
-        self.colloquy_driver.bar.move_and_wait(position)
-        yield "Finish moving the bar."
+        pass
 
     def __call__(self, **kwargs):
         self._doc = CustomDoc()
@@ -64,6 +80,7 @@ class Calibration():
             if command is not None:
                 with tag("h3"):
                     text("logs:")
+                yield doc.read().encode()
                 string_command = command[0]
                 command = self._commands[string_command]
                 for log in command(**kwargs):
@@ -78,20 +95,12 @@ class Calibration():
 
             with tag("h3",):
                 text("commands:")
-            self._write_move_bar()
+            for command in sorted(self.commands.values()):
+                command.write_html()
             yield doc.read().encode()
-
-    def _write_move_bar(self):
-        doc, tag, text = self._doc.tagtext()
-        position = self.colloquy_driver.bar.position
-        with tag("form", action="", method="post"):
-            with tag("input", type="number", name="position", value=position, step="1"):
-                pass
-            with tag("button", type="submit", name="command", value="bar/move and wait"):
-                text("bar/move and wait")
 
     def add_html_link(self):
         doc, tag, text = self._wsgi.doc.tagtext()
         with tag("h2",):
-            with tag("a", href=self.wsgi_path.as_posix()):
+            with tag("a", href=f"{self.path.as_posix()}"):
                 text("Calibration.")

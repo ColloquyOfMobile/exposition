@@ -16,6 +16,14 @@ class FemaleMaleDriver(SharedDriver):
     def drive_state(self):
         return "O or P"
 
+    @property
+    def neopixel_state(self):
+        return self._neopixel_memory
+
+    @property
+    def speaker_state(self):
+        return self._speaker_memory
+
     def turn_to_left_position(self):
         self.turn_to_max_position()
 
@@ -65,7 +73,7 @@ class FemaleMaleDriver(SharedDriver):
             return
 
     def toggle_speaker(self):
-        print(f"{self._speaker_memory=}")
+        # print(f"{self._speaker_memory=}")
         if self._speaker_memory is None:
             self.turn_on_speaker()
             self._speaker_memory = True

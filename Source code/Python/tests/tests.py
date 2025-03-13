@@ -10,6 +10,7 @@ from utils import CustomDoc
 from pathlib import Path
 from time import sleep
 from threading import Thread, Event
+from calibration import Calibration
 
 PARAMETERS = Parameters().as_dict()
 # PARAMETERS.pop("dynamixel network")
@@ -23,14 +24,65 @@ class Tests:
     def __init__(self, wsgi, name="tests"):
         self._name = name
         self._wsgi = wsgi
-        self.wsgi_path = Path(self._name)
+        self.path = Path(self._name)
+        self.active = None
         self._colloquy_driver = None
         self._commands = {
         }
+        handlers = [
+            Calibration(wsgi=wsgi, owner=self, path=self.path/"calibration"),
+        ]
+        self.handlers = {
+            handler.path: handler
+            for handler in handlers
+            }
         self.run = RunCommand(owner=self)
         self.stop = StopCommand(owner=self)
         self.colloquy_thread = None
 
+
+    def __eq__(self, other):
+        return other.name == self.name
+
+    def __lt__(self, other):
+        return self.name < other.name
+
+    def __call__(self, **kwargs):
+        if self._wsgi.path != self.path:
+            self.activate()
+            yield from self.active(**kwargs)
+            return
+
+        if self.active is not None:
+            self.active.close()
+            self.active = None
+
+        self._doc = CustomDoc()
+        doc, tag, text = self._doc.tagtext()
+        self._wsgi.start_response('200 OK', [('Content-Type', 'text/html')])
+
+        doc.asis("<!DOCTYPE html>")
+        with tag("html"):
+            with tag("head"):
+                with tag("title"):
+                    text(f"Colloquy of Mobiles")
+                doc.asis(
+                    '<meta name="viewport"'
+                    ' content="width=device-width,'
+                    " initial-scale=1,"
+                    ' interactive-widget=resizes-content" />'
+                )
+
+
+            for response in self._write_body(**kwargs):
+                yield response
+
+        response = doc.read()
+        yield response.encode()
+
+    @property
+    def name(self):
+        return self._name
 
     @property
     def colloquy_driver(self):
@@ -54,29 +106,8 @@ class Tests:
             self.colloquy_driver.stop_event.set()
             self.colloquy_thread.join()
         self._colloquy_driver.stop()
-
-    def __call__(self, **kwargs):
-        self._doc = CustomDoc()
-        doc, tag, text = self._doc.tagtext()
-        self._wsgi.start_response('200 OK', [('Content-Type', 'text/html')])
-
-        doc.asis("<!DOCTYPE html>")
-        with tag("html"):
-            with tag("head"):
-                with tag("title"):
-                    text(f"Colloquy of Mobiles")
-                doc.asis(
-                    '<meta name="viewport"'
-                    ' content="width=device-width,'
-                    " initial-scale=1,"
-                    ' interactive-widget=resizes-content" />'
-                )
-
-            for response in self._write_body(**kwargs):
-                yield response
-
-        response = doc.read()
-        yield response.encode()
+        if self.active is not None:
+            self.active.close()
 
     def _write_header(self):
         doc, tag, text = self._wsgi.doc.tagtext()
@@ -92,8 +123,13 @@ class Tests:
         doc, tag, text = self._wsgi.doc.tagtext()
         with tag("body"):
             self._write_header()
+
+            for handler in sorted(self.handlers.values()):
+                handler.add_html_link()
+
             with tag("h2",):
                 text(f"{self._name.title()}:")
+
             command = kwargs.get("command")
             if command is not None:
                 with tag("h3"):
@@ -122,8 +158,17 @@ class Tests:
     def add_html_link(self):
         doc, tag, text = self._wsgi.doc.tagtext()
         with tag("h2",):
-            with tag("a", href=self.wsgi_path.as_posix()):
+            with tag("a", href=self.path.as_posix()):
                 text(f"{self._name.title()}.")
+
+    def activate(self):
+        path = Path(*self._wsgi.path.parts[:2])
+        if self.active is not None:
+            if self.active.path == path:
+                return
+            self.active.close()
+        self.active = self.handlers[path]
+        self.active.open()
 
 
 class Command:

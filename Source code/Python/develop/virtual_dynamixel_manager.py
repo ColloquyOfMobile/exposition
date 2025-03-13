@@ -25,11 +25,25 @@ class DxlThread:
 
     def __call__(self):
         owner = self._owner
-        move_duration = 5
+        table = owner._dxl_tables[self._dxl_id]
+        goal = table["goal position"]
+        position = table["position"]
+        # move_duration = 5
         start = time()
-        while time()-start<move_duration:
-            sleep(0.1)
-        goal = owner._dxl_tables[self._dxl_id]["goal position"]
+        step = 50
+        lim_min, lim_max  = goal - 2*step, goal + 2*step
+        # print(f"{lim_min=}, {lim_max=}")
+        while True:
+            # print(f"{table['position']=}")
+            if lim_min < table["position"] < lim_max:
+                break
+            if table["position"] < goal:
+                table["position"] += step
+                sleep(0.1)
+                continue
+            table["position"] -= step
+            sleep(0.01)
+
         owner._dxl_tables[self._dxl_id]["position"] = goal
 
 def default_dict_init():
@@ -104,112 +118,3 @@ class VirtualDynamixelManager(DynamixelManager):
         "port_handler": VirtualPortHandler,
         "packet_handler": VirtualPacketHandler,
     }
-
-    # def __init__(self, **kwargs):
-        # port_name = kwargs["communication port"]
-        # baudrate = kwargs["baudrate"]
-        # self.port_handler = self._classes["port_handler"](port_name)
-        # self.packet_handler = self._classes["packet_handler"](2.0)  # Using protocol 2.0
-
-        # if not self.port_handler.openPort():
-            # raise IOError(f"Failed to open the port: {port_name}")
-
-        # if not self.port_handler.setBaudRate(baudrate):
-            # raise IOError(f"Failed to set baud rate to: {baudrate}")
-
-    # @handle_error
-    # def _read_1_byte_at(self, dxl_id, register_address):
-        # value, dxl_comm_result, dxl_error = self.packet_handler.read1ByteTxRx(
-            # self.port_handler,
-            # dxl_id,
-            # register_address,
-        # )
-        # # if dxl_comm_result != COMM_SUCCESS:
-            # # raise RuntimeError(f"COM ERR: {self.packet_handler.getTxRxResult(dxl_comm_result)}")
-        # # if dxl_error != 0:
-            # # raise RuntimeError(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
-
-        # return value, dxl_comm_result, dxl_error
-
-    # @handle_error
-    # def _read_2_bytes_at(self, dxl_id, register_address):
-        # value, dxl_comm_result, dxl_error = self.packet_handler.read2ByteTxRx(
-            # self.port_handler,
-            # dxl_id,
-            # register_address,
-        # )
-        # # if dxl_comm_result != COMM_SUCCESS:
-            # # raise RuntimeError(f"COM ERR: {self.packet_handler.getTxRxResult(dxl_comm_result)}")
-        # # if dxl_error != 0:
-            # # raise RuntimeError(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
-
-        # return value, dxl_comm_result, dxl_error
-
-    # @handle_error
-    # def _read_4_bytes_at(self, dxl_id, register_address):
-        # value, dxl_comm_result, dxl_error = self.packet_handler.read4ByteTxRx(
-            # self.port_handler,
-            # dxl_id,
-            # register_address,
-        # )
-        # # if dxl_comm_result != COMM_SUCCESS:
-            # # raise RuntimeError(f"COM ERR: {self.packet_handler.getTxRxResult(dxl_comm_result)}")
-        # # if dxl_error != 0:
-            # # raise RuntimeError(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
-
-        # return value, dxl_comm_result, dxl_error
-
-    # @handle_error
-    # def _write_1_byte_at(self, dxl_id, register_address, value):
-        # # Enable Dynamixel Torque
-        # dxl_comm_result, dxl_error = self.packet_handler.write1ByteTxRx(
-            # self.port_handler,
-            # dxl_id,
-            # register_address,
-            # value)
-
-        # return None, dxl_comm_result, dxl_error
-
-        # # if dxl_comm_result != COMM_SUCCESS:
-            # # raise RuntimeError(f"COM ERR: {self.packet_handler.getTxRxResult(dxl_comm_result)}")
-        # # if dxl_error != 0:
-            # # raise RuntimeError(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
-
-    # @handle_error
-    # def _write_2_bytes_at(self, dxl_id, register_address, value):
-        # # Enable Dynamixel Torque
-        # dxl_comm_result, dxl_error = self.packet_handler.write2ByteTxRx(
-            # self.port_handler,
-            # dxl_id,
-            # register_address,
-            # value)
-
-        # # if dxl_comm_result != COMM_SUCCESS:
-            # # raise RuntimeError(f"COM ERR: {self.packet_handler.getTxRxResult(dxl_comm_result)}")
-        # # if dxl_error != 0:
-            # # raise RuntimeError(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
-
-        # return None, dxl_comm_result, dxl_error
-
-    # @handle_error
-    # def _write_4_bytes_at(self, dxl_id, register_address, value):
-        # # Enable Dynamixel Torque
-        # dxl_comm_result, dxl_error = self.packet_handler.write4ByteTxRx(
-            # self.port_handler,
-            # dxl_id,
-            # register_address,
-            # value)
-
-        # return None, dxl_comm_result, dxl_error
-
-        # # if dxl_comm_result != COMM_SUCCESS:
-            # # raise RuntimeError(f"COM ERR: {self.packet_handler.getTxRxResult(dxl_comm_result)}")
-        # # if dxl_error != 0:
-            # # raise RuntimeError(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
-
-    # def stop(self):
-        # self.port_handler.closePort()
-
-
-    # def start(self):
-        # self.port_handler.openPort()

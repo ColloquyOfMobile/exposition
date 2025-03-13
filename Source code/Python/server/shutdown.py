@@ -4,11 +4,13 @@ class Shutdown():
     def __init__(self, wsgi):
         self._wsgi = wsgi
         self._doc = None
-        self.wsgi_path = Path("shutdown")
+        self.path = Path("shutdown")
 
-    def _handle_shutdown(self):
-        self._start_response('200 OK', [('Content-Type', 'text/plain')])
-        return []
+    def __eq__(self, other):
+        return other.name == self.name
+
+    def __lt__(self, other):
+        return self.name < other.name
 
     def __call__(self, **kwargs):
         self._wsgi.shut_server = True
@@ -16,10 +18,18 @@ class Shutdown():
 
         yield b'Goodbye!'
 
+    @property
+    def name(self):
+        return "shutdown"
+
+    def _handle_shutdown(self):
+        self._start_response('200 OK', [('Content-Type', 'text/plain')])
+        return []
+
     def add_html_link(self):
         doc, tag, text = self._wsgi.doc.tagtext()
         with tag("h2",):
-            with tag("a", href=self.wsgi_path.as_posix()):
+            with tag("a", href=self.path.as_posix()):
                 text("Shudown server.")
 
     def open(self):

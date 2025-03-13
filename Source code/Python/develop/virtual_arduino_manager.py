@@ -27,6 +27,10 @@ class VirtualSerialPort:
     def close(self):
         self._is_open = False
 
+    def open(self):
+        self._readline_results = self._iter_readline_results()
+        self._is_open = True
+
 class VirtualArduinoManager(ArduinoManager):
 
     _classes = {

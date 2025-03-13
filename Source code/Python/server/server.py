@@ -2,45 +2,42 @@ from pathlib import Path
 from urllib.parse import unquote
 import urllib
 from wsgiref.simple_server import make_server, WSGIRequestHandler
-import mimetypes
 import os
 from .root import Root
-from .calibration import Calibration
-from tests import Tests
-from .shutdown import Shutdown
-from develop import Develop
+# from .calibration import Calibration
+from .file_handler import FileHandler
 from utils import CustomDoc
 
 class WSGI:
     def __init__(self):
         self._shut_server = False
         self.doc = None
-        self.handlers = [
-            Shutdown(wsgi=self),
-            Calibration(wsgi=self),
-            Tests(wsgi=self),
-            Develop(wsgi=self),
-        ]
-        self._path_handlers = {
-            Path(""): Root(self),
-            }
-        for handler in self.handlers:
-            self._path_handlers[handler.wsgi_path] = handler
-        # self._path_handlers = {
-            # Path("shutdown"): self._handle_shutdown,
-            # Path(""): Root(self),
-            # Path("calibration"): Calibration(self),
-            # Path("tests"): Tests(self),
-            # # Path("TATU"): Tatu(self),
-        # }
-        self._path_handler = None
-        # self._archive_2025_01_24 = UpgradeColloquy()
+        self.root = Root(wsgi=self)
+
+        self.file_handler = FileHandler(wsgi=self)
+
+        self._handler = None
         self._path = None
         self._start_response = None
         self._data = None
 
+    def __call__(self, environ, start_response):
+        # Get the requested path from the environment
+        self.doc = CustomDoc()
+        self._parse_path(environ)
+        self._parse_post_data(environ)
+        print(f"{self._path}, {self._data}")
+        self._start_response = start_response
+        for response in self._handle_request():
+            yield response
+
+    @property
+    def path(self):
+        return self._path
+
     @property
     def driver(self):
+        raise NotImplementedError
         return self._driver
 
     @property
@@ -56,51 +53,47 @@ class WSGI:
         self._shut_server = value
 
     @property
-    def path_handler(self):
-        return self._path_handler
+    def handler(self):
+        return self._handler
 
-    @path_handler.setter
-    def path_handler(self, value):
+    @handler.setter
+    def handler(self, value):
+        raise NotImplementedError
 
-        if value is self._path_handler:
+        if value is self._handler:
             return
 
         if value is None:
-            if hasattr(self._path_handler, "close"):
-                self._path_handler.close()
-            self._path_handler = value
+            raise NotImplementedError
+            if hasattr(self._handler, "close"):
+                self._handler.close()
+            self._handler = value
             return
 
-        if self._path_handler is not None:
-            if hasattr(self._path_handler, "close"):
-                self._path_handler.close()
+        if self._handler is not None:
+            if hasattr(self._handler, "close"):
+                self._handler.close()
 
 
         if hasattr(value, "open"):
             value.open()
 
-        self._path_handler = value
-
-    def __call__(self, environ, start_response):
-        # Get the requested path from the environment
-        self.doc = CustomDoc()
-        self._parse_path(environ)
-        self._parse_post_data(environ)
-        print(f"{self._path}, {self._data}")
-        self._start_response = start_response
-        for response in self._handle_request():
-            yield response
+        self._handler = value
 
     def _handle_request(self):
-        file_path = self._path
-        self.path_handler = self._path_handlers.get(file_path)
-        if self.path_handler is not None:
+        # self._set_handler()
+        # if self.handler is not None:
+        for response in  self.root(**self._data):
+            yield response
+        return
 
-            for response in  self.path_handler(**self._data):
-                yield response
-            return
+        # yield from self._handle_file()
 
-        yield from self._handle_file()
+    def _set_handler(self):
+        # path = self._path
+        for path in reversed(self._path.parents):
+            self.handler = self.handlers.get(path, self.file_handler)
+
 
     def _parse_path(self, environ):
         """Parse the path."""
@@ -128,37 +121,9 @@ class WSGI:
             data = urllib.parse.parse_qs(post_data.decode('utf-8'))
 
         else:
-            # Handle other request methods or unsupported content types
             data = {}
 
         self._data = data
-
-    # def _handle_archive(self,):
-            # self._start_response('200 OK', [('Content-Type', 'text/html')])
-            # return [self._archive_2025_01_24.html.encode()]
-
-
-    def _handle_file(self):
-        file_path = self._path
-        try:
-            # Open the requested file
-            with open(file_path, 'rb') as f:
-                content = f.read()
-
-            # Use mimetypes.guess_type to determine the content type
-            content_type, _ = mimetypes.guess_type(file_path)
-            if content_type is None:
-                content_type = 'application/octet-stream'  # Default content type
-
-            self._start_response('200 OK', [('Content-Type', content_type)])
-            yield content
-
-        except IOError:
-            # File not found
-            self._start_response('404 Not Found', [('Content-Type', 'text/plain')])
-            message = f'{file_path.as_posix()} not found !'
-            print(message)
-            yield message.encode()
 
 class CustomHandler(WSGIRequestHandler):
 

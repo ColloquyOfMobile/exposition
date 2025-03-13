@@ -81,7 +81,7 @@ class ArduinoManager:
 
     def start(self):
         """
-        Ferme le port série.
+        Ouvre le port série.
         """
         if not self.port_handler.is_open:
             self.port_handler.open()
