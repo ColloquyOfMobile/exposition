@@ -47,6 +47,29 @@ class BarMoveToPositionAndWait(Command):
             with tag("button", type="submit", name="command", value=self.name):
                 text(self.name)
 
+class BarMoveToOriginAndWait(Command):
+
+    def __init__(self, owner):
+        Command.__init__(self, owner, name=f"bar/move to origin")
+
+    def __call__(self, **kwargs):
+        yield f"Moving the bar to origin..."
+        colloquy_driver = self._owner.colloquy_driver
+        colloquy_driver.bar.turn_to_origin_position()
+        colloquy_driver.bar.dxl.wait_for_servo()
+        # raise NotImplementedError
+        yield f"Finish moving the bar."
+
+    def write_html(self):
+        doc, tag, text = self._owner._doc.tagtext()
+        colloquy_driver = self._owner.colloquy_driver
+        position = colloquy_driver.bar.dxl_origin
+        with tag("form", action="", method="post"):
+            with tag("input", type="number", name="position", value=position, disabled="True"):
+                pass
+            with tag("button", type="submit", name="command", value=self.name):
+                text(self.name)
+
 class BodyMoveToOriginAndWait(Command):
 
     def __init__(self, owner, body):

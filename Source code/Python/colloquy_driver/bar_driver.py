@@ -173,7 +173,6 @@ class BarDriver(ThreadDriver):
     def toggle_position(self):
         self.cursor = 0
         position = self.interact_positions.pop(0)
-        # print(f"{self.name=}: toggle position = {position=}.")
         self.interact_positions.append(position)
         self.goal_position = position
         self.interaction = self.colloquy.interactions[position-self.dxl_origin]

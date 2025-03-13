@@ -3,7 +3,7 @@ from colloquy_driver import ColloquyDriver
 from parameters import Parameters
 from pathlib import Path
 from .commands import BarMoveAndWait, BodyMoveAndWait, BodyToggleNeopixel, BodyToggleSpeaker
-from .commands import BodyMoveToOriginAndWait, BarMoveToPositionAndWait
+from .commands import BodyMoveToOriginAndWait, BarMoveToPositionAndWait, BarMoveToOriginAndWait
 PARAMETERS = Parameters().as_dict()
 
 class Calibration():
@@ -15,6 +15,9 @@ class Calibration():
         self._commands = {}
         self.add_command(
             BarMoveAndWait(owner=self)
+            )
+        self.add_command(
+            BarMoveToOriginAndWait(owner=self)
             )
 
     @property
@@ -44,6 +47,7 @@ class Calibration():
                 self.add_command(command)
 
         for position, actors in self.colloquy_driver.interactions.items():
+            position = position + self.colloquy_driver.bar.dxl_origin
             command = BarMoveToPositionAndWait(owner=self, position=position, actors=actors)
             self.add_command(command)
 
