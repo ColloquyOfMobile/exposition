@@ -3,7 +3,7 @@ from colloquy_driver import ColloquyDriver
 from parameters import Parameters
 from pathlib import Path
 from .commands import BarMoveAndWait, BodyMoveAndWait, BodyToggleNeopixel, BodyToggleSpeaker
-
+from .commands import BodyMoveToOriginAndWait
 PARAMETERS = Parameters().as_dict()
 
 class Calibration():
@@ -34,7 +34,12 @@ class Calibration():
 
     def open(self):
         for body in self.colloquy_driver.bodies:
-            for command_class in [BodyMoveAndWait, BodyToggleNeopixel, BodyToggleSpeaker]:
+            for command_class in [
+                BodyMoveAndWait,
+                BodyToggleNeopixel,
+                BodyToggleSpeaker,
+                BodyMoveToOriginAndWait,
+                ]:
                 command = command_class(owner=self, body=body)
                 self.add_command(command)
 

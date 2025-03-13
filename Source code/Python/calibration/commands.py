@@ -24,6 +24,31 @@ with tag("form", action="", method="post"):
         text(self.name)
         """)
 
+class BodyMoveToOriginAndWait(Command):
+
+    def __init__(self, owner, body):
+        self.body = body
+        Command.__init__(self, owner, name=f"{body.name}/move to origin")
+
+    def __call__(self, **kwargs):
+        yield f"Moving the {self.body.name}..."
+        position = int(kwargs["position"][0])
+        self.body.turn_to_origin_position()
+        self.body.dxl.wait_for_servo(position)
+        # raise NotImplementedError
+        yield f"Finish moving the {self.body.name}."
+
+    def write_html(self):
+        doc, tag, text = self._owner._doc.tagtext()
+        colloquy_driver = self._owner.colloquy_driver
+        position = round(self.body.position)
+        with tag("form", action="", method="post"):
+            with tag("input", type="number", name="position", value=position, disabled="True"):
+                pass
+            with tag("button", type="submit", name="command", value=self.name):
+                text(self.name)
+
+
 class BodyToggleSpeaker(Command):
 
     def __init__(self, owner, body):
