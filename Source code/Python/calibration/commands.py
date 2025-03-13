@@ -24,6 +24,29 @@ with tag("form", action="", method="post"):
         text(self.name)
         """)
 
+class BarMoveToPositionAndWait(Command):
+
+    def __init__(self, owner, position, actors):
+        self.position = position
+        self.actors = actors
+        Command.__init__(self, owner, name=f"bar/move to interaction between {self.actors[0].name} and {self.actors[1].name}")
+
+    def __call__(self, **kwargs):
+        position = int(kwargs["position"][0])
+        self._owner.colloquy_driver.bar.move_and_wait(self.position)
+        # raise NotImplementedError
+        yield "Finish moving the bar."
+
+    def write_html(self):
+        doc, tag, text = self._owner._doc.tagtext()
+        colloquy_driver = self._owner.colloquy_driver
+        position = round(self.position)
+        with tag("form", action="", method="post"):
+            with tag("input", type="number", name="position", value=position, step="1"):
+                pass
+            with tag("button", type="submit", name="command", value=self.name):
+                text(self.name)
+
 class BodyMoveToOriginAndWait(Command):
 
     def __init__(self, owner, body):
@@ -41,7 +64,7 @@ class BodyMoveToOriginAndWait(Command):
     def write_html(self):
         doc, tag, text = self._owner._doc.tagtext()
         colloquy_driver = self._owner.colloquy_driver
-        position = round(self.body.position)
+        position = self.body.dxl_origin
         with tag("form", action="", method="post"):
             with tag("input", type="number", name="position", value=position, disabled="True"):
                 pass

@@ -30,7 +30,7 @@ class DxlThread:
         position = table["position"]
         # move_duration = 5
         start = time()
-        step = 50
+        step = 100
         lim_min, lim_max  = goal - 2*step, goal + 2*step
         # print(f"{lim_min=}, {lim_max=}")
         while True:
