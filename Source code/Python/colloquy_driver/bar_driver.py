@@ -189,6 +189,8 @@ class BarDriver(ThreadDriver):
                 continue
 
             for element in self.interaction:
+                print(f"{element.name=}")
+                print(f"{self.goal_position}")
                 element.interaction_event.set()
             self.wait_interaction_end()
             self.toggle_position()
