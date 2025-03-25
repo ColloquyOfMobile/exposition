@@ -1,5 +1,6 @@
 from time import sleep
 from colloquy_driver.arduino_manager import ArduinoManager
+import json
 
 class VirtualSerialPort:
 
@@ -18,7 +19,15 @@ class VirtualSerialPort:
         return next(self._readline_results)
 
     def write(self, data):
-        pass
+        data = data.decode()
+        data = json.loads(data)
+        path = data["path"]
+        if path.endswith("neopixel"):
+            assert "r" in data
+            assert "g" in data
+            assert "b" in data
+            assert "w" in data
+            assert "brightness" in data
 
     @property
     def is_open(self):

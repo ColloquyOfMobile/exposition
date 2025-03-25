@@ -92,6 +92,7 @@ class ColloquyDriver:
         bar_params["colloquy"] = self
         bar_params["name"] = "bar"
         bar_params["dynamixel manager"] = self._dxl_manager
+        bar_params["colloquy"] = self
         if bar_params["origin"] is not None:
             self.bar = self._classes["bar_driver"](**bar_params)
 
@@ -104,6 +105,7 @@ class ColloquyDriver:
             fem_params.update( params["females"]["share"])
             fem_params["dynamixel manager"] = self._dxl_manager
             fem_params["arduino manager"] = self._arduino_manager
+            fem_params["colloquy"] = self
             female_driver = self._classes["female_driver"](**fem_params)
             self.females.append(female_driver)
             setattr(self, name, female_driver)
@@ -118,6 +120,7 @@ class ColloquyDriver:
             male_params.update( params["males"]["share"])
             male_params["dynamixel manager"] = self._dxl_manager
             male_params["arduino manager"] = self._arduino_manager
+            male_params["colloquy"] = self
             male_driver = self._classes["male_driver"](**male_params)
             self.males.append(male_driver)
             setattr(self, name, male_driver)
