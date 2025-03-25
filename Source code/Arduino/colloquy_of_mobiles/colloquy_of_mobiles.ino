@@ -71,36 +71,30 @@ String processCommand(const String& input) {
   }
 
   String path = jsonDoc["path"];
-  String data = jsonDoc["data"];
 
   // Gestion des actions sur les Neopixels
   if (path.endsWith("/neopixel")) {
-    if (data == "on") {
-      return handleNeopixel(path, true);
-    } else if (data == "off") {
-      return handleNeopixel(path, false);
-    }
+    int r = jsonDoc["r"] | 0;
+    int g = jsonDoc["g"] | 0;
+    int b = jsonDoc["b"] | 0;
+    int w = jsonDoc["w"] | 0;
+    int brightness = jsonDoc["brightness"] | 255;
+    return handleNeopixel(path, r, g, b, w, brightness);
   }
   // Gestion des actions sur les haut-parleurs
   else if (path.endsWith("/speaker")) {
+    String data = jsonDoc["data"];
     if (data == "on") {
       return handleSpeaker(path, true);
     } else if (data == "off") {
       return handleSpeaker(path, false);
     } 
   }
-  else if (path.endsWith("/pacman")) {
-    return handlePacman(path);
-  }
-  else if (path.endsWith("/pinkpanther")) {
-    return handlePinkPanther(path);
-  }
   
-
   return R"({"status": "error", "message": "Invalid path or data"})";
 }
 
-String handleNeopixel(const String& path, bool turnOn) {
+String handleNeopixel(const String& path, int r, int g, int b, int w, int brightness) {
   Adafruit_NeoPixel* targetStrip = nullptr;
 
   if (path == "female1/neopixel") {
@@ -116,11 +110,12 @@ String handleNeopixel(const String& path, bool turnOn) {
   }
 
   if (targetStrip != nullptr) {
+    targetStrip->setBrightness(brightness);
     for (int i = 0; i < targetStrip->numPixels(); i++) {
-      targetStrip->setPixelColor(i, turnOn ? targetStrip->Color(0, 0, 0, 255) : targetStrip->Color(0, 0, 0, 0));
+      targetStrip->setPixelColor(i, targetStrip->Color(r, g, b, w));
     }
     targetStrip->show();
-    return R"({"status": "success", "message": "Neopixel action completed"})";
+    return R"({"status": "success", "message": "Neopixel updated"})";
   }
   return R"({"status": "error", "message": "Invalid Neopixel path"})";
 }
@@ -151,49 +146,6 @@ String handleSpeaker(const String& path, bool turnOn) {
   return R"({"status": "error", "message": "Invalid speaker path"})";
 }
 
-String handlePacman(const String& path) {
-  int targetPin = -1;
-
-  if (path == "female1/pacman") {
-    targetPin = FEMALE1_SPEAKER_PIN;
-  } else if (path == "female2/pacman") {
-    targetPin = FEMALE2_SPEAKER_PIN;
-  } else if (path == "female3/pacman") {
-    targetPin = FEMALE3_SPEAKER_PIN;
-  } else if (path == "male1/pacman") {
-    targetPin = MALE1_SPEAKER_PIN;
-  } else if (path == "male2/pacman") {
-    targetPin = MALE2_SPEAKER_PIN;
-  }
-
-  if (targetPin != -1) {
-    playPacman(targetPin);
-    return R"({"status": "success", "message": "Pacman song completed"})";
-  }
-  return R"({"status": "error", "message": "Invalid song path"})";
-}
-
-String handlePinkPanther(const String& path) {
-  int targetPin = -1;
-
-  if (path == "female1/pinkpanther") {
-    targetPin = FEMALE1_SPEAKER_PIN;
-  } else if (path == "female2/pinkpanther") {
-    targetPin = FEMALE2_SPEAKER_PIN;
-  } else if (path == "female3/pinkpanther") {
-    targetPin = FEMALE3_SPEAKER_PIN;
-  } else if (path == "male1/pinkpanther") {
-    targetPin = MALE1_SPEAKER_PIN;
-  } else if (path == "male2/pinkpanther") {
-    targetPin = MALE2_SPEAKER_PIN;
-  }
-
-  if (targetPin != -1) {
-    playPinkPanther(targetPin);
-    return R"({"status": "success", "message": "Pacman song completed"})";
-  }
-  return R"({"status": "error", "message": "Invalid song path"})";
-}
 
 
 
