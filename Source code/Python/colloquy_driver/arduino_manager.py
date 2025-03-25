@@ -28,7 +28,7 @@ class ArduinoManager:
 
     def send(self, path, **data):
         command = {"path": str(path), **data}
-        print(f"{round(time()-START, 2)}: {command=}")
+        # print(f"{round(time()-START, 2)}: {command=}")
         serialized_command = f"{json.dumps(command)}\n"  # Conversion en JSON
         with self.lock:
             self.port_handler.write(serialized_command.encode('utf-8'))  # Envoie de la commande
