@@ -1,7 +1,9 @@
 from .male_female_driver import FemaleMaleDriver
+from .thread_driver import ThreadDriver
 from time import time, sleep
 from threading import Event, Thread
 from collections import deque
+import traceback
 
 # During search the male blinks.
 # The blink pattern define 2 things:
@@ -21,11 +23,6 @@ LIGHT_PATTERNS = {
     }
 }
 
-# const bool com_pattern_I_R[com_pattern_count] = {1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1};
-# const bool com_pattern_II_R[com_pattern_count] = {1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-# const bool com_pattern_E[com_pattern_count] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-# const bool com_pattern_rejection[com_pattern_count] = {1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0};
-
 
 class MaleDriver(FemaleMaleDriver):
 
@@ -40,37 +37,23 @@ class MaleDriver(FemaleMaleDriver):
             # The deque with max_len will act as circular list
             self.light_patterns[k] = deque(v, maxlen=len(v))
 
+        self._search_thread = None
 
-        # self.blink_patterns["o"]
-        # self._blink_profile = [
-            # #on
-            # 12,
-            # #off
-            # 21,
-            # #on
-            # 22,
-            # #off
-            # 22.5,
-            # #on
-            # 23.5,
-            # #off
-            # 24,
-            # #on
-            # 25,
-            # #off
-            # 25.5,
-            # #on
-            # 56.5,
-            # #off
-            # 59
-            # ]
 
-    def run(self, **kwargs):
-        print(f"Running {self.name}...")
+    # def _run(self, **kwargs):
+        # print(f"Running {self.name}...")
+        # self._run_setup()
+        # self._run_loop()
+        # self.__run_setdown()
+
+
+    def _run_setup(self):
         self.stop_event.clear()
-        search = Thread(target=self._search, name=f"{self.name}/search")
+        self._search_thread = search = Thread(target=self._search, name=f"{self.name}/search")
         search.start()
 
+    def _run_loop(self):
+        search = self._search_thread
         while not self.stop_event.is_set():
 
             if not self.is_moving:
@@ -80,31 +63,38 @@ class MaleDriver(FemaleMaleDriver):
             if self.interaction_event.is_set():
                 search.join()
                 self._interact()
-                search = Thread(target=self._search, name=f"{self.name}/search")
+                search = self._search_thread = Thread(target=self._search, name=f"{self.name}/search")
                 search.start()
 
+    def _run_setdown(self):
         self.turn_off_neopixel()
-        print(f"Joining thread {search.name}...")
-        search.join()
+        print(f"Joining thread {self._search_thread.name}...")
+        self._search_thread.join()
 
     def _search(self):
-        light_pattern = self.light_patterns[self.drive_state]
+        try:
+            light_pattern = self.light_patterns[self.drives.state]
 
-        neopixel_start = time()
-        neopixel_on_off = light_pattern.popleft()
-        light_pattern.append(neopixel_on_off)
-        self.set_neopixel(neopixel_on_off)
+            neopixel_start = time()
+            neopixel_on_off = light_pattern.popleft()
+            light_pattern.append(neopixel_on_off)
+            self.set_neopixel(neopixel_on_off)
 
-        while not self.stop_event.is_set():
-            if (time() - neopixel_start) > 0.5:
-                neopixel_on_off = light_pattern.popleft()
-                light_pattern.append(neopixel_on_off)
-                self.set_neopixel(neopixel_on_off)
-                neopixel_start = time()
+            while not self.stop_event.is_set():
+                if (time() - neopixel_start) > 0.5:
+                    neopixel_on_off = light_pattern.popleft()
+                    light_pattern.append(neopixel_on_off)
+                    self.set_neopixel(neopixel_on_off)
+                    neopixel_start = time()
 
-            if self.interaction_event.is_set():
-                break
-            self.sleep_min()
+                if self.interaction_event.is_set():
+                    break
+                self.sleep_min()
+        except Exception:
+            msg = traceback.format_exc()
+            self.log(msg)
+            self.colloquy.stop_event.set()
+            raise
 
     def _interact(self):
         neopixel_state = self._neopixel_memory

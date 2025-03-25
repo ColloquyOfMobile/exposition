@@ -5,7 +5,6 @@ from time import sleep
 class FemaleDriver(FemaleMaleDriver):
 
     def __init__(self, **kwargs):
-        # print(kwargs)
         dxl_manager = kwargs["dynamixel manager"]
         dxl_id = kwargs["dynamixel id"]
         origin = kwargs["origin"]
@@ -21,14 +20,27 @@ class FemaleDriver(FemaleMaleDriver):
             self.mirror = MirrorDriver(**mirror_kwargs)
 
 
+    # def run(self, **kwargs):
+        # print(f"Running {self.name}...")
+        # try:
+            # self._run_setup()
+            # self._run_loop()
+            # self._run_setdown()
+        # except Exception:
+            # msg = traceback.format_exc()
+            # self.log(msg)
+            # self._run_setdown()
+            # raise
 
-    def run(self, **kwargs):
-        print(f"Running {self.name}...")
+
+    def _run_setup(self):
         self.stop_event.clear()
-
+        self.drives.start()
         self.turn_on_neopixel()
 
+    def _run_loop(self):
         while not self.stop_event.is_set():
+
             if not self.is_moving:
                 self.toggle_position()
 
@@ -36,7 +48,10 @@ class FemaleDriver(FemaleMaleDriver):
                 self._interact()
             self.sleep_min()
 
+    def _run_setdown(self):
+        self.drives.stop()
         self.turn_off_neopixel()
+
 
     def _interact(self):
         iterations = 10

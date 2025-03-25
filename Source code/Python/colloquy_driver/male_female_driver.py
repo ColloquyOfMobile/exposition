@@ -1,23 +1,108 @@
 from .shared_driver import SharedDriver
+from .neopixel_driver import NeopixelDriver
+from .speaker_driver import SpeakerDriver
 from pathlib import Path
 from threading import Event
+from threading import Timer
+import traceback
+
+class DrivesHandler:
+
+    def __init__(self):
+        self.o_drive = 0
+        self.p_drive = 0
+        self._timer = None
+        self._update_interval = 1
+        self._step = 1
+        self._max = 10
+        self._min = 0
+
+    def run(self):
+        self.o_drive += self._step
+        self.p_drive += self._step
+        if self.o_drive > self._max:
+            self.o_drive = self._max
+        if self.p_drive > self._max:
+            self.p_drive = self._max
+        self.timer = Timer(self._update_interval, self.run)
+        print(f"{self.o_drive=}")
+        print(f"{self.p_drive=}")
+        self.timer.start()
+        # raise NotImplementedError
+
+    def start(self):
+        self.timer = Timer(self._update_interval, self.run)
+        self.timer.start()
+
+    def stop(self):
+        self.timer.cancel()
+
+    @property
+    def state(self):
+        return "O or P"
+
+
 
 class FemaleMaleDriver(SharedDriver):
 
     def __init__(self, **kwargs):
         dxl_manager = kwargs["dynamixel manager"]
         SharedDriver.__init__(self, **kwargs)
+        self.colloquy = kwargs["colloquy"]
         self.arduino_manager = kwargs["arduino manager"]
         self._neopixel_memory = None
         self._speaker_memory = None
         self.interaction_event = Event()
+        self.drives = DrivesHandler()
+
+        self.neopixel = NeopixelDriver(owner=self, arduino_manager=self.arduino_manager)
+        self.speaker = SpeakerDriver(owner=self, arduino_manager=self.arduino_manager)
+
+
+    def run(self, **kwargs):
+        print(f"Running {self.name}...")
+        try:
+            self._run_setup()
+            self._run_loop()
+            self._run_setdown()
+        except Exception:
+            msg = traceback.format_exc()
+            self.log(msg)
+            self.colloquy.stop_event.set()
+            self._run_setdown()
+            raise
+
+
+    def _run_setup(self):
+        raise NotImplementedError("""Possible implementation:
+self.stop_event.clear()
+self.drives.start()
+self.turn_on_neopixel()""")
+
+    def _run_loop(self):
+        raise NotImplementedError("""Possible implementation:
+while not self.stop_event.is_set():
+
+    if not self.is_moving:
+        self.toggle_position()
+
+    if self.interaction_event.is_set():
+        self._interact()
+    self.sleep_min()""")
+
+    def _run_setdown(self):
+        raise NotImplementedError("""Possible implementation:
+self.drives.stop()
+self.turn_off_neopixel()""")
 
     @property
     def drive_state(self):
+        raise NotImplementedError
         return "O or P"
 
     @property
     def neopixel_state(self):
+        raise NotImplementedError
         return self._neopixel_memory
 
     @property
@@ -30,61 +115,54 @@ class FemaleMaleDriver(SharedDriver):
     def turn_to_right_position(self):
         self.turn_to_min_position()
 
-    def set_neopixel(self, neopixel_on_off):
-        if neopixel_on_off:
-            self.turn_on_neopixel()
-        else:
-            self.turn_off_neopixel()
+    # def set_neopixel(self, neopixel_on_off):
+        # if neopixel_on_off:
+            # self.turn_on_neopixel()
+        # else:
+            # self.turn_off_neopixel()
 
-    def turn_on_neopixel(self):
-        path = f"{self.name}/neopixel"
-        data = "on"
-        self.arduino_manager.send(path, data)
-        self._neopixel_memory = True
+    # def turn_on_neopixel(self):
+        # path = f"{self.name}/neopixel"
+        # data = "on"
+        # self.arduino_manager.send(path, data)
+        # self._neopixel_memory = True
 
-    def turn_off_neopixel(self):
-        path = f"{self.name}/neopixel"
-        data = "off" # Turns the Neopixels off.
-        self.arduino_manager.send(path, data)
-        self._neopixel_memory = False
+    # def turn_off_neopixel(self):
+        # path = f"{self.name}/neopixel"
+        # data = "off" # Turns the Neopixels off.
+        # self.arduino_manager.send(path, data)
+        # self._neopixel_memory = False
 
     def turn_on_speaker(self):
-        path = f"{self.name}/speaker"
-        data = "on" # Turns the Neopixels off.
-        self.arduino_manager.send(path, data)
-        # raise NotImplementedError
+        self.speaker.on()
 
     def turn_off_speaker(self):
-        path = f"{self.name}/speaker"
-        data = "off" # Turns the Neopixels off.
-        self.arduino_manager.send(path, data)
+        self.speaker.off()
 
-    def toggle_neopixel(self):
-        if self._neopixel_memory is None:
-            self.turn_on_neopixel()
-            return
+    # def toggle_neopixel(self):
+        # if self._neopixel_memory is None:
+            # self.turn_on_neopixel()
+            # return
 
-        if self._neopixel_memory:
-            self.turn_off_neopixel()
-            return
+        # if self._neopixel_memory:
+            # self.turn_off_neopixel()
+            # return
 
-        if not self._neopixel_memory:
-            self.turn_on_neopixel()
-            return
+        # if not self._neopixel_memory:
+            # self.turn_on_neopixel()
+            # return
 
     def toggle_speaker(self):
-        # print(f"{self._speaker_memory=}")
-        if self._speaker_memory is None:
-            self.turn_on_speaker()
-            self._speaker_memory = True
-            return
+        self.speaker.toggle()
 
-        if self._speaker_memory:
-            self.turn_off_speaker()
-            self._speaker_memory = False
-            return
+    def toggle_neopixel(self):
+        self.neopixel.toggle()
 
-        if not self._speaker_memory:
-            self.turn_on_speaker()
-            self._speaker_memory = True
-            return
+    def set_neopixel(self, neopixel_on_off):
+        self.neopixel.set(neopixel_on_off)
+
+    def turn_on_neopixel(self):
+        self.neopixel.on()
+
+    def turn_off_neopixel(self):
+        self.neopixel.off()

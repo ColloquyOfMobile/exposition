@@ -26,8 +26,8 @@ class ArduinoManager:
             self.wait_for_reboot()
 
 
-    def send(self, path, data):
-        command = {"path": str(path), "data": data}
+    def send(self, path, **data):
+        command = {"path": str(path), **data}
         # print(f"{round(time()-START, 2)}: {command=}")
         serialized_command = f"{json.dumps(command)}\n"  # Conversion en JSON
         with self.lock:
@@ -37,11 +37,10 @@ class ArduinoManager:
         if not data:
             raise TimeoutError("No response from Arduino.")
 
-
         return self._parse(data)
 
-    def send_yield(self, path, data):
-        command = {"path": str(path), "data": data}
+    def send_yield(self, path, **data):
+        command = {"path": str(path), **data}
         serialized_command = f"{json.dumps(command)}\n"  # Conversion en JSON
         self.port_handler.write(serialized_command.encode('utf-8'))  # Envoie de la commande
         while True:
