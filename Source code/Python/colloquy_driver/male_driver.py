@@ -12,11 +12,13 @@ import traceback
 # Extracted from TJ's arduino code "logic35_system.ino, line 87."
 LIGHT_PATTERNS = {
     "male1": {
+        None:     (1, 1, 0, 0, 1, 1, 0, 0, 0, 1),
         "O":      (1, 1, 0, 0, 0, 0, 0, 1, 1, 1),
         "P":      (1, 1, 0, 0, 0, 0, 1, 1, 1, 0),
         "O or P": (1, 1, 0, 0, 0, 1, 0, 1, 0, 1),
     },
     "male2": {
+        None:     (1, 1, 0, 0, 1, 1, 1, 0, 0, 0),
         "O":      (1, 1, 0, 0, 0, 1, 1, 1, 0, 0),
         "I":      (1, 1, 0, 0, 1, 0, 0, 0, 1, 1),
         "O or P": (1, 1, 0, 0, 1, 0, 1, 0, 1, 0),
@@ -38,14 +40,18 @@ class MaleDriver(FemaleMaleDriver):
             self.light_patterns[k] = deque(v, maxlen=len(v))
 
         self._search_thread = None
+        self.neopixel.configure(
+            red = 0,
+            green = 0,
+            blue = 0,
+            white = 255,
+            brightness = 255,)
 
-
-    # def _run(self, **kwargs):
-        # print(f"Running {self.name}...")
-        # self._run_setup()
-        # self._run_loop()
-        # self.__run_setdown()
-
+    def set_neopixel(self, neopixel_on_off):
+        if neopixel_on_off:
+            self.neopixel.on()
+        else:
+            self.neopixel.off()
 
     def _run_setup(self):
         self.stop_event.clear()

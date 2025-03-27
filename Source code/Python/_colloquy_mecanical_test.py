@@ -207,13 +207,13 @@ class BarDriver:
         # Move motor to origin.
         self.dxl_driver.goal_position = self.origin
 
-    def prepare_for_test_cycle(self):    
+    def prepare_for_test_cycle(self):
         """Prepare the body before a test run.
 
         To use after self.init() and before run()"""
         self.dxl_driver.torque_enabled = 0
         # Set time base profile.
-        # WARNINGS: Time base profile make calculation easier 
+        # WARNINGS: Time base profile make calculation easier
         self.dxl_driver.drive_mode = 4
 
         # set velocity and acceleration profile.
@@ -288,7 +288,7 @@ class ColloquyMecanicalTest:
             female1, female2, female3, male1, male2: FemaleMaleDriver instance.
             bar: BarDriver instance.
             _time_duration: Test duration in seconds.
-            
+
         """
         # Handle hardware for serial communication.
         self.data_path = Path("meca_test_data.csv")
@@ -372,7 +372,7 @@ class ColloquyMecanicalTest:
 
     def run(self):
         """Run the test.
-        
+
         Define here the step of the test."""
         self._start = time.time()
         now = datetime.datetime.now()
@@ -417,7 +417,7 @@ class ColloquyMecanicalTest:
 
     def gather_data_for(self, timelap):
         """Blocking function that gather data from the servo and save it into self.data_path.
-        
+
         Parameters:
             timelap: gather data during timelap before saving and returning."""
         data = []

@@ -1,10 +1,12 @@
 from .male_female_driver import FemaleMaleDriver
 from .mirror_driver import MirrorDriver
+from threading import Lock
 from time import sleep
 
 class FemaleDriver(FemaleMaleDriver):
 
     def __init__(self, **kwargs):
+        self._lock = Lock()
         dxl_manager = kwargs["dynamixel manager"]
         dxl_id = kwargs["dynamixel id"]
         origin = kwargs["origin"]
@@ -19,19 +21,24 @@ class FemaleDriver(FemaleMaleDriver):
             mirror_kwargs["dynamixel manager"] = dxl_manager
             self.mirror = MirrorDriver(**mirror_kwargs)
 
+        orange = dict(red=255, green=165, blue=0, white=0)
+        white = dict(red=0, green=0, blue=0, white=255)
+        self._light_colors = {
+            "O": white,
+            "P": orange,
+            None: white,
+            "O or P": white,
+        }
 
-    # def run(self, **kwargs):
-        # print(f"Running {self.name}...")
-        # try:
-            # self._run_setup()
-            # self._run_loop()
-            # self._run_setdown()
-        # except Exception:
-            # msg = traceback.format_exc()
-            # self.log(msg)
-            # self._run_setdown()
-            # raise
+    def turn_on_neopixel(self):
+        with self._lock:
+            config = self._light_colors[self.drives.state].copy()
+            config["brightness"] = self.drives[self.drives.state]
+        self.neopixel.configure(**config)
+        self.neopixel.on()
 
+    def turn_off_neopixel(self):
+        self.neopixel.off()
 
     def _run_setup(self):
         self.stop_event.clear()

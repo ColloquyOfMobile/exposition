@@ -1,45 +1,12 @@
 from .shared_driver import SharedDriver
 from .neopixel_driver import NeopixelDriver
 from .speaker_driver import SpeakerDriver
+from .drives_handler import DrivesHandler
 from pathlib import Path
 from threading import Event
 from threading import Timer
 import traceback
 
-class DrivesHandler:
-
-    def __init__(self):
-        self.o_drive = 0
-        self.p_drive = 0
-        self._timer = None
-        self._update_interval = 1
-        self._step = 1
-        self._max = 10
-        self._min = 0
-
-    def run(self):
-        self.o_drive += self._step
-        self.p_drive += self._step
-        if self.o_drive > self._max:
-            self.o_drive = self._max
-        if self.p_drive > self._max:
-            self.p_drive = self._max
-        self.timer = Timer(self._update_interval, self.run)
-        print(f"{self.o_drive=}")
-        print(f"{self.p_drive=}")
-        self.timer.start()
-        # raise NotImplementedError
-
-    def start(self):
-        self.timer = Timer(self._update_interval, self.run)
-        self.timer.start()
-
-    def stop(self):
-        self.timer.cancel()
-
-    @property
-    def state(self):
-        return "O or P"
 
 
 
@@ -115,42 +82,11 @@ self.turn_off_neopixel()""")
     def turn_to_right_position(self):
         self.turn_to_min_position()
 
-    # def set_neopixel(self, neopixel_on_off):
-        # if neopixel_on_off:
-            # self.turn_on_neopixel()
-        # else:
-            # self.turn_off_neopixel()
-
-    # def turn_on_neopixel(self):
-        # path = f"{self.name}/neopixel"
-        # data = "on"
-        # self.arduino_manager.send(path, data)
-        # self._neopixel_memory = True
-
-    # def turn_off_neopixel(self):
-        # path = f"{self.name}/neopixel"
-        # data = "off" # Turns the Neopixels off.
-        # self.arduino_manager.send(path, data)
-        # self._neopixel_memory = False
-
     def turn_on_speaker(self):
         self.speaker.on()
 
     def turn_off_speaker(self):
         self.speaker.off()
-
-    # def toggle_neopixel(self):
-        # if self._neopixel_memory is None:
-            # self.turn_on_neopixel()
-            # return
-
-        # if self._neopixel_memory:
-            # self.turn_off_neopixel()
-            # return
-
-        # if not self._neopixel_memory:
-            # self.turn_on_neopixel()
-            # return
 
     def toggle_speaker(self):
         self.speaker.toggle()
@@ -158,8 +94,9 @@ self.turn_off_neopixel()""")
     def toggle_neopixel(self):
         self.neopixel.toggle()
 
-    def set_neopixel(self, neopixel_on_off):
-        self.neopixel.set(neopixel_on_off)
+    # def set_neopixel(self, neopixel_on_off):
+        # raise NotImplementedError
+        # self.neopixel.set(neopixel_on_off)
 
     def turn_on_neopixel(self):
         self.neopixel.on()
