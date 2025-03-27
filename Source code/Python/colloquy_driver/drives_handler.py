@@ -66,8 +66,6 @@ class DrivesHandler:
             self.p_drive = self._max
 
         self._timer = Timer(self._update_interval, self.run)
-        print(f"{self.o_drive=}")
-        print(f"{self.p_drive=}")
         self._timer.start()
 
     def start(self):

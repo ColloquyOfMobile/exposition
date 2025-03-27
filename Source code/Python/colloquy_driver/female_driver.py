@@ -30,18 +30,6 @@ class FemaleDriver(FemaleMaleDriver):
             "O or P": white,
         }
 
-    # def turn_on_neopixel(self):
-        # raise NotImplementedError
-        # with self._lock:
-            # config = self._light_colors[self.drives.state].copy()
-            # config["brightness"] = self.drives[self.drives.state]
-        # self.neopixel.configure(**config)
-        # self.neopixel.on()
-
-    # def turn_off_neopixel(self):
-        # raise NotImplementedError
-        # self.neopixel.off()
-
     def _run_setup(self):
         self.stop_event.clear()
         self.drives.start()
@@ -49,7 +37,7 @@ class FemaleDriver(FemaleMaleDriver):
 
     def _run_loop(self):
         while not self.stop_event.is_set():
-
+            self._update_neopixel()
             if not self.is_moving:
                 self.toggle_position()
 
@@ -61,16 +49,17 @@ class FemaleDriver(FemaleMaleDriver):
         state, brightness = self.drives.value
         color = self._light_colors[state]
         config = dict(
-            brightness = value,
+            brightness = brightness,
             **color,
             )
-        self.neopixel.configure(**config)
 
+        print(f"{state=}")
+        print(f"{brightness=}")
+        self.neopixel.configure(**config)
 
     def _run_setdown(self):
         self.drives.stop()
         self.neopixel.off()
-
 
     def _interact(self):
         iterations = 10
