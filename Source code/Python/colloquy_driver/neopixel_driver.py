@@ -8,15 +8,29 @@ class NeopixelDriver(ThreadDriver):
         self._owner = owner
         self.arduino_manager = arduino_manager
         self._on_off_state = None
-        self.red = 0,
+        self.red = 0
         self.green = 0
         self.blue = 0
         self.white = 0
         self.brightness = 0
         self.off()
 
+    @property
+    def state(self):
+        return self._on_off_state
+
+    @property
+    def configuration(self):
+        return {
+            "red": self.red,
+            "green": self.green,
+            "blue": self.blue,
+            "white": self.white,
+            "brightness": self.brightness,
+        }
+
     def configure(self, red, green, blue, white, brightness):
-        self.red = red,
+        self.red = red
         self.green = green
         self.blue = blue
         self.white = white
@@ -33,6 +47,7 @@ class NeopixelDriver(ThreadDriver):
             b = self.blue,
             w = self.white,
             brightness = self.brightness)
+        # print(f"{data=}")
         self.arduino_manager.send(path, **data)
 
     def on(self):
@@ -51,6 +66,7 @@ class NeopixelDriver(ThreadDriver):
         self._on_off_state = False
 
     def toggle(self):
+        # print(f"{self._on_off_state=}")
         if self._on_off_state is None:
             self.on()
             return

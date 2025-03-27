@@ -28,7 +28,8 @@ class ArduinoManager:
 
     def send(self, path, **data):
         command = {"path": str(path), **data}
-        # print(f"{round(time()-START, 2)}: {command=}")
+        print(f"{type(self)=}")
+        print(f"{round(time()-START, 2)}: {command=}")
         serialized_command = f"{json.dumps(command)}\n"  # Conversion en JSON
         with self.lock:
             self.port_handler.write(serialized_command.encode('utf-8'))  # Envoie de la commande
@@ -64,12 +65,15 @@ class ArduinoManager:
         """
         data = data.decode('utf-8')
         try:
-            return json.loads(data)  # Convertir JSON en dictionnaire
+            data = json.loads(data)  # Convertir JSON en dictionnaire
         except json.JSONDecodeError:
             raise ValueError(f"Invalid response format from Arduino. ({data=})")
 
         if data["status"] == "error":
             raise RuntimeError(data["message"])
+
+        print(f"{data=}")
+        return data
 
 
     def stop(self):

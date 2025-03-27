@@ -9,7 +9,6 @@ class Root():
         self._wsgi = wsgi
         self.path = Path("")
         self.active = None
-        self.file_handler = FileHandler(wsgi=wsgi)
         handlers = [
             Shutdown(wsgi=wsgi),
             Tests(wsgi=wsgi),
@@ -70,5 +69,6 @@ class Root():
             if self.active.path == path:
                 return
             self.active.close()
-        self.active = self.handlers.get(path, self.file_handler)
+        self.active = self.handlers[path]
+        #  self.file_handler)
         self.active.open()

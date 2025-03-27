@@ -16,6 +16,9 @@ class Command:
             return NotImplemented
         return self.name < other.name
 
+    def __hash__(self):
+        return id(self)
+
     def write_html(self):
         raise NotImplementedError("""Example:
 doc, tag, text = self._owner._doc.tagtext()
@@ -109,34 +112,6 @@ class BodyToggleSpeaker(Command):
         doc, tag, text = self._owner._doc.tagtext()
         colloquy_driver = self._owner.colloquy_driver
         value = self.body.speaker_state
-        if value is None:
-            value = "unknown"
-        if value is True:
-            value = "On"
-        if value is False:
-            value = "Off"
-        with tag("form", action="", method="post"):
-            with tag("input", name="state", value=value, disabled=True):
-                pass
-            with tag("button", type="submit", name="command", value=self.name):
-                text(self.name)
-
-class BodyToggleNeopixel(Command):
-
-    def __init__(self, owner, body):
-        self.body = body
-        Command.__init__(self, owner, name=f"{body.name}/toggle neopixel")
-
-    def __call__(self, **kwargs):
-        # position = int(kwargs["position"][0])
-        self.body.toggle_neopixel()
-        # raise NotImplementedError
-        yield f"Neopixel toggled for {self.body.name}."
-
-    def write_html(self):
-        doc, tag, text = self._owner._doc.tagtext()
-        colloquy_driver = self._owner.colloquy_driver
-        value = self.body.neopixel_state
         if value is None:
             value = "unknown"
         if value is True:

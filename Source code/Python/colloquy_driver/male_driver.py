@@ -40,12 +40,6 @@ class MaleDriver(FemaleMaleDriver):
             self.light_patterns[k] = deque(v, maxlen=len(v))
 
         self._search_thread = None
-        self.neopixel.configure(
-            red = 0,
-            green = 0,
-            blue = 0,
-            white = 255,
-            brightness = 255,)
 
     def set_neopixel(self, neopixel_on_off):
         if neopixel_on_off:
@@ -54,6 +48,12 @@ class MaleDriver(FemaleMaleDriver):
             self.neopixel.off()
 
     def _run_setup(self):
+        self.neopixel.configure(
+            red = 0,
+            green = 0,
+            blue = 0,
+            white = 255,
+            brightness = 255,)
         self.stop_event.clear()
         self._search_thread = search = Thread(target=self._search, name=f"{self.name}/search")
         search.start()
