@@ -52,9 +52,6 @@ class FemaleDriver(FemaleMaleDriver):
             brightness = brightness,
             **color,
             )
-
-        print(f"{state=}")
-        print(f"{brightness=}")
         self.neopixel.configure(**config)
 
     def _run_setdown(self):
@@ -62,7 +59,7 @@ class FemaleDriver(FemaleMaleDriver):
         self.neopixel.off()
 
     def _interact(self):
-        iterations = 10
+        iterations = 5
         self.turn_to_origin_position()
         self.turn_on_speaker()
         sleep(0.5)
@@ -71,5 +68,6 @@ class FemaleDriver(FemaleMaleDriver):
             if self.stop_event.is_set():
                 break
             print(f"{self.name} interacting... ({(i+1)/iterations:.0%})")
+            self._update_neopixel()
             sleep(1)
         self.interaction_event.clear()

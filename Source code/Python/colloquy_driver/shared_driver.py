@@ -47,7 +47,6 @@ class SharedDriver(ThreadDriver):
         self.dxl.move_and_wait(position)
 
     def toggle_position(self):
-        # print(f"{self.name=}: toggle position.")
         if self._position_memory is None:
             self.turn_to_max_position()
             return

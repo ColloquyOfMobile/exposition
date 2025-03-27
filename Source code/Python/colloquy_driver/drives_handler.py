@@ -14,11 +14,16 @@ class DrivesHandler:
         self.p_drive = 0
         self._timer = None
         self._update_interval = 1
-        self._step = 1
+
+        self._step_o = 1
+        self._step_p = 2
+
         self._max = 255
         self._min = 0
+
         self._satisfied = 20
         self._frustrated = 235
+
         self._lock = Lock()
 
     def __getitem__(self, key):
@@ -54,12 +59,15 @@ class DrivesHandler:
             if self.p_drive > self.o_drive:
                 assert not p_satisfied
                 return "P"
+            if self.p_drive == self.o_drive:
+                return "O or P"
+
             raise ValueError(f"Drive Error, {self.o_drive=}, {self.p_drive=}")
 
     def run(self):
         """This function repeat every "self._update_interval"."""
-        self.o_drive += self._step
-        self.p_drive += self._step
+        self.o_drive += self._step_o
+        self.p_drive += self._step_p
         if self.o_drive > self._max:
             self.o_drive = self._max
         if self.p_drive > self._max:

@@ -125,7 +125,6 @@ class Tatu():
 
                 for element in elements:
                     if not element.is_moving:
-                        # print(f"{element=}, {element.is_moving}")
                         element.toggle_position()
 
                 if time() - neopixel_start > 0.5:

@@ -107,7 +107,7 @@ class MaleDriver(FemaleMaleDriver):
         if not neopixel_state:
             self.turn_on_neopixel()
 
-        iterations = 10
+        iterations = 5
         self.turn_to_origin_position()
         for i in range(iterations):
             if self.stop_event.is_set():

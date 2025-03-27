@@ -144,7 +144,6 @@ class FemaleMaleDriver:
         self.dxl_driver.profile_acceleration = 1
         self.dxl_driver.torque_enabled = 1
         try:
-            # print(self.dxl_driver.drive_mode)
             self.dxl_driver.goal_position = position
             self.wait_for_servo()
         finally:

@@ -32,9 +32,7 @@ class DxlThread:
         start = time()
         step = 100
         lim_min, lim_max  = goal - 2*step, goal + 2*step
-        # print(f"{lim_min=}, {lim_max=}")
         while True:
-            # print(f"{table['position']=}")
             if lim_min < table["position"] < lim_max:
                 break
             if table["position"] < goal:
