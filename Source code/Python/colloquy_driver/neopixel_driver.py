@@ -13,6 +13,7 @@ class NeopixelDriver(ThreadDriver):
         self.blue = 0
         self.white = 0
         self.brightness = 0
+        self.off()
 
     def configure(self, red, green, blue, white, brightness):
         self.red = red,
@@ -20,18 +21,23 @@ class NeopixelDriver(ThreadDriver):
         self.blue = blue
         self.white = white
         self.brightness = brightness
-        self.off()
+        self._update()
 
-    def on(self):
+    def _update(self):
+        if not self._on_off_state:
+            return
         path = f"{self._owner.name}/neopixel"
         data = dict(
             r = self.red,
             g = self.green,
             b = self.blue,
             w = self.white,
-            brightness = self.brightness,)
+            brightness = self.brightness)
         self.arduino_manager.send(path, **data)
+
+    def on(self):
         self._on_off_state = True
+        self._update()
 
     def off(self):
         path = f"{self._owner.name}/neopixel"

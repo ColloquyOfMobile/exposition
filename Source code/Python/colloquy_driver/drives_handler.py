@@ -30,6 +30,11 @@ class DrivesHandler:
                 return self.p_drive
             return max(self.p_drive, self.o_drive)
 
+    @property
+    def value(self):
+        state = self.state
+        return state, self[state]
+
 
     @property
     def state(self):
