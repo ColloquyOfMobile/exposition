@@ -13,7 +13,7 @@ class VirtualSerialPort:
         yield b"Hello!"
         while self.is_open:
             sleep(0.1)
-            yield b"{}"
+            yield b'{"status": "success"}'
 
     def readline(self):
         return next(self._readline_results)

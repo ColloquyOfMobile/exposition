@@ -240,9 +240,6 @@ class BarDriver:
                 break
             assert time.time() - start < 30, "Moving male or female shouldn't take more than 30s!"
 
-
-
-
     def move_and_wait(self, position):
         """Blocking function that sets the body's goal position and wait for it to move."""
         # torque should be disabled to set the drive_mode

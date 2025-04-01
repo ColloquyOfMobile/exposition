@@ -82,12 +82,12 @@ class WSGI:
 
     def _handle_request(self):
         # self._set_handler()
-        # if self.handler is not None:        
+        # if self.handler is not None:
         path = Path(*self.path.parts[:1])
         if path == Path():
             yield from self.root(**self._data)
             return
-            
+
         if path in self.root.handlers:
             yield from self.root(**self._data)
             return

@@ -10,12 +10,13 @@ class SharedDriver(ThreadDriver):
     }
 
     def __init__(self, **kwargs):
+        ThreadDriver.__init__(self, kwargs["name"])
         dxl_manager = kwargs["dynamixel manager"]
         dxl_id = kwargs["dynamixel id"]
         self.dxl = None
         self.dxl_origin = kwargs["origin"]
         self.motion_range = kwargs["motion range"]
-        self.name = kwargs["name"]
+        # self.name = kwargs["name"]
         self.stop_event = Event()
 
         if dxl_manager is not None:

@@ -1,11 +1,5 @@
-# from .shared_driver import SharedDriver
-# from .neopixel_driver import NeopixelDriver
-# from .speaker_driver import SpeakerDriver
-# from pathlib import Path
-# from threading import Event
 from threading import Timer
 from threading import Lock
-# import traceback
 
 class DrivesHandler:
 

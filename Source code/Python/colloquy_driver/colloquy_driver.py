@@ -3,12 +3,10 @@ from .arduino_manager import ArduinoManager
 from .female_driver import FemaleDriver
 from .male_driver import MaleDriver
 from .bar_driver import BarDriver
+from .logger import Logger
 from time import sleep
 from parameters import Parameters
 from threading import Thread, Event
-
-
-
 
 
 class ColloquyDriver:
@@ -33,14 +31,16 @@ class ColloquyDriver:
         self._threads = set()
         self.females = []
         self.males = []
-        self._arduino_manager = arduino_manager =None
+        self._arduino_manager = arduino_manager = None
         self._dxl_manager = dxl_manager = None
 
 
-        dxl_network = params["dynamixel network"]
-        self._dxl_manager = dxl_manager = self._classes["dxl_manager"](**dxl_network)
+        dxl_manager_params = params["dynamixel network"]
+        dxl_manager_params["name"] = "dxl_driver"
+        self._dxl_manager = dxl_manager = self._classes["dxl_manager"](**dxl_manager_params)
 
         arduino_params = params["arduino"]
+        arduino_params["name"] = "arduino_driver"
         self._arduino_manager = arduino_manager = self._classes["arduino_manager"](**arduino_params)
 
 
@@ -204,12 +204,14 @@ class ColloquyDriver:
 
     def start(self):
         print("Starting Colloquy...")
+        Logger.clean_folder()
         if self._dxl_manager is not None:
             self._dxl_manager.start()
         if self._arduino_manager is not None:
             self._arduino_manager.start()
 
     def stop(self):
+        Logger.clean_thread.cancel()
         if self._dxl_manager is not None:
             self._dxl_manager.stop()
         if self._arduino_manager is not None:
@@ -221,6 +223,7 @@ class ColloquyDriver:
 
         for thread in self._threads:
             thread.join()
+        Logger.clean_thread.join()
         print("Colloquy stopped.")
 
 CALIBRATION_BANNER = """#########################################################

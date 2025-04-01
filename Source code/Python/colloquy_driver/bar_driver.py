@@ -6,6 +6,7 @@ from .thread_driver import ThreadDriver
 class BarDriver(ThreadDriver):
 
     def __init__(self, **kwargs):
+        ThreadDriver.__init__(self, kwargs["name"])
         self._position_memory = None
         dxl_manager = kwargs["dynamixel manager"]
         dxl_ids = kwargs["dynamixel ids"]
@@ -14,7 +15,7 @@ class BarDriver(ThreadDriver):
         assert kwargs["origin"] is not None, "Calibrate colloquy."
         self.dxl_origin = kwargs["origin"]
         self.motion_range = kwargs["motion range"]
-        self.name = kwargs["name"]
+        # self.name = kwargs["name"]
         self.moving_threshold = 20
         self.stop_event = Event()
         self.interaction = None

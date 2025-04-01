@@ -1,27 +1,20 @@
-from time import sleep
+from time import sleep, time
 from pathlib import Path
+from .logger import Logger
 
 class ThreadDriver:
 
-    log_folder = Path("local/logs")
-    if not log_folder.is_dir():
-        log_folder.mkdir()
-    for element in log_folder.iterdir():
-        lines = element.read_text().splitlines()
-        lines = lines[-1000:]
-        lines.extend(
-            ("",
-            "RESTART",
-            "",)
-        )
-        text = "\n".join(lines[-1000:])
-        element.write_text(text)
+    def __init__(self, name):
+        self._name = name
+        self._log = Logger(owner=self)
 
-    def log(self, msg):
-        path = self.log_folder / f"{self.name}.log"
-        with path.open("a") as file:
-            file.write(msg)
-            file.write("\n")
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def log(self):
+        return self._log
 
     def sleep_min(self):
         sleep(0.05)

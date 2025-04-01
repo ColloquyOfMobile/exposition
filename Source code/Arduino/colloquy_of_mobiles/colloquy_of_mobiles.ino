@@ -96,22 +96,37 @@ String processCommand(const String& input) {
 
 String handleNeopixel(const String& path, int r, int g, int b, int w, int brightness) {
   Adafruit_NeoPixel* targetStrip = nullptr;
+  int startPixel = 0;
+  int numPixels = 0;
 
   if (path == "female1/neopixel") {
     targetStrip = &female1Strip;
+    numPixels = FEMALE_NUM_PIXELS;
   } else if (path == "female2/neopixel") {
     targetStrip = &female2Strip;
+    numPixels = FEMALE_NUM_PIXELS;
   } else if (path == "female3/neopixel") {
     targetStrip = &female3Strip;
-  } else if (path == "male1/neopixel") {
+    numPixels = FEMALE_NUM_PIXELS;
+  } else if (path == "male1/ring/neopixel") {
     targetStrip = &male1Strip;
-  } else if (path == "male2/neopixel") {
+    numPixels = 24;
+  } else if (path == "male2/ring/neopixel") {
     targetStrip = &male2Strip;
+    numPixels = 24;
+  } else if (path == "male1/drive/neopixel") {
+    targetStrip = &male1Strip;
+    startPixel = 24;
+    numPixels = 16;
+  } else if (path == "male2/drive/neopixel") {
+    targetStrip = &male2Strip;
+    startPixel = 24;
+    numPixels = 16;
   }
 
-  if (targetStrip != nullptr) {
+  if (targetStrip != nullptr && numPixels > 0) {
     targetStrip->setBrightness(brightness);
-    for (int i = 0; i < targetStrip->numPixels(); i++) {
+    for (int i = startPixel; i < startPixel + numPixels; i++) {
       targetStrip->setPixelColor(i, targetStrip->Color(r, g, b, w));
     }
     targetStrip->show();

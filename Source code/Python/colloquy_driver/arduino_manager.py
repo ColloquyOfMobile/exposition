@@ -1,12 +1,12 @@
-
 import serial
 from pathlib import Path
 import json
 from time import sleep, time
 from threading import Lock
+from .thread_driver import ThreadDriver
 START = time()
 
-class ArduinoManager:
+class ArduinoManager(ThreadDriver):
 
     _classes = {
         "serial": serial.Serial,
@@ -16,6 +16,7 @@ class ArduinoManager:
         """
         Initialise la communication série avec l'Arduino.
         """
+        ThreadDriver.__init__(self, kwargs["name"])
         self.lock = Lock()
         #self._busy = Event()
         port_name = kwargs["communication port"]
@@ -25,11 +26,9 @@ class ArduinoManager:
         with self.lock:
             self.wait_for_reboot()
 
-
     def send(self, path, **data):
         command = {"path": str(path), **data}
-        print(f"{type(self)=}")
-        print(f"{round(time()-START, 2)}: {command=}")
+        self.log(f"{round(time()-START, 2)}: {command=}")
         serialized_command = f"{json.dumps(command)}\n"  # Conversion en JSON
         with self.lock:
             self.port_handler.write(serialized_command.encode('utf-8'))  # Envoie de la commande
@@ -72,7 +71,7 @@ class ArduinoManager:
         if data["status"] == "error":
             raise RuntimeError(data["message"])
 
-        print(f"{data=}")
+        self.log(f"{data=}")
         return data
 
 
@@ -90,9 +89,6 @@ class ArduinoManager:
             self.port_handler.open()
             self.wait_for_reboot()
 
-    def _turn_off_all_neopixel(self):
-        raise NotImplementedError("Should give access to colloquy driver here to implement this.")
-        self.send(path="male1/neopixel", data="on")
 
     def wait_for_reboot(self):
         start = time()
