@@ -211,7 +211,6 @@ class ColloquyDriver:
             self._arduino_manager.start()
 
     def stop(self):
-        Logger.clean_thread.cancel()
         if self._dxl_manager is not None:
             self._dxl_manager.stop()
         if self._arduino_manager is not None:
@@ -223,7 +222,8 @@ class ColloquyDriver:
 
         for thread in self._threads:
             thread.join()
-        Logger.clean_thread.join()
+        Logger.clean_thread.cancel()
+        # Logger.clean_thread.join()
         print("Colloquy stopped.")
 
 CALIBRATION_BANNER = """#########################################################

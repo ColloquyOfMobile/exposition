@@ -17,4 +17,4 @@ class ThreadDriver:
         return self._log
 
     def sleep_min(self):
-        sleep(0.05)
+        sleep(0.01)

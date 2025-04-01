@@ -21,7 +21,7 @@ LIGHT_PATTERNS = {
     "male2": {
         None:     (1, 1, 0, 0, 1, 1, 1, 0, 0, 0),
         "O":      (1, 1, 0, 0, 0, 1, 1, 1, 0, 0),
-        "I":      (1, 1, 0, 0, 1, 0, 0, 0, 1, 1),
+        "P":      (1, 1, 0, 0, 1, 0, 0, 0, 1, 1),
         "O or P": (1, 1, 0, 0, 1, 0, 1, 0, 1, 0),
     }
 }
@@ -62,7 +62,7 @@ class MaleDriver(Body):
     def _run_loop(self):
         blink_thread = self._blink_thread
         while not self.stop_event.is_set():
-            
+
             self._update_drive_pixel()
 
             if not self.is_moving:
@@ -108,18 +108,19 @@ class MaleDriver(Body):
     def _interact(self):
         self.ring_pixel.on()
 
-        iterations = 5
+        iterations = 2
         self.turn_to_origin_position()
         for i in range(iterations):
             if self.stop_event.is_set():
                 break
-            print(f"{self.name} interacting... ({(i+1)/iterations:.0%})")
+            # print(f"{self.name} interacting... ({(i+1)/iterations:.0%})")
             sleep(1)
         self.interaction_event.clear()
 
         self.turn_on_speaker()
         sleep(0.5)
         self.turn_off_speaker()
+        print(f"{self.name} finished interaction.")
 
     def _update_drive_pixel(self):
         state, brightness, color= self.drives.value

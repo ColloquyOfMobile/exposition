@@ -58,10 +58,10 @@ while not self.stop_event.is_set():
 self.drives.stop()
 self.turn_off_neopixel()""")
 
-    @property
-    def drive_state(self):
-        raise NotImplementedError
-        return "O or P"
+    # @property
+    # def drive_state(self):
+        # raise NotImplementedError
+        # return "O or P"
 
     @property
     def speaker_state(self):
