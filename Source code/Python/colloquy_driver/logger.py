@@ -42,6 +42,7 @@ class Logger:
             element.write_text(text)
 
         cls.clean_thread = Timer(60, cls.clean_folder)
+        print(f"{id(cls.clean_thread)=}")
         cls.clean_thread.start()
 
     def _format(self, msg):

@@ -222,6 +222,8 @@ class ColloquyDriver:
 
         for thread in self._threads:
             thread.join()
+
+        print(f"{id(Logger.clean_thread)=}")
         Logger.clean_thread.cancel()
         # Logger.clean_thread.join()
         print("Colloquy stopped.")
