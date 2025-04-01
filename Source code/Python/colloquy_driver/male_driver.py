@@ -42,7 +42,7 @@ class MaleDriver(Body):
             # The deque with max_len will act as circular list
             self.light_patterns[k] = deque(v, maxlen=len(v))
 
-        self._search_thread = None
+        self._blink_thread = None
 
     def _run_setup(self):
         self.ring_pixel.configure(
@@ -52,29 +52,35 @@ class MaleDriver(Body):
             white = 255,
             brightness = 255,)
         self.stop_event.clear()
-        self._search_thread = search = Thread(target=self._search, name=f"{self.name}/search")
-        search.start()
+        self._blink_thread = blink_thread = Thread(target=self._blink, name=f"{self.name}/blink")
+        blink_thread.start()
+
+        self.drives.start()
+        self.drive_pixel.on()
+        self._update_drive_pixel()
 
     def _run_loop(self):
-        search = self._search_thread
+        blink_thread = self._blink_thread
         while not self.stop_event.is_set():
+            
+            self._update_drive_pixel()
 
             if not self.is_moving:
                 self.toggle_position()
             self.sleep_min()
 
             if self.interaction_event.is_set():
-                search.join()
+                blink_thread.join()
                 self._interact()
-                search = self._search_thread = Thread(target=self._search, name=f"{self.name}/search")
-                search.start()
+                blink_thread = self._blink_thread = Thread(target=self._blink, name=f"{self.name}/blink")
+                blink_thread.start()
 
     def _run_setdown(self):
         self.ring_pixel.off()
-        print(f"Joining thread {self._search_thread.name}...")
-        self._search_thread.join()
+        print(f"Joining thread {self._blink_thread.name}...")
+        self._blink_thread.join()
 
-    def _search(self):
+    def _blink(self):
         try:
             light_pattern = self.light_patterns[self.drives.state]
 
@@ -115,8 +121,14 @@ class MaleDriver(Body):
         sleep(0.5)
         self.turn_off_speaker()
 
-        # if neopixel_state != self._neopixel_memory:
-            # self.toggle_neopixel()
+    def _update_drive_pixel(self):
+        state, brightness, color= self.drives.value
+        # color = self._light_colors[state]
+        config = dict(
+            brightness = brightness,
+            **color,
+            )
+        self.drive_pixel.configure(**config)
 
 # TODO: If time, look into subclassing the NeopixelDriver directly
 class RingPixel:

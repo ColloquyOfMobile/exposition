@@ -20,6 +20,15 @@ class DrivesHandler:
 
         self._lock = Lock()
 
+        self._orange = dict(red=255, green=165, blue=0, white=0)
+        self._white = dict(red=0, green=0, blue=0, white=255)
+        self._colors = {
+            "O": self._white,
+            "P": self._orange,
+            None: self._white,
+            "O or P": self._white,
+        }
+
     def __getitem__(self, key):
         assert key in (None, "O", "P", "O or P"), f"{key=}"
         with self._lock:
@@ -30,9 +39,13 @@ class DrivesHandler:
             return max(self.p_drive, self.o_drive)
 
     @property
+    def color(self):
+        return self._colors[self.state]
+
+    @property
     def value(self):
         state = self.state
-        return state, self[state]
+        return state, self[state], self._colors[state]
 
 
     @property

@@ -24,19 +24,18 @@ class FemaleDriver(Body):
             mirror_kwargs["dynamixel manager"] = dxl_manager
             self.mirror = MirrorDriver(**mirror_kwargs)
 
-        orange = dict(red=255, green=165, blue=0, white=0)
-        white = dict(red=0, green=0, blue=0, white=255)
-        self._light_colors = {
-            "O": white,
-            "P": orange,
-            None: white,
-            "O or P": white,
-        }
+        # self._light_colors = {
+            # "O": white,
+            # "P": orange,
+            # None: white,
+            # "O or P": white,
+        # }
 
     def _run_setup(self):
         self.stop_event.clear()
         self.drives.start()
         self.neopixel.on()
+        self._update_neopixel()
 
     def _run_loop(self):
         while not self.stop_event.is_set():
@@ -49,8 +48,8 @@ class FemaleDriver(Body):
             self.sleep_min()
 
     def _update_neopixel(self):
-        state, brightness = self.drives.value
-        color = self._light_colors[state]
+        state, brightness, color = self.drives.value
+        # color = self._light_colors[state]
         config = dict(
             brightness = brightness,
             **color,
