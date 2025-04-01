@@ -1,19 +1,22 @@
-from .male_female_driver import FemaleMaleDriver
+from .body import Body
 from .mirror_driver import MirrorDriver
+from .neopixel_driver import NeopixelDriver
 from threading import Lock
 from time import sleep
 
-class FemaleDriver(FemaleMaleDriver):
+class FemaleDriver(Body):
 
     def __init__(self, **kwargs):
-        self._lock = Lock()
-        dxl_manager = kwargs["dynamixel manager"]
-        dxl_id = kwargs["dynamixel id"]
-        origin = kwargs["origin"]
-        FemaleMaleDriver.__init__(
+        # self._lock = Lock()
+        Body.__init__(
             self,
             **kwargs,
             )
+        dxl_manager = kwargs["dynamixel manager"]
+        dxl_id = kwargs["dynamixel id"]
+        origin = kwargs["origin"]
+
+        self.neopixel = NeopixelDriver(owner=self, arduino_manager=self.arduino_manager)
 
         mirror_kwargs = kwargs.get("mirror")
         self.mirror = None

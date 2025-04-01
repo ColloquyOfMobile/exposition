@@ -1,5 +1,4 @@
 from .shared_driver import SharedDriver
-from .neopixel_driver import NeopixelDriver
 from .speaker_driver import SpeakerDriver
 from .drives_handler import DrivesHandler
 from pathlib import Path
@@ -10,19 +9,16 @@ import traceback
 
 
 
-class FemaleMaleDriver(SharedDriver):
+class Body(SharedDriver):
 
     def __init__(self, **kwargs):
         dxl_manager = kwargs["dynamixel manager"]
         SharedDriver.__init__(self, **kwargs)
         self.colloquy = kwargs["colloquy"]
         self.arduino_manager = kwargs["arduino manager"]
-        self._neopixel_memory = None
         self._speaker_memory = None
         self.interaction_event = Event()
         self.drives = DrivesHandler()
-
-        self.neopixel = NeopixelDriver(owner=self, arduino_manager=self.arduino_manager)
         self.speaker = SpeakerDriver(owner=self, arduino_manager=self.arduino_manager)
 
 
@@ -68,11 +64,6 @@ self.turn_off_neopixel()""")
         return "O or P"
 
     @property
-    def neopixel_state(self):
-        raise NotImplementedError
-        return self._neopixel_memory
-
-    @property
     def speaker_state(self):
         return self._speaker_memory
 
@@ -93,10 +84,6 @@ self.turn_off_neopixel()""")
 
     def toggle_neopixel(self):
         self.neopixel.toggle()
-
-    # def set_neopixel(self, neopixel_on_off):
-        # raise NotImplementedError
-        # self.neopixel.set(neopixel_on_off)
 
     def turn_on_neopixel(self):
         self.neopixel.on()

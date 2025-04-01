@@ -18,7 +18,6 @@ class ArduinoManager(ThreadDriver):
         """
         ThreadDriver.__init__(self, kwargs["name"])
         self.lock = Lock()
-        #self._busy = Event()
         port_name = kwargs["communication port"]
         baudrate = kwargs["baudrate"]
         self.port_handler = self._classes["serial"](port=port_name, baudrate=baudrate, timeout=1)

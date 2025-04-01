@@ -6,6 +6,7 @@ class NeopixelDriver(ThreadDriver):
 
     def __init__(self, owner, arduino_manager):
         self._owner = owner
+        self._path = f"{self._owner.name}/neopixel"
         self.arduino_manager = arduino_manager
         self._on_off_state = None
         self.red = 0
@@ -40,28 +41,28 @@ class NeopixelDriver(ThreadDriver):
     def _update(self):
         if not self._on_off_state:
             return
-        path = f"{self._owner.name}/neopixel"
+        # path = f"{self._owner.name}/neopixel"
         data = dict(
             r = self.red,
             g = self.green,
             b = self.blue,
             w = self.white,
             brightness = self.brightness)
-        self.arduino_manager.send(path, **data)
+        self.arduino_manager.send(self._path, **data)
 
     def on(self):
         self._on_off_state = True
         self._update()
 
     def off(self):
-        path = f"{self._owner.name}/neopixel"
+        # path = f"{self._owner.name}/neopixel"
         data = dict(
             r = 0,
             g = 0,
             b = 0,
             w = 0,
             brightness = 0,)
-        self.arduino_manager.send(path, **data)
+        self.arduino_manager.send(self._path, **data)
         self._on_off_state = False
 
     def toggle(self):
@@ -75,4 +76,10 @@ class NeopixelDriver(ThreadDriver):
 
         if not self._on_off_state:
             self.on()
-            return
+            return            
+
+    def set(self, value):
+        if value:
+            self.on()
+        else:
+            self.off()

@@ -1,5 +1,6 @@
-from .male_female_driver import FemaleMaleDriver
+from .body import Body
 from .thread_driver import ThreadDriver
+from .neopixel_driver import NeopixelDriver
 from time import time, sleep
 from threading import Event, Thread
 from collections import deque
@@ -26,14 +27,16 @@ LIGHT_PATTERNS = {
 }
 
 
-class MaleDriver(FemaleMaleDriver):
+class MaleDriver(Body):
 
     def __init__(self, **kwargs):
-        dxl_manager = kwargs["dynamixel manager"]
-        FemaleMaleDriver.__init__(
+        # dxl_manager = kwargs["dynamixel manager"]
+        Body.__init__(
             self,
             **kwargs,
             )
+        self.ring_pixel = RingPixel(owner=self)
+        self.drive_pixel = DrivePixel(owner=self)
         self.light_patterns = {}
         for k, v in LIGHT_PATTERNS[self.name].items():
             # The deque with max_len will act as circular list
@@ -41,14 +44,8 @@ class MaleDriver(FemaleMaleDriver):
 
         self._search_thread = None
 
-    def set_neopixel(self, neopixel_on_off):
-        if neopixel_on_off:
-            self.neopixel.on()
-        else:
-            self.neopixel.off()
-
     def _run_setup(self):
-        self.neopixel.configure(
+        self.ring_pixel.configure(
             red = 0,
             green = 0,
             blue = 0,
@@ -73,7 +70,7 @@ class MaleDriver(FemaleMaleDriver):
                 search.start()
 
     def _run_setdown(self):
-        self.turn_off_neopixel()
+        self.ring_pixel.off()
         print(f"Joining thread {self._search_thread.name}...")
         self._search_thread.join()
 
@@ -82,15 +79,15 @@ class MaleDriver(FemaleMaleDriver):
             light_pattern = self.light_patterns[self.drives.state]
 
             neopixel_start = time()
-            neopixel_on_off = light_pattern.popleft()
-            light_pattern.append(neopixel_on_off)
-            self.set_neopixel(neopixel_on_off)
+            value = light_pattern.popleft()
+            light_pattern.append(value)
+            self.ring_pixel.set(value)
 
             while not self.stop_event.is_set():
                 if (time() - neopixel_start) > 0.5:
-                    neopixel_on_off = light_pattern.popleft()
-                    light_pattern.append(neopixel_on_off)
-                    self.set_neopixel(neopixel_on_off)
+                    value = light_pattern.popleft()
+                    light_pattern.append(value)
+                    self.ring_pixel.set(value)
                     neopixel_start = time()
 
                 if self.interaction_event.is_set():
@@ -103,9 +100,7 @@ class MaleDriver(FemaleMaleDriver):
             raise
 
     def _interact(self):
-        neopixel_state = self._neopixel_memory
-        if not neopixel_state:
-            self.turn_on_neopixel()
+        self.ring_pixel.on()
 
         iterations = 5
         self.turn_to_origin_position()
@@ -120,5 +115,59 @@ class MaleDriver(FemaleMaleDriver):
         sleep(0.5)
         self.turn_off_speaker()
 
-        if neopixel_state != self._neopixel_memory:
-            self.toggle_neopixel()
+        # if neopixel_state != self._neopixel_memory:
+            # self.toggle_neopixel()
+
+# TODO: If time, look into subclassing the NeopixelDriver directly
+class RingPixel:
+
+    def __init__(self, owner):
+        self._owner = owner
+        self._name = f"{owner.name}/ring"
+        self.neopixel = NeopixelDriver(owner=self, arduino_manager=owner.arduino_manager)
+
+    @property
+    def name(self):
+        return self._name
+
+    def configure(self, red, green, blue, white, brightness):
+        self.neopixel.configure(red, green, blue, white, brightness)
+
+    def on(self):
+        self.neopixel.on()
+
+    def off(self):
+        self.neopixel.off()
+
+    def toggle(self):
+        self.neopixel.toggle()
+
+    def set(self, value):
+        self.neopixel.set(value)
+
+
+class DrivePixel:
+
+    def __init__(self, owner):
+        self._owner = owner
+        self._name = f"{owner.name}/drive"
+        self.neopixel = NeopixelDriver(owner=self, arduino_manager=owner.arduino_manager)
+
+    @property
+    def name(self):
+        return self._name
+
+    def configure(self, red, green, blue, white, brightness):
+        self.neopixel.configure(red, green, blue, white, brightness)
+
+    def on(self):
+        self.neopixel.on()
+
+    def off(self):
+        self.neopixel.off()
+
+    def toggle(self):
+        self.neopixel.toggle()
+
+    def set(self):
+        self.neopixel.set()
