@@ -9,7 +9,6 @@ from time import sleep
 from parameters import Parameters
 from threading import Thread, Event
 
-
 class ColloquyDriver(ThreadDriver):
 
     _classes = {
@@ -49,13 +48,13 @@ class ColloquyDriver(ThreadDriver):
         self._init_males(params)
 
         # Defined at for each bar position, which female and male interacts
-        self.interactions = {
+        self.nearby_interactions = {
             0: (self.male2, self.female1),
-            1600: (self.male1, self.female3),
-            3900: (self.male2, self.female2),
-            6500: (self.male1, self.female1),
-            7900: (self.male2, self.female3),
-            10200: (self.male1, self.female2),
+            1600: NearbyInteractions(self.male1, self.female3),
+            3900: NearbyInteractions(self.male2, self.female2),
+            6500: NearbyInteractions(self.male1, self.female1),
+            7900: NearbyInteractions(self.male2, self.female3),
+            10200: NearbyInteractions(self.male1, self.female2),
         }
 
         self._init_bar(params)
@@ -80,6 +79,10 @@ class ColloquyDriver(ThreadDriver):
     @property
     def arduino(self):
         return self._arduino_manager
+
+    @property
+    def nearby_interaction(self):
+        return self.bar.nearby_interaction
 
     def _init_bar(self, params):
         bar_params = dict(params["bar"])
@@ -227,69 +230,27 @@ class ColloquyDriver(ThreadDriver):
         self._arduino_manager.close()
 
         print("Colloquy closed.")
+        
 
-# CALIBRATION_BANNER = """#########################################################
-# This small script is for mecanical calibration.
-
-# Normally, the calibration should be done after every motor assembly.
-
-# Running this script will return an interactive python console, in which you can run python command directly.
-# To exit the calibration process:
-# >>> exit()
-
-# The aim is to:
-# - move the females carefully to point them all at the center of the artwork.
-# - move the males carefully to point them all outwards and aligned with the bar.
-# - move the bar carefully to point in direction of female 1. Check the cables.
-
-
-# The useful command are (replace female1 by the interested part):
-# - colloquy.female1.position: returns the current position as seen by the motor.
-# - colloquy.female1.move_and_wait(position=2200): Turn the female to desired position.
-# - colloquy.female1.mirror.position: FEMALE ONLY, returns the current position as seen by the motor.
-# - colloquy.female1.mirror.move_and_wait(position=1200) : Turn the mirror to desired position.
-
-# The attribute "female1" can be replace by "female2", "female3", "male1", "male2", "bar".
-# The attribute "body" can be replace by "mirror".
-
-# Calibration steps:
-# 1. Use the colloquy.female1.position() to check the present female1's position.
-# 2. Use the colloquy.female1.move_and_wait() to align the female1 to the wanted origin (the body will move symmetrically from this origin).
-# 3. Copy the origin and paste the value in colloquy_driver.py, FEMALE1_ORIGIN
-# 4. Repeat for the process the other females, males
-
-
-
-# Example:
-# >>> female1.position
-# 2645
-# >>> female1.move_and_wait(position=2000)
-# >>> female1.move_and_wait(position=2300)
-# >>> female1.move_and_wait(position=2200)
-# ... When happy with origin write FEMALE1_ORIGIN=2200, in file colloquy_mecanical_test.py.
-# >>> exit()
-
-# Repeat with other females, males and the bar.
-
-# Note: Resolution = 0.087891 unit/°
-# >>> female1.position
-# 0
-# >>> female1.move_and_wait(position=2000) # Will turn 175°
-
-
-# WARNING:
-# Moving threshold = 20 unit !
-# Example:
-# >>> female1.position
-# 3000
-# >>> female1.move_and_wait(position=3010) # ! Won't move because 3010-3000 = 10 < 20
-# >>> female1.move_and_wait(position=3500) # OK will move.
-# #########################################################
-# """
-
-# if __name__ == "__main__":
-    # COLLOQUY_DRIVER = ColloquyDriver(params=Parameters().as_dict())
-    # try:
-        # COLLOQUY_DRIVER.calibrate()
-    # finally:
-        # COLLOQUY_DRIVER.close()
+class NearbyInteractions:
+    
+    def __init__(self, male, female):
+        self._male = male
+        self._female = female
+        
+    def __iter__(self):
+        yield self.male
+        yield self.female
+    
+    def male(self):
+        return self._male
+    
+    def female(self):
+        return self._female
+    
+    def busy(self):
+        return any(
+            element.interaction_event.is_set()
+            for element
+            in self
+            )

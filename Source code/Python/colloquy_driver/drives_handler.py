@@ -51,6 +51,7 @@ class DrivesHandler:
 
     @property
     def state(self):
+        raise NotImplementedError(f"Update to return a tuple for the states")
         with self._lock:
             o_satisfied = self.o_drive < self._satisfied
             p_satisfied = self.p_drive < self._satisfied

@@ -16,11 +16,11 @@ class BarDriver(ThreadDriver):
         self.motion_range = kwargs["motion range"]
         self.moving_threshold = 20
         self.stop_event = Event()
-        self.interaction = None
+        self.nearby_interaction = None
 
-        self.interact_positions = []
-        for position in sorted(self.colloquy.interactions):
-            self.interact_positions.append(position + self.dxl_origin)
+        self.nearby_positions = []
+        for position in sorted(self.colloquy.nearby_interactions):
+            self.nearby_positions.append(position + self.dxl_origin)
         self.offset = None
         self.dxl1 = DXLDriver(dxl_manager, dxl_ids[0])
         self.dxl2 = DXLDriver(dxl_manager, dxl_ids[1])
@@ -163,10 +163,10 @@ class BarDriver(ThreadDriver):
 
     def toggle_position(self):
         self.cursor = 0
-        position = self.interact_positions.pop(0)
-        self.interact_positions.append(position)
+        position = self.nearby_positions.pop(0)
+        self.nearby_positions.append(position)
         self.goal_position = position
-        self.interaction = self.colloquy.interactions[position-self.dxl_origin]
+        self.nearby_interaction = self.colloquy.nearby_interactions[position-self.dxl_origin]
 
 
     # def _run(self, **kwargs):
@@ -175,26 +175,26 @@ class BarDriver(ThreadDriver):
             # if self.is_moving:
                 # continue
 
-            # if self.interaction is None:
+            # if self.nearby_interaction is None:
                 # self.toggle_position()
                 # continue
 
-            # for element in self.interaction:
+            # for element in self.nearby_interaction:
                 # element.interaction_event.set()
             # self.wait_interaction_end()
             # self.toggle_position()
             # self.sleep_min()
 
     def wait_interaction_end(self):
-        print(f"Waiting interaction end.")
-        def still_interacting():
-            for element in self.interaction:
-                yield element.interaction_event.is_set()
+        print(f"Waiting nearby_interaction end.")
+        nearby_interaction = self.nearby_interaction
+        busy = nearby_interaction.busy
 
-        while any(still_interacting()):
+        while busy:
             if self.stop_event.is_set():
                 break
             self.sleep_min()
+        self.sleep_min()
         print(f"...Interaction finished.")
 
 
@@ -212,11 +212,11 @@ class BarDriver(ThreadDriver):
             if self.is_moving:
                 continue
 
-            if self.interaction is None:
+            if self.nearby_interaction is None:
                 self.toggle_position()
                 continue
 
-            for element in self.interaction:
+            for element in self.nearby_interaction:
                 element.interaction_event.set()
             self.wait_interaction_end()
             self.toggle_position()

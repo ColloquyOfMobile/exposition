@@ -24,7 +24,7 @@ class FemaleDriver(Body):
         if mirror_kwargs:
             mirror_kwargs["dynamixel manager"] = dxl_manager
             self.mirror = MirrorDriver(owner=self, **mirror_kwargs)
-            
+
 
     def _run_setup(self):
         self.stop_event.clear()
@@ -56,6 +56,11 @@ class FemaleDriver(Body):
         self.neopixel.off()
 
     def _interact(self):
+        nearby_interaction = self.colloquy.nearby_interaction
+        assert nearby_interaction.female is self
+        male = self.colloquy.nearby_interaction.male
+        raise NotImplementedError(f"Update drive_handler to return a tuple for the states")
+
         iterations = 2
         self.turn_to_origin_position()
         self.turn_on_speaker()
@@ -67,12 +72,12 @@ class FemaleDriver(Body):
 
             self._update_neopixel()
             sleep(1)
-            
+
             self.drives.o_drive = self.drives.o_drive / 2
             self.drives.p_drive = self.drives.p_drive / 2
-        
+
         self.drives.satisfy()
-        
+
         self.interaction_event.clear()
         print(f"{self.name} finished interaction.")
 
