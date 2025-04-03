@@ -126,11 +126,11 @@ String handleNeopixel(const String& path, int r, int g, int b, int w, int bright
 
   if (targetStrip != nullptr && numPixels > 0) {
     // targetStrip->setBrightness(brightness);
+    r = (r * brightness) / 255;
+    g = (g * brightness) / 255;
+    b = (b * brightness) / 255;
+    w = (w * brightness) / 255;
     for (int i = startPixel; i < startPixel + numPixels; i++) {
-      r = (r * brightness) / 255;
-      g = (g * brightness) / 255;
-      b = (b * brightness) / 255;
-      w = (w * brightness) / 255;
       targetStrip->setPixelColor(i, targetStrip->Color(r, g, b, w));
     }
     targetStrip->show();

@@ -118,6 +118,11 @@ class MaleDriver(Body):
                 break
             # print(f"{self.name} interacting... ({(i+1)/iterations:.0%})")
             sleep(1)
+            self.drives.o_drive = self.drives.o_drive / 2
+            self.drives.p_drive = self.drives.p_drive / 2
+
+        self.drives.satisfy()
+
         self.interaction_event.clear()
 
         self.turn_on_speaker()

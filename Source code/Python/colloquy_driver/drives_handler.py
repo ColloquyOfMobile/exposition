@@ -16,7 +16,7 @@ class DrivesHandler:
         self._max = 255
         self._min = 0
 
-        self._satisfied = 20
+        self._satisfied = 2
         self._frustrated = 235
 
         self._lock = Lock()
@@ -94,3 +94,7 @@ class DrivesHandler:
     def stop(self):
         self._timer.cancel()
         self._started = False
+
+    def satisfy(self):
+        self.o_drive =  self._satisfied
+        self.p_drive =  self._satisfied
