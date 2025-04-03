@@ -22,8 +22,8 @@ class ArduinoManager(ThreadDriver):
         baudrate = kwargs["baudrate"]
         self.port_handler = self._classes["serial"](port=port_name, baudrate=baudrate, timeout=1)
 
-        with self.lock:
-            self.wait_for_reboot()
+        # with self.lock:
+            # self.wait_for_reboot()
 
     def send(self, path, **data):
         command = {"path": str(path), **data}
@@ -74,19 +74,18 @@ class ArduinoManager(ThreadDriver):
         return data
 
 
-    def stop(self):
+    def close(self):
         """
         Ferme le port série.
         """
         self.port_handler.close()
 
-    def start(self):
+    def open(self):
         """
         Ouvre le port série.
         """
-        if not self.port_handler.is_open:
-            self.port_handler.open()
-            self.wait_for_reboot()
+        self.port_handler.open()
+        self.wait_for_reboot()
 
 
     def wait_for_reboot(self):

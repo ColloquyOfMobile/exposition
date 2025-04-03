@@ -4,22 +4,8 @@ from time import time, sleep
 class DXLDriver:
     def __init__(self, dxl_manager, dynamixel_id):
         # Handle hardware for serial communication.
-
         self._dxl_manager = dxl_manager
         self._id = dynamixel_id
-
-        self.moving_threshold = 20
-
-        self.torque_enabled = 0
-        # Set velocity base profile.
-        self.drive_mode = 0
-
-        # set velocity and acceleration profile.
-        self.profile_velocity = 40
-        self.profile_acceleration = 1
-
-        # Enable torque.
-        self.torque_enabled = 1
         self.moving_threshold = 20
 
     @property
@@ -104,6 +90,20 @@ class DXLDriver:
     def is_moving(self):
         """Tell if the body is still moving."""
         return abs(self.position-self.goal_position) > self.moving_threshold
+
+    def open(self):
+        self.moving_threshold = 20
+
+        self.torque_enabled = 0
+        # Set velocity base profile.
+        self.drive_mode = 0
+
+        # set velocity and acceleration profile.
+        self.profile_velocity = 40
+        self.profile_acceleration = 1
+
+        # Enable torque.
+        self.torque_enabled = 1
 
     def move_and_wait(self, position):
         """Blocking function that sets the body's goal position and wait for it to move."""

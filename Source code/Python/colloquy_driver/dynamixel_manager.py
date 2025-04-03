@@ -37,16 +37,10 @@ class DynamixelManager:
 
     def __init__(self, **kwargs):
         port_name = kwargs["communication port"]
-        baudrate = kwargs["baudrate"]
+        self._baudrate = kwargs["baudrate"]
         self.port_handler = self._classes["port_handler"](port_name)
         self.packet_handler = self._classes["packet_handler"](2.0)  # Using protocol 2.0
         self.lock = Lock()
-
-        if not self.port_handler.openPort():
-            raise IOError(f"Failed to open the port: {port_name}")
-
-        if not self.port_handler.setBaudRate(baudrate):
-            raise IOError(f"Failed to set baud rate to: {baudrate}")
 
     @handle_error
     def _read_1_byte_at(self, dxl_id, register_address):
@@ -138,9 +132,10 @@ class DynamixelManager:
         # if dxl_error != 0:
             # raise RuntimeError(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
 
-    def stop(self):
+    def close(self):
         self.port_handler.closePort()
 
 
-    def start(self):
+    def open(self):
         self.port_handler.openPort()
+        self.port_handler.setBaudRate(self._baudrate)

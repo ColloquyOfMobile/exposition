@@ -4,17 +4,21 @@ from threading import Event
 
 class NeopixelDriver(ThreadDriver):
 
-    def __init__(self, owner, arduino_manager):
+    def __init__(self, owner, name=None):
+        parts = [owner.name]
+        if name is not None:
+            parts.append(name)
+        parts.append("neopixel")
         self._owner = owner
-        self._path = f"{self._owner.name}/neopixel"
-        self.arduino_manager = arduino_manager
+        self._path = Path(*parts).as_posix()
+        self.arduino_manager = owner.arduino_manager
         self._on_off_state = None
         self.red = 0
         self.green = 0
         self.blue = 0
         self.white = 0
         self.brightness = 0
-        self.off()
+        # self.off()
 
     @property
     def state(self):
@@ -29,6 +33,9 @@ class NeopixelDriver(ThreadDriver):
             "white": self.white,
             "brightness": self.brightness,
         }
+
+    def open(self):
+        self.off()
 
     def configure(self, red, green, blue, white, brightness):
         self.red = red
@@ -76,7 +83,7 @@ class NeopixelDriver(ThreadDriver):
 
         if not self._on_off_state:
             self.on()
-            return            
+            return
 
     def set(self, value):
         if value:

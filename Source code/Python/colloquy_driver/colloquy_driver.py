@@ -4,12 +4,13 @@ from .female_driver import FemaleDriver
 from .male_driver import MaleDriver
 from .bar_driver import BarDriver
 from .logger import Logger
+from .thread_driver import ThreadDriver
 from time import sleep
 from parameters import Parameters
 from threading import Thread, Event
 
 
-class ColloquyDriver:
+class ColloquyDriver(ThreadDriver):
 
     _classes = {
         "dxl_manager": DynamixelManager,
@@ -21,13 +22,14 @@ class ColloquyDriver:
 
     def __init__(self, params, name="Colloquy driver"):
         print(f"Initialising {name}...")
+        self._is_open = False
         self._name = name
         self.mirrors = []
         self.males = []
         self.bodies = []
         self.elements = []
         self.bar = None
-        self._stop_event = None
+        self._stop_event = Event()
         self._threads = set()
         self.females = []
         self.males = []
@@ -42,7 +44,6 @@ class ColloquyDriver:
         arduino_params = params["arduino"]
         arduino_params["name"] = "arduino_driver"
         self._arduino_manager = arduino_manager = self._classes["arduino_manager"](**arduino_params)
-
 
         self._init_females(params)
         self._init_males(params)
@@ -72,13 +73,6 @@ class ColloquyDriver:
             self.bar
         ]
 
-    def __enter__(self):
-        self.start()
-        return self
-
-    def __exit__(self, *args):
-        self.stop()
-
     @property
     def stop_event(self):
         return self._stop_event
@@ -94,7 +88,7 @@ class ColloquyDriver:
         bar_params["dynamixel manager"] = self._dxl_manager
         bar_params["colloquy"] = self
         if bar_params["origin"] is not None:
-            self.bar = self._classes["bar_driver"](**bar_params)
+            self.bar = self._classes["bar_driver"](owner=self, **bar_params)
 
     def _init_females(self, params, ):
         females_params = params["females"]
@@ -106,7 +100,7 @@ class ColloquyDriver:
             fem_params["dynamixel manager"] = self._dxl_manager
             fem_params["arduino manager"] = self._arduino_manager
             fem_params["colloquy"] = self
-            female_driver = self._classes["female_driver"](**fem_params)
+            female_driver = self._classes["female_driver"](owner=self, **fem_params)
             self.females.append(female_driver)
             setattr(self, name, female_driver)
             self.mirrors.append(female_driver.mirror)
@@ -121,7 +115,7 @@ class ColloquyDriver:
             male_params["dynamixel manager"] = self._dxl_manager
             male_params["arduino manager"] = self._arduino_manager
             male_params["colloquy"] = self
-            male_driver = self._classes["male_driver"](**male_params)
+            male_driver = self._classes["male_driver"](owner=self, **male_params)
             self.males.append(male_driver)
             setattr(self, name, male_driver)
 
@@ -157,139 +151,145 @@ class ColloquyDriver:
         while self.is_something_moving():
             sleep(0.1)
 
-    def calibrate(self):
-        import code
-        colloquy = self
-        locals_dict = {
-            "female1": self.female1,
-            "female2": self.female2,
-            "female3": self.female3,
-            "mirror1": self.female1.mirror,
-            "mirror2": self.female2.mirror,
-            "mirror3": self.female3.mirror,
-            "male1": self.male1,
-            "male2": self.male2,
-            }
+    # def calibrate(self):
+        # import code
+        # colloquy = self
+        # locals_dict = {
+            # "female1": self.female1,
+            # "female2": self.female2,
+            # "female3": self.female3,
+            # "mirror1": self.female1.mirror,
+            # "mirror2": self.female2.mirror,
+            # "mirror3": self.female3.mirror,
+            # "male1": self.male1,
+            # "male2": self.male2,
+            # }
 
-        code.interact(local=locals_dict, banner=CALIBRATION_BANNER)
+        # code.interact(local=locals_dict, banner=CALIBRATION_BANNER)
 
     def run(self):
         print(f"Running {self._name}...")
-        self._stop_event = Event()
+        self.stop_event.clear()
         for element in self.elements:
             element.turn_to_origin_position()
         self.wait_until_everything_is_still()
-        with self:
-            for body in self.bodies:
-                thread = Thread(target=body.run, name=body.name)
-                self._threads.add(thread)
-                thread.start()
 
-            thread = Thread(target=self.bar.run, name="bar")
+        for body in self.bodies:
+            thread = Thread(target=body.run, name=body.name)
             self._threads.add(thread)
             thread.start()
 
-            while not self.stop_event.is_set():
-                sleep(1)
+        thread = Thread(target=self.bar.run, name="bar")
+        self._threads.add(thread)
+        thread.start()
 
-            for element in self.elements:
-                if element.stop_event is not None:
-                    element.stop_event.set()
-
-            for thread in self._threads:
-                print(f"Joining thread {thread.name}...")
-                thread.join()
-        print(f"... finished running {self._name}.")
-
-
-    def start(self):
-        print("Starting Colloquy...")
-        Logger.clean_folder()
-        if self._dxl_manager is not None:
-            self._dxl_manager.start()
-        if self._arduino_manager is not None:
-            self._arduino_manager.start()
-
-    def stop(self):
-        if self._dxl_manager is not None:
-            self._dxl_manager.stop()
-        if self._arduino_manager is not None:
-            self._arduino_manager.stop()
+        while not self.stop_event.is_set():
+            self.sleep_min()
 
         for element in self.elements:
-            if element.stop_event is not None:
-                element.stop_event.set()
+            element.stop_event.set()
 
         for thread in self._threads:
             thread.join()
 
-        print(f"{id(Logger.clean_thread)=}")
-        Logger.clean_thread.cancel()
-        # Logger.clean_thread.join()
-        print("Colloquy stopped.")
+    def start(self):
+        self.stop_event.clear()
+        self.thread = Thread(target=self.run, name=self._name)
+        self.thread.start()
 
-CALIBRATION_BANNER = """#########################################################
-This small script is for mecanical calibration.
+    def stop(self):
+        if self.stop_event.is_set():
+            return
+        self.stop_event.set()
+        self.thread.join()
+        self.thread = None
 
-Normally, the calibration should be done after every motor assembly.
+    def open(self):
+        if self._is_open:
+            return
+        self._dxl_manager.open()
+        self._arduino_manager.open()
 
-Running this script will return an interactive python console, in which you can run python command directly.
-To exit the calibration process:
->>> exit()
+        for body in self.bodies:
+            body.open()
 
-The aim is to:
-- move the females carefully to point them all at the center of the artwork.
-- move the males carefully to point them all outwards and aligned with the bar.
-- move the bar carefully to point in direction of female 1. Check the cables.
+        self.bar.open()
+        self._is_open = True
 
+    def close(self):
+        if not self._is_open:
+            return
 
-The useful command are (replace female1 by the interested part):
-- colloquy.female1.position: returns the current position as seen by the motor.
-- colloquy.female1.move_and_wait(position=2200): Turn the female to desired position.
-- colloquy.female1.mirror.position: FEMALE ONLY, returns the current position as seen by the motor.
-- colloquy.female1.mirror.move_and_wait(position=1200) : Turn the mirror to desired position.
+        if self.thread is not None:
+            self.stop()
 
-The attribute "female1" can be replace by "female2", "female3", "male1", "male2", "bar".
-The attribute "body" can be replace by "mirror".
+        self._dxl_manager.close()
+        self._arduino_manager.close()
 
-Calibration steps:
-1. Use the colloquy.female1.position() to check the present female1's position.
-2. Use the colloquy.female1.move_and_wait() to align the female1 to the wanted origin (the body will move symmetrically from this origin).
-3. Copy the origin and paste the value in colloquy_driver.py, FEMALE1_ORIGIN
-4. Repeat for the process the other females, males
+        print("Colloquy closed.")
 
+# CALIBRATION_BANNER = """#########################################################
+# This small script is for mecanical calibration.
 
+# Normally, the calibration should be done after every motor assembly.
 
-Example:
->>> female1.position
-2645
->>> female1.move_and_wait(position=2000)
->>> female1.move_and_wait(position=2300)
->>> female1.move_and_wait(position=2200)
-... When happy with origin write FEMALE1_ORIGIN=2200, in file colloquy_mecanical_test.py.
->>> exit()
+# Running this script will return an interactive python console, in which you can run python command directly.
+# To exit the calibration process:
+# >>> exit()
 
-Repeat with other females, males and the bar.
-
-Note: Resolution = 0.087891 unit/°
->>> female1.position
-0
->>> female1.move_and_wait(position=2000) # Will turn 175°
+# The aim is to:
+# - move the females carefully to point them all at the center of the artwork.
+# - move the males carefully to point them all outwards and aligned with the bar.
+# - move the bar carefully to point in direction of female 1. Check the cables.
 
 
-WARNING:
-Moving threshold = 20 unit !
-Example:
->>> female1.position
-3000
->>> female1.move_and_wait(position=3010) # ! Won't move because 3010-3000 = 10 < 20
->>> female1.move_and_wait(position=3500) # OK will move.
-#########################################################
-"""
+# The useful command are (replace female1 by the interested part):
+# - colloquy.female1.position: returns the current position as seen by the motor.
+# - colloquy.female1.move_and_wait(position=2200): Turn the female to desired position.
+# - colloquy.female1.mirror.position: FEMALE ONLY, returns the current position as seen by the motor.
+# - colloquy.female1.mirror.move_and_wait(position=1200) : Turn the mirror to desired position.
 
-if __name__ == "__main__":
-    COLLOQUY_DRIVER = ColloquyDriver(params=Parameters().as_dict())
-    try:
-        COLLOQUY_DRIVER.calibrate()
-    finally:
-        COLLOQUY_DRIVER.close()
+# The attribute "female1" can be replace by "female2", "female3", "male1", "male2", "bar".
+# The attribute "body" can be replace by "mirror".
+
+# Calibration steps:
+# 1. Use the colloquy.female1.position() to check the present female1's position.
+# 2. Use the colloquy.female1.move_and_wait() to align the female1 to the wanted origin (the body will move symmetrically from this origin).
+# 3. Copy the origin and paste the value in colloquy_driver.py, FEMALE1_ORIGIN
+# 4. Repeat for the process the other females, males
+
+
+
+# Example:
+# >>> female1.position
+# 2645
+# >>> female1.move_and_wait(position=2000)
+# >>> female1.move_and_wait(position=2300)
+# >>> female1.move_and_wait(position=2200)
+# ... When happy with origin write FEMALE1_ORIGIN=2200, in file colloquy_mecanical_test.py.
+# >>> exit()
+
+# Repeat with other females, males and the bar.
+
+# Note: Resolution = 0.087891 unit/°
+# >>> female1.position
+# 0
+# >>> female1.move_and_wait(position=2000) # Will turn 175°
+
+
+# WARNING:
+# Moving threshold = 20 unit !
+# Example:
+# >>> female1.position
+# 3000
+# >>> female1.move_and_wait(position=3010) # ! Won't move because 3010-3000 = 10 < 20
+# >>> female1.move_and_wait(position=3500) # OK will move.
+# #########################################################
+# """
+
+# if __name__ == "__main__":
+    # COLLOQUY_DRIVER = ColloquyDriver(params=Parameters().as_dict())
+    # try:
+        # COLLOQUY_DRIVER.calibrate()
+    # finally:
+        # COLLOQUY_DRIVER.close()

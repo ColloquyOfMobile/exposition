@@ -11,9 +11,9 @@ import traceback
 
 class Body(SharedDriver):
 
-    def __init__(self, **kwargs):
+    def __init__(self, owner, **kwargs):
         dxl_manager = kwargs["dynamixel manager"]
-        SharedDriver.__init__(self, **kwargs)
+        SharedDriver.__init__(self, owner, **kwargs)
         self.colloquy = kwargs["colloquy"]
         self.arduino_manager = kwargs["arduino manager"]
         self._speaker_memory = None
@@ -21,51 +21,12 @@ class Body(SharedDriver):
         self.drives = DrivesHandler()
         self.speaker = SpeakerDriver(owner=self, arduino_manager=self.arduino_manager)
 
-
-    def run(self, **kwargs):
-        print(f"Running {self.name}...")
-        try:
-            self._run_setup()
-            self._run_loop()
-            self._run_setdown()
-        except Exception:
-            msg = traceback.format_exc()
-            self.log(msg)
-            self.colloquy.stop_event.set()
-            self._run_setdown()
-            raise
-
-
-    def _run_setup(self):
-        raise NotImplementedError("""Possible implementation:
-self.stop_event.clear()
-self.drives.start()
-self.turn_on_neopixel()""")
-
-    def _run_loop(self):
-        raise NotImplementedError("""Possible implementation:
-while not self.stop_event.is_set():
-
-    if not self.is_moving:
-        self.toggle_position()
-
-    if self.interaction_event.is_set():
-        self._interact()
-    self.sleep_min()""")
-
-    def _run_setdown(self):
-        raise NotImplementedError("""Possible implementation:
-self.drives.stop()
-self.turn_off_neopixel()""")
-
-    # @property
-    # def drive_state(self):
-        # raise NotImplementedError
-        # return "O or P"
-
     @property
     def speaker_state(self):
         return self._speaker_memory
+
+    def open(self):
+        SharedDriver.open(self)
 
     def turn_to_left_position(self):
         self.turn_to_max_position()

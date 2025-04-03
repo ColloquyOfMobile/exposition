@@ -1,6 +1,6 @@
-from .body import Body
-from .thread_driver import ThreadDriver
-from .neopixel_driver import NeopixelDriver
+from colloquy_driver.body import Body
+from colloquy_driver.thread_driver import ThreadDriver
+from .body_neopixels import BodyNeopixels
 from time import time, sleep
 from threading import Event, Thread
 from collections import deque
@@ -35,20 +35,19 @@ class MaleDriver(Body):
             self,
             **kwargs,
             )
-        self.ring_pixel = RingPixel(owner=self)
-        self.drive_pixel = DrivePixel(owner=self)
+        self.body_neopixel = BodyNeopixels(owner=self)
         self.light_patterns = {}
         for k, v in LIGHT_PATTERNS[self.name].items():
             # The deque with max_len will act as circular list
             self.light_patterns[k] = deque(v, maxlen=len(v))
 
         self._blink_thread = None
-    
+
     def open(self):
-        self.neopixel.off()
+        self.body_neopixel.off()
 
     def _run_setup(self):
-        self.ring_pixel.configure(
+        self.body_neopixel.ring.configure(
             red = 0,
             green = 0,
             blue = 0,
@@ -59,7 +58,7 @@ class MaleDriver(Body):
         blink_thread.start()
 
         self.drives.start()
-        self.drive_pixel.on()
+        self.body_neopixel.drive.on()
         self._update_drive_pixel()
 
     def _run_loop(self):
@@ -79,7 +78,7 @@ class MaleDriver(Body):
                 blink_thread.start()
 
     def _run_setdown(self):
-        self.ring_pixel.off()
+        self.body_neopixel.ring.off()
         print(f"Joining thread {self._blink_thread.name}...")
         self._blink_thread.join()
 
@@ -90,13 +89,13 @@ class MaleDriver(Body):
             neopixel_start = time()
             value = light_pattern.popleft()
             light_pattern.append(value)
-            self.ring_pixel.set(value)
+            self.body_neopixel.ring.set(value)
 
             while not self.stop_event.is_set():
                 if (time() - neopixel_start) > 0.5:
                     value = light_pattern.popleft()
                     light_pattern.append(value)
-                    self.ring_pixel.set(value)
+                    self.body_neopixel.ring.set(value)
                     neopixel_start = time()
 
                 if self.interaction_event.is_set():
@@ -109,7 +108,7 @@ class MaleDriver(Body):
             raise
 
     def _interact(self):
-        self.ring_pixel.on()
+        self.body_neopixel.ring.on()
 
         iterations = 2
         self.turn_to_origin_position()
@@ -132,58 +131,4 @@ class MaleDriver(Body):
             brightness = brightness,
             **color,
             )
-        self.drive_pixel.configure(**config)
-
-# TODO: If time, look into subclassing the NeopixelDriver directly
-class RingPixel:
-
-    def __init__(self, owner):
-        self._owner = owner
-        self._name = f"{owner.name}/ring"
-        self.neopixel = NeopixelDriver(owner=self, arduino_manager=owner.arduino_manager)
-
-    @property
-    def name(self):
-        return self._name
-
-    def configure(self, red, green, blue, white, brightness):
-        self.neopixel.configure(red, green, blue, white, brightness)
-
-    def on(self):
-        self.neopixel.on()
-
-    def off(self):
-        self.neopixel.off()
-
-    def toggle(self):
-        self.neopixel.toggle()
-
-    def set(self, value):
-        self.neopixel.set(value)
-
-
-class DrivePixel:
-
-    def __init__(self, owner):
-        self._owner = owner
-        self._name = f"{owner.name}/drive"
-        self.neopixel = NeopixelDriver(owner=self, arduino_manager=owner.arduino_manager)
-
-    @property
-    def name(self):
-        return self._name
-
-    def configure(self, red, green, blue, white, brightness):
-        self.neopixel.configure(red, green, blue, white, brightness)
-
-    def on(self):
-        self.neopixel.on()
-
-    def off(self):
-        self.neopixel.off()
-
-    def toggle(self):
-        self.neopixel.toggle()
-
-    def set(self):
-        self.neopixel.set()
+        self.body_neopixel.drive.configure(**config)

@@ -6,30 +6,25 @@ from time import sleep
 
 class FemaleDriver(Body):
 
-    def __init__(self, **kwargs):
+    def __init__(self, owner, **kwargs):
         # self._lock = Lock()
         Body.__init__(
             self,
+            owner,
             **kwargs,
             )
         dxl_manager = kwargs["dynamixel manager"]
         dxl_id = kwargs["dynamixel id"]
         origin = kwargs["origin"]
 
-        self.neopixel = NeopixelDriver(owner=self, arduino_manager=self.arduino_manager)
+        self.neopixel = NeopixelDriver(owner=self)
 
         mirror_kwargs = kwargs.get("mirror")
         self.mirror = None
         if mirror_kwargs:
             mirror_kwargs["dynamixel manager"] = dxl_manager
-            self.mirror = MirrorDriver(**mirror_kwargs)
-
-        # self._light_colors = {
-            # "O": white,
-            # "P": orange,
-            # None: white,
-            # "O or P": white,
-        # }
+            self.mirror = MirrorDriver(owner=self, **mirror_kwargs)
+            
 
     def _run_setup(self):
         self.stop_event.clear()
@@ -74,3 +69,8 @@ class FemaleDriver(Body):
             sleep(1)
         self.interaction_event.clear()
         print(f"{self.name} finished interaction.")
+
+    def open(self):
+        Body.open(self)
+        self.neopixel.open()
+        self.mirror.open()

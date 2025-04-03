@@ -5,54 +5,52 @@ from threading import Timer
 class Logger:
 
     clean_thread = None
+    _started = False
     _time_origin = time()
     _log_folder = Path("local/logs")
 
     if not _log_folder.is_dir():
         _log_folder.mkdir()
 
-    for element in _log_folder.iterdir():
-        lines = element.read_text().splitlines()
-        lines = lines[-1000:]
+    def __init__(self, owner):
+        self._owner = owner
+        self._path = self._log_folder / f"{owner.name}.log"
+        if not self._path.exists():
+            self._path.touch()
+        self._line_count = len(self._path.read_text().splitlines())
+        lines = self._path.read_text().splitlines()
         lines.extend(
             ("",
             "RESTART",
             "",)
         )
-        text = "\n".join(lines[-1000:])
-        element.write_text(text)
-
-    def __init__(self, owner):
-        self._owner = owner
-        self._path = self._log_folder / f"{owner.name}.log"
+        text = "\n".join(lines[-500:])
+        self._path.write_text(text)
 
     def __call__(self, msg):
-        msg = self._format(msg)
+        msg_lines = self._format(msg)
+        msg_line_count = len(msg_lines)
+        line_count = self._line_count + msg_line_count
+
+        if line_count > 1000:
+            print(f"Cleaning {self._path.as_posix()}")
+            lines = self._path.read_text().splitlines()
+            lines.extend(msg_lines)
+            self._path.write_text("\n".join(lines[-500:]))
+            return
+
         with self._path.open("a") as file:
-            file.write(msg)
+            file.write("\n".join(msg_lines))
             file.write("\n")
-
-    @classmethod
-    def clean_folder(cls):
-        print(f"Cleaning log folder...")
-        for element in cls._log_folder.iterdir():
-            lines = element.read_text().splitlines()
-            lines = lines[-1000:]
-            text = "\n".join(lines[-1000:])
-            element.write_text(text)
-
-        cls.clean_thread = Timer(60, cls.clean_folder)
-        print(f"{id(cls.clean_thread)=}")
-        cls.clean_thread.start()
 
     def _format(self, msg):
         time_header = f"{round(time()-self._time_origin, 2)}:"
         lines = msg.splitlines()
         if len(lines) == 1:
-            return f"{time_header} {msg=}"
+            return [f"{time_header} {msg=}"]
 
         new_lines = [f"{time_header}"]
         for line in lines:
             new_lines.append(f"| {line}")
 
-        return "\n".join(new_lines)
+        return new_lines

@@ -9,18 +9,15 @@ class SharedDriver(ThreadDriver):
         "dxl_driver": DXLDriver
     }
 
-    def __init__(self, **kwargs):
+    def __init__(self, owner, **kwargs):
         ThreadDriver.__init__(self, kwargs["name"])
+        self._owner = owner
         dxl_manager = kwargs["dynamixel manager"]
         dxl_id = kwargs["dynamixel id"]
-        self.dxl = None
         self.dxl_origin = kwargs["origin"]
         self.motion_range = kwargs["motion range"]
-        # self.name = kwargs["name"]
         self.stop_event = Event()
-
-        if dxl_manager is not None:
-            self.dxl = self.classes["dxl_driver"](dxl_manager, dxl_id)
+        self.dxl = self.classes["dxl_driver"](dxl_manager, dxl_id)
 
         self._position_memory = None
 
@@ -60,5 +57,8 @@ class SharedDriver(ThreadDriver):
             self.turn_to_max_position()
             return
 
-    def stop(self):
+    def close(self):
         raise NotImplementedError
+
+    def open(self):
+        self.dxl.open()

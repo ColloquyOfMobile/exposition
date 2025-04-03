@@ -26,9 +26,8 @@ class Tests:
         self._wsgi = wsgi
         self.path = Path(self._name)
         self.active = None
-        self._colloquy_driver = None
-        self._commands = {
-        }
+        self._colloquy_driver = self.classes["colloquy_driver"](params=PARAMETERS)
+        self._commands = {}
         handlers = [
             Calibration(wsgi=wsgi, owner=self, path=self.path/"calibration"),
         ]
@@ -38,7 +37,7 @@ class Tests:
             }
         self.run = RunCommand(owner=self)
         self.stop = StopCommand(owner=self)
-        self.colloquy_thread = None
+        # self.colloquy_thread = None
 
 
     def __eq__(self, other):
@@ -97,18 +96,10 @@ class Tests:
         return self._wsgi
 
     def open(self):
-        if self._colloquy_driver is None:
-            self._colloquy_driver = self.classes["colloquy_driver"](params=PARAMETERS)
-        self._colloquy_driver.start()
+        self._colloquy_driver.open()
 
     def close(self):
-        if self.colloquy_thread is not None:
-            self.colloquy_driver.stop_event.set()
-            self.colloquy_thread.join()
-        if self._colloquy_driver is not None:
-            self._colloquy_driver.stop()
-        if self.active is not None:
-            self.active.close()
+        self._colloquy_driver.close()
 
     def _write_header(self):
         doc, tag, text = self._wsgi.doc.tagtext()
@@ -164,6 +155,7 @@ class Tests:
 
     def activate(self):
         path = Path(*self._wsgi.path.parts[:2])
+        self._colloquy_driver.stop()
         if self.active is not None:
             if self.active.path == path:
                 return
@@ -192,8 +184,7 @@ class StopCommand(Command):
 
     def __call__(self, **kwargs):
         owner = self._owner
-        owner.colloquy_driver.stop_event.set()
-        owner.colloquy_thread.join()
+        owner.colloquy_driver.stop()
         yield "Stopped."
 
 class RunCommand(Command):
@@ -206,7 +197,5 @@ class RunCommand(Command):
         owner.stop_event = Event()
         self._doc = CustomDoc()
         doc, tag, text = self._wsgi.doc.tagtext()
-        # self._wsgi.start_response('200 OK', [('Content-Type', 'text/html')])
-        owner.colloquy_thread = Thread(target=owner.colloquy_driver.run)
-        owner.colloquy_thread.start()
+        owner.colloquy_driver.start()
         yield "Started..."

@@ -11,11 +11,9 @@ class BarDriver(ThreadDriver):
         dxl_manager = kwargs["dynamixel manager"]
         dxl_ids = kwargs["dynamixel ids"]
         self.colloquy = kwargs["colloquy"]
-        self.dxl = None
         assert kwargs["origin"] is not None, "Calibrate colloquy."
         self.dxl_origin = kwargs["origin"]
         self.motion_range = kwargs["motion range"]
-        # self.name = kwargs["name"]
         self.moving_threshold = 20
         self.stop_event = Event()
         self.interaction = None
@@ -23,32 +21,9 @@ class BarDriver(ThreadDriver):
         self.interact_positions = []
         for position in sorted(self.colloquy.interactions):
             self.interact_positions.append(position + self.dxl_origin)
-
-        if dxl_manager is not None:
-            self.offset = None
-            self.dxl1 = DXLDriver(dxl_manager, dxl_ids[0])
-            self.dxl2 = DXLDriver(dxl_manager, dxl_ids[1])
-            self._init_offset()
-            self._init()
-
-
-    def _init_offset(self):
-        """Initialise the offset postision between the two servos."""
-        position1 = self.dxl1.position
-        position2 = self.dxl2.position
-        self.offset = position2 - position1
-
-    def _init(self):
-        """Initialise the body's position."""
-        self.torque_enabled = 0
-
-        self.drive_mode = 0
-
-        self.operating_mode = 4
-        self.profile_velocity = 16
-        self.profile_acceleration = 1
-
-        self.torque_enabled = 1
+        self.offset = None
+        self.dxl1 = DXLDriver(dxl_manager, dxl_ids[0])
+        self.dxl2 = DXLDriver(dxl_manager, dxl_ids[1])
 
     @property
     def position(self):
@@ -89,6 +64,7 @@ class BarDriver(ThreadDriver):
 
     @torque_enabled.setter
     def torque_enabled(self, value):
+        assert self.offset is not None
         self.dxl1.torque_enabled = value
         self.dxl2.torque_enabled = value
 
@@ -120,6 +96,7 @@ class BarDriver(ThreadDriver):
 
     @goal_position.setter
     def goal_position(self, value):
+        assert self.offset is not None
         self.dxl1.goal_position = value
         self.dxl2.goal_position = value + self.offset
 
@@ -145,6 +122,19 @@ class BarDriver(ThreadDriver):
                 break
             assert time() - start < 60, "Moving the bar shouldn't take more than 60s!"
             timelap = time() - start
+
+    def open(self):
+        self._init_offset()
+        self.torque_enabled = 0
+
+        self.drive_mode = 0
+
+        self.operating_mode = 4
+        self.profile_velocity = 16
+        self.profile_acceleration = 1
+
+
+        self.torque_enabled = 1
 
     def turn_to_origin_position(self):
         self.goal_position = self.dxl_origin
@@ -179,8 +169,45 @@ class BarDriver(ThreadDriver):
         self.interaction = self.colloquy.interactions[position-self.dxl_origin]
 
 
-    def run(self, **kwargs):
+    # def _run(self, **kwargs):
+        # self.stop_event.clear()
+        # while not self.stop_event.is_set():
+            # if self.is_moving:
+                # continue
+
+            # if self.interaction is None:
+                # self.toggle_position()
+                # continue
+
+            # for element in self.interaction:
+                # element.interaction_event.set()
+            # self.wait_interaction_end()
+            # self.toggle_position()
+            # self.sleep_min()
+
+    def wait_interaction_end(self):
+        print(f"Waiting interaction end.")
+        def still_interacting():
+            for element in self.interaction:
+                yield element.interaction_event.is_set()
+
+        while any(still_interacting()):
+            if self.stop_event.is_set():
+                break
+            self.sleep_min()
+        print(f"...Interaction finished.")
+
+
+    def _init_offset(self):
+        """Initialise the offset postision between the two servos."""
+        position1 = self.dxl1.position
+        position2 = self.dxl2.position
+        self.offset = position2 - position1
+
+    def _run_setup(self):
         self.stop_event.clear()
+
+    def _run_loop(self):
         while not self.stop_event.is_set():
             if self.is_moving:
                 continue
@@ -195,14 +222,5 @@ class BarDriver(ThreadDriver):
             self.toggle_position()
             self.sleep_min()
 
-    def wait_interaction_end(self):
-        print(f"Waiting interaction end.")
-        def still_interacting():
-            for element in self.interaction:
-                yield element.interaction_event.is_set()
-
-        while any(still_interacting()):
-            if self.stop_event.is_set():
-                break
-            self.sleep_min()
-        print(f"...Interaction finished.")
+    def _run_setdown(self):
+        pass
