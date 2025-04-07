@@ -182,6 +182,8 @@ class ColloquyDriver(ThreadDriver):
             self._threads.add(thread)
             thread.start()
 
+        raise NotImplementedError(f"Move the thread start into in the run element.")
+        raise NotImplementedError(f"Remove the self._threads attribute.")
         thread = Thread(target=self.bar.run, name="bar")
         self._threads.add(thread)
         thread.start()
@@ -192,6 +194,7 @@ class ColloquyDriver(ThreadDriver):
         for element in self.elements:
             element.stop_event.set()
 
+        raise NotImplementedError(f"Stop the bodies directly.")
         for thread in self._threads:
             thread.join()
 

@@ -20,10 +20,9 @@ class ArduinoManager(ThreadDriver):
         self.lock = Lock()
         port_name = kwargs["communication port"]
         baudrate = kwargs["baudrate"]
-        self.port_handler = self._classes["serial"](port=port_name, baudrate=baudrate, timeout=1)
-
-        # with self.lock:
-            # self.wait_for_reboot()
+        self.port_handler = self._classes["serial"](baudrate=baudrate, timeout=1)
+        # Set port name avoid opening the port
+        self.port_handler.port = port_name
 
     def send(self, path, **data):
         command = {"path": str(path), **data}

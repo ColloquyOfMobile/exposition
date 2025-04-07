@@ -68,6 +68,9 @@ class FemaleDriver(Body):
                 sleep(0.5)
                 self.turn_off_speaker()
                 while self.is_moving or male.is_moving:
+                    if self.stop_event.is_set():
+                        break
+                    print(f"{self.is_moving=}, {male.is_moving=}")
                     self.sleep_min()
                 break
         else:
@@ -75,11 +78,6 @@ class FemaleDriver(Body):
             return
 
         raise NotImplementedError(f"Start the mirror thread.")
-        iterations = 2
-        self.turn_to_origin_position()
-        self.turn_on_speaker()
-        sleep(0.5)
-        self.turn_off_speaker()
         for i in range(iterations):
             if self.stop_event.is_set():
                 break

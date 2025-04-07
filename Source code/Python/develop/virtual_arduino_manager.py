@@ -6,8 +6,12 @@ import re
 
 class VirtualSerialPort:
 
-    def __init__(self, port, baudrate, timeout):
-        self._is_open = True
+    def __init__(self, baudrate, timeout, port=None):
+        assert port is None, f"Port should be none to avoid opening! ({port=})"
+        self._port = port
+        self._is_open = False
+        if port is not None:
+            self._is_open = True
         self._possible_paths = set()
         self._load_possible_paths()
         self._readline_results = self._iter_readline_results()
@@ -31,10 +35,20 @@ class VirtualSerialPort:
     def is_open(self):
         return self._is_open
 
+    @property
+    def port(self):
+        return self._port
+
+    @port.setter
+    def port(self, value):
+        self._port = value
+
     def close(self):
         self._is_open = False
 
     def open(self):
+        assert not self.is_open
+        assert self._port is not None
         self._readline_results = self._iter_readline_results()
         self._is_open = True
 

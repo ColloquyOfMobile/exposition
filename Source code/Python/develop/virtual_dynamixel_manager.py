@@ -1,9 +1,8 @@
-from dynamixel_sdk import PortHandler, PacketHandler, COMM_SUCCESS  # Uses Dynamixel SDK library
-from functools import wraps
-from colloquy_driver.dynamixel_manager import DynamixelManager
+from dynamixel_sdk import COMM_SUCCESS  # Uses Dynamixel SDK library
 from time import time, sleep
-from collections import defaultdict
-from threading import Thread
+from threading import Thread, Lock
+from colloquy_driver.dynamixel_manager import DynamixelManager
+from colloquy_driver.thread_driver import ThreadDriver
 
 class VirtualPortHandler:
     def __init__(self, port_name):
@@ -18,31 +17,61 @@ class VirtualPortHandler:
     def closePort(self):
         return
 
-class DxlThread:
+class VirtualDxl(ThreadDriver):
     def __init__(self, owner, dxl_id):
+        ThreadDriver.__init__(self, name=f"virtual dxl {dxl_id}")
         self._owner = owner
         self._dxl_id = dxl_id
+        self._thread = None
+        self._lock = Lock()
+        self._goal_position = 0
+        self._position = 0
 
-    def __call__(self):
-        owner = self._owner
-        table = owner._dxl_tables[self._dxl_id]
-        goal = table["goal position"]
-        position = table["position"]
+    def __getitem__(self, key):
+        if key == "position":
+            return self.position
+        if key == "goal position":
+            return self.goal_position
+        raise KeyError(f"{key=}")
+
+    @property
+    def position(self):
+        return self._position
+
+    @property
+    def goal_position(self):
+        return self._goal_position
+
+    @goal_position.setter
+    def goal_position(self, value):
+        with self._lock:
+            self._goal_position = value
+            if self._thread is None:
+                self._thread = thread = Thread(target = self.run, name=self.name)
+                thread.start()
+
+    def run(self):
+        goal = self.goal_position
+        self.log(f"Goal position set to {goal}.")
+        position = self.position
         # move_duration = 5
-        start = time()
         step = 100
         lim_min, lim_max  = goal - 2*step, goal + 2*step
         while True:
-            if lim_min < table["position"] < lim_max:
+            if self.goal_position != goal:
+                self.log(f"Goal position changed to {self.goal_position}.")
+
+            print(f"{self._dxl_id=}, {goal=}, {position=}")
+            if lim_min < self._position < lim_max:
                 break
-            if table["position"] < goal:
-                table["position"] += step
+            if self._position < self.goal_position:
+                self._position += step
                 sleep(0.1)
                 continue
-            table["position"] -= step
+            self._position -= step
             sleep(0.01)
 
-        owner._dxl_tables[self._dxl_id]["position"] = goal
+        self._position = self.goal_position
 
 def default_dict_init():
     return {"position":0, "goal position": 0}
@@ -64,18 +93,19 @@ class VirtualPacketHandler:
         }
         self._register_reader = {
         }
-        self._dxl_tables = defaultdict(default_dict_init)
+
+        self._dxls = {i: VirtualDxl(owner=self, dxl_id=i) for i in range(1, 11)}
+        # print(f"{len(self._dxls)=}")
 
     def _write_register(self, dxl_id, value):
         pass
 
     def _read_register(self, dxl_id, label):
-        return self._dxl_tables[dxl_id][label]
+        return self._dxls[dxl_id][label]
 
 
     def _write_goal_position(self, dxl_id, value):
-        self._dxl_tables[dxl_id]["goal position"] = value
-        Thread(target = DxlThread(owner=self, dxl_id=dxl_id)).start()
+        self._dxls[dxl_id].goal_position = value
 
 
     def write1ByteTxRx(self, port_handler, dxl_id, register_address, value):
