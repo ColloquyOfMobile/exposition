@@ -24,20 +24,24 @@ class DrivesHandler:
         self._orange = dict(red=255, green=165, blue=0, white=0)
         self._white = dict(red=0, green=0, blue=0, white=255)
         self._colors = {
-            "O": self._white,
-            "P": self._orange,
+            ("O",): self._white,
+            ("P",): self._orange,
             None: self._white,
-            "O or P": self._white,
+            ("O", "P",): self._white,
         }
 
     def __getitem__(self, key):
-        assert key in (None, "O", "P", "O or P"), f"{key=}"
+        # assert key in (None, "O", "P", "O or P"), f"{key=}"
+        for_max = list()
         with self._lock:
-            if key == "O":
-                return self.o_drive
-            if key == "P":
-                return self.p_drive
-            return max(self.p_drive, self.o_drive)
+            if key is None:
+                return  max(self.o_drive, self.p_drive)
+
+            if "O" in key:
+                for_max.append(self.o_drive)
+            if "P" in key:
+                for_max.append(self.p_drive)
+            return max(for_max)
 
     @property
     def color(self):
@@ -51,7 +55,7 @@ class DrivesHandler:
 
     @property
     def state(self):
-        raise NotImplementedError(f"Update to return a tuple for the states")
+        # raise NotImplementedError(f"Update to return a tuple for the states")
         with self._lock:
             o_satisfied = self.o_drive < self._satisfied
             p_satisfied = self.p_drive < self._satisfied
@@ -61,15 +65,15 @@ class DrivesHandler:
             if o_satisfied and p_satisfied:
                 return None
             if o_frustated and p_frustated:
-                return "O or P"
+                return ("O", "P")
             if self.o_drive > self.p_drive:
                 assert not o_satisfied
-                return "O"
+                return ("O", )
             if self.p_drive > self.o_drive:
                 assert not p_satisfied
-                return "P"
+                return ("P", )
             if self.p_drive == self.o_drive:
-                return "O or P"
+                return ("O", "P")
 
             raise ValueError(f"Drive Error, {self.o_drive=}, {self.p_drive=}")
 

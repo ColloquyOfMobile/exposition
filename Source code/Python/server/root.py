@@ -30,9 +30,9 @@ class Root():
         if self.active is not None:
             self.active.close()
             self.active = None
-        
+
         yield from self.write_html()
-        
+
     def write_html(self):
         doc, tag, text = self._wsgi.doc.tagtext()
         self._wsgi.start_response('200 OK', [('Content-Type', 'text/html')])
@@ -49,13 +49,13 @@ class Root():
                     ' interactive-widget=resizes-content" />'
                 )
 
-            yield from self._write_body(**kwargs)
+            yield from self._write_body()
 
         response = doc.read()
         yield response.encode()
-        
 
-    def _write_body(self, **kwargs):
+
+    def _write_body(self):
         doc, tag, text = self._wsgi.doc.tagtext()
         with tag("body"):
             with tag("h1",):

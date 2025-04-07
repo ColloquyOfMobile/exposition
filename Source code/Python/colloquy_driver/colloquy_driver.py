@@ -49,7 +49,7 @@ class ColloquyDriver(ThreadDriver):
 
         # Defined at for each bar position, which female and male interacts
         self.nearby_interactions = {
-            0: (self.male2, self.female1),
+            0: NearbyInteractions(self.male2, self.female1),
             1600: NearbyInteractions(self.male1, self.female3),
             3900: NearbyInteractions(self.male2, self.female2),
             6500: NearbyInteractions(self.male1, self.female1),
@@ -230,24 +230,26 @@ class ColloquyDriver(ThreadDriver):
         self._arduino_manager.close()
 
         print("Colloquy closed.")
-        
+
 
 class NearbyInteractions:
-    
+
     def __init__(self, male, female):
         self._male = male
         self._female = female
-        
+
     def __iter__(self):
         yield self.male
         yield self.female
-    
+
+    @property
     def male(self):
         return self._male
-    
+
+    @property
     def female(self):
         return self._female
-    
+
     def busy(self):
         return any(
             element.interaction_event.is_set()

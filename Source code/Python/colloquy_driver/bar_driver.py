@@ -216,8 +216,9 @@ class BarDriver(ThreadDriver):
                 self.toggle_position()
                 continue
 
-            for element in self.nearby_interaction:
-                element.interaction_event.set()
+
+            self.nearby_interaction.female.interaction_event.set()
+
             self.wait_interaction_end()
             self.toggle_position()
             self.sleep_min()

@@ -57,10 +57,24 @@ class FemaleDriver(Body):
 
     def _interact(self):
         nearby_interaction = self.colloquy.nearby_interaction
-        assert nearby_interaction.female is self
+        assert nearby_interaction.female is self, f"{nearby_interaction.female.name=},{self.name=}"
         male = self.colloquy.nearby_interaction.male
-        raise NotImplementedError(f"Update drive_handler to return a tuple for the states")
+        for state in self.drives.state:
+            if state in male.drives.state:
+                male.interaction_event.set()
+                self.turn_to_origin_position()
+                male.turn_to_origin_position()
+                self.turn_on_speaker()
+                sleep(0.5)
+                self.turn_off_speaker()
+                while self.is_moving or male.is_moving:
+                    self.sleep_min()
+                break
+        else:
+            self.interaction_event.clear()
+            return
 
+        raise NotImplementedError(f"Start the mirror thread.")
         iterations = 2
         self.turn_to_origin_position()
         self.turn_on_speaker()

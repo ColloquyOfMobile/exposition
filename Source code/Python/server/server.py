@@ -81,23 +81,24 @@ class WSGI:
         self._handler = value
 
     def _handle_request(self):
-        
+
         path = Path(*self.path.parts[:1])
-        if path.exists():
-            yield from self.file_handler()
-            return
 
         if path == Path():
             yield from self.root(**self._data)
             return
 
+        if path.exists():
+            yield from self.file_handler()
+            return
+
         if path in self.root.handlers:
             yield from self.root(**self._data)
             return
-            
+
         # File not found
         self.start_response('404 Not Found', [('Content-Type', 'text/plain')])
-        message = f'{file_path.as_posix()} not found !'
+        message = f'{path.as_posix()} not found !'
         print(message)
         yield message.encode()
 
