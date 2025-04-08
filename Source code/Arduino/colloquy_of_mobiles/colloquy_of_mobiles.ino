@@ -25,6 +25,132 @@ Adafruit_NeoPixel male2Strip(MALE_NUM_PIXELS, MALE2_NEOPIXEL_PIN, NEO_GRBW + NEO
 #define MALE1_SPEAKER_PIN 14
 #define MALE2_SPEAKER_PIN 15
 
+class Female {
+public:
+  String name;
+  Adafruit_NeoPixel* strip;
+  int speakerPin;
+  int numPixels;
+
+  Female(String name, Adafruit_NeoPixel* strip, int speakerPin, int numPixels)
+    : name(name), strip(strip), speakerPin(speakerPin), numPixels(numPixels) {}
+
+  String handleSubcommand(String subcommand, JsonDocument& doc) {
+    if (subcommand == "neopixel") {
+      return handleNeopixel(doc);
+    } else if (subcommand == "speaker") {
+      return handleSpeaker(doc);
+    }
+    return R"({"status": "error", "message": "Invalid subcommand"})";
+  }
+
+private:
+  String handleNeopixel(JsonDocument& doc) {
+    int r = doc["r"] | 0;
+    int g = doc["g"] | 0;
+    int b = doc["b"] | 0;
+    int w = doc["w"] | 0;
+    int brightness = doc["brightness"] | 255;
+
+    strip->setBrightness(brightness);
+    for (int i = 0; i < numPixels; i++) {
+      strip->setPixelColor(i, strip->Color(r, g, b, w));
+    }
+    strip->show();
+    return R"({"status": "success", "message": "Neopixel updated"})";
+  }
+
+  String handleSpeaker(JsonDocument& doc) {
+    String data = doc["data"];
+    if (data == "on") {
+      tone(speakerPin, 300);
+    } else {
+      noTone(speakerPin);
+    }
+    return R"({"status": "success", "message": "Speaker updated"})";
+  }
+};
+
+
+class Male {
+public:
+  String name;
+  Adafruit_NeoPixel* strip;
+  int speakerPin;
+  int numPixels;
+
+  Male(String name, Adafruit_NeoPixel* strip, int speakerPin, int numPixels)
+    : name(name), strip(strip), speakerPin(speakerPin), numPixels(numPixels) {}
+
+  String handleSubcommand(String path, JsonDocument& doc) {
+    
+    int sep = path.indexOf('/');
+    if (sep == -1) {
+      if (path == "speaker") {
+      return handleSpeaker(doc);
+    } else if (path == "up_ring") {
+      return handleUpRing(doc);
+    }
+    return R"({"status": "error", "message": "Invalid subcommand"})";
+    }
+
+    String groupName = path.substring(0, sep);
+    String subcommand = path.substring(sep + 1);
+
+    if (subcommand == "body") {
+      return handleBody(subcommand, doc);
+    } 
+    return R"({"status": "error", "message": "Invalid subcommand"})";
+  }
+
+  String handleBody(String path, JsonDocument& doc) {
+    
+    int sep = path.indexOf('/');
+    if (sep == -1) {
+      if (path == "drive") {
+      return handleDrive(doc);
+    } else if (path == "ring") {
+      return handleRing(doc);
+    }
+    return R"({"status": "error", "message": "Invalid subcommand"})";
+    }
+    return R"({"status": "error", "message": "Invalid subcommand"})";
+
+    String groupName = path.substring(0, sep);
+    String subcommand = path.substring(sep + 1);
+
+    if (subcommand == "body") {
+      return handleBody(doc);
+    } 
+    return R"({"status": "error", "message": "Invalid subcommand"})";
+  }
+
+private:
+  String handleUpRing(JsonDocument& doc) {
+    int r = doc["r"] | 0;
+    int g = doc["g"] | 0;
+    int b = doc["b"] | 0;
+    int w = doc["w"] | 0;
+    int brightness = doc["brightness"] | 255;
+
+    strip->setBrightness(brightness);
+    for (int i = 0; i < numPixels; i++) {
+      strip->setPixelColor(i, strip->Color(r, g, b, w));
+    }
+    strip->show();
+    return R"({"status": "success", "message": "Neopixel updated"})";
+  }
+
+  String handleSpeaker(JsonDocument& doc) {
+    String data = doc["data"];
+    if (data == "on") {
+      tone(speakerPin, 300);
+    } else {
+      noTone(speakerPin);
+    }
+    return R"({"status": "success", "message": "Speaker updated"})";
+  }
+};
 
 void setup() {
   // Initialisation des Neopixels
@@ -46,6 +172,12 @@ void setup() {
   pinMode(FEMALE3_SPEAKER_PIN, OUTPUT);
   pinMode(MALE1_SPEAKER_PIN, OUTPUT);
   pinMode(MALE2_SPEAKER_PIN, OUTPUT);
+
+  groups[0] = new Female("female1", &female1Strip, FEMALE1_SPEAKER_PIN, FEMALE_NUM_PIXELS);
+  groups[1] = new Female("female2", &female2Strip, FEMALE2_SPEAKER_PIN, FEMALE_NUM_PIXELS);
+  groups[2] = new Female("female3", &female3Strip, FEMALE3_SPEAKER_PIN, FEMALE_NUM_PIXELS);
+  groups[3] = new Male("male1",   &male1Strip,   MALE1_SPEAKER_PIN,   MALE_NUM_PIXELS);
+  groups[4] = new Male("male2",   &male2Strip,   MALE2_SPEAKER_PIN,   MALE_NUM_PIXELS);
 
   // Initialisation du port série
   Serial.begin(57600);
@@ -70,25 +202,42 @@ String processCommand(const String& input) {
     return R"({"status": "error", "message": "Invalid JSON"})";
   }
 
+  if (!doc.containsKey("path")) return R"({"status": "error", "message": "Missing path"})";
+
   String path = jsonDoc["path"];
 
-  // Gestion des actions sur les Neopixels
-  if (path.endsWith("/neopixel")) {
-    int r = jsonDoc["r"] | 0;
-    int g = jsonDoc["g"] | 0;
-    int b = jsonDoc["b"] | 0;
-    int w = jsonDoc["w"] | 0;
-    int brightness = jsonDoc["brightness"] | 255;
-    return handleNeopixel(path, r, g, b, w, brightness);
+  if (path.startsWith("/")) path = path.substring(1);
+
+  int sep = path.indexOf('/');
+  if (sep == -1) return R"({"status": "error", "message": "Invalid path format"})";
+  
+  String groupName = path.substring(0, sep);
+  String subcommand = path.substring(sep + 1);
+  
+  for (int i = 0; i < 5; i++) {
+    if (groups[i]->name == groupName) {
+      return groups[i]->handleSubcommand(subcommand, doc);
+    }
   }
-  // Gestion des actions sur les haut-parleurs
-  else if (path.endsWith("/speaker")) {
-    String data = jsonDoc["data"];
-    if (data == "on") {
-      return handleSpeaker(path, true);
-    } else if (data == "off") {
-      return handleSpeaker(path, false);
-    } 
+
+  return R"({"status": "error", "message": "Unknown group"})";
+  // Gestion des actions sur les Neopixels
+  // if (path.endsWith("/neopixel")) {
+  //   int r = jsonDoc["r"] | 0;
+  //   int g = jsonDoc["g"] | 0;
+  //   int b = jsonDoc["b"] | 0;
+  //   int w = jsonDoc["w"] | 0;
+  //   int brightness = jsonDoc["brightness"] | 255;
+  //   return handleNeopixel(path, r, g, b, w, brightness);
+  // }
+  // // Gestion des actions sur les haut-parleurs
+  // else if (path.endsWith("/speaker")) {
+  //   String data = jsonDoc["data"];
+  //   if (data == "on") {
+  //     return handleSpeaker(path, true);
+  //   } else if (data == "off") {
+  //     return handleSpeaker(path, false);
+  //   } 
   }
   
   return R"({"status": "error", "message": "Invalid path or data"})";

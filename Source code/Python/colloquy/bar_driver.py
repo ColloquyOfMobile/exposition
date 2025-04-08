@@ -5,17 +5,17 @@ from .thread_driver import ThreadDriver
 
 class BarDriver(ThreadDriver):
 
-    def __init__(self, **kwargs):
-        ThreadDriver.__init__(self, kwargs["name"])
+    def __init__(self, owner, **kwargs):
+        ThreadDriver.__init__(self, name=kwargs["name"], owner=owner)
         self._position_memory = None
         dxl_manager = kwargs["dynamixel manager"]
         dxl_ids = kwargs["dynamixel ids"]
-        self.colloquy = kwargs["colloquy"]
+        # self.colloquy = kwargs["colloquy"]
         assert kwargs["origin"] is not None, "Calibrate colloquy."
         self.dxl_origin = kwargs["origin"]
         self.motion_range = kwargs["motion range"]
         self.moving_threshold = 20
-        self.stop_event = Event()
+        # self.stop_event = Event()
         self.nearby_interaction = None
 
         self.nearby_positions = []
@@ -167,23 +167,6 @@ class BarDriver(ThreadDriver):
         self.nearby_positions.append(position)
         self.goal_position = position
         self.nearby_interaction = self.colloquy.nearby_interactions[position-self.dxl_origin]
-
-
-    # def _run(self, **kwargs):
-        # self.stop_event.clear()
-        # while not self.stop_event.is_set():
-            # if self.is_moving:
-                # continue
-
-            # if self.nearby_interaction is None:
-                # self.toggle_position()
-                # continue
-
-            # for element in self.nearby_interaction:
-                # element.interaction_event.set()
-            # self.wait_interaction_end()
-            # self.toggle_position()
-            # self.sleep_min()
 
     def wait_interaction_end(self):
         print(f"Waiting nearby_interaction end.")

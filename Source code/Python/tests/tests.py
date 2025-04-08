@@ -4,7 +4,7 @@ import time
 import traceback
 from datetime import datetime, timedelta
 from time import sleep
-from colloquy_driver import ColloquyDriver
+from colloquy import ColloquyDriver
 from parameters import Parameters
 from utils import CustomDoc
 from pathlib import Path
@@ -18,7 +18,7 @@ PARAMETERS = Parameters().as_dict()
 class Tests:
 
     classes = {
-        "colloquy_driver": ColloquyDriver
+        "colloquy": ColloquyDriver
     }
 
     def __init__(self, wsgi, name="tests"):
@@ -26,7 +26,7 @@ class Tests:
         self._wsgi = wsgi
         self.path = Path(self._name)
         self.active = None
-        self._colloquy_driver = self.classes["colloquy_driver"](params=PARAMETERS)
+        self._colloquy = self.classes["colloquy"](params=PARAMETERS)
         self._commands = {}
         handlers = [
             Calibration(wsgi=wsgi, owner=self, path=self.path/"calibration"),
@@ -84,8 +84,8 @@ class Tests:
         return self._name
 
     @property
-    def colloquy_driver(self):
-        return self._colloquy_driver
+    def colloquy(self):
+        return self._colloquy
 
     @property
     def commands(self):
@@ -96,10 +96,10 @@ class Tests:
         return self._wsgi
 
     def open(self):
-        self._colloquy_driver.open()
+        self._colloquy.open()
 
     def close(self):
-        self._colloquy_driver.close()
+        self._colloquy.close()
 
     def _write_header(self):
         doc, tag, text = self._wsgi.doc.tagtext()
@@ -129,7 +129,7 @@ class Tests:
                 string_command = command[0]
                 command = self._commands[string_command]
                 for log in command(**kwargs):
-                    print(log)
+                    print(f"{log=}")
                     with tag("div"):
                         text(log)
                     yield doc.read().encode()
@@ -155,7 +155,7 @@ class Tests:
 
     def activate(self):
         path = Path(*self._wsgi.path.parts[:2])
-        self._colloquy_driver.stop()
+        # self._colloquy.stop()
         if self.active is not None:
             if self.active.path == path:
                 return
@@ -184,7 +184,7 @@ class StopCommand(Command):
 
     def __call__(self, **kwargs):
         owner = self._owner
-        owner.colloquy_driver.stop()
+        owner.colloquy.stop()
         yield "Stopped."
 
 class RunCommand(Command):
@@ -197,5 +197,5 @@ class RunCommand(Command):
         owner.stop_event = Event()
         self._doc = CustomDoc()
         doc, tag, text = self._wsgi.doc.tagtext()
-        owner.colloquy_driver.start()
+        owner.colloquy.start()
         yield "Started..."

@@ -7,7 +7,7 @@ from .logger import Logger
 from .thread_driver import ThreadDriver
 from time import sleep
 from parameters import Parameters
-from threading import Thread, Event
+from threading import Event # Thread
 
 class ColloquyDriver(ThreadDriver):
 
@@ -19,16 +19,15 @@ class ColloquyDriver(ThreadDriver):
         "bar_driver": BarDriver,
     }
 
-    def __init__(self, params, name="Colloquy driver"):
-        print(f"Initialising {name}...")
+    def __init__(self, params, name="colloquy"):
+        ThreadDriver.__init__(self, name=name, owner=None)
         self._is_open = False
         self._name = name
         self.mirrors = []
         self.males = []
         self.bodies = []
-        self.elements = []
+        # self.elements = []
         self.bar = None
-        self._stop_event = Event()
         self._threads = set()
         self.females = []
         self.males = []
@@ -65,16 +64,16 @@ class ColloquyDriver(ThreadDriver):
             ]
 
 
-        self.elements = [
-            *self.females,
-            *self.mirrors,
-            *self.males,
-            self.bar
-        ]
+        # self.elements = [
+            # *self.females,
+            # *self.mirrors,
+            # *self.males,
+            # self.bar
+        # ]
 
     @property
-    def stop_event(self):
-        return self._stop_event
+    def colloquy(self):
+        return self
 
     @property
     def arduino(self):
@@ -154,61 +153,39 @@ class ColloquyDriver(ThreadDriver):
         while self.is_something_moving():
             sleep(0.1)
 
-    # def calibrate(self):
-        # import code
-        # colloquy = self
-        # locals_dict = {
-            # "female1": self.female1,
-            # "female2": self.female2,
-            # "female3": self.female3,
-            # "mirror1": self.female1.mirror,
-            # "mirror2": self.female2.mirror,
-            # "mirror3": self.female3.mirror,
-            # "male1": self.male1,
-            # "male2": self.male2,
-            # }
-
-        # code.interact(local=locals_dict, banner=CALIBRATION_BANNER)
-
-    def run(self):
-        print(f"Running {self._name}...")
+    def __enter__(self):
         self.stop_event.clear()
         for element in self.elements:
             element.turn_to_origin_position()
         self.wait_until_everything_is_still()
 
-        for body in self.bodies:
-            thread = Thread(target=body.run, name=body.name)
-            self._threads.add(thread)
-            thread.start()
+        self.male1.start()
+        # for body in self.bodies:
+            # body.start()
 
-        raise NotImplementedError(f"Move the thread start into in the run element.")
-        raise NotImplementedError(f"Remove the self._threads attribute.")
-        thread = Thread(target=self.bar.run, name="bar")
-        self._threads.add(thread)
-        thread.start()
+        # self.bar.start()
 
-        while not self.stop_event.is_set():
-            self.sleep_min()
+    def _loop(self):
+        self.sleep_min()
 
-        for element in self.elements:
-            element.stop_event.set()
+    # def __exit__(self):
+        # for element in self.elements:
+            # element.stop()
 
-        raise NotImplementedError(f"Stop the bodies directly.")
-        for thread in self._threads:
-            thread.join()
+        # for element in self.elements:
+            # elements.join()
 
-    def start(self):
-        self.stop_event.clear()
-        self.thread = Thread(target=self.run, name=self._name)
-        self.thread.start()
+    # def start(self):
+        # self.stop_event.clear()
+        # self.thread = Thread(target=self.run, name=self._name)
+        # self.thread.start()
 
-    def stop(self):
-        if self.stop_event.is_set():
-            return
-        self.stop_event.set()
-        self.thread.join()
-        self.thread = None
+    # def stop(self):
+        # if self.stop_event.is_set():
+            # return
+        # self.stop_event.set()
+        # self.thread.join()
+        # self.thread = None
 
     def open(self):
         if self._is_open:

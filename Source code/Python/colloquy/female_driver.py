@@ -26,21 +26,20 @@ class FemaleDriver(Body):
             self.mirror = MirrorDriver(owner=self, **mirror_kwargs)
 
 
-    def _run_setup(self):
+    def __enter__(self):
         self.stop_event.clear()
         self.drives.start()
         self.neopixel.on()
         self._update_neopixel()
 
-    def _run_loop(self):
-        while not self.stop_event.is_set():
-            self._update_neopixel()
-            if not self.is_moving:
-                self.toggle_position()
+    def _loop(self):
+        self._update_neopixel()
+        if not self.is_moving:
+            self.toggle_position()
 
-            if self.interaction_event.is_set():
-                self._interact()
-            self.sleep_min()
+        if self.interaction_event.is_set():
+            self._interact()
+        self.sleep_min()
 
     def _update_neopixel(self):
         state, brightness, color = self.drives.value
@@ -51,9 +50,10 @@ class FemaleDriver(Body):
             )
         self.neopixel.configure(**config)
 
-    def _run_setdown(self):
+    def stop(self):
         self.drives.stop()
         self.neopixel.off()
+        Body.stop(self)
 
     def _interact(self):
         nearby_interaction = self.colloquy.nearby_interaction

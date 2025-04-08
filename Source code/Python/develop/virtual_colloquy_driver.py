@@ -5,7 +5,7 @@ from .virtual_arduino_manager import VirtualArduinoManager
 # from .virtual_bar_driver import VirtualBarDriver
 from time import sleep
 from parameters import Parameters
-from colloquy_driver import ColloquyDriver
+from colloquy import ColloquyDriver
 
 
 class VirtualColloquyDriver(ColloquyDriver):
@@ -19,4 +19,4 @@ class VirtualColloquyDriver(ColloquyDriver):
         # "virtual_bar_driver": VirtualBarDriver,
     })
     def __init__(self, params, ):
-        ColloquyDriver.__init__(self, params, name="Virtual Colloquy driver")
+        ColloquyDriver.__init__(self, params)

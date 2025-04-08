@@ -1,5 +1,5 @@
 from time import sleep
-from colloquy_driver.arduino_manager import ArduinoManager
+from colloquy.arduino_manager import ArduinoManager
 import json
 from pathlib import Path
 import re

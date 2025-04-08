@@ -1,5 +1,5 @@
 from utils import CustomDoc
-from colloquy_driver import ColloquyDriver
+from colloquy import ColloquyDriver
 from parameters import Parameters
 from pathlib import Path
 from .commands import BarMoveAndWait, BodyMoveAndWait, BodyToggleNeopixel, BodyToggleSpeaker

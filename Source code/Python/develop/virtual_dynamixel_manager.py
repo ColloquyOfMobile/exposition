@@ -1,8 +1,9 @@
 from dynamixel_sdk import COMM_SUCCESS  # Uses Dynamixel SDK library
 from time import time, sleep
 from threading import Thread, Lock
-from colloquy_driver.dynamixel_manager import DynamixelManager
-from colloquy_driver.thread_driver import ThreadDriver
+from pathlib import Path
+from colloquy.dynamixel_manager import DynamixelManager
+from colloquy.thread_driver import ThreadDriver
 
 class VirtualPortHandler:
     def __init__(self, port_name):
@@ -19,8 +20,8 @@ class VirtualPortHandler:
 
 class VirtualDxl(ThreadDriver):
     def __init__(self, owner, dxl_id):
-        ThreadDriver.__init__(self, name=f"virtual dxl {dxl_id}")
-        self._owner = owner
+        ThreadDriver.__init__(self, name=f"dxl_{dxl_id}", owner=owner)
+        # self._owner = owner
         self._dxl_id = dxl_id
         self._thread = None
         self._lock = Lock()
@@ -60,8 +61,7 @@ class VirtualDxl(ThreadDriver):
         while True:
             if self.goal_position != goal:
                 self.log(f"Goal position changed to {self.goal_position}.")
-
-            print(f"{self._dxl_id=}, {goal=}, {position=}")
+                
             if lim_min < self._position < lim_max:
                 break
             if self._position < self.goal_position:
@@ -78,6 +78,8 @@ def default_dict_init():
 
 class VirtualPacketHandler:
     def __init__(self, protocol):
+        self._path = Path("dxl_network")
+        self._elements = set()
         self._dxl_threads = {}
         self._register_map = {
             64: "torque",
@@ -96,6 +98,14 @@ class VirtualPacketHandler:
 
         self._dxls = {i: VirtualDxl(owner=self, dxl_id=i) for i in range(1, 11)}
         # print(f"{len(self._dxls)=}")
+
+    @property
+    def elements(self):
+        return self._elements
+
+    @property
+    def path(self):
+        return self._path
 
     def _write_register(self, dxl_id, value):
         pass

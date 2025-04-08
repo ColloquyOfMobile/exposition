@@ -14,11 +14,11 @@ class Body(SharedDriver):
     def __init__(self, owner, **kwargs):
         dxl_manager = kwargs["dynamixel manager"]
         SharedDriver.__init__(self, owner, **kwargs)
-        self.colloquy = kwargs["colloquy"]
+        # self.colloquy = kwargs["colloquy"]
         self.arduino_manager = kwargs["arduino manager"]
         self._speaker_memory = None
         self.interaction_event = Event()
-        self.drives = DrivesHandler()
+        self.drives = DrivesHandler(owner=self)
         self.speaker = SpeakerDriver(owner=self, arduino_manager=self.arduino_manager)
 
     @property

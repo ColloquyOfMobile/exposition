@@ -16,7 +16,7 @@ class ArduinoManager(ThreadDriver):
         """
         Initialise la communication série avec l'Arduino.
         """
-        ThreadDriver.__init__(self, kwargs["name"])
+        ThreadDriver.__init__(self, name=kwargs["name"],  owner=None, )
         self.lock = Lock()
         port_name = kwargs["communication port"]
         baudrate = kwargs["baudrate"]

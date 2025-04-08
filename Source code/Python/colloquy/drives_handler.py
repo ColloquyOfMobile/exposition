@@ -1,14 +1,15 @@
-from threading import Timer
+from time import time
 from threading import Lock
+from colloquy.thread_driver import ThreadDriver
 
-class DrivesHandler:
+class DrivesHandler(ThreadDriver):
 
-    def __init__(self):
-        self._started = False
+    def __init__(self, owner):
+        ThreadDriver.__init__(self, name="drives", owner=owner)
         self.o_drive = 0
         self.p_drive = 0
-        self._timer = None
         self._update_interval = 1
+        self._timestamp = time()
 
         self._step_o = 1
         self._step_p = 2
@@ -77,10 +78,18 @@ class DrivesHandler:
 
             raise ValueError(f"Drive Error, {self.o_drive=}, {self.p_drive=}")
 
-    def run(self):
-        """This function repeat every "self._update_interval"."""
-        if not self._started:
+    def __enter__(self):
+        """Setup before loop."""
+        pass
+
+    def _loop(self):
+        if self._timestamp - time() < self._update_interval:
             return
+
+        self.update()
+
+    def _update(self):
+        self._timestamp = time()
         self.o_drive += self._step_o
         self.p_drive += self._step_p
         if self.o_drive > self._max:
@@ -88,17 +97,6 @@ class DrivesHandler:
         if self.p_drive > self._max:
             self.p_drive = self._max
 
-        self._timer = Timer(self._update_interval, self.run)
-        self._timer.start()
-
-    def start(self):
-        self._started = True
-        self._timer = Timer(self._update_interval, self.run)
-        self._timer.start()
-
-    def stop(self):
-        self._timer.cancel()
-        self._started = False
 
     def satisfy(self):
         self.o_drive =  self._satisfied

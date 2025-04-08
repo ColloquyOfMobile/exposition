@@ -9,7 +9,7 @@ PARAMETERS = Parameters().as_dict()
 class Develop(Tests):
 
     classes = Tests.classes.copy()
-    classes["colloquy_driver"] = VirtualColloquyDriver
+    classes["colloquy"] = VirtualColloquyDriver
 
     def __init__(self, wsgi):
         Tests.__init__(self, wsgi, name="develop")
