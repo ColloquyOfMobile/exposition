@@ -14,6 +14,7 @@ class ThreadDriver:
             self._path = owner.path / name
         self._log = Logger(owner=self)
         self._thread = None
+        self._threads = set()
         self._stop_event = Event()
         self._stop_event.set()
         self._elements = set()
@@ -23,7 +24,7 @@ class ThreadDriver:
     # 👇 Context manager methods
     def __enter__(self):
         raise NotImplementedError(
-        "Set up before starting a thread."
+        f"for {self=}"
         )
 
     def __exit__(self, exc_type, exc_value, traceback_obj):
@@ -35,6 +36,14 @@ class ThreadDriver:
         self.stop()
         # self._thread = None
         return False  # re-raise exception if any
+
+    @property
+    def threads(self):
+        return self._threads
+
+    @property
+    def owner(self):
+        return self._owner
 
     @property
     def path(self):
@@ -60,45 +69,37 @@ class ThreadDriver:
     def log(self):
         return self._log
 
-    def sleep_min(self):
+    def _sleep_min(self):
         sleep(0.01)
 
     def start(self):
+        self.log(f"Starting {self.path.as_posix()}...")
         assert self._thread is None
         self.stop_event.clear()
         self._thread = thread = Thread(target=self.run, name=self._name)
+        self.owner.threads.add(thread)
         thread.start()
+        self.log(f"...{self.path.as_posix()} started.")
 
     def stop(self):
+        self.stop_event.set()
         for element in self.elements:
             element.stop()
 
-        if self._stop_event.is_set():
-            return
-        self.stop_event.set()
-        self._thread.join()
-        self._thread = None
+        for thread in self.threads:
+            thread.join()
 
     def run(self, **kwargs):
-        print(f"Running {self.name}...")
-        print(f"{self=}...")
+        print(f"Running {self.path}...")
 
         with self:
             while not self.stop_event.is_set():
                 self._loop()
-        # try:
-            # self._run_setup()
-            # self._run_loop()
-            # self._run_setdown()
-        # except Exception:
-            # msg = traceback.format_exc()
-            # self.log(msg)
-            # self.colloquy.stop_event.set()
-            # self._run_setdown()
-            # self._thread = None
-            # raise
+                self._sleep_min()
+
+        print(f"Stopped {self.path}!")
 
     def _loop(self):
         raise NotImplementedError(
-            "Called repeatedly until stopped!"
+            f"Called repeatedly until stopped! ({self=})"
             )

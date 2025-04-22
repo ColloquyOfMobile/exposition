@@ -38,7 +38,7 @@ class MaleDriver(Body):
 
         if not self.is_moving:
             self.toggle_position()
-        self.sleep_min()
+        # self.sleep_min()
 
         if self.interaction_event.is_set():
             self.body_neopixel.stop()

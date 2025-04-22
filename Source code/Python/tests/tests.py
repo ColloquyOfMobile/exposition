@@ -26,7 +26,9 @@ class Tests:
         self._wsgi = wsgi
         self.path = Path(self._name)
         self.active = None
-        self._colloquy = self.classes["colloquy"](params=PARAMETERS)
+        self._elements = set()
+        self._threads = set()
+        self._colloquy = self.classes["colloquy"](owner=self, params=PARAMETERS)
         self._commands = {}
         handlers = [
             Calibration(wsgi=wsgi, owner=self, path=self.path/"calibration"),
@@ -80,6 +82,14 @@ class Tests:
         yield response.encode()
 
     @property
+    def threads(self):
+        return self._threads
+
+    @property
+    def elements(self):
+        return self._elements
+
+    @property
     def name(self):
         return self._name
 
@@ -96,10 +106,13 @@ class Tests:
         return self._wsgi
 
     def open(self):
+        self.threads.clear()
         self._colloquy.open()
 
     def close(self):
         self._colloquy.close()
+        for thread in self.threads:
+            thread.join()
 
     def _write_header(self):
         doc, tag, text = self._wsgi.doc.tagtext()

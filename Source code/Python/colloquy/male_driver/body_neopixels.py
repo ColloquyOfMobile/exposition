@@ -13,13 +13,13 @@ from time import time, sleep
 # Extracted from TJ's arduino code "logic35_system.ino, line 87."
 LIGHT_PATTERNS = {
     "male1": {
-        None:     (1, 1, 0, 0, 1, 1, 0, 0, 0, 1),
+        tuple():     (1, 1, 0, 0, 1, 1, 0, 0, 0, 1),
         ("O",):      (1, 1, 0, 0, 0, 0, 0, 1, 1, 1),
         ("P",):      (1, 1, 0, 0, 0, 0, 1, 1, 1, 0),
         ("O", "P"): (1, 1, 0, 0, 0, 1, 0, 1, 0, 1),
     },
     "male2": {
-        None:     (1, 1, 0, 0, 1, 1, 1, 0, 0, 0),
+        tuple():     (1, 1, 0, 0, 1, 1, 1, 0, 0, 0),
         ("O",):      (1, 1, 0, 0, 0, 1, 1, 1, 0, 0),
         ("P",):      (1, 1, 0, 0, 1, 0, 0, 0, 1, 1),
         ("O", "P"): (1, 1, 0, 0, 1, 0, 1, 0, 1, 0),
@@ -29,7 +29,7 @@ LIGHT_PATTERNS = {
 class BodyNeopixels(ThreadDriver):
 
     def __init__(self, owner):
-        ThreadDriver.__init__(self, name="neopixel_body", owner=owner)
+        ThreadDriver.__init__(self, name="body", owner=owner)
         self.ring = NeopixelDriver(owner=self, name="ring")
         self.drive = NeopixelDriver(owner=self, name="drive")
         self.light_patterns = {}
@@ -69,7 +69,7 @@ class BodyNeopixels(ThreadDriver):
             light_pattern.append(value)
             self.ring.set(value)
             self._timestamp = time()
-        self.sleep_min()
+        # self.sleep_min()
 
     def stop(self):
         self.ring.off()

@@ -17,15 +17,14 @@ class FemaleDriver(Body):
         dxl_id = kwargs["dynamixel id"]
         origin = kwargs["origin"]
 
-        self.neopixel = NeopixelDriver(owner=self)
+        self.neopixel = NeopixelDriver(owner=self, name="neopixel")
 
         mirror_kwargs = kwargs.get("mirror")
         self.mirror = None
         if mirror_kwargs:
             mirror_kwargs["dynamixel manager"] = dxl_manager
             self.mirror = MirrorDriver(owner=self, **mirror_kwargs)
-
-
+            
     def __enter__(self):
         self.stop_event.clear()
         self.drives.start()
@@ -39,7 +38,7 @@ class FemaleDriver(Body):
 
         if self.interaction_event.is_set():
             self._interact()
-        self.sleep_min()
+        # self.sleep_min()
 
     def _update_neopixel(self):
         state, brightness, color = self.drives.value
@@ -59,6 +58,7 @@ class FemaleDriver(Body):
         nearby_interaction = self.colloquy.nearby_interaction
         assert nearby_interaction.female is self, f"{nearby_interaction.female.name=},{self.name=}"
         male = self.colloquy.nearby_interaction.male
+        print(f"{self.drives.state=}, {male.drives.state=}")
         for state in self.drives.state:
             if state in male.drives.state:
                 male.interaction_event.set()
@@ -70,8 +70,7 @@ class FemaleDriver(Body):
                 while self.is_moving or male.is_moving:
                     if self.stop_event.is_set():
                         break
-                    print(f"{self.is_moving=}, {male.is_moving=}")
-                    self.sleep_min()
+                    # self.sleep_min()
                 break
         else:
             self.interaction_event.clear()

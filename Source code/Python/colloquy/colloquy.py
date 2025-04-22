@@ -19,8 +19,8 @@ class ColloquyDriver(ThreadDriver):
         "bar_driver": BarDriver,
     }
 
-    def __init__(self, params, name="colloquy"):
-        ThreadDriver.__init__(self, name=name, owner=None)
+    def __init__(self, owner, params, name="colloquy"):
+        ThreadDriver.__init__(self, name=name, owner=owner)
         self._is_open = False
         self._name = name
         self.mirrors = []
@@ -159,33 +159,15 @@ class ColloquyDriver(ThreadDriver):
             element.turn_to_origin_position()
         self.wait_until_everything_is_still()
 
-        self.male1.start()
-        # for body in self.bodies:
-            # body.start()
+        # self.male1.start()
+        for body in self.bodies:
+            body.start()
 
-        # self.bar.start()
+        self.bar.start()
 
     def _loop(self):
-        self.sleep_min()
-
-    # def __exit__(self):
-        # for element in self.elements:
-            # element.stop()
-
-        # for element in self.elements:
-            # elements.join()
-
-    # def start(self):
-        # self.stop_event.clear()
-        # self.thread = Thread(target=self.run, name=self._name)
-        # self.thread.start()
-
-    # def stop(self):
-        # if self.stop_event.is_set():
-            # return
-        # self.stop_event.set()
-        # self.thread.join()
-        # self.thread = None
+        pass
+        # self.sleep_min()
 
     def open(self):
         if self._is_open:

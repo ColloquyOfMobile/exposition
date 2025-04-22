@@ -47,9 +47,13 @@ class VirtualDxl(ThreadDriver):
     def goal_position(self, value):
         with self._lock:
             self._goal_position = value
-            if self._thread is None:
-                self._thread = thread = Thread(target = self.run, name=self.name)
-                thread.start()
+            if self._thread is not None:
+                if self._thread.is_alive():
+                    return
+
+            self._thread = thread = Thread(target = self.run, name=self.name)
+            thread.start()
+
 
     def run(self):
         goal = self.goal_position
@@ -61,7 +65,7 @@ class VirtualDxl(ThreadDriver):
         while True:
             if self.goal_position != goal:
                 self.log(f"Goal position changed to {self.goal_position}.")
-                
+
             if lim_min < self._position < lim_max:
                 break
             if self._position < self.goal_position:
@@ -72,6 +76,7 @@ class VirtualDxl(ThreadDriver):
             sleep(0.01)
 
         self._position = self.goal_position
+        self._thread = None
 
 def default_dict_init():
     return {"position":0, "goal position": 0}

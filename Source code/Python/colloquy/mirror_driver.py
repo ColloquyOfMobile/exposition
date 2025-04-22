@@ -25,7 +25,7 @@ class MirrorDriver(SharedDriver):
             if not self.is_moving:
                 self.owner.drive()
                 self.toggle_position()
-            self.sleep_min()
+            # self.sleep_min()
 
     def _run_setdown(self):
         pass

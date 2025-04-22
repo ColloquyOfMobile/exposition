@@ -5,7 +5,8 @@ from colloquy.thread_driver import ThreadDriver
 class DrivesHandler(ThreadDriver):
 
     def __init__(self, owner):
-        ThreadDriver.__init__(self, name="drives", owner=owner)
+        name = f"{owner.name}_drives"
+        ThreadDriver.__init__(self, name=name, owner=owner)
         self.o_drive = 0
         self.p_drive = 0
         self._update_interval = 1
@@ -27,7 +28,7 @@ class DrivesHandler(ThreadDriver):
         self._colors = {
             ("O",): self._white,
             ("P",): self._orange,
-            None: self._white,
+            tuple(): self._white,
             ("O", "P",): self._white,
         }
 
@@ -35,7 +36,7 @@ class DrivesHandler(ThreadDriver):
         # assert key in (None, "O", "P", "O or P"), f"{key=}"
         for_max = list()
         with self._lock:
-            if key is None:
+            if not key:
                 return  max(self.o_drive, self.p_drive)
 
             if "O" in key:
@@ -64,7 +65,7 @@ class DrivesHandler(ThreadDriver):
             p_frustated = self.p_drive > self._frustrated
 
             if o_satisfied and p_satisfied:
-                return None
+                return tuple()
             if o_frustated and p_frustated:
                 return ("O", "P")
             if self.o_drive > self.p_drive:
@@ -83,13 +84,12 @@ class DrivesHandler(ThreadDriver):
         pass
 
     def _loop(self):
-        if self._timestamp - time() < self._update_interval:
+        if time() - self._timestamp < self._update_interval:
             return
-
-        self.update()
+        self._timestamp = time()
+        self._update()
 
     def _update(self):
-        self._timestamp = time()
         self.o_drive += self._step_o
         self.p_drive += self._step_p
         if self.o_drive > self._max:

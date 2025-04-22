@@ -58,11 +58,10 @@ class VirtualSerialPort:
         text = path.read_text()
 
         # Expression régulière pour capturer les valeurs de path == "..."
-        paths = re.findall(r'path\s*==\s*"([^"]+)"', text)
+        paths = re.findall(r'if\s*\(\s*path\s*==\s*"([^"]+)"\s*\)', text)
 
         # Stocker les chemins extraits
-        self._possible_paths = set(paths)
-        # raise NotImplementedError(f"{self._possible_paths=}")
+        self._possible_paths = sorted(paths)
 
     def _iter_readline_results(self):
         sleep(0.1)

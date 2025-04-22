@@ -1,6 +1,5 @@
 #include <Adafruit_NeoPixel.h>
 #include <ArduinoJson.h>
-
 // Configuration des Neopixels pour chaque groupe
 #define FEMALE1_NEOPIXEL_PIN 6
 #define FEMALE2_NEOPIXEL_PIN 7
@@ -25,6 +24,8 @@ Adafruit_NeoPixel male2Strip(MALE_NUM_PIXELS, MALE2_NEOPIXEL_PIN, NEO_GRBW + NEO
 #define MALE1_SPEAKER_PIN 14
 #define MALE2_SPEAKER_PIN 15
 
+void updateStrip(Adafruit_NeoPixel* strip, int numPixels, int r, int g, int b, int w, int brightness);
+
 class Female {
 public:
   String name;
@@ -35,32 +36,18 @@ public:
   Female(String name, Adafruit_NeoPixel* strip, int speakerPin, int numPixels)
     : name(name), strip(strip), speakerPin(speakerPin), numPixels(numPixels) {}
 
-  String handleSubcommand(String subcommand, JsonDocument& doc) {
-    if (subcommand == "neopixel") {
-      return handleNeopixel(doc);
-    } else if (subcommand == "speaker") {
-      return handleSpeaker(doc);
-    }
-    return R"({"status": "error", "message": "Invalid subcommand"})";
-  }
-
-private:
-  String handleNeopixel(JsonDocument& doc) {
+  String neopixel(JsonDocument& doc) {
     int r = doc["r"] | 0;
     int g = doc["g"] | 0;
     int b = doc["b"] | 0;
     int w = doc["w"] | 0;
     int brightness = doc["brightness"] | 255;
 
-    strip->setBrightness(brightness);
-    for (int i = 0; i < numPixels; i++) {
-      strip->setPixelColor(i, strip->Color(r, g, b, w));
-    }
-    strip->show();
+    updateStrip(strip, numPixels, r, g, b, w, brightness);
     return R"({"status": "success", "message": "Neopixel updated"})";
   }
 
-  String handleSpeaker(JsonDocument& doc) {
+  String speaker(JsonDocument& doc) {
     String data = doc["data"];
     if (data == "on") {
       tone(speakerPin, 300);
@@ -71,6 +58,36 @@ private:
   }
 };
 
+class MaleBody {
+public:
+  Adafruit_NeoPixel* strip;
+  int numPixels;
+  
+  MaleBody(Adafruit_NeoPixel* strip, int numPixels)
+    : strip(strip), numPixels(numPixels) {}
+
+  String ring(JsonDocument& doc) {
+    int r = doc["r"] | 0;
+    int g = doc["g"] | 0;
+    int b = doc["b"] | 0;
+    int w = doc["w"] | 0;
+    int brightness = doc["brightness"] | 255;
+
+    updateStrip(strip, numPixels, r, g, b, w, brightness);
+    return R"({"status": "success", "message": "Neopixel updated"})";
+  }
+
+  String drive(JsonDocument& doc) {
+    int r = doc["r"] | 0;
+    int g = doc["g"] | 0;
+    int b = doc["b"] | 0;
+    int w = doc["w"] | 0;
+    int brightness = doc["brightness"] | 255;   
+
+    updateStrip(strip, numPixels, r, g, b, w, brightness);
+    return R"({"status": "success", "message": "Neopixel updated"})";
+  }
+};
 
 class Male {
 public:
@@ -78,70 +95,25 @@ public:
   Adafruit_NeoPixel* strip;
   int speakerPin;
   int numPixels;
+  MaleBody body;
 
   Male(String name, Adafruit_NeoPixel* strip, int speakerPin, int numPixels)
-    : name(name), strip(strip), speakerPin(speakerPin), numPixels(numPixels) {}
+    : name(name), strip(strip), speakerPin(speakerPin), numPixels(numPixels), body(strip, numPixels){}
 
-  String handleSubcommand(String path, JsonDocument& doc) {
-    
-    int sep = path.indexOf('/');
-    if (sep == -1) {
-      if (path == "speaker") {
-      return handleSpeaker(doc);
-    } else if (path == "up_ring") {
-      return handleUpRing(doc);
-    }
-    return R"({"status": "error", "message": "Invalid subcommand"})";
-    }
 
-    String groupName = path.substring(0, sep);
-    String subcommand = path.substring(sep + 1);
 
-    if (subcommand == "body") {
-      return handleBody(subcommand, doc);
-    } 
-    return R"({"status": "error", "message": "Invalid subcommand"})";
-  }
-
-  String handleBody(String path, JsonDocument& doc) {
-    
-    int sep = path.indexOf('/');
-    if (sep == -1) {
-      if (path == "drive") {
-      return handleDrive(doc);
-    } else if (path == "ring") {
-      return handleRing(doc);
-    }
-    return R"({"status": "error", "message": "Invalid subcommand"})";
-    }
-    return R"({"status": "error", "message": "Invalid subcommand"})";
-
-    String groupName = path.substring(0, sep);
-    String subcommand = path.substring(sep + 1);
-
-    if (subcommand == "body") {
-      return handleBody(doc);
-    } 
-    return R"({"status": "error", "message": "Invalid subcommand"})";
-  }
-
-private:
-  String handleUpRing(JsonDocument& doc) {
+  String upRing(JsonDocument& doc) {
     int r = doc["r"] | 0;
     int g = doc["g"] | 0;
     int b = doc["b"] | 0;
     int w = doc["w"] | 0;
     int brightness = doc["brightness"] | 255;
 
-    strip->setBrightness(brightness);
-    for (int i = 0; i < numPixels; i++) {
-      strip->setPixelColor(i, strip->Color(r, g, b, w));
-    }
-    strip->show();
+    updateStrip(strip, numPixels, r, g, b, w, brightness);
     return R"({"status": "success", "message": "Neopixel updated"})";
   }
 
-  String handleSpeaker(JsonDocument& doc) {
+  String speaker(JsonDocument& doc) {
     String data = doc["data"];
     if (data == "on") {
       tone(speakerPin, 300);
@@ -151,6 +123,12 @@ private:
     return R"({"status": "success", "message": "Speaker updated"})";
   }
 };
+
+Female* female1;
+Female* female2;
+Female* female3;
+Male* male1;
+Male* male2;
 
 void setup() {
   // Initialisation des Neopixels
@@ -173,11 +151,11 @@ void setup() {
   pinMode(MALE1_SPEAKER_PIN, OUTPUT);
   pinMode(MALE2_SPEAKER_PIN, OUTPUT);
 
-  groups[0] = new Female("female1", &female1Strip, FEMALE1_SPEAKER_PIN, FEMALE_NUM_PIXELS);
-  groups[1] = new Female("female2", &female2Strip, FEMALE2_SPEAKER_PIN, FEMALE_NUM_PIXELS);
-  groups[2] = new Female("female3", &female3Strip, FEMALE3_SPEAKER_PIN, FEMALE_NUM_PIXELS);
-  groups[3] = new Male("male1",   &male1Strip,   MALE1_SPEAKER_PIN,   MALE_NUM_PIXELS);
-  groups[4] = new Male("male2",   &male2Strip,   MALE2_SPEAKER_PIN,   MALE_NUM_PIXELS);
+  female1 = new Female("female1", &female1Strip, FEMALE1_SPEAKER_PIN, FEMALE_NUM_PIXELS);
+  female2 = new Female("female2", &female2Strip, FEMALE2_SPEAKER_PIN, FEMALE_NUM_PIXELS);
+  female3 = new Female("female3", &female3Strip, FEMALE3_SPEAKER_PIN, FEMALE_NUM_PIXELS);
+  male1 = new Male("male1",   &male1Strip,   MALE1_SPEAKER_PIN,   MALE_NUM_PIXELS);
+  male2 = new Male("male2",   &male2Strip,   MALE2_SPEAKER_PIN,   MALE_NUM_PIXELS);
 
   // Initialisation du port série
   Serial.begin(57600);
@@ -202,116 +180,49 @@ String processCommand(const String& input) {
     return R"({"status": "error", "message": "Invalid JSON"})";
   }
 
-  if (!doc.containsKey("path")) return R"({"status": "error", "message": "Missing path"})";
+  if (!jsonDoc.containsKey("path")) return R"({"status": "error", "message": "Missing path"})";
 
   String path = jsonDoc["path"];
 
-  if (path.startsWith("/")) path = path.substring(1);
-
-  int sep = path.indexOf('/');
-  if (sep == -1) return R"({"status": "error", "message": "Invalid path format"})";
-  
-  String groupName = path.substring(0, sep);
-  String subcommand = path.substring(sep + 1);
-  
-  for (int i = 0; i < 5; i++) {
-    if (groups[i]->name == groupName) {
-      return groups[i]->handleSubcommand(subcommand, doc);
-    }
-  }
-
-  return R"({"status": "error", "message": "Unknown group"})";
-  // Gestion des actions sur les Neopixels
-  // if (path.endsWith("/neopixel")) {
-  //   int r = jsonDoc["r"] | 0;
-  //   int g = jsonDoc["g"] | 0;
-  //   int b = jsonDoc["b"] | 0;
-  //   int w = jsonDoc["w"] | 0;
-  //   int brightness = jsonDoc["brightness"] | 255;
-  //   return handleNeopixel(path, r, g, b, w, brightness);
-  // }
-  // // Gestion des actions sur les haut-parleurs
-  // else if (path.endsWith("/speaker")) {
-  //   String data = jsonDoc["data"];
-  //   if (data == "on") {
-  //     return handleSpeaker(path, true);
-  //   } else if (data == "off") {
-  //     return handleSpeaker(path, false);
-  //   } 
-  }
+  if (path == "female1/speaker"){
+    return female1->speaker(jsonDoc);
+  } else if (path == "female1/neopixel"){
+    return female1->neopixel(jsonDoc);
+  } else if (path == "female2/speaker"){
+    return female2->speaker(jsonDoc);
+  } else if (path == "female2/neopixel"){
+    return female2->neopixel(jsonDoc);
+  } else if (path == "female3/speaker"){
+    return female3->speaker(jsonDoc);
+  } else if (path == "female3/neopixel"){
+    return female3->neopixel(jsonDoc);
+  } else if (path == "male1/speaker"){
+    return male1->speaker(jsonDoc);
+  } else if (path == "male1/up_ring"){
+    return male1->upRing(jsonDoc);
+  } else if (path == "male1/body/drive"){
+    return male1->body.drive(jsonDoc);
+  } else if (path == "male1/body/ring"){
+    return male1->body.ring(jsonDoc);
+  } else if (path == "male2/speaker"){
+    return male2->speaker(jsonDoc);
+  } else if (path == "male2/up_ring"){
+    return male2->upRing(jsonDoc);
+  } else if (path == "male2/body/drive"){
+    return male2->body.drive(jsonDoc);
+  } else if (path == "male2/body/ring"){
+    return male2->body.ring(jsonDoc);
+  } 
   
   return R"({"status": "error", "message": "Invalid path or data"})";
 }
 
-String handleNeopixel(const String& path, int r, int g, int b, int w, int brightness) {
-  Adafruit_NeoPixel* targetStrip = nullptr;
-  int startPixel = 0;
-  int numPixels = 0;
-
-  if (path == "female1/neopixel") {
-    targetStrip = &female1Strip;
-    numPixels = FEMALE_NUM_PIXELS;
-  } else if (path == "female2/neopixel") {
-    targetStrip = &female2Strip;
-    numPixels = FEMALE_NUM_PIXELS;
-  } else if (path == "female3/neopixel") {
-    targetStrip = &female3Strip;
-    numPixels = FEMALE_NUM_PIXELS;
-  } else if (path == "male1/ring/neopixel") {
-    targetStrip = &male1Strip;
-    numPixels = 24;
-  } else if (path == "male2/ring/neopixel") {
-    targetStrip = &male2Strip;
-    numPixels = 24;
-  } else if (path == "male1/drive/neopixel") {
-    targetStrip = &male1Strip;
-    startPixel = 24;
-    numPixels = 16;
-  } else if (path == "male2/drive/neopixel") {
-    targetStrip = &male2Strip;
-    startPixel = 24;
-    numPixels = 16;
+void updateStrip(Adafruit_NeoPixel* strip, int numPixels, int r, int g, int b, int w, int brightness) {
+  strip->setBrightness(brightness);
+  for (int i = 0; i < numPixels; i++) {
+    strip->setPixelColor(i, strip->Color(r, g, b, w));
   }
-
-  if (targetStrip != nullptr && numPixels > 0) {
-    // targetStrip->setBrightness(brightness);
-    r = (r * brightness) / 255;
-    g = (g * brightness) / 255;
-    b = (b * brightness) / 255;
-    w = (w * brightness) / 255;
-    for (int i = startPixel; i < startPixel + numPixels; i++) {
-      targetStrip->setPixelColor(i, targetStrip->Color(r, g, b, w));
-    }
-    targetStrip->show();
-    return R"({"status": "success", "message": "Neopixel updated"})";
-  }
-  return R"({"status": "error", "message": "Invalid Neopixel path"})";
-}
-
-String handleSpeaker(const String& path, bool turnOn) {
-  int targetPin = -1;
-
-  if (path == "female1/speaker") {
-    targetPin = FEMALE1_SPEAKER_PIN;
-  } else if (path == "female2/speaker") {
-    targetPin = FEMALE2_SPEAKER_PIN;
-  } else if (path == "female3/speaker") {
-    targetPin = FEMALE3_SPEAKER_PIN;
-  } else if (path == "male1/speaker") {
-    targetPin = MALE1_SPEAKER_PIN;
-  } else if (path == "male2/speaker") {
-    targetPin = MALE2_SPEAKER_PIN;
-  }
-
-  if (targetPin != -1) {
-    if (turnOn) {
-      tone(targetPin, 300);  // Joue un son à 300 Hz
-    } else {
-      noTone(targetPin);  // Arrête le son
-    }
-    return R"({"status": "success", "message": "Speaker action completed"})";
-  }
-  return R"({"status": "error", "message": "Invalid speaker path"})";
+  strip->show();
 }
 
 

@@ -18,5 +18,5 @@ class VirtualColloquyDriver(ColloquyDriver):
         # "virtual_male_driver": VirtualMaleDriver,
         # "virtual_bar_driver": VirtualBarDriver,
     })
-    def __init__(self, params, ):
-        ColloquyDriver.__init__(self, params)
+    def __init__(self, owner, params, ):
+        ColloquyDriver.__init__(self, owner, params)

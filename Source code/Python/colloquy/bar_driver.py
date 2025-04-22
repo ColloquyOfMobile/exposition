@@ -25,6 +25,9 @@ class BarDriver(ThreadDriver):
         self.dxl1 = DXLDriver(dxl_manager, dxl_ids[0])
         self.dxl2 = DXLDriver(dxl_manager, dxl_ids[1])
 
+    def __enter__(self):
+        pass
+
     @property
     def position(self):
         return self.dxl1.position
@@ -173,11 +176,10 @@ class BarDriver(ThreadDriver):
         nearby_interaction = self.nearby_interaction
         busy = nearby_interaction.busy
 
-        while busy:
+        while busy():
             if self.stop_event.is_set():
                 break
-            self.sleep_min()
-        self.sleep_min()
+            self._sleep_min()
         print(f"...Interaction finished.")
 
 
@@ -187,24 +189,16 @@ class BarDriver(ThreadDriver):
         position2 = self.dxl2.position
         self.offset = position2 - position1
 
-    def _run_setup(self):
-        self.stop_event.clear()
 
-    def _run_loop(self):
-        while not self.stop_event.is_set():
-            if self.is_moving:
-                continue
+    def _loop(self):
+        if self.is_moving:
+            return
 
-            if self.nearby_interaction is None:
-                self.toggle_position()
-                continue
-
-
-            self.nearby_interaction.female.interaction_event.set()
-
-            self.wait_interaction_end()
+        if self.nearby_interaction is None:
             self.toggle_position()
-            self.sleep_min()
+            return
 
-    def _run_setdown(self):
-        pass
+        self.nearby_interaction.female.interaction_event.set()
+
+        self.wait_interaction_end()
+        self.toggle_position()
