@@ -24,7 +24,7 @@ class FemaleDriver(Body):
         if mirror_kwargs:
             mirror_kwargs["dynamixel manager"] = dxl_manager
             self.mirror = MirrorDriver(owner=self, **mirror_kwargs)
-            
+
     def __enter__(self):
         self.stop_event.clear()
         self.drives.start()
@@ -70,26 +70,39 @@ class FemaleDriver(Body):
                 while self.is_moving or male.is_moving:
                     if self.stop_event.is_set():
                         break
-                    # self.sleep_min()
+                    self._sleep_min()
                 break
         else:
             self.interaction_event.clear()
             return
 
-        raise NotImplementedError(f"Start the mirror thread.")
+        # raise NotImplementedError(f"Start the mirror thread.")
+        iterations = 5
+        self.drives.stop()
+        if self.drives.thread is not None:
+            self.drives.thread.join()
+
         for i in range(iterations):
             if self.stop_event.is_set():
                 break
 
-            self._update_neopixel()
-            sleep(1)
+            if self.mirror.is_moving:
+                continue
+
+            self.mirror.toggle_position()
+            print(f"mirror.toggle_position...")
 
             self.drives.o_drive = self.drives.o_drive / 2
             self.drives.p_drive = self.drives.p_drive / 2
 
+            self._update_neopixel()
+            self._sleep_min()
+
+
         self.drives.satisfy()
 
         self.interaction_event.clear()
+        male.interaction_event.clear()
         print(f"{self.name} finished interaction.")
 
     def open(self):

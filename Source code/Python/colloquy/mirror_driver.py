@@ -20,12 +20,12 @@ class MirrorDriver(SharedDriver):
     def _run_setup(self):
         self.stop_event.clear()
 
-    def _run_loop(self):
+    def _loop(self):
+        raise NotImplementedError(f"Start the mirror thread.")
         while not self.stop_event.is_set():
             if not self.is_moving:
                 self.owner.drive()
                 self.toggle_position()
-            # self.sleep_min()
 
     def _run_setdown(self):
         pass

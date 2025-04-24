@@ -41,9 +41,9 @@ class MaleDriver(Body):
         # self.sleep_min()
 
         if self.interaction_event.is_set():
-            self.body_neopixel.stop()
+            # self.body_neopixel.stop()
             self._interact()
-            self.body_neopixel.start()
+            # self.body_neopixel.start()
 
     # def stop(self):
         # self.body_neopixel.ring.off()
@@ -80,11 +80,12 @@ class MaleDriver(Body):
 
         iterations = 2
         self.turn_to_origin_position()
-        for i in range(iterations):
+        while self.interaction_event.is_set():
             if self.stop_event.is_set():
                 break
             # print(f"{self.name} interacting... ({(i+1)/iterations:.0%})")
-            sleep(1)
+            self._sleep_min()
+            
         self.interaction_event.clear()
 
         self.turn_on_speaker()

@@ -38,6 +38,10 @@ class ThreadDriver:
         return False  # re-raise exception if any
 
     @property
+    def thread(self):
+        return self._thread
+
+    @property
     def threads(self):
         return self._threads
 
@@ -74,7 +78,8 @@ class ThreadDriver:
 
     def start(self):
         self.log(f"Starting {self.path.as_posix()}...")
-        assert self._thread is None
+        if self._thread is not None:
+            assert not self._thread.is_alive() is None
         self.stop_event.clear()
         self._thread = thread = Thread(target=self.run, name=self._name)
         self.owner.threads.add(thread)
