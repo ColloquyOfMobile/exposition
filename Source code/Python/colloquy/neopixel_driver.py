@@ -5,14 +5,9 @@ from threading import Event
 class NeopixelDriver(ThreadDriver):
 
     def __init__(self, owner, name):
-        # parts = [owner.name]
-        # if name is not None:
-            # parts.append(name)
-        # parts.append("neopixel")
         self._owner = owner
         self._path = owner.path / name # Path(*parts).as_posix()
         self._path = self._path.relative_to(self.colloquy.path).as_posix()
-        # raise NotImplementedError(f"{self._path=}")
         self.arduino_manager = owner.arduino_manager
         self._on_off_state = None
         self.red = 0
@@ -20,7 +15,6 @@ class NeopixelDriver(ThreadDriver):
         self.blue = 0
         self.white = 0
         self.brightness = 0
-        # self.off()
 
     @property
     def state(self):

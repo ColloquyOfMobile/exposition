@@ -26,7 +26,7 @@ class ArduinoManager(ThreadDriver):
 
     def send(self, path, **data):
         command = {"path": str(path), **data}
-        self.log(f"{round(time()-START, 2)}: {command=}")
+        self.log(f"{command=}")
         serialized_command = f"{json.dumps(command)}\n"  # Conversion en JSON
         with self.lock:
             self.port_handler.write(serialized_command.encode('utf-8'))  # Envoie de la commande
@@ -69,7 +69,7 @@ class ArduinoManager(ThreadDriver):
         if data["status"] == "error":
             raise RuntimeError(data["message"])
 
-        self.log(f"{data=}")
+        self.log(f"response={data}")
         return data
 
 

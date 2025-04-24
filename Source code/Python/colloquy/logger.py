@@ -1,6 +1,7 @@
 from time import sleep, time
 from pathlib import Path
 from threading import Timer
+from datetime import datetime
 
 class Logger:
 
@@ -21,7 +22,7 @@ class Logger:
         lines = self._path.read_text().splitlines()
         lines.extend(
             ("",
-            "RESTART",
+            f"RESTART {datetime.now()}",
             "",)
         )
         text = "\n".join(lines[-500:])
@@ -47,7 +48,7 @@ class Logger:
         time_header = f"{round(time()-self._time_origin, 2)}:"
         lines = msg.splitlines()
         if len(lines) == 1:
-            return [f"{time_header} {msg=}"]
+            return [f"{time_header} {msg}"]
 
         new_lines = [f"{time_header}"]
         for line in lines:
