@@ -20,8 +20,8 @@ class Calibration():
         return self._doc
 
     @property
-    def colloquy_driver(self):
-        return self._owner.colloquy_driver
+    def colloquy(self):
+        return self._owner.colloquy
 
     @property
     def commands(self):
@@ -35,14 +35,14 @@ class Calibration():
         self._elements[element].add(command)
 
     def open(self):
-        colloquy = self.colloquy_driver
+        colloquy = self.colloquy
         for body in colloquy.bodies:
             for command_class in [
                 BodyMoveAndWait,
-                BodyToggleNeopixel,
+                # BodyToggleNeopixel,
                 BodyToggleSpeaker,
                 BodyMoveToOriginAndWait,
-                BodyConfigureNeopixel,
+                # BodyConfigureNeopixel,
                 ]:
                 command = command_class(owner=self, body=body)
                 self.add_command(body, command)
@@ -56,8 +56,8 @@ class Calibration():
             command=BarMoveToOriginAndWait(owner=self)
             )
 
-        for position, actors in self.colloquy_driver.interactions.items():
-            position = position + self.colloquy_driver.bar.dxl_origin
+        for position, actors in self.colloquy.nearby_interactions.items():
+            position = position + self.colloquy.bar.dxl_origin
             command = BarMoveToPositionAndWait(owner=self, position=position, actors=actors)
             self.add_command(element=colloquy.bar, command=command)
 

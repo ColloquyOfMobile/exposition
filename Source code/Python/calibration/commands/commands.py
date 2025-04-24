@@ -32,17 +32,17 @@ class BarMoveToPositionAndWait(Command):
     def __init__(self, owner, position, actors):
         self.position = position
         self.actors = actors
-        Command.__init__(self, owner, name=f"bar/move to interaction between {self.actors[0].name} and {self.actors[1].name}")
+        Command.__init__(self, owner, name=f"bar/move to interaction between {self.actors.male.name} and {self.actors.female.name}")
 
     def __call__(self, **kwargs):
         position = int(kwargs["position"][0])
-        self._owner.colloquy_driver.bar.move_and_wait(self.position)
+        self._owner.colloquy.bar.move_and_wait(self.position)
         # raise NotImplementedError
         yield "Finish moving the bar."
 
     def write_html(self):
         doc, tag, text = self._owner._doc.tagtext()
-        colloquy_driver = self._owner.colloquy_driver
+        colloquy = self._owner.colloquy
         position = round(self.position)
         with tag("form", action="", method="post"):
             with tag("input", type="number", name="position", value=position, step="1"):
@@ -57,16 +57,16 @@ class BarMoveToOriginAndWait(Command):
 
     def __call__(self, **kwargs):
         yield f"Moving the bar to origin..."
-        colloquy_driver = self._owner.colloquy_driver
-        colloquy_driver.bar.turn_to_origin_position()
-        colloquy_driver.bar.dxl.wait_for_servo()
+        colloquy = self._owner.colloquy
+        colloquy.bar.turn_to_origin_position()
+        colloquy.bar.dxl.wait_for_servo()
         # raise NotImplementedError
         yield f"Finish moving the bar."
 
     def write_html(self):
         doc, tag, text = self._owner._doc.tagtext()
-        colloquy_driver = self._owner.colloquy_driver
-        position = colloquy_driver.bar.dxl_origin
+        colloquy = self._owner.colloquy
+        position = colloquy.bar.dxl_origin
         with tag("form", action="", method="post"):
             with tag("input", type="number", name="position", value=position, disabled="True"):
                 pass
@@ -89,7 +89,7 @@ class BodyMoveToOriginAndWait(Command):
 
     def write_html(self):
         doc, tag, text = self._owner._doc.tagtext()
-        colloquy_driver = self._owner.colloquy_driver
+        colloquy = self._owner.colloquy
         position = self.body.dxl_origin
         with tag("form", action="", method="post"):
             with tag("input", type="number", name="position", value=position, disabled="True"):
@@ -110,7 +110,7 @@ class BodyToggleSpeaker(Command):
 
     def write_html(self):
         doc, tag, text = self._owner._doc.tagtext()
-        colloquy_driver = self._owner.colloquy_driver
+        colloquy = self._owner.colloquy
         value = self.body.speaker_state
         if value is None:
             value = "unknown"
@@ -139,7 +139,7 @@ class BodyMoveAndWait(Command):
 
     def write_html(self):
         doc, tag, text = self._owner._doc.tagtext()
-        colloquy_driver = self._owner.colloquy_driver
+        colloquy = self._owner.colloquy
         position = round(self.body.position)
         with tag("form", action="", method="post"):
             with tag("input", type="number", name="position", value=position, step="1"):
@@ -154,14 +154,14 @@ class BarMoveAndWait(Command):
 
     def __call__(self, **kwargs):
         position = int(kwargs["position"][0])
-        self._owner.colloquy_driver.bar.move_and_wait(position)
+        self._owner.colloquy.bar.move_and_wait(position)
         # raise NotImplementedError
         yield "Finish moving the bar."
 
     def write_html(self):
         doc, tag, text = self._owner._doc.tagtext()
-        colloquy_driver = self._owner.colloquy_driver
-        position = round(colloquy_driver.bar.position)
+        colloquy = self._owner.colloquy
+        position = round(colloquy.bar.position)
         with tag("form", action="", method="post"):
             with tag("input", type="number", name="position", value=position, step="1"):
                 pass
