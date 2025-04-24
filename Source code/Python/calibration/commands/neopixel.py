@@ -155,7 +155,7 @@ class MaleConfigureUpRingNeopixel(ConfigureNeopixel):
 class MaleConfigureDriveNeopixel(ConfigureNeopixel):
 
     def __init__(self, owner, body):
-        ConfigureNeopixel.__init__(self, owner, body, name=f"{body.name}/body/drive/toggle")
+        ConfigureNeopixel.__init__(self, owner, body, name=f"{body.name}/body/drive/configure")
 
     @property
     def neopixel(self):
@@ -164,7 +164,7 @@ class MaleConfigureDriveNeopixel(ConfigureNeopixel):
 class MaleConfigureRingNeopixel(ConfigureNeopixel):
 
     def __init__(self, owner, body):
-        ConfigureNeopixel.__init__(self, owner, body, name=f"{body.name}/body/ring/toggle")
+        ConfigureNeopixel.__init__(self, owner, body, name=f"{body.name}/body/ring/configure")
 
     @property
     def neopixel(self):
