@@ -17,6 +17,7 @@ class MaleDriver(Body):
         self.body_neopixel = BodyNeopixels(owner=self)
 
     def open(self):
+        Body.open(self)
         self.body_neopixel.off()
 
     def __enter__(self):
@@ -85,7 +86,7 @@ class MaleDriver(Body):
                 break
             # print(f"{self.name} interacting... ({(i+1)/iterations:.0%})")
             self._sleep_min()
-            
+
         self.interaction_event.clear()
 
         self.turn_on_speaker()

@@ -59,7 +59,7 @@ class BarMoveToOriginAndWait(Command):
         yield f"Moving the bar to origin..."
         colloquy = self._owner.colloquy
         colloquy.bar.turn_to_origin_position()
-        colloquy.bar.dxl.wait_for_servo()
+        colloquy.bar.wait_for_servo()
         # raise NotImplementedError
         yield f"Finish moving the bar."
 
@@ -111,7 +111,7 @@ class BodyToggleSpeaker(Command):
     def write_html(self):
         doc, tag, text = self._owner._doc.tagtext()
         colloquy = self._owner.colloquy
-        value = self.body.speaker_state
+        value = self.body.speaker.is_on
         if value is None:
             value = "unknown"
         if value is True:

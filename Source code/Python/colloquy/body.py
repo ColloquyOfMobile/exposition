@@ -7,8 +7,6 @@ from threading import Timer
 import traceback
 
 
-
-
 class Body(SharedDriver):
 
     def __init__(self, owner, **kwargs):
@@ -16,14 +14,14 @@ class Body(SharedDriver):
         SharedDriver.__init__(self, owner, **kwargs)
         # self.colloquy = kwargs["colloquy"]
         self.arduino_manager = kwargs["arduino manager"]
-        self._speaker_memory = None
+        # elf._speaker_memory = None
         self.interaction_event = Event()
         self.drives = DrivesHandler(owner=self)
         self.speaker = SpeakerDriver(owner=self, arduino_manager=self.arduino_manager)
 
-    @property
-    def speaker_state(self):
-        return self._speaker_memory
+    # @property
+    # def speaker_state(self):
+        # return self._speaker_memory
 
     def open(self):
         SharedDriver.open(self)

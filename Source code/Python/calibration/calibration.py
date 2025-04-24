@@ -38,12 +38,18 @@ class Calibration():
         colloquy = self.colloquy
         for body in colloquy.bodies:
             for command_class in [
-                BodyMoveAndWait,
-                # BodyToggleNeopixel,
-                BodyToggleSpeaker,
-                BodyMoveToOriginAndWait,
-                # BodyConfigureNeopixel,
-                ]:
+                    BodyMoveAndWait,
+                    BodyToggleSpeaker,
+                    BodyMoveToOriginAndWait,
+                    ]:
+                command = command_class(owner=self, body=body)
+                self.add_command(body, command)
+
+            for female in self.colloquy.females:
+                for command_class in [
+                    BodyToggleNeopixel,
+                    BodyConfigureNeopixel,
+                    ]:
                 command = command_class(owner=self, body=body)
                 self.add_command(body, command)
 

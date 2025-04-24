@@ -8,6 +8,10 @@ class SpeakerDriver(ThreadDriver):
         self._owner = owner
         self.arduino_manager = arduino_manager
         self._on_off_state = None
+    
+    @property
+    def is_on(self):
+        return self._on_off_state
 
     def set(self, neopixel_on_off):
         if neopixel_on_off:
@@ -16,27 +20,28 @@ class SpeakerDriver(ThreadDriver):
             self.off()
 
     def on(self):
-
         path = f"{self._owner.name}/speaker"
         self.arduino_manager.send(path, data="on")
+        self._on_off_state = True
 
 
     def off(self):
         path = f"{self._owner.name}/speaker"
         self.arduino_manager.send(path, data="off")
+        self._on_off_state = False
 
     def toggle(self):
         if self._on_off_state is None:
-            self.turn_on_speaker()
+            self.on()
             self._on_off_state = True
             return
 
         if self._on_off_state:
-            self.turn_off_speaker()
+            self.off()
             self._on_off_state = False
             return
 
         if not self._on_off_state:
-            self.turn_on_speaker()
+            self.on()
             self._on_off_state = True
             return
