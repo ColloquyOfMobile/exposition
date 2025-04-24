@@ -2,8 +2,7 @@ from utils import CustomDoc
 from colloquy import ColloquyDriver
 from parameters import Parameters
 from pathlib import Path
-from .commands import BarMoveAndWait, BodyMoveAndWait, BodyToggleNeopixel, BodyToggleSpeaker
-from .commands import BodyMoveToOriginAndWait, BarMoveToPositionAndWait, BarMoveToOriginAndWait, BodyConfigureNeopixel
+from .commands import *
 PARAMETERS = Parameters().as_dict()
 
 class Calibration():
@@ -47,11 +46,23 @@ class Calibration():
 
         for female in self.colloquy.females:
             for command_class in [
-                BodyToggleNeopixel,
-                BodyConfigureNeopixel,
+                FemaleToggleNeopixel,
+                FemaleConfigureNeopixel,
                 ]:
                 command = command_class(owner=self, body=female)
                 self.add_command(female, command)
+
+        for male in self.colloquy.males:
+            for command_class in [
+                MaleToggleUpRingNeopixel,
+                MaleToggleDriveNeopixel,
+                MaleToggleRingNeopixel,
+                MaleConfigureUpRingNeopixel,
+                MaleConfigureDriveNeopixel,
+                MaleConfigureRingNeopixel,
+                ]:
+                command = command_class(owner=self, body=male)
+                self.add_command(male, command)
 
         self.add_command(
             element=colloquy.bar,

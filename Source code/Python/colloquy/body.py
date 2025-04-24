@@ -19,10 +19,6 @@ class Body(SharedDriver):
         self.drives = DrivesHandler(owner=self)
         self.speaker = SpeakerDriver(owner=self, arduino_manager=self.arduino_manager)
 
-    # @property
-    # def speaker_state(self):
-        # return self._speaker_memory
-
     def open(self):
         SharedDriver.open(self)
 
@@ -41,11 +37,11 @@ class Body(SharedDriver):
     def toggle_speaker(self):
         self.speaker.toggle()
 
-    def toggle_neopixel(self):
-        self.neopixel.toggle()
+    # def toggle_neopixel(self):
+        # self.neopixel.toggle()
 
-    def turn_on_neopixel(self):
-        self.neopixel.on()
+    # def turn_on_neopixel(self):
+        # self.neopixel.on()
 
-    def turn_off_neopixel(self):
-        self.neopixel.off()
+    # def turn_off_neopixel(self):
+        # self.neopixel.off()

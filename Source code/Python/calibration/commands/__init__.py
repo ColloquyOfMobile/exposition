@@ -1,2 +1,2 @@
 from .commands import *
-from .neopixel import BodyToggleNeopixel, BodyConfigureNeopixel
+from .neopixel import * 

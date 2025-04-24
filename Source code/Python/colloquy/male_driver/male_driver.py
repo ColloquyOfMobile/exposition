@@ -1,5 +1,6 @@
 from colloquy.body import Body
 from colloquy.thread_driver import ThreadDriver
+from colloquy.neopixel_driver import NeopixelDriver
 from .body_neopixels import BodyNeopixels
 from time import time, sleep
 from threading import Event, Thread
@@ -15,6 +16,7 @@ class MaleDriver(Body):
             **kwargs,
             )
         self.body_neopixel = BodyNeopixels(owner=self)
+        self.up_ring = NeopixelDriver(owner=self, name="up_ring")
 
     def open(self):
         Body.open(self)
@@ -42,39 +44,7 @@ class MaleDriver(Body):
         # self.sleep_min()
 
         if self.interaction_event.is_set():
-            # self.body_neopixel.stop()
             self._interact()
-            # self.body_neopixel.start()
-
-    # def stop(self):
-        # self.body_neopixel.ring.off()
-        # self._blink_thread.stop()
-        # Body.stop(self)
-
-    # def _blink(self):
-        # try:
-            # light_pattern = self.light_patterns[self.drives.state]
-
-            # neopixel_start = time()
-            # value = light_pattern.popleft()
-            # light_pattern.append(value)
-            # self.body_neopixel.ring.set(value)
-
-            # while not self.stop_event.is_set():
-                # if (time() - neopixel_start) > 0.5:
-                    # value = light_pattern.popleft()
-                    # light_pattern.append(value)
-                    # self.body_neopixel.ring.set(value)
-                    # neopixel_start = time()
-
-                # if self.interaction_event.is_set():
-                    # break
-                # self.sleep_min()
-        # except Exception:
-            # msg = traceback.format_exc()
-            # self.log(msg)
-            # self.colloquy.stop_event.set()
-            # raise
 
     def _interact(self):
         self.body_neopixel.ring.on()

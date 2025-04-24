@@ -44,7 +44,7 @@ class BarMoveToPositionAndWait(Command):
         doc, tag, text = self._owner._doc.tagtext()
         colloquy = self._owner.colloquy
         position = round(self.position)
-        with tag("form", action="", method="post"):
+        with tag("form", action="", method="post", style="display: flex; flex-wrap: wrap;"):
             with tag("input", type="number", name="position", value=position, step="1"):
                 pass
             with tag("button", type="submit", name="command", value=self.name):
@@ -67,7 +67,7 @@ class BarMoveToOriginAndWait(Command):
         doc, tag, text = self._owner._doc.tagtext()
         colloquy = self._owner.colloquy
         position = colloquy.bar.dxl_origin
-        with tag("form", action="", method="post"):
+        with tag("form", action="", method="post", style="display: flex; flex-wrap: wrap;"):
             with tag("input", type="number", name="position", value=position, disabled="True"):
                 pass
             with tag("button", type="submit", name="command", value=self.name):
@@ -91,7 +91,7 @@ class BodyMoveToOriginAndWait(Command):
         doc, tag, text = self._owner._doc.tagtext()
         colloquy = self._owner.colloquy
         position = self.body.dxl_origin
-        with tag("form", action="", method="post"):
+        with tag("form", action="", method="post", style="display: flex; flex-wrap: wrap;"):
             with tag("input", type="number", name="position", value=position, disabled="True"):
                 pass
             with tag("button", type="submit", name="command", value=self.name):
@@ -118,7 +118,7 @@ class BodyToggleSpeaker(Command):
             value = "On"
         if value is False:
             value = "Off"
-        with tag("form", action="", method="post"):
+        with tag("form", action="", method="post", style="display: flex; flex-wrap: wrap;"):
             with tag("input", name="state", value=value, disabled=True):
                 pass
             with tag("button", type="submit", name="command", value=self.name):
@@ -141,7 +141,7 @@ class BodyMoveAndWait(Command):
         doc, tag, text = self._owner._doc.tagtext()
         colloquy = self._owner.colloquy
         position = round(self.body.position)
-        with tag("form", action="", method="post"):
+        with tag("form", action="", method="post", style="display: flex; flex-wrap: wrap;"):
             with tag("input", type="number", name="position", value=position, step="1"):
                 pass
             with tag("button", type="submit", name="command", value=self.name):
