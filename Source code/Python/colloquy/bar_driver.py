@@ -26,7 +26,11 @@ class BarDriver(ThreadDriver):
         self.dxl2 = DXLDriver(dxl_manager, dxl_ids[1])
 
     def __enter__(self):
-        pass
+        self.stop_event.clear()
+
+    def __exit__(self, exc_type, exc_value, traceback_obj):
+        self.turn_to_origin_position()
+        return ThreadDriver.__exit__(self, exc_type, exc_value, traceback_obj)
 
     @property
     def position(self):

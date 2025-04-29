@@ -7,7 +7,7 @@ class DXLDriver:
         self._dxl_manager = dxl_manager
         self._id = dynamixel_id
         self.moving_threshold = 20
-    
+
     @property
     def dxl_id(self):
         return self._id
@@ -46,11 +46,6 @@ class DXLDriver:
         self._dxl_manager._write_1_byte_at(self._id, 64, value)
         if value:
             return
-
-    # @property
-    # def is_moving(self):
-        # """Tell if the servo is still moving."""
-        # return abs(self.position - self.goal_position) > self.moving_threshold
 
     @property
     def profile_velocity(self):
