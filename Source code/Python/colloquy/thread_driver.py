@@ -33,9 +33,9 @@ class ThreadDriver:
             self._exception = exc_value
             msg = ''.join(traceback.format_exception(exc_type, exc_value, traceback_obj))
             self.log(msg)
+            print(f"Error ({exc_type=}) in {self.name}")
         self.stop()
-        # self._thread = None
-        return False  # re-raise exception if any
+        return True  # suppress exception if any
 
     @property
     def thread(self):
@@ -79,7 +79,7 @@ class ThreadDriver:
     def start(self):
         self.log(f"Starting {self.path.as_posix()}...")
         if self._thread is not None:
-            assert not self._thread.is_alive() is None
+            assert not self._thread.is_alive()
         self.stop_event.clear()
         self._thread = thread = Thread(target=self.run, name=self._name)
         self.owner.threads.add(thread)
@@ -95,14 +95,12 @@ class ThreadDriver:
             thread.join()
 
     def run(self, **kwargs):
-        print(f"Running {self.path}...")
-
+        # print(f"Running {self.path}...")
         with self:
             while not self.stop_event.is_set():
                 self._loop()
                 self._sleep_min()
-
-        print(f"Stopped {self.path}!")
+        # print(f"Stopped {self.path}!")
 
     def _loop(self):
         raise NotImplementedError(

@@ -81,7 +81,7 @@ class DrivesHandler(ThreadDriver):
 
     def __enter__(self):
         """Setup before loop."""
-        pass
+        self.stop_event.clear()
 
     def _loop(self):
         if time() - self._timestamp < self._update_interval:
@@ -96,6 +96,12 @@ class DrivesHandler(ThreadDriver):
             self.o_drive = self._max
         if self.p_drive > self._max:
             self.p_drive = self._max
+    
+    def decrease(self, drive):
+        if "O" in drive:
+            self.o_drive -= 10 * self._step_o
+        if "P" in drive:
+            self.p_drive -= 10 * self._step_p
 
 
     def satisfy(self):

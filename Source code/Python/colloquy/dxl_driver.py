@@ -7,6 +7,10 @@ class DXLDriver:
         self._dxl_manager = dxl_manager
         self._id = dynamixel_id
         self.moving_threshold = 20
+    
+    @property
+    def dxl_id(self):
+        return self._id
 
     @property
     def drive_mode(self):
@@ -43,10 +47,10 @@ class DXLDriver:
         if value:
             return
 
-    @property
-    def is_moving(self):
-        """Tell if the servo is still moving."""
-        return abs(self.position - self.goal_position) > self.moving_threshold
+    # @property
+    # def is_moving(self):
+        # """Tell if the servo is still moving."""
+        # return abs(self.position - self.goal_position) > self.moving_threshold
 
     @property
     def profile_velocity(self):

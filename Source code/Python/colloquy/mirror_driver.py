@@ -11,21 +11,32 @@ class MirrorDriver(SharedDriver):
     def turn_to_up_position(self):
         self.turn_to_min_position()
 
-    def run(self):
-        raise NotImplementedError
-
     def open(self):
         pass
 
-    def _run_setup(self):
+    def __enter__(self):
         self.stop_event.clear()
 
     def _loop(self):
-        raise NotImplementedError(f"Start the mirror thread.")
-        while not self.stop_event.is_set():
-            if not self.is_moving:
-                self.owner.drive()
-                self.toggle_position()
+        male = self.colloquy.nearby_interaction.male
+        female = self.owner
+        target_drive = self.owner.target_drive
 
-    def _run_setdown(self):
-        pass
+        iterations = 5
+        for i in range(iterations):
+            print(f"Toggle position for {self.dxl.dxl_id=}...")
+            self.toggle_position()
+            if self.stop_event.is_set():
+                break
+
+            while self.is_moving:
+                if self.stop_event.is_set():
+                    break
+                self._sleep_min()
+
+            female.drives.decrease(target_drive)
+            male.drives.decrease(target_drive)
+
+
+        self.stop_event.set()
+        # raise NotImplementedError(f"Start the mirror thread.")

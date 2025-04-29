@@ -55,8 +55,8 @@ class BodyNeopixels(ThreadDriver):
         self.drive.off()
 
     def __enter__(self):
+        self.stop_event.clear()
         light_pattern = self.light_patterns[self.drives.state]
-
         self._timestamp = time()
         value = light_pattern.popleft()
         light_pattern.append(value)

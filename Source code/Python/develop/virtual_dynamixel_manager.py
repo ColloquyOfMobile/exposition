@@ -4,6 +4,7 @@ from threading import Thread, Lock
 from pathlib import Path
 from colloquy.dynamixel_manager import DynamixelManager
 from colloquy.thread_driver import ThreadDriver
+from colloquy.logger import Logger
 
 class VirtualPortHandler:
     def __init__(self, port_name):
@@ -27,6 +28,9 @@ class VirtualDxl(ThreadDriver):
         self._lock = Lock()
         self._goal_position = 0
         self._position = 0
+        self._step = 100
+        self._lim_min = None
+        self._lim_max = None
 
     def __getitem__(self, key):
         if key == "position":
@@ -47,36 +51,39 @@ class VirtualDxl(ThreadDriver):
     def goal_position(self, value):
         with self._lock:
             self._goal_position = value
+            self._lim_min = value - 2*self._step
+            self._lim_max  = value + 2*self._step
             if self._thread is not None:
                 if self._thread.is_alive():
+                    self.log(f"Goal position changed to {self.goal_position}.")
                     return
+            self.start()
 
-            self._thread = thread = Thread(target = self.run, name=self.name)
-            thread.start()
+            # self._thread = thread = Thread(target = self.run, name=self.name)
+            # thread.start()
+
+    def __enter__(self):
+        self.log(f"Goal position set to {self.goal_position}.")
+        self.stop_event.clear()
 
 
-    def run(self):
-        goal = self.goal_position
-        self.log(f"Goal position set to {goal}.")
-        position = self.position
-        # move_duration = 5
-        step = 100
-        lim_min, lim_max  = goal - 2*step, goal + 2*step
-        while True:
-            if self.goal_position != goal:
-                self.log(f"Goal position changed to {self.goal_position}.")
+    # def __exit__(self, exc_type, exc_value, traceback_obj):
+        # return self.__exit__(self, exc_type, exc_value, traceback_obj)
 
-            if lim_min < self._position < lim_max:
-                break
-            if self._position < self.goal_position:
-                self._position += step
-                sleep(0.1)
-                continue
-            self._position -= step
-            sleep(0.01)
+    def _loop(self):
+        self.log(f"{self._position=}")
+        lim_min, lim_max  = self._lim_min, self._lim_max
 
-        self._position = self.goal_position
-        self._thread = None
+        if lim_min < self._position < lim_max:
+            self._position = self.goal_position
+            self.stop_event.set()
+            return
+
+        if self._position < self.goal_position:
+            self._position += self._step
+            return
+
+        self._position -= self._step
 
 def default_dict_init():
     return {"position":0, "goal position": 0}
@@ -84,8 +91,8 @@ def default_dict_init():
 class VirtualPacketHandler:
     def __init__(self, protocol):
         self._path = Path("dxl_network")
+        self._name = "virtual dxl packet handler"
         self._elements = set()
-        self._dxl_threads = {}
         self._register_map = {
             64: "torque",
             10: "drive mode",
@@ -100,9 +107,16 @@ class VirtualPacketHandler:
         }
         self._register_reader = {
         }
+        self.dxls = None
+        self._log = Logger(owner=self)
 
-        self._dxls = {i: VirtualDxl(owner=self, dxl_id=i) for i in range(1, 11)}
-        # print(f"{len(self._dxls)=}")
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def log(self):
+        return self._log
 
     @property
     def elements(self):
@@ -116,11 +130,12 @@ class VirtualPacketHandler:
         pass
 
     def _read_register(self, dxl_id, label):
-        return self._dxls[dxl_id][label]
+        return self.dxls[dxl_id][label]
 
 
     def _write_goal_position(self, dxl_id, value):
-        self._dxls[dxl_id].goal_position = value
+        self.log(f"Write goal position {value=} to dxl{dxl_id=}")
+        self.dxls[dxl_id].goal_position = value
 
 
     def write1ByteTxRx(self, port_handler, dxl_id, register_address, value):
@@ -161,3 +176,19 @@ class VirtualDynamixelManager(DynamixelManager):
         "port_handler": VirtualPortHandler,
         "packet_handler": VirtualPacketHandler,
     }
+    def __init__(self, owner, **kwargs):
+        DynamixelManager.__init__(self, owner, **kwargs)
+        self._dxls = {i: VirtualDxl(owner=self, dxl_id=i) for i in range(1, 11)}
+
+    @property
+    def dxls(self):
+        return self._dxls
+
+    def open(self):
+        DynamixelManager.open(self)
+        self.packet_handler.dxls = self.dxls
+
+    def close(self):
+        DynamixelManager.close(self)
+        for dxl in self.packet_handler.dxls.values():
+            dxl.stop()

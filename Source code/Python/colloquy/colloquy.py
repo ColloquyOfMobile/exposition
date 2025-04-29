@@ -37,11 +37,11 @@ class ColloquyDriver(ThreadDriver):
 
         dxl_manager_params = params["dynamixel network"]
         dxl_manager_params["name"] = "dxl_driver"
-        self._dxl_manager = dxl_manager = self._classes["dxl_manager"](**dxl_manager_params)
+        self._dxl_manager = dxl_manager = self._classes["dxl_manager"](owner=self, **dxl_manager_params)
 
         arduino_params = params["arduino"]
         arduino_params["name"] = "arduino_driver"
-        self._arduino_manager = arduino_manager = self._classes["arduino_manager"](**arduino_params)
+        self._arduino_manager = arduino_manager = self._classes["arduino_manager"](owner=self, **arduino_params)
 
         self._init_females(params)
         self._init_males(params)
@@ -63,13 +63,12 @@ class ColloquyDriver(ThreadDriver):
             *self.males,
             ]
 
-
-        # self.elements = [
-            # *self.females,
-            # *self.mirrors,
-            # *self.males,
-            # self.bar
-        # ]
+        self.moving_elements = [
+            *self.females,
+            *self.mirrors,
+            *self.males,
+            self.bar
+        ]
 
     @property
     def colloquy(self):
@@ -145,7 +144,7 @@ class ColloquyDriver(ThreadDriver):
         return any(
             (e.is_moving
             for e
-            in self.elements)
+            in self.moving_elements)
         )
 
     def wait_until_everything_is_still(self):
@@ -155,7 +154,7 @@ class ColloquyDriver(ThreadDriver):
 
     def __enter__(self):
         self.stop_event.clear()
-        for element in self.elements:
+        for element in self.moving_elements:
             element.turn_to_origin_position()
         self.wait_until_everything_is_still()
 
