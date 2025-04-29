@@ -85,9 +85,10 @@ class DXLDriver:
     @drive_mode.setter
     def operating_mode(self, value):
         """
-            0x00: velocity based profile.
-            0x04: Time base profile.
+            0x00: Position control.
+            0x04: Extended position control (multi-turn).
         """
+        print(f"Setting operating_mode: {self._id=}, {value=}")
         return self._dxl_manager._write_1_byte_at(self._id, 11, value)
 
     @property
