@@ -11,6 +11,8 @@
 
 #define FEMALE_NUM_PIXELS 50  // Nombre de LEDs par groupe
 #define MALE_BODY_NUM_PIXELS 40    // Nombre de LEDs par groupe
+#define MALE_BODY_RING_END_PIXELS 24    // Nombre de LEDs par groupe
+#define MALE_BODY_DRIVE_START_PIXELS 25    // Nombre de LEDs par groupe
 #define MALE_UP_RING_NUM_PIXELS 12    // Nombre de LEDs par groupe
 
 // Initialisation des bandes Neopixel
@@ -120,7 +122,7 @@ public:
   PixelGroup drive;
   
   MaleBody(Adafruit_NeoPixel* strip)
-    : ring(strip, 0, 20), drive(strip, 20, 20) {}
+    : ring(strip, 0, MALE_BODY_RING_END_PIXELS), drive(strip, MALE_BODY_DRIVE_START_PIXELS, MALE_BODY_NUM_PIXELS) {}
 };
 
 class Male {
@@ -135,7 +137,7 @@ public:
 
   Male(String name, Adafruit_NeoPixel* bodyStrip, Adafruit_NeoPixel* upRingStrip, int speakerPin)
     : name(name), 
-    upRing(upRingStrip, 0, 20), 
+    upRing(upRingStrip, 0, MALE_UP_RING_NUM_PIXELS), 
     speakerPin(speakerPin), 
     body(bodyStrip),
     bodyStrip(bodyStrip),

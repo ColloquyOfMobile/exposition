@@ -48,12 +48,12 @@ class ColloquyDriver(ThreadDriver):
 
         # Defined at for each bar position, which female and male interacts
         self.nearby_interactions = {
-            0: NearbyInteractions(self.male2, self.female1),
-            1600: NearbyInteractions(self.male1, self.female3),
-            3900: NearbyInteractions(self.male2, self.female2),
-            6500: NearbyInteractions(self.male1, self.female1),
-            7900: NearbyInteractions(self.male2, self.female3),
-            10200: NearbyInteractions(self.male1, self.female2),
+            0: NearbyInteractions(self.male1, self.female1),
+            2200: NearbyInteractions(self.male2, self.female3),
+            4300: NearbyInteractions(self.male1, self.female2),
+            6200: NearbyInteractions(self.male2, self.female1),
+            8400: NearbyInteractions(self.male1, self.female3),
+            10400: NearbyInteractions(self.male2, self.female2),
         }
 
         self._init_bar(params)
@@ -187,6 +187,7 @@ class ColloquyDriver(ThreadDriver):
         if self.thread is not None:
             self.stop()
 
+        self.bar.turn_to_origin_position()
         self._dxl_manager.close()
         self._arduino_manager.close()
 
