@@ -24,12 +24,14 @@ class MirrorDriver(SharedDriver):
 
         iterations = 5
         for i in range(iterations):
-            print(f"Toggle position for {self.dxl.dxl_id=}...")
             self.toggle_position()
             if self.stop_event.is_set():
                 break
 
+            print(f"Toggle position for {self.dxl.dxl_id=}...")
+            print(f"Toggle position for {self.name=}...")
             while self.is_moving:
+                print(f"Toggle position for {self.dxl.position=}...")
                 if self.stop_event.is_set():
                     break
                 self._sleep_min()
