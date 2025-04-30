@@ -4,7 +4,8 @@ from threading import Timer
 from datetime import datetime
 
 class Logger:
-
+    
+    _instances = {}
     clean_thread = None
     _started = False
     _time_origin = time()
@@ -16,6 +17,8 @@ class Logger:
     def __init__(self, owner):
         self._owner = owner
         self._path = self._log_folder / f"{owner.name}.log"
+        assert self._path not in self._instances
+        self._instances[self._path] = self
         if not self._path.exists():
             self._path.touch()
         self._line_count = len(self._path.read_text().splitlines())
