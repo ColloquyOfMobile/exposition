@@ -11,6 +11,7 @@ from pathlib import Path
 from time import sleep
 from threading import Thread, Event
 from calibration import Calibration
+from colloquy.logger import Logger
 
 PARAMETERS = Parameters().as_dict()
 # PARAMETERS.pop("dynamixel network")
@@ -22,6 +23,7 @@ class Tests:
     }
 
     def __init__(self, wsgi, name="tests"):
+        self._owner = None
         self._name = name
         self._wsgi = wsgi
         self.path = Path(self._name)
@@ -39,6 +41,7 @@ class Tests:
             }
         self.run = RunCommand(owner=self)
         self.stop = StopCommand(owner=self)
+        self._log = Logger(owner=self)
         # self.colloquy_thread = None
 
 
@@ -80,6 +83,14 @@ class Tests:
 
         response = doc.read()
         yield response.encode()
+
+    @property
+    def owner(self):
+        return self._owner
+
+    @property
+    def log(self):
+        return self._log
 
     @property
     def threads(self):

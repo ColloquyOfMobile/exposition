@@ -4,7 +4,7 @@ from threading import Timer
 from datetime import datetime
 
 class Logger:
-    
+
     _instances = {}
     clean_thread = None
     _started = False
@@ -16,11 +16,19 @@ class Logger:
 
     def __init__(self, owner):
         self._owner = owner
-        self._path = self._log_folder / f"{owner.name}.log"
+        self._folder = self._log_folder / self._owner.path
+        self._path = self._folder.parent / f"{owner.name}.log"
+        self._line_count = None
+
         assert self._path not in self._instances
         self._instances[self._path] = self
+
+    def _init(self):
         if not self._path.exists():
+            if not self._owner.owner.log.folder.is_dir():
+                self._owner.owner.log.mkdir()
             self._path.touch()
+
         self._line_count = len(self._path.read_text().splitlines())
         lines = self._path.read_text().splitlines()
         lines.extend(
@@ -31,7 +39,22 @@ class Logger:
         text = "\n".join(lines[-500:])
         self._path.write_text(text)
 
+    @property
+    def folder(self):
+        return self._folder
+
+    def mkdir(self):
+        if not hasattr(self._owner.owner, "log"):
+            self._folder.mkdir()
+            return
+
+        if not self._owner.owner.log.folder.is_dir():
+            self._owner.owner.log.mkdir()
+        self._folder.mkdir()
+
     def __call__(self, msg):
+        if self._line_count is None:
+            self._init()
         msg_lines = self._format(msg)
         msg_line_count = len(msg_lines)
         line_count = self._line_count + msg_line_count
