@@ -100,10 +100,10 @@ class DrivesHandler(ThreadDriver):
     def decrease(self, drive):
         if "O" in drive:
             self.o_drive -= 10 * self._step_o
-            print(f"Decreased O drive of {self.path=}.")
+            print(f"Decreased O drive of {self.path.as_posix()=}.")
         if "P" in drive:
             self.p_drive -= 10 * self._step_p
-            print(f"Decreased P drive of {self.path=}.")
+            print(f"Decreased P drive of {self.path.as_posix()=}.")
 
 
     def satisfy(self):

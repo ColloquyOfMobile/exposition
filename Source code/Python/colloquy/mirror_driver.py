@@ -11,8 +11,8 @@ class MirrorDriver(SharedDriver):
     def turn_to_up_position(self):
         self.turn_to_min_position()
 
-    def open(self):
-        pass
+    # def open(self):
+        # pass
 
     def __enter__(self):
         assert self.dxl_origin is not None, "Calibrate colloquy."
@@ -32,9 +32,6 @@ class MirrorDriver(SharedDriver):
 
             # print(f"Toggle position for {self.dxl.dxl_id=}...")
             while self.is_moving:
-                print(f"{self.position=}")
-                dxl = self.colloquy._dxl_manager._dxls[self.dxl.dxl_id]
-                print(f"[{dxl._lim_min}, {dxl._lim_max}]")
                 if self.stop_event.is_set():
                     break
                 self._sleep_min()
@@ -80,7 +77,6 @@ class MirrorDriver(SharedDriver):
                     text(f"male1")
                 with tag("option", value="male2"):
                     text(f"male2")
-
 
         with tag("div"):
             with tag("label", **{"for": f"{self.name}/fem_o_drive"}):
