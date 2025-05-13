@@ -48,6 +48,7 @@ class MaleDriver(Body):
             self._interact()
 
     def _interact(self):
+        self.body_neopixel.stop()
         self.body_neopixel.ring.on()
 
         iterations = 2
@@ -63,6 +64,7 @@ class MaleDriver(Body):
         sleep(0.5)
         self.turn_off_speaker()
         print(f"{self.name} finished interaction.")
+        self.body_neopixel.start()
 
     def _update_drive_pixel(self):
         state, brightness, color= self.drives.value

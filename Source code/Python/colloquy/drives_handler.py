@@ -25,11 +25,12 @@ class DrivesHandler(ThreadDriver):
 
         self._orange = dict(red=255, green=165, blue=0, white=0)
         self._white = dict(red=0, green=0, blue=0, white=255)
+        self._puce = dict(red=80, green=53, blue=60, white=125)#cc8899
         self._colors = {
-            ("O",): self._white,
+            ("O",): self._puce,
             ("P",): self._orange,
-            tuple(): self._white,
-            ("O", "P",): self._white,
+            tuple(): self._puce,
+            ("O", "P",): self._puce,
         }
 
     def __getitem__(self, key):
