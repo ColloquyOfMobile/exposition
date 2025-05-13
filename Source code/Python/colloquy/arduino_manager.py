@@ -1,4 +1,5 @@
 import serial
+import serial.tools.list_ports
 from pathlib import Path
 import json
 from time import sleep, time
@@ -72,6 +73,17 @@ class ArduinoManager(ThreadDriver):
         self.log(f"response={data}")
         return data
 
+    def _get_com_ports(self):
+        return [
+            port.device
+            for port
+            in serial.tools.list_ports.comports()]
+
+    def _set_com_port(self, com_port):
+        com_port = com_port[0]
+        self.port_handler.port = com_port
+        self.colloquy.params["arduino"]["communication port"] = com_port
+        self.colloquy.save()
 
     def close(self):
         """
@@ -96,3 +108,27 @@ class ArduinoManager(ThreadDriver):
                 break
             if time()-start > 2:
                 raise RuntimeError("Arduino was to long to reboot !")
+
+    def add_html(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("h3"):
+            text("Arduino:")
+
+        port_list = self._get_com_ports()
+
+        with tag("form", method="post"):
+            with tag("label", **{"id": "arduino/com_port"}):
+                text(f"Com port:")
+
+            with tag("select", id="arduino/com_port", name="com_port"):
+                for port in port_list:
+                    kwargs = {}
+                    if port == self.port_handler.name:
+                        kwargs["selected"] = True
+                    with tag('option', value=port, **kwargs):
+                        text(port)
+
+            with tag("button", name="action", value="arduino/com_port/set"):
+                text(f"set.")
+
+            self.colloquy.actions["arduino/com_port/set"] = self._set_com_port

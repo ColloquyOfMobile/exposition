@@ -1,77 +1,90 @@
 from pathlib import Path
-from tests import Tests
-from develop import Develop
+from colloquy import Colloquy
+from virtual_colloquy import VirtualColloquy
+import socket
 from .file_handler import FileHandler
 from .shutdown import Shutdown
+from .html_element import HTMLElement
+from colloquy.logger import Logger as _Logger
 
-class Root():
-    def __init__(self, wsgi):
-        self._wsgi = wsgi
+class Root(HTMLElement):
+    def __init__(self, owner):
+        HTMLElement.__init__(self, owner)
+        self._owner = owner
         self.path = Path("")
+        self._log = Logger(owner=self)
         self.active = None
-        handlers = [
-            Shutdown(wsgi=wsgi),
-            Tests(wsgi=wsgi),
-            Develop(wsgi=wsgi),
-        ]
-        self.handlers = {
-            handler.path: handler
-            for handler in handlers
-            }
+        self._items = {}
+        self.elements = set()
+        self.threads = set()
+        self._colloquy = None
+        self.init()
 
     def __call__(self, **kwargs):
-        wsgi = self._wsgi
+        self._init_html_doc()
+        self.write_html(**kwargs)
+        return [self.html_doc.getvalue().encode()]
 
-        if self._wsgi.path != self.path:
-            self.activate()
-            yield from self.active(**kwargs)
+    @property
+    def log(self):
+        return self._log
+
+    def init(self):
+        hostname = socket.gethostname()
+        if hostname == "DESKTOP-MRSLS88":
+            self._items["colloquy"] = self._colloquy = VirtualColloquy(owner=self)
             return
 
-        if self.active is not None:
-            self.active.close()
-            self.active = None
+        self._items["colloquy"] = self._colloquy = Colloquy(owner=self)
 
-        yield from self.write_html()
-
-    def write_html(self):
-        doc, tag, text = self._wsgi.doc.tagtext()
-        self._wsgi.start_response('200 OK', [('Content-Type', 'text/html')])
+    def write_html(self, **kwargs):
+        doc, tag, text = self.html_doc.tagtext()
 
         doc.asis("<!DOCTYPE html>")
         with tag("html"):
-            with tag("head"):
-                with tag("title"):
-                    text(f"Colloquy of Mobiles")
-                doc.asis(
-                    '<meta name="viewport"'
-                    ' content="width=device-width,'
-                    " initial-scale=1,"
-                    ' interactive-widget=resizes-content" />'
-                )
+            self._write_html_head()
+            self._write_body(**kwargs)
 
-            yield from self._write_body()
+    def _write_html_head(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("head"):
+            with tag("title"):
+                text(f"Colloquy of Mobiles")
+            doc.asis(
+                '<meta name="viewport"'
+                ' content="width=device-width,'
+                " initial-scale=1,"
+                ' interactive-widget=resizes-content" />'
+            )
 
         response = doc.read()
         yield response.encode()
 
-
-    def _write_body(self):
-        doc, tag, text = self._wsgi.doc.tagtext()
+    def _write_body(self, **kwargs):
+        doc, tag, text = self.html_doc.tagtext()
         with tag("body"):
             with tag("h1",):
                 text("Colloquy of Mobiles")
 
-            for handler in sorted(self.handlers.values()):
-                handler.add_html_link()
+            if self.active is not None:
+                self.active(**kwargs)
+            else:
+                self._handle_request(**kwargs)
 
-            yield doc.read().encode()
+    def _handle_request(self, **kwargs):
+        if kwargs:
+            action = kwargs.pop("action")[0]
+            self._colloquy.actions[action](**kwargs)
 
-    def activate(self):
-        path = Path(*self._wsgi.path.parts[:1])
-        if self.active is not None:
-            if self.active.path == path:
-                return
-            self.active.close()
-        self.active = self.handlers[path]
-        #  self.file_handler)
-        self.active.open()
+        self._colloquy.add_html()
+
+class Logger(_Logger):
+
+    def __init__(self, owner):
+        self._owner = owner
+        self._folder = self._log_folder
+        self._path = self._folder / f"root.log"
+        self._line_count = None
+
+        assert self._path not in self._instances, f"{self._path=}"
+        self._instances[self._path] = self

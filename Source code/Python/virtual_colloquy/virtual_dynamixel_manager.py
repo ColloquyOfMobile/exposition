@@ -8,6 +8,7 @@ from colloquy.logger import Logger
 
 class VirtualPortHandler:
     def __init__(self, port_name):
+        self._port_name = port_name
         pass
 
     def openPort(self):
@@ -19,6 +20,9 @@ class VirtualPortHandler:
     def closePort(self):
         return
 
+    def getPortName(self):
+        return self._port_name
+
 class VirtualDxl(ThreadDriver):
     def __init__(self, owner, dxl_id):
         ThreadDriver.__init__(self, name=f"dxl_{dxl_id}", owner=owner)
@@ -28,7 +32,7 @@ class VirtualDxl(ThreadDriver):
         self._lock = Lock()
         self._goal_position = 0
         self._position = 0
-        self._step = 100
+        self._step = 10
         self._lim_min = None
         self._lim_max = None
 
@@ -52,32 +56,26 @@ class VirtualDxl(ThreadDriver):
         with self._lock:
             self._goal_position = value
             self._lim_min = value - 2*self._step
-            self._lim_max  = value + 2*self._step
-            if self._thread is not None:
-                if self._thread.is_alive():
-                    self.log(f"Goal position changed to {self.goal_position}.")
-                    return
-            self.start()
+            self._lim_max = value + 2*self._step
 
-            # self._thread = thread = Thread(target = self.run, name=self.name)
-            # thread.start()
+        self.log(f"Goal position set to {self.goal_position}.")
+        if self._thread is not None:
+            if self._thread.is_alive():
+                return
+        self.start()
 
     def __enter__(self):
-        self.log(f"Goal position set to {self.goal_position}.")
         self.stop_event.clear()
 
-
-    # def __exit__(self, exc_type, exc_value, traceback_obj):
-        # return self.__exit__(self, exc_type, exc_value, traceback_obj)
-
     def _loop(self):
-        self.log(f"{self._position=}")
         lim_min, lim_max  = self._lim_min, self._lim_max
 
-        if lim_min < self._position < lim_max:
-            self._position = self.goal_position
-            self.stop_event.set()
+        if self._lim_min < self._position < self._lim_max:
             return
+            # with self._lock:
+                # self._position = self.goal_position
+                # self.stop_event.set()
+                # return
 
         if self._position < self.goal_position:
             self._position += self._step
@@ -92,6 +90,7 @@ class VirtualPacketHandler:
     def __init__(self, protocol):
         self._path = Path("dxl_network")
         self._name = "virtual dxl packet handler"
+        self.owner = None
         self._elements = set()
         self._register_map = {
             64: "torque",
@@ -179,10 +178,14 @@ class VirtualDynamixelManager(DynamixelManager):
     def __init__(self, owner, **kwargs):
         DynamixelManager.__init__(self, owner, **kwargs)
         self._dxls = {i: VirtualDxl(owner=self, dxl_id=i) for i in range(1, 11)}
+        self.packet_handler.owner = self
 
     @property
     def dxls(self):
         return self._dxls
+
+    def _get_com_ports(self):
+        return ["VirtualCOM1", "VirtualCOM2"]
 
     def open(self):
         DynamixelManager.open(self)

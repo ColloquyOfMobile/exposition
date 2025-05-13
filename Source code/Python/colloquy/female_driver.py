@@ -31,6 +31,7 @@ class FemaleDriver(Body):
         return self._target_drive
 
     def __enter__(self):
+        assert self.dxl_origin is not None, "Calibrate colloquy."
         self.stop_event.clear()
         self.drives.start()
         self.neopixel.on()

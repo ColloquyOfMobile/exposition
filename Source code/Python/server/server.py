@@ -12,7 +12,7 @@ class WSGI:
     def __init__(self):
         self._shut_server = False
         self.doc = None
-        self.root = Root(wsgi=self)
+        self.root = Root(owner=self)
 
         self.file_handler = FileHandler(wsgi=self)
 
@@ -74,7 +74,6 @@ class WSGI:
             if hasattr(self._handler, "close"):
                 self._handler.close()
 
-
         if hasattr(value, "open"):
             value.open()
 
@@ -90,10 +89,6 @@ class WSGI:
 
         if path.exists():
             yield from self.file_handler()
-            return
-
-        if path in self.root.handlers:
-            yield from self.root(**self._data)
             return
 
         # File not found

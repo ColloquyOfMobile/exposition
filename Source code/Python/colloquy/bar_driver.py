@@ -11,7 +11,6 @@ class BarDriver(ThreadDriver):
         dxl_manager = kwargs["dynamixel manager"]
         dxl_ids = kwargs["dynamixel ids"]
         # self.colloquy = kwargs["colloquy"]
-        assert kwargs["origin"] is not None, "Calibrate colloquy."
         self.dxl_origin = kwargs["origin"]
         self.motion_range = kwargs["motion range"]
         self.moving_threshold = 20
@@ -19,13 +18,12 @@ class BarDriver(ThreadDriver):
         self.nearby_interaction = None
 
         self.nearby_positions = []
-        for position in sorted(self.colloquy.nearby_interactions):
-            self.nearby_positions.append(position + self.dxl_origin)
         self.offset = None
         self.dxl1 = DXLDriver(dxl_manager, dxl_ids[0])
         self.dxl2 = DXLDriver(dxl_manager, dxl_ids[1])
 
     def __enter__(self):
+        assert self.dxl_origin is not None, "Calibrate colloquy."
         self.stop_event.clear()
 
     def __exit__(self, exc_type, exc_value, traceback_obj):
@@ -131,6 +129,8 @@ class BarDriver(ThreadDriver):
             timelap = time() - start
 
     def open(self):
+        for position in sorted(self.colloquy.nearby_interactions):
+            self.nearby_positions.append(position + self.dxl_origin)
         self._init_offset()
         self.torque_enabled = 0
 
@@ -206,3 +206,29 @@ class BarDriver(ThreadDriver):
 
         self.wait_interaction_end()
         self.toggle_position()
+
+    def _set_origin(self, origin):
+        origin = int(origin[0])
+        self.dxl_origin = origin
+        self.colloquy.params[self.name]["origin"] = origin
+        self.colloquy.save()
+
+    def add_html(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("h3"):
+            text(f"{self.name.title()}:")
+
+        with tag("form", method="post"):
+            with tag("label", **{"id": f"{self.name}/origin"}):
+                text(f"Origin:")
+                kwargs = {}
+                if self.dxl_origin is not None:
+                    kwargs = {"value": self.dxl_origin}
+
+            with tag("input", type="number", id=f"{self.name}/origin", name="origin", **kwargs):
+                pass
+
+            with tag("button", name="action", value=f"{self.name}/origin/set"):
+                text(f"set.")
+
+            self.colloquy.actions[f"{self.name}/origin/set"] = self._set_origin

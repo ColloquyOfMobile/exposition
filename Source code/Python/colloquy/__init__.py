@@ -1,1 +1,1 @@
-from .colloquy import ColloquyDriver
+from .colloquy import Colloquy

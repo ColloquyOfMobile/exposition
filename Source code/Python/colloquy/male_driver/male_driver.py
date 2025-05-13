@@ -23,6 +23,7 @@ class MaleDriver(Body):
         self.body_neopixel.off()
 
     def __enter__(self):
+        assert self.dxl_origin is not None, "Calibrate colloquy."
         self.body_neopixel.ring.configure(
             red = 0,
             green = 0,
@@ -54,7 +55,6 @@ class MaleDriver(Body):
         while self.interaction_event.is_set():
             if self.stop_event.is_set():
                 break
-            # print(f"{self.name} interacting... ({(i+1)/iterations:.0%})")
             self._sleep_min()
 
         self.interaction_event.clear()

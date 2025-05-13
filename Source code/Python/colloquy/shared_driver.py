@@ -62,3 +62,46 @@ class SharedDriver(ThreadDriver):
 
     def open(self):
         self.dxl.open()
+
+    def add_html(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("h3"):
+            text(f"{self.name.title()}:")
+
+        if self.colloquy.is_open:
+            with tag("form", method="post"):
+                if not self._is_started:
+                    self._add_html_start()
+                else:
+                    self._add_html_stop()
+
+        self._add_html_params()
+
+    def _add_html_params(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("form", method="post"):
+            with tag("label", **{"for": f"{self.name}/origin"}):
+                text(f"Origin:")
+                kwargs = {}
+                if self.dxl_origin is not None:
+                    kwargs = {"value": self.dxl_origin}
+
+            with tag("input", type="number", id=f"{self.name}/origin", name="origin", **kwargs):
+                pass
+
+            with tag("button", name="action", value=f"{self.name}/origin/set"):
+                text(f"set.")
+
+            self.colloquy.actions[f"{self.name}/origin/set"] = self._set_origin
+
+    def _add_html_start(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("button", name="action", value=f"{self.name}/start"):
+            text(f"Start.")
+        self.colloquy.actions[f"{self.name}/start"] = self.start
+
+    def _add_html_stop(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("button", name="action", value=f"{self.name}/stop"):
+            text(f"Stop.")
+        self.colloquy.actions[f"{self.name}/stop"] = self.stop

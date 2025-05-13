@@ -3,13 +3,17 @@ from pathlib import Path
 from .logger import Logger
 import traceback
 from threading import Thread, Event
+from server.html_element import HTMLElement
 
-class ThreadDriver:
+class ThreadDriver(HTMLElement):
 
     def __init__(self, name, owner):
+        HTMLElement.__init__(self, owner)
         self._owner = owner
         self._name = name
         self._path = Path(name)
+        self._is_started = False
+
         if owner is not None:
             self._path = owner.path / name
         self._log = Logger(owner=self)
@@ -20,6 +24,19 @@ class ThreadDriver:
         self._elements = set()
         if self._owner is not None:
             self._owner.elements.add(self)
+
+    def __eq__(self, other):
+        if not isinstance(other, ThreadDriver):
+            return NotImplemented
+        return self is other
+
+    def __lt__(self, other):
+        if not isinstance(other, ThreadDriver):
+            return NotImplemented
+        return self.name < other.name
+
+    def __hash__(self):
+        return id(self)
 
     # 👇 Context manager methods
     def __enter__(self):
@@ -36,6 +53,10 @@ class ThreadDriver:
             print(f"Error ({exc_type=}) in {self.name}")
         self.stop()
         return True  # suppress exception if any
+
+    @property
+    def param(self):
+        return self.owner.params
 
     @property
     def thread(self):
@@ -76,8 +97,15 @@ class ThreadDriver:
     def _sleep_min(self):
         sleep(0.01)
 
-    def start(self):
+    def _setup(self, **kwargs):
+        raise NotImplementedError(f"for {self.name}, ({kwargs=})!")
+
+    def start(self, **kwargs):
+        if kwargs:
+            self._setup(**kwargs)
+
         self.log(f"Starting {self.path.as_posix()}...")
+        self._is_started = True
         if self._thread is not None:
             assert not self._thread.is_alive()
         self.stop_event.clear()
@@ -93,14 +121,13 @@ class ThreadDriver:
 
         for thread in self.threads:
             thread.join()
+        self._is_started = False
 
     def run(self, **kwargs):
-        # print(f"Running {self.path}...")
         with self:
             while not self.stop_event.is_set():
                 self._loop()
                 self._sleep_min()
-        # print(f"Stopped {self.path}!")
 
     def _loop(self):
         raise NotImplementedError(

@@ -3,6 +3,7 @@ from functools import wraps
 from threading import Lock
 from time import sleep
 from pathlib import Path
+import serial.tools.list_ports
 from .logger import Logger
 from .thread_driver import ThreadDriver
 
@@ -47,23 +48,6 @@ class DynamixelManager(ThreadDriver):
         self.port_handler = self._classes["port_handler"](port_name)
         self.packet_handler = self._classes["packet_handler"](2.0)
         self.lock = Lock()
-        # self._log = Logger(owner=self)
-
-    # @property
-    # def path(self):
-        # return self._path
-
-    # @property
-    # def colloquy(self):
-        # return self._owner.colloquy
-
-    # @property
-    # def name(self):
-        # return self._name
-
-    # @property
-    # def log(self):
-        # return self._log
 
     @handle_error
     def _read_1_byte_at(self, dxl_id, register_address):
@@ -133,3 +117,43 @@ class DynamixelManager(ThreadDriver):
     def open(self):
         self.port_handler.openPort()
         self.port_handler.setBaudRate(self._baudrate)
+
+    def _get_com_ports(self):
+        return [
+            port.device
+            for port
+            in serial.tools.list_ports.comports()]
+
+    def _set_com_port(self, com_port):
+        com_port = com_port[0]
+        self.port_handler.closePort()
+        self.port_handler = self._classes["port_handler"](com_port)
+
+        self.colloquy.params["dynamixel network"]["communication port"] = com_port
+        self.colloquy.save()
+
+    def add_html(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("h3"):
+            text("DXL manager:")
+
+        port_list = self._get_com_ports()
+
+        with tag("form", method="post"):
+            with tag("label", **{"id": "dxl_manager/com_port"}):
+                text(f"Com port:")
+
+            with tag("select", id="dxl_manager/com_port", name="com_port"):
+                for port in port_list:
+                    kwargs = {}
+                    if port == self.port_handler.getPortName():
+                        kwargs["selected"] = True
+                    with tag('option', value=port, **kwargs):
+                        text(port)
+
+            with tag("button", name="action", value="dxl_manager/com_port/set"):
+                text(f"set.")
+
+            self.colloquy.actions["dxl_manager/com_port/set"] = self._set_com_port
+
+        # yield doc.read().encode()

@@ -9,7 +9,7 @@ from time import sleep
 from parameters import Parameters
 from threading import Event # Thread
 
-class ColloquyDriver(ThreadDriver):
+class Colloquy(ThreadDriver):
 
     _classes = {
         "dxl_manager": DynamixelManager,
@@ -19,21 +19,25 @@ class ColloquyDriver(ThreadDriver):
         "bar_driver": BarDriver,
     }
 
-    def __init__(self, owner, params, name="colloquy"):
+    def __init__(self, owner, name="colloquy"):
         ThreadDriver.__init__(self, name=name, owner=owner)
+
+        self._params =  Parameters(owner=self)# .as_dict()
+        params = self._params.as_dict()
+
         self._is_open = False
         self._name = name
         self.mirrors = []
         self.males = []
         self.bodies = []
-        # self.elements = []
+        self.actions = {}
         self.bar = None
         self._threads = set()
         self.females = []
         self.males = []
         self._arduino_manager = arduino_manager = None
         self._dxl_manager = dxl_manager = None
-
+        self._doc = None
 
         dxl_manager_params = params["dynamixel network"]
         dxl_manager_params["name"] = "dxl_driver"
@@ -71,6 +75,10 @@ class ColloquyDriver(ThreadDriver):
         ]
 
     @property
+    def params(self):
+        return self._params
+
+    @property
     def colloquy(self):
         return self
 
@@ -82,14 +90,18 @@ class ColloquyDriver(ThreadDriver):
     def nearby_interaction(self):
         return self.bar.nearby_interaction
 
+    @property
+    def is_open(self):
+        return self._is_open
+
     def _init_bar(self, params):
         bar_params = dict(params["bar"])
         bar_params["colloquy"] = self
         bar_params["name"] = "bar"
         bar_params["dynamixel manager"] = self._dxl_manager
         bar_params["colloquy"] = self
-        if bar_params["origin"] is not None:
-            self.bar = self._classes["bar_driver"](owner=self, **bar_params)
+        self.bar = self._classes["bar_driver"](owner=self, **bar_params)
+
 
     def _init_females(self, params, ):
         females_params = params["females"]
@@ -158,7 +170,6 @@ class ColloquyDriver(ThreadDriver):
             element.turn_to_origin_position()
         self.wait_until_everything_is_still()
 
-        # self.male1.start()
         for body in self.bodies:
             body.start()
 
@@ -166,7 +177,6 @@ class ColloquyDriver(ThreadDriver):
 
     def _loop(self):
         pass
-        # self.sleep_min()
 
     def open(self):
         if self._is_open:
@@ -192,6 +202,45 @@ class ColloquyDriver(ThreadDriver):
         self._arduino_manager.close()
 
         print("Colloquy closed.")
+
+    def save(self):
+        self.params.save()
+
+    def add_html(self):
+        self.actions.clear()
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("form", method="post"):
+            if not self._is_open:
+                self._add_html_open()
+            else:
+                if not self._is_started:
+                    self._add_html_start()
+                else:
+                    self._add_html_stop()
+
+        with tag("h2"):
+            text("Elements")
+        for element in sorted([*self.elements, *self.mirrors]):
+            element.add_html()
+
+    def _add_html_open(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("button", name="action", value="colloquy/open"):
+            text(f"Open.")
+        self.colloquy.actions["colloquy/open"] = self.open
+
+    def _add_html_start(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("button", name="action", value="colloquy/start"):
+            text(f"Start.")
+        self.colloquy.actions["colloquy/start"] = self.start
+
+    def _add_html_stop(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("button", name="action", value="colloquy/stop"):
+            text(f"Stop.")
+        self.colloquy.actions["colloquy/stop"] = self.stop
+
 
 
 class NearbyInteractions:

@@ -96,12 +96,14 @@ class DrivesHandler(ThreadDriver):
             self.o_drive = self._max
         if self.p_drive > self._max:
             self.p_drive = self._max
-    
+
     def decrease(self, drive):
         if "O" in drive:
             self.o_drive -= 10 * self._step_o
+            print(f"Decreased O drive of {self.path=}.")
         if "P" in drive:
             self.p_drive -= 10 * self._step_p
+            print(f"Decreased P drive of {self.path=}.")
 
 
     def satisfy(self):

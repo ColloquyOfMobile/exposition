@@ -12,9 +12,7 @@ class Body(SharedDriver):
     def __init__(self, owner, **kwargs):
         dxl_manager = kwargs["dynamixel manager"]
         SharedDriver.__init__(self, owner, **kwargs)
-        # self.colloquy = kwargs["colloquy"]
         self.arduino_manager = kwargs["arduino manager"]
-        # elf._speaker_memory = None
         self.interaction_event = Event()
         self.drives = DrivesHandler(owner=self)
         self.speaker = SpeakerDriver(owner=self, arduino_manager=self.arduino_manager)
@@ -37,11 +35,28 @@ class Body(SharedDriver):
     def toggle_speaker(self):
         self.speaker.toggle()
 
-    # def toggle_neopixel(self):
-        # self.neopixel.toggle()
+    def _set_origin(self, origin):
+        origin = int(origin[0])
+        self.dxl_origin = origin
+        self.colloquy.params[self.name]["origin"] = origin
+        self.colloquy.save()
 
-    # def turn_on_neopixel(self):
-        # self.neopixel.on()
+    # def add_html(self):
+        # doc, tag, text = self.html_doc.tagtext()
+        # with tag("h3"):
+            # text(f"{self.name.title()}:")
 
-    # def turn_off_neopixel(self):
-        # self.neopixel.off()
+        # with tag("form", method="post"):
+            # with tag("label", **{"id": f"{self.name}/origin"}):
+                # text(f"Origin:")
+                # kwargs = {}
+                # if self.dxl_origin is not None:
+                    # kwargs = {"value": self.dxl_origin}
+
+            # with tag("input", type="number", id=f"{self.name}/origin", name="origin", **kwargs):
+                # pass
+
+            # with tag("button", name="action", value=f"{self.name}/origin/set"):
+                # text(f"set.")
+
+            # self.colloquy.actions[f"{self.name}/origin/set"] = self._set_origin

@@ -12,11 +12,11 @@ from time import sleep
 from threading import Thread, Event
 from calibration import Calibration
 from colloquy.logger import Logger
+from server.html_element import HTMLElement
 
 PARAMETERS = Parameters().as_dict()
-# PARAMETERS.pop("dynamixel network")
 
-class Tests:
+class Tests(HTMLElement):
 
     classes = {
         "colloquy": ColloquyDriver
@@ -61,8 +61,8 @@ class Tests:
             self.active.close()
             self.active = None
 
-        self._doc = CustomDoc()
-        doc, tag, text = self._doc.tagtext()
+        # self.html_doc = CustomDoc()
+        doc, tag, text = self.html_doc.tagtext()
         self._wsgi.start_response('200 OK', [('Content-Type', 'text/html')])
 
         doc.asis("<!DOCTYPE html>")
@@ -166,16 +166,18 @@ class Tests:
 
 
     def _write_commands(self):
-        doc, tag, text = self._doc.tagtext()
+        doc, tag, text = self.html_doc.tagtext()
         for command_path in sorted(self._commands):
             command = self._commands[command_path]
             command.write_html()
 
-    def add_html_link(self):
+    def add_html_cover(self):
         doc, tag, text = self._wsgi.doc.tagtext()
-        with tag("h2",):
-            with tag("a", href=self.path.as_posix()):
+        with tag("form", method="post"):
+            with tag("button", name=self._name, value=self.path.as_posix()):
                 text(f"{self._name.title()}.")
+
+        yield doc.read().encode()
 
     def activate(self):
         path = Path(*self._wsgi.path.parts[:2])
@@ -219,7 +221,7 @@ class RunCommand(Command):
     def __call__(self, **kwargs):
         owner = self._owner
         owner.stop_event = Event()
-        self._doc = CustomDoc()
+        self.html_doc = CustomDoc()
         doc, tag, text = self._wsgi.doc.tagtext()
         owner.colloquy.start()
         yield "Started..."

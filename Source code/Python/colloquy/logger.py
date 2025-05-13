@@ -20,7 +20,7 @@ class Logger:
         self._path = self._folder.parent / f"{owner.name}.log"
         self._line_count = None
 
-        assert self._path not in self._instances
+        assert self._path not in self._instances, f"{self._path=}"
         self._instances[self._path] = self
 
     def _init(self):

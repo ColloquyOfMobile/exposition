@@ -43,6 +43,10 @@ class VirtualSerialPort:
     def port(self, value):
         self._port = value
 
+    @property
+    def name(self):
+        return self._port
+
     def close(self):
         self._is_open = False
 
@@ -75,3 +79,6 @@ class VirtualArduinoManager(ArduinoManager):
     _classes = {
         "serial": VirtualSerialPort,
     }
+
+    def _get_com_ports(self):
+        return ["VirtualCOM1", "VirtualCOM2"]
