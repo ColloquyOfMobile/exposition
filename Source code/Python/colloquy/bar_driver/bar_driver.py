@@ -1,7 +1,8 @@
-from .dxl_driver import DXLDriver
+from colloquy.dxl_driver import DXLDriver
+from colloquy.thread_driver import ThreadDriver
 from time import time, sleep
 from threading import Event
-from .thread_driver import ThreadDriver
+from .search import Search
 
 class BarDriver(ThreadDriver):
 
@@ -10,17 +11,18 @@ class BarDriver(ThreadDriver):
         self._position_memory = None
         dxl_manager = kwargs["dynamixel manager"]
         dxl_ids = kwargs["dynamixel ids"]
-        # self.colloquy = kwargs["colloquy"]
         self.dxl_origin = kwargs["origin"]
         self.motion_range = kwargs["motion range"]
         self.moving_threshold = 20
-        # self.stop_event = Event()
         self.nearby_interaction = None
+        self.interaction_event = Event()
 
         self.nearby_positions = []
         self.offset = None
         self.dxl1 = DXLDriver(dxl_manager, dxl_ids[0])
         self.dxl2 = DXLDriver(dxl_manager, dxl_ids[1])
+
+        self._search = Search(owner=self)
 
     def __enter__(self):
         assert self.dxl_origin is not None, "Calibrate colloquy."
@@ -29,6 +31,10 @@ class BarDriver(ThreadDriver):
     def __exit__(self, exc_type, exc_value, traceback_obj):
         self.turn_to_origin_position()
         return ThreadDriver.__exit__(self, exc_type, exc_value, traceback_obj)
+
+    @property
+    def search(self):
+        return self._search
 
     @property
     def position(self):
@@ -168,7 +174,7 @@ class BarDriver(ThreadDriver):
             self._position_memory = "max"
             return
 
-    def toggle_position(self):
+    def toggle_interaction_position(self):
         self.cursor = 0
         position = self.nearby_positions.pop(0)
         self.nearby_positions.append(position)
@@ -195,17 +201,18 @@ class BarDriver(ThreadDriver):
 
 
     def _loop(self):
-        if self.is_moving:
-            return
+        return
+        # if self.is_moving:
+            # return
 
-        if self.nearby_interaction is None:
-            self.toggle_position()
-            return
+        # if self.nearby_interaction is None:
+            # self.toggle_position()
+            # return
 
-        self.nearby_interaction.female.interaction_event.set()
+        # self.nearby_interaction.female.interaction_event.set()
 
-        self.wait_interaction_end()
-        self.toggle_position()
+        # self.wait_interaction_end()
+        # self.toggle_position()
 
     def _set_origin(self, origin):
         origin = int(origin[0])

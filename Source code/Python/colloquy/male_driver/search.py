@@ -8,10 +8,15 @@ class Search(ThreadDriver):
         self._blink = Blink(owner=self)
 
     def __enter__(self):
-        print(f"Start searching...")
+        print(f"The {self.owner.name} is searching...")
         self.stop_event.clear()
         self.blink.start()
-        print(f"Tell the bar to start searching. (Not implemented yet...)")
+        if not self.colloquy.bar.search.is_started:
+            if self.colloquy.bar.interaction_event.is_set():
+                print(f"The bar is already interacting")
+            print(f"Tell the bar to start searching.")
+        else:
+            print(f"Bar is already searching.")
 
     @property
     def blink(self):
@@ -22,9 +27,12 @@ class Search(ThreadDriver):
         return self.owner.body_neopixel
 
     def _loop(self):
+        if not self.colloquy.bar.search.is_started:
+            if not self.colloquy.bar.interaction_event.is_set():
+                self.colloquy.bar.search.start()
 
         if not self.owner.is_moving:
-            print(f"{self.path.as_posix()} toggle position...")
+            print(f"{self.owner.name} toggle position...")
             self.owner.toggle_position()
 
         if self.owner.interaction_event.is_set():

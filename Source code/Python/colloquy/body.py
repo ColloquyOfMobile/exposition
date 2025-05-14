@@ -14,6 +14,10 @@ class Body(SharedDriver):
         self.arduino_manager = kwargs["arduino manager"]
         self.interaction_event = Event()
         self.speaker = SpeakerDriver(owner=self, arduino_manager=self.arduino_manager)
+    
+    @property
+    def search(self):
+        return self._search
 
     def open(self):
         SharedDriver.open(self)
@@ -38,11 +42,3 @@ class Body(SharedDriver):
         self.dxl_origin = origin
         self.colloquy.params[self.name]["origin"] = origin
         self.colloquy.save()
-    
-    @property
-    def search(self):
-        return self._search
-        if self._search.thread is not None:
-            if self._search.thread.is_alive():
-                return
-        self._search.start()
