@@ -60,7 +60,7 @@ class Logger:
         line_count = self._line_count + msg_line_count
 
         if line_count > 1000:
-            print(f"Cleaning {self._path.as_posix()}")
+            # print(f"Cleaning {self._path.as_posix()}")
             lines = self._path.read_text().splitlines()
             lines.extend(msg_lines)
             self._path.write_text("\n".join(lines[-500:]))

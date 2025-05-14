@@ -1,8 +1,8 @@
 from colloquy.body import Body
-from colloquy.thread_driver import ThreadDriver
 from colloquy.neopixel_driver import NeopixelDriver
 from colloquy.drives_handler import DrivesHandler
 from .body_neopixels import BodyNeopixels
+from .search import Search
 from time import time, sleep
 from threading import Event, Thread
 import traceback
@@ -18,6 +18,7 @@ class MaleDriver(Body):
             )
         self.body_neopixel = BodyNeopixels(owner=self)
         self.up_ring = NeopixelDriver(owner=self, name="up_ring")
+        self._search = Search(owner=self)
 
         self.drives = DrivesHandler(owner=self, neopixel=self.body_neopixel.drive)
 
@@ -27,25 +28,15 @@ class MaleDriver(Body):
 
     def __enter__(self):
         assert self.dxl_origin is not None, "Calibrate colloquy."
-        self.body_neopixel.ring.configure(
-            red = 0,
-            green = 0,
-            blue = 0,
-            white = 255,
-            brightness = 255,)
         self.stop_event.clear()
         self.body_neopixel.start()
-
         self.drives.start()
         self.body_neopixel.drive.on()
         # self._update_drive_pixel()
 
     def _loop(self):
-        # self._update_drive_pixel()
-
         if not self.is_moving:
             self.toggle_position()
-        # self.sleep_min()
 
         if self.interaction_event.is_set():
             self._interact()
@@ -70,11 +61,29 @@ class MaleDriver(Body):
         print(f"{self.name} finished interaction.")
         self.body_neopixel.start()
 
-    # def _update_drive_pixel(self):
-        # state, brightness, color= self.drives.value
-        # # color = self._light_colors[state]
-        # config = dict(
-            # brightness = brightness,
-            # **color,
-            # )
-        # self.body_neopixel.drive.configure(**config)
+    def add_html(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("h3"):
+            text(f"{self.name.title()}:")
+
+        if self.colloquy.is_open:
+                if not self._is_started:
+                    self._add_html_start()
+                else:
+                    self._add_html_stop()
+
+        self._add_html_params()
+
+    def _add_html_start(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("form", method="post"):
+            with tag("button", name="action", value=f"{self.name}/start"):
+                text(f"Start.")
+            self.colloquy.actions[f"{self.name}/start"] = self.start
+
+        self._search.add_html()
+        # self.body_neopixel.add_html()
+
+
+
+

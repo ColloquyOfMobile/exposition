@@ -202,6 +202,10 @@ class Colloquy(ThreadDriver):
         self.bar.turn_to_origin_position()
         self._dxl_manager.close()
         self._arduino_manager.close()
+        # for female in self.females:
+            # female.close()
+        # for male in self.males:
+            # male.close()
 
         print("Colloquy closed.")
 
@@ -252,7 +256,11 @@ class Colloquy(ThreadDriver):
         with tag("form", method="post"):
             with tag("button", name="action", value="colloquy/start"):
                 text(f"Start.")
-        self.colloquy.actions["colloquy/start"] = self.start
+                self.colloquy.actions["colloquy/start"] = self.start
+            with tag("button", name="action", value="colloquy/close"):
+                text(f"close.")
+                self.colloquy.actions["colloquy/close"] = self.close
+
         self._add_html_interaction()
 
     def _add_html_stop(self):

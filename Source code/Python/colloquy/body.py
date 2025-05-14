@@ -38,8 +38,10 @@ class Body(SharedDriver):
         self.dxl_origin = origin
         self.colloquy.params[self.name]["origin"] = origin
         self.colloquy.save()
-
+    
+    @property
     def search(self):
+        return self._search
         if self._search.thread is not None:
             if self._search.thread.is_alive():
                 return

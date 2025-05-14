@@ -106,7 +106,7 @@ class DrivesHandler(ThreadDriver):
         self._update_neopixel()
 
         if self.is_unsatisfied:
-            self.owner.search()
+            self.owner.search.start()
 
     def decrease(self, drive):
         if "O" in drive:

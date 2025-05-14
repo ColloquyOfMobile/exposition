@@ -36,11 +36,11 @@ class BodyNeopixels(ThreadDriver):
         for k, v in LIGHT_PATTERNS[owner.name].items():
             # The deque with max_len will act as circular list
             self.light_patterns[k] = deque(v, maxlen=len(v))
-        self._timestamp = None
+        # self._blink = Blink(owner=self)
 
     # @property
-    # def name(self):
-        # return self._owner.name
+    # def blink(self):
+        # return self._blink
 
     @property
     def arduino_manager(self):
@@ -56,19 +56,9 @@ class BodyNeopixels(ThreadDriver):
 
     def __enter__(self):
         self.stop_event.clear()
-        light_pattern = self.light_patterns[self.drives.state]
-        self._timestamp = time()
-        value = light_pattern.popleft()
-        light_pattern.append(value)
-        self.ring.set(value)
 
     def _loop(self):
-        if (time() - self._timestamp) > 0.5:
-            light_pattern = self.light_patterns[self.drives.state]
-            value = light_pattern.popleft()
-            light_pattern.append(value)
-            self.ring.set(value)
-            self._timestamp = time()
+        pass
         # self.sleep_min()
 
     def stop(self):

@@ -50,7 +50,7 @@ class ThreadDriver(HTMLElement):
             self._exception = exc_value
             msg = ''.join(traceback.format_exception(exc_type, exc_value, traceback_obj))
             self.log(msg)
-            print(f"Error ({exc_type=}) in {self.name}")
+            print(f"Error ({exc_type=}) in {self.path.as_posix()}")
         self.stop()
         return True  # suppress exception if any
 
@@ -107,8 +107,10 @@ class ThreadDriver(HTMLElement):
         self.log(f"Starting {self.path.as_posix()}...")
         self._is_started = True
         if self._thread is not None:
-            assert not self._thread.is_alive()
+            if self._thread.is_alive():
+                return
         self.stop_event.clear()
+        self.threads.clear()
         self._thread = thread = Thread(target=self.run, name=self._name)
         self.owner.threads.add(thread)
         thread.start()
