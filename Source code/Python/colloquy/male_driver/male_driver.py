@@ -85,5 +85,15 @@ class MaleDriver(Body):
         self._search.add_html()
         # self.body_neopixel.add_html()
 
+    def _add_html_stop(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("form", method="post"):
+            with tag("button", name="action", value=f"{self.path.as_posix()}/stop"):
+                text(f"Stop.")
+            self.colloquy.actions[f"{self.path.as_posix()}/stop"] = self.stop_from_ui
 
+    def stop_from_ui(self):
+        self.stop()
+        self.thread.join()
+        self.colloquy.bar.search.stop()
 

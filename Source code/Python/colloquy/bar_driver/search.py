@@ -19,6 +19,9 @@ class Search(ThreadDriver):
         if self.owner.interaction_event.is_set():
             self.stop()
 
+    def stop(self):
+        ThreadDriver.stop(self)
+
     def add_html(self):
         doc, tag, text = self.html_doc.tagtext()
 

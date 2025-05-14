@@ -51,7 +51,9 @@ class ThreadDriver(HTMLElement):
             msg = ''.join(traceback.format_exception(exc_type, exc_value, traceback_obj))
             self.log(msg)
             print(f"Error ({exc_type=}) in {self.path.as_posix()}")
-        self.stop()
+            self.stop()
+        else:
+            assert self.stop_event.is_set()
         self._is_started = False
         return True  # suppress exception if any
 

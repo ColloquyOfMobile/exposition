@@ -202,17 +202,6 @@ class BarDriver(ThreadDriver):
 
     def _loop(self):
         return
-        # if self.is_moving:
-            # return
-
-        # if self.nearby_interaction is None:
-            # self.toggle_position()
-            # return
-
-        # self.nearby_interaction.female.interaction_event.set()
-
-        # self.wait_interaction_end()
-        # self.toggle_position()
 
     def _set_origin(self, origin):
         origin = int(origin[0])

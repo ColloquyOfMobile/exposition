@@ -64,11 +64,7 @@ class Search(ThreadDriver):
         doc, tag, text = self.html_doc.tagtext()
         with tag("button", name="action", value=f"{self.path.as_posix()}/stop"):
             text(f"Stop.")
-        self.colloquy.actions[f"{self.path.as_posix()}/stop"] = self.stop_from_ui
-
-    def stop_from_ui(self):
-        self.colloquy.bar.search.stop()
-        self.stop()
+        self.colloquy.actions[f"{self.path.as_posix()}/stop"] = self.stop
 
 
 
