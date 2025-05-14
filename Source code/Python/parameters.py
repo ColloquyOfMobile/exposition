@@ -31,7 +31,7 @@ class Parameters(HTMLElement):
         "mirrors":{
             "names": ["mirror1", "mirror2", "mirror3"],
             "share":{
-                "motion range": 500,
+                "motion range": 700,
                 },
             },
         "dynamixel network":{

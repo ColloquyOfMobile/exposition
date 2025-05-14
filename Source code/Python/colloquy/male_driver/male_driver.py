@@ -49,6 +49,7 @@ class MaleDriver(Body):
 
     def _interact(self):
         self.body_neopixel.stop()
+        self.body_neopixel.thread.join()
         self.body_neopixel.ring.on()
 
         iterations = 2
