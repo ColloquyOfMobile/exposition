@@ -2,6 +2,18 @@ from time import time
 from threading import Lock
 from colloquy.thread_driver import ThreadDriver
 
+"""logic35_systems.ino
+//act_drive
+const int   internal_drive_LL = 600;      //interested floor, in samples     600 = 30 seconds
+const int   internal_drive_UL = 3600;     //desperate floor, in samples     3600 = 3 minutes
+const int   internal_drive_MAX = 4800;    //in samples                      4800 = 4 minutes
+const int   internal_drive_adjustment_O = 1;
+const int   internal_drive_adjustment_P  = 1;
+int         internal_drive_O = 0;
+int         internal_drive_P = 0;
+int         internal_drive_state = 0;     //Undefined, Neither[Inert], O, P, OP
+"""
+
 class DrivesHandler(ThreadDriver):
 
     def __init__(self, owner, neopixel):

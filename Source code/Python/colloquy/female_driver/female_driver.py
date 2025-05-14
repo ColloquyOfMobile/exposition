@@ -44,11 +44,6 @@ class FemaleDriver(Body):
 
     def _loop(self):
         pass
-        # if not self.is_moving:
-            # self.toggle_position()
-
-        # if self.interaction_event.is_set():
-            # self._interact()
 
     def stop(self):
         self.drives.stop()
