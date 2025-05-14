@@ -10,23 +10,23 @@ class DrivesHandler(ThreadDriver):
         self._neopixel = neopixel
         self.o_drive = 0
         self.p_drive = 0
-        self._update_interval = 1
+        self._update_interval = 2
         self._timestamp = time()
 
-        self._step_o = 1
-        self._step_p = 2
+        self._step_o = 2
+        self._step_p = 3
 
         self._max = 255
         self._min = 0
 
-        self._satisfied = 2
+        self._satisfied = 10
         self._frustrated = 235
 
         self._lock = Lock()
 
         self._orange = dict(red=255, green=165, blue=0, white=0)
         self._white = dict(red=0, green=0, blue=0, white=255)
-        self._puce = dict(red=80, green=53, blue=60, white=125)#cc8899
+        self._puce = dict(red=80, green=53, blue=60, white=125) #CC8899
         self._colors = {
             ("O",): self._puce,
             ("P",): self._orange,
@@ -35,7 +35,6 @@ class DrivesHandler(ThreadDriver):
         }
 
     def __getitem__(self, key):
-        # assert key in (None, "O", "P", "O or P"), f"{key=}"
         for_max = list()
         with self._lock:
             if not key:
@@ -105,8 +104,14 @@ class DrivesHandler(ThreadDriver):
 
         self._update_neopixel()
 
+        print(f"Update drives: O={self.o_drive}, P={self.p_drive}")
+
         if self.is_unsatisfied:
-            self.owner.search.start()
+            if not self.owner.search.is_started:
+                print(f"The {self.owner.name} is unsatisfied {self.state}!")
+                self.owner.search.start()
+            return
+        print(f"The {self.owner.name} is satisfied. => Not doing anything...")
 
     def decrease(self, drive):
         if "O" in drive:

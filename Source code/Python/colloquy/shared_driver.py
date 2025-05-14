@@ -69,7 +69,6 @@ class SharedDriver(ThreadDriver):
             text(f"{self.name.title()}:")
 
         if self.colloquy.is_open:
-            with tag("form", method="post"):
                 if not self._is_started:
                     self._add_html_start()
                 else:
@@ -95,13 +94,15 @@ class SharedDriver(ThreadDriver):
             self.colloquy.actions[f"{self.name}/origin/set"] = self._set_origin
 
     def _add_html_start(self):
-        doc, tag, text = self.html_doc.tagtext()
-        with tag("button", name="action", value=f"{self.name}/start"):
-            text(f"Start.")
-        self.colloquy.actions[f"{self.name}/start"] = self.start
+        doc, tag, text = self.html_doc.tagtext()        
+        with tag("form", method="post"):
+            with tag("button", name="action", value=f"{self.name}/start"):
+                text(f"Start.")
+            self.colloquy.actions[f"{self.name}/start"] = self.start
 
     def _add_html_stop(self):
-        doc, tag, text = self.html_doc.tagtext()
-        with tag("button", name="action", value=f"{self.name}/stop"):
-            text(f"Stop.")
-        self.colloquy.actions[f"{self.name}/stop"] = self.stop
+        doc, tag, text = self.html_doc.tagtext()        
+        with tag("form", method="post"):
+            with tag("button", name="action", value=f"{self.name}/stop"):
+                text(f"Stop.")
+            self.colloquy.actions[f"{self.name}/stop"] = self.stop

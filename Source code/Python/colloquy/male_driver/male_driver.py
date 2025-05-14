@@ -35,11 +35,12 @@ class MaleDriver(Body):
         # self._update_drive_pixel()
 
     def _loop(self):
-        if not self.is_moving:
-            self.toggle_position()
+        pass
+        # if not self.is_moving:
+            # self.toggle_position()
 
-        if self.interaction_event.is_set():
-            self._interact()
+        # if self.interaction_event.is_set():
+            # self._interact()
 
     def _interact(self):
         self.body_neopixel.stop()
@@ -83,7 +84,6 @@ class MaleDriver(Body):
 
         self._search.add_html()
         # self.body_neopixel.add_html()
-
 
 
 

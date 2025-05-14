@@ -52,7 +52,12 @@ class ThreadDriver(HTMLElement):
             self.log(msg)
             print(f"Error ({exc_type=}) in {self.path.as_posix()}")
         self.stop()
+        self._is_started = False
         return True  # suppress exception if any
+
+    @property
+    def is_started(self):
+        return self._is_started
 
     @property
     def param(self):

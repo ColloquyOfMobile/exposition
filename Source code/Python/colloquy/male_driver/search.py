@@ -8,8 +8,10 @@ class Search(ThreadDriver):
         self._blink = Blink(owner=self)
 
     def __enter__(self):
+        print(f"Start searching...")
         self.stop_event.clear()
         self.blink.start()
+        print(f"Tell the bar to start searching. (Not implemented yet...)")
 
     @property
     def blink(self):
@@ -20,12 +22,10 @@ class Search(ThreadDriver):
         return self.owner.body_neopixel
 
     def _loop(self):
-        # self._update_drive_pixel()
 
         if not self.owner.is_moving:
             print(f"{self.path.as_posix()} toggle position...")
             self.owner.toggle_position()
-        # self.sleep_min()
 
         if self.owner.interaction_event.is_set():
             self.owner.interact()
@@ -38,7 +38,6 @@ class Search(ThreadDriver):
 
         if self.colloquy.is_open:
             with tag("form", method="post"):
-                print(f"{self._is_started=}")
                 if not self._is_started:
                     self._add_html_start()
                 else:
@@ -69,6 +68,7 @@ class Blink(ThreadDriver):
         self._blink_step = 0.5
 
     def __enter__(self):
+        print(f"Start blinking...")
         self.stop_event.clear()
         self._timestamp = 0
         self.ring.configure(
@@ -84,7 +84,6 @@ class Blink(ThreadDriver):
             value = light_pattern.popleft()
             light_pattern.append(value)
             self.ring.set(value)
-            print(f"blink={value}")
             self._timestamp = time()
 
     @property
