@@ -45,11 +45,10 @@ class Search(ThreadDriver):
             text(f"Search:")
 
         if self.colloquy.is_open:
-            with tag("form", method="post"):
-                if not self._is_started:
-                    self._add_html_start()
-                else:
-                    self._add_html_stop()
+            if not self._is_started:
+                self._add_html_start()
+            else:
+                self._add_html_stop()
 
     def _add_html_start(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -62,9 +61,22 @@ class Search(ThreadDriver):
 
     def _add_html_stop(self):
         doc, tag, text = self.html_doc.tagtext()
-        with tag("button", name="action", value=f"{self.path.as_posix()}/stop"):
-            text(f"Stop.")
-        self.colloquy.actions[f"{self.path.as_posix()}/stop"] = self.stop
+        with tag("form", method="post"):
+            with tag("button", name="action", value=f"{self.path.as_posix()}/stop"):
+                text(f"Stop.")
+            self.colloquy.actions[f"{self.path.as_posix()}/stop"] = self.stop
+
+    def _add_html_stop(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("form", method="post"):
+            with tag("button", name="action", value=f"{self.path.as_posix()}/stop"):
+                text(f"Stop.")
+            self.colloquy.actions[f"{self.path.as_posix()}/stop"] = self.stop_from_ui
+
+    def stop_from_ui(self):
+        self.stop()
+        self.thread.join()
+        self.colloquy.bar.search.stop()
 
 
 
@@ -117,11 +129,10 @@ class Blink(ThreadDriver):
             text(f"Blink:")
 
         if self.colloquy.is_open:
-            with tag("form", method="post"):
-                if not self._is_started:
-                    self._add_html_start()
-                else:
-                    self._add_html_stop()
+            if not self._is_started:
+                self._add_html_start()
+            else:
+                self._add_html_stop()
 
     def _add_html_start(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -133,6 +144,7 @@ class Blink(ThreadDriver):
 
     def _add_html_stop(self):
         doc, tag, text = self.html_doc.tagtext()
-        with tag("button", name="action", value=f"{self.path.as_posix()}/stop"):
-            text(f"Stop.")
-        self.colloquy.actions[f"{self.path.as_posix()}/stop"] = self.stop
+        with tag("form", method="post"):
+            with tag("button", name="action", value=f"{self.path.as_posix()}/stop"):
+                text(f"Stop.")
+            self.colloquy.actions[f"{self.path.as_posix()}/stop"] = self.stop

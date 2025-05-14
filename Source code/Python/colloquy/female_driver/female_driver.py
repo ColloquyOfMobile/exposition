@@ -1,8 +1,9 @@
-from .body import Body
-from .mirror_driver import MirrorDriver
-from .neopixel_driver import NeopixelDriver
-from .drives_handler import DrivesHandler
-from .thread_driver import ThreadDriver
+from colloquy.body import Body
+from colloquy.mirror_driver import MirrorDriver
+from colloquy.neopixel_driver import NeopixelDriver
+from colloquy.drives_handler import DrivesHandler
+from colloquy.thread_driver import ThreadDriver
+from .search import Search
 from threading import Lock
 from time import sleep
 
@@ -42,11 +43,12 @@ class FemaleDriver(Body):
         self.neopixel.on()
 
     def _loop(self):
-        if not self.is_moving:
-            self.toggle_position()
+        pass
+        # if not self.is_moving:
+            # self.toggle_position()
 
-        if self.interaction_event.is_set():
-            self._interact()
+        # if self.interaction_event.is_set():
+            # self._interact()
 
     def stop(self):
         self.drives.stop()
@@ -93,9 +95,11 @@ class FemaleDriver(Body):
         self.neopixel.open()
         self.mirror.open()
 
+    def _add_html_start(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("form", method="post"):
+            with tag("button", name="action", value=f"{self.name}/start"):
+                text(f"Start.")
+            self.colloquy.actions[f"{self.name}/start"] = self.start
 
-
-class Search(ThreadDriver):
-
-    def __init__(self, owner):
-        ThreadDriver.__init__(self, owner=owner, name=f"search")
+        self._search.add_html()

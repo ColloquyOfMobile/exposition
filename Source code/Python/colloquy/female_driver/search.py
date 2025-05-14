@@ -11,16 +11,12 @@ class Search(ThreadDriver):
         self.stop_event.clear()
 
     def _loop(self):
-
         if not self.owner.is_moving:
             print(f"{self.owner.name} toggle position...")
-            self.owner.toggle_max_min_position()
+            self.owner.toggle_position()
 
         if self.owner.interaction_event.is_set():
-            self.stop()
-
-    def stop(self):
-        ThreadDriver.stop(self)
+            raise NotImplementedError()
 
     def add_html(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -29,11 +25,10 @@ class Search(ThreadDriver):
             text(f"Search:")
 
         if self.colloquy.is_open:
-            with tag("form", method="post"):
-                if not self._is_started:
-                    self._add_html_start()
-                else:
-                    self._add_html_stop()
+            if not self._is_started:
+                self._add_html_start()
+            else:
+                self._add_html_stop()
 
     def _add_html_start(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -41,10 +36,11 @@ class Search(ThreadDriver):
             with tag("button", name="action", value=f"{self.path.as_posix()}/start"):
                 text(f"Start.")
         self.colloquy.actions[f"{self.path.as_posix()}/start"] = self.start
-        self.blink.add_html()
 
     def _add_html_stop(self):
         doc, tag, text = self.html_doc.tagtext()
-        with tag("button", name="action", value=f"{self.path.as_posix()}/stop"):
-            text(f"Stop.")
-        self.colloquy.actions[f"{self.path.as_posix()}/stop"] = self.stop
+        with tag("form", method="post"):
+            with tag("button", name="action", value=f"{self.path.as_posix()}/stop"):
+                text(f"Stop.")
+            self.colloquy.actions[f"{self.path.as_posix()}/stop"] = self.stop
+
