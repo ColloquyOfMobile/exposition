@@ -52,6 +52,7 @@ class MirrorDriver(SharedDriver):
                 if interaction.female.name == self.owner.name:
                     self.colloquy.bar.nearby_interaction = interaction
                     break
+
         self.owner.drives.o_drive = fem_o_drive
         self.owner.drives.p_drive = fem_p_drive
 

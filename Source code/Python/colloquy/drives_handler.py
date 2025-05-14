@@ -4,9 +4,10 @@ from colloquy.thread_driver import ThreadDriver
 
 class DrivesHandler(ThreadDriver):
 
-    def __init__(self, owner):
+    def __init__(self, owner, neopixel):
         name = f"{owner.name}_drives"
         ThreadDriver.__init__(self, name=name, owner=owner)
+        self._neopixel = neopixel
         self.o_drive = 0
         self.p_drive = 0
         self._update_interval = 1
@@ -80,6 +81,10 @@ class DrivesHandler(ThreadDriver):
 
             raise ValueError(f"Drive Error, {self.o_drive=}, {self.p_drive=}")
 
+    @property
+    def is_unsatisfied(self):
+        return bool(self.state)
+
     def __enter__(self):
         """Setup before loop."""
         self.stop_event.clear()
@@ -98,6 +103,11 @@ class DrivesHandler(ThreadDriver):
         if self.p_drive > self._max:
             self.p_drive = self._max
 
+        self._update_neopixel()
+
+        if self.is_unsatisfied:
+            self.owner.search()
+
     def decrease(self, drive):
         if "O" in drive:
             self.o_drive -= 10 * self._step_o
@@ -110,3 +120,12 @@ class DrivesHandler(ThreadDriver):
     def satisfy(self):
         self.o_drive =  self._satisfied
         self.p_drive =  self._satisfied
+
+    def _update_neopixel(self):
+        state, brightness, color = self.value
+        # color = self._light_colors[state]
+        config = dict(
+            brightness = brightness,
+            **color,
+            )
+        self._neopixel.configure(**config)

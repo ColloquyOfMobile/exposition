@@ -1,6 +1,8 @@
 from .body import Body
 from .mirror_driver import MirrorDriver
 from .neopixel_driver import NeopixelDriver
+from .drives_handler import DrivesHandler
+from .thread_driver import ThreadDriver
 from threading import Lock
 from time import sleep
 
@@ -13,11 +15,14 @@ class FemaleDriver(Body):
             owner,
             **kwargs,
             )
+        self.neopixel = NeopixelDriver(owner=self, name="neopixel")
+        self.drives = DrivesHandler(owner=self, neopixel=self.neopixel)
+        self._search = Search(owner=self)
+
         dxl_manager = kwargs["dynamixel manager"]
         dxl_id = kwargs["dynamixel id"]
         origin = kwargs["origin"]
 
-        self.neopixel = NeopixelDriver(owner=self, name="neopixel")
 
         mirror_kwargs = kwargs.get("mirror")
         self.mirror = None
@@ -35,25 +40,13 @@ class FemaleDriver(Body):
         self.stop_event.clear()
         self.drives.start()
         self.neopixel.on()
-        self._update_neopixel()
 
     def _loop(self):
-        self._update_neopixel()
         if not self.is_moving:
             self.toggle_position()
 
         if self.interaction_event.is_set():
             self._interact()
-        # self.sleep_min()
-
-    def _update_neopixel(self):
-        state, brightness, color = self.drives.value
-        # color = self._light_colors[state]
-        config = dict(
-            brightness = brightness,
-            **color,
-            )
-        self.neopixel.configure(**config)
 
     def stop(self):
         self.drives.stop()
@@ -99,3 +92,10 @@ class FemaleDriver(Body):
         Body.open(self)
         self.neopixel.open()
         self.mirror.open()
+
+
+
+class Search(ThreadDriver):
+
+    def __init__(self, owner):
+        ThreadDriver.__init__(self, owner=owner, name=f"search")

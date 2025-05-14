@@ -1,6 +1,7 @@
 from colloquy.body import Body
 from colloquy.thread_driver import ThreadDriver
 from colloquy.neopixel_driver import NeopixelDriver
+from colloquy.drives_handler import DrivesHandler
 from .body_neopixels import BodyNeopixels
 from time import time, sleep
 from threading import Event, Thread
@@ -17,6 +18,8 @@ class MaleDriver(Body):
             )
         self.body_neopixel = BodyNeopixels(owner=self)
         self.up_ring = NeopixelDriver(owner=self, name="up_ring")
+
+        self.drives = DrivesHandler(owner=self, neopixel=self.body_neopixel.drive)
 
     def open(self):
         Body.open(self)
@@ -35,10 +38,10 @@ class MaleDriver(Body):
 
         self.drives.start()
         self.body_neopixel.drive.on()
-        self._update_drive_pixel()
+        # self._update_drive_pixel()
 
     def _loop(self):
-        self._update_drive_pixel()
+        # self._update_drive_pixel()
 
         if not self.is_moving:
             self.toggle_position()
@@ -67,11 +70,11 @@ class MaleDriver(Body):
         print(f"{self.name} finished interaction.")
         self.body_neopixel.start()
 
-    def _update_drive_pixel(self):
-        state, brightness, color= self.drives.value
-        # color = self._light_colors[state]
-        config = dict(
-            brightness = brightness,
-            **color,
-            )
-        self.body_neopixel.drive.configure(**config)
+    # def _update_drive_pixel(self):
+        # state, brightness, color= self.drives.value
+        # # color = self._light_colors[state]
+        # config = dict(
+            # brightness = brightness,
+            # **color,
+            # )
+        # self.body_neopixel.drive.configure(**config)

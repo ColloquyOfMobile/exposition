@@ -5,6 +5,7 @@ from .male_driver import MaleDriver
 from .bar_driver import BarDriver
 from .logger import Logger
 from .thread_driver import ThreadDriver
+from .nearby_interaction import NearbyInteraction
 from time import sleep
 from parameters import Parameters
 from threading import Event # Thread
@@ -52,12 +53,12 @@ class Colloquy(ThreadDriver):
 
         # Defined at for each bar position, which female and male interacts
         self.nearby_interactions = {
-            0: NearbyInteractions(self.male1, self.female1),
-            2200: NearbyInteractions(self.male2, self.female3),
-            4300: NearbyInteractions(self.male1, self.female2),
-            6200: NearbyInteractions(self.male2, self.female1),
-            8400: NearbyInteractions(self.male1, self.female3),
-            10400: NearbyInteractions(self.male2, self.female2),
+            0: NearbyInteraction(self, self.male1, self.female1),
+            2200: NearbyInteraction(self, self.male2, self.female3),
+            4300: NearbyInteraction(self, self.male1, self.female2),
+            6200: NearbyInteraction(self, self.male2, self.female1),
+            8400: NearbyInteraction(self, self.male1, self.female3),
+            10400: NearbyInteraction(self, self.male2, self.female2),
         }
 
         self._init_bar(params)
@@ -178,6 +179,7 @@ class Colloquy(ThreadDriver):
     def _loop(self):
         pass
 
+
     def open(self):
         if self._is_open:
             return
@@ -207,63 +209,116 @@ class Colloquy(ThreadDriver):
         self.params.save()
 
     def add_html(self):
-        self.actions.clear()
         doc, tag, text = self.html_doc.tagtext()
-        with tag("form", method="post"):
-            if not self._is_open:
-                self._add_html_open()
+        self.actions.clear()
+        if not self._is_open:
+            self._add_html_open()
+        else:
+            if not self._is_started:
+                self._add_html_start()
             else:
-                if not self._is_started:
-                    self._add_html_start()
-                else:
-                    self._add_html_stop()
+                self._add_html_stop()
 
         with tag("h2"):
             text("Elements")
         for element in sorted([*self.elements, *self.mirrors]):
             element.add_html()
 
+    def _interact(self, **kwargs):
+        male = kwargs.pop("male")[0]
+        female = kwargs.pop("female")[0]
+        fem_o_drive = kwargs.pop("fem_o_drive")[0]
+        fem_p_drive = kwargs.pop("fem_p_drive")[0]
+        male_o_drive = kwargs.pop("male_o_drive")[0]
+        male_p_drive = kwargs.pop("male_p_drive")[0]
+
+        for interaction in self.colloquy.nearby_interactions.values():
+            if interaction.male.name == male_name:
+                if interaction.female.name == self.owner.name:
+                    self.colloquy.bar.nearby_interaction = interaction
+                    break
+
+        raise NotImplementedError
+
     def _add_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
-        with tag("button", name="action", value="colloquy/open"):
-            text(f"Open.")
+        with tag("form", method="post"):
+            with tag("button", name="action", value="colloquy/open"):
+                text(f"Open.")
         self.colloquy.actions["colloquy/open"] = self.open
 
     def _add_html_start(self):
         doc, tag, text = self.html_doc.tagtext()
-        with tag("button", name="action", value="colloquy/start"):
-            text(f"Start.")
+        with tag("form", method="post"):
+            with tag("button", name="action", value="colloquy/start"):
+                text(f"Start.")
         self.colloquy.actions["colloquy/start"] = self.start
+        self._add_html_interaction()
 
     def _add_html_stop(self):
         doc, tag, text = self.html_doc.tagtext()
-        with tag("button", name="action", value="colloquy/stop"):
-            text(f"Stop.")
+        with tag("form", method="post"):
+            with tag("button", name="action", value="colloquy/stop"):
+                text(f"Stop.")
         self.colloquy.actions["colloquy/stop"] = self.stop
 
+    def _add_html_interaction(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("h2"):
+            text("Interact")
 
+        with tag("form", method="post"):
+            with tag("div"):
+                with tag("label", **{"for": f"{self.name}/interacting_male"}):
+                    text(f"Interacting male:")
 
-class NearbyInteractions:
+                with tag("select", name="male", id=f"{self.name}/interacting_male"):
+                    with tag("option", value="male1"):
+                        text(f"male1")
+                    with tag("option", value="male2"):
+                        text(f"male2")
 
-    def __init__(self, male, female):
-        self._male = male
-        self._female = female
+            with tag("div"):
+                with tag("label", **{"for": f"{self.name}/interacting_female"}):
+                    text(f"Interacting female:")
 
-    def __iter__(self):
-        yield self.male
-        yield self.female
+                with tag("select", name="female", id=f"{self.name}/interacting_female"):
+                    with tag("option", value="female1"):
+                        text(f"female1")
+                    with tag("option", value="female2"):
+                        text(f"female2")
+                    with tag("option", value="female3"):
+                        text(f"female3")
 
-    @property
-    def male(self):
-        return self._male
+            with tag("div"):
+                with tag("label", **{"for": f"{self.name}/fem_o_drive"}):
+                    text(f"Fem O drive:")
 
-    @property
-    def female(self):
-        return self._female
+                with tag("input", type="number", id=f"{self.name}/fem_o_drive", name="fem_o_drive", value=0):
+                    pass
 
-    def busy(self):
-        return any(
-            element.interaction_event.is_set()
-            for element
-            in self
-            )
+            with tag("div"):
+                with tag("label", **{"for": f"{self.name}/fem_p_drive"}):
+                    text(f"Fem P drive:")
+
+                with tag("input", type="number", id=f"{self.name}/fem_p_drive", name="fem_p_drive", value=0):
+                    pass
+
+            with tag("div"):
+                with tag("label", **{"for": f"{self.name}/male_o_drive"}):
+                    text(f"Male O drive:")
+
+                with tag("input", type="number", id=f"{self.name}/male_o_drive", name="male_o_drive", value=0):
+                    pass
+
+            with tag("div"):
+                with tag("label", **{"for": f"{self.name}/male_p_drive"}):
+                    text(f"Male P drive:")
+
+                with tag("input", type="number", id=f"{self.name}/male_p_drive", name="male_p_drive", value=0):
+                    pass
+
+            with tag("button", name="action", value="colloquy/interact"):
+                text(f"Start.")
+
+            self.colloquy.actions["colloquy/interact"] = self._interact
