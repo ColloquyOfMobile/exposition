@@ -11,7 +11,7 @@ class Conversation(ThreadDriver):
     def __enter__(self):
         print(f"The {self.owner.name} is engaging...")
         self.stop_event.clear()
-        self.owner.interaction_event.set()
+        # self.owner.interaction_event.set()
         self.owner.notify_male()
         self.owner.turn_to_origin_position()
         self.owner.mirror.start()
@@ -31,6 +31,7 @@ class Conversation(ThreadDriver):
             self.stop_event.set()
             self.owner.mirror.stop()
             self.colloquy.bar.nearby_interaction.stop()
+            self.owner.search.start()
 
     def listen_confirmation(self):
         return False
