@@ -108,7 +108,6 @@ class DrivesHandler(ThreadDriver):
 
     @o_drive.setter
     def o_drive(self, value):
-        print(f"set 'O' {self.retrieve_call_origin()}")
         assert isinstance(value, int)
         self._o_drive = value
         self._update_neopixel()
@@ -119,7 +118,6 @@ class DrivesHandler(ThreadDriver):
 
     @p_drive.setter
     def p_drive(self, value):
-        print(f"set 'P' {self.retrieve_call_origin()}")
         assert isinstance(value, int)
         self._p_drive = value
         self._update_neopixel()
@@ -182,8 +180,6 @@ class DrivesHandler(ThreadDriver):
 
     def _update_neopixel(self):
         state, brightness, color = self.value
-        print(f"{self.owner.name=}, {state=}")
-        print(f"{self.owner.name=}, {color=}")
         config = dict(
             brightness = brightness,
             **color,

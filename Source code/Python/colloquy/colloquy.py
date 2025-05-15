@@ -237,8 +237,7 @@ class Colloquy(ThreadDriver):
         fem_p_drive = int(kwargs.pop("fem_p_drive")[0])
         male_o_drive = int(kwargs.pop("male_o_drive")[0])
         male_p_drive = int(kwargs.pop("male_p_drive")[0])
-        fem_target_drive = tuple(kwargs.pop("fem_target_drive"))
-
+        override_microphone = kwargs.pop("override_microphone")[0]
 
         for interaction in self.colloquy.nearby_interactions.values():
             if interaction.male.name == male_name:
@@ -247,7 +246,6 @@ class Colloquy(ThreadDriver):
                     break
         else:
             raise ValueError(f"No interaction found for {female_name=}, {male_name=}")
-
 
         interaction.female.drives.o_drive = fem_o_drive
         interaction.female.drives.p_drive = fem_p_drive
@@ -258,12 +256,17 @@ class Colloquy(ThreadDriver):
         interaction.male.drives.p_drive = male_p_drive
         interaction.male.body_neopixel.drive.on()
 
+        if override_microphone == "True":
+            interaction.male.microphone = True
+        else:
+            interaction.male.microphone = False
+
         assert interaction.female.drives.is_frustated
 
         print(f"Move bar to interaction.")
-        self.bar.move_and_wait(position = self.bar.nearby_interaction.position+self.bar.dxl_origin)
-        # interaction.male.search.start()
 
+        self.bar.move_and_wait(position = self.bar.nearby_interaction.position+self.bar.dxl_origin)
+        interaction.male.search.start()
         interaction.start()
 
     def _add_html_open(self):
@@ -334,14 +337,14 @@ class Colloquy(ThreadDriver):
                         text(f"female3")
 
             with tag("div"):
-                with tag("label", **{"for": f"{self.name}/fem_target_drive"}):
-                    text(f"Female target drive (can select one or both):")
+                with tag("label", **{"for": f"{self.name}/override_microphone"}):
+                    text(f"Override microphone:")
 
-                with tag("select", name="fem_target_drive", id=f"{self.name}/fem_target_drive", multiple=True, required=True):
-                    with tag("option", value="O", selected=True):
-                        text(f"'O'")
-                    with tag("option", value="P"):
-                        text(f"'P'")
+                with tag("select", name="override_microphone", id=f"{self.name}/override_microphone", required=True):
+                    with tag("option", value="True", ):
+                        text(f"Always hears fem")
+                    with tag("option", value="False", selected=True):
+                        text(f"Never hears fem")
 
             min_value = 10
             max_value = 255

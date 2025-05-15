@@ -51,3 +51,6 @@ class SpeakerDriver(ThreadDriver):
         self.on()
         sleep(0.5)
         self.off()
+        self.on()
+        sleep(0.5)
+        self.off()

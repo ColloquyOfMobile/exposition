@@ -91,3 +91,8 @@ class MaleDriver(Body):
         self.stop()
         self.thread.join()
         self.colloquy.bar.search.stop()
+
+    def listen_for_notification(self):
+        if self._microphone:
+            raise NotImplementedError
+        return False

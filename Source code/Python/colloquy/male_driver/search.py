@@ -35,7 +35,7 @@ class Search(ThreadDriver):
             print(f"{self.owner.name} toggle position...")
             self.owner.toggle_position()
 
-        if self.owner.interaction_event.is_set():
+        if self.owner.listen_for_notification():
             raise NotImplementedError()
 
     def add_html(self):

@@ -13,11 +13,24 @@ class Body(SharedDriver):
         SharedDriver.__init__(self, owner, **kwargs)
         self.arduino_manager = kwargs["arduino manager"]
         self.interaction_event = Event()
-        self.speaker = SpeakerDriver(owner=self, arduino_manager=self.arduino_manager)
+        self._speaker = SpeakerDriver(owner=self, arduino_manager=self.arduino_manager)
+        self._microphone = None
+
+    @property
+    def speaker(self):
+        return self._speaker
 
     @property
     def search(self):
         return self._search
+
+    @property
+    def microphone(self):
+        return self._microphone
+
+    @microphone.setter
+    def microphone(self, value):
+        self._microphone = value
 
     def open(self):
         SharedDriver.open(self)
