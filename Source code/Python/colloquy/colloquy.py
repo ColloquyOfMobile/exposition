@@ -235,8 +235,8 @@ class Colloquy(ThreadDriver):
         female_name = kwargs.pop("female")[0]
         fem_o_drive = int(kwargs.pop("fem_o_drive")[0])
         fem_p_drive = int(kwargs.pop("fem_p_drive")[0])
-        male_o_drive = int(kwargs.pop("male_o_drive")[0])
-        male_p_drive = int(kwargs.pop("male_p_drive")[0])
+        # male_o_drive = int(kwargs.pop("male_o_drive")[0])
+        # male_p_drive = int(kwargs.pop("male_p_drive")[0])
         override_microphone = kwargs.pop("override_microphone")[0]
 
         for interaction in self.colloquy.nearby_interactions.values():
@@ -252,8 +252,8 @@ class Colloquy(ThreadDriver):
         interaction.female.neopixel.on()
         interaction.female.target_drive = interaction.female.drives.state
 
-        interaction.male.drives.o_drive = male_o_drive
-        interaction.male.drives.p_drive = male_p_drive
+        interaction.male.drives.o_drive = fem_o_drive
+        interaction.male.drives.p_drive = fem_p_drive
         interaction.male.body_neopixel.drive.on()
 
         if override_microphone == "True":
@@ -346,7 +346,6 @@ class Colloquy(ThreadDriver):
                     text(f"Override microphone:")
 
                 with tag("select", name="override_microphone", id=f"{self.name}/override_microphone", required=True):
-
                     with tag("option", value="True", ):
                         text(f"Always hears fem")
                     with tag("option", value="False", selected=True):
@@ -369,18 +368,21 @@ class Colloquy(ThreadDriver):
                     pass
 
             with tag("div"):
-                with tag("label", **{"for": f"{self.name}/male_o_drive"}):
-                    text(f"Male O drive:")
+                text(f"Male drive will match female for interaction.")
 
-                with tag("input", type="number", id=f"{self.name}/male_o_drive", name="male_o_drive", value=min_value, min=min_value, max=max_value):
-                    pass
+            # with tag("div"):
+                # with tag("label", **{"for": f"{self.name}/male_o_drive"}):
+                    # text(f"Male O drive:")
 
-            with tag("div"):
-                with tag("label", **{"for": f"{self.name}/male_p_drive"}):
-                    text(f"Male P drive:")
+                # with tag("input", type="number", id=f"{self.name}/male_o_drive", name="male_o_drive", value=min_value, min=min_value, max=max_value):
+                    # pass
 
-                with tag("input", type="number", id=f"{self.name}/male_p_drive", name="male_p_drive", value=min_value, min=min_value, max=max_value):
-                    pass
+            # with tag("div"):
+                # with tag("label", **{"for": f"{self.name}/male_p_drive"}):
+                    # text(f"Male P drive:")
+
+                # with tag("input", type="number", id=f"{self.name}/male_p_drive", name="male_p_drive", value=min_value, min=min_value, max=max_value):
+                    # pass
 
             with tag("button", name="action", value="colloquy/interact"):
                 text(f"Start.")
