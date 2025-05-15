@@ -271,6 +271,8 @@ class Colloquy(ThreadDriver):
         print(f"Move bar to interaction.")
 
         self.bar.move_and_wait(position = self.bar.nearby_interaction.position+self.bar.dxl_origin)
+        interaction.female.move_and_wait(interaction.female.dxl_origin)
+        interaction.male.move_and_wait(interaction.male.dxl_origin)
         interaction.male.search.start()
         interaction.start()
 

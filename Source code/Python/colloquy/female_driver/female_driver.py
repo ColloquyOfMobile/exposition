@@ -21,6 +21,7 @@ class FemaleDriver(Body):
         self.drives = DrivesHandler(owner=self, neopixel=self.neopixel)
         self._search = Search(owner=self)
         self._conversation = Conversation(owner=self)
+        self._is_notifing = False
 
         dxl_manager = kwargs["dynamixel manager"]
         dxl_id = kwargs["dynamixel id"]
@@ -38,6 +39,10 @@ class FemaleDriver(Body):
         assert self.dxl_origin is not None, "Calibrate colloquy."
         self.stop_event.clear()
         self.drives.start()
+
+    @property
+    def is_notifing(self):
+        return self._is_notifing
 
     @property
     def target_drive(self):
@@ -100,7 +105,11 @@ class FemaleDriver(Body):
         self.mirror.open()
 
     def notify_male(self):
+        print(f"Notifying...")
+        self._is_notifing = True
         self.speaker.notify()
+        self._is_notifing = False
+        print(f"Stop notifying...")
 
     def _add_html_start(self):
         doc, tag, text = self.html_doc.tagtext()

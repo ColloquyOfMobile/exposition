@@ -48,9 +48,8 @@ class SpeakerDriver(ThreadDriver):
             return
 
     def notify(self):
-        self.on()
-        sleep(0.5)
-        self.off()
-        self.on()
-        sleep(0.5)
-        self.off()
+        for i in range(5):
+            self.on()
+            sleep(0.5)
+            self.off()
+            sleep(0.5)

@@ -12,9 +12,9 @@ class Conversation(ThreadDriver):
         print(f"The {self.owner.name} is engaging...")
         self.stop_event.clear()
         # self.owner.interaction_event.set()
-        self.owner.notify_male()
         self.owner.turn_to_origin_position()
         self.owner.mirror.start()
+        self.owner.notify_male()
         self._timeout_start = time()
 
     def __exit__(self, exc_type, exc_value, traceback_obj):

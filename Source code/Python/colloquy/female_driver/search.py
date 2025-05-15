@@ -12,7 +12,6 @@ class Search(ThreadDriver):
 
     def _loop(self):
         if not self.owner.is_moving:
-            print(f"{self.owner.name} toggle position...")
             self.owner.toggle_position()
 
         # if self.owner.interaction_event.is_set():

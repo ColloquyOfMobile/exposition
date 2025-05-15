@@ -94,5 +94,11 @@ class MaleDriver(Body):
 
     def listen_for_notification(self):
         if self._microphone:
-            raise NotImplementedError
+            interaction = self.colloquy.bar.nearby_interaction
+            if interaction is not None:
+                if interaction.is_started:
+                   if interaction.female.is_notifing:
+                       return True
+
+            # raise NotImplementedError
         return False

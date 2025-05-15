@@ -32,11 +32,12 @@ class Search(ThreadDriver):
                 self.colloquy.bar.search.start()
 
         if not self.owner.is_moving:
-            print(f"{self.owner.name} toggle position...")
             self.owner.toggle_position()
 
         if self.owner.listen_for_notification():
-            raise NotImplementedError()
+           self.search.stop()
+           self.conversation.start()
+           raise NotImplementedError()
 
     def add_html(self):
         doc, tag, text = self.html_doc.tagtext()

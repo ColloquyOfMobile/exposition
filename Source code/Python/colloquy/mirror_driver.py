@@ -28,7 +28,6 @@ class MirrorDriver(SharedDriver):
         for i in range(iterations):
             if self.stop_event.is_set():
                 break
-            print(f"Toggle position for {self.name=}...")
             self.toggle_position()
 
             while self.is_moving:
