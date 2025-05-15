@@ -15,6 +15,10 @@ class MirrorDriver(SharedDriver):
         assert self.dxl_origin is not None, "Calibrate colloquy."
         self.stop_event.clear()
 
+    def __exit__(self, exc_type, exc_value, traceback_obj):
+        self.turn_to_origin_position()
+        return SharedDriver.__exit__(self, exc_type, exc_value, traceback_obj)
+
     def _loop(self):
         male = self.colloquy.nearby_interaction.male
         female = self.owner

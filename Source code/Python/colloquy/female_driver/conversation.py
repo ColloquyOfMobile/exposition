@@ -6,7 +6,7 @@ class Conversation(ThreadDriver):
     def __init__(self, owner):
         ThreadDriver.__init__(self, owner=owner, name=f"conversation")
         self._timeout_start = None
-        self.timeout = 2 # seconds
+        self.timeout = 4 # seconds
 
     def __enter__(self):
         print(f"The {self.owner.name} is engaging...")
@@ -29,6 +29,7 @@ class Conversation(ThreadDriver):
         if time() - self._timeout_start > self.timeout:
             print(f"The male doesn't respond...")
             self.stop_event.set()
+            self.owner.mirror.stop()
             self.colloquy.bar.nearby_interaction.stop()
 
     def listen_confirmation(self):

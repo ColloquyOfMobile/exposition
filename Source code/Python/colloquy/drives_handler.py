@@ -40,8 +40,8 @@ class DrivesHandler(ThreadDriver):
         self._white = dict(red=0, green=0, blue=0, white=255)
         self._puce = dict(red=80, green=53, blue=60, white=125) #CC8899
         self._colors = {
-            ("O",): self._puce,
-            ("P",): self._orange,
+            ("O",): self._orange,
+            ("P",): self._puce,
             tuple(): self._puce,
             ("O", "P",): self._puce,
         }
@@ -76,6 +76,12 @@ class DrivesHandler(ThreadDriver):
             p_satisfaction_lim = self.p_drive < self._satisfaction_lim
             o_frustated = self.o_drive > self._frustrated_lim
             p_frustated = self.p_drive > self._frustrated_lim
+            # print(f"{self.o_drive=}")
+            # print(f"{self.p_drive=}")
+            # print(f"{o_satisfaction_lim=}")
+            # print(f"{p_satisfaction_lim=}")
+            # print(f"{o_frustated=}")
+            # print(f"{p_frustated=}")
 
             if o_satisfaction_lim and p_satisfaction_lim:
                 return tuple()
@@ -102,6 +108,7 @@ class DrivesHandler(ThreadDriver):
 
     @o_drive.setter
     def o_drive(self, value):
+        print(f"set 'O' {self.retrieve_call_origin()}")
         assert isinstance(value, int)
         self._o_drive = value
         self._update_neopixel()
@@ -110,8 +117,9 @@ class DrivesHandler(ThreadDriver):
     def p_drive(self):
         return self._p_drive
 
-    @o_drive.setter
+    @p_drive.setter
     def p_drive(self, value):
+        print(f"set 'P' {self.retrieve_call_origin()}")
         assert isinstance(value, int)
         self._p_drive = value
         self._update_neopixel()
@@ -132,6 +140,7 @@ class DrivesHandler(ThreadDriver):
     def __enter__(self):
         """Setup before loop."""
         self.stop_event.clear()
+        self._neopixel.on()
 
     def _loop(self):
         if time() - self._timestamp < self._update_interval:
@@ -173,7 +182,8 @@ class DrivesHandler(ThreadDriver):
 
     def _update_neopixel(self):
         state, brightness, color = self.value
-        # color = self._light_colors[state]
+        print(f"{self.owner.name=}, {state=}")
+        print(f"{self.owner.name=}, {color=}")
         config = dict(
             brightness = brightness,
             **color,

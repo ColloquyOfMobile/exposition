@@ -38,7 +38,6 @@ class FemaleDriver(Body):
         assert self.dxl_origin is not None, "Calibrate colloquy."
         self.stop_event.clear()
         self.drives.start()
-        self.neopixel.on()
 
     @property
     def target_drive(self):

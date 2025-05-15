@@ -248,18 +248,20 @@ class Colloquy(ThreadDriver):
         else:
             raise ValueError(f"No interaction found for {female_name=}, {male_name=}")
 
-        interaction.female.target_drive = fem_target_drive
 
         interaction.female.drives.o_drive = fem_o_drive
         interaction.female.drives.p_drive = fem_p_drive
+        interaction.female.neopixel.on()
+        interaction.female.target_drive = interaction.female.drives.state
 
         interaction.male.drives.o_drive = male_o_drive
-        interaction.male.drives.P_drive = male_p_drive
+        interaction.male.drives.p_drive = male_p_drive
+        interaction.male.body_neopixel.drive.on()
 
         assert interaction.female.drives.is_frustated
 
         print(f"Move bar to interaction.")
-        self.bar.move_and_wait(position = self.bar.nearby_interaction.position)
+        self.bar.move_and_wait(position = self.bar.nearby_interaction.position+self.bar.dxl_origin)
         # interaction.male.search.start()
 
         interaction.start()

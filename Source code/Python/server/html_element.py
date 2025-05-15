@@ -23,7 +23,7 @@ class HTMLElement:
         if self._start_response is None:
             return self.owner.start_response
         return self._start_response
-        
+
     @staticmethod
     def retrieve_call_origin():
         # Get the current call stack
