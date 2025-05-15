@@ -261,6 +261,11 @@ class Colloquy(ThreadDriver):
         else:
             interaction.male.microphone = False
 
+        if override_microphone == "True":
+            interaction.male.microphone = True
+        else:
+            interaction.male.microphone = False
+
         assert interaction.female.drives.is_frustated
 
         print(f"Move bar to interaction.")
@@ -341,6 +346,7 @@ class Colloquy(ThreadDriver):
                     text(f"Override microphone:")
 
                 with tag("select", name="override_microphone", id=f"{self.name}/override_microphone", required=True):
+
                     with tag("option", value="True", ):
                         text(f"Always hears fem")
                     with tag("option", value="False", selected=True):
