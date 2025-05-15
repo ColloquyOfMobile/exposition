@@ -4,6 +4,7 @@ from colloquy.neopixel_driver import NeopixelDriver
 from colloquy.drives_handler import DrivesHandler
 from colloquy.thread_driver import ThreadDriver
 from .search import Search
+from .conversation import Conversation
 from threading import Lock
 from time import sleep
 
@@ -19,6 +20,7 @@ class FemaleDriver(Body):
         self.neopixel = NeopixelDriver(owner=self, name="neopixel")
         self.drives = DrivesHandler(owner=self, neopixel=self.neopixel)
         self._search = Search(owner=self)
+        self._conversation = Conversation(owner=self)
 
         dxl_manager = kwargs["dynamixel manager"]
         dxl_id = kwargs["dynamixel id"]
@@ -32,15 +34,23 @@ class FemaleDriver(Body):
             self.mirror = MirrorDriver(owner=self, **mirror_kwargs)
         self._target_drive = None
 
-    @property
-    def target_drive(self):
-        return self._target_drive
-
     def __enter__(self):
         assert self.dxl_origin is not None, "Calibrate colloquy."
         self.stop_event.clear()
         self.drives.start()
         self.neopixel.on()
+
+    @property
+    def target_drive(self):
+        return self._target_drive
+
+    @target_drive.setter
+    def target_drive(self, value):
+        self._target_drive = value
+
+    @property
+    def conversation(self):
+        return self._conversation
 
     def _loop(self):
         pass
@@ -89,6 +99,9 @@ class FemaleDriver(Body):
         Body.open(self)
         self.neopixel.open()
         self.mirror.open()
+
+    def notify_male(self):
+        self.speaker.notify()
 
     def _add_html_start(self):
         doc, tag, text = self.html_doc.tagtext()

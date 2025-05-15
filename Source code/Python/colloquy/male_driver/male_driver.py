@@ -91,4 +91,3 @@ class MaleDriver(Body):
         self.stop()
         self.thread.join()
         self.colloquy.bar.search.stop()
-

@@ -1,6 +1,7 @@
 from .thread_driver import ThreadDriver
 from pathlib import Path
 from threading import Event
+from time import sleep
 
 class SpeakerDriver(ThreadDriver):
 
@@ -8,7 +9,7 @@ class SpeakerDriver(ThreadDriver):
         self._owner = owner
         self.arduino_manager = arduino_manager
         self._on_off_state = None
-    
+
     @property
     def is_on(self):
         return self._on_off_state
@@ -45,3 +46,8 @@ class SpeakerDriver(ThreadDriver):
             self.on()
             self._on_off_state = True
             return
+
+    def notify(self):
+        self.on()
+        sleep(0.5)
+        self.off()

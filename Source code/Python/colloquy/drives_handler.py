@@ -20,8 +20,8 @@ class DrivesHandler(ThreadDriver):
         name = f"{owner.name}_drives"
         ThreadDriver.__init__(self, name=name, owner=owner)
         self._neopixel = neopixel
-        self.o_drive = 0
-        self.p_drive = 0
+        self._o_drive = 0
+        self._p_drive = 0
         self._update_interval = 2
         self._timestamp = time()
 
@@ -31,8 +31,8 @@ class DrivesHandler(ThreadDriver):
         self._max = 255
         self._min = 0
 
-        self._satisfied = 10
-        self._frustrated = 235
+        self._satisfaction_lim = 10
+        self._frustrated_lim = 235
 
         self._lock = Lock()
 
@@ -72,20 +72,20 @@ class DrivesHandler(ThreadDriver):
     def state(self):
         # raise NotImplementedError(f"Update to return a tuple for the states")
         with self._lock:
-            o_satisfied = self.o_drive < self._satisfied
-            p_satisfied = self.p_drive < self._satisfied
-            o_frustated = self.o_drive > self._frustrated
-            p_frustated = self.p_drive > self._frustrated
+            o_satisfaction_lim = self.o_drive < self._satisfaction_lim
+            p_satisfaction_lim = self.p_drive < self._satisfaction_lim
+            o_frustated = self.o_drive > self._frustrated_lim
+            p_frustated = self.p_drive > self._frustrated_lim
 
-            if o_satisfied and p_satisfied:
+            if o_satisfaction_lim and p_satisfaction_lim:
                 return tuple()
             if o_frustated and p_frustated:
                 return ("O", "P")
             if self.o_drive > self.p_drive:
-                assert not o_satisfied
+                assert not o_satisfaction_lim
                 return ("O", )
             if self.p_drive > self.o_drive:
-                assert not p_satisfied
+                assert not p_satisfaction_lim
                 return ("P", )
             if self.p_drive == self.o_drive:
                 return ("O", "P")
@@ -93,8 +93,41 @@ class DrivesHandler(ThreadDriver):
             raise ValueError(f"Drive Error, {self.o_drive=}, {self.p_drive=}")
 
     @property
+    def max(self):
+        return self._max
+
+    @property
+    def o_drive(self):
+        return self._o_drive
+
+    @o_drive.setter
+    def o_drive(self, value):
+        assert isinstance(value, int)
+        self._o_drive = value
+        self._update_neopixel()
+
+    @property
+    def p_drive(self):
+        return self._p_drive
+
+    @o_drive.setter
+    def p_drive(self, value):
+        assert isinstance(value, int)
+        self._p_drive = value
+        self._update_neopixel()
+
+    @property
     def is_unsatisfied(self):
+        raise NotImplementedError(f"Use is_frustrated_lim instead!")
         return bool(self.state)
+
+    @property
+    def is_frustated(self):
+        return bool(self.state)
+
+    @property
+    def satisfaction_lim(self):
+        return self._satisfaction_lim
 
     def __enter__(self):
         """Setup before loop."""
@@ -135,8 +168,8 @@ class DrivesHandler(ThreadDriver):
 
 
     def satisfy(self):
-        self.o_drive =  self._satisfied
-        self.p_drive =  self._satisfied
+        self.o_drive = self._satisfaction_lim
+        self.p_drive = self._satisfaction_lim
 
     def _update_neopixel(self):
         state, brightness, color = self.value

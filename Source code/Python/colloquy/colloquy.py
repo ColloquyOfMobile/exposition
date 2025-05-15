@@ -52,13 +52,16 @@ class Colloquy(ThreadDriver):
         self._init_males(params)
 
         # Defined at for each bar position, which female and male interacts
+        nearby_interactions = [
+            NearbyInteraction(owner=self, male=self.male1, female=self.female1, position=0),
+            NearbyInteraction(owner=self, male=self.male2, female=self.female3, position=2200),
+            NearbyInteraction(owner=self, male=self.male1, female=self.female2, position=4300),
+            NearbyInteraction(owner=self, male=self.male2, female=self.female1, position=6200),
+            NearbyInteraction(owner=self, male=self.male1, female=self.female3, position=8400),
+            NearbyInteraction(owner=self, male=self.male2, female=self.female2, position=10400),
+        ]
         self.nearby_interactions = {
-            0: NearbyInteraction(self, self.male1, self.female1),
-            2200: NearbyInteraction(self, self.male2, self.female3),
-            4300: NearbyInteraction(self, self.male1, self.female2),
-            6200: NearbyInteraction(self, self.male2, self.female1),
-            8400: NearbyInteraction(self, self.male1, self.female3),
-            10400: NearbyInteraction(self, self.male2, self.female2),
+            e.position: e for e in nearby_interactions
         }
 
         self._init_bar(params)
@@ -179,6 +182,9 @@ class Colloquy(ThreadDriver):
     def _loop(self):
         pass
 
+    def __exit__(self, exc_type, exc_value, traceback_obj):
+        self.turn_to_origin_position()
+        return ThreadDriver.__exit__(self, exc_type, exc_value, traceback_obj)
 
     def open(self):
         if self._is_open:
@@ -202,10 +208,6 @@ class Colloquy(ThreadDriver):
         self.bar.turn_to_origin_position()
         self._dxl_manager.close()
         self._arduino_manager.close()
-        # for female in self.females:
-            # female.close()
-        # for male in self.males:
-            # male.close()
 
         print("Colloquy closed.")
 
@@ -229,20 +231,38 @@ class Colloquy(ThreadDriver):
             element.add_html()
 
     def _interact(self, **kwargs):
-        male = kwargs.pop("male")[0]
-        female = kwargs.pop("female")[0]
-        fem_o_drive = kwargs.pop("fem_o_drive")[0]
-        fem_p_drive = kwargs.pop("fem_p_drive")[0]
-        male_o_drive = kwargs.pop("male_o_drive")[0]
-        male_p_drive = kwargs.pop("male_p_drive")[0]
+        male_name = kwargs.pop("male")[0]
+        female_name = kwargs.pop("female")[0]
+        fem_o_drive = int(kwargs.pop("fem_o_drive")[0])
+        fem_p_drive = int(kwargs.pop("fem_p_drive")[0])
+        male_o_drive = int(kwargs.pop("male_o_drive")[0])
+        male_p_drive = int(kwargs.pop("male_p_drive")[0])
+        fem_target_drive = tuple(kwargs.pop("fem_target_drive"))
+
 
         for interaction in self.colloquy.nearby_interactions.values():
             if interaction.male.name == male_name:
-                if interaction.female.name == self.owner.name:
+                if interaction.female.name == female_name:
                     self.colloquy.bar.nearby_interaction = interaction
                     break
+        else:
+            raise ValueError(f"No interaction found for {female_name=}, {male_name=}")
 
-        raise NotImplementedError
+        interaction.female.target_drive = fem_target_drive
+
+        interaction.female.drives.o_drive = fem_o_drive
+        interaction.female.drives.p_drive = fem_p_drive
+
+        interaction.male.drives.o_drive = male_o_drive
+        interaction.male.drives.P_drive = male_p_drive
+
+        assert interaction.female.drives.is_frustated
+
+        print(f"Move bar to interaction.")
+        self.bar.move_and_wait(position = self.bar.nearby_interaction.position)
+        # interaction.male.search.start()
+
+        interaction.start()
 
     def _add_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -275,6 +295,19 @@ class Colloquy(ThreadDriver):
         with tag("h2"):
             text("Interact")
 
+        if self.bar.nearby_interaction is None:
+            self._add_html_interaction_start()
+            return
+
+        else:
+            if not self.bar.nearby_interaction.is_started:
+                self._add_html_interaction_start()
+                return
+
+        self._add_html_interaction_stop()
+
+    def _add_html_interaction_start(self):
+        doc, tag, text = self.html_doc.tagtext()
         with tag("form", method="post"):
             with tag("div"):
                 with tag("label", **{"for": f"{self.name}/interacting_male"}):
@@ -299,34 +332,59 @@ class Colloquy(ThreadDriver):
                         text(f"female3")
 
             with tag("div"):
+                with tag("label", **{"for": f"{self.name}/fem_target_drive"}):
+                    text(f"Female target drive (can select one or both):")
+
+                with tag("select", name="fem_target_drive", id=f"{self.name}/fem_target_drive", multiple=True, required=True):
+                    with tag("option", value="O", selected=True):
+                        text(f"'O'")
+                    with tag("option", value="P"):
+                        text(f"'P'")
+
+            min_value = 10
+            max_value = 255
+            with tag("div"):
                 with tag("label", **{"for": f"{self.name}/fem_o_drive"}):
                     text(f"Fem O drive:")
 
-                with tag("input", type="number", id=f"{self.name}/fem_o_drive", name="fem_o_drive", value=0):
+                with tag("input", type="number", id=f"{self.name}/fem_o_drive", name="fem_o_drive", value=min_value, min=min_value, max=max_value):
                     pass
 
             with tag("div"):
                 with tag("label", **{"for": f"{self.name}/fem_p_drive"}):
                     text(f"Fem P drive:")
 
-                with tag("input", type="number", id=f"{self.name}/fem_p_drive", name="fem_p_drive", value=0):
+                with tag("input", type="number", id=f"{self.name}/fem_p_drive", name="fem_p_drive", value=min_value, min=min_value, max=max_value):
                     pass
 
             with tag("div"):
                 with tag("label", **{"for": f"{self.name}/male_o_drive"}):
                     text(f"Male O drive:")
 
-                with tag("input", type="number", id=f"{self.name}/male_o_drive", name="male_o_drive", value=0):
+                with tag("input", type="number", id=f"{self.name}/male_o_drive", name="male_o_drive", value=min_value, min=min_value, max=max_value):
                     pass
 
             with tag("div"):
                 with tag("label", **{"for": f"{self.name}/male_p_drive"}):
                     text(f"Male P drive:")
 
-                with tag("input", type="number", id=f"{self.name}/male_p_drive", name="male_p_drive", value=0):
+                with tag("input", type="number", id=f"{self.name}/male_p_drive", name="male_p_drive", value=min_value, min=min_value, max=max_value):
                     pass
 
             with tag("button", name="action", value="colloquy/interact"):
                 text(f"Start.")
 
             self.colloquy.actions["colloquy/interact"] = self._interact
+
+    def _add_html_interaction_stop(self):
+        doc, tag, text = self.html_doc.tagtext()
+        male = self.bar.nearby_interaction.male
+        female = self.bar.nearby_interaction.female
+        with tag("form", method="post"):
+            with tag("div"):
+                text(f"Interacting between {male.name}-{female.name}!")
+
+            with tag("button", name="action", value="colloquy/interact/stop"):
+                text(f"Stop.")
+
+            self.colloquy.actions["colloquy/interact/stop"] = self.bar.nearby_interaction.stop

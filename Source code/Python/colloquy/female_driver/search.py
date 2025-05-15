@@ -43,4 +43,3 @@ class Search(ThreadDriver):
             with tag("button", name="action", value=f"{self.path.as_posix()}/stop"):
                 text(f"Stop.")
             self.colloquy.actions[f"{self.path.as_posix()}/stop"] = self.stop
-

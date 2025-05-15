@@ -14,7 +14,7 @@ class Body(SharedDriver):
         self.arduino_manager = kwargs["arduino manager"]
         self.interaction_event = Event()
         self.speaker = SpeakerDriver(owner=self, arduino_manager=self.arduino_manager)
-    
+
     @property
     def search(self):
         return self._search

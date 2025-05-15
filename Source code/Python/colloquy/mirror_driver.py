@@ -11,9 +11,6 @@ class MirrorDriver(SharedDriver):
     def turn_to_up_position(self):
         self.turn_to_min_position()
 
-    # def open(self):
-        # pass
-
     def __enter__(self):
         assert self.dxl_origin is not None, "Calibrate colloquy."
         self.stop_event.clear()
@@ -30,18 +27,12 @@ class MirrorDriver(SharedDriver):
             print(f"Toggle position for {self.name=}...")
             self.toggle_position()
 
-            # print(f"Toggle position for {self.dxl.dxl_id=}...")
             while self.is_moving:
                 if self.stop_event.is_set():
                     break
                 self._sleep_min()
 
-            female.drives.decrease(target_drive)
-            male.drives.decrease(target_drive)
-
-
         self.stop_event.set()
-        # raise NotImplementedError(f"Start the mirror thread.")
 
     def _setup(self, male, fem_o_drive, fem_p_drive, **kwargs):
         male_name = male[0]
