@@ -33,6 +33,14 @@ class NearbyInteraction(ThreadDriver):
     def female(self):
         return self._female
 
+    def move_to_position_and_wait(self):
+        bar = self.colloquy.bar
+        position = self.position + bar.dxl_origin
+        bar.goal_position = position
+        self.female.turn_to_origin_position()
+        self.male.turn_to_origin_position()
+        self.colloquy.wait_until_everything_is_still()
+
     def _loop(self):
         pass
 

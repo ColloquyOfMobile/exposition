@@ -184,8 +184,10 @@ class VirtualDynamixelManager(DynamixelManager):
     def dxls(self):
         return self._dxls
 
-    def _get_com_ports(self):
-        return ["VirtualCOM1", "VirtualCOM2"]
+    def stop(self):
+        for element in self.elements:
+            element.stop()
+        # self._dxls.clear()
 
     def open(self):
         DynamixelManager.open(self)
@@ -195,3 +197,6 @@ class VirtualDynamixelManager(DynamixelManager):
         DynamixelManager.close(self)
         for dxl in self.packet_handler.dxls.values():
             dxl.stop()
+
+    def _get_com_ports(self):
+        return ["VirtualCOM1", "VirtualCOM2"]

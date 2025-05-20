@@ -57,14 +57,28 @@ class Root(HTMLElement):
                 ' interactive-widget=resizes-content" />'
             )
 
-        response = doc.read()
-        yield response.encode()
+        # response = doc.read()
+        # yield response.encode()
 
     def _write_body(self, **kwargs):
         doc, tag, text = self.html_doc.tagtext()
         with tag("body"):
             with tag("h1",):
-                text("Colloquy of Mobiles")
+                text(
+                    f"Colloquy of Mobiles (threads={self._colloquy.thread_count})"
+                    )
+
+            if self._colloquy.thread_count:
+                with tag("details",):
+                    with tag("summary",):
+                        text(
+                            f"threads: {self._colloquy.thread_count}"
+                            )
+                    for e in self._colloquy.iter_thread_pool():
+                        with tag("summary",):
+                            text(
+                                f"{e.name}"
+                                )
 
             if self.active is not None:
                 self.active(**kwargs)

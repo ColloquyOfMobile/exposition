@@ -133,15 +133,18 @@ class DynamixelManager(ThreadDriver):
         self.colloquy.save()
 
     def add_html(self):
+        pass
+
+    def add_html_com(self):
         doc, tag, text = self.html_doc.tagtext()
-        with tag("h3"):
-            text("DXL manager:")
+        # with tag("h3"):
+            # text("DXL manager:")
 
         port_list = self._get_com_ports()
 
         with tag("form", method="post"):
             with tag("label", **{"id": "dxl_manager/com_port"}):
-                text(f"Com port:")
+                text(f"DXL com port:")
 
             with tag("select", id="dxl_manager/com_port", name="com_port"):
                 for port in port_list:

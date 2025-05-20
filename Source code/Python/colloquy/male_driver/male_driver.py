@@ -3,6 +3,7 @@ from colloquy.neopixel_driver import NeopixelDriver
 from colloquy.drives_handler import DrivesHandler
 from .body_neopixels import BodyNeopixels
 from .search import Search
+from .conversation import Conversation
 from time import time, sleep
 from threading import Event, Thread
 import traceback
@@ -19,6 +20,7 @@ class MaleDriver(Body):
         self.body_neopixel = BodyNeopixels(owner=self)
         self.up_ring = NeopixelDriver(owner=self, name="up_ring")
         self._search = Search(owner=self)
+        self._conversation = Conversation(owner=self)
 
         self.drives = DrivesHandler(owner=self, neopixel=self.body_neopixel.drive)
 
@@ -32,7 +34,18 @@ class MaleDriver(Body):
         self.body_neopixel.start()
         self.drives.start()
         self.body_neopixel.drive.on()
-        # self._update_drive_pixel()
+
+    @property
+    def beam(self):
+        return self.body_neopixel.beam
+
+    @property
+    def conversation(self):
+        return self._conversation
+
+    @property
+    def is_beaming(self):
+        return self.body_neopixel.beam.is_started
 
     def _loop(self):
         pass
@@ -97,8 +110,6 @@ class MaleDriver(Body):
             interaction = self.colloquy.bar.nearby_interaction
             if interaction is not None:
                 if interaction.is_started:
-                   if interaction.female.is_notifing:
-                       return True
-
+                   return interaction.female.is_notifing
             # raise NotImplementedError
         return False

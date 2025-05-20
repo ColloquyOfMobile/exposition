@@ -110,15 +110,16 @@ class ArduinoManager(ThreadDriver):
                 raise RuntimeError("Arduino was to long to reboot !")
 
     def add_html(self):
+        pass
+
+    def add_html_com(self):
         doc, tag, text = self.html_doc.tagtext()
-        with tag("h3"):
-            text("Arduino:")
 
         port_list = self._get_com_ports()
 
         with tag("form", method="post"):
             with tag("label", **{"id": "arduino/com_port"}):
-                text(f"Com port:")
+                text(f"Arduino com port:")
 
             with tag("select", id="arduino/com_port", name="com_port"):
                 for port in port_list:

@@ -2,10 +2,12 @@ from time import sleep, time
 from pathlib import Path
 from .logger import Logger
 import traceback
-from threading import Thread, Event
+from threading import Thread, Event, Lock
 from server.html_element import HTMLElement
 
 class ThreadDriver(HTMLElement):
+
+    _thread_pool = set()
 
     def __init__(self, name, owner):
         HTMLElement.__init__(self, owner)
@@ -22,8 +24,12 @@ class ThreadDriver(HTMLElement):
         self._stop_event = Event()
         self._stop_event.set()
         self._elements = set()
+        self._pool_lock = Lock()
         if self._owner is not None:
             self._owner.elements.add(self)
+
+    def __repr__(self):
+        return self.path.as_posix()
 
     def __eq__(self, other):
         if not isinstance(other, ThreadDriver):
@@ -45,21 +51,37 @@ class ThreadDriver(HTMLElement):
         )
 
     def __exit__(self, exc_type, exc_value, traceback_obj):
+        self.is_started = False
+        self._thread_pool.discard(self.thread)
         if exc_type is not None:
-            self.colloquy.stop_event.set()
+            # self.stop()
+            self.colloquy.stop()
             self._exception = exc_value
             msg = ''.join(traceback.format_exception(exc_type, exc_value, traceback_obj))
             self.log(msg)
             print(f"Error ({exc_type=}) in {self.path.as_posix()}")
-            self.stop()
-        else:
-            assert self.stop_event.is_set()
-        self._is_started = False
+        for element in self.elements:
+            element.stop()
+        for element in self.elements:
+            element.join()
+        print(f"Exited thread: {self.thread.name=}")
         return True  # suppress exception if any
 
     @property
     def is_started(self):
+        for e in self.elements:
+            if e.is_started:
+                return True
+        # raise NotImplementedError(f"Detect from here.")
         return self._is_started
+
+    @is_started.setter
+    def is_started(self, value):
+        # if value:
+            # self._is_started = value
+            # self.owner.is_started = value
+            # return
+        self._is_started = value
 
     @property
     def param(self):
@@ -101,6 +123,26 @@ class ThreadDriver(HTMLElement):
     def log(self):
         return self._log
 
+    @property
+    def thread_count(self):
+        # for thread in self._thread_pool:
+            # print(f"{thread=}, {thread.is_alive()=}")
+        return len(self._thread_pool)
+
+    def join(self):
+        if self.thread is None:
+            return
+        for element in self.elements:
+            element.join()
+        self.thread.join()
+
+    def _add_thread_to_pool(self, value):
+        with self._pool_lock:
+            self._thread_pool.add(value)
+
+    def iter_thread_pool(self):
+        yield from sorted(self._thread_pool, key=lambda x:x.name)
+
     def _sleep_min(self):
         sleep(0.01)
 
@@ -108,29 +150,28 @@ class ThreadDriver(HTMLElement):
         raise NotImplementedError(f"for {self.name}, ({kwargs=})!")
 
     def start(self, **kwargs):
+        self.stop_event.clear()
         if kwargs:
             self._setup(**kwargs)
 
         self.log(f"Starting {self.path.as_posix()}...")
-        self._is_started = True
+        self.is_started = True
         if self._thread is not None:
             if self._thread.is_alive():
                 return
-        self.stop_event.clear()
         self.threads.clear()
-        self._thread = thread = Thread(target=self.run, name=self._name)
+        self._thread = thread = Thread(target=self.run, name=self.path.as_posix())
         self.owner.threads.add(thread)
+        self._add_thread_to_pool(thread)
         thread.start()
         self.log(f"...{self.path.as_posix()} started.")
 
     def stop(self):
-        self.stop_event.set()
+        if self._is_started:
+            self.stop_event.set()
+            return
         for element in self.elements:
             element.stop()
-
-        for thread in self.threads:
-            thread.join()
-        self._is_started = False
 
     def run(self, **kwargs):
         with self:

@@ -35,9 +35,9 @@ class Search(ThreadDriver):
             self.owner.toggle_position()
 
         if self.owner.listen_for_notification():
-           self.search.stop()
-           self.conversation.start()
-           raise NotImplementedError()
+           self.stop()
+           self.owner.conversation.start()
+           # raise NotImplementedError()
 
     def add_html(self):
         doc, tag, text = self.html_doc.tagtext()

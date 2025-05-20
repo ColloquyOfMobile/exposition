@@ -32,6 +32,7 @@ class BodyNeopixels(ThreadDriver):
         ThreadDriver.__init__(self, name="body", owner=owner)
         self.ring = NeopixelDriver(owner=self, name="ring")
         self.drive = NeopixelDriver(owner=self, name="drive")
+        self._beam = Beam(owner=self)
         self.light_patterns = {}
         for k, v in LIGHT_PATTERNS[owner.name].items():
             # The deque with max_len will act as circular list
@@ -41,6 +42,10 @@ class BodyNeopixels(ThreadDriver):
     # @property
     # def blink(self):
         # return self._blink
+
+    @property
+    def beam(self):
+        return self._beam
 
     @property
     def arduino_manager(self):
@@ -62,6 +67,22 @@ class BodyNeopixels(ThreadDriver):
         # self.sleep_min()
 
     def stop(self):
-        self.ring.off()
-        self.drive.off()
+        self.off()
         ThreadDriver.stop(self)
+
+class Beam(ThreadDriver):
+
+    def __init__(self, owner):
+        ThreadDriver.__init__(self, owner=owner, name=f"beam")        
+
+    def __enter__(self):
+        print(f"The {self.owner.owner.name} is beaming...")
+        self.stop_event.clear()
+        self.owner.ring.on()     
+        
+    def __exit__(self, exc_type, exc_value, traceback_obj):
+        self.owner.ring.off()
+        return ThreadDriver.__exit__(self, exc_type, exc_value, traceback_obj)
+
+    def _loop(self):
+        pass
