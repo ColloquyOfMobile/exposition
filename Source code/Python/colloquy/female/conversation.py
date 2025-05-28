@@ -39,6 +39,7 @@ class Conversation(ThreadElement):
                 print(f"The male doesn't encourage...")
                 self.stop_event.set()
                 self.colloquy.bar.interaction.stop()
+                self.owner.mirror.stop()
                 self.owner.drives.start()
 
             if self.owner.microphone.is_encouraged:
@@ -50,7 +51,7 @@ class Conversation(ThreadElement):
                 continue
 
             self.stop_event.set()
-            self.owner.mirror.turn_to_origin_position()
+            self.owner.mirror.stop()
             self._climax()
             self.colloquy.bar.interaction.stop()
             self.owner.drives.start()

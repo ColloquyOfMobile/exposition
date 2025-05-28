@@ -135,3 +135,11 @@ class Mirror(MovingPart):
         with tag("button", name="action", value=f"{self.name}/start"):
             text(f"Start.")
         self.colloquy.actions[f"{self.name}/start"] = self.start
+
+    # def stop(self, **kwargs):
+        # raise NotImplementedError
+        # if self._is_started:
+            # self.stop_event.set()
+            # return
+        # for element in self.elements:
+            # element.stop()
