@@ -1,12 +1,13 @@
-from .thread_driver import ThreadDriver
+from .thread_element import ThreadElement
 
-class NearbyInteraction(ThreadDriver):
+class Interaction(ThreadElement):
 
     def __init__(self, owner, male, female, position):
-        ThreadDriver.__init__(self, owner=owner, name=f"interaction {male.name}-{female.name}")
+        ThreadElement.__init__(self, owner=owner, name=f"interaction {male.name}-{female.name}")
         self._male = male
         self._female = female
         self._position = position
+        self.target_drive = tuple()
 
     def __iter__(self):
         yield self.male
@@ -19,7 +20,7 @@ class NearbyInteraction(ThreadDriver):
     def __exit__(self, exc_type, exc_value, traceback_obj):
         if self.female.conversation.is_started:
             self.female.conversation.stop()
-        return ThreadDriver.__exit__(self, exc_type, exc_value, traceback_obj)
+        return ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
 
     @property
     def position(self):

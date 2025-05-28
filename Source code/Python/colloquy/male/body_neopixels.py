@@ -1,6 +1,6 @@
-# from collo.thread_driver import ThreadDriver
-from colloquy.neopixel_driver import NeopixelDriver
-from colloquy.thread_driver import ThreadDriver
+# from collo.thread import Thread
+from colloquy.neopixel import Neopixel
+from colloquy.thread_element import ThreadElement
 from pathlib import Path
 from threading import Event
 from collections import deque
@@ -26,12 +26,12 @@ LIGHT_PATTERNS = {
     }
 }
 
-class BodyNeopixels(ThreadDriver):
+class BodyNeopixels(ThreadElement):
 
     def __init__(self, owner):
-        ThreadDriver.__init__(self, name="body", owner=owner)
-        self.ring = NeopixelDriver(owner=self, name="ring")
-        self.drive = NeopixelDriver(owner=self, name="drive")
+        ThreadElement.__init__(self, name="body", owner=owner)
+        self.ring = Neopixel(owner=self, name="ring")
+        self.drive = Neopixel(owner=self, name="drive")
         self._beam = Beam(owner=self)
         self.light_patterns = {}
         for k, v in LIGHT_PATTERNS[owner.name].items():
@@ -68,12 +68,12 @@ class BodyNeopixels(ThreadDriver):
 
     def stop(self):
         self.off()
-        ThreadDriver.stop(self)
+        ThreadElement.stop(self)
 
-class Beam(ThreadDriver):
+class Beam(ThreadElement):
 
     def __init__(self, owner):
-        ThreadDriver.__init__(self, owner=owner, name=f"beam")        
+        ThreadElement.__init__(self, owner=owner, name=f"beam")        
 
     def __enter__(self):
         print(f"The {self.owner.owner.name} is beaming...")
@@ -82,7 +82,7 @@ class Beam(ThreadDriver):
         
     def __exit__(self, exc_type, exc_value, traceback_obj):
         self.owner.ring.off()
-        return ThreadDriver.__exit__(self, exc_type, exc_value, traceback_obj)
+        return ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
 
     def _loop(self):
         pass

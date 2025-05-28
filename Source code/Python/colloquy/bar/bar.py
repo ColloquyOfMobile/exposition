@@ -1,26 +1,26 @@
-from colloquy.dxl_driver import DXLDriver
-from colloquy.thread_driver import ThreadDriver
+from colloquy.dxl import DXL
+from colloquy.thread_element import ThreadElement
 from time import time, sleep
 from threading import Event
 from .search import Search
 
-class BarDriver(ThreadDriver):
+class BarDriver(ThreadElement):
 
     def __init__(self, owner, **kwargs):
-        ThreadDriver.__init__(self, name=kwargs["name"], owner=owner)
+        ThreadElement.__init__(self, name=kwargs["name"], owner=owner)
         self._position_memory = None
         dxl_manager = kwargs["dynamixel manager"]
         dxl_ids = kwargs["dynamixel ids"]
         self.dxl_origin = kwargs["origin"]
         self.motion_range = kwargs["motion range"]
         self.moving_threshold = 20
-        self.nearby_interaction = None
+        self.interaction = None
         self.interaction_event = Event()
 
         self.nearby_positions = []
         self.offset = None
-        self.dxl1 = DXLDriver(dxl_manager, dxl_ids[0])
-        self.dxl2 = DXLDriver(dxl_manager, dxl_ids[1])
+        self.dxl1 = DXL(dxl_manager, dxl_ids[0])
+        self.dxl2 = DXL(dxl_manager, dxl_ids[1])
 
         self._search = Search(owner=self)
 
@@ -30,7 +30,7 @@ class BarDriver(ThreadDriver):
 
     def __exit__(self, exc_type, exc_value, traceback_obj):
         self.turn_to_origin_position()
-        return ThreadDriver.__exit__(self, exc_type, exc_value, traceback_obj)
+        return ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
 
     @property
     def search(self):
@@ -179,12 +179,12 @@ class BarDriver(ThreadDriver):
         position = self.nearby_positions.pop(0)
         self.nearby_positions.append(position)
         self.goal_position = position
-        self.nearby_interaction = self.colloquy.nearby_interactions[position-self.dxl_origin]
+        self.interaction = self.colloquy.nearby_interactions[position-self.dxl_origin]
 
     def wait_interaction_end(self):
-        print(f"Waiting nearby_interaction end.")
-        nearby_interaction = self.nearby_interaction
-        busy = nearby_interaction.busy
+        print(f"Waiting interaction end.")
+        interaction = self.interaction
+        busy = interaction.busy
 
         while busy():
             if self.stop_event.is_set():

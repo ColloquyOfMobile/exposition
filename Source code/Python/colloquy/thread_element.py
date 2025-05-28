@@ -5,7 +5,7 @@ import traceback
 from threading import Thread, Event, Lock
 from server.html_element import HTMLElement
 
-class ThreadDriver(HTMLElement):
+class ThreadElement(HTMLElement):
 
     _thread_pool = set()
 
@@ -32,12 +32,12 @@ class ThreadDriver(HTMLElement):
         return self.path.as_posix()
 
     def __eq__(self, other):
-        if not isinstance(other, ThreadDriver):
+        if not isinstance(other, ThreadElement):
             return NotImplemented
         return self is other
 
     def __lt__(self, other):
-        if not isinstance(other, ThreadDriver):
+        if not isinstance(other, ThreadElement):
             return NotImplemented
         return self.name < other.name
 
@@ -46,9 +46,10 @@ class ThreadDriver(HTMLElement):
 
     # 👇 Context manager methods
     def __enter__(self):
-        raise NotImplementedError(
-        f"for {self=}"
-        )
+        self.stop_event.clear()
+        # raise NotImplementedError(
+        # f"for {self=}"
+        # )
 
     def __exit__(self, exc_type, exc_value, traceback_obj):
         self.is_started = False
@@ -64,7 +65,7 @@ class ThreadDriver(HTMLElement):
             element.stop()
         for element in self.elements:
             element.join()
-        print(f"Exited thread: {self.thread.name=}")
+        self.log(f"Exited thread: {self.thread.name=}")
         return True  # suppress exception if any
 
     @property
@@ -147,12 +148,11 @@ class ThreadDriver(HTMLElement):
         sleep(0.01)
 
     def _setup(self, **kwargs):
-        raise NotImplementedError(f"for {self.name}, ({kwargs=})!")
+        pass
+        # raise NotImplementedError(f"for {self.name}, ({kwargs=})!")
 
     def start(self, **kwargs):
         self.stop_event.clear()
-        if kwargs:
-            self._setup(**kwargs)
 
         self.log(f"Starting {self.path.as_posix()}...")
         self.is_started = True
@@ -166,7 +166,7 @@ class ThreadDriver(HTMLElement):
         thread.start()
         self.log(f"...{self.path.as_posix()} started.")
 
-    def stop(self):
+    def stop(self, **kwargs):
         if self._is_started:
             self.stop_event.set()
             return
@@ -175,6 +175,7 @@ class ThreadDriver(HTMLElement):
 
     def run(self, **kwargs):
         with self:
+            self._setup(**kwargs)
             while not self.stop_event.is_set():
                 self._loop()
                 self._sleep_min()

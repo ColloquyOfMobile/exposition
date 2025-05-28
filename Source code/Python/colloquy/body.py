@@ -1,19 +1,19 @@
-from .shared_driver import SharedDriver
-from .speaker_driver import SpeakerDriver
+from .moving_part import MovingPart
+from .speaker import Speaker
 from pathlib import Path
 from threading import Event
 from threading import Timer
 import traceback
 
 
-class Body(SharedDriver):
+class Body(MovingPart):
 
     def __init__(self, owner, **kwargs):
         dxl_manager = kwargs["dynamixel manager"]
-        SharedDriver.__init__(self, owner, **kwargs)
+        MovingPart.__init__(self, owner, **kwargs)
         self.arduino_manager = kwargs["arduino manager"]
         self.interaction_event = Event()
-        self._speaker = SpeakerDriver(owner=self, arduino_manager=self.arduino_manager)
+        self._speaker = Speaker(owner=self, arduino_manager=self.arduino_manager)
         self._microphone = None
 
     @property
@@ -33,7 +33,7 @@ class Body(SharedDriver):
         self._microphone = value
 
     def open(self):
-        SharedDriver.open(self)
+        MovingPart.open(self)
 
     def turn_to_left_position(self):
         self.turn_to_max_position()

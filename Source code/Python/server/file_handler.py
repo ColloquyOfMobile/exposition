@@ -1,11 +1,12 @@
 import mimetypes
+from .http_element import HTTPElement
 
-class FileHandler():
-    def __init__(self, wsgi):
-        self._wsgi = wsgi
+class FileHandler(HTTPElement):
+    def __init__(self, owner):
+        HTTPElement.__init__(self, owner)
 
-    def __call__(self, **kwargs):
-        file_path = self._wsgi.path
+    def __call__(self, environ):
+        file_path = self._parse_path(environ)
         try:
             # Open the requested file
             with open(file_path, 'rb') as f:
@@ -16,12 +17,12 @@ class FileHandler():
             if content_type is None:
                 content_type = 'application/octet-stream'  # Default content type
 
-            self._wsgi.start_response('200 OK', [('Content-Type', content_type)])
+            self.start_response('200 OK', [('Content-Type', content_type)])
             yield content
 
         except IOError:
             # File not found
-            self._wsgi.start_response('404 Not Found', [('Content-Type', 'text/plain')])
+            self.start_response('404 Not Found', [('Content-Type', 'text/plain')])
             message = f'{file_path.as_posix()} not found !'
             print(message)
             yield message.encode()

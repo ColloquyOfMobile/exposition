@@ -1,14 +1,24 @@
-from .thread_driver import ThreadDriver
+from .thread_element import ThreadElement
 from pathlib import Path
 from threading import Event
 from time import sleep
 
-class SpeakerDriver(ThreadDriver):
+class Speaker(ThreadElement):
 
     def __init__(self, owner, arduino_manager):
         self._owner = owner
         self.arduino_manager = arduino_manager
         self._on_off_state = None
+        self._is_notifing = False
+        self._is_encouraging = False
+
+    @property
+    def is_encouraging(self):
+        return self._is_encouraging
+
+    @property
+    def is_notifing(self):
+        return self._is_notifing
 
     @property
     def is_on(self):
@@ -48,8 +58,19 @@ class SpeakerDriver(ThreadDriver):
             return
 
     def notify(self):
-        for i in range(5):
+        self._is_notifing = True
+        for i in range(3):
             self.on()
-            sleep(0.5)
+            sleep(0.3)
             self.off()
-            sleep(0.5)
+            sleep(0.3)
+        self._is_notifing = False
+
+    def encourage(self):
+        self._is_encouraging = True
+        for i in range(3):
+            self.on()
+            sleep(0.3)
+            self.off()
+            sleep(0.3)
+        self._is_encouraging = False

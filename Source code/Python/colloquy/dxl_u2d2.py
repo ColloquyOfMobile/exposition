@@ -5,7 +5,7 @@ from time import sleep
 from pathlib import Path
 import serial.tools.list_ports
 from .logger import Logger
-from .thread_driver import ThreadDriver
+from .thread_element import ThreadElement
 
 
 def handle_error(func):
@@ -32,7 +32,7 @@ def handle_error(func):
     return wrapper
 
 
-class DynamixelManager(ThreadDriver):
+class DXLU2D2(ThreadElement):
 
     _classes = {
         "port_handler": PortHandler,
@@ -40,7 +40,7 @@ class DynamixelManager(ThreadDriver):
     }
 
     def __init__(self, owner, **kwargs):
-        ThreadDriver.__init__(self, name="dynamixel manager",  owner=owner, )
+        ThreadElement.__init__(self, name="dynamixel manager",  owner=owner, )
         self._owner = owner
         # self._path = Path("dxl manager")
         port_name = kwargs["communication port"]
@@ -124,7 +124,7 @@ class DynamixelManager(ThreadDriver):
             for port
             in serial.tools.list_ports.comports()]
 
-    def _set_com_port(self, com_port):
+    def _set_com_port(self, com_port, **kwargs):
         com_port = com_port[0]
         self.port_handler.closePort()
         self.port_handler = self._classes["port_handler"](com_port)
@@ -133,9 +133,10 @@ class DynamixelManager(ThreadDriver):
         self.colloquy.save()
 
     def add_html(self):
-        pass
+        if not self.colloquy.is_open:
+            self._add_html_com()
 
-    def add_html_com(self):
+    def _add_html_com(self, ):
         doc, tag, text = self.html_doc.tagtext()
         # with tag("h3"):
             # text("DXL manager:")

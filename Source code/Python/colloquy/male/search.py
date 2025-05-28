@@ -1,10 +1,10 @@
-from colloquy.thread_driver import ThreadDriver
+from colloquy.thread_element import ThreadElement
 from time import time, sleep
 
-class Search(ThreadDriver):
+class Search(ThreadElement):
 
     def __init__(self, owner):
-        ThreadDriver.__init__(self, owner=owner, name=f"search")
+        ThreadElement.__init__(self, owner=owner, name=f"search")
         self._blink = Blink(owner=self)
 
     def __enter__(self):
@@ -18,6 +18,10 @@ class Search(ThreadDriver):
         else:
             print(f"Bar is already searching.")
 
+    def __exit__(self, exc_type, exc_value, traceback_obj):
+        self.colloquy.bar.search.stop()
+        return ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
+
     @property
     def blink(self):
         return self._blink
@@ -25,6 +29,10 @@ class Search(ThreadDriver):
     @property
     def body_neopixel(self):
         return self.owner.body_neopixel
+
+    @property
+    def microphone(self):
+        return self.owner.microphone
 
     def _loop(self):
         if not self.colloquy.bar.search.is_started:
@@ -34,7 +42,7 @@ class Search(ThreadDriver):
         if not self.owner.is_moving:
             self.owner.toggle_position()
 
-        if self.owner.listen_for_notification():
+        if self.owner.microphone.is_notified:
            self.stop()
            self.owner.conversation.start()
            # raise NotImplementedError()
@@ -81,10 +89,10 @@ class Search(ThreadDriver):
 
 
 
-class Blink(ThreadDriver):
+class Blink(ThreadElement):
 
     def __init__(self, owner):
-        ThreadDriver.__init__(self, owner=owner, name=f"blink")
+        ThreadElement.__init__(self, owner=owner, name=f"blink")
         self._timestamp = None
         self._blink_step = 0.5
 

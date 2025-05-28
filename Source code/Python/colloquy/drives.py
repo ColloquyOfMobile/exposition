@@ -1,6 +1,6 @@
 from time import time
 from threading import Lock
-from colloquy.thread_driver import ThreadDriver
+from colloquy.thread_element import ThreadElement
 
 """logic35_systems.ino
 //act_drive
@@ -14,11 +14,11 @@ int         internal_drive_P = 0;
 int         internal_drive_state = 0;     //Undefined, Neither[Inert], O, P, OP
 """
 
-class DrivesHandler(ThreadDriver):
+class Drives(ThreadElement):
 
     def __init__(self, owner, neopixel):
         name = f"{owner.name}_drives"
-        ThreadDriver.__init__(self, name=name, owner=owner)
+        ThreadElement.__init__(self, name=name, owner=owner)
         self._neopixel = neopixel
         self._o_drive = 0
         self._p_drive = 0
@@ -57,6 +57,14 @@ class DrivesHandler(ThreadDriver):
             if "P" in key:
                 for_max.append(self.p_drive)
             return max(for_max)
+
+    @property
+    def puce(self):
+        return self._puce
+
+    @property
+    def orange(self):
+        return self._orange
 
     @property
     def color(self):
@@ -158,7 +166,7 @@ class DrivesHandler(ThreadDriver):
 
         print(f"Update drives: O={self.o_drive}, P={self.p_drive}")
 
-        if self.is_unsatisfied:
+        if self.is_frustated:
             if not self.owner.search.is_started:
                 print(f"The {self.owner.name} is unsatisfied {self.state}!")
                 self.owner.search.start()
@@ -167,11 +175,28 @@ class DrivesHandler(ThreadDriver):
 
     def decrease(self, drive):
         if "O" in drive:
-            self.o_drive -= 10 * self._step_o
-            print(f"Decreased O drive of {self.path.as_posix()=}.")
+            self.o_drive -= 20 * self._step_o
+            print(f"Decreased O drive of {self.owner.name=}.")
         if "P" in drive:
-            self.p_drive -= 10 * self._step_p
-            print(f"Decreased P drive of {self.path.as_posix()=}.")
+            self.p_drive -= 20 * self._step_p
+            print(f"Decreased P drive of {self.owner.name=}.")
+        self._update_neopixel()
+
+    def is_satisfied(self, drive):
+        satisfied_drives = []
+        for value in drive:
+            if value == "O":
+                is_satisfied = self.o_drive < self._satisfaction_lim
+                satisfied_drives.append(is_satisfied)
+                # print(f"Is {self.owner.name} O drive satisfied ? {is_satisfied}.")
+            if "P" in drive:
+                is_satisfied = self.p_drive < self._satisfaction_lim
+                satisfied_drives.append(is_satisfied)
+                # print(f"Is {self.owner.name} P drive satisfied ? {is_satisfied}.")
+        if all(satisfied_drives):
+            print(f"{self.owner.name} is satisfied.")
+
+        return all(satisfied_drives)
 
 
     def satisfy(self):

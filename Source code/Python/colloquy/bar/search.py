@@ -1,25 +1,24 @@
-from colloquy.thread_driver import ThreadDriver
+from colloquy.thread_element import ThreadElement
 from time import time, sleep
 
-class Search(ThreadDriver):
+class Search(ThreadElement):
 
     def __init__(self, owner):
-        ThreadDriver.__init__(self, owner=owner, name=f"search")
+        ThreadElement.__init__(self, owner=owner, name=f"search")
 
     def __enter__(self):
         print(f"The {self.owner.name} is searching...")
         self.stop_event.clear()
 
     def _loop(self):
-
         if not self.owner.is_moving:
             self.owner.toggle_max_min_position()
 
         if self.owner.interaction_event.is_set():
             self.stop()
 
-    def stop(self):
-        ThreadDriver.stop(self)
+    # def stop(self):
+        # Thread.stop(self)
 
     def add_html(self):
         doc, tag, text = self.html_doc.tagtext()

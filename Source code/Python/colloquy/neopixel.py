@@ -1,11 +1,11 @@
-from .thread_driver import ThreadDriver
+from .thread_element import ThreadElement
 from pathlib import Path
 from threading import Event
 
-class NeopixelDriver(ThreadDriver):
+class Neopixel(ThreadElement):
 
     def __init__(self, owner, name):
-        ThreadDriver.__init__(self, owner=owner, name=name)
+        ThreadElement.__init__(self, owner=owner, name=name)
         # self._owner = owner
         self._path = owner.path / name # Path(*parts).as_posix()
         self._path = self._path.relative_to(self.colloquy.path).as_posix()

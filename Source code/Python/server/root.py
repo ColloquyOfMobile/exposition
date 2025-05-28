@@ -5,25 +5,35 @@ import socket
 from .file_handler import FileHandler
 from .shutdown import Shutdown
 from .html_element import HTMLElement
+from parameters import Parameters
 from colloquy.logger import Logger as _Logger
 
 class Root(HTMLElement):
     def __init__(self, owner):
         HTMLElement.__init__(self, owner)
         self._owner = owner
+        self._actions = {}
         self.path = Path("")
         self._log = Logger(owner=self)
-        self.active = None
+        self._opened = None
         self._items = {}
         self.elements = set()
         self.threads = set()
         self._colloquy = None
         self.init()
 
-    def __call__(self, **kwargs):
+    def __call__(self, environ):
         self._init_html_doc()
-        self.write_html(**kwargs)
+        self.write_html(environ)
         return [self.html_doc.getvalue().encode()]
+
+    @property
+    def opened(self):
+        return self._opened
+
+    @opened.setter
+    def opened(self, value):
+        self._opened = value
 
     @property
     def log(self):
@@ -37,13 +47,19 @@ class Root(HTMLElement):
 
         self._items["colloquy"] = self._colloquy = Colloquy(owner=self)
 
-    def write_html(self, **kwargs):
+
+    def write_html(self, environ):
+        self._parse_data(environ)
+        data = self.post_data
+        action = data.get("action")
+        if action == ["shutdown"]:
+            raise NotImplementedError
         doc, tag, text = self.html_doc.tagtext()
 
         doc.asis("<!DOCTYPE html>")
         with tag("html"):
             self._write_html_head()
-            self._write_body(**kwargs)
+            self._write_body()
 
     def _write_html_head(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -54,40 +70,42 @@ class Root(HTMLElement):
                 '<meta name="viewport"'
                 ' content="width=device-width,'
                 " initial-scale=1,"
-                ' interactive-widget=resizes-content" />'
+                ' interopened-widget=resizes-content" />'
             )
 
-        # response = doc.read()
-        # yield response.encode()
-
-    def _write_body(self, **kwargs):
+    def _write_body(self):
         doc, tag, text = self.html_doc.tagtext()
         with tag("body"):
-            with tag("h1",):
-                text(
-                    f"Colloquy of Mobiles (threads={self._colloquy.thread_count})"
-                    )
+            with tag("div", style="display: flex; "):
+                with tag("h1", style="display: flex; flex: 1; justify-items: center;"):
+                    text(
+                        f"Colloquy of Mobiles"
+                        )
 
-            if self._colloquy.thread_count:
-                with tag("details",):
-                    with tag("summary",):
-                        text(
-                            f"threads: {self._colloquy.thread_count}"
-                            )
-                    for e in self._colloquy.iter_thread_pool():
-                        with tag("summary",):
-                            text(
-                                f"{e.name}"
-                                )
+                with tag("form", method="post", style="display: flex;"):
+                    with tag("button", name="action", value="shutdown", style="align-self:center;"):
+                        text(f"Shutdown.")
 
-            if self.active is not None:
-                self.active(**kwargs)
-            else:
-                self._handle_request(**kwargs)
+            data = self.post_data
 
-    def _handle_request(self, **kwargs):
-        if kwargs:
+            action = data.get("action")
+            if action:
+                action = action[0]
+            action = self.actions.get(action, )
+            if action:
+                action(**data)
+            return self._write_root()
+            # raise NotImplementedError(f"{data=}")
+
+    def _write_root(self, **data):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("div"):
+            self._colloquy.write_html()
+
+    def _handle_request(self, environ):
+        if not kwargs:
             action = kwargs.pop("action")[0]
+
             self._colloquy.actions[action](**kwargs)
 
         self._colloquy.add_html()

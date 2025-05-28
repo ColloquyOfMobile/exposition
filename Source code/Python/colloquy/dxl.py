@@ -1,7 +1,7 @@
 from dynamixel_sdk import PortHandler, PacketHandler, COMM_SUCCESS  # Uses Dynamixel SDK library
 from time import time, sleep
 
-class DXLDriver:
+class DXL:
     def __init__(self, dxl_manager, dynamixel_id):
         # Handle hardware for serial communication.
         self._dxl_manager = dxl_manager

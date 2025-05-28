@@ -1,10 +1,10 @@
-from colloquy.thread_driver import ThreadDriver
+from colloquy.thread_element import ThreadElement
 from time import time, sleep
 
-class Search(ThreadDriver):
+class Search(ThreadElement):
 
     def __init__(self, owner):
-        ThreadDriver.__init__(self, owner=owner, name=f"search")
+        ThreadElement.__init__(self, owner=owner, name=f"search")
 
     def __enter__(self):
         print(f"The {self.owner.name} is searching...")
