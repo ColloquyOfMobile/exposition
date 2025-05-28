@@ -6,7 +6,7 @@ class Conversation(ThreadElement):
     def __init__(self, owner):
         ThreadElement.__init__(self, owner=owner, name=f"conversation")
         self._timeout_start = None
-        self._timeout = 4 # seconds
+        self._timeout = 10 # seconds
         #self._watch_out_for_reflection = WatchOutForReflection(owner=self)
 
     def __enter__(self):
@@ -49,8 +49,8 @@ class Conversation(ThreadElement):
 
             if not self.owner.drives.is_satisfied(drive=target_drive):
                 # sleep(0.5)
-                self.owner.speaker.encourage()
-                # sleep(0.5)
+                self.owner.speaker.encourage()                
+                sleep(4)
                 continue
 
             self.stop_event.set()

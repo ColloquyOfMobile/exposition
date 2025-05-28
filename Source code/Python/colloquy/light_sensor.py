@@ -1,11 +1,10 @@
 from colloquy.thread_element import ThreadElement
+from time import sleep
 
 class LightSensor(ThreadElement):
 
     def beamed(self):
         return self.colloquy.interaction.male.is_beaming
-        raise NotImplementedError
-        return True
 
     def engaged(self):
         raise NotImplementedError

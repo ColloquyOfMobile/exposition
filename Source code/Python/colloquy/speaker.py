@@ -61,16 +61,16 @@ class Speaker(ThreadElement):
         self._is_notifing = True
         for i in range(3):
             self.on()
-            sleep(0.3)
+            sleep(0.2)
             self.off()
-            sleep(0.3)
+            sleep(0.1)
         self._is_notifing = False
 
     def encourage(self):
         self._is_encouraging = True
         for i in range(3):
             self.on()
-            sleep(0.3)
+            sleep(0.2)
             self.off()
-            sleep(0.3)
+            sleep(0.1)
         self._is_encouraging = False

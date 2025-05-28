@@ -7,7 +7,7 @@ class Conversation(ThreadElement):
         ThreadElement.__init__(self, owner=owner, name=f"conversation")
         # self._watch_out_for_beam = WatchOutForBeam(owner=self)
         self._timeout_start = None
-        self._timeout = 4 # seconds
+        self._timeout = 10 # seconds
 
     def __enter__(self):
         print(f"The {self.owner.name} is engaging...")
@@ -46,10 +46,11 @@ class Conversation(ThreadElement):
                 self._timeout_start = time()
 
             if not self.owner.drives.is_satisfied(drive=target_drive):
-                sleep(1)
+                sleep(5)
                 continue
 
             self.stop_event.set()
+            self.owner.mirror.turn_to_origin_position()
             self._climax()
             self.colloquy.bar.interaction.stop()
             self.owner.drives.start()

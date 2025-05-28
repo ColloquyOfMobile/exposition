@@ -1,4 +1,5 @@
 from colloquy.thread_element import ThreadElement
+from time import sleep
 
 class Microphone(ThreadElement):
 
