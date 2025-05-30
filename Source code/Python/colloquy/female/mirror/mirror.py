@@ -66,7 +66,9 @@ class Mirror(MovingPart):
         if len(target_drive) == 1:
             self._move_to_target_position = self._memory[male.name][target_drive[0]]
         elif len(target_drive)==2:
-            raise NotImplementedError(f"{target_drive=}")
+            # Just pick the first one here.
+            self._move_to_target_position = self._memory[male.name][target_drive[0]]
+            # raise NotImplementedError(f"{target_drive=}")
         else:
             raise NotImplementedError(f"{target_drive=}")
 

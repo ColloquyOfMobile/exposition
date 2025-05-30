@@ -15,7 +15,7 @@ class Body(MovingPart):
         self.interaction_event = Event()
         self._speaker = Speaker(owner=self, arduino_manager=self.arduino_manager)
         self._microphone = None
-        self._near_origin_threashold = 300
+        self._near_origin_threashold = 400
 
     @property
     def speaker(self):

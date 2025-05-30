@@ -16,7 +16,7 @@ class BarDriver(ThreadElement):
         self.moving_threshold = 20
         self.interaction = None
         self.interaction_event = Event()
-        self._nearby_threashold = 500
+        self._nearby_threashold = 1000
 
         self.nearby_positions = []
         self.offset = None
