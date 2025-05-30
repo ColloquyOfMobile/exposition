@@ -12,7 +12,6 @@ class Search(ThreadElement):
         self.stop_event.clear()
 
     def __exit__(self, exc_type, exc_value, traceback_obj):
-        self.colloquy.bar.search.stop()
         return ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
 
     @property

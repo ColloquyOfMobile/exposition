@@ -21,7 +21,8 @@ class Conversation(ThreadElement):
     def _loop(self):
         self._watch_out_for_engagement()
 
-    def _setup(self):
+    def _setup(self):        
+        self.colloquy.bar.search.stop()
         self.owner.drives.stop()
         self.owner.turn_to_origin_position()
         self.owner.beam.start()

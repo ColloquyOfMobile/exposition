@@ -121,7 +121,7 @@ class Colloquy(ThreadElement):
         return self._is_open
 
     def turn_to_interaction_position(self):
-        position = self.interaction.position + self.bar.dxl_origin
+        position = self.interaction.position # + self.bar.dxl_origin
         self.bar.goal_position = position
 
     def turn_to_origin_position(self, elements):
