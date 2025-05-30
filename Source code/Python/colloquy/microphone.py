@@ -15,7 +15,8 @@ class Microphone(ThreadElement):
             interaction = self.colloquy.bar.interaction
             if interaction is not None:
                 if interaction.is_started:
-                   return interaction.female.speaker.is_notifing
+                    if interaction.male is self.owner:
+                        return interaction.female.speaker.is_notifing
             # raise NotImplementedError
         return False
 

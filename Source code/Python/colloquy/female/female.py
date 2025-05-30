@@ -50,15 +50,6 @@ class FemaleDriver(Body):
     def is_notifing(self):
         return self._is_notifing
 
-    # @property
-    # def target_drive(self):
-        # assert not self.drives.is_started
-        # return self.drives.state
-
-    # @target_drive.setter
-    # def target_drive(self, value):
-        # self._target_drive = value
-
     @property
     def conversation(self):
         return self._conversation

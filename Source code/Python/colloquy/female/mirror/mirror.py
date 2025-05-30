@@ -66,9 +66,9 @@ class Mirror(MovingPart):
         if len(target_drive) == 1:
             self._move_to_target_position = self._memory[male.name][target_drive[0]]
         elif len(target_drive)==2:
-            raise NotImplementedError
+            raise NotImplementedError(f"{target_drive=}")
         else:
-            raise NotImplementedError
+            raise NotImplementedError(f"{target_drive=}")
 
     def _loop(self):
         pass
@@ -80,25 +80,6 @@ class Mirror(MovingPart):
             return
         print(f"The {self.name} is moving to target position...")
         self._move_to_target_position()
-
-
-    # def _setup(self, male, fem_o_drive, fem_p_drive, **kwargs):
-        # male_name = male[0]
-        # fem_o_drive, fem_p_drive = int(fem_o_drive[0]), int(fem_p_drive[0])
-
-        # for interaction in self.colloquy.nearby_interactions.values():
-            # if interaction.male.name == male_name:
-                # if interaction.female.name == self.owner.name:
-                    # self.colloquy.bar.interaction = interaction
-                    # break
-
-        # self.owner.drives.o_drive = fem_o_drive
-        # self.owner.drives.p_drive = fem_p_drive
-
-        # self.owner._target_drive = self.owner.drives.state
-
-        # if kwargs:
-            # raise NotImplementedError(f"for {self.name}, ({kwargs=})!")
 
     def _set_origin(self, origin):
         origin = int(origin[0])

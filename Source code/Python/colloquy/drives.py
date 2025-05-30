@@ -75,7 +75,6 @@ class Drives(ThreadElement):
         state = self.state
         return state, self[state], self._colors[state]
 
-
     @property
     def state(self):
         # raise NotImplementedError(f"Update to return a tuple for the states")
@@ -84,12 +83,6 @@ class Drives(ThreadElement):
             p_satisfaction_lim = self.p_drive < self._satisfaction_lim
             o_frustated = self.o_drive > self._frustrated_lim
             p_frustated = self.p_drive > self._frustrated_lim
-            # print(f"{self.o_drive=}")
-            # print(f"{self.p_drive=}")
-            # print(f"{o_satisfaction_lim=}")
-            # print(f"{p_satisfaction_lim=}")
-            # print(f"{o_frustated=}")
-            # print(f"{p_frustated=}")
 
             if o_satisfaction_lim and p_satisfaction_lim:
                 return tuple()
@@ -145,14 +138,23 @@ class Drives(ThreadElement):
 
     def __enter__(self):
         """Setup before loop."""
+        print(f"The {self.owner.name} drives are started !")
         self.stop_event.clear()
-        self._neopixel.on()
+
+    def __exit__(self, exc_type, exc_value, traceback_obj):
+        print(f"The {self.owner.name} drives are exited !")
+        if self.owner.search.is_started:
+            self.owner.search.stop()
+        return ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
 
     def _loop(self):
         if time() - self._timestamp < self._update_interval:
             return
         self._timestamp = time()
         self._update()
+
+    def _setup(self, **kwargs):
+        self._neopixel.on()
 
     def _update(self):
         self.o_drive += self._step_o
@@ -164,14 +166,13 @@ class Drives(ThreadElement):
 
         self._update_neopixel()
 
-        print(f"Update drives: O={self.o_drive}, P={self.p_drive}")
+        # print(f"Update drives: O={self.o_drive}, P={self.p_drive}")
 
         if self.is_frustated:
             if not self.owner.search.is_started:
                 print(f"The {self.owner.name} is unsatisfied {self.state}!")
                 self.owner.search.start()
             return
-        print(f"The {self.owner.name} is satisfied. => Not doing anything...")
 
     def decrease(self, drive):
         if "O" in drive:
@@ -188,11 +189,9 @@ class Drives(ThreadElement):
             if value == "O":
                 is_satisfied = self.o_drive < self._satisfaction_lim
                 satisfied_drives.append(is_satisfied)
-                # print(f"Is {self.owner.name} O drive satisfied ? {is_satisfied}.")
             if "P" in drive:
                 is_satisfied = self.p_drive < self._satisfaction_lim
                 satisfied_drives.append(is_satisfied)
-                # print(f"Is {self.owner.name} P drive satisfied ? {is_satisfied}.")
         if all(satisfied_drives):
             print(f"{self.owner.name} is satisfied.")
 

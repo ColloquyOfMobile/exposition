@@ -13,11 +13,12 @@ class ThreadElement(HTMLElement):
         HTMLElement.__init__(self, owner)
         self._owner = owner
         self._name = name
-        self._path = Path(name)
-        self._is_started = False
 
+        self._path = Path(name)
         if owner is not None:
             self._path = owner.path / name
+
+        self._is_started = False
         self._log = Logger(owner=self)
         self._thread = None
         self._threads = set()
@@ -29,6 +30,7 @@ class ThreadElement(HTMLElement):
             self._owner.elements.add(self)
 
     def __repr__(self):
+        assert isinstance(self.path, Path), f"{self.path=}"
         return self.path.as_posix()
 
     def __eq__(self, other):
@@ -126,8 +128,6 @@ class ThreadElement(HTMLElement):
 
     @property
     def thread_count(self):
-        # for thread in self._thread_pool:
-            # print(f"{thread=}, {thread.is_alive()=}")
         return len(self._thread_pool)
 
     def join(self):
@@ -167,7 +167,9 @@ class ThreadElement(HTMLElement):
         self.log(f"...{self.path.as_posix()} started.")
 
     def stop(self, **kwargs):
+        # print(f"Stopping {self=}, {self._is_started=}...")
         if self._is_started:
+            self._is_started = False
             self.stop_event.set()
             return
         for element in self.elements:

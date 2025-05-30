@@ -7,8 +7,8 @@ class Neopixel(ThreadElement):
     def __init__(self, owner, name):
         ThreadElement.__init__(self, owner=owner, name=name)
         # self._owner = owner
-        self._path = owner.path / name # Path(*parts).as_posix()
-        self._path = self._path.relative_to(self.colloquy.path).as_posix()
+        # self._path = owner.path / name # Path(*parts).as_posix()
+        self._request_path = self._path.relative_to(self.colloquy.path).as_posix()
         self.arduino_manager = owner.arduino_manager
         self._on_off_state = None
         self.red = 0
@@ -52,7 +52,7 @@ class Neopixel(ThreadElement):
             b = self.blue,
             w = self.white,
             brightness = self.brightness)
-        self.arduino_manager.send(self._path, **data)
+        self.arduino_manager.send(self._request_path, **data)
 
     def on(self):
         self._on_off_state = True
@@ -66,7 +66,7 @@ class Neopixel(ThreadElement):
             b = 0,
             w = 0,
             brightness = 0,)
-        self.arduino_manager.send(self._path, **data)
+        self.arduino_manager.send(self._request_path, **data)
         self._on_off_state = False
 
     def toggle(self):

@@ -16,6 +16,7 @@ class BarDriver(ThreadElement):
         self.moving_threshold = 20
         self.interaction = None
         self.interaction_event = Event()
+        self._nearby_threashold = 500
 
         self.nearby_positions = []
         self.offset = None
@@ -135,8 +136,8 @@ class BarDriver(ThreadElement):
             timelap = time() - start
 
     def open(self):
-        for position in sorted(self.colloquy.nearby_interactions):
-            self.nearby_positions.append(position + self.dxl_origin)
+        for position in sorted(self.colloquy.interactions.from_positions):
+            self.nearby_positions.append(position)
         self._init_offset()
         self.torque_enabled = 0
 
@@ -148,6 +149,16 @@ class BarDriver(ThreadElement):
 
 
         self.torque_enabled = 1
+
+    def nearby(self, female):
+        if not self.search.is_started:
+            return
+        for interaction in self.colloquy.interactions.from_females[female]:
+            min = interaction.position - self._nearby_threashold
+            max = interaction.position + self._nearby_threashold
+            if min < self.position < max:
+                return interaction
+
 
     def turn_to_origin_position(self):
         self.goal_position = self.dxl_origin
@@ -179,18 +190,18 @@ class BarDriver(ThreadElement):
         position = self.nearby_positions.pop(0)
         self.nearby_positions.append(position)
         self.goal_position = position
-        self.interaction = self.colloquy.nearby_interactions[position-self.dxl_origin]
+        self.interaction = self.colloquy.interactions.from_positions[position]
 
-    def wait_interaction_end(self):
-        print(f"Waiting interaction end.")
-        interaction = self.interaction
-        busy = interaction.busy
+    # def wait_interaction_end(self):
+        # print(f"Waiting interaction end.")
+        # interaction = self.interaction
+        # busy = interaction.busy
 
-        while busy():
-            if self.stop_event.is_set():
-                break
-            self._sleep_min()
-        print(f"...Interaction finished.")
+        # while busy():
+            # if self.stop_event.is_set():
+                # break
+            # self._sleep_min()
+        # print(f"...Interaction finished.")
 
 
     def _init_offset(self):

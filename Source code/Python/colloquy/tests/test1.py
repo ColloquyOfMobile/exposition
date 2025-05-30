@@ -4,8 +4,8 @@ class Test1(HTMLElement):
 
     def __init__(self, owner):
         HTMLElement.__init__(self, owner)
-        self._interaction = self.colloquy.nearby_interactions[0]
         self._is_started = False
+        self._interaction = None
 
     @property
     def colloquy(self):
@@ -36,7 +36,7 @@ class Test1(HTMLElement):
 
     def _start(self, **kwargs):
         self._is_started = True
-        interaction = self._interaction
+        self._interaction = interaction = self.colloquy.interactions[0]
         self.colloquy.bar.interaction = interaction
 
         interaction.female.drives.o_drive = 255

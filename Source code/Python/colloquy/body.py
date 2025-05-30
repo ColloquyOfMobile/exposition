@@ -15,6 +15,7 @@ class Body(MovingPart):
         self.interaction_event = Event()
         self._speaker = Speaker(owner=self, arduino_manager=self.arduino_manager)
         self._microphone = None
+        self._near_origin_threashold = 300
 
     @property
     def speaker(self):
@@ -31,6 +32,11 @@ class Body(MovingPart):
     @microphone.setter
     def microphone(self, value):
         self._microphone = value
+
+    def near_origin(self):
+        min = self.dxl_origin - self._near_origin_threashold
+        max = self.dxl_origin + self._near_origin_threashold
+        return min < self.position < max
 
     def open(self):
         MovingPart.open(self)

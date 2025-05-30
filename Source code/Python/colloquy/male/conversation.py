@@ -34,13 +34,14 @@ class Conversation(ThreadElement):
         timeout = self._timeout
         target_drive = self.colloquy.interaction.target_drive
         while not self.stop_event.is_set():
-            
+
             if time() - self._timeout_start > timeout:
                 print(f"The female doesn't engage...")
                 self.stop_event.set()
                 self.colloquy.bar.interaction.stop()
                 self.owner.drives.start()
-                
+                continue
+
             for drive in target_drive:
                 sensor = self.owner.light_sensors[drive]
                 if sensor.engaged:
@@ -49,7 +50,7 @@ class Conversation(ThreadElement):
 
             if not self.owner.drives.is_satisfied(drive=target_drive):
                 # sleep(0.5)
-                self.owner.speaker.encourage()                
+                self.owner.speaker.encourage()
                 sleep(4)
                 continue
 
@@ -58,7 +59,7 @@ class Conversation(ThreadElement):
             self.colloquy.bar.interaction.stop()
             self.owner.drives.start()
 
-    def _climax(self):        
+    def _climax(self):
         print(f"Climax {self.owner.name}...")
         start = time()
         while time()-start < 6:

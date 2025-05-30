@@ -5,7 +5,7 @@ class Test2(Test1):
 
     def _start(self, **kwargs):
 
-        interaction = self._interaction
+        self._interaction = interaction = self.colloquy.interactions[0]
         self.colloquy.bar.interaction = interaction
 
         interaction.female.drives.o_drive = 255
@@ -26,6 +26,7 @@ class Test2(Test1):
 
         print(f"Move bar to interaction.")
         interaction.move_to_position_and_wait()
+
 
         interaction.male.drives.start()
         interaction.start()

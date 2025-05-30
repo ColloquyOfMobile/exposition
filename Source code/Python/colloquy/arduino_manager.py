@@ -90,7 +90,7 @@ class ArduinoManager(ThreadElement):
     def wait_for_reboot(self):
         start = time()
         while True:
-            print("|| Waiting for Arduino to reboot.")
+            print("Waiting for Arduino to reboot.")
             data = self.port_handler.readline().strip()
             if data == b"Hello!":
                 break

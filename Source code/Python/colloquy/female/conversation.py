@@ -41,6 +41,7 @@ class Conversation(ThreadElement):
                 self.colloquy.bar.interaction.stop()
                 self.owner.mirror.stop()
                 self.owner.drives.start()
+                continue
 
             if self.owner.microphone.is_encouraged:
                 self.owner.drives.decrease(drive=target_drive)

@@ -10,13 +10,6 @@ class Search(ThreadElement):
     def __enter__(self):
         print(f"The {self.owner.name} is searching...")
         self.stop_event.clear()
-        self.blink.start()
-        if not self.colloquy.bar.search.is_started:
-            if self.colloquy.bar.interaction_event.is_set():
-                print(f"The bar is already interacting")
-            print(f"Tell the bar to start searching.")
-        else:
-            print(f"Bar is already searching.")
 
     def __exit__(self, exc_type, exc_value, traceback_obj):
         self.colloquy.bar.search.stop()
@@ -36,8 +29,13 @@ class Search(ThreadElement):
 
     def _loop(self):
         if not self.colloquy.bar.search.is_started:
-            if not self.colloquy.bar.interaction_event.is_set():
+            if self.colloquy.interaction is None:
+                print(f"No interaction, => Tell the bar to start searching.")
                 self.colloquy.bar.search.start()
+            else:
+                if not self.colloquy.interaction.is_started:
+                    print(f"Interaction stopped => Tell the bar to start searching.")
+                    self.colloquy.bar.search.start()
 
         if not self.owner.is_moving:
             self.owner.toggle_position()
@@ -45,7 +43,15 @@ class Search(ThreadElement):
         if self.owner.microphone.is_notified:
            self.stop()
            self.owner.conversation.start()
-           # raise NotImplementedError()
+
+    def _setup(self):
+        self.blink.start()
+        # if not self.colloquy.bar.search.is_started:
+            # if self.colloquy.interaction.is_started:
+                # print(f"The bar is already interacting")
+            # print(f"Tell the bar to start searching.")
+        # else:
+            # print(f"Bar is already searching.")
 
     def add_html(self):
         doc, tag, text = self.html_doc.tagtext()

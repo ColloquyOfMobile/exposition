@@ -5,7 +5,7 @@ from .male import MaleDriver
 from .bar import BarDriver
 from .logger import Logger
 from .thread_element import ThreadElement
-from .interaction import Interaction
+from .interactions import Interactions
 from .tests import Tests
 from parameters import Parameters
 from time import sleep
@@ -51,18 +51,16 @@ class Colloquy(ThreadElement):
         self._init_females(params)
         self._init_males(params)
 
-        # Defined at for each bar position, which female and male interacts
-        nearby_interactions = [
-            Interaction(owner=self, male=self.male1, female=self.female1, position=0),
-            Interaction(owner=self, male=self.male2, female=self.female3, position=2200),
-            Interaction(owner=self, male=self.male1, female=self.female2, position=4300),
-            Interaction(owner=self, male=self.male2, female=self.female1, position=6200),
-            Interaction(owner=self, male=self.male1, female=self.female3, position=8400),
-            Interaction(owner=self, male=self.male2, female=self.female2, position=10400),
-        ]
-        self.nearby_interactions = {
-            e.position: e for e in nearby_interactions
-        }
+        # # Defined at for each bar position, which female and male interacts
+        # interactions = [
+            # Interaction(owner=self, male=self.male1, female=self.female1, origin=0),
+            # Interaction(owner=self, male=self.male2, female=self.female3, origin=2200),
+            # Interaction(owner=self, male=self.male1, female=self.female2, origin=4300),
+            # Interaction(owner=self, male=self.male2, female=self.female1, origin=6200),
+            # Interaction(owner=self, male=self.male1, female=self.female3, origin=8400),
+            # Interaction(owner=self, male=self.male2, female=self.female2, origin=10400),
+        # ]
+        self.interactions = None
         self._tests = Tests(owner=self)
         self._init_bar(params)
         self.bodies = [
@@ -90,11 +88,11 @@ class Colloquy(ThreadElement):
         self.bar.start()
 
     def __exit__(self, exc_type, exc_value, traceback_obj):
+        result = ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
         self.turn_to_origin_position(
             elements=self.moving_elements
         )
         self.wait_until_everything_is_still()
-        result = ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
         self._dxl_manager.stop()
         return result
 
@@ -117,6 +115,10 @@ class Colloquy(ThreadElement):
     @property
     def interaction(self):
         return self.bar.interaction
+
+    @interaction.setter
+    def interaction(self, value):
+        self.bar.interaction = value
 
     @property
     def is_open(self):
@@ -162,6 +164,7 @@ class Colloquy(ThreadElement):
         assert not self.opened # params should be closed
         if self._is_open:
             return
+        self.interactions = Interactions(owner=self)
         self._dxl_manager.open()
         self._arduino_manager.open()
 
@@ -200,13 +203,6 @@ class Colloquy(ThreadElement):
             self.opened.write_html()
             return
         self._add_html_thread_count()
-        # if not self.is_open:
-            # if not self.params.is_calibrated:
-                # self.params.open()
-                # self.params.write_html()
-                # return
-            # else:
-                # self._write_html_open()
         if not self.is_open:
             # self.params.write_html()
             self._write_html_open()
