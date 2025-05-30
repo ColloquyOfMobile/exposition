@@ -142,7 +142,7 @@ class Drives(ThreadElement):
         self.stop_event.clear()
 
     def __exit__(self, exc_type, exc_value, traceback_obj):
-        print(f"The {self.owner.name} drives are exited !")
+        print(f"The {self.owner.name} drives are stopped !")
         if self.owner.search.is_started:
             self.owner.search.stop()
         return ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
