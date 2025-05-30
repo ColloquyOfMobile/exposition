@@ -9,7 +9,7 @@ from .interactions import Interactions
 from .tests import Tests
 from parameters import Parameters
 from time import sleep
-from threading import Event # Thread
+from threading import Event, Lock # Thread
 
 class Colloquy(ThreadElement):
 
@@ -23,6 +23,7 @@ class Colloquy(ThreadElement):
 
     def __init__(self, owner, name="colloquy"):
         ThreadElement.__init__(self, name=name, owner=owner)
+        self._lock = Lock()
         self._params = Parameters(owner=self)
         params = self.params.as_dict()
 
@@ -51,15 +52,6 @@ class Colloquy(ThreadElement):
         self._init_females(params)
         self._init_males(params)
 
-        # # Defined at for each bar position, which female and male interacts
-        # interactions = [
-            # Interaction(owner=self, male=self.male1, female=self.female1, origin=0),
-            # Interaction(owner=self, male=self.male2, female=self.female3, origin=2200),
-            # Interaction(owner=self, male=self.male1, female=self.female2, origin=4300),
-            # Interaction(owner=self, male=self.male2, female=self.female1, origin=6200),
-            # Interaction(owner=self, male=self.male1, female=self.female3, origin=8400),
-            # Interaction(owner=self, male=self.male2, female=self.female2, origin=10400),
-        # ]
         self.interactions = None
         self._tests = Tests(owner=self)
         self._init_bar(params)
@@ -95,6 +87,10 @@ class Colloquy(ThreadElement):
         self.wait_until_everything_is_still()
         self._dxl_manager.stop()
         return result
+
+    @property
+    def lock(self):
+        return self._lock
 
     @property
     def params(self):

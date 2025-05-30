@@ -27,15 +27,16 @@ class Search(ThreadElement):
     def microphone(self):
         return self.owner.microphone
 
-    def _loop(self):
-        if not self.colloquy.bar.search.is_started:
-            if self.colloquy.interaction is None:
-                print(f"No interaction, => Tell the bar to start searching.")
-                self.colloquy.bar.search.start()
-            else:
-                if not self.colloquy.interaction.is_started:
-                    print(f"Interaction stopped => Tell the bar to start searching.")
+    def _loop(self):        
+        with self.colloquy.lock:
+            if not self.colloquy.bar.search.is_started:
+                if self.colloquy.interaction is None:
+                    print(f"No interaction, => Tell the bar to start searching.")
                     self.colloquy.bar.search.start()
+                else:
+                    if not self.colloquy.interaction.is_started:
+                        print(f"Interaction stopped => Tell the bar to start searching.")
+                        self.colloquy.bar.search.start()
 
         if not self.owner.is_moving:
             self.owner.toggle_position()

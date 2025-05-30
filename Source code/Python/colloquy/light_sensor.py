@@ -16,7 +16,7 @@ class LightSensor(ThreadElement):
         return self.colloquy.interaction.female.mirror.is_up
 
     def detect_male(self):
-        with self._lock:
+        with self.colloquy.lock:
             female = self.owner
 
             if not female.near_origin():
@@ -25,6 +25,7 @@ class LightSensor(ThreadElement):
             interaction = self.colloquy.bar.nearby(female)
             if interaction is None:
                 return
+
             male = interaction.male
             if not male.near_origin():
                 return
