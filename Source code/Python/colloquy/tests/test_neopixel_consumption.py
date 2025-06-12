@@ -17,11 +17,10 @@ class TestNeopixelConsumption(HTMLElement):
 
     def add_html(self):
         doc, tag, text = self.html_doc.tagtext()
-        if self.colloquy.is_started:
-            if self.is_started:
-                self._add_html_title()
-                self._add_html_stop()
-                return
+        # if self.colloquy.is_started:
+        if self.is_started:
+            self._add_html_title()
+            self._add_html_stop()
             return
 
         self._add_html_title()
@@ -36,21 +35,35 @@ class TestNeopixelConsumption(HTMLElement):
 
     def _start(self, **kwargs):
         self._is_started = True
-        for female in self.females:
+        for female in self.colloquy.females:
             brightness = 255
-            color = female.drive.puce
+            color = female.drives.puce
             config = dict(
                 brightness = brightness,
                 **color,
                 )
             female.neopixel.configure(**config)
-        for male in self.males:
-            raise NotImplementedError("Light up the male Neopixel.")
-            male.neopixel
+            female.neopixel.on()
+        for male in self.colloquy.males:
+            brightness = 255
+            color = male.drives.puce
+            config = dict(
+                brightness = brightness,
+                **color,
+                )
+            male.body_neopixel.ring.configure(**config)
+            male.body_neopixel.drive.configure(**config)
+            male.body_neopixel.ring.on()
+            male.body_neopixel.drive.on()
+            
         
 
-    def _stop(self):
-        self._interaction.stop()
+    def _stop(self, **kwarg):
+        for female in self.colloquy.females:
+            female.neopixel.off()
+        for male in self.colloquy.males:
+            male.body_neopixel.ring.off()
+            male.body_neopixel.drive.off()
         self._is_started = False
 
     def _add_html_title(self):
@@ -71,11 +84,9 @@ class TestNeopixelConsumption(HTMLElement):
 
     def _add_html_stop(self):
         doc, tag, text = self.html_doc.tagtext()
-        male = self._interaction.male
-        female = self._interaction.female
         with tag("form", method="post"):
             with tag("div"):
-                text(f"Interacting between {male.name}-{female.name}!")
+                text(f"All LEDs should be on.")
 
             with tag("button", name="action", value="colloquy/test_led_consumption/stop"):
                 text(f"Stop.")

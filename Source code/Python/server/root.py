@@ -52,13 +52,18 @@ class Root(HTMLElement):
         self._parse_data(environ)
         data = self.post_data
         action = data.get("action")
-        if action == ["shutdown"]:
-            raise NotImplementedError
         doc, tag, text = self.html_doc.tagtext()
-
         doc.asis("<!DOCTYPE html>")
         with tag("html"):
             self._write_html_head()
+            
+            if action == ["shutdown"]:
+                self.owner.shut_server = True
+                with tag("body"):
+                    text("Goodbye !")
+                return
+                # raise NotImplementedError
+
             self._write_body()
 
     def _write_html_head(self):
