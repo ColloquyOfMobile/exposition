@@ -1,6 +1,7 @@
 from server.html_element import HTMLElement
 from .test1 import Test1
 from .test2 import Test2
+from .test_neopixel_consumption import TestNeopixelConsumption
 
 
 
@@ -10,6 +11,7 @@ class Tests(HTMLElement):
         HTMLElement.__init__(self, owner)
         self._test1 = Test1(owner=self)
         self._test2 = Test2(owner=self)
+        self._test_neopixel_consumption = TestNeopixelConsumption(owner=self)
 
     @property
     def colloquy(self):
@@ -19,3 +21,4 @@ class Tests(HTMLElement):
         doc, tag, text = self.html_doc.tagtext()
         self._test1.add_html()
         self._test2.add_html()
+        self._test_neopixel_consumption.add_html()
