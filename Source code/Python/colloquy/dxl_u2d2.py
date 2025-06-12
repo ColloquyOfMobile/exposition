@@ -9,25 +9,44 @@ from .thread_element import ThreadElement
 
 
 def handle_error(func):
+    
     @wraps(func)
     def wrapper(*args, **kwargs):
         self = args[0]
+        dxl_id = args[1]
         for i in range(3):
 
             with self.lock:
                 value, dxl_comm_result, dxl_error = func(*args, **kwargs)
             #self._busy.clear()
             if dxl_comm_result != COMM_SUCCESS:
-                print(f"COM ERR: {self.packet_handler.getTxRxResult(dxl_comm_result)}")
+                print(f"COM ERR: ({dxl_id=}) {self.packet_handler.getTxRxResult(dxl_comm_result)}")
                 continue
             if dxl_error != 0:
-                print(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
+                print(f"DXL ERR: ({dxl_id=}) {self.packet_handler.getRxPacketError(dxl_error)}")
                 continue
             return value
+            
         if dxl_comm_result != COMM_SUCCESS:
-            raise RuntimeError(f"COM ERR: {self.packet_handler.getTxRxResult(dxl_comm_result)}")
+            raise RuntimeError(f"COM ERR: ({dxl_id=}) {self.packet_handler.getTxRxResult(dxl_comm_result)}")
+            
         if dxl_error != 0:
-            raise RuntimeError(f"DXL ERR: {self.packet_handler.getRxPacketError(dxl_error)}")
+            error_description = self.packet_handler.getRxPacketError(dxl_error)
+            if dxl_error == 6:
+                value = args[3]
+                raise NotImplementedError(
+                    f"\n- DXL ERR: ({dxl_id=}) ({value=}) {error_description}"
+                    f"\n- If you just calibrated Colloquy this might appen."
+                    f"\n- Immediate fix (using Dynamixel Wizard):"
+                    f"\n- | 1. Note down the (dxl_id=??) value printed 3 lines above."
+                    f"\n- | 2. Shutdown Colloquy program (to avoid communication errors)."
+                    f"\n- | 3. Open Dynamixel Wizard and connect to the dxl network."
+                    f"\n- | 4. ."
+                    )
+            raise RuntimeError(f"DXL ERR: ({dxl_id=}) {error_description}")
+        
+        if dxl_id == 8:
+            raise NotImplementedError(f"Looks like the problem is solved. Make sure to write the solution.")
 
     return wrapper
 
@@ -79,7 +98,6 @@ class DXLU2D2(ThreadElement):
 
     @handle_error
     def _write_1_byte_at(self, dxl_id, register_address, value):
-        # Enable Dynamixel Torque
         dxl_comm_result, dxl_error = self.packet_handler.write1ByteTxRx(
             self.port_handler,
             dxl_id,
@@ -90,7 +108,6 @@ class DXLU2D2(ThreadElement):
 
     @handle_error
     def _write_2_bytes_at(self, dxl_id, register_address, value):
-        # Enable Dynamixel Torque
         dxl_comm_result, dxl_error = self.packet_handler.write2ByteTxRx(
             self.port_handler,
             dxl_id,
@@ -101,7 +118,6 @@ class DXLU2D2(ThreadElement):
 
     @handle_error
     def _write_4_bytes_at(self, dxl_id, register_address, value):
-        # Enable Dynamixel Torque
         dxl_comm_result, dxl_error = self.packet_handler.write4ByteTxRx(
             self.port_handler,
             dxl_id,
