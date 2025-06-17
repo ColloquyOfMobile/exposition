@@ -172,6 +172,8 @@ class Colloquy(ThreadElement):
         self.owner.opened = self
         # self._actions = {}
         self._is_open = True
+        self.turn_to_origin_position(elements=self.moving_elements)
+        self.wait_until_everything_is_still()
 
     def close(self, **kwargs):
         self._actions = None
@@ -185,6 +187,7 @@ class Colloquy(ThreadElement):
         self._dxl_manager.close()
         self._arduino_manager.close()
         self._is_open = False
+        
 
         print("Colloquy closed.")
 

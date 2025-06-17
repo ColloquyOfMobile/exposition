@@ -14,10 +14,14 @@ def handle_error(func):
     def wrapper(*args, **kwargs):
         self = args[0]
         dxl_id = args[1]
-        for i in range(3):
+        for i in range(5):
 
             with self.lock:
-                value, dxl_comm_result, dxl_error = func(*args, **kwargs)
+                try:
+                    value, dxl_comm_result, dxl_error = func(*args, **kwargs)
+                except IndexError:
+                    continue # Look like com error produce index error in the DXL SDK.
+                    
             #self._busy.clear()
             if dxl_comm_result != COMM_SUCCESS:
                 print(f"COM ERR: ({dxl_id=}) {self.packet_handler.getTxRxResult(dxl_comm_result)}")
@@ -27,23 +31,20 @@ def handle_error(func):
                 continue
             return value
             
-        if dxl_comm_result != COMM_SUCCESS:
-            raise RuntimeError(f"COM ERR: ({dxl_id=}) {self.packet_handler.getTxRxResult(dxl_comm_result)}")
+        # if dxl_comm_result != COMM_SUCCESS:
+            # raise RuntimeError(f"COM ERR: ({dxl_id=}) {self.packet_handler.getTxRxResult(dxl_comm_result)}")
             
-        if dxl_error != 0:
-            error_description = self.packet_handler.getRxPacketError(dxl_error)
-            if dxl_error == 6:
-                value = args[3]
-                raise NotImplementedError(
-                    f"\n- DXL ERR: ({dxl_id=}) ({value=}) {error_description}"
-                    f"\n- If you just calibrated Colloquy this might appen."
-                    f"\n- Immediate fix (using Dynamixel Wizard):"
-                    f"\n- | - TODO"
-                    )
-            raise RuntimeError(f"DXL ERR: ({dxl_id=}) {error_description}")
-        
-        if dxl_id == 8:
-            raise NotImplementedError(f"Looks like the problem is solved. Make sure to write the solution.")
+        # if dxl_error != 0:
+            # error_description = self.packet_handler.getRxPacketError(dxl_error)
+            # if dxl_error == 6:
+                # value = args[3]
+                # raise NotImplementedError(
+                    # f"\n- DXL ERR: ({dxl_id=}) ({value=}) {error_description}"
+                    # f"\n- If you just calibrated Colloquy this might appen."
+                    # f"\n- Immediate fix (using Dynamixel Wizard):"
+                    # f"\n- | - TODO"
+                    # )
+            # raise RuntimeError(f"DXL ERR: ({dxl_id=}) {error_description}")
 
     return wrapper
 

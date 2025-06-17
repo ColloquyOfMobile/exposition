@@ -7,6 +7,8 @@ class DXL:
         self._dxl_manager = dxl_manager
         self._id = dynamixel_id
         self.moving_threshold = 20
+        self._old_position = None
+        self._old_goal_position = None
 
     @property
     def dxl_id(self):
@@ -34,7 +36,11 @@ class DXL:
 
     @property
     def position(self):
-        return self._dxl_manager._read_4_bytes_at(self._id, 132)
+        position = self._dxl_manager._read_4_bytes_at(self._id, 132)
+        if position is not None:
+            self._old_position = position
+            return position
+        return self._old_position
 
     @property
     def torque_enabled(self):
@@ -65,7 +71,12 @@ class DXL:
 
     @property
     def goal_position(self):
-        return self._dxl_manager._read_4_bytes_at(self._id, 116)
+        position = self._dxl_manager._read_4_bytes_at(self._id, 116)
+        if position is not None:
+            self._old_goal_position = position
+            return position
+        return self._old_goal_position
+        # return self._dxl_manager._read_4_bytes_at(self._id, 116)
 
     @goal_position.setter
     def goal_position(self, value):
