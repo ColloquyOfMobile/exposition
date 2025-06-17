@@ -35,9 +35,11 @@ class TestNeopixelConsumption(HTMLElement):
 
     def _start(self, **kwargs):
         self._is_started = True
+        
+        brightness = 255
+        color = dict(red=254, green=254, blue=254, white=254)
+        
         for female in self.colloquy.females:
-            brightness = 255
-            color = female.drives.puce
             config = dict(
                 brightness = brightness,
                 **color,
@@ -45,8 +47,8 @@ class TestNeopixelConsumption(HTMLElement):
             female.neopixel.configure(**config)
             female.neopixel.on()
         for male in self.colloquy.males:
-            brightness = 255
-            color = male.drives.puce
+            #brightness = 255
+            #color = dict(red=0, green=0, blue=0, white=255)
             config = dict(
                 brightness = brightness,
                 **color,

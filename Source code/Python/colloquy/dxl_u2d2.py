@@ -38,10 +38,7 @@ def handle_error(func):
                     f"\n- DXL ERR: ({dxl_id=}) ({value=}) {error_description}"
                     f"\n- If you just calibrated Colloquy this might appen."
                     f"\n- Immediate fix (using Dynamixel Wizard):"
-                    f"\n- | 1. Note down the (dxl_id=??) value printed 3 lines above."
-                    f"\n- | 2. Shutdown Colloquy program (to avoid communication errors)."
-                    f"\n- | 3. Open Dynamixel Wizard and connect to the dxl network."
-                    f"\n- | 4. ."
+                    f"\n- | - TODO"
                     )
             raise RuntimeError(f"DXL ERR: ({dxl_id=}) {error_description}")
         
