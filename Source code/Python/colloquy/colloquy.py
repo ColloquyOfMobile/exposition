@@ -10,6 +10,7 @@ from .tests import Tests
 from parameters import Parameters
 from time import sleep
 from threading import Event, Lock # Thread
+from datetime import datetime
 
 class Colloquy(ThreadElement):
 
@@ -212,12 +213,6 @@ class Colloquy(ThreadElement):
         doc.stag("hr")
 
         self._tests.add_html()
-        # doc.stag("hr")
-
-        # with tag("h2"):
-            # text("Elements")
-        # for element in sorted([*self.elements, *self.mirrors]):
-            # element.add_html()
 
     def _add_html_thread_count(self):
         doc, tag, text = self.html_doc.tagtext()
