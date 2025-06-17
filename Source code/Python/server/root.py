@@ -5,6 +5,8 @@ import socket
 from .file_handler import FileHandler
 from .shutdown import Shutdown
 from .html_element import HTMLElement
+# raise NotImplementedError(f"Move thread element!")
+# from .thread_element import ThreadElement
 from parameters import Parameters
 from colloquy.logger import Logger as _Logger
 
@@ -56,13 +58,16 @@ class Root(HTMLElement):
         doc.asis("<!DOCTYPE html>")
         with tag("html"):
             self._write_html_head()
-            
+
             if action == ["shutdown"]:
                 self.owner.shut_server = True
+                self._colloquy.stop()
+                print("Waiting colloquy thread to stop...")
+                self._colloquy.join()
+                print("... colloquy thread stopped.")
                 with tag("body"):
                     text("Goodbye !")
                 return
-                # raise NotImplementedError
 
             self._write_body()
 
@@ -114,6 +119,11 @@ class Root(HTMLElement):
             self._colloquy.actions[action](**kwargs)
 
         self._colloquy.add_html()
+
+    def _loop(self, **kwargs):
+        self._started_on = datetime.now()
+        pass
+        raise NotImplementedError(f"for {self.name}, ({kwargs=}) implement the timing!")
 
 class Logger(_Logger):
 

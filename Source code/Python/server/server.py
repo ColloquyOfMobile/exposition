@@ -46,33 +46,6 @@ class WSGI(HTTPElement):
     def shut_server(self, value):
         self._shut_server = value
 
-    # @property
-    # def handler(self):
-        # return self._handler
-
-    # @handler.setter
-    # def handler(self, value):
-        # raise NotImplementedError
-
-        # if value is self._handler:
-            # return
-
-        # if value is None:
-            # raise NotImplementedError
-            # if hasattr(self._handler, "close"):
-                # self._handler.close()
-            # self._handler = value
-            # return
-
-        # if self._handler is not None:
-            # if hasattr(self._handler, "close"):
-                # self._handler.close()
-
-        # if hasattr(value, "open"):
-            # value.open()
-
-        # self._handler = value
-
     def _handle_request(self, environ):
         path = self._parse_path(environ)
 

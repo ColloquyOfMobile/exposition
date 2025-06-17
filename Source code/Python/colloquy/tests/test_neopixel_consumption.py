@@ -17,10 +17,11 @@ class TestNeopixelConsumption(HTMLElement):
 
     def add_html(self):
         doc, tag, text = self.html_doc.tagtext()
-        # if self.colloquy.is_started:
-        if self.is_started:
-            self._add_html_title()
-            self._add_html_stop()
+        if self.colloquy.is_started:
+            if self.is_started:
+                self._add_html_title()
+                self._add_html_stop()
+                return
             return
 
         self._add_html_title()
@@ -57,8 +58,8 @@ class TestNeopixelConsumption(HTMLElement):
             male.body_neopixel.drive.configure(**config)
             male.body_neopixel.ring.on()
             male.body_neopixel.drive.on()
-            
-        
+
+
 
     def _stop(self, **kwarg):
         for female in self.colloquy.females:

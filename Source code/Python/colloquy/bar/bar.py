@@ -192,17 +192,6 @@ class BarDriver(ThreadElement):
         self.goal_position = position
         self.interaction = self.colloquy.interactions.from_positions[position]
 
-    # def wait_interaction_end(self):
-        # print(f"Waiting interaction end.")
-        # interaction = self.interaction
-        # busy = interaction.busy
-
-        # while busy():
-            # if self.stop_event.is_set():
-                # break
-            # self._sleep_min()
-        # print(f"...Interaction finished.")
-
 
     def _init_offset(self):
         """Initialise the offset postision between the two servos."""
