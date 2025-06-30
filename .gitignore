@@ -174,3 +174,4 @@ cython_debug/
 /local
 *.MP4
 docs/~$questions.xlsx
+/CAD/KiCad/electronic box/electronic box-backups
