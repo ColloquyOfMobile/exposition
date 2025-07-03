@@ -1,4 +1,4 @@
-25278992121615036
+25280743504254859
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -101540,7 +101540,7 @@ SparkFun Mono Audio Amp Breakout TPA2005D1
 
 0
 16
-11
+10
 custom1
 custom potentiometer 1
 
@@ -101548,6 +101548,13 @@ custom potentiometer 1
 0
 3
 3
+custom1
+screw brigde
+
+
+0
+6
+6
 custom1
 u2d2_mounting
 
