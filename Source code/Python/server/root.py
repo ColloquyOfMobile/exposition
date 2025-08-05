@@ -1,4 +1,5 @@
 from pathlib import Path
+import traceback
 from colloquy import Colloquy
 from virtual_colloquy import VirtualColloquy
 import socket
@@ -99,12 +100,30 @@ class Root(HTMLElement):
             data = self.post_data
 
             action = data.get("action")
+            str_action = None
             if action:
-                action = action[0]
-            action = self.actions.get(action, )
+                str_action = action[0]
+            action = self.actions.get(str_action, )
             if action:
-                action(**data)
-            return self._write_root()
+                try:
+                    action(**data)
+                except Exception as e:
+                    with tag("div"):
+                        with tag("h2"):
+                            text(f"Error trying {str_action=}, {action=}!")
+                        
+                        with tag("pre", ):
+                            text(traceback.format_exc())
+            try:
+                return self._write_root()
+            except Exception as e:
+                with tag("div"):
+                    with tag("h2"):
+                        text(f"Error building root html!")
+                    
+                    with tag("pre", ):
+                        text(traceback.format_exc())
+            
             # raise NotImplementedError(f"{data=}")
 
     def _write_root(self, **data):

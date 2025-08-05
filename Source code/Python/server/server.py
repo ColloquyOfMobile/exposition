@@ -23,7 +23,7 @@ class WSGI(HTTPElement):
 
     def __call__(self, environ, start_response):
         # Get the requested path from the environment
-        self.doc = CustomDoc()
+        # self.doc = CustomDoc()
         # self._parse_post_data(environ)
         self._start_response = start_response
         for response in self._handle_request(environ):

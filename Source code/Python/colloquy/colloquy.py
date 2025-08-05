@@ -7,6 +7,7 @@ from .logger import Logger
 from .thread_element import ThreadElement
 from .interactions import Interactions
 from .tests import Tests
+from .exposition import Exposition
 from parameters import Parameters
 from time import sleep
 from threading import Event, Lock # Thread
@@ -23,6 +24,7 @@ class Colloquy(ThreadElement):
     }
 
     def __init__(self, owner, name="colloquy"):
+        raise NotImplementedError(f"Store the threads from the virtual dxl manager into the server")
         ThreadElement.__init__(self, name=name, owner=owner)
         self._lock = Lock()
         self._params = Parameters(owner=self)
@@ -54,7 +56,10 @@ class Colloquy(ThreadElement):
         self._init_males(params)
 
         self.interactions = None
+        
         self._tests = Tests(owner=self)
+        self._exposition = Exposition(owner=self)
+        
         self._init_bar(params)
         self.bodies = [
             *self.females,
@@ -96,6 +101,15 @@ class Colloquy(ThreadElement):
     @property
     def params(self):
         return self._params
+
+    @property
+    def exposition(self):
+        return self._exposition
+        # raise NotImplementedError("Separate exposition from test.")
+
+    @property
+    def tests(self):
+        return self._tests
 
     @property
     def colloquy(self):
@@ -199,23 +213,16 @@ class Colloquy(ThreadElement):
 
         self.actions.clear()
 
+        self._add_html_thread_count()
+        
         if self.opened:
             self.opened.write_html()
             return
-        self._add_html_thread_count()
+            
+        
         if not self.is_open:
-            # self.params.write_html()
             self._write_html_open()
             return
-
-        doc.stag("hr")
-        if not self.is_started:
-            self._add_html_start()
-        else:
-            self._add_html_stop()
-        doc.stag("hr")
-
-        self._tests.add_html()
 
     def _add_html_thread_count(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -272,26 +279,8 @@ class Colloquy(ThreadElement):
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
         self.params.write_html()
-        self._write_html_action(value="colloquy/open", label=self.name, func=self.open)
-
-    def _add_html_start(self):
-        doc, tag, text = self.html_doc.tagtext()
-        with tag("form", method="post"):
-            with tag("button", name="action", value="colloquy/start"):
-                text(f"Start.")
-                self.colloquy.actions["colloquy/start"] = self.start
-            with tag("button", name="action", value="colloquy/close"):
-                text(f"close.")
-                self.actions["colloquy/close"] = self.close
-
-        # self._add_html_interaction()
-
-    def _add_html_stop(self):
-        doc, tag, text = self.html_doc.tagtext()
-        with tag("form", method="post"):
-            with tag("button", name="action", value="colloquy/stop"):
-                text(f"Stop.")
-        self.actions["colloquy/stop"] = self.stop
+        self.exposition.write_html()
+        # self._write_html_action(value="colloquy/open", label=self.name, func=self.open)
 
     def _loop(self):
         pass

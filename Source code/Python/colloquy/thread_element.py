@@ -168,10 +168,16 @@ class ThreadElement(HTMLElement):
 
     def stop(self, **kwargs):
         # print(f"Stopping {self=}, {self._is_started=}...")
+        if not self._is_started:
+            for element in self.elements:
+                assert not element.is_started, f"{element=}"
+            return
+                
         if self._is_started:
             self._is_started = False
             self.stop_event.set()
             return
+            
         for element in self.elements:
             element.stop()
 
