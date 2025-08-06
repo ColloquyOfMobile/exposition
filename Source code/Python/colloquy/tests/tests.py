@@ -1,22 +1,29 @@
+from pathlib import Path
 from server.html_element import HTMLElement
+from colloquy.thread_element import ThreadElement
 from .test1 import Test1
 from .test2 import Test2
 from .test_neopixel_consumption import TestNeopixelConsumption
+from .test_neopixel_communication import TestNeopixelCommunication
 from .test_speaker import TestSpeaker
 
 
 
-class Tests(HTMLElement):
+class Tests(ThreadElement):
 
     def __init__(self, owner):
-        HTMLElement.__init__(self, owner)
-        # self._test1 = Test1(owner=self)
-        # self._test2 = Test2(owner=self)
-        self._test_neopixel_consumption = TestNeopixelConsumption(owner=self)
-        self._test_speaker = TestSpeaker(owner=self)
+        ThreadElement.__init__(self, owner=owner, name="tests")
         self._is_open = False
         self.opened = None
-        self.name = "tests"
+        # self.name = "tests"
+
+        # self._path = Path(self.name)
+        # if owner is not None:
+            # self._path = owner.path / self.name
+            
+        self._test_neopixel_consumption = TestNeopixelConsumption(owner=self)
+        self._test_neopixel_communication = TestNeopixelCommunication(owner=self)
+        self._test_speaker = TestSpeaker(owner=self)
 
     @property
     def colloquy(self):
@@ -25,6 +32,10 @@ class Tests(HTMLElement):
     @property
     def is_open(self):
         return self._is_open
+
+    @property
+    def path(self):
+        return self._path
 
     def write_html(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -45,6 +56,7 @@ class Tests(HTMLElement):
             
         self._test_neopixel_consumption.write_html()
         self._test_speaker.write_html()
+        self._test_neopixel_communication.write_html()
     
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
