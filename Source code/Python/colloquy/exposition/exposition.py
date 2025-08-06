@@ -26,6 +26,7 @@ class Exposition(HTMLElement):
         
         with tag("h2"):
             text(self.name.title())
+            
         doc.stag("hr")
         if not self.colloquy.is_started:
             self._add_html_start()
@@ -36,9 +37,9 @@ class Exposition(HTMLElement):
     def open(self, **kwargs):
         if self._is_open:
             return
-        self.colloquy.open()
+        self.colloquy.connect()
         self.owner.opened = self
-        # self._actions = {}
+        
         self._is_open = True
 
     def close(self, **kwargs):
@@ -61,11 +62,6 @@ class Exposition(HTMLElement):
             
             
             self._write_html_action(value="colloquy/exposition/close", label="close", func=self.close)
-            # with tag("button", name="action", value="colloquy/close"):
-                # text(f"close.")
-                # self.actions["colloquy/exposition/close"] = self.close
-
-        # self._add_html_interaction()
 
     def _add_html_stop(self):
         doc, tag, text = self.html_doc.tagtext()
