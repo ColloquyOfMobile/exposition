@@ -1,24 +1,45 @@
-from .shared_driver import SharedDriver
-from .speaker_driver import SpeakerDriver
-from .drives_handler import DrivesHandler
+from .moving_part import MovingPart
+from .speaker import Speaker
 from pathlib import Path
 from threading import Event
 from threading import Timer
 import traceback
 
 
-class Body(SharedDriver):
+class Body(MovingPart):
 
     def __init__(self, owner, **kwargs):
         dxl_manager = kwargs["dynamixel manager"]
-        SharedDriver.__init__(self, owner, **kwargs)
+        MovingPart.__init__(self, owner, **kwargs)
         self.arduino_manager = kwargs["arduino manager"]
         self.interaction_event = Event()
-        self.drives = DrivesHandler(owner=self)
-        self.speaker = SpeakerDriver(owner=self, arduino_manager=self.arduino_manager)
+        self._speaker = Speaker(owner=self, arduino_manager=self.arduino_manager)
+        self._microphone = None
+        self._near_origin_threashold = 400
+
+    @property
+    def speaker(self):
+        return self._speaker
+
+    @property
+    def search(self):
+        return self._search
+
+    @property
+    def microphone(self):
+        return self._microphone
+
+    @microphone.setter
+    def microphone(self, value):
+        self._microphone = value
+
+    def near_origin(self):
+        min = self.dxl_origin - self._near_origin_threashold
+        max = self.dxl_origin + self._near_origin_threashold
+        return min < self.position < max
 
     def open(self):
-        SharedDriver.open(self)
+        MovingPart.open(self)
 
     def turn_to_left_position(self):
         self.turn_to_max_position()
@@ -40,23 +61,3 @@ class Body(SharedDriver):
         self.dxl_origin = origin
         self.colloquy.params[self.name]["origin"] = origin
         self.colloquy.save()
-
-    # def add_html(self):
-        # doc, tag, text = self.html_doc.tagtext()
-        # with tag("h3"):
-            # text(f"{self.name.title()}:")
-
-        # with tag("form", method="post"):
-            # with tag("label", **{"id": f"{self.name}/origin"}):
-                # text(f"Origin:")
-                # kwargs = {}
-                # if self.dxl_origin is not None:
-                    # kwargs = {"value": self.dxl_origin}
-
-            # with tag("input", type="number", id=f"{self.name}/origin", name="origin", **kwargs):
-                # pass
-
-            # with tag("button", name="action", value=f"{self.name}/origin/set"):
-                # text(f"set.")
-
-            # self.colloquy.actions[f"{self.name}/origin/set"] = self._set_origin

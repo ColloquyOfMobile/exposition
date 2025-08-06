@@ -20,6 +20,8 @@ class VirtualSerialPort:
         return next(self._readline_results)
 
     def write(self, data):
+        if not self._is_open:
+            raise AssertionError(f"Port should be open before using it.")
         data = data.decode()
         data = json.loads(data)
         path = data["path"]

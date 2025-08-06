@@ -2,8 +2,8 @@ from dynamixel_sdk import COMM_SUCCESS  # Uses Dynamixel SDK library
 from time import time, sleep
 from threading import Thread, Lock
 from pathlib import Path
-from colloquy.dynamixel_manager import DynamixelManager
-from colloquy.thread_driver import ThreadDriver
+from colloquy.dxl_u2d2 import DXLU2D2
+from colloquy.thread_element import ThreadElement
 from colloquy.logger import Logger
 
 class VirtualPortHandler:
@@ -23,9 +23,9 @@ class VirtualPortHandler:
     def getPortName(self):
         return self._port_name
 
-class VirtualDxl(ThreadDriver):
+class VirtualDxl(ThreadElement):
     def __init__(self, owner, dxl_id):
-        ThreadDriver.__init__(self, name=f"dxl_{dxl_id}", owner=owner)
+        ThreadElement.__init__(self, name=f"dxl_{dxl_id}", owner=owner)
         # self._owner = owner
         self._dxl_id = dxl_id
         self._thread = None
@@ -71,6 +71,7 @@ class VirtualDxl(ThreadDriver):
         lim_min, lim_max  = self._lim_min, self._lim_max
 
         if self._lim_min < self._position < self._lim_max:
+            self.stop_event.set()
             return
             # with self._lock:
                 # self._position = self.goal_position
@@ -169,14 +170,14 @@ class VirtualPacketHandler:
         raise NotImplementedError
         return None
 
-class VirtualDynamixelManager(DynamixelManager):
+class VirtualDynamixelManager(DXLU2D2):
 
     _classes = {
         "port_handler": VirtualPortHandler,
         "packet_handler": VirtualPacketHandler,
     }
     def __init__(self, owner, **kwargs):
-        DynamixelManager.__init__(self, owner, **kwargs)
+        DXLU2D2.__init__(self, owner, **kwargs)
         self._dxls = {i: VirtualDxl(owner=self, dxl_id=i) for i in range(1, 11)}
         self.packet_handler.owner = self
 
@@ -184,14 +185,19 @@ class VirtualDynamixelManager(DynamixelManager):
     def dxls(self):
         return self._dxls
 
-    def _get_com_ports(self):
-        return ["VirtualCOM1", "VirtualCOM2"]
+    # def stop(self):
+        # for element in self.elements:
+            # element.stop()
+        # # self._dxls.clear()
 
     def open(self):
-        DynamixelManager.open(self)
+        DXLU2D2.open(self)
         self.packet_handler.dxls = self.dxls
 
     def close(self):
-        DynamixelManager.close(self)
+        DXLU2D2.close(self)
         for dxl in self.packet_handler.dxls.values():
             dxl.stop()
+
+    def _get_com_ports(self):
+        return ["VirtualCOM1", "VirtualCOM2"]

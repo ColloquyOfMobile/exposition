@@ -4,10 +4,10 @@ from pathlib import Path
 import json
 from time import sleep, time
 from threading import Lock
-from .thread_driver import ThreadDriver
+from .thread_element import ThreadElement
 START = time()
 
-class ArduinoManager(ThreadDriver):
+class ArduinoManager(ThreadElement):
 
     _classes = {
         "serial": serial.Serial,
@@ -17,7 +17,7 @@ class ArduinoManager(ThreadDriver):
         """
         Initialise la communication série avec l'Arduino.
         """
-        ThreadDriver.__init__(self, name=kwargs["name"],  owner=owner, )
+        ThreadElement.__init__(self, name=kwargs["name"],  owner=owner, )
         self.lock = Lock()
         port_name = kwargs["communication port"]
         baudrate = kwargs["baudrate"]
@@ -73,18 +73,6 @@ class ArduinoManager(ThreadDriver):
         self.log(f"response={data}")
         return data
 
-    def _get_com_ports(self):
-        return [
-            port.device
-            for port
-            in serial.tools.list_ports.comports()]
-
-    def _set_com_port(self, com_port):
-        com_port = com_port[0]
-        self.port_handler.port = com_port
-        self.colloquy.params["arduino"]["communication port"] = com_port
-        self.colloquy.save()
-
     def close(self):
         """
         Ferme le port série.
@@ -102,7 +90,7 @@ class ArduinoManager(ThreadDriver):
     def wait_for_reboot(self):
         start = time()
         while True:
-            print("|| Waiting for Arduino to reboot.")
+            print("Waiting for Arduino to reboot.")
             data = self.port_handler.readline().strip()
             if data == b"Hello!":
                 break
@@ -110,15 +98,29 @@ class ArduinoManager(ThreadDriver):
                 raise RuntimeError("Arduino was to long to reboot !")
 
     def add_html(self):
+        if not self.colloquy.is_connected:
+            self._add_html_com()
+
+    def _get_com_ports(self):
+        return [
+            port.device
+            for port
+            in serial.tools.list_ports.comports()]
+
+    def _set_com_port(self, com_port):
+        com_port = com_port[0]
+        self.port_handler.port = com_port
+        self.colloquy.params["arduino"]["communication port"] = com_port
+        self.colloquy.save()
+
+    def _add_html_com(self):
         doc, tag, text = self.html_doc.tagtext()
-        with tag("h3"):
-            text("Arduino:")
 
         port_list = self._get_com_ports()
 
         with tag("form", method="post"):
             with tag("label", **{"id": "arduino/com_port"}):
-                text(f"Com port:")
+                text(f"Arduino com port:")
 
             with tag("select", id="arduino/com_port", name="com_port"):
                 for port in port_list:

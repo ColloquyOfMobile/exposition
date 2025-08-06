@@ -1,36 +1,42 @@
-from .dynamixel_manager import DynamixelManager
+from .dxl_u2d2 import DXLU2D2
 from .arduino_manager import ArduinoManager
-from .female_driver import FemaleDriver
-from .male_driver import MaleDriver
-from .bar_driver import BarDriver
+from .female import FemaleDriver
+from .male import MaleDriver
+from .bar import BarDriver
 from .logger import Logger
-from .thread_driver import ThreadDriver
-from time import sleep
+from .thread_element import ThreadElement
+from .interactions import Interactions
+from .tests import Tests
+from .exposition import Exposition
 from parameters import Parameters
-from threading import Event # Thread
+from time import sleep
+from threading import Event, Lock # Thread
+from datetime import datetime
 
-class Colloquy(ThreadDriver):
+class Colloquy(ThreadElement):
 
     _classes = {
-        "dxl_manager": DynamixelManager,
+        "dxl_manager": DXLU2D2,
         "arduino_manager": ArduinoManager,
-        "female_driver": FemaleDriver,
-        "male_driver": MaleDriver,
-        "bar_driver": BarDriver,
+        "female": FemaleDriver,
+        "male": MaleDriver,
+        "bar": BarDriver,
     }
 
     def __init__(self, owner, name="colloquy"):
-        ThreadDriver.__init__(self, name=name, owner=owner)
+        # raise NotImplementedError(f"Store the threads from the virtual dxl manager into the server")
+        ThreadElement.__init__(self, name=name, owner=owner)
+        self._lock = Lock()
+        self._params = Parameters(owner=self)
+        params = self.params.as_dict()
 
-        self._params =  Parameters(owner=self)# .as_dict()
-        params = self._params.as_dict()
-
-        self._is_open = False
+        self.opened = None
+        self._is_connected = False
         self._name = name
         self.mirrors = []
         self.males = []
         self.bodies = []
-        self.actions = {}
+        self.speakers = []
         self.bar = None
         self._threads = set()
         self.females = []
@@ -40,7 +46,7 @@ class Colloquy(ThreadDriver):
         self._doc = None
 
         dxl_manager_params = params["dynamixel network"]
-        dxl_manager_params["name"] = "dxl_driver"
+        dxl_manager_params["name"] = "dxl"
         self._dxl_manager = dxl_manager = self._classes["dxl_manager"](owner=self, **dxl_manager_params)
 
         arduino_params = params["arduino"]
@@ -49,19 +55,14 @@ class Colloquy(ThreadDriver):
 
         self._init_females(params)
         self._init_males(params)
-
-        # Defined at for each bar position, which female and male interacts
-        self.nearby_interactions = {
-            0: NearbyInteractions(self.male1, self.female1),
-            2200: NearbyInteractions(self.male2, self.female3),
-            4300: NearbyInteractions(self.male1, self.female2),
-            6200: NearbyInteractions(self.male2, self.female1),
-            8400: NearbyInteractions(self.male1, self.female3),
-            10400: NearbyInteractions(self.male2, self.female2),
-        }
-
         self._init_bar(params)
 
+        # self.interactions = None
+        self.interactions = Interactions(owner=self)
+        
+        self._tests = Tests(owner=self)
+        self._exposition = Exposition(owner=self)
+        
         self.bodies = [
             *self.females,
             *self.males,
@@ -73,10 +74,43 @@ class Colloquy(ThreadDriver):
             *self.males,
             self.bar
         ]
+        if not self.params.is_calibrated:
+            self.params.open()
+
+    def __enter__(self):
+        self.stop_event.clear()
+        self.turn_to_origin_position(elements=self.moving_elements)
+        self.wait_until_everything_is_still()
+
+        for body in self.bodies:
+            body.start()
+
+        self.bar.start()
+
+    def __exit__(self, exc_type, exc_value, traceback_obj):
+        result = ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
+        self.turn_to_origin_position(
+            elements=self.moving_elements
+        )
+        self.wait_until_everything_is_still()
+        self._dxl_manager.stop()
+        return result
+
+    @property
+    def lock(self):
+        return self._lock
 
     @property
     def params(self):
         return self._params
+
+    @property
+    def exposition(self):
+        return self._exposition
+
+    @property
+    def tests(self):
+        return self._tests
 
     @property
     def colloquy(self):
@@ -87,50 +121,24 @@ class Colloquy(ThreadDriver):
         return self._arduino_manager
 
     @property
-    def nearby_interaction(self):
-        return self.bar.nearby_interaction
+    def dxl_manager(self):
+        return self._dxl_manager
 
     @property
-    def is_open(self):
-        return self._is_open
+    def interaction(self):
+        return self.bar.interaction
 
-    def _init_bar(self, params):
-        bar_params = dict(params["bar"])
-        bar_params["colloquy"] = self
-        bar_params["name"] = "bar"
-        bar_params["dynamixel manager"] = self._dxl_manager
-        bar_params["colloquy"] = self
-        self.bar = self._classes["bar_driver"](owner=self, **bar_params)
+    @interaction.setter
+    def interaction(self, value):
+        self.bar.interaction = value
 
+    @property
+    def is_connected(self):
+        return self._is_connected
 
-    def _init_females(self, params, ):
-        females_params = params["females"]
-        females_names = females_params["names"]
-        for name in females_names:
-            fem_params = dict(params[name])
-            fem_params["name"] = name
-            fem_params.update( params["females"]["share"])
-            fem_params["dynamixel manager"] = self._dxl_manager
-            fem_params["arduino manager"] = self._arduino_manager
-            fem_params["colloquy"] = self
-            female_driver = self._classes["female_driver"](owner=self, **fem_params)
-            self.females.append(female_driver)
-            setattr(self, name, female_driver)
-            self.mirrors.append(female_driver.mirror)
-
-    def _init_males(self, params, ):
-        males_params = params["males"]
-        males_names = males_params["names"]
-        for name in males_names:
-            male_params = dict(params[name])
-            male_params["name"] = name
-            male_params.update( params["males"]["share"])
-            male_params["dynamixel manager"] = self._dxl_manager
-            male_params["arduino manager"] = self._arduino_manager
-            male_params["colloquy"] = self
-            male_driver = self._classes["male_driver"](owner=self, **male_params)
-            self.males.append(male_driver)
-            setattr(self, name, male_driver)
+    def turn_to_interaction_position(self):
+        position = self.interaction.position # + self.bar.dxl_origin
+        self.bar.goal_position = position
 
     def turn_to_origin_position(self, elements):
         for element in elements:
@@ -164,22 +172,26 @@ class Colloquy(ThreadDriver):
         while self.is_something_moving():
             sleep(0.1)
 
-    def __enter__(self):
-        self.stop_event.clear()
-        for element in self.moving_elements:
-            element.turn_to_origin_position()
-        self.wait_until_everything_is_still()
+    def open(self, **kwargs):
+        raise NotImplementedError
+        # # assert not self.opened # params should be closed
+        # if self._is_open:
+            # return
+        # self._dxl_manager.open()
+        # self._arduino_manager.open()
 
-        for body in self.bodies:
-            body.start()
+        # for body in self.bodies:
+            # body.open()
 
-        self.bar.start()
-
-    def _loop(self):
-        pass
-
-    def open(self):
-        if self._is_open:
+        # self.bar.open()
+        # self.owner.opened = self
+        # # self._actions = {}
+        # self._is_open = True
+        # self.turn_to_origin_position(elements=self.moving_elements)
+        # self.wait_until_everything_is_still()
+    
+    def connect(self, **kwargs):
+        if self._is_connected:
             return
         self._dxl_manager.open()
         self._arduino_manager.open()
@@ -188,10 +200,16 @@ class Colloquy(ThreadDriver):
             body.open()
 
         self.bar.open()
-        self._is_open = True
+        self.owner.opened = self
+        # self._actions = {}
+        self._is_connected = True
+        self.turn_to_origin_position(elements=self.moving_elements)
+        self.wait_until_everything_is_still()
+        
 
-    def close(self):
-        if not self._is_open:
+    def close(self, **kwargs):
+        self._actions = None
+        if not self._is_connected:
             return
 
         if self.thread is not None:
@@ -200,70 +218,84 @@ class Colloquy(ThreadDriver):
         self.bar.turn_to_origin_position()
         self._dxl_manager.close()
         self._arduino_manager.close()
+        self._is_connected = False
+        
 
         print("Colloquy closed.")
 
     def save(self):
         self.params.save()
 
-    def add_html(self):
+    def write_html(self):
+        doc, tag, text = self.html_doc.tagtext()
+
         self.actions.clear()
+
+        self._add_html_thread_count()
+        
+        if self.opened:
+            self.opened.write_html()
+            return
+            
+        self.params.write_html()
+        self.exposition.write_html()
+        self.tests.write_html()
+
+    def _add_html_thread_count(self):
         doc, tag, text = self.html_doc.tagtext()
-        with tag("form", method="post"):
-            if not self._is_open:
-                self._add_html_open()
-            else:
-                if not self._is_started:
-                    self._add_html_start()
-                else:
-                    self._add_html_stop()
+        if self.thread_count:
+            with tag("details",):
+                with tag("summary",):
+                    text(
+                        f"threads: {self.thread_count}"
+                        )
+                for e in self.iter_thread_pool():
+                    with tag("summary",):
+                        text(
+                            f"{e.name}"
+                            )
 
-        with tag("h2"):
-            text("Elements")
-        for element in sorted([*self.elements, *self.mirrors]):
-            element.add_html()
-
-    def _add_html_open(self):
-        doc, tag, text = self.html_doc.tagtext()
-        with tag("button", name="action", value="colloquy/open"):
-            text(f"Open.")
-        self.colloquy.actions["colloquy/open"] = self.open
-
-    def _add_html_start(self):
-        doc, tag, text = self.html_doc.tagtext()
-        with tag("button", name="action", value="colloquy/start"):
-            text(f"Start.")
-        self.colloquy.actions["colloquy/start"] = self.start
-
-    def _add_html_stop(self):
-        doc, tag, text = self.html_doc.tagtext()
-        with tag("button", name="action", value="colloquy/stop"):
-            text(f"Stop.")
-        self.colloquy.actions["colloquy/stop"] = self.stop
+    def _init_bar(self, params):
+        bar_params = dict(params["bar"])
+        bar_params["colloquy"] = self
+        bar_params["name"] = "bar"
+        bar_params["dynamixel manager"] = self._dxl_manager
+        bar_params["colloquy"] = self
+        self.bar = self._classes["bar"](owner=self, **bar_params)
 
 
+    def _init_females(self, params, ):
+        females_params = params["females"]
+        females_names = females_params["names"]
+        for name in females_names:
+            fem_params = dict(params[name])
+            fem_params["name"] = name
+            fem_params.update( params["females"]["share"])
+            fem_params["dynamixel manager"] = self._dxl_manager
+            fem_params["arduino manager"] = self._arduino_manager
+            fem_params["colloquy"] = self
+            female = self._classes["female"](owner=self, **fem_params)
+            self.females.append(female)
+            setattr(self, name, female)
+            self.mirrors.append(female.mirror)
 
-class NearbyInteractions:
+    def _init_males(self, params, ):
+        males_params = params["males"]
+        males_names = males_params["names"]
+        for name in males_names:
+            male_params = dict(params[name])
+            male_params["name"] = name
+            male_params.update( params["males"]["share"])
+            male_params["dynamixel manager"] = self._dxl_manager
+            male_params["arduino manager"] = self._arduino_manager
+            male_params["colloquy"] = self
+            male = self._classes["male"](owner=self, **male_params)
+            self.males.append(male)
+            setattr(self, name, male)
 
-    def __init__(self, male, female):
-        self._male = male
-        self._female = female
+    # def _write_html_open(self):
+        # doc, tag, text = self.html_doc.tagtext()
+        # # self._write_html_action(value="colloquy/open", label=self.name, func=self.open)
 
-    def __iter__(self):
-        yield self.male
-        yield self.female
-
-    @property
-    def male(self):
-        return self._male
-
-    @property
-    def female(self):
-        return self._female
-
-    def busy(self):
-        return any(
-            element.interaction_event.is_set()
-            for element
-            in self
-            )
+    def _loop(self):
+        pass
