@@ -10,15 +10,22 @@ class Search(ThreadElement):
         print(f"The {self.owner.name} is searching...")
         self.stop_event.clear()
 
+    def run(self, **kwargs):
+        with self:
+            self._setup(**kwargs)
+            while not self.stop_event.is_set():
+                if self.owner.stop_event.is_set():
+                    print(f"Hard stop. {self=}, {self.owner=}")
+                    break
+                self._loop()
+                self._sleep_min()
+
     def _loop(self):
         if not self.owner.is_moving:
             self.owner.toggle_max_min_position()
 
         if self.owner.interaction_event.is_set():
             self.stop()
-
-    # def stop(self):
-        # Thread.stop(self)
 
     def add_html(self):
         doc, tag, text = self.html_doc.tagtext()

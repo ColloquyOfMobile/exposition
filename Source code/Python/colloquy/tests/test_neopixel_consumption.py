@@ -5,7 +5,8 @@ class TestNeopixelConsumption(HTMLElement):
     def __init__(self, owner):
         HTMLElement.__init__(self, owner)
         self._is_started = False
-        self._interaction = None
+        self._is_open = False
+        self.name = "test Neopixel consumption"
 
     @property
     def colloquy(self):
@@ -15,24 +16,45 @@ class TestNeopixelConsumption(HTMLElement):
     def is_started(self):
         return self._is_started
 
-    def add_html(self):
-        doc, tag, text = self.html_doc.tagtext()
-        if self.colloquy.is_started:
-            if self.is_started:
-                self._add_html_title()
-                self._add_html_stop()
-                return
+    @property
+    def is_open(self):
+        return self._is_open
+
+    def open(self, **kwargs):
+        if self._is_open:
             return
+        self.colloquy.connect()
+        self.owner.opened = self
+        # self._actions = {}
+        self._is_open = True
+
+    def close(self, **kwargs):
+        if not self._is_open:
+            return
+        self.colloquy.close()
+        self._is_open = False
+        self.owner.opened = None
+
+    def write_html(self):
+        doc, tag, text = self.html_doc.tagtext()
+        
+        if not self.is_open:
+            self._write_html_open()
+            return
+            
+        # if self.colloquy.is_started:
+        if self.is_started:
+            self._add_html_title()
+            self._add_html_stop()
+            return
+        
 
         self._add_html_title()
-
-        if self.colloquy.interaction is None:
-            self._add_html_start()
-            return
-        else:
-            if not self.colloquy.interaction.is_started:
-                self._add_html_start()
-                return
+        self._add_html_start()
+    
+    def _write_html_open(self):
+        doc, tag, text = self.html_doc.tagtext()
+        self._write_html_action(value="colloquy/tests/consumption/open", label=self.name, func=self.open)
 
     def _start(self, **kwargs):
         self._is_started = True
@@ -72,7 +94,7 @@ class TestNeopixelConsumption(HTMLElement):
     def _add_html_title(self):
         doc, tag, text = self.html_doc.tagtext()
         with tag("h3"):
-            text("Test Neopixel consumption.")
+            text(self.name.title())
         with tag("div"):
             text("Light up all the LED for measuring power consumption.")
 
@@ -83,7 +105,9 @@ class TestNeopixelConsumption(HTMLElement):
             with tag("button", name="action", value="colloquy/test_led_consumption"):
                 text(f"Start.")
 
-            self.colloquy.actions["colloquy/test_led_consumption"] = self._start
+            self.colloquy.actions["colloquy/test_led_consumption"] = self._start            
+            
+        self._write_html_action(value="colloquy/test_led_consumption/close", label="close", func=self.close)
 
     def _add_html_stop(self):
         doc, tag, text = self.html_doc.tagtext()

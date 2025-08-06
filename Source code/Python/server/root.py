@@ -62,9 +62,10 @@ class Root(HTMLElement):
 
             if action == ["shutdown"]:
                 self.owner.shut_server = True
-                self._colloquy.stop()
-                print("Waiting colloquy thread to stop...")
-                self._colloquy.join()
+                if self._colloquy.is_started:
+                    self._colloquy.stop()
+                    print("Waiting colloquy thread to stop...")
+                    self._colloquy.join()
                 print("... colloquy thread stopped.")
                 with tag("body"):
                     text("Goodbye !")

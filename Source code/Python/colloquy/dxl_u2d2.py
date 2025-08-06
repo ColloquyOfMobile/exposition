@@ -147,7 +147,7 @@ class DXLU2D2(ThreadElement):
         self.colloquy.save()
 
     def add_html(self):
-        if not self.colloquy.is_open:
+        if not self.colloquy.is_connected:
             self._add_html_com()
 
     def _add_html_com(self, ):

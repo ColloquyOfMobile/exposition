@@ -71,6 +71,7 @@ class VirtualDxl(ThreadElement):
         lim_min, lim_max  = self._lim_min, self._lim_max
 
         if self._lim_min < self._position < self._lim_max:
+            self.stop_event.set()
             return
             # with self._lock:
                 # self._position = self.goal_position
@@ -184,10 +185,10 @@ class VirtualDynamixelManager(DXLU2D2):
     def dxls(self):
         return self._dxls
 
-    def stop(self):
-        for element in self.elements:
-            element.stop()
-        # self._dxls.clear()
+    # def stop(self):
+        # for element in self.elements:
+            # element.stop()
+        # # self._dxls.clear()
 
     def open(self):
         DXLU2D2.open(self)

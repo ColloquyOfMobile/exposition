@@ -98,7 +98,7 @@ class ArduinoManager(ThreadElement):
                 raise RuntimeError("Arduino was to long to reboot !")
 
     def add_html(self):
-        if not self.colloquy.is_open:
+        if not self.colloquy.is_connected:
             self._add_html_com()
 
     def _get_com_ports(self):

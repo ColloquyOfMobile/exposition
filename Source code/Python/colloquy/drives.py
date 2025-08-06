@@ -204,6 +204,8 @@ class Drives(ThreadElement):
 
     def _update_neopixel(self):
         state, brightness, color = self.value
+        if brightness > 200:
+            brightness = 200
         config = dict(
             brightness = brightness,
             **color,

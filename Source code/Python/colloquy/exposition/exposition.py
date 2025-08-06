@@ -23,7 +23,9 @@ class Exposition(HTMLElement):
         if not self.is_open:
             self._write_html_open()
             return
-
+        
+        with tag("h2"):
+            text(self.name.title())
         doc.stag("hr")
         if not self.colloquy.is_started:
             self._add_html_start()
@@ -45,12 +47,6 @@ class Exposition(HTMLElement):
         self.colloquy.close()
         self._is_open = False
         self.owner.opened = None
-        # raise NotImplementedError
-        # if self._is_open:
-            # return
-        # self.owner.opened = self
-        # # self._actions = {}
-        # self._is_open = True
     
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()

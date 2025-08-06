@@ -24,18 +24,19 @@ class Colloquy(ThreadElement):
     }
 
     def __init__(self, owner, name="colloquy"):
-        raise NotImplementedError(f"Store the threads from the virtual dxl manager into the server")
+        # raise NotImplementedError(f"Store the threads from the virtual dxl manager into the server")
         ThreadElement.__init__(self, name=name, owner=owner)
         self._lock = Lock()
         self._params = Parameters(owner=self)
         params = self.params.as_dict()
 
         self.opened = None
-        self._is_open = False
+        self._is_connected = False
         self._name = name
         self.mirrors = []
         self.males = []
         self.bodies = []
+        self.speakers = []
         self.bar = None
         self._threads = set()
         self.females = []
@@ -54,13 +55,14 @@ class Colloquy(ThreadElement):
 
         self._init_females(params)
         self._init_males(params)
+        self._init_bar(params)
 
-        self.interactions = None
+        # self.interactions = None
+        self.interactions = Interactions(owner=self)
         
         self._tests = Tests(owner=self)
         self._exposition = Exposition(owner=self)
         
-        self._init_bar(params)
         self.bodies = [
             *self.females,
             *self.males,
@@ -105,7 +107,6 @@ class Colloquy(ThreadElement):
     @property
     def exposition(self):
         return self._exposition
-        # raise NotImplementedError("Separate exposition from test.")
 
     @property
     def tests(self):
@@ -132,8 +133,8 @@ class Colloquy(ThreadElement):
         self.bar.interaction = value
 
     @property
-    def is_open(self):
-        return self._is_open
+    def is_connected(self):
+        return self._is_connected
 
     def turn_to_interaction_position(self):
         position = self.interaction.position # + self.bar.dxl_origin
@@ -172,10 +173,26 @@ class Colloquy(ThreadElement):
             sleep(0.1)
 
     def open(self, **kwargs):
-        assert not self.opened # params should be closed
-        if self._is_open:
+        raise NotImplementedError
+        # # assert not self.opened # params should be closed
+        # if self._is_open:
+            # return
+        # self._dxl_manager.open()
+        # self._arduino_manager.open()
+
+        # for body in self.bodies:
+            # body.open()
+
+        # self.bar.open()
+        # self.owner.opened = self
+        # # self._actions = {}
+        # self._is_open = True
+        # self.turn_to_origin_position(elements=self.moving_elements)
+        # self.wait_until_everything_is_still()
+    
+    def connect(self, **kwargs):
+        if self._is_connected:
             return
-        self.interactions = Interactions(owner=self)
         self._dxl_manager.open()
         self._arduino_manager.open()
 
@@ -185,13 +202,14 @@ class Colloquy(ThreadElement):
         self.bar.open()
         self.owner.opened = self
         # self._actions = {}
-        self._is_open = True
+        self._is_connected = True
         self.turn_to_origin_position(elements=self.moving_elements)
         self.wait_until_everything_is_still()
+        
 
     def close(self, **kwargs):
         self._actions = None
-        if not self._is_open:
+        if not self._is_connected:
             return
 
         if self.thread is not None:
@@ -200,7 +218,7 @@ class Colloquy(ThreadElement):
         self.bar.turn_to_origin_position()
         self._dxl_manager.close()
         self._arduino_manager.close()
-        self._is_open = False
+        self._is_connected = False
         
 
         print("Colloquy closed.")
@@ -219,10 +237,9 @@ class Colloquy(ThreadElement):
             self.opened.write_html()
             return
             
-        
-        if not self.is_open:
-            self._write_html_open()
-            return
+        self.params.write_html()
+        self.exposition.write_html()
+        self.tests.write_html()
 
     def _add_html_thread_count(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -276,11 +293,9 @@ class Colloquy(ThreadElement):
             self.males.append(male)
             setattr(self, name, male)
 
-    def _write_html_open(self):
-        doc, tag, text = self.html_doc.tagtext()
-        self.params.write_html()
-        self.exposition.write_html()
-        # self._write_html_action(value="colloquy/open", label=self.name, func=self.open)
+    # def _write_html_open(self):
+        # doc, tag, text = self.html_doc.tagtext()
+        # # self._write_html_action(value="colloquy/open", label=self.name, func=self.open)
 
     def _loop(self):
         pass
