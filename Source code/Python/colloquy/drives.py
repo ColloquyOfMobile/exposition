@@ -206,8 +206,9 @@ class Drives(ThreadElement):
         state, brightness, color = self.value
         
         # Trying to reduce brigtness to avoid blink
-        if brightness > 200:
-            brightness = 200
+        # Look like when the RGB value are all 255, the white LED is turned on, and RGB LEDs turned off. If white value is 0 then everything is turn off.
+        if brightness > 254:
+            brightness = 254
             
         config = dict(
             brightness = brightness,
