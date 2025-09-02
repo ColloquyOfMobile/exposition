@@ -60,7 +60,7 @@ class TestNeopixelCommunication(ThreadElement):
     
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
-        self._write_html_action(value="colloquy/tests/consumption/open", label=self.name, func=self.open)
+        self._write_html_action(value="colloquy/tests/communication/open", label=self.name, func=self.open)
 
     def _loop(self):
         self._is_started = True
@@ -117,12 +117,12 @@ class TestNeopixelCommunication(ThreadElement):
         doc, tag, text = self.html_doc.tagtext()
         with tag("form", method="post"):
 
-            with tag("button", name="action", value="colloquy/test_led_consumption"):
+            with tag("button", name="action", value="colloquy/test_led_communication"):
                 text(f"Start.")
 
-            self.colloquy.actions["colloquy/test_led_consumption"] = self.start            
+            self.colloquy.actions["colloquy/test_led_communication"] = self.start            
             
-        self._write_html_action(value="colloquy/test_led_consumption/close", label="close", func=self.close)
+        self._write_html_action(value="colloquy/test_led_communication/close", label="close", func=self.close)
 
     def _add_html_stop(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -130,7 +130,7 @@ class TestNeopixelCommunication(ThreadElement):
             with tag("div"):
                 text(f"All LEDs should be on.")
 
-            with tag("button", name="action", value="colloquy/test_led_consumption/stop"):
+            with tag("button", name="action", value="colloquy/test_led_communication/stop"):
                 text(f"Stop.")
 
-            self.colloquy.actions["colloquy/test_led_consumption/stop"] = self.stop
+            self.colloquy.actions["colloquy/test_led_communication/stop"] = self.stop

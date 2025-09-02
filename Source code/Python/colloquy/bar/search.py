@@ -15,7 +15,7 @@ class Search(ThreadElement):
             self._setup(**kwargs)
             while not self.stop_event.is_set():
                 if self.owner.stop_event.is_set():
-                    print(f"Hard stop. {self=}, {self.owner=}")
+                    # print(f"Hard stop. {self=}, {self.owner=}")
                     break
                 self._loop()
                 self._sleep_min()

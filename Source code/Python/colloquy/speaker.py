@@ -13,6 +13,7 @@ class Speaker(ThreadElement):
         self._is_notifing = False
         self._is_encouraging = False
         self.colloquy.speakers.append(self)
+        self._ui_context = None
 
     @property
     def is_encouraging(self):
