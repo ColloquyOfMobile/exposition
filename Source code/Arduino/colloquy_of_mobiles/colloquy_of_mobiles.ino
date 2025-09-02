@@ -28,8 +28,8 @@ Adafruit_NeoPixel male2BodyStrip(MALE_BODY_NUM_PIXELS, MALE2_BODY_NEOPIXEL_PIN, 
 #define FEMALE1_SPEAKER_PIN 11
 #define FEMALE2_SPEAKER_PIN 12
 #define FEMALE3_SPEAKER_PIN 13
-#define MALE1_SPEAKER_PIN 14
-#define MALE2_SPEAKER_PIN 15
+#define MALE1_SPEAKER_PIN 22
+#define MALE2_SPEAKER_PIN 23
 
 void updateStrip(Adafruit_NeoPixel* strip, int numPixels, int r, int g, int b, int w, int brightness);
 
