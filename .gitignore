@@ -175,3 +175,4 @@ cython_debug/
 *.MP4
 docs/~$questions.xlsx
 /CAD/KiCad/electronic box/electronic box-backups
+*.lck
