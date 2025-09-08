@@ -6,6 +6,7 @@ from .test2 import Test2
 from .test_neopixel_consumption import TestNeopixelConsumption
 from .test_neopixel_communication import TestNeopixelCommunication
 from .test_speaker import TestSpeaker
+from .test_photosensors import TestPhotosensors
 
 
 
@@ -15,15 +16,11 @@ class Tests(ThreadElement):
         ThreadElement.__init__(self, owner=owner, name="tests")
         self._is_open = False
         self.opened = None
-        # self.name = "tests"
-
-        # self._path = Path(self.name)
-        # if owner is not None:
-            # self._path = owner.path / self.name
             
         self._test_neopixel_consumption = TestNeopixelConsumption(owner=self)
         self._test_neopixel_communication = TestNeopixelCommunication(owner=self)
         self._test_speaker = TestSpeaker(owner=self)
+        self._test_photosensors = TestPhotosensors(owner=self)
 
     @property
     def colloquy(self):
@@ -57,6 +54,7 @@ class Tests(ThreadElement):
         self._test_neopixel_consumption.write_html()
         self._test_speaker.write_html()
         self._test_neopixel_communication.write_html()
+        self._test_photosensors.write_html()
     
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
