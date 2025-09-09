@@ -30,6 +30,10 @@ class TestPhotosensors(ThreadElement):
         self._is_open = False
         self.owner.opened = None
 
+    def _toggle_beam(self, **kwargs):
+        self.colloquy.male1.body_neopixel.ring.toggle()
+        # raise NotImplementedError()
+
     def _setup(self, **kwargs):
         self.colloquy.turn_to_origin_position(elements=self.colloquy.moving_elements)
         self.colloquy.male1.body_neopixel.ring.configure(
@@ -68,6 +72,8 @@ class TestPhotosensors(ThreadElement):
         
         if self._is_started:
             self._write_html_action(value="colloquy/tests/photosensors/stop", label="stop", func=self.stop)
+            
+            self._write_html_action(value="colloquy/tests/photosensors/toggle_beam", label="toggle beam", func=self._toggle_beam)
             return
         
             

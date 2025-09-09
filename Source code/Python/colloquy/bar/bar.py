@@ -2,26 +2,27 @@ from colloquy.dxl import DXL
 from colloquy.thread_element import ThreadElement
 from time import time, sleep
 from threading import Event
+from colloquy.moving_part import MovingPart
 from .search import Search
 
-class BarDriver(ThreadElement):
+class BarDriver(MovingPart):
 
     def __init__(self, owner, **kwargs):
-        ThreadElement.__init__(self, name=kwargs["name"], owner=owner)
-        self._position_memory = None
-        dxl_manager = kwargs["dynamixel manager"]
+        MovingPart.__init__(self, owner=owner, **kwargs)
+        # self._position_memory = None
+        #dxl_manager = kwargs["dynamixel manager"]
         # dxl_ids = kwargs["dynamixel ids"]
-        dxl_id = kwargs["dynamixel id"]
-        self.dxl_origin = kwargs["origin"]
-        self.motion_range = kwargs["motion range"]
-        self.moving_threshold = 20
+        # dxl_id = kwargs["dynamixel id"]
+        # self.dxl_origin = kwargs["origin"]
+        # self.motion_range = kwargs["motion range"]
+        # self.moving_threshold = 20
         self.interaction = None
         self.interaction_event = Event()
         self._nearby_threashold = 1000
 
         self.nearby_positions = []
         # self.offset = None
-        self.dxl1 = DXL(dxl_manager, dxl_id)
+        # self.dxl = DXL(dxl_manager, dxl_id)
         # self._dxl2 = DXL(dxl_manager, dxl_ids[1])
 
         self._search = Search(owner=self)
@@ -32,7 +33,7 @@ class BarDriver(ThreadElement):
 
     def __exit__(self, exc_type, exc_value, traceback_obj):
         self.turn_to_origin_position()
-        return ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
+        return MovingPart.__exit__(self, exc_type, exc_value, traceback_obj)
     
     # @property
     # def dxl2(self):
@@ -45,86 +46,86 @@ class BarDriver(ThreadElement):
 
     @property
     def position(self):
-        return self.dxl1.position
+        return self.dxl.position
 
     @property
     def is_moving(self):
-        return self.dxl1.is_moving
+        return self.dxl.is_moving
 
     @property
     def drive_mode(self):
-        return self.dxl1.drive_mode
+        return self.dxl.drive_mode
 
     @drive_mode.setter
     def drive_mode(self, value):
-        self.dxl1.drive_mode = value
+        self.dxl.drive_mode = value
         # self.dxl2.drive_mode = value
 
     @property
     def temperature(self):
-        temp1 = self.dxl1.temperature
+        temp1 = self.dxl.temperature
         # temp2 = self.dxl2.temperature
         return max((temp1, temp2))
 
     @property
     def elec_current(self):
-        elec_current1 = self.dxl1.elec_current
+        elec_current1 = self.dxl.elec_current
         # elec_current2 = self.dxl2.elec_current
         return elec_current1 + elec_current2
 
     @property
     def position(self):
-        return self.dxl1.position
+        return self.dxl.position
 
     @property
     def torque_enabled(self):
-        return self.dxl1.torque_enabled
+        return self.dxl.torque_enabled
 
     @torque_enabled.setter
     def torque_enabled(self, value):
         # assert self.offset is not None
-        self.dxl1.torque_enabled = value
+        self.dxl.torque_enabled = value
         # self.dxl2.torque_enabled = value
 
     @property
     def is_moving(self):
-        return abs(self.dxl1.position - self.dxl1.goal_position) > self.moving_threshold
+        return self.dxl.is_moving
 
     @property
     def profile_velocity(self):
-        return self.dxl1.profile_velocity
+        return self.dxl.profile_velocity
 
     @profile_velocity.setter
     def profile_velocity(self, value):
-        self.dxl1.profile_velocity = value
+        self.dxl.profile_velocity = value
         # self.dxl2.profile_velocity = value
 
     @property
     def profile_acceleration(self):
-        return self.dxl1.profile_acceleration
+        return self.dxl.profile_acceleration
 
     @profile_acceleration.setter
     def profile_acceleration(self, value):
-        self.dxl1.profile_acceleration = value
+        self.dxl.profile_acceleration = value
         # self.dxl2.profile_acceleration = value
 
     @property
     def goal_position(self):
-        return self.dxl1.goal_position
+        return self.dxl.goal_position
 
     @goal_position.setter
     def goal_position(self, value):
         # assert self.offset is not None
-        self.dxl1.goal_position = value
+        self.dxl.goal_position = value
         # self.dxl2.goal_position = value + self.offset
 
     @property
     def operating_mode(self):
-        return self.dxl1.operating_mode
+        return self.dxl.operating_mode
 
     @operating_mode.setter
     def operating_mode(self, value):
-        self.dxl1.operating_mode = value
+        self.dxl.operating_mode = value
         # self.dxl2.operating_mode = value
 
     def move_and_wait(self, position):
@@ -201,7 +202,7 @@ class BarDriver(ThreadElement):
 
     # def _init_offset(self):
         # """Initialise the offset postision between the two servos."""
-        # position1 = self.dxl1.position
+        # position1 = self.dxl.position
         # # position2 = self.dxl2.position
         # self.offset = position2 - position1
 

@@ -2,8 +2,9 @@ from dynamixel_sdk import PortHandler, PacketHandler, COMM_SUCCESS  # Uses Dynam
 from time import time, sleep
 
 class DXL:
-    def __init__(self, dxl_manager, dynamixel_id):
+    def __init__(self, owner, dxl_manager, dynamixel_id):
         # Handle hardware for serial communication.
+        self.owner = owner
         self._dxl_manager = dxl_manager
         self._id = dynamixel_id
         self.moving_threshold = 20
@@ -48,10 +49,11 @@ class DXL:
 
     @torque_enabled.setter
     def torque_enabled(self, value):
+        # print(f"{self.owner.name=} torque to {value=}")
         value = int(value)
         self._dxl_manager._write_1_byte_at(self._id, 64, value)
-        if value:
-            return
+        # if value:
+            # return
 
     @property
     def profile_velocity(self):

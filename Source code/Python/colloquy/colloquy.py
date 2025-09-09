@@ -173,24 +173,6 @@ class Colloquy(ThreadElement):
         print(f"Waiting until everything is stopped...")
         while self.is_something_moving():
             sleep(0.1)
-
-    def open(self, **kwargs):
-        raise NotImplementedError
-        # # assert not self.opened # params should be closed
-        # if self._is_open:
-            # return
-        # self._dxl_manager.open()
-        # self._arduino_manager.open()
-
-        # for body in self.bodies:
-            # body.open()
-
-        # self.bar.open()
-        # self.owner.opened = self
-        # # self._actions = {}
-        # self._is_open = True
-        # self.turn_to_origin_position(elements=self.moving_elements)
-        # self.wait_until_everything_is_still()
     
     def connect(self, **kwargs):
         if self._is_connected:
@@ -216,6 +198,9 @@ class Colloquy(ThreadElement):
 
         if self.thread is not None:
             self.stop()
+        
+        for element in self.moving_elements:
+            element.dxl.torque_enabled = False
 
         self.bar.turn_to_origin_position()
         self._dxl_manager.close()

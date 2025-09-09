@@ -30,21 +30,6 @@ def handle_error(func):
                 print(f"DXL ERR: ({dxl_id=}) {self.packet_handler.getRxPacketError(dxl_error)}")
                 continue
             return value
-            
-        # if dxl_comm_result != COMM_SUCCESS:
-            # raise RuntimeError(f"COM ERR: ({dxl_id=}) {self.packet_handler.getTxRxResult(dxl_comm_result)}")
-            
-        # if dxl_error != 0:
-            # error_description = self.packet_handler.getRxPacketError(dxl_error)
-            # if dxl_error == 6:
-                # value = args[3]
-                # raise NotImplementedError(
-                    # f"\n- DXL ERR: ({dxl_id=}) ({value=}) {error_description}"
-                    # f"\n- If you just calibrated Colloquy this might appen."
-                    # f"\n- Immediate fix (using Dynamixel Wizard):"
-                    # f"\n- | - TODO"
-                    # )
-            # raise RuntimeError(f"DXL ERR: ({dxl_id=}) {error_description}")
 
     return wrapper
 

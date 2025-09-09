@@ -17,7 +17,7 @@ class MovingPart(ThreadElement):
         self.dxl_origin = kwargs["origin"]
         self.motion_range = kwargs["motion range"]
         # self.stop_event = Event()
-        self.dxl = self.classes["dxl"](dxl_manager, dxl_id)
+        self.dxl = self.classes["dxl"](self, dxl_manager, dxl_id)
 
         self._position_memory = None
 
