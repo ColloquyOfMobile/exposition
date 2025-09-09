@@ -10,7 +10,8 @@ class BarDriver(ThreadElement):
         ThreadElement.__init__(self, name=kwargs["name"], owner=owner)
         self._position_memory = None
         dxl_manager = kwargs["dynamixel manager"]
-        dxl_ids = kwargs["dynamixel ids"]
+        # dxl_ids = kwargs["dynamixel ids"]
+        dxl_id = kwargs["dynamixel id"]
         self.dxl_origin = kwargs["origin"]
         self.motion_range = kwargs["motion range"]
         self.moving_threshold = 20
@@ -19,9 +20,9 @@ class BarDriver(ThreadElement):
         self._nearby_threashold = 1000
 
         self.nearby_positions = []
-        self.offset = None
-        self.dxl1 = DXL(dxl_manager, dxl_ids[0])
-        self.dxl2 = DXL(dxl_manager, dxl_ids[1])
+        # self.offset = None
+        self.dxl1 = DXL(dxl_manager, dxl_id)
+        # self._dxl2 = DXL(dxl_manager, dxl_ids[1])
 
         self._search = Search(owner=self)
 
@@ -32,6 +33,11 @@ class BarDriver(ThreadElement):
     def __exit__(self, exc_type, exc_value, traceback_obj):
         self.turn_to_origin_position()
         return ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
+    
+    # @property
+    # def dxl2(self):
+        # raise NotImplementedError(f"")
+        # # return self._dxl2
 
     @property
     def search(self):
@@ -52,18 +58,18 @@ class BarDriver(ThreadElement):
     @drive_mode.setter
     def drive_mode(self, value):
         self.dxl1.drive_mode = value
-        self.dxl2.drive_mode = value
+        # self.dxl2.drive_mode = value
 
     @property
     def temperature(self):
         temp1 = self.dxl1.temperature
-        temp2 = self.dxl2.temperature
+        # temp2 = self.dxl2.temperature
         return max((temp1, temp2))
 
     @property
     def elec_current(self):
         elec_current1 = self.dxl1.elec_current
-        elec_current2 = self.dxl2.elec_current
+        # elec_current2 = self.dxl2.elec_current
         return elec_current1 + elec_current2
 
     @property
@@ -76,9 +82,9 @@ class BarDriver(ThreadElement):
 
     @torque_enabled.setter
     def torque_enabled(self, value):
-        assert self.offset is not None
+        # assert self.offset is not None
         self.dxl1.torque_enabled = value
-        self.dxl2.torque_enabled = value
+        # self.dxl2.torque_enabled = value
 
     @property
     def is_moving(self):
@@ -91,7 +97,7 @@ class BarDriver(ThreadElement):
     @profile_velocity.setter
     def profile_velocity(self, value):
         self.dxl1.profile_velocity = value
-        self.dxl2.profile_velocity = value
+        # self.dxl2.profile_velocity = value
 
     @property
     def profile_acceleration(self):
@@ -100,7 +106,7 @@ class BarDriver(ThreadElement):
     @profile_acceleration.setter
     def profile_acceleration(self, value):
         self.dxl1.profile_acceleration = value
-        self.dxl2.profile_acceleration = value
+        # self.dxl2.profile_acceleration = value
 
     @property
     def goal_position(self):
@@ -108,9 +114,9 @@ class BarDriver(ThreadElement):
 
     @goal_position.setter
     def goal_position(self, value):
-        assert self.offset is not None
+        # assert self.offset is not None
         self.dxl1.goal_position = value
-        self.dxl2.goal_position = value + self.offset
+        # self.dxl2.goal_position = value + self.offset
 
     @property
     def operating_mode(self):
@@ -119,7 +125,7 @@ class BarDriver(ThreadElement):
     @operating_mode.setter
     def operating_mode(self, value):
         self.dxl1.operating_mode = value
-        self.dxl2.operating_mode = value
+        # self.dxl2.operating_mode = value
 
     def move_and_wait(self, position):
         """Blocking function that sets the body's goal position and wait for it to move."""
@@ -138,7 +144,7 @@ class BarDriver(ThreadElement):
     def open(self):
         for position in sorted(self.colloquy.interactions.from_positions):
             self.nearby_positions.append(position)
-        self._init_offset()
+        # self._init_offset()
         self.torque_enabled = 0
 
         self.drive_mode = 0
@@ -193,11 +199,11 @@ class BarDriver(ThreadElement):
         self.interaction = self.colloquy.interactions.from_positions[position]
 
 
-    def _init_offset(self):
-        """Initialise the offset postision between the two servos."""
-        position1 = self.dxl1.position
-        position2 = self.dxl2.position
-        self.offset = position2 - position1
+    # def _init_offset(self):
+        # """Initialise the offset postision between the two servos."""
+        # position1 = self.dxl1.position
+        # # position2 = self.dxl2.position
+        # self.offset = position2 - position1
 
 
     def _loop(self):

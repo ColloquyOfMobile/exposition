@@ -44,6 +44,7 @@ class Colloquy(ThreadElement):
         self._arduino_manager = arduino_manager = None
         self._dxl_manager = dxl_manager = None
         self._doc = None
+        self.emulate_light_sensors = True
 
         dxl_manager_params = params["dynamixel network"]
         dxl_manager_params["name"] = "dxl"
@@ -95,6 +96,7 @@ class Colloquy(ThreadElement):
         self.wait_until_everything_is_still()
         self._dxl_manager.stop()
         return result
+        
 
     @property
     def lock(self):

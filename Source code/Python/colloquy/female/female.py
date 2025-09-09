@@ -27,6 +27,7 @@ class FemaleDriver(Body):
         self._search = Search(owner=self)
         self._conversation = Conversation(owner=self)
         self._is_notifing = False
+        self._emulate_light_sensor = None
 
         dxl_manager = kwargs["dynamixel manager"]
         dxl_id = kwargs["dynamixel id"]
@@ -45,6 +46,16 @@ class FemaleDriver(Body):
         assert self.dxl_origin is not None, "Calibrate colloquy."
         self.stop_event.clear()
         self.drives.start()
+    
+    @property
+    def emulate_light_sensor(self):
+        if self._emulate_light_sensor is None:
+            return self.owner.emulate_light_sensors
+        return self._emulate_light_sensor
+    
+    @emulate_light_sensor.setter
+    def emulate_light_sensor(self, value):
+        self._emulate_light_sensor = value
 
     @property
     def is_notifing(self):

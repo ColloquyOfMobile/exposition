@@ -9,11 +9,11 @@
 #define MALE1_UP_RING_NEOPIXEL_PIN 5
 #define MALE2_UP_RING_NEOPIXEL_PIN 4
 
-#define FEMALE_NUM_PIXELS 50  // Nombre de LEDs par groupe
-#define MALE_BODY_NUM_PIXELS 40    // Nombre de LEDs par groupe
-#define MALE_BODY_RING_END_PIXELS 24    // Nombre de LEDs par groupe
-#define MALE_BODY_DRIVE_START_PIXELS 25    // Nombre de LEDs par groupe
-#define MALE_UP_RING_NUM_PIXELS 12    // Nombre de LEDs par groupe
+#define FEMALE_NUM_PIXELS 50             // Nombre de LEDs par groupe
+#define MALE_BODY_NUM_PIXELS 40          // Nombre de LEDs par groupe
+#define MALE_BODY_RING_END_PIXELS 24     // Nombre de LEDs par groupe
+#define MALE_BODY_DRIVE_START_PIXELS 25  // Nombre de LEDs par groupe
+#define MALE_UP_RING_NUM_PIXELS 12       // Nombre de LEDs par groupe
 
 // Initialisation des bandes Neopixel
 Adafruit_NeoPixel female1Strip(FEMALE_NUM_PIXELS, FEMALE1_NEOPIXEL_PIN, NEO_GRBW + NEO_KHZ800);
@@ -30,6 +30,11 @@ Adafruit_NeoPixel male2BodyStrip(MALE_BODY_NUM_PIXELS, MALE2_BODY_NEOPIXEL_PIN, 
 #define FEMALE3_SPEAKER_PIN 13
 #define MALE1_SPEAKER_PIN 22
 #define MALE2_SPEAKER_PIN 23
+
+// Config for photosensors
+#define FEMALE1_PHOTOSENSOR_PIN 59  // What is A5 pin number ?
+#define FEMALE2_PHOTOSENSOR_PIN 60  // What is A6 pin number ?
+#define FEMALE3_PHOTOSENSOR_PIN 61  // What is A7 pin number ?
 
 void updateStrip(Adafruit_NeoPixel* strip, int numPixels, int r, int g, int b, int w, int brightness);
 
@@ -56,13 +61,11 @@ public:
       int brightness = doc["brightness"] | 255;
       setBrightness(brightness);
       strip->setPixelColor(i,
-        strip->Color(
-          scaleBrightness(r),
-          scaleBrightness(g),
-          scaleBrightness(b),
-          scaleBrightness(w)
-        )
-      );
+                           strip->Color(
+                             scaleBrightness(r),
+                             scaleBrightness(g),
+                             scaleBrightness(b),
+                             scaleBrightness(w)));
     }
     strip->show();
     return R"({"status": "success", "message": "Neopixel updated"})";
@@ -112,6 +115,14 @@ public:
     }
     return R"({"status": "success", "message": "Speaker updated"})";
   }
+
+  String sensor(int pin) {
+    int value = analogRead(pin);
+    String result = "{\"status\": \"success\", \"value\": ";
+    result += value;
+    result += "}";
+    return result;
+  }
 };
 
 class MaleBody {
@@ -120,7 +131,7 @@ public:
   // int numPixels;
   PixelGroup ring;
   PixelGroup drive;
-  
+
   MaleBody(Adafruit_NeoPixel* strip)
     : ring(strip, 0, MALE_BODY_RING_END_PIXELS), drive(strip, MALE_BODY_DRIVE_START_PIXELS, MALE_BODY_NUM_PIXELS) {}
 };
@@ -136,12 +147,12 @@ public:
   PixelGroup upRing;
 
   Male(String name, Adafruit_NeoPixel* bodyStrip, Adafruit_NeoPixel* upRingStrip, int speakerPin)
-    : name(name), 
-    upRing(upRingStrip, 0, MALE_UP_RING_NUM_PIXELS), 
-    speakerPin(speakerPin), 
-    body(bodyStrip),
-    bodyStrip(bodyStrip),
-    upRingStrip(upRingStrip){}
+    : name(name),
+      upRing(upRingStrip, 0, MALE_UP_RING_NUM_PIXELS),
+      speakerPin(speakerPin),
+      body(bodyStrip),
+      bodyStrip(bodyStrip),
+      upRingStrip(upRingStrip) {}
 
   // String upRing(JsonDocument& doc) {
   //   int r = doc["r"] | 0;
@@ -223,36 +234,43 @@ String processCommand(const String& input) {
 
   String path = jsonDoc["path"];
 
-  if (path == "female1/speaker"){
+  if (path == "female1/speaker") {
     return female1.speaker(jsonDoc);
-  } else if (path == "female1/neopixel"){
+  } else if (path == "female1/neopixel") {
     return female1.neopixel.fill(jsonDoc);
-  } else if (path == "female2/speaker"){
+  } else if (path == "female2/speaker") {
     return female2.speaker(jsonDoc);
-  } else if (path == "female2/neopixel"){
+  } else if (path == "female2/neopixel") {
     return female2.neopixel.fill(jsonDoc);
-  } else if (path == "female3/speaker"){
+  } else if (path == "female3/speaker") {
     return female3.speaker(jsonDoc);
-  } else if (path == "female3/neopixel"){
+  } else if (path == "female3/neopixel") {
     return female3.neopixel.fill(jsonDoc);
-  } else if (path == "male1/speaker"){
+  } else if (path == "male1/speaker") {
     return male1.speaker(jsonDoc);
-  } else if (path == "male1/up_ring"){
+  } else if (path == "male1/up_ring") {
     return male1.upRing.fill(jsonDoc);
-  } else if (path == "male1/body/drive"){
+  } else if (path == "male1/body/drive") {
     return male1.body.drive.fill(jsonDoc);
-  } else if (path == "male1/body/ring"){
+  } else if (path == "male1/body/ring") {
     return male1.body.ring.fill(jsonDoc);
-  } else if (path == "male2/speaker"){
+  } else if (path == "male2/speaker") {
     return male2.speaker(jsonDoc);
-  } else if (path == "male2/up_ring"){
+  } else if (path == "male2/up_ring") {
     return male2.upRing.fill(jsonDoc);
-  } else if (path == "male2/body/drive"){
+  } else if (path == "male2/body/drive") {
     return male2.body.drive.fill(jsonDoc);
-  } else if (path == "male2/body/ring"){
+  } else if (path == "male2/body/ring") {
     return male2.body.ring.fill(jsonDoc);
-  } 
-  
+  } else if (path == "female1/sensor") {
+    return female1.sensor(FEMALE1_PHOTOSENSOR_PIN);
+  } else if (path == "female2/sensor") {
+    return female2.sensor(FEMALE2_PHOTOSENSOR_PIN);
+  } else if (path == "female3/sensor") {
+    return female3.sensor(FEMALE3_PHOTOSENSOR_PIN);
+  }
+
+
   return R"({"status": "error", "message": "Invalid path or data"})";
 }
 
@@ -263,7 +281,3 @@ void updateStrip(Adafruit_NeoPixel* strip, int numPixels, int r, int g, int b, i
   }
   strip->show();
 }
-
-
-
-

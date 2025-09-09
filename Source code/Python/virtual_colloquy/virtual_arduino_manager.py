@@ -14,9 +14,15 @@ class VirtualSerialPort:
             self._is_open = True
         self._possible_paths = set()
         self._load_possible_paths()
+        self._to_return = None
         self._readline_results = self._iter_readline_results()
 
     def readline(self):
+        if self._to_return is not None:
+            to_return = self._to_return
+            self._to_return = None
+            return to_return
+            
         return next(self._readline_results)
 
     def write(self, data):
@@ -32,6 +38,9 @@ class VirtualSerialPort:
             assert "b" in data
             assert "w" in data
             assert "brightness" in data
+        if path.endswith("sensor"):
+            self._to_return = json.dumps({"status": "success", "value": "10"}).encode()
+            
 
     @property
     def is_open(self):

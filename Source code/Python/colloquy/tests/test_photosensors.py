@@ -1,21 +1,16 @@
-from server.html_element import HTMLElement
+from colloquy.thread_element import ThreadElement
 
-class TestPhotosensors(HTMLElement):
+class TestPhotosensors(ThreadElement):
 
     def __init__(self, owner):
-        HTMLElement.__init__(self, owner)
+        ThreadElement.__init__(self, owner=owner, name="test photosensors")
         self._is_started = False
         self._is_open = False
-        self.name = "test photosensors"
         # self.speaker_on = None
 
     @property
     def colloquy(self):
         return self.owner.colloquy
-
-    @property
-    def is_started(self):
-        return self._is_started
 
     @property
     def is_open(self):
@@ -31,18 +26,30 @@ class TestPhotosensors(HTMLElement):
     def close(self, **kwargs):
         if not self._is_open:
             return
-        # raise NotImplementedError
-        # if self.speaker_on is not None:
-            # self.speaker_on.off()
         self.colloquy.close()
         self._is_open = False
         self.owner.opened = None
 
-    def _start(self, **kwargs):
-        raise NotImplementedError(f"{kwargs=}")
+    def _setup(self, **kwargs):
+        self.colloquy.turn_to_origin_position(elements=self.colloquy.moving_elements)
+        self.colloquy.male1.body_neopixel.ring.on()
+        self.colloquy.female1.emulate_light_sensor = False
 
-    def _stop(self, **kwargs):
-        raise NotImplementedError(f"{kwargs=}")
+    def _loop(self, **kwargs):
+        self.colloquy.female1.sensor.read()
+        print(f"{self.colloquy.female1.sensor.read()=}")
+    
+    def stop(self, **kwarg):
+        self.colloquy.male1.body_neopixel.ring.off()
+        self.colloquy.female1.emulate_light_sensor = None
+                
+        if self._is_started:
+            self._is_started = False
+            self.stop_event.set()
+            return
+            
+        for element in self.elements:
+            element.stop()
 
     def write_html(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -54,20 +61,13 @@ class TestPhotosensors(HTMLElement):
         self._add_html_title()
         
         if self._is_started:
-            self._write_html_action(value="colloquy/tests/photosensors/stop", label="stop", func=self._stop)
+            self._write_html_action(value="colloquy/tests/photosensors/stop", label="stop", func=self.stop)
             return
         
             
         self._write_html_action(value="colloquy/tests/photosensors/close", label="close", func=self.close)
         
-        self._write_html_action(value="colloquy/tests/photosensors/start", label="start", func=self._start)
-        # print(f"{self.speaker_on=}")
-        # if self.speaker_on is not None:
-            # self.speaker_on.write_html(ui_context=self)
-            # return 
-        
-        # for female in self.colloquy.females:
-            # female.photosensors.write_html(ui_context=self)
+        self._write_html_action(value="colloquy/tests/photosensors/start", label="start", func=self.start)
     
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -80,14 +80,3 @@ class TestPhotosensors(HTMLElement):
             text(self.name.title())
         with tag("div"):
             text("Enable testing photosensors one by one.")
-
-    def _add_html_stop(self):
-        doc, tag, text = self.html_doc.tagtext()
-        with tag("form", method="post"):
-            with tag("div"):
-                text(f"All LEDs should be on.")
-
-            with tag("button", name="action", value="colloquy/test_led_consumption/stop"):
-                text(f"Stop.")
-
-            self.colloquy.actions["colloquy/test_led_consumption/stop"] = self._stop

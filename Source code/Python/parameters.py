@@ -78,8 +78,8 @@ class Parameters(HTMLElement):
             },
         "bar": {
             "origin": None,
-            "dynamixel ids": [9, 10],
-                "motion range": 10000,
+            "dynamixel id": 9,
+            "motion range": 10000,
             },
         }
 
@@ -96,8 +96,10 @@ class Parameters(HTMLElement):
 
         with self._path.open() as file:
             self._data = json.load(file)
-
-
+        
+        assert "dynamixel id" in self._data["bar"], f"Make sure to replace the 'dynamixel ids' list by the 'dynamixel id' int (check self._default), because one motor was removed."
+            
+            
         for mirror_name, female_name in zip(self._data["mirrors"]["names"], self._data["females"]["names"]):
             self._data[mirror_name] = self._data[female_name]["mirror"]
 
