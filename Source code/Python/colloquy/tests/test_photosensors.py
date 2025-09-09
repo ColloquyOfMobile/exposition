@@ -32,6 +32,12 @@ class TestPhotosensors(ThreadElement):
 
     def _setup(self, **kwargs):
         self.colloquy.turn_to_origin_position(elements=self.colloquy.moving_elements)
+        self.colloquy.male1.body_neopixel.ring.configure(
+            red = 0,
+            green = 0,
+            blue = 0,
+            white = 255,
+            brightness = 255,)
         self.colloquy.male1.body_neopixel.ring.on()
         self.colloquy.female1.emulate_light_sensor = False
 
