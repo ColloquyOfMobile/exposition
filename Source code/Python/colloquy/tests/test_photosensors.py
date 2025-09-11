@@ -46,8 +46,29 @@ class TestPhotosensors(ThreadElement):
         self.colloquy.female1.emulate_light_sensor = False
 
     def _loop(self, **kwargs):
-        self.colloquy.female1.sensor.read()
-        print(f"{self.colloquy.female1.sensor.read()=}")
+        value = self.colloquy.female1.sensor.read()
+        
+        # threshold to decide between "light detected" and "no light"
+        threshold = 300  # adjust depending on your sensor
+        
+        # convert to boolean (False = low, True = high)
+        current_state = value > threshold
+        
+        if self._last_sensor_value is None:
+            # first read, just initialize
+            self._last_sensor_value = current_state
+            return
+        
+        # rising edge detected (low -> high)
+        if not self._last_sensor_value and current_state:
+            print("Rising edge detected!")
+        
+        # falling edge detected (high -> low)
+        elif self._last_sensor_value and not current_state:
+            print("Falling edge detected!")
+        
+        # update last value for the next loop
+        self._last_sensor_value = current_state
     
     def stop(self, **kwarg):
         self.colloquy.male1.body_neopixel.ring.off()
