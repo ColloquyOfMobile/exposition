@@ -48,7 +48,7 @@ class TestPhotosensors(ThreadElement):
 
     def _loop(self, **kwargs):
         value = self.colloquy.female1.sensor.read()
-            print(f"{value=}")
+        print(f"{value=}")
         
         # threshold to decide between "light detected" and "no light"
         threshold = 300  # adjust depending on your sensor
