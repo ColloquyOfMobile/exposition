@@ -6,6 +6,7 @@ class TestPhotosensors(ThreadElement):
         ThreadElement.__init__(self, owner=owner, name="test photosensors")
         self._is_started = False
         self._is_open = False
+        self._last_sensor_value = None  # stores the previous sensor state
         # self.speaker_on = None
 
     @property
@@ -47,6 +48,7 @@ class TestPhotosensors(ThreadElement):
 
     def _loop(self, **kwargs):
         value = self.colloquy.female1.sensor.read()
+            print(f"{value=}")
         
         # threshold to decide between "light detected" and "no light"
         threshold = 300  # adjust depending on your sensor
