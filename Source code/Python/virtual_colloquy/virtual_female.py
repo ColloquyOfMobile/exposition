@@ -1,8 +1,12 @@
-from colloquy_driver.shared_driver import FemaleDriver
+from colloquy.female import FemaleDriver
+from .virtual_light_sensor import VirtualLightSensor
 
 
-class VirtualFemaleDriver(SharedDriver):
-    pass
+class VirtualFemale(FemaleDriver):    
+    
+    _classes = {
+        "sensor": VirtualLightSensor
+    }
 
     # def __init__(self, **kwargs):
         # dxl_manager = kwargs["dynamixel manager"]

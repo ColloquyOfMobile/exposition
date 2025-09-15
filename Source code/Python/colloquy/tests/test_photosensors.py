@@ -1,4 +1,6 @@
 from colloquy.thread_element import ThreadElement
+import socket
+from .detect_pattern import DetectPattern
 
 class TestPhotosensors(ThreadElement):
 
@@ -7,6 +9,7 @@ class TestPhotosensors(ThreadElement):
         self._is_started = False
         self._is_open = False
         self._last_sensor_value = None  # stores the previous sensor state
+        self._detect_pattern = DetectPattern(owner=self)
         # self.speaker_on = None
 
     @property
@@ -36,42 +39,48 @@ class TestPhotosensors(ThreadElement):
         # raise NotImplementedError()
 
     def _setup(self, **kwargs):
+        hostname = socket.gethostname()
+        if hostname != "DESKTOP-MRSLS88":        
+            self.colloquy.female1.emulate_light_sensor = False
+        
         self.colloquy.turn_to_origin_position(elements=self.colloquy.moving_elements)
-        self.colloquy.male1.body_neopixel.ring.configure(
-            red = 0,
-            green = 0,
-            blue = 0,
-            white = 255,
-            brightness = 255,)
-        self.colloquy.male1.body_neopixel.ring.on()
-        self.colloquy.female1.emulate_light_sensor = False
+        self._detect_pattern.start()
+        # self.colloquy.male1.search.blink.start()
+        # self.colloquy.male1.body_neopixel.ring.configure(
+            # red = 0,
+            # green = 0,
+            # blue = 0,
+            # white = 255,
+            # brightness = 255,)
+        # self.colloquy.male1.body_neopixel.ring.on()
 
     def _loop(self, **kwargs):
-        raise NotImplementedError("Update this funtion to detect the pattern of light.")
-        value = self.colloquy.female1.sensor.read()
-        print(f"{value=}")
+        return
+        # raise NotImplementedError("Update this funtion to detect the pattern of light.")
+        # value = self.colloquy.female1.sensor.read()
+        # print(f"{value=}")
         
-        # threshold to decide between "light detected" and "no light"
-        threshold = 300  # adjust depending on your sensor
+        # # threshold to decide between "light detected" and "no light"
+        # threshold = 300  # adjust depending on your sensor
         
-        # convert to boolean (False = low, True = high)
-        current_state = value > threshold
+        # # convert to boolean (False = low, True = high)
+        # current_state = value > threshold
         
-        if self._last_sensor_value is None:
-            # first read, just initialize
-            self._last_sensor_value = current_state
-            return
+        # if self._last_sensor_value is None:
+            # # first read, just initialize
+            # self._last_sensor_value = current_state
+            # return
         
-        # rising edge detected (low -> high)
-        if not self._last_sensor_value and current_state:
-            print("Rising edge detected!")
+        # # rising edge detected (low -> high)
+        # if not self._last_sensor_value and current_state:
+            # print("Rising edge detected!")
         
-        # falling edge detected (high -> low)
-        elif self._last_sensor_value and not current_state:
-            print("Falling edge detected!")
+        # # falling edge detected (high -> low)
+        # elif self._last_sensor_value and not current_state:
+            # print("Falling edge detected!")
         
-        # update last value for the next loop
-        self._last_sensor_value = current_state
+        # # update last value for the next loop
+        # self._last_sensor_value = current_state
     
     def stop(self, **kwarg):
         self.colloquy.male1.body_neopixel.ring.off()
@@ -97,7 +106,8 @@ class TestPhotosensors(ThreadElement):
         if self._is_started:
             self._write_html_action(value="colloquy/tests/photosensors/stop", label="stop", func=self.stop)
             
-            self._write_html_action(value="colloquy/tests/photosensors/toggle_beam", label="toggle beam", func=self._toggle_beam)
+            
+            self.colloquy.male1.search.blink.add_html()
             return
         
             
@@ -116,42 +126,6 @@ class TestPhotosensors(ThreadElement):
             text(self.name.title())
         with tag("div"):
             text("Enable testing photosensors one by one.")
+    
 
-class DetectPattern(ThreadElement):
-    def __init__(self, owner):
-        super().__init__(owner=owner, name="detect_pattern")
-        self._last_sensor_value = None
-        self._edges = []  # store timestamps of edges
-        self._threshold = 300  # adjust to your sensor
-        self._debounce = 0.05  # seconds to avoid false triggers
-        self._last_edge_time = 0
 
-    def _loop(self, **kwargs):
-        value = self.colloquy.female1.sensor.read()
-
-        # convert to boolean (False = low, True = high)
-        current_state = value > self._threshold
-
-        if self._last_sensor_value is None:
-            self._last_sensor_value = current_state
-            return
-
-        now = time()
-
-        # rising edge detected (0 -> 1)
-        if not self._last_sensor_value and current_state:
-            if now - self._last_edge_time > self._debounce:
-                print("Rising edge detected")
-                self._edges.append(("rise", now))
-                self._last_edge_time = now
-
-        # falling edge detected (1 -> 0)
-        elif self._last_sensor_value and not current_state:
-            if now - self._last_edge_time > self._debounce:
-                print("Falling edge detected")
-                self._edges.append(("fall", now))
-                self._last_edge_time = now
-
-        self._last_sensor_value = current_state
-
-        # Optional: after collecting enough edges, analyze timing vs LIGHT_PATTERNS

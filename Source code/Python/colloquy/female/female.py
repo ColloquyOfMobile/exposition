@@ -11,6 +11,10 @@ from threading import Lock
 from time import sleep
 
 class FemaleDriver(Body):
+    
+    _classes = {
+        "sensor": LightSensor
+    }
 
     def __init__(self, owner, **kwargs):
         # self._lock = Lock()
@@ -21,7 +25,7 @@ class FemaleDriver(Body):
             )
         self.neopixel = Neopixel(owner=self, name="neopixel")
         self.drives = Drives(owner=self, neopixel=self.neopixel)
-        self.sensor = LightSensor(owner=self, name="sensor")
+        self.sensor = self._classes["sensor"](owner=self, name="sensor")
         self.microphone = Microphone(owner=self)
 
         self._search = Search(owner=self)

@@ -215,3 +215,51 @@ class Drives(ThreadElement):
             **color,
             )
         self._neopixel.configure(**config)
+    
+    def _set_p_drive(self, **kwargs):
+        value = kwargs["value"][0]
+        self._p_drive = int(value)
+        
+    def _set_o_drive(self, **kwargs):
+        value = kwargs["value"][0]
+        self._o_drive = int(value)
+        # raise NotImplementedError(f"{kwargs=}, {self.post_data=}")
+        
+
+    def add_html(self):
+        doc, tag, text = self.html_doc.tagtext()
+
+        with tag("h4"):
+            text(f"Drives:")
+
+        with tag("div", style="padding-bottom:1rem;"):
+            text(f"Set the drive here")
+            with tag("ol"):
+                with tag("li"):
+                    text(f"{self._satisfaction_lim=}")
+                with tag("li"):
+                    text(f"{self._frustrated_lim=}")
+
+        # if self.colloquy.is_open:
+        self._add_html_o_drive()
+        self._add_html_p_drive()
+
+    def _add_html_o_drive(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("form", method="post"):
+            with tag("label"):
+                text(f"O drive [{self._min}-{self._max}]: ")
+            doc.stag("input", type="number", name="value", value=self.o_drive, min=self._min, max=self._max, increment=1)
+            with tag("button", name="action", value=f"{self.path.as_posix()}/set_o"):
+                text(f"Set.")
+            self.colloquy.actions[f"{self.path.as_posix()}/set_o"] = self._set_o_drive
+
+    def _add_html_p_drive(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("form", method="post"):
+            with tag("label"):
+                text(f"P drive [{self._min}-{self._max}]: ")
+            doc.stag("input", type="number", name="value", value=self.p_drive, min=self._min, max=self._max, increment=1)
+            with tag("button", name="action", value=f"{self.path.as_posix()}/set_p"):
+                text(f"Set.")
+            self.colloquy.actions[f"{self.path.as_posix()}/set_p"] = self._set_p_drive

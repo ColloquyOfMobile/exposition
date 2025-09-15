@@ -103,7 +103,7 @@ class Blink(ThreadElement):
         self._blink_step = 0.5
 
     def __enter__(self):
-        print(f"Start blinking...")
+        print(f"Start blinking ({self.owner.owner.name})...")
         self.stop_event.clear()
         self._timestamp = 0
         self.ring.configure(
@@ -143,11 +143,13 @@ class Blink(ThreadElement):
         with tag("h4"):
             text(f"Blink:")
 
-        if self.colloquy.is_open:
-            if not self._is_started:
-                self._add_html_start()
-            else:
-                self._add_html_stop()
+        # if self.colloquy.is_open:
+        if not self._is_started:
+            self._add_html_start()
+        else:
+            self._add_html_stop()
+            
+        self.drives.add_html()
 
     def _add_html_start(self):
         doc, tag, text = self.html_doc.tagtext()
