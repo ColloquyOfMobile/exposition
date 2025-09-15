@@ -114,7 +114,7 @@ class Blink(ThreadElement):
             brightness = 255,)
 
     def _loop(self):
-        if (time() - self._timestamp) > 0.5:
+        if (time() - self._timestamp) > self._blink_step:
             light_pattern = self.light_patterns[self.drives.state]
             value = light_pattern.popleft()
             light_pattern.append(value)

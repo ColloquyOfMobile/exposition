@@ -47,8 +47,9 @@ class TestPhotosensors(ThreadElement):
         self.colloquy.female1.emulate_light_sensor = False
 
     def _loop(self, **kwargs):
+        raise NotImplementedError("Update this funtion to detect the pattern of light.")
         value = self.colloquy.female1.sensor.read()
-            print(f"{value=}")
+        print(f"{value=}")
         
         # threshold to decide between "light detected" and "no light"
         threshold = 300  # adjust depending on your sensor
@@ -115,3 +116,42 @@ class TestPhotosensors(ThreadElement):
             text(self.name.title())
         with tag("div"):
             text("Enable testing photosensors one by one.")
+
+class DetectPattern(ThreadElement):
+    def __init__(self, owner):
+        super().__init__(owner=owner, name="detect_pattern")
+        self._last_sensor_value = None
+        self._edges = []  # store timestamps of edges
+        self._threshold = 300  # adjust to your sensor
+        self._debounce = 0.05  # seconds to avoid false triggers
+        self._last_edge_time = 0
+
+    def _loop(self, **kwargs):
+        value = self.colloquy.female1.sensor.read()
+
+        # convert to boolean (False = low, True = high)
+        current_state = value > self._threshold
+
+        if self._last_sensor_value is None:
+            self._last_sensor_value = current_state
+            return
+
+        now = time()
+
+        # rising edge detected (0 -> 1)
+        if not self._last_sensor_value and current_state:
+            if now - self._last_edge_time > self._debounce:
+                print("Rising edge detected")
+                self._edges.append(("rise", now))
+                self._last_edge_time = now
+
+        # falling edge detected (1 -> 0)
+        elif self._last_sensor_value and not current_state:
+            if now - self._last_edge_time > self._debounce:
+                print("Falling edge detected")
+                self._edges.append(("fall", now))
+                self._last_edge_time = now
+
+        self._last_sensor_value = current_state
+
+        # Optional: after collecting enough edges, analyze timing vs LIGHT_PATTERNS
