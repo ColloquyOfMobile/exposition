@@ -49,7 +49,6 @@ class DXL:
 
     @torque_enabled.setter
     def torque_enabled(self, value):
-        # print(f"{self.owner.name=} torque to {value=}")
         value = int(value)
         self._dxl_manager._write_1_byte_at(self._id, 64, value)
         # if value:

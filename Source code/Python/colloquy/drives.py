@@ -138,11 +138,9 @@ class Drives(ThreadElement):
 
     def __enter__(self):
         """Setup before loop."""
-        print(f"The {self.owner.name} drives are started !")
         self.stop_event.clear()
 
     def __exit__(self, exc_type, exc_value, traceback_obj):
-        print(f"The {self.owner.name} drives are stopped !")
         if self.owner.search.is_started:
             self.owner.search.stop()
         return ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
@@ -166,21 +164,17 @@ class Drives(ThreadElement):
 
         self._update_neopixel()
 
-        # print(f"Update drives: O={self.o_drive}, P={self.p_drive}")
 
         if self.is_frustated:
             if not self.owner.search.is_started:
-                print(f"The {self.owner.name} is unsatisfied {self.state}!")
                 self.owner.search.start()
             return
 
     def decrease(self, drive):
         if "O" in drive:
             self.o_drive -= 20 * self._step_o
-            print(f"Decreased O drive of {self.owner.name=}.")
         if "P" in drive:
             self.p_drive -= 20 * self._step_p
-            print(f"Decreased P drive of {self.owner.name=}.")
         self._update_neopixel()
 
     def is_satisfied(self, drive):
@@ -192,8 +186,7 @@ class Drives(ThreadElement):
             if "P" in drive:
                 is_satisfied = self.p_drive < self._satisfaction_lim
                 satisfied_drives.append(is_satisfied)
-        if all(satisfied_drives):
-            print(f"{self.owner.name} is satisfied.")
+                
 
         return all(satisfied_drives)
 

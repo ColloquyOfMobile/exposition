@@ -8,7 +8,6 @@ class Search(ThreadElement):
         self._blink = Blink(owner=self)
 
     def __enter__(self):
-        print(f"The {self.owner.name} is searching...")
         self.stop_event.clear()
 
     def __exit__(self, exc_type, exc_value, traceback_obj):
@@ -30,11 +29,9 @@ class Search(ThreadElement):
         with self.colloquy.lock:
             if not self.colloquy.bar.search.is_started:
                 if self.colloquy.interaction is None:
-                    print(f"No interaction, => Tell the bar to start searching.")
                     self.colloquy.bar.search.start()
                 else:
                     if not self.colloquy.interaction.is_started:
-                        print(f"Interaction stopped => Tell the bar to start searching.")
                         self.colloquy.bar.search.start()
 
         if not self.owner.is_moving:
@@ -46,12 +43,6 @@ class Search(ThreadElement):
 
     def _setup(self):
         self.blink.start()
-        # if not self.colloquy.bar.search.is_started:
-            # if self.colloquy.interaction.is_started:
-                # print(f"The bar is already interacting")
-            # print(f"Tell the bar to start searching.")
-        # else:
-            # print(f"Bar is already searching.")
 
     def add_html(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -103,7 +94,6 @@ class Blink(ThreadElement):
         self._blink_step = 0.5
 
     def __enter__(self):
-        print(f"Start blinking ({self.owner.owner.name})...")
         self.stop_event.clear()
         self._timestamp = 0
         self.ring.configure(

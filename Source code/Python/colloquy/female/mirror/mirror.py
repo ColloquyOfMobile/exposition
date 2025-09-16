@@ -80,7 +80,6 @@ class Mirror(MovingPart):
         if self._move_to_target_position is None:
             self._search.start()
             return
-        print(f"The {self.name} is moving to target position...")
         self._move_to_target_position()
 
     def _set_origin(self, origin):

@@ -48,12 +48,9 @@ class Interaction(ThreadElement):
         yield self.female
 
     def __enter__(self):
-        print(f"Interaction {self.female.name}-{self.male.name} Started...")
         self.stop_event.clear()
 
     def __exit__(self, exc_type, exc_value, traceback_obj):
-        # if self.female.conversation.is_started:
-            # self.female.conversation.stop()
         return ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
 
     @property
@@ -85,6 +82,7 @@ class Interaction(ThreadElement):
         pass
 
     def _setup(self, **kwargs):
+        self.colloquy.interaction_counter.increment()
         self.colloquy.interaction = self
         self.female.drives.stop()
         self.female.conversation.start()

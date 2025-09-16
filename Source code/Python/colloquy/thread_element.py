@@ -167,7 +167,6 @@ class ThreadElement(HTMLElement):
         self.log(f"...{self.path.as_posix()} started.")
 
     def stop(self, **kwargs):
-        # print(f"Stopping {self=}, {self._is_started=}...")
                 
         if self._is_started:
             self._is_started = False

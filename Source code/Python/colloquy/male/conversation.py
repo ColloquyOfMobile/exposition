@@ -10,7 +10,6 @@ class Conversation(ThreadElement):
         #self._watch_out_for_reflection = WatchOutForReflection(owner=self)
 
     def __enter__(self):
-        print(f"The {self.owner.name} is engaging...")
         self.stop_event.clear()
 
     def __exit__(self, exc_type, exc_value, traceback_obj):
@@ -30,14 +29,12 @@ class Conversation(ThreadElement):
         self.colloquy.turn_to_interaction_position()
 
     def _watch_out_for_engagement(self):
-        print(f"Watching out for encouragement...")
         self._timeout_start = time()
         timeout = self._timeout
         target_drive = self.colloquy.interaction.target_drive
         while not self.stop_event.is_set():
 
             if time() - self._timeout_start > timeout:
-                print(f"The female doesn't engage...")
                 self.stop_event.set()
                 self.colloquy.bar.interaction.stop()
                 self.owner.drives.start()
@@ -61,7 +58,6 @@ class Conversation(ThreadElement):
             self.owner.drives.start()
 
     def _climax(self):
-        print(f"Climax {self.owner.name}...")
         start = time()
         while time()-start < 6:
             self.owner.body_neopixel.ring.on()
@@ -86,7 +82,6 @@ class WatchOutForReflection(ThreadElement):
         self.timeout = 4 # seconds
 
     def __enter__(self):
-        print(f"The {self.owner.owner.name} is waiting for reflection...")
         self.stop_event.clear()
         self._timeout_start = time()
 
@@ -95,7 +90,6 @@ class WatchOutForReflection(ThreadElement):
             self.stop_event.set()
 
         if time() - self._timeout_start > self.timeout:
-            print(f"The male doesn't respond...")
             self.stop_event.set()
             self.colloquy.bar.interaction.stop()
             self.owner.owner.search.start()

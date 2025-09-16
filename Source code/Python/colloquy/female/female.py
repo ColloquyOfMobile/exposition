@@ -86,7 +86,6 @@ class FemaleDriver(Body):
         self.mirror.open()
 
     def notify_male(self):
-        print(f"Notifying...")
         self._is_notifing = True
         self.speaker.notify()
         self._is_notifing = False

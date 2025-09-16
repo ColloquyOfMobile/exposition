@@ -18,6 +18,7 @@ import serial.tools.list_ports
 class Parameters(HTMLElement):
     _path = Path("local/parameters.json")
     _default = {
+        "near_origin_threashold": 400,
         "females":{
             "names": ["female1", "female2", "female3"],
             "share":{
@@ -98,6 +99,8 @@ class Parameters(HTMLElement):
             self._data = json.load(file)
         
         assert "dynamixel id" in self._data["bar"], f"Make sure to replace the 'dynamixel ids' list by the 'dynamixel id' int (check self._default), because one motor was removed."
+        if "near_origin_threashold" not in self._data:
+            self._data["near_origin_threashold"] = self._default["near_origin_threashold"]
             
             
         for mirror_name, female_name in zip(self._data["mirrors"]["names"], self._data["females"]["names"]):
@@ -110,15 +113,17 @@ class Parameters(HTMLElement):
                 *self._data["males"]["names"],
                 ]
             }
-
+        
+        # TODO move the process into the as_dict and the __getitem__
         self._process(self._data)
 
     def __getitem__(self, key):
         return self._data[key]
-        raise NotImplementedError
 
     def __setitem__(self, key, value):
-        raise NotImplementedError
+        self._data[key] = value
+        self.save()
+        # raise NotImplementedError
 
     def __call__(self):
         data = self.post_data

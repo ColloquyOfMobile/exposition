@@ -1,5 +1,5 @@
 from server.html_element import HTMLElement
-
+from colloquy.body import Body
 
 
 class Exposition(HTMLElement):
@@ -7,7 +7,11 @@ class Exposition(HTMLElement):
     def __init__(self, owner):
         HTMLElement.__init__(self, owner)
         self._is_open = False
-        self.name = "exposition"
+        self.name = "exposition"   
+
+    @property
+    def near_origin_threashold(self):
+        return self.owner.near_origin_threashold 
 
     @property
     def colloquy(self):
@@ -16,6 +20,16 @@ class Exposition(HTMLElement):
     @property
     def is_open(self):
         return self._is_open
+
+    
+    def get_near_origin_threashold(self, **kwargs):
+        return self._near_origin_threashold
+
+    
+    def set_near_origin_threashold(self, **kwargs):
+        value = kwargs["value"][0]
+        self.colloquy.near_origin_threashold = int(value)
+        # raise NotImplementedError(f"{value=} save into parameters")
 
     def write_html(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -26,13 +40,26 @@ class Exposition(HTMLElement):
         
         with tag("h2"):
             text(self.name.title())
+        
+        with tag("div"):
+            path =f"colloquy/near origin threashold"
+            with tag("form", method="post"):
+                min_value = 0
+                max_value = 400
+                with tag("label"):
+                    text(f"Near origin threashold [{min_value}-{max_value}]: ")
+                doc.stag("input", type="number", name="value", value=self.near_origin_threashold, min=min_value, max=max_value, increment=1)
+                with tag("button", name="action", value=path):
+                    text("set")
+            self.actions[path] = self.set_near_origin_threashold
             
-        doc.stag("hr")
-        if not self.colloquy.is_started:
-            self._add_html_start()
-        else:
-            self._add_html_stop()
-        doc.stag("hr")
+        with tag("div"):
+            doc.stag("hr")
+            if not self.colloquy.is_started:
+                self._add_html_start()
+            else:
+                self._add_html_stop()
+            doc.stag("hr")
 
     def open(self, **kwargs):
         if self._is_open:

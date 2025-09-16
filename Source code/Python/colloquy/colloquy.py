@@ -12,6 +12,7 @@ from parameters import Parameters
 from time import sleep
 from threading import Event, Lock # Thread
 from datetime import datetime
+from .interaction_counter import InteractionCounter
 
 class Colloquy(ThreadElement):
 
@@ -45,6 +46,8 @@ class Colloquy(ThreadElement):
         self._dxl_manager = dxl_manager = None
         self._doc = None
         self.emulate_light_sensors = True
+        self.interaction_counter = InteractionCounter()
+        # self._near_origin_threashold = 400
 
         dxl_manager_params = params["dynamixel network"]
         dxl_manager_params["name"] = "dxl"
@@ -96,6 +99,14 @@ class Colloquy(ThreadElement):
         self.wait_until_everything_is_still()
         self._dxl_manager.stop()
         return result
+
+    @property
+    def near_origin_threashold(self):
+        return self._params["near_origin_threashold"]
+
+    @near_origin_threashold.setter
+    def near_origin_threashold(self, value):
+        self._params["near_origin_threashold"] = value
         
 
     @property
@@ -170,7 +181,7 @@ class Colloquy(ThreadElement):
         )
 
     def wait_until_everything_is_still(self):
-        print(f"Waiting until everything is stopped...")
+        print(f"Waiting until everything is still...")
         while self.is_something_moving():
             sleep(0.1)
     
@@ -192,6 +203,7 @@ class Colloquy(ThreadElement):
         
 
     def close(self, **kwargs):
+        print(f"{self.interaction_counter.frequency=}")
         self._actions = None
         if not self._is_connected:
             return
@@ -206,9 +218,6 @@ class Colloquy(ThreadElement):
         self._dxl_manager.close()
         self._arduino_manager.close()
         self._is_connected = False
-        
-
-        print("Colloquy closed.")
 
     def save(self):
         self.params.save()

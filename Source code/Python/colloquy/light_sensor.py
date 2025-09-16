@@ -35,7 +35,7 @@ class LightSensor(ThreadElement):
             male = interaction.male
             if not male.near_origin():
                 return
-
+            
             common_drives = set(female.drives.state).intersection(male.drives.state)
             if common_drives:
                 interaction.target_drive = tuple(common_drives)
@@ -47,6 +47,5 @@ class LightSensor(ThreadElement):
         # path = f"{self._owner.name}/neopixel"
         response = self.arduino_manager.send(self._request_path)
         return int(response["value"])
-        raise NotImplementedError(f"{self=}, {response=}")
         
         

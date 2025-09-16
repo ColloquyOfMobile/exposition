@@ -7,7 +7,6 @@ class Search(ThreadElement):
         ThreadElement.__init__(self, owner=owner, name=f"search")
 
     def __enter__(self):
-        print(f"The {self.owner.name} is searching...")
         self.stop_event.clear()
 
     def run(self, **kwargs):
@@ -15,7 +14,6 @@ class Search(ThreadElement):
             self._setup(**kwargs)
             while not self.stop_event.is_set():
                 if self.owner.stop_event.is_set():
-                    # print(f"Hard stop. {self=}, {self.owner=}")
                     break
                 self._loop()
                 self._sleep_min()

@@ -10,11 +10,9 @@ class Conversation(ThreadElement):
         self._timeout = 10 # seconds
 
     def __enter__(self):
-        print(f"The {self.owner.name} is engaging...")
         self.stop_event.clear()
 
     def _watch_out_for_beam(self):
-        print(f"Watching out for the beam...")
         self._timeout_start = time()
         timeout = self._timeout
         while not self.stop_event.is_set():
@@ -23,20 +21,17 @@ class Conversation(ThreadElement):
                 return
 
             if time() - self._timeout_start > timeout:
-                print(f"The male doesn't beam...")
                 self.stop_event.set()
                 self.colloquy.bar.interaction.stop()
                 self.owner.search.start()
             self._sleep_min()
 
     def _listen_for_encouragement(self):
-        print(f"Listening out for encouragement...")
         self._timeout_start = time()
         timeout = self._timeout
         target_drive = self.colloquy.interaction.target_drive
         while not self.stop_event.is_set():
             if time() - self._timeout_start > timeout:
-                print(f"The male doesn't encourage...")
                 self.stop_event.set()
                 self.colloquy.bar.interaction.stop()
                 self.owner.mirror.stop()
@@ -58,7 +53,6 @@ class Conversation(ThreadElement):
             self.owner.drives.start()
 
     def _climax(self):
-        print(f"Climax {self.owner.name}...")
         start = time()
         neopixel = self.owner.neopixel
         orange = self.owner.drives.orange
@@ -94,7 +88,6 @@ class WatchOutForBeam(ThreadElement):
         self.timeout = 4 # seconds
 
     def __enter__(self):
-        print(f"The {self.owner.owner.name} is waiting for beam...")
         self.stop_event.clear()
         self._timeout_start = time()
 
@@ -108,7 +101,6 @@ class WatchOutForBeam(ThreadElement):
             return
 
         if time() - self._timeout_start > self.timeout:
-            print(f"The male doesn't respond...")
             self.stop_event.set()
             self.colloquy.bar.interaction.stop()
             self.owner.owner.search.start()

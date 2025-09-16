@@ -76,7 +76,6 @@ class Beam(ThreadElement):
         ThreadElement.__init__(self, owner=owner, name=f"beam")        
 
     def __enter__(self):
-        print(f"The {self.owner.owner.name} is beaming...")
         self.stop_event.clear()
         self.owner.ring.on()     
         

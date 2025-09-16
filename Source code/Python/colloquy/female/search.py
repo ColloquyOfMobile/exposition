@@ -7,7 +7,6 @@ class Search(ThreadElement):
         ThreadElement.__init__(self, owner=owner, name=f"search")
 
     def __enter__(self):
-        print(f"The {self.owner.name} is searching...")
         self.stop_event.clear()
 
     def _loop(self):

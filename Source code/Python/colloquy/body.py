@@ -7,6 +7,8 @@ import traceback
 
 
 class Body(MovingPart):
+    
+    _near_origin_threashold = 400
 
     def __init__(self, owner, **kwargs):
         dxl_manager = kwargs["dynamixel manager"]
@@ -15,7 +17,10 @@ class Body(MovingPart):
         self.interaction_event = Event()
         self._speaker = Speaker(owner=self, arduino_manager=self.arduino_manager)
         self._microphone = None
-        self._near_origin_threashold = 400
+
+    @property
+    def near_origin_threashold(self):
+        return self.owner.near_origin_threashold
 
     @property
     def speaker(self):
@@ -34,8 +39,8 @@ class Body(MovingPart):
         self._microphone = value
 
     def near_origin(self):
-        min = self.dxl_origin - self._near_origin_threashold
-        max = self.dxl_origin + self._near_origin_threashold
+        min = self.dxl_origin - self.near_origin_threashold
+        max = self.dxl_origin + self.near_origin_threashold
         return min < self.position < max
 
     def open(self):
