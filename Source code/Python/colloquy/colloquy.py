@@ -13,6 +13,7 @@ from time import sleep
 from threading import Event, Lock # Thread
 from datetime import datetime
 from .interaction_counter import InteractionCounter
+from .agenda import Agenda
 
 class Colloquy(ThreadElement):
 
@@ -47,6 +48,7 @@ class Colloquy(ThreadElement):
         self._doc = None
         self.emulate_light_sensors = True
         self.interaction_counter = InteractionCounter()
+        self._agenda = Agenda(owner=self, params=self.params["agenda"])
         # self._near_origin_threashold = 400
 
         dxl_manager_params = params["dynamixel network"]
@@ -107,7 +109,10 @@ class Colloquy(ThreadElement):
     @near_origin_threashold.setter
     def near_origin_threashold(self, value):
         self._params["near_origin_threashold"] = value
-        
+
+    @property
+    def agenda(self):
+        return self._agenda        
 
     @property
     def lock(self):

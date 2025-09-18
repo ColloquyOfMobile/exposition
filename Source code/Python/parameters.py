@@ -19,6 +19,43 @@ class Parameters(HTMLElement):
     _path = Path("local/parameters.json")
     _default = {
         "near_origin_threashold": 400,
+        "agenda": {
+            "monday": {
+                "start": None,
+                "end": None,
+                "state": False,
+            },
+            "tuesday":{
+                "start": None,
+                "end": None,
+                "state": False,
+            },
+            "wednesday":{
+                "start": "10:00",
+                "end": "18:00",
+                "state": True,
+            },
+            "thursday":{
+                "start": "10:00",
+                "end": "18:00",
+                "state": True,
+            },
+            "friday":{
+                "start": "10:00",
+                "end": "18:00",
+                "state": True,
+            },
+            "saturday":{
+                "start": "10:00",
+                "end": "18:00",
+                "state": True,
+            },
+            "sunday":{
+                "start": "10:00",
+                "end": "18:00",
+                "state": True,
+            },
+        },
         "females":{
             "names": ["female1", "female2", "female3"],
             "share":{
@@ -101,6 +138,8 @@ class Parameters(HTMLElement):
         assert "dynamixel id" in self._data["bar"], f"Make sure to replace the 'dynamixel ids' list by the 'dynamixel id' int (check self._default), because one motor was removed."
         if "near_origin_threashold" not in self._data:
             self._data["near_origin_threashold"] = self._default["near_origin_threashold"]
+        if "agenda" not in self._data:
+            self._data["agenda"] = self._default["agenda"]
             
             
         for mirror_name, female_name in zip(self._data["mirrors"]["names"], self._data["females"]["names"]):
@@ -176,7 +215,13 @@ class Parameters(HTMLElement):
     def save(self):
         json_data = {}
         for key in self._default:
-            json_data[key] = self._data[key]
+            value = self._data[key]
+            # print(value)
+            json_data[key] = value
+            # if isinstance(value, (str, int, type(None), bool)):
+                # json_data[key] = value
+                # continue
+            # json_data[key] = value.as_json()
 
         with self._path.open("w") as file:
             json.dump(json_data, file, indent=2)

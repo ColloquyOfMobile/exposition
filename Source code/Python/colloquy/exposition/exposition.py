@@ -1,17 +1,21 @@
-from server.html_element import HTMLElement
-from colloquy.body import Body
+from colloquy.thread_element import ThreadElement
+from datetime import datetime
+from time import sleep
 
 
-class Exposition(HTMLElement):
+class Exposition(ThreadElement):
 
     def __init__(self, owner):
-        HTMLElement.__init__(self, owner)
+        ThreadElement.__init__(self, owner=owner, name="exposition")
         self._is_open = False
-        self.name = "exposition"   
 
     @property
     def near_origin_threashold(self):
         return self.owner.near_origin_threashold 
+
+    @property
+    def agenda(self):
+        return self.owner.agenda 
 
     @property
     def colloquy(self):
@@ -52,12 +56,15 @@ class Exposition(HTMLElement):
                 with tag("button", name="action", value=path):
                     text("set")
             self.actions[path] = self.set_near_origin_threashold
+        
+        self.agenda.add_html()
             
         with tag("div"):
             doc.stag("hr")
             if not self.colloquy.is_started:
                 self._add_html_start()
             else:
+                self._add_html_timer()
                 self._add_html_stop()
             doc.stag("hr")
 
@@ -76,6 +83,67 @@ class Exposition(HTMLElement):
         self._is_open = False
         self.owner.opened = None
     
+    def _setup(self):
+        pass
+    
+    def _loop(self):
+        
+        now = datetime.now()
+        today = now.strftime("%A").lower()
+        
+        day = self.agenda.week[today]
+        
+        print(f"{today=}")
+        
+        if day.state:
+            start, end = day.start, day.end
+            assert start and end, "Make sure to start and end working days!"
+            current_time = now.time()
+            print(f"{current_time=}")            
+            print(f"{start=}")
+            print(f"{end=}")
+            print(f"{start <= current_time < end=}")
+            if start <= current_time < end:  
+                print(f"{self.colloquy.is_started=}")
+                if not self.colloquy.is_started:              
+                    print(f"Colloquy is started...")
+                    self.colloquy.start()
+                # delta = datetime.combine(now.date(), end) - now
+            else:
+                if self.colloquy.is_started:          
+                    print(f"Colloquy is stop...")
+                    self.colloquy.stop()
+        
+        sleep(1)
+                    
+                # if current_time < start:
+                    # delta = datetime.combine(now.date(), start) - now
+                # else:
+                    # tomorrow = now.date() + timedelta(days=1)
+                    # next_day = datetime.combine(tomorrow, time(hour=0, minute=0))
+                    # delta = next_day - now
+        # else:
+            
+            # tomorrow = now.date() + timedelta(days=1)
+            # next_day = datetime.combine(tomorrow, time(hour=0, minute=0))
+            # delta = next_day - now
+                    
+                    
+        # if now is in the agenda range:            
+            # self.colloquy.start()
+            # sleep(the time until when it needs to stop)
+        # else:
+            # if self.colloquy.is_started:
+                # self.colloquy.stop()
+            # sleep(the time until when it needs to stop)
+        # raise NotImplementedError(f"Implement the daily trigger. Sleep the good amount of time.")
+    
+    def _add_html_timer(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("div"):
+            text(f"Colloquy will start in [NotImplementedError].")
+        # self._write_html_action(value="colloquy/exposition/open", label=self.name, func=self.open)
+    
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
         self._write_html_action(value="colloquy/exposition/open", label=self.name, func=self.open)
@@ -85,7 +153,7 @@ class Exposition(HTMLElement):
         with tag("form", method="post"):
             with tag("button", name="action", value="colloquy/start"):
                 text(f"Start.")
-                self.actions["colloquy/start"] = self.colloquy.start
+                self.actions["colloquy/start"] = self.start
             
             
             self._write_html_action(value="colloquy/exposition/close", label="close", func=self.close)

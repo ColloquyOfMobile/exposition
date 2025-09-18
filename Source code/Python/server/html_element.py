@@ -31,12 +31,4 @@ class HTMLElement(HTTPElement):
         with tag("form", method="post"):
             with tag("button", name="action", value=value):
                 text(label)
-        # if value in self.actions:
-            # lines = ["", f"{value=}"]
-            # for key in self.actions:
-                # lines.append(
-                    # f"- {key=}"
-                # )
-            # raise ValueError("\n".join(lines))
-        # assert value not in self.actions
         self.actions[value] = func
