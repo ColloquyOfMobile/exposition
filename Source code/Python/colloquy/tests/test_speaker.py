@@ -10,8 +10,8 @@ class TestSpeaker(HTMLElement):
         self.speaker_on = None
 
     @property
-    def colloquy(self):
-        return self.owner.colloquy
+    def hardware(self):
+        return self.owner.hardware
 
     @property
     def is_started(self):
@@ -24,7 +24,7 @@ class TestSpeaker(HTMLElement):
     def open(self, **kwargs):
         if self._is_open:
             return
-        self.colloquy.connect()
+        self.hardware.connect()
         self.owner.opened = self
         self._is_open = True
 
@@ -33,7 +33,7 @@ class TestSpeaker(HTMLElement):
             return
         if self.speaker_on is not None:
             self.speaker_on.off()
-        self.colloquy.close()
+        self.hardware.close()
         self._is_open = False
         self.owner.opened = None
 
@@ -46,19 +46,19 @@ class TestSpeaker(HTMLElement):
 
         self._add_html_title()
             
-        self._write_html_action(value="colloquy/tests/speaker/close", label="close", func=self.close)
+        self._write_html_action(value="hardware/tests/speaker/close", label="close", func=self.close)
         
         print(f"{self.speaker_on=}")
         if self.speaker_on is not None:
             self.speaker_on.write_html(ui_context=self)
             return 
         
-        for speaker in self.colloquy.speakers:
+        for speaker in self.hardware.speakers:
             speaker.write_html(ui_context=self)
     
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
-        self._write_html_action(value="colloquy/tests/speaker/open", label=self.name, func=self.open)
+        self._write_html_action(value="hardware/tests/speaker/open", label=self.name, func=self.open)
 
     # def _start(self, **kwargs):
         # self._is_started = True
@@ -66,14 +66,14 @@ class TestSpeaker(HTMLElement):
         # brightness = 255
         # color = dict(red=254, green=254, blue=254, white=254)
         
-        # for female in self.colloquy.females:
+        # for female in self.hardware.females:
             # config = dict(
                 # brightness = brightness,
                 # **color,
                 # )
             # female.neopixel.configure(**config)
             # female.neopixel.on()
-        # for male in self.colloquy.males:
+        # for male in self.hardware.males:
             # #brightness = 255
             # #color = dict(red=0, green=0, blue=0, white=255)
             # config = dict(
@@ -88,9 +88,9 @@ class TestSpeaker(HTMLElement):
 
     # def _stop(self, **kwarg):
         
-        # for female in self.colloquy.females:
+        # for female in self.hardware.females:
             # female.neopixel.off()
-        # for male in self.colloquy.males:
+        # for male in self.hardware.males:
             # male.body_neopixel.ring.off()
             # male.body_neopixel.drive.off()
         # self._is_started = False
@@ -106,10 +106,10 @@ class TestSpeaker(HTMLElement):
         doc, tag, text = self.html_doc.tagtext()
         with tag("form", method="post"):
 
-            with tag("button", name="action", value="colloquy/test_led_consumption"):
+            with tag("button", name="action", value="hardware/test_led_consumption"):
                 text(f"Start.")
 
-            self.colloquy.actions["colloquy/test_led_consumption"] = self._start
+            self.hardware.actions["hardware/test_led_consumption"] = self._start
 
     def _add_html_stop(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -117,7 +117,7 @@ class TestSpeaker(HTMLElement):
             with tag("div"):
                 text(f"All LEDs should be on.")
 
-            with tag("button", name="action", value="colloquy/test_led_consumption/stop"):
+            with tag("button", name="action", value="hardware/test_led_consumption/stop"):
                 text(f"Stop.")
 
-            self.colloquy.actions["colloquy/test_led_consumption/stop"] = self._stop
+            self.hardware.actions["hardware/test_led_consumption/stop"] = self._stop

@@ -19,8 +19,8 @@ class TestNeopixelCommunication(ThreadElement):
         ]
 
     @property
-    def colloquy(self):
-        return self.owner.colloquy
+    def hardware(self):
+        return self.owner.hardware
 
 
     @property
@@ -30,14 +30,14 @@ class TestNeopixelCommunication(ThreadElement):
     def open(self, **kwargs):
         if self._is_open:
             return
-        self.colloquy.connect()
+        self.hardware.connect()
         self.owner.opened = self
         self._is_open = True
 
     def close(self, **kwargs):
         if not self._is_open:
             return
-        self.colloquy.close()
+        self.hardware.close()
         self._is_open = False
         self.owner.opened = None
 
@@ -48,7 +48,7 @@ class TestNeopixelCommunication(ThreadElement):
             self._write_html_open()
             return
             
-        # if self.colloquy.is_started:
+        # if self.hardware.is_started:
         if self.is_started:
             self._add_html_title()
             self._add_html_stop()
@@ -60,7 +60,7 @@ class TestNeopixelCommunication(ThreadElement):
     
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
-        self._write_html_action(value="colloquy/tests/communication/open", label=self.name, func=self.open)
+        self._write_html_action(value="hardware/tests/communication/open", label=self.name, func=self.open)
 
     def _loop(self):
         self._is_started = True
@@ -71,7 +71,7 @@ class TestNeopixelCommunication(ThreadElement):
         color = self._colors[index]
         
         # print(f"{color=}")
-        for female in self.colloquy.females:
+        for female in self.hardware.females:
             config = dict(
                 brightness = brightness,
                 **color,
@@ -79,7 +79,7 @@ class TestNeopixelCommunication(ThreadElement):
             female.neopixel.configure(**config)
             female.neopixel.on()
             
-        for male in self.colloquy.males:
+        for male in self.hardware.males:
             config = dict(
                 brightness = brightness,
                 **color,
@@ -91,20 +91,22 @@ class TestNeopixelCommunication(ThreadElement):
 
 
     def stop(self, **kwarg):
-        for female in self.colloquy.females:
-            female.neopixel.off()
-        for male in self.colloquy.males:
-            male.body_neopixel.ring.off()
-            male.body_neopixel.drive.off()
+        if self.is_started:
+            for female in self.hardware.females:
+                female.neopixel.off()
+            for male in self.hardware.males:
+                male.body_neopixel.ring.off()
+                male.body_neopixel.drive.off()
         # self._is_started = False
+        ThreadElement.stop(self)
                 
-        if self._is_started:
-            self._is_started = False
-            self.stop_event.set()
-            return
+        # if self._is_started:
+            # self._is_started = False
+            # self.stop_event.set()
+            # return
             
-        for element in self.elements:
-            element.stop()
+        # for element in self.elements:
+            # element.stop()
 
     def _add_html_title(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -117,12 +119,12 @@ class TestNeopixelCommunication(ThreadElement):
         doc, tag, text = self.html_doc.tagtext()
         with tag("form", method="post"):
 
-            with tag("button", name="action", value="colloquy/test_led_communication"):
+            with tag("button", name="action", value="hardware/test_led_communication"):
                 text(f"Start.")
 
-            self.colloquy.actions["colloquy/test_led_communication"] = self.start            
+            self.hardware.actions["hardware/test_led_communication"] = self.start            
             
-        self._write_html_action(value="colloquy/test_led_communication/close", label="close", func=self.close)
+        self._write_html_action(value="hardware/test_led_communication/close", label="close", func=self.close)
 
     def _add_html_stop(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -130,7 +132,7 @@ class TestNeopixelCommunication(ThreadElement):
             with tag("div"):
                 text(f"All LEDs should be on.")
 
-            with tag("button", name="action", value="colloquy/test_led_communication/stop"):
+            with tag("button", name="action", value="hardware/test_led_communication/stop"):
                 text(f"Stop.")
 
-            self.colloquy.actions["colloquy/test_led_communication/stop"] = self.stop
+            self.hardware.actions["hardware/test_led_communication/stop"] = self.stop

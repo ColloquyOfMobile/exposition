@@ -8,8 +8,8 @@ class Test1(HTMLElement):
         self._interaction = None
 
     @property
-    def colloquy(self):
-        return self.owner.colloquy
+    def hardware(self):
+        return self.owner.hardware
 
     @property
     def is_started(self):
@@ -17,7 +17,7 @@ class Test1(HTMLElement):
 
     def add_html(self):
         doc, tag, text = self.html_doc.tagtext()
-        if self.colloquy.is_started:
+        if self.hardware.is_started:
             if self.is_started:
                 self._add_html_title()
                 self._add_html_stop()
@@ -26,18 +26,18 @@ class Test1(HTMLElement):
 
         self._add_html_title()
 
-        if self.colloquy.interaction is None:
+        if self.hardware.interaction is None:
             self._add_html_start()
             return
         else:
-            if not self.colloquy.interaction.is_started:
+            if not self.hardware.interaction.is_started:
                 self._add_html_start()
                 return
 
     def _start(self, **kwargs):
         self._is_started = True
-        self._interaction = interaction = self.colloquy.interactions[0]
-        self.colloquy.bar.interaction = interaction
+        self._interaction = interaction = self.hardware.interactions[0]
+        self.hardware.bar.interaction = interaction
 
         interaction.female.drives.o_drive = 255
         interaction.female.drives.p_drive = 10
@@ -73,10 +73,10 @@ class Test1(HTMLElement):
         doc, tag, text = self.html_doc.tagtext()
         with tag("form", method="post"):
 
-            with tag("button", name="action", value="colloquy/test1"):
+            with tag("button", name="action", value="hardware/test1"):
                 text(f"Start.")
 
-            self.colloquy.actions["colloquy/test1"] = self._start
+            self.hardware.actions["hardware/test1"] = self._start
 
     def _add_html_stop(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -86,7 +86,7 @@ class Test1(HTMLElement):
             with tag("div"):
                 text(f"Interacting between {male.name}-{female.name}!")
 
-            with tag("button", name="action", value="colloquy/test1/stop"):
+            with tag("button", name="action", value="hardware/test1/stop"):
                 text(f"Stop.")
 
-            self.colloquy.actions["colloquy/test1/stop"] = self._stop
+            self.hardware.actions["hardware/test1/stop"] = self._stop

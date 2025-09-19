@@ -59,7 +59,7 @@ class Interaction(ThreadElement):
 
     @property
     def position(self):
-        return self._origin + self.colloquy.bar.dxl_origin
+        return self._origin + self.hardware.bar.dxl_origin
 
     @property
     def male(self):
@@ -70,10 +70,10 @@ class Interaction(ThreadElement):
         return self._female
 
     def move_to_position_and_wait(self):
-        self.colloquy.bar.goal_position = self.position
+        self.hardware.bar.goal_position = self.position
         self.female.turn_to_origin_position()
         self.male.turn_to_origin_position()
-        self.colloquy.wait_until_everything_is_still()
+        self.hardware.wait_until_everything_is_still()
 
     def _loop(self):
         pass
@@ -82,7 +82,7 @@ class Interaction(ThreadElement):
         pass
 
     def _setup(self, **kwargs):
-        self.colloquy.interaction_counter.increment()
-        self.colloquy.interaction = self
+        self.hardware.interaction_counter.increment()
+        self.hardware.interaction = self
         self.female.drives.stop()
         self.female.conversation.start()

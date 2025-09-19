@@ -21,22 +21,22 @@ class Conversation(ThreadElement):
         self._watch_out_for_engagement()
 
     def _setup(self):        
-        self.colloquy.bar.search.stop()
+        self.hardware.bar.search.stop()
         self.owner.drives.stop()
         self.owner.turn_to_origin_position()
         self.owner.beam.start()
-        self.colloquy.bar.search.stop()
-        self.colloquy.turn_to_interaction_position()
+        self.hardware.bar.search.stop()
+        self.hardware.turn_to_interaction_position()
 
     def _watch_out_for_engagement(self):
         self._timeout_start = time()
         timeout = self._timeout
-        target_drive = self.colloquy.interaction.target_drive
+        target_drive = self.hardware.interaction.target_drive
         while not self.stop_event.is_set():
 
             if time() - self._timeout_start > timeout:
                 self.stop_event.set()
-                self.colloquy.bar.interaction.stop()
+                self.hardware.bar.interaction.stop()
                 self.owner.drives.start()
                 continue
 
@@ -54,7 +54,7 @@ class Conversation(ThreadElement):
 
             self.stop_event.set()
             self._climax()
-            self.colloquy.bar.interaction.stop()
+            self.hardware.bar.interaction.stop()
             self.owner.drives.start()
 
     def _climax(self):
@@ -91,5 +91,5 @@ class WatchOutForReflection(ThreadElement):
 
         if time() - self._timeout_start > self.timeout:
             self.stop_event.set()
-            self.colloquy.bar.interaction.stop()
+            self.hardware.bar.interaction.stop()
             self.owner.owner.search.start()

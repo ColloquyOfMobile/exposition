@@ -5,8 +5,8 @@ class Test2(Test1):
 
     def _start(self, **kwargs):
 
-        self._interaction = interaction = self.colloquy.interactions[0]
-        self.colloquy.bar.interaction = interaction
+        self._interaction = interaction = self.hardware.interactions[0]
+        self.hardware.bar.interaction = interaction
 
         interaction.female.drives.o_drive = 255
         interaction.female.drives.p_drive = 10
@@ -42,10 +42,10 @@ class Test2(Test1):
         doc, tag, text = self.html_doc.tagtext()
         with tag("form", method="post"):
 
-            with tag("button", name="action", value="colloquy/test2"):
+            with tag("button", name="action", value="hardware/test2"):
                 text(f"Start.")
 
-            self.colloquy.actions["colloquy/test2"] = self._start
+            self.hardware.actions["hardware/test2"] = self._start
 
     def _add_html_stop(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -55,7 +55,7 @@ class Test2(Test1):
             with tag("div"):
                 text(f"Interacting between {male.name}-{female.name}!")
 
-            with tag("button", name="action", value="colloquy/test2/stop"):
+            with tag("button", name="action", value="hardware/test2/stop"):
                 text(f"Stop.")
 
-            self.colloquy.actions["colloquy/test2/stop"] = self._stop
+            self.hardware.actions["hardware/test2/stop"] = self._stop

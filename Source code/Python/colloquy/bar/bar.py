@@ -28,7 +28,7 @@ class BarDriver(MovingPart):
         self._search = Search(owner=self)
 
     def __enter__(self):
-        assert self.dxl_origin is not None, "Calibrate colloquy."
+        assert self.dxl_origin is not None, "Calibrate hardware."
         self.stop_event.clear()
 
     def __exit__(self, exc_type, exc_value, traceback_obj):
@@ -143,7 +143,7 @@ class BarDriver(MovingPart):
             timelap = time() - start
 
     def open(self):
-        for position in sorted(self.colloquy.interactions.from_positions):
+        for position in sorted(self.hardware.interactions.from_positions):
             self.nearby_positions.append(position)
         # self._init_offset()
         self.torque_enabled = 0
@@ -160,7 +160,7 @@ class BarDriver(MovingPart):
     def nearby(self, female):
         if not self.search.is_started:
             return
-        for interaction in self.colloquy.interactions.from_females[female]:
+        for interaction in self.hardware.interactions.from_females[female]:
             min = interaction.position - self._nearby_threashold
             max = interaction.position + self._nearby_threashold
             if min < self.position < max:
@@ -197,7 +197,7 @@ class BarDriver(MovingPart):
         position = self.nearby_positions.pop(0)
         self.nearby_positions.append(position)
         self.goal_position = position
-        self.interaction = self.colloquy.interactions.from_positions[position]
+        self.interaction = self.hardware.interactions.from_positions[position]
 
 
     # def _init_offset(self):
@@ -213,8 +213,8 @@ class BarDriver(MovingPart):
     def _set_origin(self, origin):
         origin = int(origin[0])
         self.dxl_origin = origin
-        self.colloquy.params[self.name]["origin"] = origin
-        self.colloquy.save()
+        self.hardware.params[self.name]["origin"] = origin
+        self.hardware.save()
 
     def add_html(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -234,4 +234,4 @@ class BarDriver(MovingPart):
             with tag("button", name="action", value=f"{self.name}/origin/set"):
                 text(f"set.")
 
-            self.colloquy.actions[f"{self.name}/origin/set"] = self._set_origin
+            self.hardware.actions[f"{self.name}/origin/set"] = self._set_origin

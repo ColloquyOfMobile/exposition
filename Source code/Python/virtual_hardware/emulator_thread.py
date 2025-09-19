@@ -1,11 +1,11 @@
 from time import sleep, time
 from pathlib import Path
-from .logger import Logger
+from colloquy.logger import Logger
 import traceback
 from threading import Thread, Event, Lock
 from server.html_element import HTMLElement
 
-class ThreadElement(HTMLElement):
+class EmulatorThread(HTMLElement):
 
     _thread_pool = set()
 
@@ -27,7 +27,7 @@ class ThreadElement(HTMLElement):
         self._elements = set()
         self._pool_lock = Lock()
         if self._owner is not None:
-            self._owner.elements.add(self)
+            self._owner.emulators.add(self)
 
     def __repr__(self):
         assert isinstance(self.path, Path), f"{self.path=}"

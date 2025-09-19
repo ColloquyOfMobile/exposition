@@ -19,6 +19,43 @@ class Parameters(HTMLElement):
     _path = Path("local/parameters.json")
     _default = {
         "near_origin_threashold": 400,
+        "agenda": {
+            "monday": {
+                "start": None,
+                "end": None,
+                "state": False,
+            },
+            "tuesday":{
+                "start": None,
+                "end": None,
+                "state": False,
+            },
+            "wednesday":{
+                "start": "10:00",
+                "end": "18:00",
+                "state": True,
+            },
+            "thursday":{
+                "start": "10:00",
+                "end": "18:00",
+                "state": True,
+            },
+            "friday":{
+                "start": "10:00",
+                "end": "18:00",
+                "state": True,
+            },
+            "saturday":{
+                "start": "10:00",
+                "end": "18:00",
+                "state": True,
+            },
+            "sunday":{
+                "start": "10:00",
+                "end": "18:00",
+                "state": True,
+            },
+        },
         "females":{
             "names": ["female1", "female2", "female3"],
             "share":{
@@ -101,6 +138,8 @@ class Parameters(HTMLElement):
         assert "dynamixel id" in self._data["bar"], f"Make sure to replace the 'dynamixel ids' list by the 'dynamixel id' int (check self._default), because one motor was removed."
         if "near_origin_threashold" not in self._data:
             self._data["near_origin_threashold"] = self._default["near_origin_threashold"]
+        if "agenda" not in self._data:
+            self._data["agenda"] = self._default["agenda"]
             
             
         for mirror_name, female_name in zip(self._data["mirrors"]["names"], self._data["females"]["names"]):
@@ -142,7 +181,7 @@ class Parameters(HTMLElement):
         return self._is_open
 
     @property
-    def colloquy(self):
+    def hardware(self):
         return self.owner
 
     @property
@@ -176,7 +215,13 @@ class Parameters(HTMLElement):
     def save(self):
         json_data = {}
         for key in self._default:
-            json_data[key] = self._data[key]
+            value = self._data[key]
+            # print(value)
+            json_data[key] = value
+            # if isinstance(value, (str, int, type(None), bool)):
+                # json_data[key] = value
+                # continue
+            # json_data[key] = value.as_json()
 
         with self._path.open("w") as file:
             json.dump(json_data, file, indent=2)
@@ -213,16 +258,16 @@ class Parameters(HTMLElement):
             if self.is_calibrated:
                 with tag("div", style="display: flex;"):
                     with tag("div",):
-                        text(f" All set :). You can close the parameters and open Colloquy!")
+                        text(f" All set :). You can close the parameters and open Hardware!")
                     if self.is_calibrated:
                         self._write_html_action(value="params/close", label="close", func=self.close)
 
             for element in self._unset_elements:
                 with tag("div",):
-                    text(f"Set the '{element}' to open Colloquy!")
+                    text(f"Set the '{element}' to open Hardware!")
 
-        self.colloquy.arduino.add_html()
-        self.colloquy.dxl_manager.add_html()
+        self.hardware.arduino.add_html()
+        self.hardware.dxl_manager.add_html()
 
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()

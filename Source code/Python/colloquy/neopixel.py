@@ -6,7 +6,7 @@ class Neopixel(ThreadElement):
 
     def __init__(self, owner, name):
         ThreadElement.__init__(self, owner=owner, name=name)
-        self._request_path = self._path.relative_to(self.colloquy.path).as_posix()
+        self._request_path = self._path.relative_to(self.hardware.path).as_posix()
         self.arduino_manager = owner.arduino_manager
         self._on_off_state = None
         self.red = 0

@@ -47,7 +47,7 @@ class FemaleDriver(Body):
         self._male_target_drive = None
 
     def __enter__(self):
-        assert self.dxl_origin is not None, "Calibrate colloquy."
+        assert self.dxl_origin is not None, "Calibrate hardware."
         self.stop_event.clear()
         self.drives.start()
     
@@ -76,8 +76,10 @@ class FemaleDriver(Body):
         pass
 
     def stop(self):
-        self.drives.stop()
-        self.neopixel.off()
+                
+        if self._is_started:            
+            # self.drives.stop()
+            self.neopixel.off()
         Body.stop(self)
 
     def open(self):
@@ -95,6 +97,6 @@ class FemaleDriver(Body):
         with tag("form", method="post"):
             with tag("button", name="action", value=f"{self.name}/start"):
                 text(f"Start.")
-            self.colloquy.actions[f"{self.name}/start"] = self.start
+            self.hardware.actions[f"{self.name}/start"] = self.start
 
         self._search.add_html()

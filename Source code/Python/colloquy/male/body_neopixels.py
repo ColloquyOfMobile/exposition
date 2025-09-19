@@ -67,7 +67,10 @@ class BodyNeopixels(ThreadElement):
         # self.sleep_min()
 
     def stop(self):
-        self.off()
+                
+        if self._is_started:      
+            self.off()
+            
         ThreadElement.stop(self)
 
 class Beam(ThreadElement):

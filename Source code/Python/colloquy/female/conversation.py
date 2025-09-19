@@ -22,18 +22,18 @@ class Conversation(ThreadElement):
 
             if time() - self._timeout_start > timeout:
                 self.stop_event.set()
-                self.colloquy.bar.interaction.stop()
+                self.hardware.bar.interaction.stop()
                 self.owner.search.start()
             self._sleep_min()
 
     def _listen_for_encouragement(self):
         self._timeout_start = time()
         timeout = self._timeout
-        target_drive = self.colloquy.interaction.target_drive
+        target_drive = self.hardware.interaction.target_drive
         while not self.stop_event.is_set():
             if time() - self._timeout_start > timeout:
                 self.stop_event.set()
-                self.colloquy.bar.interaction.stop()
+                self.hardware.bar.interaction.stop()
                 self.owner.mirror.stop()
                 self.owner.drives.start()
                 continue
@@ -49,7 +49,7 @@ class Conversation(ThreadElement):
             self.stop_event.set()
             self.owner.mirror.stop()
             self._climax()
-            self.colloquy.bar.interaction.stop()
+            self.hardware.bar.interaction.stop()
             self.owner.drives.start()
 
     def _climax(self):
@@ -69,7 +69,7 @@ class Conversation(ThreadElement):
         self.owner.speaker.off()
 
     def _listen(self):
-        return self.colloquy.interaction.male.is_encouraging
+        return self.hardware.interaction.male.is_encouraging
 
     def _loop(self):
         self._listen_for_encouragement()
@@ -102,8 +102,8 @@ class WatchOutForBeam(ThreadElement):
 
         if time() - self._timeout_start > self.timeout:
             self.stop_event.set()
-            self.colloquy.bar.interaction.stop()
+            self.hardware.bar.interaction.stop()
             self.owner.owner.search.start()
 
     def sense(self):
-        return self.colloquy.interaction.male.is_beaming
+        return self.hardware.interaction.male.is_beaming

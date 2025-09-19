@@ -18,7 +18,7 @@ class Mirror(MovingPart):
         }
 
     def __enter__(self):
-        assert self.dxl_origin is not None, "Calibrate colloquy."
+        assert self.dxl_origin is not None, "Calibrate hardware."
         self.stop_event.clear()
 
 
@@ -61,8 +61,8 @@ class Mirror(MovingPart):
         raise NotImplementedError()
 
     def _define_position(self):
-        male = self.colloquy.interaction.male
-        target_drive = self.colloquy.interaction.target_drive
+        male = self.hardware.interaction.male
+        target_drive = self.hardware.interaction.target_drive
         if len(target_drive) == 1:
             self._move_to_target_position = self._memory[male.name][target_drive[0]]
         elif len(target_drive)==2:
@@ -85,8 +85,8 @@ class Mirror(MovingPart):
     def _set_origin(self, origin):
         origin = int(origin[0])
         self.dxl_origin = origin
-        self.colloquy.params[self.owner.name][self.name[:-1]]["origin"] = origin
-        self.colloquy.save()
+        self.hardware.params[self.owner.name][self.name[:-1]]["origin"] = origin
+        self.hardware.save()
 
     def _add_html_start(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -116,7 +116,7 @@ class Mirror(MovingPart):
 
         with tag("button", name="action", value=f"{self.name}/start"):
             text(f"Start.")
-        self.colloquy.actions[f"{self.name}/start"] = self.start
+        self.hardware.actions[f"{self.name}/start"] = self.start
 
     # def stop(self, **kwargs):
         # raise NotImplementedError
