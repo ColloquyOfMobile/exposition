@@ -64,5 +64,5 @@ class Body(MovingPart):
     def _set_origin(self, origin):
         origin = int(origin[0])
         self.dxl_origin = origin
-        self.colloquy.params[self.name]["origin"] = origin
-        self.colloquy.save()
+        self.hardware.params[self.name]["origin"] = origin
+        self.hardware.save()

@@ -23,8 +23,8 @@ class Agenda(HTMLElement):
         return self._week
             
     @property
-    def colloquy(self):
-        return self.owner.colloquy
+    def hardware(self):
+        return self.owner.hardware
     
     def add_html(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -50,8 +50,8 @@ class Day(HTMLElement):
             self._end = time.fromisoformat(params["end"])
             
     @property
-    def colloquy(self):
-        return self.owner.colloquy
+    def hardware(self):
+        return self.owner.hardware
     
     @property
     def name(self):
@@ -70,7 +70,7 @@ class Day(HTMLElement):
         return self._end
     
     def save(self):
-        return self.colloquy.save()
+        return self.hardware.save()
     
     def _set_end_start(self, **kwargs):
         start = kwargs["start"][0] # gives "17:20"
@@ -78,18 +78,18 @@ class Day(HTMLElement):
         
         self._start = time.fromisoformat(start)
         self._end = time.fromisoformat(end)
-        self.colloquy.params["agenda"][self.name]["start"] = start
-        self.colloquy.params["agenda"][self.name]["end"] = end
+        self.hardware.params["agenda"][self.name]["start"] = start
+        self.hardware.params["agenda"][self.name]["end"] = end
         self.save()
     
     def _toggle_state(self, **kwargs):
         if self._state:
             self._state = False
-            self.colloquy.params["agenda"][self.name]["state"] = self._state
+            self.hardware.params["agenda"][self.name]["state"] = self._state
             self.save()
             return 
         self._state = True
-        self.colloquy.params["agenda"][self.name]["state"] = self._state
+        self.hardware.params["agenda"][self.name]["state"] = self._state
         self.save()
         # raise NotImplementedError(f"{kwargs=}")
         
@@ -99,7 +99,7 @@ class Day(HTMLElement):
             with tag("label"):
                 text(f"{self.name}: ")
             
-            path =f"colloquy/{self._name}/toggle"
+            path =f"hardware/{self._name}/toggle"
             self.actions[path] = self._toggle_state
             if not self._state:                
                 with tag("button", name="action", value=path):
@@ -109,7 +109,7 @@ class Day(HTMLElement):
             with tag("button", name="action", value=path):
                 text("set off")
                 
-            path =f"colloquy/{self._name}/set"
+            path =f"hardware/{self._name}/set"
             
             kwargs = {}
             if self._start is not None:

@@ -1,6 +1,6 @@
 from colloquy.thread_element import ThreadElement
 from datetime import datetime
-from time import sleep
+from time import sleep, time
 
 
 class Exposition(ThreadElement):
@@ -8,6 +8,7 @@ class Exposition(ThreadElement):
     def __init__(self, owner):
         ThreadElement.__init__(self, owner=owner, name="exposition")
         self._is_open = False
+        self._print_origin = None
 
     @property
     def near_origin_threashold(self):
@@ -18,8 +19,8 @@ class Exposition(ThreadElement):
         return self.owner.agenda 
 
     @property
-    def colloquy(self):
-        return self.owner
+    def hardware(self):
+        return self.owner.hardware
 
     @property
     def is_open(self):
@@ -32,8 +33,7 @@ class Exposition(ThreadElement):
     
     def set_near_origin_threashold(self, **kwargs):
         value = kwargs["value"][0]
-        self.colloquy.near_origin_threashold = int(value)
-        # raise NotImplementedError(f"{value=} save into parameters")
+        self.hardware.near_origin_threashold = int(value)
 
     def write_html(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -41,12 +41,15 @@ class Exposition(ThreadElement):
         if not self.is_open:
             self._write_html_open()
             return
+            
+        self._add_html_thread_count()
         
         with tag("h2"):
             text(self.name.title())
         
         with tag("div"):
-            path =f"colloquy/near origin threashold"
+            doc.stag("hr")
+            path =f"hardware/near origin threashold"
             with tag("form", method="post"):
                 min_value = 0
                 max_value = 400
@@ -56,22 +59,29 @@ class Exposition(ThreadElement):
                 with tag("button", name="action", value=path):
                     text("set")
             self.actions[path] = self.set_near_origin_threashold
+            doc.stag("hr")
         
         self.agenda.add_html()
             
         with tag("div"):
             doc.stag("hr")
-            if not self.colloquy.is_started:
+            if not self.is_started:
                 self._add_html_start()
             else:
-                self._add_html_timer()
                 self._add_html_stop()
             doc.stag("hr")
+
+    
+
+    def stop(self, **kwargs):
+        self.hardware.stop()
+        self.hardware.join()
+        ThreadElement.stop(self, **kwargs)
 
     def open(self, **kwargs):
         if self._is_open:
             return
-        self.colloquy.connect()
+        self.hardware.connect()
         self.owner.opened = self
         
         self._is_open = True
@@ -79,7 +89,7 @@ class Exposition(ThreadElement):
     def close(self, **kwargs):
         if not self._is_open:
             return
-        self.colloquy.close()
+        self.hardware.close()
         self._is_open = False
         self.owner.opened = None
     
@@ -87,32 +97,47 @@ class Exposition(ThreadElement):
         pass
     
     def _loop(self):
+        if self._print_origin is None:
+            self._print_origin = time()
         
         now = datetime.now()
         today = now.strftime("%A").lower()
         
         day = self.agenda.week[today]
         
-        print(f"{today=}")
+        
         
         if day.state:
             start, end = day.start, day.end
-            assert start and end, "Make sure to start and end working days!"
+            assert start and end, "Make sure to define start and end working days!"
             current_time = now.time()
-            print(f"{current_time=}")            
-            print(f"{start=}")
-            print(f"{end=}")
-            print(f"{start <= current_time < end=}")
+            # print(f"{current_time=}")            
+            # print(f"{start=}")
+            # print(f"{end=}")
+            # print(f"{start <= current_time < end=}")
             if start <= current_time < end:  
-                print(f"{self.colloquy.is_started=}")
-                if not self.colloquy.is_started:              
-                    print(f"Colloquy is started...")
-                    self.colloquy.start()
+                # print(f"{self.hardware.is_started=}")
+                if not self.hardware.is_started:              
+                    print(f"Hardware is started...")
+                    self.hardware.start()
+                    
+                if time() - self._print_origin > 10:
+                    self._print_origin = time()
+                    print("Running...")
                 # delta = datetime.combine(now.date(), end) - now
             else:
-                if self.colloquy.is_started:          
-                    print(f"Colloquy is stop...")
-                    self.colloquy.stop()
+                if self.hardware.is_started:          
+                    print(f"Hardware is stop...")
+                    self.hardware.stop()
+                    
+                if time() - self._print_origin > 10:
+                    self._print_origin = time()
+                    print("Waiting next agenda slot...")
+        else:
+            
+            if time() - self._print_origin > 10:
+                self._print_origin = time()
+                print("Waiting next agenda slot...")
         
         sleep(1)
                     
@@ -130,37 +155,32 @@ class Exposition(ThreadElement):
                     
                     
         # if now is in the agenda range:            
-            # self.colloquy.start()
+            # self.hardware.start()
             # sleep(the time until when it needs to stop)
         # else:
-            # if self.colloquy.is_started:
-                # self.colloquy.stop()
+            # if self.hardware.is_started:
+                # self.hardware.stop()
             # sleep(the time until when it needs to stop)
         # raise NotImplementedError(f"Implement the daily trigger. Sleep the good amount of time.")
-    
-    def _add_html_timer(self):
-        doc, tag, text = self.html_doc.tagtext()
-        with tag("div"):
-            text(f"Colloquy will start in [NotImplementedError].")
-        # self._write_html_action(value="colloquy/exposition/open", label=self.name, func=self.open)
+   
     
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
-        self._write_html_action(value="colloquy/exposition/open", label=self.name, func=self.open)
+        self._write_html_action(value="hardware/exposition/open", label=self.name, func=self.open)
 
     def _add_html_start(self):
         doc, tag, text = self.html_doc.tagtext()
         with tag("form", method="post"):
-            with tag("button", name="action", value="colloquy/start"):
+            with tag("button", name="action", value="hardware/start"):
                 text(f"Start.")
-                self.actions["colloquy/start"] = self.start
+                self.actions["hardware/start"] = self.start
             
             
-            self._write_html_action(value="colloquy/exposition/close", label="close", func=self.close)
+            self._write_html_action(value="hardware/exposition/close", label="close", func=self.close)
 
     def _add_html_stop(self):
         doc, tag, text = self.html_doc.tagtext()
         with tag("form", method="post"):
-            with tag("button", name="action", value="colloquy/stop"):
+            with tag("button", name="action", value="hardware/stop"):
                 text(f"Stop.")
-        self.actions["colloquy/stop"] = self.colloquy.stop
+        self.actions["hardware/stop"] = self.stop

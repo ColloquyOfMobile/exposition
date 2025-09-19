@@ -50,7 +50,7 @@ class DetectPattern(ThreadElement):
         if (now - self._last_sample_time) < self.sample_rate:
             return
 
-        raw = self.colloquy.female1.sensor.read()  # analog reading
+        raw = self.hardware.female1.sensor.read()  # analog reading
         state = 1 if raw > self.threshold else 0
         self.sample_buffer.append(state)
         self._last_sample_time = now

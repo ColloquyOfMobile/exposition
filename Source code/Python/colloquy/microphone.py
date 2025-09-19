@@ -12,7 +12,7 @@ class Microphone(ThreadElement):
     def is_notified(self):
         # raise NotImplementedError
         if self.is_plugged:
-            interaction = self.colloquy.bar.interaction
+            interaction = self.hardware.bar.interaction
             if interaction is not None:
                 if interaction.is_started:
                     if interaction.male is self.owner:
@@ -24,7 +24,7 @@ class Microphone(ThreadElement):
     def is_encouraged(self):
         # raise NotImplementedError
         if self.is_plugged:
-            interaction = self.colloquy.bar.interaction
+            interaction = self.hardware.bar.interaction
             if interaction is not None:
                 if interaction.is_started:
                    return interaction.male.speaker.is_encouraging

@@ -16,7 +16,7 @@ class ToggleNeopixel(Command):
 
     def write_html(self):
         doc, tag, text = self._owner._doc.tagtext()
-        colloquy = self._owner.colloquy
+        hardware = self._owner.hardware
         value = self.neopixel.state
         if value is None:
             value = "unknown"
@@ -91,7 +91,7 @@ class ConfigureNeopixel(Command):
 
     def write_html(self):
         doc, tag, text = self._owner._doc.tagtext()
-        colloquy = self._owner.colloquy
+        hardware = self._owner.hardware
         config = self.neopixel.configuration
 
         with tag("form", action="", method="post", style="display: flex; flex-wrap: wrap;"):

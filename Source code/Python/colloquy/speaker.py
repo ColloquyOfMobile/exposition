@@ -12,7 +12,7 @@ class Speaker(ThreadElement):
         self._on_off_state = None
         self._is_notifing = False
         self._is_encouraging = False
-        self.colloquy.speakers.append(self)
+        self.hardware.speakers.append(self)
         self._ui_context = None
 
     @property
@@ -89,8 +89,8 @@ class Speaker(ThreadElement):
         self._ui_context = ui_context
         
         if self.is_on:
-            self._write_html_action(value=f"colloquy/{self.owner.name}/speaker/off", label=f"{self.owner.name} off", func=self.off)
+            self._write_html_action(value=f"hardware/{self.owner.name}/speaker/off", label=f"{self.owner.name} off", func=self.off)
             return
 
         
-        self._write_html_action(value=f"colloquy/{self.owner.name}/speaker/on", label=f"{self.owner.name} on", func=self.on)
+        self._write_html_action(value=f"hardware/{self.owner.name}/speaker/on", label=f"{self.owner.name} on", func=self.on)

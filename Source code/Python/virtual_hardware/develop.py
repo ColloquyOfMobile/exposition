@@ -6,10 +6,10 @@ from tests import Tests
 
 PARAMETERS = Parameters().as_dict()
 
-class Develop(Tests):
+class _Develop(Tests):
 
     classes = Tests.classes.copy()
-    classes["colloquy"] = VirtualColloquyDriver
+    classes["hardware"] = VirtualColloquyDriver
 
     def __init__(self, wsgi):
         Tests.__init__(self, wsgi, name="develop")

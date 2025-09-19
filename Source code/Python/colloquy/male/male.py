@@ -40,7 +40,7 @@ class MaleDriver(Body):
         self.body_neopixel.off()
 
     def __enter__(self):
-        assert self.dxl_origin is not None, "Calibrate colloquy."
+        assert self.dxl_origin is not None, "Calibrate hardware."
         self.stop_event.clear()
         self.body_neopixel.start()
         self.drives.start()
@@ -66,7 +66,7 @@ class MaleDriver(Body):
         with tag("h3"):
             text(f"{self.name.title()}:")
 
-        if self.colloquy.is_open:
+        if self.hardware.is_open:
                 if not self._is_started:
                     self._add_html_start()
                 else:
@@ -79,7 +79,7 @@ class MaleDriver(Body):
         with tag("form", method="post"):
             with tag("button", name="action", value=f"{self.name}/start"):
                 text(f"Start.")
-            self.colloquy.actions[f"{self.name}/start"] = self.start
+            self.hardware.actions[f"{self.name}/start"] = self.start
 
         self._search.add_html()
 
@@ -88,9 +88,9 @@ class MaleDriver(Body):
         with tag("form", method="post"):
             with tag("button", name="action", value=f"{self.path.as_posix()}/stop"):
                 text(f"Stop.")
-            self.colloquy.actions[f"{self.path.as_posix()}/stop"] = self.stop_from_ui
+            self.hardware.actions[f"{self.path.as_posix()}/stop"] = self.stop_from_ui
 
     def stop_from_ui(self):
         self.stop()
         self.thread.join()
-        self.colloquy.bar.search.stop()
+        self.hardware.bar.search.stop()

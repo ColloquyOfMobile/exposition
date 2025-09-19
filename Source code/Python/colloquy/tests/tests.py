@@ -23,8 +23,8 @@ class Tests(ThreadElement):
         self._test_photosensors = TestPhotosensors(owner=self)
 
     @property
-    def colloquy(self):
-        return self.owner
+    def hardware(self):
+        return self.owner.hardware
 
     @property
     def is_open(self):
@@ -49,7 +49,7 @@ class Tests(ThreadElement):
             text(self.name.title())
             
             
-        self._write_html_action(value="colloquy/tests/close", label="close", func=self.close)
+        self._write_html_action(value="hardware/tests/close", label="close", func=self.close)
             
         self._test_neopixel_consumption.write_html()
         self._test_speaker.write_html()
@@ -58,7 +58,7 @@ class Tests(ThreadElement):
     
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
-        self._write_html_action(value="colloquy/tests/open", label=self.name, func=self.open)
+        self._write_html_action(value="hardware/tests/open", label=self.name, func=self.open)
 
     def open(self, **kwargs):
         if self._is_open:

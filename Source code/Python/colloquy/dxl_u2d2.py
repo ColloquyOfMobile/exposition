@@ -128,11 +128,11 @@ class DXLU2D2(ThreadElement):
         self.port_handler.closePort()
         self.port_handler = self._classes["port_handler"](com_port)
 
-        self.colloquy.params["dynamixel network"]["communication port"] = com_port
-        self.colloquy.save()
+        self.hardware.params["dynamixel network"]["communication port"] = com_port
+        self.hardware.save()
 
     def add_html(self):
-        if not self.colloquy.is_connected:
+        if not self.hardware.is_connected:
             self._add_html_com()
 
     def _add_html_com(self, ):
@@ -157,6 +157,6 @@ class DXLU2D2(ThreadElement):
             with tag("button", name="action", value="dxl_manager/com_port/set"):
                 text(f"set.")
 
-            self.colloquy.actions["dxl_manager/com_port/set"] = self._set_com_port
+            self.hardware.actions["dxl_manager/com_port/set"] = self._set_com_port
 
         # yield doc.read().encode()

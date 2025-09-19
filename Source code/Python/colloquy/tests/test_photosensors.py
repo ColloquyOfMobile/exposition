@@ -13,8 +13,8 @@ class TestPhotosensors(ThreadElement):
         # self.speaker_on = None
 
     @property
-    def colloquy(self):
-        return self.owner.colloquy
+    def hardware(self):
+        return self.owner.hardware
 
     @property
     def is_open(self):
@@ -23,41 +23,41 @@ class TestPhotosensors(ThreadElement):
     def open(self, **kwargs):
         if self._is_open:
             return
-        self.colloquy.connect()
+        self.hardware.connect()
         self.owner.opened = self
         self._is_open = True
 
     def close(self, **kwargs):
         if not self._is_open:
             return
-        self.colloquy.close()
+        self.hardware.close()
         self._is_open = False
         self.owner.opened = None
 
     def _toggle_beam(self, **kwargs):
-        self.colloquy.male1.body_neopixel.ring.toggle()
+        self.hardware.male1.body_neopixel.ring.toggle()
         # raise NotImplementedError()
 
     def _setup(self, **kwargs):
         hostname = socket.gethostname()
         if hostname != "DESKTOP-MRSLS88":        
-            self.colloquy.female1.emulate_light_sensor = False
+            self.hardware.female1.emulate_light_sensor = False
         
-        self.colloquy.turn_to_origin_position(elements=self.colloquy.moving_elements)
+        self.hardware.turn_to_origin_position(elements=self.hardware.moving_elements)
         self._detect_pattern.start()
-        # self.colloquy.male1.search.blink.start()
-        # self.colloquy.male1.body_neopixel.ring.configure(
+        # self.hardware.male1.search.blink.start()
+        # self.hardware.male1.body_neopixel.ring.configure(
             # red = 0,
             # green = 0,
             # blue = 0,
             # white = 255,
             # brightness = 255,)
-        # self.colloquy.male1.body_neopixel.ring.on()
+        # self.hardware.male1.body_neopixel.ring.on()
 
     def _loop(self, **kwargs):
         return
         # raise NotImplementedError("Update this funtion to detect the pattern of light.")
-        # value = self.colloquy.female1.sensor.read()
+        # value = self.hardware.female1.sensor.read()
         # print(f"{value=}")
         
         # # threshold to decide between "light detected" and "no light"
@@ -83,16 +83,12 @@ class TestPhotosensors(ThreadElement):
         # self._last_sensor_value = current_state
     
     def stop(self, **kwarg):
-        self.colloquy.male1.body_neopixel.ring.off()
-        self.colloquy.female1.emulate_light_sensor = None
+        if self.is_started:
+            self.hardware.male1.body_neopixel.ring.off()
+        self.hardware.female1.emulate_light_sensor = None
                 
-        if self._is_started:
-            self._is_started = False
-            self.stop_event.set()
-            return
-            
-        for element in self.elements:
-            element.stop()
+        
+        ThreadElement.stop(self)
 
     def write_html(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -104,20 +100,20 @@ class TestPhotosensors(ThreadElement):
         self._add_html_title()
         
         if self._is_started:
-            self._write_html_action(value="colloquy/tests/photosensors/stop", label="stop", func=self.stop)
+            self._write_html_action(value="hardware/tests/photosensors/stop", label="stop", func=self.stop)
             
             
-            self.colloquy.male1.search.blink.add_html()
+            self.hardware.male1.search.blink.add_html()
             return
         
             
-        self._write_html_action(value="colloquy/tests/photosensors/close", label="close", func=self.close)
+        self._write_html_action(value="hardware/tests/photosensors/close", label="close", func=self.close)
         
-        self._write_html_action(value="colloquy/tests/photosensors/start", label="start", func=self.start)
+        self._write_html_action(value="hardware/tests/photosensors/start", label="start", func=self.start)
     
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
-        self._write_html_action(value="colloquy/tests/speaker/open", label=self.name, func=self.open)
+        self._write_html_action(value="hardware/tests/speaker/open", label=self.name, func=self.open)
 
 
     def _add_html_title(self):

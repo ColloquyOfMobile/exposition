@@ -6,7 +6,7 @@ class UpSensor(LightSensor):
         raise NotImplementedError
 
     def engaged(self):
-        return self.colloquy.interaction.female.mirror.is_up
+        return self.hardware.interaction.female.mirror.is_up
 
 class DownSensor(LightSensor):
 
@@ -14,4 +14,4 @@ class DownSensor(LightSensor):
         raise NotImplementedError
 
     def engaged(self):
-        return self.colloquy.interaction.female.mirror.is_down
+        return self.hardware.interaction.female.mirror.is_down

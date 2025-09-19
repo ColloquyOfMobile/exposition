@@ -26,13 +26,13 @@ class Search(ThreadElement):
         return self.owner.microphone
 
     def _loop(self):        
-        with self.colloquy.lock:
-            if not self.colloquy.bar.search.is_started:
-                if self.colloquy.interaction is None:
-                    self.colloquy.bar.search.start()
+        with self.hardware.lock:
+            if not self.hardware.bar.search.is_started:
+                if self.hardware.interaction is None:
+                    self.hardware.bar.search.start()
                 else:
-                    if not self.colloquy.interaction.is_started:
-                        self.colloquy.bar.search.start()
+                    if not self.hardware.interaction.is_started:
+                        self.hardware.bar.search.start()
 
         if not self.owner.is_moving:
             self.owner.toggle_position()
@@ -50,7 +50,7 @@ class Search(ThreadElement):
         with tag("h4"):
             text(f"Search:")
 
-        if self.colloquy.is_open:
+        if self.hardware.is_open:
             if not self._is_started:
                 self._add_html_start()
             else:
@@ -61,7 +61,7 @@ class Search(ThreadElement):
         with tag("form", method="post"):
             with tag("button", name="action", value=f"{self.path.as_posix()}/start"):
                 text(f"Start.")
-        self.colloquy.actions[f"{self.path.as_posix()}/start"] = self.start
+        self.hardware.actions[f"{self.path.as_posix()}/start"] = self.start
 
         self.blink.add_html()
 
@@ -70,19 +70,19 @@ class Search(ThreadElement):
         with tag("form", method="post"):
             with tag("button", name="action", value=f"{self.path.as_posix()}/stop"):
                 text(f"Stop.")
-            self.colloquy.actions[f"{self.path.as_posix()}/stop"] = self.stop
+            self.hardware.actions[f"{self.path.as_posix()}/stop"] = self.stop
 
     def _add_html_stop(self):
         doc, tag, text = self.html_doc.tagtext()
         with tag("form", method="post"):
             with tag("button", name="action", value=f"{self.path.as_posix()}/stop"):
                 text(f"Stop.")
-            self.colloquy.actions[f"{self.path.as_posix()}/stop"] = self.stop_from_ui
+            self.hardware.actions[f"{self.path.as_posix()}/stop"] = self.stop_from_ui
 
     def stop_from_ui(self):
         self.stop()
         self.thread.join()
-        self.colloquy.bar.search.stop()
+        self.hardware.bar.search.stop()
 
 
 
@@ -133,7 +133,7 @@ class Blink(ThreadElement):
         with tag("h4"):
             text(f"Blink:")
 
-        # if self.colloquy.is_open:
+        # if self.hardware.is_open:
         if not self._is_started:
             self._add_html_start()
         else:
@@ -147,11 +147,11 @@ class Blink(ThreadElement):
 
             with tag("button", name="action", value=f"{self.path.as_posix()}/start"):
                 text(f"Start.")
-        self.colloquy.actions[f"{self.path.as_posix()}/start"] = self.start
+        self.hardware.actions[f"{self.path.as_posix()}/start"] = self.start
 
     def _add_html_stop(self):
         doc, tag, text = self.html_doc.tagtext()
         with tag("form", method="post"):
             with tag("button", name="action", value=f"{self.path.as_posix()}/stop"):
                 text(f"Stop.")
-            self.colloquy.actions[f"{self.path.as_posix()}/stop"] = self.stop
+            self.hardware.actions[f"{self.path.as_posix()}/stop"] = self.stop

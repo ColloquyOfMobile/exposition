@@ -2,7 +2,7 @@ from pathlib import Path
 import urllib
 from wsgiref.simple_server import make_server, WSGIRequestHandler
 import os
-from .root import Root
+from colloquy import Colloquy
 # from .calibration import Calibration
 from .file_handler import FileHandler
 from .http_element import HTTPElement
@@ -13,7 +13,7 @@ class WSGI(HTTPElement):
         HTTPElement.__init__(self, owner=None)
         self._shut_server = False
         self.doc = None
-        self.root = Root(owner=self)
+        self.colloquy = Colloquy(owner=self)
 
         self.file_handler = FileHandler(owner=self)
 
@@ -47,7 +47,7 @@ class WSGI(HTTPElement):
         path = self._parse_path(environ)
 
         if path == Path():
-            yield from self.root(environ)
+            yield from self.colloquy(environ)
             return
 
         yield from self.file_handler(environ)

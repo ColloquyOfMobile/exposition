@@ -233,7 +233,7 @@ class Drives(ThreadElement):
                 with tag("li"):
                     text(f"{self._frustrated_lim=}")
 
-        # if self.colloquy.is_open:
+        # if self.hardware.is_open:
         self._add_html_o_drive()
         self._add_html_p_drive()
 
@@ -245,7 +245,7 @@ class Drives(ThreadElement):
             doc.stag("input", type="number", name="value", value=self.o_drive, min=self._min, max=self._max, increment=1)
             with tag("button", name="action", value=f"{self.path.as_posix()}/set_o"):
                 text(f"Set.")
-            self.colloquy.actions[f"{self.path.as_posix()}/set_o"] = self._set_o_drive
+            self.hardware.actions[f"{self.path.as_posix()}/set_o"] = self._set_o_drive
 
     def _add_html_p_drive(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -255,4 +255,4 @@ class Drives(ThreadElement):
             doc.stag("input", type="number", name="value", value=self.p_drive, min=self._min, max=self._max, increment=1)
             with tag("button", name="action", value=f"{self.path.as_posix()}/set_p"):
                 text(f"Set.")
-            self.colloquy.actions[f"{self.path.as_posix()}/set_p"] = self._set_p_drive
+            self.hardware.actions[f"{self.path.as_posix()}/set_p"] = self._set_p_drive

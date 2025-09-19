@@ -181,7 +181,7 @@ class Parameters(HTMLElement):
         return self._is_open
 
     @property
-    def colloquy(self):
+    def hardware(self):
         return self.owner
 
     @property
@@ -258,16 +258,16 @@ class Parameters(HTMLElement):
             if self.is_calibrated:
                 with tag("div", style="display: flex;"):
                     with tag("div",):
-                        text(f" All set :). You can close the parameters and open Colloquy!")
+                        text(f" All set :). You can close the parameters and open Hardware!")
                     if self.is_calibrated:
                         self._write_html_action(value="params/close", label="close", func=self.close)
 
             for element in self._unset_elements:
                 with tag("div",):
-                    text(f"Set the '{element}' to open Colloquy!")
+                    text(f"Set the '{element}' to open Hardware!")
 
-        self.colloquy.arduino.add_html()
-        self.colloquy.dxl_manager.add_html()
+        self.hardware.arduino.add_html()
+        self.hardware.dxl_manager.add_html()
 
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()

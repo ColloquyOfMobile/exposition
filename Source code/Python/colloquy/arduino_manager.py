@@ -98,7 +98,7 @@ class ArduinoManager(ThreadElement):
                 raise RuntimeError("Arduino was to long to reboot !")
 
     def add_html(self):
-        if not self.colloquy.is_connected:
+        if not self.hardware.is_connected:
             self._add_html_com()
 
     def _get_com_ports(self):
@@ -110,8 +110,8 @@ class ArduinoManager(ThreadElement):
     def _set_com_port(self, com_port):
         com_port = com_port[0]
         self.port_handler.port = com_port
-        self.colloquy.params["arduino"]["communication port"] = com_port
-        self.colloquy.save()
+        self.hardware.params["arduino"]["communication port"] = com_port
+        self.hardware.save()
 
     def _add_html_com(self):
         doc, tag, text = self.html_doc.tagtext()
@@ -133,4 +133,4 @@ class ArduinoManager(ThreadElement):
             with tag("button", name="action", value="arduino/com_port/set"):
                 text(f"set.")
 
-            self.colloquy.actions["arduino/com_port/set"] = self._set_com_port
+            self.hardware.actions["arduino/com_port/set"] = self._set_com_port

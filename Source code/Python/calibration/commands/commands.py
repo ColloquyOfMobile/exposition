@@ -36,13 +36,13 @@ class BarMoveToPositionAndWait(Command):
 
     def __call__(self, **kwargs):
         position = int(kwargs["position"][0])
-        self._owner.colloquy.bar.move_and_wait(self.position)
+        self._owner.hardware.bar.move_and_wait(self.position)
         # raise NotImplementedError
         yield "Finish moving the bar."
 
     def write_html(self):
         doc, tag, text = self._owner._doc.tagtext()
-        colloquy = self._owner.colloquy
+        hardware = self._owner.hardware
         position = round(self.position)
         with tag("form", action="", method="post", style="display: flex; flex-wrap: wrap;"):
             with tag("input", type="number", name="position", value=position, step="1"):
@@ -57,16 +57,16 @@ class BarMoveToOriginAndWait(Command):
 
     def __call__(self, **kwargs):
         yield f"Moving the bar to origin..."
-        colloquy = self._owner.colloquy
-        colloquy.bar.turn_to_origin_position()
-        colloquy.bar.wait_for_servo()
+        hardware = self._owner.hardware
+        hardware.bar.turn_to_origin_position()
+        hardware.bar.wait_for_servo()
         # raise NotImplementedError
         yield f"Finish moving the bar."
 
     def write_html(self):
         doc, tag, text = self._owner._doc.tagtext()
-        colloquy = self._owner.colloquy
-        position = colloquy.bar.dxl_origin
+        hardware = self._owner.hardware
+        position = hardware.bar.dxl_origin
         with tag("form", action="", method="post", style="display: flex; flex-wrap: wrap;"):
             with tag("input", type="number", name="position", value=position, disabled="True"):
                 pass
@@ -89,7 +89,7 @@ class BodyMoveToOriginAndWait(Command):
 
     def write_html(self):
         doc, tag, text = self._owner._doc.tagtext()
-        colloquy = self._owner.colloquy
+        hardware = self._owner.hardware
         position = self.body.dxl_origin
         with tag("form", action="", method="post", style="display: flex; flex-wrap: wrap;"):
             with tag("input", type="number", name="position", value=position, disabled="True"):
@@ -110,7 +110,7 @@ class BodyToggleSpeaker(Command):
 
     def write_html(self):
         doc, tag, text = self._owner._doc.tagtext()
-        colloquy = self._owner.colloquy
+        hardware = self._owner.hardware
         value = self.body.speaker.is_on
         if value is None:
             value = "unknown"
@@ -139,7 +139,7 @@ class BodyMoveAndWait(Command):
 
     def write_html(self):
         doc, tag, text = self._owner._doc.tagtext()
-        colloquy = self._owner.colloquy
+        hardware = self._owner.hardware
         position = round(self.body.position)
         with tag("form", action="", method="post", style="display: flex; flex-wrap: wrap;"):
             with tag("input", type="number", name="position", value=position, step="1"):
@@ -154,14 +154,14 @@ class BarMoveAndWait(Command):
 
     def __call__(self, **kwargs):
         position = int(kwargs["position"][0])
-        self._owner.colloquy.bar.move_and_wait(position)
+        self._owner.hardware.bar.move_and_wait(position)
         # raise NotImplementedError
         yield "Finish moving the bar."
 
     def write_html(self):
         doc, tag, text = self._owner._doc.tagtext()
-        colloquy = self._owner.colloquy
-        position = round(colloquy.bar.position)
+        hardware = self._owner.hardware
+        position = round(hardware.bar.position)
         with tag("form", action="", method="post"):
             with tag("input", type="number", name="position", value=position, step="1"):
                 pass

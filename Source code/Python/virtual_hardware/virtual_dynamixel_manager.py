@@ -3,7 +3,7 @@ from time import time, sleep
 from threading import Thread, Lock
 from pathlib import Path
 from colloquy.dxl_u2d2 import DXLU2D2
-from colloquy.thread_element import ThreadElement
+from .emulator_thread import EmulatorThread
 from colloquy.logger import Logger
 
 class VirtualPortHandler:
@@ -23,9 +23,9 @@ class VirtualPortHandler:
     def getPortName(self):
         return self._port_name
 
-class VirtualDxl(ThreadElement):
+class VirtualDxl(EmulatorThread):
     def __init__(self, owner, dxl_id):
-        ThreadElement.__init__(self, name=f"dxl_{dxl_id}", owner=owner)
+        EmulatorThread.__init__(self, name=f"dxl_{dxl_id}", owner=owner)
         # self._owner = owner
         self._dxl_id = dxl_id
         self._thread = None
@@ -178,6 +178,7 @@ class VirtualDynamixelManager(DXLU2D2):
     }
     def __init__(self, owner, **kwargs):
         DXLU2D2.__init__(self, owner, **kwargs)
+        self.emulators = set()
         self._dxls = {i: VirtualDxl(owner=self, dxl_id=i) for i in range(1, 11)}
         self.packet_handler.owner = self
 
@@ -198,6 +199,7 @@ class VirtualDynamixelManager(DXLU2D2):
         DXLU2D2.close(self)
         for dxl in self.packet_handler.dxls.values():
             dxl.stop()
+        
 
     def _get_com_ports(self):
         return ["VirtualCOM1", "VirtualCOM2"]

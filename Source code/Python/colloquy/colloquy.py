@@ -1,126 +1,80 @@
-from .dxl_u2d2 import DXLU2D2
-from .arduino_manager import ArduinoManager
-from .female import FemaleDriver
-from .male import MaleDriver
-from .bar import BarDriver
-from .logger import Logger
-from .thread_element import ThreadElement
-from .interactions import Interactions
-from .tests import Tests
-from .exposition import Exposition
+from pathlib import Path
+import traceback
+from .hardware import Hardware
+from virtual_hardware import VirtualHardware
+import socket
+from threading import Thread, Event, Lock
+from server.html_element import HTMLElement
 from parameters import Parameters
-from time import sleep
-from threading import Event, Lock # Thread
-from datetime import datetime
-from .interaction_counter import InteractionCounter
 from .agenda import Agenda
+from parameters import Parameters
+from .exposition import Exposition
+from .tests import Tests
+from .logger import Logger as _Logger
 
-class Colloquy(ThreadElement):
-
-    _classes = {
-        "dxl_manager": DXLU2D2,
-        "arduino_manager": ArduinoManager,
-        "female": FemaleDriver,
-        "male": MaleDriver,
-        "bar": BarDriver,
-    }
-
-    def __init__(self, owner, name="colloquy"):
-        # raise NotImplementedError(f"Store the threads from the virtual dxl manager into the server")
-        ThreadElement.__init__(self, name=name, owner=owner)
-        self._lock = Lock()
+class Colloquy(HTMLElement):
+    def __init__(self, owner):
+        HTMLElement.__init__(self, owner)
+        self._is_started = True
+        self._owner = owner
+        self._actions = {}
+        self.path = Path("")
+        self._log = Logger(owner=self)
+        self._opened = None
+        self._items = {}
+        self.elements = set()
+        self.threads = set()
+        self._hardware = None        
         self._params = Parameters(owner=self)
-        params = self.params.as_dict()
-
-        self.opened = None
-        self._is_connected = False
-        self._name = name
-        self.mirrors = []
-        self.males = []
-        self.bodies = []
-        self.speakers = []
-        self.bar = None
-        self._threads = set()
-        self.females = []
-        self.males = []
-        self._arduino_manager = arduino_manager = None
-        self._dxl_manager = dxl_manager = None
-        self._doc = None
-        self.emulate_light_sensors = True
-        self.interaction_counter = InteractionCounter()
-        self._agenda = Agenda(owner=self, params=self.params["agenda"])
-        # self._near_origin_threashold = 400
-
-        dxl_manager_params = params["dynamixel network"]
-        dxl_manager_params["name"] = "dxl"
-        self._dxl_manager = dxl_manager = self._classes["dxl_manager"](owner=self, **dxl_manager_params)
-
-        arduino_params = params["arduino"]
-        arduino_params["name"] = "arduino_driver"
-        self._arduino_manager = arduino_manager = self._classes["arduino_manager"](owner=self, **arduino_params)
-
-        self._init_females(params)
-        self._init_males(params)
-        self._init_bar(params)
-
-        # self.interactions = None
-        self.interactions = Interactions(owner=self)
-        
         self._tests = Tests(owner=self)
         self._exposition = Exposition(owner=self)
-        
-        self.bodies = [
-            *self.females,
-            *self.males,
-            ]
-
-        self.moving_elements = [
-            *self.females,
-            *self.mirrors,
-            *self.males,
-            self.bar
-        ]
+        self._agenda = Agenda(owner=self, params=self.params["agenda"])
+        self._shutdown_event = Event()
         if not self.params.is_calibrated:
             self.params.open()
+        
+        self.init()
 
-    def __enter__(self):
-        self.stop_event.clear()
-        self.turn_to_origin_position(elements=self.moving_elements)
-        self.wait_until_everything_is_still()
+    def __call__(self, environ):
+        self._init_html_doc()
+        self.write_html(environ)
+        return [self.html_doc.getvalue().encode()]
 
-        for body in self.bodies:
-            body.start()
+    @property
+    def shutdown_event(self):
+        return self._shutdown_event
+        
+    @property
+    def stop_event(self):
+        return self._shutdown_event
 
-        self.bar.start()
-
-    def __exit__(self, exc_type, exc_value, traceback_obj):
-        result = ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
-        self.turn_to_origin_position(
-            elements=self.moving_elements
-        )
-        self.wait_until_everything_is_still()
-        self._dxl_manager.stop()
-        return result
-
+    @property
+    def is_started(self):
+        return self._is_started
+        
     @property
     def near_origin_threashold(self):
         return self._params["near_origin_threashold"]
 
     @near_origin_threashold.setter
     def near_origin_threashold(self, value):
-        self._params["near_origin_threashold"] = value
+        self._params["near_origin_threashold"] = value 
 
     @property
-    def agenda(self):
-        return self._agenda        
-
-    @property
-    def lock(self):
-        return self._lock
+    def hardware(self):
+        return self._hardware
 
     @property
     def params(self):
         return self._params
+
+    @property
+    def opened(self):
+        return self._opened
+
+    @opened.setter
+    def opened(self, value):
+        self._opened = value
 
     @property
     def exposition(self):
@@ -131,172 +85,145 @@ class Colloquy(ThreadElement):
         return self._tests
 
     @property
-    def colloquy(self):
-        return self
+    def agenda(self):
+        return self._agenda   
 
     @property
-    def arduino(self):
-        return self._arduino_manager
+    def log(self):
+        return self._log
 
-    @property
-    def dxl_manager(self):
-        return self._dxl_manager
-
-    @property
-    def interaction(self):
-        return self.bar.interaction
-
-    @interaction.setter
-    def interaction(self, value):
-        self.bar.interaction = value
-
-    @property
-    def is_connected(self):
-        return self._is_connected
-
-    def turn_to_interaction_position(self):
-        position = self.interaction.position # + self.bar.dxl_origin
-        self.bar.goal_position = position
-
-    def turn_to_origin_position(self, elements):
-        for element in elements:
-            element.turn_to_origin_position()
-
-    def turn_to_max_position(self, elements):
-        for element in elements:
-            element.turn_to_max_position()
-
-    def turn_to_min_position(self, elements):
-        for element in elements:
-            element.turn_to_min_position()
-
-    def turn_on_neopixel(self, elements):
-        for element in elements:
-            element.turn_on_neopixel()
-
-    def turn_off_neopixel(self, elements):
-        for element in elements:
-            element.turn_off_neopixel()
-
-    def is_something_moving(self):
-        return any(
-            (e.is_moving
-            for e
-            in self.moving_elements)
-        )
-
-    def wait_until_everything_is_still(self):
-        print(f"Waiting until everything is still...")
-        while self.is_something_moving():
-            sleep(0.1)
-    
-    def connect(self, **kwargs):
-        if self._is_connected:
-            return
-        self._dxl_manager.open()
-        self._arduino_manager.open()
-
-        for body in self.bodies:
-            body.open()
-
-        self.bar.open()
-        self.owner.opened = self
-        # self._actions = {}
-        self._is_connected = True
-        self.turn_to_origin_position(elements=self.moving_elements)
-        self.wait_until_everything_is_still()
-        
-
-    def close(self, **kwargs):
-        print(f"{self.interaction_counter.frequency=}")
-        self._actions = None
-        if not self._is_connected:
+    def init(self):
+        params = self.params.as_dict()
+        hostname = socket.gethostname()
+        if hostname == "DESKTOP-MRSLS88":
+            self._items["hardware"] = self._hardware = VirtualHardware(owner=self, params=params)
             return
 
-        if self.thread is not None:
-            self.stop()
-        
-        for element in self.moving_elements:
-            element.dxl.torque_enabled = False
+        self._items["hardware"] = self._hardware = Hardware(owner=self, params=params)
 
-        self.bar.turn_to_origin_position()
-        self._dxl_manager.close()
-        self._arduino_manager.close()
-        self._is_connected = False
 
-    def save(self):
-        self.params.save()
-
-    def write_html(self):
+    def write_html(self, environ):
+        self._parse_data(environ)
+        data = self.post_data
+        action = data.get("action")
         doc, tag, text = self.html_doc.tagtext()
+        doc.asis("<!DOCTYPE html>")
+        with tag("html"):
+            self._write_html_head()
+            
+            
+            if action == ["shutdown"]:                
+                with tag("body"):
+                    text("Goodbye !")
+                return self.stop()
+                
+                
 
-        self.actions.clear()
+            self._write_body()
 
-        self._add_html_thread_count()
+    def _write_html_head(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("head"):
+            with tag("title"):
+                text(f"Hardware of Mobiles")
+            doc.asis(
+                '<meta name="viewport"'
+                ' content="width=device-width,'
+                " initial-scale=1,"
+                ' interopened-widget=resizes-content" />'
+            )
+
+    def _write_body(self):
+        doc, tag, text = self.html_doc.tagtext()
+        with tag("body"):
+            with tag("div", style="display: flex; "):
+                with tag("h1", style="display: flex; flex: 1; justify-items: center;"):
+                    text(
+                        f"Colloquy of Mobiles"
+                        )
+
+                with tag("form", method="post", style="display: flex;"):
+                    with tag("button", name="action", value="shutdown", style="align-self:center;"):
+                        text(f"Shutdown.")
+
+            data = self.post_data
+
+            action = data.get("action")
+            str_action = None
+            if action:
+                str_action = action[0]
+            action = self.actions.get(str_action, )
+            if action:
+                try:
+                    action(**data)
+                except Exception as e:
+                    with tag("div"):
+                        with tag("h2"):
+                            text(f"Error trying {str_action=}, {action=}!")
+                        
+                        with tag("pre", ):
+                            text(traceback.format_exc())
+            try:
+                return self._write_root()
+            except Exception as e:
+                with tag("div"):
+                    with tag("h2"):
+                        text(f"Error building root html!")
+                    
+                    with tag("pre", ):
+                        text(traceback.format_exc())
+            
+            # raise NotImplementedError(f"{data=}")
+
+    def _write_root(self, **data):
+        doc, tag, text = self.html_doc.tagtext()
         
         if self.opened:
             self.opened.write_html()
             return
+        with tag("div"):            
+            self.params.write_html()
+            self.exposition.write_html()
+            self.tests.write_html()
+    
+    def stop(self):
+        self.owner.shut_server = True
+        self._is_started = False
+        self._shutdown_event.set()
+        # if self._exposition.is_started:
+        self._exposition.stop()
+        self._tests.stop()
+        
+        self._exposition.join()
+        self._tests.join()
             
-        self.params.write_html()
-        self.exposition.write_html()
-        self.tests.write_html()
+        if self._hardware.is_started:
+            self._hardware.stop()
+            print("Waiting hardware thread to stop...")
+            self._hardware.join()
+        print("... exposition and tests threads stopped.")
 
-    def _add_html_thread_count(self):
-        doc, tag, text = self.html_doc.tagtext()
-        if self.thread_count:
-            with tag("details",):
-                with tag("summary",):
-                    text(
-                        f"threads: {self.thread_count}"
-                        )
-                for e in self.iter_thread_pool():
-                    with tag("summary",):
-                        text(
-                            f"{e.name}"
-                            )
+    # def _handle_request(self, environ):
+        # raise NotImplementedError
+        # if not kwargs:
+            # action = kwargs.pop("action")[0]
 
-    def _init_bar(self, params):
-        bar_params = dict(params["bar"])
-        bar_params["colloquy"] = self
-        bar_params["name"] = "bar"
-        bar_params["dynamixel manager"] = self._dxl_manager
-        bar_params["colloquy"] = self
-        self.bar = self._classes["bar"](owner=self, **bar_params)
+            # self._hardware.actions[action](**kwargs)
 
+        # self._hardware.add_html()
 
-    def _init_females(self, params, ):
-        females_params = params["females"]
-        females_names = females_params["names"]
-        for name in females_names:
-            fem_params = dict(params[name])
-            fem_params["name"] = name
-            fem_params.update( params["females"]["share"])
-            fem_params["dynamixel manager"] = self._dxl_manager
-            fem_params["arduino manager"] = self._arduino_manager
-            fem_params["colloquy"] = self
-            female = self._classes["female"](owner=self, **fem_params)
-            self.females.append(female)
-            setattr(self, name, female)
-            self.mirrors.append(female.mirror)
+    # def _loop(self, **kwargs):
+        # self._started_on = datetime.now()
+        # pass
+        # raise NotImplementedError(f"for {self.name}, ({kwargs=}) implement the timing!")
 
-    def _init_males(self, params, ):
-        males_params = params["males"]
-        males_names = males_params["names"]
-        for name in males_names:
-            male_params = dict(params[name])
-            male_params["name"] = name
-            male_params.update( params["males"]["share"])
-            male_params["dynamixel manager"] = self._dxl_manager
-            male_params["arduino manager"] = self._arduino_manager
-            male_params["colloquy"] = self
-            male = self._classes["male"](owner=self, **male_params)
-            self.males.append(male)
-            setattr(self, name, male)
+class Logger(_Logger):
 
-    # def _write_html_open(self):
-        # doc, tag, text = self.html_doc.tagtext()
-        # # self._write_html_action(value="colloquy/open", label=self.name, func=self.open)
+    def __init__(self, owner):
+        self._owner = owner
+        self._folder = self._log_folder
+        self._path = self._folder / f"root.log"
+        self._line_count = None
 
-    def _loop(self):
-        pass
+        assert self._path not in self._instances, f"{self._path=}"
+        self._instances[self._path] = self

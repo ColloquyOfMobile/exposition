@@ -3,16 +3,16 @@ from .virtual_arduino_manager import VirtualArduinoManager
 from .virtual_female import VirtualFemale
 from time import sleep
 from parameters import Parameters
-from colloquy import Colloquy
+from colloquy.hardware import Hardware
 
 
-class VirtualColloquy(Colloquy):
+class VirtualHardware(Hardware):
 
-    _classes = Colloquy._classes.copy()
+    _classes = Hardware._classes.copy()
     _classes.update({
         "dxl_manager": VirtualDynamixelManager,
         "arduino_manager": VirtualArduinoManager,
         "female": VirtualFemale,
     })
-    def __init__(self, owner, ):
-        Colloquy.__init__(self, owner)
+    # def __init__(self, owner, ):
+        # Hardware.__init__(self, owner)
