@@ -58,6 +58,9 @@ class Exposition(ThreadElement):
                 doc.stag("input", type="number", name="value", value=self.near_origin_threashold, min=min_value, max=max_value, increment=1)
                 with tag("button", name="action", value=path):
                     text("set")
+                with tag("ul"):
+                    with tag("li"):
+                        text("400 => around 100 interaction per hour.")
             self.actions[path] = self.set_near_origin_threashold
             doc.stag("hr")
         
