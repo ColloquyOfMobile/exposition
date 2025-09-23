@@ -12,6 +12,8 @@ class UpRing(Neopixel):
         doc, tag, text = self.html_doc.tagtext()
         self._ui_context = ui_context
         
+        raise NotImplementedError("Implement a close button !")
+        
         self._write_html_configure()
         
         if self.state:
