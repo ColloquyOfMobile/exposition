@@ -10,7 +10,6 @@ class TestPhotosensors(ThreadElement):
         self._is_open = False
         self._last_sensor_value = None  # stores the previous sensor state
         self._detect_pattern = DetectPattern(owner=self)
-        # self.speaker_on = None
 
     @property
     def hardware(self):
@@ -45,42 +44,10 @@ class TestPhotosensors(ThreadElement):
         
         self.hardware.turn_to_origin_position(elements=self.hardware.moving_elements)
         self._detect_pattern.start()
-        # self.hardware.male1.search.blink.start()
-        # self.hardware.male1.body_neopixel.ring.configure(
-            # red = 0,
-            # green = 0,
-            # blue = 0,
-            # white = 255,
-            # brightness = 255,)
-        # self.hardware.male1.body_neopixel.ring.on()
 
     def _loop(self, **kwargs):
         return
-        # raise NotImplementedError("Update this funtion to detect the pattern of light.")
-        # value = self.hardware.female1.sensor.read()
-        # print(f"{value=}")
         
-        # # threshold to decide between "light detected" and "no light"
-        # threshold = 300  # adjust depending on your sensor
-        
-        # # convert to boolean (False = low, True = high)
-        # current_state = value > threshold
-        
-        # if self._last_sensor_value is None:
-            # # first read, just initialize
-            # self._last_sensor_value = current_state
-            # return
-        
-        # # rising edge detected (low -> high)
-        # if not self._last_sensor_value and current_state:
-            # print("Rising edge detected!")
-        
-        # # falling edge detected (high -> low)
-        # elif self._last_sensor_value and not current_state:
-            # print("Falling edge detected!")
-        
-        # # update last value for the next loop
-        # self._last_sensor_value = current_state
     
     def stop(self, **kwarg):
         if self.is_started:

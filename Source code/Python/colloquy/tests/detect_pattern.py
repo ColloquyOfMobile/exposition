@@ -62,15 +62,9 @@ class DetectPattern(ThreadElement):
             match = self._try_match()
             if match:
                 male, drive = match
-                # cooldown to avoid spammy repeated detections
                 if (now - self._last_detection_time) > self.detection_cooldown:
                     print(f"Pattern detected: {male}  drive={drive}")
                     self._last_detection_time = now
-                    # Optional: trigger some handler, e.g.
-                    # self.owner.on_pattern_detected(male, drive)
-                # else:
-                    # if self.debug:
-                        # print("Match found but in cooldown.")
 
     def _try_match(self):
         """
@@ -101,9 +95,6 @@ class DetectPattern(ThreadElement):
                 bit = 1 if avg > 0.5 else 0
                 candidate.append(bit)
 
-            # if self.debug:
-                # print(f"Offset {offset}: candidate={candidate}")
-
             # compare candidate to all known patterns and all rotations
             for male, patterns in LIGHT_PATTERNS.items():
                 for drive, ref in patterns.items():
@@ -127,14 +118,6 @@ class DetectPattern(ThreadElement):
                             if self.debug:
                                 print(f"Good match: {male} drive={drive} rot={rot} offset={offset} mismatches={mismatches}")
                             return (male, drive)
-
-        # # no match within max_mismatches
-        # if self.debug and best_candidate:
-            # male, drive, cand, ref_rot, offset, mismatches = best_candidate
-            # print("No exact match within tolerance.")
-            # print(f"Best candidate: male={male} drive={drive} mismatches={mismatches} offset={offset}")
-            # print(f"candidate={cand}")
-            # print(f"best_rotated_ref={ref_rot}")
-
+                            
         return None
 

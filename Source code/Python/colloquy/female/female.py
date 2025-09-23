@@ -1,9 +1,9 @@
 from colloquy.body import Body
-from colloquy.neopixel import Neopixel
 from colloquy.drives import Drives
 from colloquy.thread_element import ThreadElement
 from colloquy.light_sensor import LightSensor
 from colloquy.microphone import Microphone
+from .female_neopixel import FemaleNeopixel
 from .mirror import Mirror
 from .search import Search
 from .conversation import Conversation
@@ -23,7 +23,7 @@ class FemaleDriver(Body):
             owner,
             **kwargs,
             )
-        self.neopixel = Neopixel(owner=self, name="neopixel")
+        self.neopixel = FemaleNeopixel(owner=self, name="neopixel")
         self.drives = Drives(owner=self, neopixel=self.neopixel)
         self.sensor = self._classes["sensor"](owner=self, name="sensor")
         self.microphone = Microphone(owner=self)

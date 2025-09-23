@@ -1,5 +1,6 @@
 from colloquy.body import Body
-from colloquy.neopixel import Neopixel
+from .up_ring import UpRing
+# from colloquy.neopixel import Neopixel
 from colloquy.drives import Drives
 from colloquy.microphone import Microphone
 from .body_neopixels import BodyNeopixels
@@ -18,8 +19,9 @@ class MaleDriver(Body):
             self,
             **kwargs,
             )
+        self.segments = []
         self.body_neopixel = BodyNeopixels(owner=self)
-        self.up_ring = Neopixel(owner=self, name="up_ring")
+        self.up_ring = UpRing(owner=self, name="up_ring", )
         self.up_sensor = UpSensor(owner=self, name="up sensor")
         self.down_sensor = DownSensor(owner=self, name="down sensor")
 

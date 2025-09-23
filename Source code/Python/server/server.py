@@ -3,7 +3,10 @@ import urllib
 from wsgiref.simple_server import make_server, WSGIRequestHandler
 import os
 from colloquy import Colloquy
+import webbrowser
 # from .calibration import Calibration
+from .shutdown import Shutdown
+from .restart import Restart
 from .file_handler import FileHandler
 from .http_element import HTTPElement
 from utils import CustomDoc
@@ -16,6 +19,8 @@ class WSGI(HTTPElement):
         self.colloquy = Colloquy(owner=self)
 
         self.file_handler = FileHandler(owner=self)
+        self.shutdown = Shutdown(owner=self)
+        self.restart = Restart(owner=self)
 
         self._handler = None
         self._path = None
@@ -25,12 +30,7 @@ class WSGI(HTTPElement):
         self._start_response = start_response
         for response in self._handle_request(environ):
             yield response
-
-    @property
-    def driver(self):
-        raise NotImplementedError
-        return self._driver
-
+    
     @property
     def start_response(self):
         return self._start_response
@@ -50,6 +50,14 @@ class WSGI(HTTPElement):
             yield from self.colloquy(environ)
             return
 
+        if path == Path("shutdown"):
+            yield from self.shutdown()
+            return
+
+        if path == Path("restart"):
+            yield from self.restart()
+            return
+
         yield from self.file_handler(environ)
         return
 
@@ -66,6 +74,9 @@ def run():
     with make_server("0.0.0.0", port, wsgi, handler_class=CustomHandler) as httpd:
         WSGIRequestHandler.log_message = lambda *args, **kwargs: None
         print(f"Serving on port {port}...")
+        
+        webbrowser.open(url=f"http://127.0.0.1:{port}", new=2)
+        # raise NotImplementedError("Implement a way to restart the process.")
 
         while not wsgi.shut_server:
             httpd.handle_request()

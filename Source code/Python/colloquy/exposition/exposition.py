@@ -73,10 +73,12 @@ class Exposition(ThreadElement):
 
     
 
-    def stop(self, **kwargs):
+    def stop(self, **kwargs):        
+        self.stop_event.set()
         self.hardware.stop()
         self.hardware.join()
-        ThreadElement.stop(self, **kwargs)
+        ThreadElement.stop(self, **kwargs)     
+        self.stop_event.clear()
 
     def open(self, **kwargs):
         if self._is_open:
@@ -111,12 +113,7 @@ class Exposition(ThreadElement):
             start, end = day.start, day.end
             assert start and end, "Make sure to define start and end working days!"
             current_time = now.time()
-            # print(f"{current_time=}")            
-            # print(f"{start=}")
-            # print(f"{end=}")
-            # print(f"{start <= current_time < end=}")
             if start <= current_time < end:  
-                # print(f"{self.hardware.is_started=}")
                 if not self.hardware.is_started:              
                     print(f"Hardware is started...")
                     self.hardware.start()
@@ -124,7 +121,6 @@ class Exposition(ThreadElement):
                 if time() - self._print_origin > 10:
                     self._print_origin = time()
                     print("Running...")
-                # delta = datetime.combine(now.date(), end) - now
             else:
                 if self.hardware.is_started:          
                     print(f"Hardware is stop...")
@@ -140,28 +136,6 @@ class Exposition(ThreadElement):
                 print("Waiting next agenda slot...")
         
         sleep(1)
-                    
-                # if current_time < start:
-                    # delta = datetime.combine(now.date(), start) - now
-                # else:
-                    # tomorrow = now.date() + timedelta(days=1)
-                    # next_day = datetime.combine(tomorrow, time(hour=0, minute=0))
-                    # delta = next_day - now
-        # else:
-            
-            # tomorrow = now.date() + timedelta(days=1)
-            # next_day = datetime.combine(tomorrow, time(hour=0, minute=0))
-            # delta = next_day - now
-                    
-                    
-        # if now is in the agenda range:            
-            # self.hardware.start()
-            # sleep(the time until when it needs to stop)
-        # else:
-            # if self.hardware.is_started:
-                # self.hardware.stop()
-            # sleep(the time until when it needs to stop)
-        # raise NotImplementedError(f"Implement the daily trigger. Sleep the good amount of time.")
    
     
     def _write_html_open(self):

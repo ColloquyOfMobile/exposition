@@ -52,11 +52,11 @@ class Neopixel(ThreadElement):
             brightness = self.brightness)
         self.arduino_manager.send(self._request_path, **data)
 
-    def on(self):
+    def on(self, **kwargs):
         self._on_off_state = True
         self._update()
 
-    def off(self):
+    def off(self, **kwargs):
         # path = f"{self._owner.name}/neopixel"
         data = dict(
             r = 0,

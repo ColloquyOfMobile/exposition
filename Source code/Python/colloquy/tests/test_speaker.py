@@ -102,22 +102,3 @@ class TestSpeaker(HTMLElement):
         with tag("div"):
             text("Enable testing speaker one by one.")
 
-    def _add_html_start(self):
-        doc, tag, text = self.html_doc.tagtext()
-        with tag("form", method="post"):
-
-            with tag("button", name="action", value="hardware/test_led_consumption"):
-                text(f"Start.")
-
-            self.hardware.actions["hardware/test_led_consumption"] = self._start
-
-    def _add_html_stop(self):
-        doc, tag, text = self.html_doc.tagtext()
-        with tag("form", method="post"):
-            with tag("div"):
-                text(f"All LEDs should be on.")
-
-            with tag("button", name="action", value="hardware/test_led_consumption/stop"):
-                text(f"Stop.")
-
-            self.hardware.actions["hardware/test_led_consumption/stop"] = self._stop

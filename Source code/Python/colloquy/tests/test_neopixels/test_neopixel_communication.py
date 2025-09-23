@@ -44,11 +44,12 @@ class TestNeopixelCommunication(ThreadElement):
     def write_html(self):
         doc, tag, text = self.html_doc.tagtext()
         
+        
+        
         if not self.is_open:
             self._write_html_open()
             return
             
-        # if self.hardware.is_started:
         if self.is_started:
             self._add_html_title()
             self._add_html_stop()
@@ -70,7 +71,6 @@ class TestNeopixelCommunication(ThreadElement):
         self._color_index += 1
         color = self._colors[index]
         
-        # print(f"{color=}")
         for female in self.hardware.females:
             config = dict(
                 brightness = brightness,
@@ -97,16 +97,7 @@ class TestNeopixelCommunication(ThreadElement):
             for male in self.hardware.males:
                 male.body_neopixel.ring.off()
                 male.body_neopixel.drive.off()
-        # self._is_started = False
         ThreadElement.stop(self)
-                
-        # if self._is_started:
-            # self._is_started = False
-            # self.stop_event.set()
-            # return
-            
-        # for element in self.elements:
-            # element.stop()
 
     def _add_html_title(self):
         doc, tag, text = self.html_doc.tagtext()

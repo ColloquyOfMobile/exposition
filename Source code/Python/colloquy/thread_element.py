@@ -85,10 +85,6 @@ class ThreadElement(HTMLElement):
 
     @is_started.setter
     def is_started(self, value):
-        # if value:
-            # self._is_started = value
-            # self.owner.is_started = value
-            # return
         self._is_started = value
 
     @property

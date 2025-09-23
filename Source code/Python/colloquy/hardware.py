@@ -170,7 +170,7 @@ class Hardware(ThreadElement):
             body.open()
 
         self.bar.open()
-        self.owner.opened = self
+        # self.owner.opened = self
         # self._actions = {}
         self._is_connected = True
         self.turn_to_origin_position(elements=self.moving_elements)
