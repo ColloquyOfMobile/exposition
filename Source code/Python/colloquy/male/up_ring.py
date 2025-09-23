@@ -73,7 +73,7 @@ class UpRing(Neopixel):
         
         self.configure(red, green, blue, white, brightness)
         
-        raise NotImplementedError(f"{kwargs=}")
+        # raise NotImplementedError(f"{kwargs=}")
 
     def rgb_to_hex(self, red, green, blue):
         for value in (red, green, blue):
