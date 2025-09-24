@@ -1,7 +1,8 @@
 from colloquy.body import Body
 from .up_ring import UpRing
 # from colloquy.neopixel import Neopixel
-from colloquy.drives import Drives
+# from colloquy.drives import Drives
+from .male_drives import MaleDrives
 from colloquy.microphone import Microphone
 from .body_neopixels import BodyNeopixels
 from .search import Search
@@ -35,7 +36,10 @@ class MaleDriver(Body):
         self._search = Search(owner=self)
         self._conversation = Conversation(owner=self)
 
-        self.drives = Drives(owner=self, neopixel=self.body_neopixel.drive)
+        self.drives = MaleDrives(
+            owner=self, 
+            neopixel=self.body_neopixel.drive
+            )
 
     def open(self):
         Body.open(self)

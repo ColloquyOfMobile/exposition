@@ -9,14 +9,14 @@ class Search(ThreadElement):
     def __enter__(self):
         self.stop_event.clear()
 
-    def run(self, **kwargs):
-        with self:
-            self._setup(**kwargs)
-            while not self.stop_event.is_set():
-                if self.owner.stop_event.is_set():
-                    break
-                self._loop()
-                self._sleep_min()
+    # def run(self, **kwargs):
+        # with self:
+            # self._setup(**kwargs)
+            # while not self.stop_event.is_set():
+                # if self.owner.stop_event.is_set():
+                    # break
+                # self._loop()
+                # self._sleep_min()
 
     def _loop(self):
         if not self.owner.is_moving:

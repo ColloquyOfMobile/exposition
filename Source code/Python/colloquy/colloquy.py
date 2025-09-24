@@ -6,8 +6,8 @@ import socket
 from threading import Thread, Event, Lock
 from server.html_element import HTMLElement
 from parameters import Parameters
-from .agenda import Agenda
 from parameters import Parameters
+from .agenda import Agenda
 from .exposition import Exposition
 from .tests import Tests
 from .logger import Logger as _Logger
@@ -194,7 +194,7 @@ class Colloquy(HTMLElement):
         self._exposition.stop()
         self._tests.stop()
         
-        self._exposition.join()
+        # self._exposition.join()
         self._tests.join()
             
         if self._hardware.is_started:

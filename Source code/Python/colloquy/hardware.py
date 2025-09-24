@@ -79,6 +79,7 @@ class Hardware(ThreadElement):
         self.bar.start()
 
     def __exit__(self, exc_type, exc_value, traceback_obj):
+        print(f"Exiting {self=}")
         result = ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
         self.turn_to_origin_position(
             elements=self.moving_elements
@@ -149,6 +150,15 @@ class Hardware(ThreadElement):
             element.turn_off_neopixel()
 
     def is_something_moving(self):
+        # print(f"{self.thread_count=}")
+        # for t in self.iter_thread_pool():
+            # print(f"  - {t.name}")
+        # for e in self.moving_elements:
+            # if e.is_moving:
+                # print(f"{e=} is moving...")
+                # dxl_id = e.dxl.dxl_id
+                # dxl_emulator = self._dxl_manager.dxls[dxl_id]
+                # print(f"{dxl_id=} {dxl_emulator.is_started}...")
         return any(
             (e.is_moving
             for e
@@ -158,7 +168,7 @@ class Hardware(ThreadElement):
     def wait_until_everything_is_still(self):
         print(f"Waiting until everything is still...")
         while self.is_something_moving():
-            sleep(0.1)
+            sleep(0.5)
     
     def connect(self, **kwargs):
         if self._is_connected:

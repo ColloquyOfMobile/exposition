@@ -20,6 +20,7 @@ class Parameters(HTMLElement):
     _default = {
         "near_origin_threashold": 400,
         "agenda": {
+            "is_enabled": True,
             "monday": {
                 "start": None,
                 "end": None,
@@ -140,6 +141,8 @@ class Parameters(HTMLElement):
             self._data["near_origin_threashold"] = self._default["near_origin_threashold"]
         if "agenda" not in self._data:
             self._data["agenda"] = self._default["agenda"]
+        if "is_enabled" not in self._data["agenda"]:
+            self._data["agenda"]["is_enabled"] = self._default["agenda"]["is_enabled"]
             
             
         for mirror_name, female_name in zip(self._data["mirrors"]["names"], self._data["females"]["names"]):

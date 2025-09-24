@@ -7,8 +7,6 @@ from server.html_element import HTMLElement
 
 class ThreadElement(HTMLElement):
 
-    _thread_pool = set()
-
     def __init__(self, name, owner):
         HTMLElement.__init__(self, owner)
         self._owner = owner
@@ -25,7 +23,6 @@ class ThreadElement(HTMLElement):
         self._stop_event = Event()
         # self._stop_event.set()
         self._elements = set()
-        self._pool_lock = Lock()
         if self._owner is not None:
             self._owner.elements.add(self)
 
@@ -127,23 +124,12 @@ class ThreadElement(HTMLElement):
     def log(self):
         return self._log
 
-    @property
-    def thread_count(self):
-        return len(self._thread_pool)
-
     def join(self):
         if self.thread is None:
             return
         for element in self.elements:
             element.join()
         self.thread.join()
-
-    def _add_thread_to_pool(self, value):
-        with self._pool_lock:
-            self._thread_pool.add(value)
-
-    def iter_thread_pool(self):
-        yield from sorted(self._thread_pool, key=lambda x:x.name)
 
     def _sleep_min(self):
         sleep(0.01)
@@ -154,10 +140,11 @@ class ThreadElement(HTMLElement):
 
     def start(self, **kwargs):
         if self.stop_event.is_set():
-            print(f"Cannot start, {self=} stop_event is set")
             return
         if self.owner.stop_event.is_set():
-            print(f"Cannot start, {self=} {self.owner=} stop_event is set")
+            return
+        if self.shutdown_event.is_set():
+            print(f"Cannot start shutdown_event is set")
             return
             
         # self.stop_event.clear()
@@ -185,6 +172,8 @@ class ThreadElement(HTMLElement):
             element.stop()
 
     def run(self, **kwargs):
+        if self.shutdown_event.is_set():
+            return
         with self:
             self._setup(**kwargs)
             while not self.stop_event.is_set():
@@ -197,17 +186,3 @@ class ThreadElement(HTMLElement):
         raise NotImplementedError(
             f"Called repeatedly until stopped! ({self=})"
             )
-
-    def _add_html_thread_count(self):
-        doc, tag, text = self.html_doc.tagtext()
-        if self.thread_count:
-            with tag("details",):
-                with tag("summary",):
-                    text(
-                        f"threads: {self.thread_count}"
-                        )
-                for e in self.iter_thread_pool():
-                    with tag("summary",):
-                        text(
-                            f"{e.name}"
-                            )

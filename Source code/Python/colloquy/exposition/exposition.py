@@ -1,14 +1,13 @@
-from colloquy.thread_element import ThreadElement
-from datetime import datetime
+from server.html_element import HTMLElement
 from time import sleep, time
 
 
-class Exposition(ThreadElement):
+class Exposition(HTMLElement):
 
     def __init__(self, owner):
-        ThreadElement.__init__(self, owner=owner, name="exposition")
+        HTMLElement.__init__(self, owner=owner)
+        self._name = "exposition"
         self._is_open = False
-        self._print_origin = None
 
     @property
     def near_origin_threashold(self):
@@ -45,7 +44,7 @@ class Exposition(ThreadElement):
         self._add_html_thread_count()
         
         with tag("h2"):
-            text(self.name.title())
+            text(self._name.title())
         
         with tag("div"):
             doc.stag("hr")
@@ -64,24 +63,38 @@ class Exposition(ThreadElement):
             self.actions[path] = self.set_near_origin_threashold
             doc.stag("hr")
         
-        self.agenda.add_html()
-            
-        with tag("div"):
-            doc.stag("hr")
-            if not self.is_started:
-                self._add_html_start()
-            else:
-                self._add_html_stop()
-            doc.stag("hr")
+        self.agenda.write_html()
+        if not self.agenda.is_enabled:            
+            with tag("div"):
+                doc.stag("hr")
+                if not self.hardware.is_started:
+                    self._add_html_start()
+                else:
+                    self._add_html_stop()
+                doc.stag("hr")
 
     
-
     def stop(self, **kwargs):        
-        self.stop_event.set()
+        # self.stop_event.set()
+        if self.agenda.is_enabled:
+            self.agenda.stop()
+            self.agenda.join()
+            return
         self.hardware.stop()
         self.hardware.join()
-        ThreadElement.stop(self, **kwargs)     
-        self.stop_event.clear()
+        # ThreadElement.stop(self, **kwargs)     
+        # self.stop_event.clear()
+
+    
+    def _start(self, **kwargs):        
+        # self.stop_event.set()
+        # if self.agenda.is_enabled:
+            # self.agenda.start()
+            # return
+        assert not self.agenda.is_enabled
+        self.hardware.start()
+        # ThreadElement.stop(self, **kwargs)     
+        # self.stop_event.clear()
 
     def open(self, **kwargs):
         if self._is_open:
@@ -92,65 +105,25 @@ class Exposition(ThreadElement):
         self._is_open = True
 
     def close(self, **kwargs):
+        assert not  self.agenda.is_started, (
+            f"Stop the exposition run before closing ! This is probably due to an outdated UI... Reload the page without sending the form and retry.")
         if not self._is_open:
             return
         self.hardware.close()
         self._is_open = False
         self.owner.opened = None
-    
-    def _setup(self):
-        pass
-    
-    def _loop(self):
-        if self._print_origin is None:
-            self._print_origin = time()
-        
-        now = datetime.now()
-        today = now.strftime("%A").lower()
-        
-        day = self.agenda.week[today]
-        
-        
-        
-        if day.state:
-            start, end = day.start, day.end
-            assert start and end, "Make sure to define start and end working days!"
-            current_time = now.time()
-            if start <= current_time < end:  
-                if not self.hardware.is_started:              
-                    print(f"Hardware is started...")
-                    self.hardware.start()
-                    
-                if time() - self._print_origin > 10:
-                    self._print_origin = time()
-                    print("Running...")
-            else:
-                if self.hardware.is_started:          
-                    print(f"Hardware is stop...")
-                    self.hardware.stop()
-                    
-                if time() - self._print_origin > 10:
-                    self._print_origin = time()
-                    print("Waiting next agenda slot...")
-        else:
-            
-            if time() - self._print_origin > 10:
-                self._print_origin = time()
-                print("Waiting next agenda slot...")
-        
-        sleep(1)
    
     
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
-        self._write_html_action(value="hardware/exposition/open", label=self.name, func=self.open)
+        self._write_html_action(value="hardware/exposition/open", label=self._name, func=self.open)
 
     def _add_html_start(self):
         doc, tag, text = self.html_doc.tagtext()
         with tag("form", method="post"):
             with tag("button", name="action", value="hardware/start"):
                 text(f"Start.")
-                self.actions["hardware/start"] = self.start
+                self.actions["hardware/start"] = self._start
             
             
             self._write_html_action(value="hardware/exposition/close", label="close", func=self.close)

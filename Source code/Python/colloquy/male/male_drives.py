@@ -15,7 +15,7 @@ int         internal_drive_P = 0;
 int         internal_drive_state = 0;     //Undefined, Neither[Inert], O, P, OP
 """
 
-class Drives(Drives):
+class MaleDrives(Drives):
 
     def __init__(self, owner, ):
         Drives.__init__(self, owner=owner, neopixel=None)
@@ -153,7 +153,7 @@ class Drives(Drives):
 
     def _setup(self, **kwargs):
         self.owner.up_ring.on()
-        # self._neopixel.on()
+        self._neopixel.on()
 
     # def _update(self):
         # self.o_drive += self._step_o
@@ -204,11 +204,18 @@ class Drives(Drives):
         if brightness > 254:
             brightness = 254
             
+        up_ring_config = dict(
+            brightness = brightness,
+            **self.white,
+            )
+            
+        self.owner.up_ring.configure(**up_ring_config)
+        
         config = dict(
             brightness = brightness,
             **color,
             )
-        self.owner.up_ring.configure(**config)
+        self._neopixel.configure(**config)
     
     # def _set_p_drive(self, **kwargs):
         # value = kwargs["value"][0]

@@ -67,6 +67,10 @@ class Drives(ThreadElement):
         return self._orange
 
     @property
+    def white(self):
+        return self._white
+
+    @property
     def color(self):
         return self._colors[self.state]
 

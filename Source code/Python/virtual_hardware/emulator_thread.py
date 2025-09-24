@@ -157,12 +157,12 @@ class EmulatorThread(HTMLElement):
         # raise NotImplementedError(f"for {self.name}, ({kwargs=})!")
 
     def start(self, **kwargs):
-        if self.stop_event.is_set():
-            print(f"Cannot start, {self=} stop_event is set")
-            return
-        if self.owner.stop_event.is_set():
-            print(f"Cannot start, {self=} {self.owner=} stop_event is set")
-            return
+        # if self.stop_event.is_set():
+            # print(f"Cannot start, {self=} stop_event is set")
+            # return
+        # if self.owner.stop_event.is_set():
+            # print(f"Cannot start, {self=} {self.owner=} stop_event is set")
+            # return
             
         # self.stop_event.clear()
 
@@ -192,8 +192,8 @@ class EmulatorThread(HTMLElement):
         with self:
             self._setup(**kwargs)
             while not self.stop_event.is_set():
-                if self.shutdown_event.is_set():
-                    break
+                # if self.shutdown_event.is_set():
+                    # break
                 self._loop()
                 self._sleep_min()
 
