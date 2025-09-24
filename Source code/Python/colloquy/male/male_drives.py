@@ -17,8 +17,8 @@ int         internal_drive_state = 0;     //Undefined, Neither[Inert], O, P, OP
 
 class MaleDrives(Drives):
 
-    def __init__(self, owner, ):
-        Drives.__init__(self, owner=owner, neopixel=None)
+    def __init__(self, owner, neopixel):
+        Drives.__init__(self, owner=owner, neopixel=neopixel)
         # self._neopixel = neopixel
         # self._o_drive = 0
         # self._p_drive = 0
