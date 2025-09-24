@@ -66,7 +66,7 @@ class Agenda(ThreadElement):
                 
         with tag("div"):
             doc.stag("hr")
-            if not self.hardware.is_started:
+            if not self.is_started:
                 self._add_html_start()
             else:
                 self._add_html_stop()
@@ -128,7 +128,7 @@ class Agenda(ThreadElement):
                     print(f"Hardware is stop...")
                     self.hardware.stop()
                     
-                self._print("Running...")
+                self._print("Waiting next slot...")
         else:
             
             self._print("Waiting next slot...")
