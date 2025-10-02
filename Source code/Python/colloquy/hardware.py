@@ -193,8 +193,8 @@ class Hardware(ThreadElement):
         if not self._is_connected:
             return
 
-        if self.thread is not None:
-            self.stop()
+        # if self.thread is not None:
+        self.stop()
         
         for element in self.moving_elements:
             element.dxl.torque_enabled = False

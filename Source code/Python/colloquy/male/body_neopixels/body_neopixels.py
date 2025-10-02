@@ -1,6 +1,7 @@
 # from collo.thread import Thread
 from colloquy.neopixel import Neopixel
 from colloquy.thread_element import ThreadElement
+from .ring import Ring
 from pathlib import Path
 from threading import Event
 from collections import deque
@@ -30,8 +31,10 @@ class BodyNeopixels(ThreadElement):
 
     def __init__(self, owner):
         ThreadElement.__init__(self, name="body", owner=owner)
-        self.ring = Neopixel(owner=self, name="ring")
-        self.drive = Neopixel(owner=self, name="drive")
+        self.ring = Ring(owner=self, name="ring")
+        # self._drive = Neopixel(owner=self, name="drive")
+        self.bottom_neopixel_o = Neopixel(owner=self, name="o_drive")
+        self.bottom_neopixel_p = Neopixel(owner=self, name="p_drive")
         self._beam = Beam(owner=self)
         self.light_patterns = {}
         for k, v in LIGHT_PATTERNS[owner.name].items():
@@ -39,9 +42,10 @@ class BodyNeopixels(ThreadElement):
             self.light_patterns[k] = deque(v, maxlen=len(v))
         # self._blink = Blink(owner=self)
 
-    # @property
-    # def blink(self):
-        # return self._blink
+    @property
+    def drive(self):
+        raise NotImplementedError
+        return self._drive
 
     @property
     def beam(self):
@@ -55,9 +59,14 @@ class BodyNeopixels(ThreadElement):
     def drives(self):
         return self._owner.drives
 
+    @property
+    def segments(self):
+        return self._owner.segments
+
     def off(self):
         self.ring.off()
-        self.drive.off()
+        self.bottom_neopixel_o.off()
+        self.bottom_neopixel_p.off()
 
     def __enter__(self):
         self.stop_event.clear()

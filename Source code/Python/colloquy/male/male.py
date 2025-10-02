@@ -38,7 +38,6 @@ class MaleDriver(Body):
 
         self.drives = MaleDrives(
             owner=self, 
-            neopixel=self.body_neopixel.drive
             )
 
     def open(self):

@@ -3,7 +3,9 @@ from colloquy.drives import Drives
 from colloquy.thread_element import ThreadElement
 from colloquy.light_sensor import LightSensor
 from colloquy.microphone import Microphone
+from colloquy.neopixel import Neopixel
 from .female_neopixel import FemaleNeopixel
+from .female_drives import FemaleDrives
 from .mirror import Mirror
 from .search import Search
 from .conversation import Conversation
@@ -23,8 +25,13 @@ class FemaleDriver(Body):
             owner,
             **kwargs,
             )
-        self.neopixel = FemaleNeopixel(owner=self, name="neopixel")
-        self.drives = Drives(owner=self, neopixel=self.neopixel)
+        self.segments = []
+        # self.neopixel = FemaleNeopixel(owner=self, name="neopixel")
+        self.head_neopixel = Neopixel(owner=self, name="head neopixel")
+        self.body_neopixel = Neopixel(owner=self, name="body neopixel")
+        self.feet_neopixel = Neopixel(owner=self, name="feet neopixel")
+        
+        self.drives = FemaleDrives(owner=self)
         self.sensor = self._classes["sensor"](owner=self, name="sensor")
         self.microphone = Microphone(owner=self)
 
@@ -50,6 +57,13 @@ class FemaleDriver(Body):
         assert self.dxl_origin is not None, "Calibrate hardware."
         self.stop_event.clear()
         self.drives.start()
+        
+    @property
+    def neopixel(self):
+        raise NotImplementedError
+        if self._emulate_light_sensor is None:
+            return self.owner.emulate_light_sensors
+        return self._emulate_light_sensor
     
     @property
     def emulate_light_sensor(self):
@@ -84,7 +98,9 @@ class FemaleDriver(Body):
 
     def open(self):
         Body.open(self)
-        self.neopixel.open()
+        self.head_neopixel.open()
+        self.body_neopixel.open()
+        self.feet_neopixel.open()
         self.mirror.open()
 
     def notify_male(self):

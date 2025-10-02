@@ -9,4 +9,5 @@ sys.path.append(str(source_code.resolve()))
 import server
 
 if __name__ == "__main__":
-    server.run()
+    print(f"{sys.argv=}")
+    server.run(*sys.argv[1:])

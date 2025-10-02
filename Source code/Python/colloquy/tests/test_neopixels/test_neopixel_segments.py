@@ -41,7 +41,9 @@ class TestNeopixelSegments(ThreadElement):
             # return
         
 
-        self._add_html_title()
+        self._add_html_title()            
+            
+        self._write_html_action(value=f"hardware/{self.name}/close", label="close", func=self.close)
         
         doc, tag, text = self.html_doc.tagtext()
         

@@ -4,6 +4,7 @@ from wsgiref.simple_server import make_server, WSGIRequestHandler
 import os
 from colloquy import Colloquy
 import webbrowser
+import sys
 # from .calibration import Calibration
 from .shutdown import Shutdown
 from .restart import Restart
@@ -15,12 +16,13 @@ class WSGI(HTTPElement):
     def __init__(self):
         HTTPElement.__init__(self, owner=None)
         self._shut_server = False
+        self._restart_server = False
         self.doc = None
         self.colloquy = Colloquy(owner=self)
 
         self.file_handler = FileHandler(owner=self)
         self.shutdown = Shutdown(owner=self)
-        self.restart = Restart(owner=self)
+        self.http_restart = Restart(owner=self)
 
         self._handler = None
         self._path = None
@@ -43,6 +45,20 @@ class WSGI(HTTPElement):
     def shut_server(self, value):
         self._shut_server = value
 
+    @property
+    def restart_server(self):
+        return self._restart_server
+
+    @restart_server.setter
+    def restart_server(self, value):
+        self._restart_server = value
+    
+    def restart(self):        
+        python = sys.executable
+        args = ["main.py", "restart"]
+        # args.append()
+        os.execl(python, python, *args)
+
     def _handle_request(self, environ):
         path = self._parse_path(environ)
 
@@ -55,7 +71,7 @@ class WSGI(HTTPElement):
             return
 
         if path == Path("restart"):
-            yield from self.restart()
+            yield from self.http_restart()
             return
 
         yield from self.file_handler(environ)
@@ -66,7 +82,7 @@ class CustomHandler(WSGIRequestHandler):
     def log_message(self, *args, **kwargs):
         return
 
-def run():
+def run(mode=None):
     wsgi = WSGI()
     port = 8000
     if Path("Local/logs.txt").exists():
@@ -75,9 +91,12 @@ def run():
         WSGIRequestHandler.log_message = lambda *args, **kwargs: None
         print(f"Serving on port {port}...")
         
-        webbrowser.open(url=f"http://127.0.0.1:{port}", new=2)
-        # raise NotImplementedError("Implement a way to restart the process.")
+        print(f"{mode=}")
+        if mode != "restart":
+            webbrowser.open(url=f"http://127.0.0.1:{port}", new=2)
 
         while not wsgi.shut_server:
             httpd.handle_request()
+            if wsgi.restart_server:
+                wsgi.restart()
         print(f"Stopped server...")

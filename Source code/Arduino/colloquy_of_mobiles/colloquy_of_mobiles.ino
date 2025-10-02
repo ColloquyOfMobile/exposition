@@ -1,6 +1,7 @@
 #include <Adafruit_NeoPixel.h>
 #include <ArduinoJson.h>
 // Configuration des Neopixels pour chaque groupe
+// PINs
 #define FEMALE1_NEOPIXEL_PIN 6
 #define FEMALE2_NEOPIXEL_PIN 7
 #define FEMALE3_NEOPIXEL_PIN 8
@@ -9,20 +10,46 @@
 #define MALE1_UP_RING_NEOPIXEL_PIN 5
 #define MALE2_UP_RING_NEOPIXEL_PIN 4
 
-#define FEMALE_NUM_PIXELS 50             // Nombre de LEDs par groupe
-#define MALE_BODY_NUM_PIXELS 40          // Nombre de LEDs par groupe
-#define MALE_BODY_RING_END_PIXELS 24     // Nombre de LEDs par groupe
-#define MALE_BODY_DRIVE_START_PIXELS 25  // Nombre de LEDs par groupe
-#define MALE_UP_RING_NUM_PIXELS 12       // Nombre de LEDs par groupe
+#define FEMALE_NUM_PIXELS 50  // Nombre de LEDs par groupe
 
 // Initialisation des bandes Neopixel
-Adafruit_NeoPixel female1Strip(FEMALE_NUM_PIXELS, FEMALE1_NEOPIXEL_PIN, NEO_GRBW + NEO_KHZ800);
-Adafruit_NeoPixel female2Strip(FEMALE_NUM_PIXELS, FEMALE2_NEOPIXEL_PIN, NEO_GRBW + NEO_KHZ800);
-Adafruit_NeoPixel female3Strip(FEMALE_NUM_PIXELS, FEMALE3_NEOPIXEL_PIN, NEO_GRBW + NEO_KHZ800);
-Adafruit_NeoPixel male1UpRingStrip(MALE_UP_RING_NUM_PIXELS, MALE1_UP_RING_NEOPIXEL_PIN, NEO_GRBW + NEO_KHZ800);
-Adafruit_NeoPixel male1BodyStrip(MALE_BODY_NUM_PIXELS, MALE1_BODY_NEOPIXEL_PIN, NEO_GRBW + NEO_KHZ800);
-Adafruit_NeoPixel male2UpRingStrip(MALE_UP_RING_NUM_PIXELS, MALE2_UP_RING_NEOPIXEL_PIN, NEO_GRBW + NEO_KHZ800);
-Adafruit_NeoPixel male2BodyStrip(MALE_BODY_NUM_PIXELS, MALE2_BODY_NEOPIXEL_PIN, NEO_GRBW + NEO_KHZ800);
+Adafruit_NeoPixel female1Strip(
+  FEMALE_NUM_PIXELS,
+  FEMALE1_NEOPIXEL_PIN,
+  NEO_GRBW + NEO_KHZ800);
+Adafruit_NeoPixel female2Strip(
+  FEMALE_NUM_PIXELS,
+  FEMALE2_NEOPIXEL_PIN,
+  NEO_GRBW + NEO_KHZ800);
+Adafruit_NeoPixel female3Strip(
+  FEMALE_NUM_PIXELS,
+  FEMALE3_NEOPIXEL_PIN,
+  NEO_GRBW + NEO_KHZ800);
+
+#define NUMBER_OF_PIXEL_IN_MALE_BODY_RING 24
+#define MALE_BODY_O_DRIVE_START_PIXEL 24
+#define NUMBER_OF_PIXEL_IN_MALE_BODY_RING_O_DRIVE 8
+#define MALE_BODY_P_DRIVE_START_PIXEL 32  // 25 + 8 + 1
+
+#define NUMBER_OF_PIXEL_IN_MALE_BODY 40  // Nombre de LEDs par groupe
+Adafruit_NeoPixel male1BodyStrip(
+  NUMBER_OF_PIXEL_IN_MALE_BODY,
+  MALE1_BODY_NEOPIXEL_PIN,
+  NEO_GRBW + NEO_KHZ800);
+Adafruit_NeoPixel male2BodyStrip(
+  NUMBER_OF_PIXEL_IN_MALE_BODY,
+  MALE2_BODY_NEOPIXEL_PIN,
+  NEO_GRBW + NEO_KHZ800);
+
+#define NUMBER_OF_PIXEL_IN_MALE_UP_RING 24  // Nombre de LEDs par groupe
+Adafruit_NeoPixel male1UpRingStrip(
+  NUMBER_OF_PIXEL_IN_MALE_UP_RING,
+  MALE1_UP_RING_NEOPIXEL_PIN,
+  NEO_GRBW + NEO_KHZ800);
+Adafruit_NeoPixel male2UpRingStrip(
+  NUMBER_OF_PIXEL_IN_MALE_UP_RING,
+  MALE2_UP_RING_NEOPIXEL_PIN,
+  NEO_GRBW + NEO_KHZ800);
 
 // Configuration des haut-parleurs pour chaque groupe
 #define FEMALE1_SPEAKER_PIN 11
@@ -90,10 +117,16 @@ public:
   Adafruit_NeoPixel* strip;
   int speakerPin;
   // int numPixels;
-  PixelGroup neopixel;
+  PixelGroup head;
+  PixelGroup body;
+  PixelGroup feet;
 
   Female(String name, Adafruit_NeoPixel* strip, int speakerPin, int numPixels)
-    : name(name), neopixel(strip, 0, FEMALE_NUM_PIXELS), speakerPin(speakerPin) {}
+    : name(name), 
+    head(strip, 0, 10), 
+    body(strip, 10, 30), 
+    feet(strip, 30, FEMALE_NUM_PIXELS), 
+    speakerPin(speakerPin) {}
 
   // String neopixel(JsonDocument& doc) {
   //   int r = doc["r"] | 0;
@@ -130,10 +163,13 @@ public:
   Adafruit_NeoPixel* strip;
   // int numPixels;
   PixelGroup ring;
-  PixelGroup drive;
+  PixelGroup o_drive;
+  PixelGroup p_drive;
 
   MaleBody(Adafruit_NeoPixel* strip)
-    : ring(strip, 0, MALE_BODY_RING_END_PIXELS), drive(strip, MALE_BODY_DRIVE_START_PIXELS, MALE_BODY_NUM_PIXELS) {}
+    : ring(strip, 0, NUMBER_OF_PIXEL_IN_MALE_BODY_RING),
+      o_drive(strip, MALE_BODY_O_DRIVE_START_PIXEL, NUMBER_OF_PIXEL_IN_MALE_BODY_RING_O_DRIVE),
+      p_drive(strip, MALE_BODY_P_DRIVE_START_PIXEL, NUMBER_OF_PIXEL_IN_MALE_BODY) {}
 };
 
 class Male {
@@ -148,22 +184,11 @@ public:
 
   Male(String name, Adafruit_NeoPixel* bodyStrip, Adafruit_NeoPixel* upRingStrip, int speakerPin)
     : name(name),
-      upRing(upRingStrip, 0, MALE_UP_RING_NUM_PIXELS),
+      upRing(upRingStrip, 0, NUMBER_OF_PIXEL_IN_MALE_UP_RING),
       speakerPin(speakerPin),
       body(bodyStrip),
       bodyStrip(bodyStrip),
       upRingStrip(upRingStrip) {}
-
-  // String upRing(JsonDocument& doc) {
-  //   int r = doc["r"] | 0;
-  //   int g = doc["g"] | 0;
-  //   int b = doc["b"] | 0;
-  //   int w = doc["w"] | 0;
-  //   int brightness = doc["brightness"] | 255;
-
-  //   updateStrip(strip, numPixels, r, g, b, w, brightness);
-  //   return R"({"status": "success", "message": "Neopixel updated"})";
-  // }
 
   String speaker(JsonDocument& doc) {
     String data = doc["data"];
@@ -236,38 +261,62 @@ String processCommand(const String& input) {
 
   if (path == "female1/speaker") {
     return female1.speaker(jsonDoc);
-  } else if (path == "female1/neopixel") {
-    return female1.neopixel.fill(jsonDoc);
-  } else if (path == "female2/speaker") {
+  } else if (path == "female1/sensor") {
+    return female1.sensor(FEMALE1_PHOTOSENSOR_PIN);
+  } else if (path == "female1/head neopixel") {
+    return female1.head.fill(jsonDoc);
+  } else if (path == "female1/body neopixel") {
+    return female1.body.fill(jsonDoc);
+  } else if (path == "female1/feet neopixel") {
+    return female1.feet.fill(jsonDoc);
+  }
+
+  else if (path == "female2/speaker") {
     return female2.speaker(jsonDoc);
-  } else if (path == "female2/neopixel") {
-    return female2.neopixel.fill(jsonDoc);
-  } else if (path == "female3/speaker") {
+  } else if (path == "female2/head neopixel") {
+    return female2.head.fill(jsonDoc);
+  } else if (path == "female2/sensor") {
+    return female2.sensor(FEMALE2_PHOTOSENSOR_PIN);
+  } else if (path == "female2/body neopixel") {
+    return female1.body.fill(jsonDoc);
+  } else if (path == "female2/feet neopixel") {
+    return female1.feet.fill(jsonDoc);
+  }
+
+  else if (path == "female3/head neopixel") {
     return female3.speaker(jsonDoc);
   } else if (path == "female3/neopixel") {
-    return female3.neopixel.fill(jsonDoc);
-  } else if (path == "male1/speaker") {
+    return female3.head.fill(jsonDoc);
+  } else if (path == "female3/sensor") {
+    return female3.sensor(FEMALE3_PHOTOSENSOR_PIN);
+  } else if (path == "female3/body neopixel") {
+    return female1.body.fill(jsonDoc);
+  } else if (path == "female3/feet neopixel") {
+    return female1.feet.fill(jsonDoc);
+  }
+
+  else if (path == "male1/speaker") {
     return male1.speaker(jsonDoc);
   } else if (path == "male1/up_ring") {
     return male1.upRing.fill(jsonDoc);
-  } else if (path == "male1/body/drive") {
-    return male1.body.drive.fill(jsonDoc);
+  } else if (path == "male1/body/o_drive") {
+    return male1.body.o_drive.fill(jsonDoc);
+  } else if (path == "male1/body/p_drive") {
+    return male1.body.p_drive.fill(jsonDoc);
   } else if (path == "male1/body/ring") {
     return male1.body.ring.fill(jsonDoc);
-  } else if (path == "male2/speaker") {
+  }
+
+  else if (path == "male2/speaker") {
     return male2.speaker(jsonDoc);
   } else if (path == "male2/up_ring") {
     return male2.upRing.fill(jsonDoc);
-  } else if (path == "male2/body/drive") {
-    return male2.body.drive.fill(jsonDoc);
+  } else if (path == "male2/body/o_drive") {
+    return male2.body.o_drive.fill(jsonDoc);
+  } else if (path == "male2/body/p_drive") {
+    return male2.body.p_drive.fill(jsonDoc);
   } else if (path == "male2/body/ring") {
     return male2.body.ring.fill(jsonDoc);
-  } else if (path == "female1/sensor") {
-    return female1.sensor(FEMALE1_PHOTOSENSOR_PIN);
-  } else if (path == "female2/sensor") {
-    return female2.sensor(FEMALE2_PHOTOSENSOR_PIN);
-  } else if (path == "female3/sensor") {
-    return female3.sensor(FEMALE3_PHOTOSENSOR_PIN);
   }
 
 

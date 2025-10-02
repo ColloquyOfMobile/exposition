@@ -15,21 +15,19 @@ int         internal_drive_P = 0;
 int         internal_drive_state = 0;     //Undefined, Neither[Inert], O, P, OP
 """
 
-class MaleDrives(Drives):
+class FemaleDrives(Drives):
 
     def __init__(self, owner):
         Drives.__init__(self, owner=owner, neopixel=None)
         
 
     def _setup(self, **kwargs):
-        self.owner.up_ring.on()
-        self.bottom_neopixel_o.on()
-        self.bottom_neopixel_p.on()
-        self._neopixel.on()
+        self.head_neopixel.on()
+        self.body_neopixel.on()
+        self.feet_neopixel.on()
 
     def _update_neopixel(self):
         state, brightness, color = self.value
-        self.bottom_neopixel_o
         
         # Clamp the brigtness to avoid blink to 254.
         # Look like when the RGB value are all 255, the white LED is turned on, and RGB LEDs turned off. If white value is 0 then everything is turn off.
@@ -43,26 +41,10 @@ class MaleDrives(Drives):
             
         self.owner.up_ring.configure(**up_ring_config)
         
-        brightness = self.o_drive
-        if brightness > 254:
-            brightness = 254
-            
         config = dict(
             brightness = brightness,
-            **self.puce,
+            **color,
             )
-        self.bottom_neopixel_o.configure(**config)
-        
-        
-        
-        brightness = self.p_drive
-        if brightness > 254:
-            brightness = 254
-            
-        config = dict(
-            brightness = brightness,
-            **self.orange,
-            )        
-        self.bottom_neopixel_p.configure(**config)
+        self._neopixel.configure(**config)
     
     

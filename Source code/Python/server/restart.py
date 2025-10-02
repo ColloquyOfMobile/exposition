@@ -2,6 +2,7 @@ from server.http_element import HTTPElement
 from pathlib import Path
 import os
 import sys
+from time import sleep
 
 class Restart(HTTPElement):
     def __init__(self, owner):
@@ -17,19 +18,17 @@ class Restart(HTTPElement):
     def __call__(self, **kwargs):
         self.owner.shut_server = True
         self.owner.start_response('200 OK', [('Content-Type', 'text/plain')])
-
-        yield b'Goodbye!'
         
-        python = sys.executable
-        os.execl(python, python, *sys.argv)
+        text = b'Restarting... Refresh the page to see changes.'
+        yield text
+        print(text)
+        sleep(0.5)
+        
+        self.owner.restart_server = True
 
     @property
     def name(self):
         return "restart"
-
-    def _handle_shutdown(self):
-        self._start_response('200 OK', [('Content-Type', 'text/plain')])
-        return []
 
     def open(self):
         pass

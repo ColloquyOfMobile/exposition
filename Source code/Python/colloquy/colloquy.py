@@ -117,6 +117,16 @@ class Colloquy(HTMLElement):
                     text("Goodbye !")
                 return self.stop()
                 
+            if action == ["restart"]:                
+                with tag("body"):
+                    with tag("div"):
+                        text("Restarting...")
+                    with tag("div"):
+                        with tag("a", href=""):
+                            text("Click here to see the changes.")
+                    
+                return self.restart()
+                
                 
 
             self._write_body()
@@ -145,6 +155,10 @@ class Colloquy(HTMLElement):
                 with tag("form", method="post", style="display: flex;"):
                     with tag("button", name="action", value="shutdown", style="align-self:center;"):
                         text(f"Shutdown.")
+
+                with tag("form", method="post", style="display: flex;"):
+                    with tag("button", name="action", value="restart", style="align-self:center;"):
+                        text(f"Restart.")
 
             data = self.post_data
 
@@ -185,6 +199,9 @@ class Colloquy(HTMLElement):
             self.params.write_html()
             self.exposition.write_html()
             self.tests.write_html()
+    
+    def restart(self):
+        self.owner.restart_server = True
     
     def stop(self):
         self.owner.shut_server = True
