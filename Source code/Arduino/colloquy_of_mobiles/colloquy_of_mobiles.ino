@@ -158,6 +158,53 @@ public:
   }
 };
 
+class Female3 {
+public:
+  String name;
+  Adafruit_NeoPixel* strip;
+  int speakerPin;
+  // int numPixels;
+  PixelGroup head;
+  PixelGroup body;
+  PixelGroup feet;
+
+  Female3(String name, Adafruit_NeoPixel* strip, int speakerPin, int numPixels)
+    : name(name), 
+    head(strip, 37, FEMALE_NUM_PIXELS), 
+    body(strip, 0, 28), 
+    feet(strip, 29, 7), 
+    speakerPin(speakerPin) {}
+
+  // String neopixel(JsonDocument& doc) {
+  //   int r = doc["r"] | 0;
+  //   int g = doc["g"] | 0;
+  //   int b = doc["b"] | 0;
+  //   int w = doc["w"] | 0;
+  //   int brightness = doc["brightness"] | 255;
+
+  //   updateStrip(strip, numPixels, r, g, b, w, brightness);
+  //   return R"({"status": "success", "message": "Neopixel updated"})";
+  // }
+
+  String speaker(JsonDocument& doc) {
+    String data = doc["data"];
+    if (data == "on") {
+      tone(speakerPin, 300);
+    } else {
+      noTone(speakerPin);
+    }
+    return R"({"status": "success", "message": "Speaker updated"})";
+  }
+
+  String sensor(int pin) {
+    int value = analogRead(pin);
+    String result = "{\"status\": \"success\", \"value\": ";
+    result += value;
+    result += "}";
+    return result;
+  }
+};
+
 class MaleBody {
 public:
   Adafruit_NeoPixel* strip;
