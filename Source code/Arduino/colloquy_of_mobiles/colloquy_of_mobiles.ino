@@ -123,9 +123,9 @@ public:
 
   Female(String name, Adafruit_NeoPixel* strip, int speakerPin, int numPixels)
     : name(name), 
-    head(strip, 0, 10), 
-    body(strip, 10, 30), 
-    feet(strip, 30, FEMALE_NUM_PIXELS), 
+    head(strip, 37, FEMALE_NUM_PIXELS), 
+    body(strip, 0, 28), 
+    feet(strip, 29, 7), 
     speakerPin(speakerPin) {}
 
   // String neopixel(JsonDocument& doc) {
@@ -278,9 +278,9 @@ String processCommand(const String& input) {
   } else if (path == "female2/sensor") {
     return female2.sensor(FEMALE2_PHOTOSENSOR_PIN);
   } else if (path == "female2/body neopixel") {
-    return female1.body.fill(jsonDoc);
+    return female2.body.fill(jsonDoc);
   } else if (path == "female2/feet neopixel") {
-    return female1.feet.fill(jsonDoc);
+    return female2.feet.fill(jsonDoc);
   }
 
   else if (path == "female3/head neopixel") {
@@ -290,9 +290,9 @@ String processCommand(const String& input) {
   } else if (path == "female3/sensor") {
     return female3.sensor(FEMALE3_PHOTOSENSOR_PIN);
   } else if (path == "female3/body neopixel") {
-    return female1.body.fill(jsonDoc);
+    return female3.body.fill(jsonDoc);
   } else if (path == "female3/feet neopixel") {
-    return female1.feet.fill(jsonDoc);
+    return female3.feet.fill(jsonDoc);
   }
 
   else if (path == "male1/speaker") {
