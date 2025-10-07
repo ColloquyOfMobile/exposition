@@ -108,10 +108,10 @@ class Neopixel(ThreadElement):
         self._write_html_configure()
         
         if self.state:
-            self._write_html_action(value=f"hardware/{self.owner.name}/{self.name}/off", label=f"{self.name} off", func=self.off)
+            self._write_html_action(value=f"{self.path.as_posix()}/off", label=f"{self.name} off", func=self.off)
             return
         
-        self._write_html_action(value=f"hardware/{self.owner.name}/{self.name}/on", label=f"{self.name} on", func=self.on)
+        self._write_html_action(value=f"{self.path.as_posix()}/on", label=f"{self.name} on", func=self.on)
         doc.stag("hr")
     
     def _write_html_configure(self):
@@ -127,7 +127,7 @@ class Neopixel(ThreadElement):
                 self._write_html_white()
                 self._write_html_rgb()
                 
-                value = f"hardware/{self.owner.name}/{self.name}/color"
+                value = f"{self.path.as_posix()}/color"
                 with tag("button", name="action", value=value):
                     text("configure")
                 self.actions[value] = self._configure_from_html

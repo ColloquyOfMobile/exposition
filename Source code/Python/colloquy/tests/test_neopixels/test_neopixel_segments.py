@@ -46,12 +46,14 @@ class TestNeopixelSegments(ThreadElement):
             with tag("h4"):
                 text(male.name)
             for segment in male.segments:
+                segment.set_test_default()
                 segment.write_html()
         
         for female in self.hardware.females:
             with tag("h4"):
                 text(female.name)
             for segment in female.segments:
+                segment.set_test_default()
                 segment.write_html()
             
             

@@ -33,8 +33,8 @@ class BodyNeopixels(ThreadElement):
         ThreadElement.__init__(self, name="body", owner=owner)
         self.ring = Ring(owner=self, name="ring")
         # self._drive = Neopixel(owner=self, name="drive")
-        self.bottom_neopixel_o = Neopixel(owner=self, name="o_drive")
-        self.bottom_neopixel_p = Neopixel(owner=self, name="p_drive")
+        self.bottom_neopixel_o = BottomNeopixelO(owner=self,)
+        self.bottom_neopixel_p = BottomNeopixelP(owner=self,)
         self._beam = Beam(owner=self)
         self.light_patterns = {}
         for k, v in LIGHT_PATTERNS[owner.name].items():
@@ -97,3 +97,26 @@ class Beam(ThreadElement):
 
     def _loop(self):
         pass
+        
+        
+
+
+
+class BottomNeopixelO(Neopixel):
+
+    def __init__(self, owner):
+        Neopixel.__init__(self, owner=owner, name="o_drive")
+    
+    def set_test_default(self):
+        self.configure(red=0, green=255, blue=0, white=0, brightness=255)
+        self.on()
+
+
+class BottomNeopixelP(Neopixel):
+
+    def __init__(self, owner):
+        Neopixel.__init__(self, owner=owner, name="p_drive")  
+    
+    def set_test_default(self):
+        self.configure(red=255, green=0, blue=0, white=0, brightness=255)
+        self.on()
