@@ -20,6 +20,14 @@ class TestNeopixelSegments(ThreadElement):
         self.hardware.connect()
         self.owner.opened = self
         self._is_open = True
+        
+        for male in self.hardware.males:
+            for segment in male.segments:
+                segment.set_test_default()
+        
+        for female in self.hardware.females:
+            for segment in female.segments:
+                segment.set_test_default()
 
     def close(self, **kwargs):
         if not self._is_open:
@@ -42,20 +50,19 @@ class TestNeopixelSegments(ThreadElement):
         
         doc, tag, text = self.html_doc.tagtext()
         
+        
         for male in self.hardware.males:
             with tag("h4"):
-                text(male.name)
+                text(male.name)            
             for segment in male.segments:
-                segment.set_test_default()
                 segment.write_html()
+            
         
         for female in self.hardware.females:
             with tag("h4"):
-                text(female.name)
+                text(female.name)           
             for segment in female.segments:
-                segment.set_test_default()
                 segment.write_html()
-            
             
         # self._add_html_start()
     

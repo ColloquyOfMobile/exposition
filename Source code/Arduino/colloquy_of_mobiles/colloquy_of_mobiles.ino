@@ -123,7 +123,7 @@ public:
 
   Female(String name, Adafruit_NeoPixel* strip, int speakerPin, int numPixels)
     : name(name), 
-    head(strip, 37, FEMALE_NUM_PIXELS), 
+    head(strip, 37, 13), 
     body(strip, 0, 28), 
     feet(strip, 29, 7), 
     speakerPin(speakerPin) {}
@@ -170,9 +170,9 @@ public:
 
   Female3(String name, Adafruit_NeoPixel* strip, int speakerPin, int numPixels)
     : name(name), 
-    head(strip, 37, FEMALE_NUM_PIXELS), 
-    body(strip, 0, 28), 
-    feet(strip, 29, 7), 
+    head(strip, 37, 13), 
+    body(strip, 8, 28), 
+    feet(strip, 0, 7), 
     speakerPin(speakerPin) {}
 
   // String neopixel(JsonDocument& doc) {
@@ -250,7 +250,7 @@ public:
 
 Female female1("female1", &female1Strip, FEMALE1_SPEAKER_PIN, FEMALE_NUM_PIXELS);
 Female female2("female2", &female2Strip, FEMALE2_SPEAKER_PIN, FEMALE_NUM_PIXELS);
-Female female3("female3", &female3Strip, FEMALE3_SPEAKER_PIN, FEMALE_NUM_PIXELS);
+Female3 female3("female3", &female3Strip, FEMALE3_SPEAKER_PIN, FEMALE_NUM_PIXELS);
 Male male1("male1", &male1BodyStrip, &male1UpRingStrip, MALE1_SPEAKER_PIN);
 Male male2("male2", &male2BodyStrip, &male2UpRingStrip, MALE2_SPEAKER_PIN);
 
@@ -330,9 +330,9 @@ String processCommand(const String& input) {
     return female2.feet.fill(jsonDoc);
   }
 
-  else if (path == "female3/head neopixel") {
+  else if (path == "female3/speaker") {
     return female3.speaker(jsonDoc);
-  } else if (path == "female3/neopixel") {
+  } else if (path == "female3/head neopixel") {
     return female3.head.fill(jsonDoc);
   } else if (path == "female3/sensor") {
     return female3.sensor(FEMALE3_PHOTOSENSOR_PIN);
