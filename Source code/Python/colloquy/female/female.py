@@ -61,9 +61,6 @@ class FemaleDriver(Body):
     @property
     def neopixel(self):
         raise NotImplementedError
-        if self._emulate_light_sensor is None:
-            return self.owner.emulate_light_sensors
-        return self._emulate_light_sensor
     
     @property
     def emulate_light_sensor(self):
@@ -91,9 +88,10 @@ class FemaleDriver(Body):
 
     def stop(self):
                 
-        if self._is_started:            
+        # if self._is_started:            
             # self.drives.stop()
-            self.neopixel.off()
+        for segment in self.segments:
+            segment.off()
         Body.stop(self)
 
     def open(self):

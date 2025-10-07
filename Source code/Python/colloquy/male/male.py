@@ -49,7 +49,8 @@ class MaleDriver(Body):
         self.stop_event.clear()
         self.body_neopixel.start()
         self.drives.start()
-        self.body_neopixel.drive.on()
+        self.body_neopixel.bottom_neopixel_o.on()
+        self.body_neopixel.bottom_neopixel_p.on()
 
     @property
     def beam(self):

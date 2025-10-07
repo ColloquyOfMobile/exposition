@@ -19,6 +19,18 @@ class FemaleDrives(Drives):
 
     def __init__(self, owner):
         Drives.__init__(self, owner=owner, neopixel=None)
+    
+    @property
+    def head_neopixel(self):
+        return self.owner.head_neopixel
+    
+    @property
+    def body_neopixel(self):
+        return self.owner.body_neopixel
+    
+    @property
+    def feet_neopixel(self):
+        return self.owner.feet_neopixel
         
 
     def _setup(self, **kwargs):

@@ -34,11 +34,6 @@ class TestNeopixelSegments(ThreadElement):
         if not self.is_open:
             self._write_html_open()
             return
-            
-        # if self.is_started:
-            # self._add_html_title()
-            # self._add_html_stop()
-            # return
         
 
         self._add_html_title()            
@@ -53,11 +48,11 @@ class TestNeopixelSegments(ThreadElement):
             for segment in male.segments:
                 segment.write_html()
         
-        # for female in self.hardware.females:
-            # with tag("h4"):
-                # text(female.name)
-            # for segment in female.segment:
-                # segment.write_html()
+        for female in self.hardware.females:
+            with tag("h4"):
+                text(female.name)
+            for segment in female.segments:
+                segment.write_html()
             
             
         # self._add_html_start()

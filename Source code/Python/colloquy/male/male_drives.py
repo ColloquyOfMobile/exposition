@@ -28,41 +28,42 @@ class MaleDrives(Drives):
         self._neopixel.on()
 
     def _update_neopixel(self):
+        raise NotImplementedError()
         state, brightness, color = self.value
-        self.bottom_neopixel_o
+        # self.bottom_neopixel_o
         
-        # Clamp the brigtness to avoid blink to 254.
-        # Look like when the RGB value are all 255, the white LED is turned on, and RGB LEDs turned off. If white value is 0 then everything is turn off.
-        if brightness > 254:
-            brightness = 254
+        # # Clamp the brigtness to avoid blink to 254.
+        # # Look like when the RGB value are all 255, the white LED is turned on, and RGB LEDs turned off. If white value is 0 then everything is turn off.
+        # if brightness > 254:
+            # brightness = 254
             
-        up_ring_config = dict(
-            brightness = brightness,
-            **self.white,
-            )
+        # up_ring_config = dict(
+            # brightness = brightness,
+            # **self.white,
+            # )
             
-        self.owner.up_ring.configure(**up_ring_config)
+        # self.owner.up_ring.configure(**up_ring_config)
         
-        brightness = self.o_drive
-        if brightness > 254:
-            brightness = 254
+        # brightness = self.o_drive
+        # if brightness > 254:
+            # brightness = 254
             
-        config = dict(
-            brightness = brightness,
-            **self.puce,
-            )
-        self.bottom_neopixel_o.configure(**config)
+        # config = dict(
+            # brightness = brightness,
+            # **self.puce,
+            # )
+        # self.bottom_neopixel_o.configure(**config)
         
         
         
-        brightness = self.p_drive
-        if brightness > 254:
-            brightness = 254
+        # brightness = self.p_drive
+        # if brightness > 254:
+            # brightness = 254
             
-        config = dict(
-            brightness = brightness,
-            **self.orange,
-            )        
-        self.bottom_neopixel_p.configure(**config)
+        # config = dict(
+            # brightness = brightness,
+            # **self.orange,
+            # )        
+        # self.bottom_neopixel_p.configure(**config)
     
     
