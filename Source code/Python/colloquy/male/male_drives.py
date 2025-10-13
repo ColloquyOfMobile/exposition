@@ -22,14 +22,23 @@ class MaleDrives(Drives):
         
 
     def _setup(self, **kwargs):
+        self.owner.up_ring.configure(**self.white, brightness=0)
         self.owner.up_ring.on()
-        self.bottom_neopixel_o.on()
-        self.bottom_neopixel_p.on()
-        self._neopixel.on()
+        
+        
+        self.owner.body_neopixel.bottom_neopixel_o.configure(**self.orange, brightness=0)
+        self.owner.body_neopixel.bottom_neopixel_p.configure(**self.puce, brightness=0)
+        self.owner.body_neopixel.on()
 
     def _update_neopixel(self):
-        raise NotImplementedError()
-        state, brightness, color = self.value
+        
+        self.owner.up_ring.brightness = self.dominant_value
+        
+        self.owner.body_neopixel.bottom_neopixel_o.brightness = self.o_drive
+        self.owner.body_neopixel.bottom_neopixel_p.brightness= self.p_drive
+        
+        # raise NotImplementedError()
+        # state, brightness, color = self.value
         # self.bottom_neopixel_o
         
         # # Clamp the brigtness to avoid blink to 254.

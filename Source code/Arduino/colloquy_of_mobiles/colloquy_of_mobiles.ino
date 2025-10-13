@@ -111,6 +111,64 @@ private:
   }
 };
 
+class PixelGroupAdvance {
+public:
+  Adafruit_NeoPixel* strip;
+  int startPixel;
+  int numPixels;
+  uint8_t brightness = 255;  // propre au groupe
+
+  PixelGroupAdvance(Adafruit_NeoPixel* strip, int startPixel, int numPixels)
+    : strip(strip), startPixel(startPixel), numPixels(numPixels) {}
+
+  void setBrightness(uint8_t b) {
+    brightness = b;
+  }
+
+  String fill(JsonDocument& doc) {
+    for (int i = startPixel; i < startPixel + numPixels; i += 2) {
+      int r = doc["r"] | 0;
+      int g = doc["g"] | 0;
+      int b = doc["b"] | 0;
+      int w = doc["w"] | 0;
+      int brightness = doc["brightness"] | 255;
+      setBrightness(brightness);
+      strip->setPixelColor(i,
+                           strip->Color(
+                             scaleBrightness(r),
+                             scaleBrightness(g),
+                             scaleBrightness(b),
+                             scaleBrightness(w)));
+    }
+    strip->show();
+    return R"({"status": "success", "message": "Neopixel updated"})";
+  }
+
+  void clear() {
+    for (int i = startPixel; i < startPixel + numPixels; i++) {
+      strip->setPixelColor(i, 0);
+    }
+    strip->show();
+  }
+
+private:
+  uint8_t scaleBrightness(uint8_t value) {
+    return (uint16_t(value) * brightness) / 255;
+  }
+};
+
+class FemaleBody {
+public:
+  Adafruit_NeoPixel* strip;
+  // int numPixels;
+  PixelGroupAdvance pixel_o;
+  PixelGroupAdvance pixel_p;
+
+  FemaleBody(Adafruit_NeoPixel* strip, int startPixelO, int numPixelsO, int startPixelP, int numPixelsP)
+    : pixel_o(strip, startPixelO, numPixelsO),
+      pixel_p(strip, startPixelP, numPixelsP) {}
+};
+
 class Female {
 public:
   String name;
@@ -118,26 +176,15 @@ public:
   int speakerPin;
   // int numPixels;
   PixelGroup head;
-  PixelGroup body;
+  FemaleBody body;
   PixelGroup feet;
 
   Female(String name, Adafruit_NeoPixel* strip, int speakerPin, int numPixels)
-    : name(name), 
-    head(strip, 37, 13), 
-    body(strip, 0, 28), 
-    feet(strip, 29, 7), 
-    speakerPin(speakerPin) {}
-
-  // String neopixel(JsonDocument& doc) {
-  //   int r = doc["r"] | 0;
-  //   int g = doc["g"] | 0;
-  //   int b = doc["b"] | 0;
-  //   int w = doc["w"] | 0;
-  //   int brightness = doc["brightness"] | 255;
-
-  //   updateStrip(strip, numPixels, r, g, b, w, brightness);
-  //   return R"({"status": "success", "message": "Neopixel updated"})";
-  // }
+    : name(name),
+      head(strip, 37, 13),
+      body(strip, 0, 27, 1, 28),
+      feet(strip, 29, 7),
+      speakerPin(speakerPin) {}
 
   String speaker(JsonDocument& doc) {
     String data = doc["data"];
@@ -165,26 +212,15 @@ public:
   int speakerPin;
   // int numPixels;
   PixelGroup head;
-  PixelGroup body;
+  FemaleBody body;
   PixelGroup feet;
 
   Female3(String name, Adafruit_NeoPixel* strip, int speakerPin, int numPixels)
-    : name(name), 
-    head(strip, 37, 13), 
-    body(strip, 8, 28), 
-    feet(strip, 0, 7), 
-    speakerPin(speakerPin) {}
-
-  // String neopixel(JsonDocument& doc) {
-  //   int r = doc["r"] | 0;
-  //   int g = doc["g"] | 0;
-  //   int b = doc["b"] | 0;
-  //   int w = doc["w"] | 0;
-  //   int brightness = doc["brightness"] | 255;
-
-  //   updateStrip(strip, numPixels, r, g, b, w, brightness);
-  //   return R"({"status": "success", "message": "Neopixel updated"})";
-  // }
+    : name(name),
+      head(strip, 37, 13),
+      body(strip, 8, 27, 9, 28),
+      feet(strip, 0, 7),
+      speakerPin(speakerPin) {}
 
   String speaker(JsonDocument& doc) {
     String data = doc["data"];
@@ -312,8 +348,10 @@ String processCommand(const String& input) {
     return female1.sensor(FEMALE1_PHOTOSENSOR_PIN);
   } else if (path == "female1/head neopixel") {
     return female1.head.fill(jsonDoc);
-  } else if (path == "female1/body neopixel") {
-    return female1.body.fill(jsonDoc);
+  } else if (path == "female1/body neopixel/O") {
+    return female1.body.pixel_o.fill(jsonDoc);
+  } else if (path == "female1/body neopixel/P") {
+    return female1.body.pixel_p.fill(jsonDoc);
   } else if (path == "female1/feet neopixel") {
     return female1.feet.fill(jsonDoc);
   }
@@ -324,10 +362,12 @@ String processCommand(const String& input) {
     return female2.head.fill(jsonDoc);
   } else if (path == "female2/sensor") {
     return female2.sensor(FEMALE2_PHOTOSENSOR_PIN);
-  } else if (path == "female2/body neopixel") {
-    return female2.body.fill(jsonDoc);
   } else if (path == "female2/feet neopixel") {
     return female2.feet.fill(jsonDoc);
+  } else if (path == "female2/body neopixel/O") {
+    return female2.body.pixel_o.fill(jsonDoc);
+  } else if (path == "female2/body neopixel/P") {
+    return female2.body.pixel_p.fill(jsonDoc);
   }
 
   else if (path == "female3/speaker") {
@@ -336,10 +376,12 @@ String processCommand(const String& input) {
     return female3.head.fill(jsonDoc);
   } else if (path == "female3/sensor") {
     return female3.sensor(FEMALE3_PHOTOSENSOR_PIN);
-  } else if (path == "female3/body neopixel") {
-    return female3.body.fill(jsonDoc);
   } else if (path == "female3/feet neopixel") {
     return female3.feet.fill(jsonDoc);
+  } else if (path == "female3/body neopixel/O") {
+    return female3.body.pixel_o.fill(jsonDoc);
+  } else if (path == "female3/body neopixel/P") {
+    return female3.body.pixel_p.fill(jsonDoc);
   }
 
   else if (path == "male1/speaker") {

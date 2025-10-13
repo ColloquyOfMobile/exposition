@@ -14,7 +14,7 @@ class Neopixel(ThreadElement):
         self.green = 0
         self.blue = 0
         self.white = 0
-        self.brightness = 0
+        self._brightness = 0
 
     @property
     def state(self):
@@ -29,6 +29,27 @@ class Neopixel(ThreadElement):
             "white": self.white,
             "brightness": self.brightness,
         }
+    
+    @property
+    def brightness(self):
+        return self._brightness
+    
+    @brightness.setter
+    def brightness(self, value):
+        self._brightness = value
+        self._update()
+
+    @property
+    def color(self):
+        return dict(red=self.red, green=self.green, blue=self.blue, white=self.white)
+
+    @color.setter
+    def color(self, value):
+        self.red = value["red"]
+        self.green = value["green"]
+        self.blue = value["blue"]
+        self.white = value["white"]
+        self._update()
 
     def open(self):
         self.off()

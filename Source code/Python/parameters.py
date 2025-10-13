@@ -6,14 +6,6 @@ from copy import deepcopy
 import serial
 import serial.tools.list_ports
 
-# class Parameter:
-
-    # def __init__(self, owner):
-        # self._owner
-
-    # def save(self):
-        # self._owner.save()
-
 
 class Parameters(HTMLElement):
     _path = Path("local/parameters.json")

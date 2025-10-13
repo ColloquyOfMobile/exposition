@@ -2,7 +2,7 @@ from time import time
 from threading import Lock
 from colloquy.thread_element import ThreadElement
 
-"""logic35_systems.ino
+"""logic35_systems.ino: line 86
 //act_drive
 const int   internal_drive_LL = 600;      //interested floor, in samples     600 = 30 seconds
 const int   internal_drive_UL = 3600;     //desperate floor, in samples     3600 = 3 minutes
@@ -12,6 +12,11 @@ const int   internal_drive_adjustment_P  = 1;
 int         internal_drive_O = 0;
 int         internal_drive_P = 0;
 int         internal_drive_state = 0;     //Undefined, Neither[Inert], O, P, OP
+"""
+
+"""logic35_systems.ino: line 196
+const int color_orange[4] = {80, 255, 25, 16}; //GRBW/orangish
+const int color_puce[4] = {180, 160, 0, 40}; //GRBW//greenish
 """
 
 class Drives(ThreadElement):
@@ -27,8 +32,10 @@ class Drives(ThreadElement):
 
         self._step_o = 2
         self._step_p = 3
-
-        self._max = 255
+        
+        # self._max == 254 in order to clamp the brigtness to avoid blink to 254.
+        # Look like when the RGB value are all 255, the white LED is turned on, and RGB LEDs turned off. If white value is 0 then everything is turn off.
+        self._max = 254
         self._min = 0
 
         self._satisfaction_lim = 10
@@ -36,9 +43,10 @@ class Drives(ThreadElement):
 
         self._lock = Lock()
 
-        self._orange = dict(red=255, green=165, blue=0, white=0)
+        self._orange = dict(red=255, green=80, blue=25, white=16)
         self._white = dict(red=0, green=0, blue=0, white=255)
-        self._puce = dict(red=80, green=53, blue=60, white=125) #CC8899
+        self._puce = dict(red=160, green=180, blue=0, white=40) #CC8899
+        self._black = dict(red=0, green=0, blue=0, white=0) #CC8899
         self._colors = {
             ("O",): self._orange,
             ("P",): self._puce,
@@ -59,6 +67,10 @@ class Drives(ThreadElement):
             return max(for_max)
 
     @property
+    def black(self):
+        return self._black
+
+    @property
     def puce(self):
         return self._puce
 
@@ -72,7 +84,7 @@ class Drives(ThreadElement):
 
     @property
     def color(self):
-        return self._colors[self.state]
+        return dict(red=self.red, green=self.green, blue=self.blue, white=self.white)
 
     @property
     def value(self):
@@ -126,6 +138,22 @@ class Drives(ThreadElement):
         assert isinstance(value, int)
         self._p_drive = value
         self._update_neopixel()
+    
+    @property
+    def dominant_value(self):
+        return max((self._o_drive, self._p_drive))
+    
+    @property
+    def dominant(self):
+        if self._o_drive > self._p_drive:
+            return self._o_drive
+        return self._p_drive
+    
+    @property
+    def dominant_color(self):
+        if self._o_drive > self._p_drive:
+            return self.orange
+        return self.puce
 
     @property
     def is_unsatisfied(self):
@@ -167,7 +195,6 @@ class Drives(ThreadElement):
             self.p_drive = self._max
 
         self._update_neopixel()
-
 
         if self.is_frustated:
             if not self.owner.search.is_started:

@@ -33,14 +33,22 @@ class BodyNeopixels(ThreadElement):
         ThreadElement.__init__(self, name="body", owner=owner)
         self.ring = Ring(owner=self, name="ring")
         # self._drive = Neopixel(owner=self, name="drive")
-        self.bottom_neopixel_o = BottomNeopixelO(owner=self,)
-        self.bottom_neopixel_p = BottomNeopixelP(owner=self,)
+        self._bottom_neopixel_o = BottomNeopixelO(owner=self,)
+        self._bottom_neopixel_p = BottomNeopixelP(owner=self,)
         self._beam = Beam(owner=self)
         self.light_patterns = {}
         for k, v in LIGHT_PATTERNS[owner.name].items():
             # The deque with max_len will act as circular list
             self.light_patterns[k] = deque(v, maxlen=len(v))
         # self._blink = Blink(owner=self)
+
+    @property
+    def bottom_neopixel_o(self):
+        return self._bottom_neopixel_o
+
+    @property
+    def bottom_neopixel_p(self):
+        return self._bottom_neopixel_p
 
     @property
     def drive(self):
@@ -67,6 +75,11 @@ class BodyNeopixels(ThreadElement):
         self.ring.off()
         self.bottom_neopixel_o.off()
         self.bottom_neopixel_p.off()
+    
+    def on(self):
+        self.ring.on()
+        self.bottom_neopixel_o.on()
+        self.bottom_neopixel_p.on()
 
     def __enter__(self):
         self.stop_event.clear()
