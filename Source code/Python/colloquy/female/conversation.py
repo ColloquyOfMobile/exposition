@@ -54,18 +54,30 @@ class Conversation(ThreadElement):
 
     def _climax(self):
         start = time()
-        neopixel = self.owner.neopixel
+        
+        # neopixels = neopixels.
+        
+        head = self.owner.head_neopixel
+        body = self.owner.body_neopixel
+        feet = self.owner.feet_neopixel
+        segments = [head, body, feet]
+        
         orange = self.owner.drives.orange
         puce = self.owner.drives.puce
-        neopixel.on()
+        # neopixel.on()
         while time()-start < 6:
-            neopixel.configure(brightness=255, **orange)
+            for element in segments:
+                element.configure(brightness=255, **orange)
+                
             self.owner.speaker.off()
             sleep(0.2)
-            neopixel.configure(brightness=255, **puce)
+            
+            for element in segments:
+                element.configure(brightness=255, **puce)
+                
             self.owner.speaker.on()
             sleep(0.2)
-        neopixel.off()
+        # neopixel.off()
         self.owner.speaker.off()
 
     def _listen(self):
