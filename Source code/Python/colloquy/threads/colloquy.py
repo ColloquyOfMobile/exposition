@@ -204,7 +204,7 @@ class Colloquy(HTMLElement):
         self.owner.restart_server = True
     
     def stop(self):
-        self.owner.shut_server = True
+        # self.events.shut.shut_server = True
         self._is_started = False
         self._shutdown_event.set()
         # if self._exposition.is_started:

@@ -6,8 +6,8 @@ cwd = Path(__file__).parent
 source_code = cwd / "Source code" / "Python"
 sys.path.append(str(source_code.resolve()))
 
-import server
+from colloquy import Colloquy
 
 if __name__ == "__main__":
     print(f"{sys.argv=}")
-    server.run(*sys.argv[1:])
+    Colloquy(*sys.argv[1:])

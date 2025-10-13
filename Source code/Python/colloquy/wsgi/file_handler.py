@@ -1,12 +1,12 @@
 import mimetypes
-from .http_element import HTTPElement
+from colloquy.colloquy_item import ColloquyItem
 
-class FileHandler(HTTPElement):
+class FileHandler(ColloquyItem):
     def __init__(self, owner):
-        HTTPElement.__init__(self, owner)
+        ColloquyItem.__init__(self, owner)
 
-    def __call__(self, environ):
-        file_path = self._parse_path(environ)
+    def __call__(self, ):
+        file_path = self.request_path
         try:
             # Open the requested file
             with open(file_path, 'rb') as f:
@@ -26,6 +26,10 @@ class FileHandler(HTTPElement):
             message = f'{file_path.as_posix()} not found !'
             print(message)
             yield message.encode()
+    
+    @property
+    def request_path(self):
+        return self.owner.request_path
 
 
     def open(self):

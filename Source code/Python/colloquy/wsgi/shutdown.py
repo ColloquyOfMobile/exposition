@@ -1,18 +1,13 @@
-from server.http_element import HTTPElement
 from pathlib import Path
+from colloquy.wsgi.item import Item
 
-class Shutdown(HTTPElement):
+
+class Shutdown(Item):
     def __init__(self, owner):
-        HTTPElement.__init__(self, owner)
-        self.path = Path("shutdown")
-
-    # def __eq__(self, other):
-        # return other.name == self.name
-
-    # def __lt__(self, other):
-        # return self.name < other.name
+        Item.__init__(self, owner)
 
     def __call__(self, **kwargs):
+        raise NotImplementedError
         self.owner.shut_server = True
         self.owner.start_response('200 OK', [('Content-Type', 'text/plain')])
 
@@ -21,10 +16,6 @@ class Shutdown(HTTPElement):
     @property
     def name(self):
         return "shutdown"
-
-    def _handle_shutdown(self):
-        self._start_response('200 OK', [('Content-Type', 'text/plain')])
-        return []
 
     # def add_html_link(self):
         # doc, tag, text = self._wsgi.doc.tagtext()

@@ -1,21 +1,15 @@
-from server.http_element import HTTPElement
+from colloquy.wsgi.item import Item
 from pathlib import Path
 import os
 import sys
 from time import sleep
 
-class Restart(HTTPElement):
+class Restart(Item):
     def __init__(self, owner):
-        HTTPElement.__init__(self, owner)
-        self.path = Path("restart")
-
-    def __eq__(self, other):
-        return other.name == self.name
-
-    def __lt__(self, other):
-        return self.name < other.name
+        Item.__init__(self, owner)
 
     def __call__(self, **kwargs):
+        raise NotImplementedError()
         self.owner.shut_server = True
         self.owner.start_response('200 OK', [('Content-Type', 'text/plain')])
         
@@ -29,9 +23,3 @@ class Restart(HTTPElement):
     @property
     def name(self):
         return "restart"
-
-    def open(self):
-        pass
-
-    def close(self):
-        pass
