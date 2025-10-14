@@ -64,6 +64,10 @@ class BodyFemaleNeopixel(HTMLElement):
     def off(self):
         self.o_neopixel.off()
         self.p_neopixel.off()
+    
+    def configure(self, *args, **kwargs):
+        self.o_neopixel.configure(*args, **kwargs)
+        self.p_neopixel.configure(*args, **kwargs)
 
 
 class FeetFemaleNeopixel(Neopixel):
