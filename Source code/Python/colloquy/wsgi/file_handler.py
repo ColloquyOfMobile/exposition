@@ -1,12 +1,12 @@
 import mimetypes
-from colloquy.colloquy_item import ColloquyItem
+from colloquy.wsgi.item import Item
 
-class FileHandler(ColloquyItem):
-    def __init__(self, owner):
-        ColloquyItem.__init__(self, owner)
+class FileHandler(Item):
+    # def __init__(self, owner):
+        # Item.__init__(self, owner)
 
     def __call__(self, ):
-        file_path = self.request_path
+        file_path = self.owner.request
         try:
             # Open the requested file
             with open(file_path, 'rb') as f:
@@ -28,12 +28,5 @@ class FileHandler(ColloquyItem):
             yield message.encode()
     
     @property
-    def request_path(self):
-        return self.owner.request_path
-
-
-    def open(self):
-        pass
-
-    def close(self):
-        pass
+    def name(self):
+        return "file handler"

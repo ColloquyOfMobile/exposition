@@ -5,8 +5,6 @@ import os
 import webbrowser
 import sys
 # from .calibration import Calibration
-from .shutdown import Shutdown
-from .restart import Restart
 from .file_handler import FileHandler
 from .root import Root
 from colloquy.colloquy_item import ColloquyItem
@@ -17,29 +15,46 @@ import urllib.parse
 class WSGI(ColloquyItem):
     def __init__(self, owner):
         ColloquyItem.__init__(self, owner)
-        # self._html = HTML(owner=self)
-        # self._
         self._doc = None
 
         self._file_handler = FileHandler(owner=self)
-        self._shutdown = Shutdown(owner=self)
-        self._restart = Restart(owner=self)
         
-        self._root = Root(owner)
+        self._root = Root(owner=self)
 
         self._handler = None
         self._path = None
         self._start_response = None
+        self._post_data = None
 
     def __call__(self, environ, start_response):
-        
         self._start_response = start_response
         self._environ = environ
+        self._post_data = self.parse_data()
+        print(f"request: {self.request}")
+        print(f"post_data: {self._post_data}")
         try:        
             yield from self._call_1()
         except Exception:
             self.events.shutdown.set()
-            raise
+            raise            
+    
+    @property
+    def name(self):
+        return "WSGI"
+    
+    @property
+    def file_handler(self):
+        return self._file_handler
+            
+    
+    @property
+    def environ(self):
+        return self._environ
+            
+    
+    @property
+    def root(self):
+        return self._root
             
     
     @property
@@ -52,22 +67,46 @@ class WSGI(ColloquyItem):
 
     
     @property
-    def request_path(self):
+    def request(self):
         """Parse the path."""
         environ = self._environ
-        request_path = environ["PATH_INFO"]
-        request_path = unquote(request_path)
-        request_path = request_path.strip("/")
-        request_path = request_path.encode("iso-8859-1").decode("utf-8")
-        request_path = Path(request_path)
-        return request_path
-        # return request_path
+        request = environ["PATH_INFO"]
+        request = unquote(request)
+        request = request.strip("/")
+        request = request.encode("iso-8859-1").decode("utf-8")
+        request = Path(request)
+        return request
+
+    
+    @property
+    def post_data(self):
+        return self._post_data
+    
+    def parse_data(self):
+        """Parse the form data."""
+        environ = self.environ
+        method = environ.get('REQUEST_METHOD', 'GET')
+        content_type = environ.get('CONTENT_TYPE', '')
+
+        # Parse form data for POST requests
+        if method == 'POST' and content_type.startswith('application/x-www-form-urlencoded'):
+            content_length = int(environ.get('CONTENT_LENGTH', 0))
+            post_data = environ['wsgi.input'].read(content_length)
+            data = urllib.parse.parse_qs(post_data.decode('utf-8'))
+
+        else:
+            data = {}
+        return data
+
+    @property
+    def wsgi(self):
+        return self
 
     def _call_1(self):
-        if not self.request_path.parts:
+        if not self.request.parts:
             yield from self.root()
             return
-        key, *_ = self.request_path.parts
+        key, *_ = self.request.parts
         
         if key in self:
             yield from self[key]()

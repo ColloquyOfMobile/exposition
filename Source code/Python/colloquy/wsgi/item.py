@@ -10,15 +10,20 @@ class Item(_Item):
     def __init__(self, owner):
         _Item.__init__(self, owner)
         self.owner.add(self)
-
-    @property
-    def owner(self):
-        return self._owner
-
-    @property
-    def path(self):
-        return self.owner.path / self.name
     
     @property
-    def events(self):
-        return self.owner.events
+    def start_response(self):
+        return self.owner.start_response
+
+    @property
+    def wsgi(self):
+        return self.owner.wsgi
+    
+    @property
+    def request(self):
+        return self.wsgi.request.relative_to(self.path)
+
+    
+    @property
+    def post_data(self):
+        return self.owner.post_data

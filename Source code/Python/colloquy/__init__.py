@@ -28,16 +28,16 @@ class Colloquy():
         self.run()
     
     @property
+    def path(self):
+        return Path()
+    
+    @property
     def threads(self):
         return self._threads
     
     @property
     def events(self):
         return self._events
-
-    @property
-    def path(self):
-        return Path()
 
     def run(self, ):
         mode = self._mode

@@ -20,15 +20,31 @@ class ColloquyItem:
 
     def __init__(self, owner):
         self._owner = owner
+        self._elements = {}
 
-    @property
-    def owner(self):
-        return self._owner
+    def __getitem__(self, key):
+        return self._elements[key]
+
+    def __setitem__(self, key, value):
+        self._elements[key] = value
+
+    def __contains__(self, key):
+        return key in self._elements
+
+    def __repr__(self):
+        return f"{type(self).__name__}({self.path.as_posix()})"
 
     @property
     def path(self):
         return self.owner.path / self.name
+
+    @property
+    def owner(self):
+        return self._owner
     
     @property
     def events(self):
-        return self.owner.events
+        return self.owner.events    
+    
+    def add(self, element):
+        self[element.name] = element

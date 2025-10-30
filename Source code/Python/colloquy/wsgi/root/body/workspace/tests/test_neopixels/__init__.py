@@ -1,0 +1,38 @@
+from colloquy.wsgi.root.body.workspace.item import Item, HTML as _HTML
+from .commands import Commands
+# from .test_neopixel_consumption import TestNeopixelConsumption
+# from .test_neopixel_communication import TestNeopixelCommunication
+from .test_neopixel_segments import TestNeopixelSegments
+
+class TestNeopixels(Item):
+
+    def __init__(self, owner):
+        Item.__init__(self, owner=owner)
+        self._html = HTML(owner=self)
+        self._commands = Commands(owner=self)
+        # self._test_neopixel_consumption = TestNeopixelConsumption(owner=self)
+        # self._test_neopixel_communication = TestNeopixelCommunication(owner=self)
+        self._test_neopixel_segments = TestNeopixelSegments(owner=self)
+
+    @property
+    def name(self):
+        return "test Neopixels"
+
+    @property
+    def test_neopixel_segments(self):
+        return self._test_neopixel_segments
+
+    @property
+    def tests(self):
+        return self.owner.tests
+
+
+
+class HTML(_HTML):
+    
+    def _call_body(self):       
+        pass
+        # self._test_neopixel_consumption.write_html()
+        # self._test_neopixel_communication.write_html()
+        self.owner.test_neopixel_segments.html()
+        # raise NotImplementedError(f"{self=}")
