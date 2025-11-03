@@ -1,6 +1,6 @@
 from colloquy.wsgi.root.html_item import HtmlItem
 from pathlib import Path
-from colloquy.wsgi.root.body.workspace.item import Item, HTML as _HTML
+from colloquy.wsgi.root.body.workspace.hardware.item import Item, HTML as _HTML
 from threading import Event
 from .toggle_on_off import ToggleOnOff
 from .set_rgb import SetRGB
@@ -233,9 +233,9 @@ class HTML(_HTML):
     
         
     def _call_unsafe(self,):          
-        doc, tag, text = self.doc.tagtext()
-        
-        
+        doc, tag, text = self.doc.tagtext()        
+        with tag("h4"):
+            text(f"{self.owner.body.name}/{self.owner.name}")  
         self.owner.toggle_on_off.html()
         self.owner.set_rgb.html()
         self.owner.set_white.html()

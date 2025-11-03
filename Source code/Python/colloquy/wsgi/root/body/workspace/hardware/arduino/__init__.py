@@ -4,7 +4,7 @@ from pathlib import Path
 import json
 from time import sleep, time
 from threading import Lock
-from colloquy.wsgi.root.body.workspace.hardware.item import Item
+from colloquy.wsgi.root.body.workspace.hardware.item import Item, HTML as _HTML
 from .virtual_serial_port import VirtualSerialPort
 
 START = time()
@@ -20,6 +20,7 @@ class Arduino(Item):
         Initialise la communication série avec l'Arduino.
         """
         Item.__init__(self, owner=owner)
+        self._html = HTML(owner=self)
         self.lock = Lock()
         self._port_handler = None
         self._was_open = None
@@ -167,4 +168,13 @@ class Arduino(Item):
             with tag("button", name="action", value="arduino/com_port/set"):
                 text(f"set.")
 
-            self.hardware.actions["arduino/com_port/set"] = self._set_com_port
+            self.hardware.actions["arduino/com_port/set"] = self._set_com_port  
+        
+
+class HTML(_HTML):
+    
+        
+    def _call_unsafe(self,):          
+        doc, tag, text = self.doc.tagtext()        
+        with tag("h4"):
+            text(f"{self.owner.name}")  

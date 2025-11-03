@@ -11,7 +11,7 @@ from .neopixels import HeadFemaleNeopixel, BodyFemaleNeopixel, FeetFemaleNeopixe
 # from .conversation import Conversation
 # from threading import Lock
 # from time import sleep
-from colloquy.wsgi.root.body.workspace.item import Item
+from colloquy.wsgi.root.body.workspace.hardware.item import Item
 
 class Female(Item):
     

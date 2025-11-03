@@ -13,6 +13,7 @@ class HTML(HtmlItem):
                 return self.owner.opened.html()
                        
             self.owner.params.html()
+            self.owner.hardware.html()
             # self.owner.exposition.html()
             self.owner.tests.html()
 

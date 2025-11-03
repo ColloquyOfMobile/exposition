@@ -6,7 +6,7 @@ import urllib.parse
 from colloquy.wsgi.root.body.action_item import ActionItem
 from colloquy.wsgi.root.html_item import HtmlItem
 from colloquy.wsgi.root.body.item import Item as _Item
-from .logger import Logger
+from colloquy.wsgi.root.body.workspace.hardware.logger.item import Item as LoggerItem
 
 
 class Item(_Item):    
@@ -16,10 +16,14 @@ class Item(_Item):
         self._action = Action(owner=self)
         self._opened = None
         self._commands = None
-        self._log = Logger(owner=self)
+        self._log = LoggerItem(owner=self)
 
     def __call__(self):
         return
+
+    @property
+    def log(self):
+        return self._log
 
     @property
     def params(self):

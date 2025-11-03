@@ -2,17 +2,28 @@ from .u2d2 import U2D2
 from .arduino import Arduino
 from colloquy.wsgi.root.body.workspace.item import Item, Action
 from .female import Female
+from .html import HTML
+from .neopixels import Neopixels
+from .commands import Commands
+from .logger import Logger
 
 
 class Hardware(Item):
     
     def __init__(self, owner, ):
         Item.__init__(self, owner)
+        self._opened = None
+        self._html = HTML(owner=self)
+        self._commands = Commands(owner=self)
+        self._log = Logger(owner=self)
+        
+        
         self._arduino = Arduino(owner=self)
         self._u2d2 = U2D2(owner=self)
+        self._neopixels = Neopixels(owner=self)
         self._bar = None
         
-        self._threads = set()
+        # self._threads = set()
         
         self._mirrors = []
         self._males = []
@@ -25,9 +36,30 @@ class Hardware(Item):
         self._female2 = Female(owner=self, name="female2")
         self._female3 = Female(owner=self, name="female3")
 
+    def __call__(self):
+        if not self.is_opened:
+            self.open()
+
+    @property
+    def opened(self):
+        return self._opened
+
+    @opened.setter
+    def opened(self, value):
+        # Value is None only in a Close(), this is to avoid recursion.
+        if value is not None:
+            if self._opened is not None:
+                self._opened.close()
+                
+        self._opened = value
+
     @property
     def html(self):
-        return self.owner.html   
+        return self._html   
+
+    @property
+    def log(self):
+        return self._log
 
     @property
     def name(self):
@@ -67,6 +99,8 @@ class Hardware(Item):
     
     @property
     def neopixels(self):
+        return self._neopixels
+        
         neopixels = []
         for body in self.bodies:
             neopixels.extend(body.neopixels)
