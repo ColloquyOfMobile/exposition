@@ -14,6 +14,10 @@ class TestNeopixels(Item):
         # self._test_neopixel_communication = TestNeopixelCommunication(owner=self)
         self._test_neopixel_segments = TestNeopixelSegments(owner=self)
 
+    def __call__(self):
+        if not self.is_opened:
+            self.open()
+
     @property
     def name(self):
         return "test Neopixels"

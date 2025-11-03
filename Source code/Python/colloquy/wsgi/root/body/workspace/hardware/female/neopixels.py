@@ -1,5 +1,5 @@
 from colloquy.wsgi.root.body.workspace.hardware.neopixel import Neopixel
-from colloquy.wsgi.root.body.item import Item
+from colloquy.wsgi.root.body.workspace.hardware.female.item import Item
 from colloquy.wsgi.root.html_item import HtmlItem
 
 from pathlib import Path
@@ -8,7 +8,7 @@ from threading import Event
         
     
 
-class HeadFemaleNeopixel(Neopixel):
+class HeadFemaleNeopixel(Neopixel, Item):
 
     def __init__(self, owner):
         Neopixel.__init__(self, owner=owner, name="head neopixel")
@@ -17,6 +17,11 @@ class HeadFemaleNeopixel(Neopixel):
     def set_test_default(self):
         self.configure(red=0, green=255, blue=0, white=0, brightness=255)
         self.on()
+
+    @property
+    def arduino_path(self):
+        return Path(f"{self.female.name}/head neopixel")
+        raise NotImplementedError(f"{self=}")
 
 
 class BodyFemaleNeopixel(Item):
@@ -31,6 +36,11 @@ class BodyFemaleNeopixel(Item):
             self.p_neopixel,
         ]
         
+        
+
+    @property
+    def html(self):
+        return self.owner.html
 
     @property
     def arduino(self):

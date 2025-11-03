@@ -1,16 +1,24 @@
-from colloquy.wsgi.root.body.item import Item
 from colloquy.wsgi.root.html_item import HtmlItem
 from pathlib import Path
+from colloquy.wsgi.root.body.workspace.item import Item, HTML as _HTML
 from threading import Event
+from .toggle_on_off import ToggleOnOff
+from .set_rgb import SetRGB
+from .set_white import SetWhite
+from .set_brightness import SetBrightness
 
 class Neopixel(Item):
 
     def __init__(self, owner, name):
         self._name = name
         Item.__init__(self, owner=owner)
-        # owner.neopixels.append(self)
+        self._html = HTML(owner=self)
         
-        # self._request_path = self._path.relative_to(self.hardware.path).as_posix()
+        self._toggle_on_off = ToggleOnOff(owner=self)
+        self._set_rgb = SetRGB(owner=self)
+        self._set_white = SetWhite(owner=self)
+        self._set_brightness = SetBrightness(owner=self)
+        
         self._arduino = owner.arduino
         self._on_off_state = None
         self.red = 0
@@ -18,15 +26,33 @@ class Neopixel(Item):
         self.blue = 0
         self.white = 0
         self._brightness = 0
-        
+
+    @property
+    def arduino_path(self):
+        raise NotImplementedError(f"{self=}")        
 
     @property
     def body(self):
         if self._body is None:
             raise NotImplementedError(f"{self=}")
-        return self._body
-        
+        return self._body        
 
+    @property
+    def toggle_on_off(self):
+        return self._toggle_on_off             
+
+    @property
+    def set_rgb(self):
+        return self._set_rgb                 
+
+    @property
+    def set_brightness(self):
+        return self._set_brightness            
+
+    @property
+    def set_white(self):
+        return self._set_white   
+        
     @property
     def arduino(self):
         return self._arduino
@@ -91,7 +117,7 @@ class Neopixel(Item):
             b = self.blue,
             w = self.white,
             brightness = self.brightness)
-        self.arduino_manager.send(self._request_path, **data)
+        self.arduino.send(self.arduino_path, **data)
 
     def on(self, **kwargs):
         self._on_off_state = True
@@ -105,7 +131,7 @@ class Neopixel(Item):
             b = 0,
             w = 0,
             brightness = 0,)
-        self.arduino_manager.send(self._request_path, **data)
+        self.arduino.send(self.arduino_path, **data)
         self._on_off_state = False
 
     def toggle(self):
@@ -127,10 +153,10 @@ class Neopixel(Item):
         else:
             self.off()
             
-    def rgb_to_hex(self, red, green, blue):
-        for value in (red, green, blue):
-            assert 0 <= value <= 255
-        return '#{:02X}{:02X}{:02X}'.format(red, green, blue)
+    # def rgb_to_hex(self, red, green, blue):
+        # for value in (red, green, blue):
+            # assert 0 <= value <= 255
+        # return '#{:02X}{:02X}{:02X}'.format(red, green, blue)
 
     def hex_to_rgb(self, hex_value):
         hex_value = hex_value.lstrip('#')  # Retire le #
@@ -202,29 +228,28 @@ class Neopixel(Item):
                 text(f"{name} : ")
             doc.stag("input", type="number", name=name, value=config[name], max=255, min=0, step=1)       
         
-    def _configure_from_html(self, **kwargs):
-        hex_color = kwargs["hex_rgb"][0]
-        (red, green, blue) = self.hex_to_rgb(hex_color)
-        white = int(kwargs["white"][0])
-        brightness = int(kwargs["brightness"][0])
-        
-        self.configure(red, green, blue, white, brightness)
-        
 
-class HTML(HtmlItem):
+class HTML(_HTML):
     
         
     def _call_unsafe(self,):          
         doc, tag, text = self.doc.tagtext()
         
-        self._configure()
         
-        if self.owner.state:
-            raise NotImplementedError
-        
-        self._write_html_action(value=f"{self.path.as_posix()}/on", label=f"{self.name} on", func=self.on)
-        doc.stag("hr")
+        self.owner.toggle_on_off.html()
+        self.owner.set_rgb.html()
+        self.owner.set_white.html()
+        self.owner.set_brightness.html()
+        # if self.owner.state:
+            # raise NotImplementedError
 
-    @property
-    def name(self):
-        return "HTML"
+
+# class Action(ActionItem):
+    
+    # def __call__(self, **kwargs):
+        # hex_color = kwargs["hex_rgb"][0]
+        # (red, green, blue) = self.hex_to_rgb(hex_color)
+        # white = int(kwargs["white"][0])
+        # brightness = int(kwargs["brightness"][0])
+        
+        # self.configure(red, green, blue, white, brightness)

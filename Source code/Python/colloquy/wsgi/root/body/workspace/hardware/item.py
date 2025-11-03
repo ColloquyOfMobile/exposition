@@ -6,6 +6,8 @@ import urllib.parse
 from colloquy.wsgi.root.body.action_item import ActionItem
 from colloquy.wsgi.root.html_item import HtmlItem
 from colloquy.wsgi.root.body.item import Item as _Item
+from .logger import Logger
+
 
 class Item(_Item):    
 
@@ -14,17 +16,26 @@ class Item(_Item):
         self._action = Action(owner=self)
         self._opened = None
         self._commands = None
+        self._log = Logger(owner=self)
 
     def __call__(self):
-        raise NotImplementedError(f"{self=}")
+        return
 
     @property
     def params(self):
         return self.owner.params
 
     @property
+    def running_simulation(self):
+        return True
+
+    @property
     def workspace(self):
         return self.owner.workspace
+
+    @property
+    def log(self):
+        return self._log
 
     @property
     def commands(self):
@@ -63,6 +74,8 @@ class Item(_Item):
 class Action(ActionItem):
 
     def __call__(self):
+        if not self.owner.is_opened:
+            self.owner.open()
         if not self.request.parts:
             self.owner()
             return

@@ -25,17 +25,17 @@ class HtmlItem(_Item):
 
     @property
     def doc(self):
-        # print(f"#"*50)
-        # print(f"#"*50)
-        # print(f"{self=}")
-        # print(f"{self.owner.name=}")
-        # print(f"{self.owner.owner.name=}")
-        # print(f"{self.parent=}")
         return self.parent.doc
 
     @property
     def parent(self):
         return self.owner.owner.html
     
+    @property
+    def name(self):
+        return "html"
+        
     def _call_unsafe(self):
         raise NotImplementedError
+    
+    

@@ -1,6 +1,6 @@
-from colloquy.wsgi.root.item import Item
 from .u2d2 import U2D2
 from .arduino import Arduino
+from colloquy.wsgi.root.body.workspace.item import Item, Action
 from .female import Female
 
 
@@ -24,6 +24,10 @@ class Hardware(Item):
         self._female1 = Female(owner=self, name="female1")
         self._female2 = Female(owner=self, name="female2")
         self._female3 = Female(owner=self, name="female3")
+
+    @property
+    def html(self):
+        return self.owner.html   
 
     @property
     def name(self):

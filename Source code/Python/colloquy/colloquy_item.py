@@ -23,7 +23,12 @@ class ColloquyItem:
         self._elements = {}
 
     def __getitem__(self, key):
-        return self._elements[key]
+        try:
+            item = self._elements[key]
+        except KeyError:            
+            raise KeyError(f"{key} not in {self=}")
+            
+        return item # self._elements[key]
 
     def __setitem__(self, key, value):
         self._elements[key] = value

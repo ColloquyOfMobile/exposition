@@ -4,7 +4,8 @@ from pathlib import Path
 import json
 from time import sleep, time
 from threading import Lock
-from colloquy.wsgi.root.body.item import Item
+from colloquy.wsgi.root.body.workspace.hardware.item import Item
+from .virtual_serial_port import VirtualSerialPort
 
 START = time()
 
@@ -19,29 +20,44 @@ class Arduino(Item):
         Initialise la communication série avec l'Arduino.
         """
         Item.__init__(self, owner=owner)
-        # self.lock = Lock()
-        # port_name = kwargs["communication port"]
-        # baudrate = kwargs["baudrate"]
-        # self.port_handler = self._classes["serial"](baudrate=baudrate, timeout=1)
-        # # Set port name avoid opening the port
-        # self.port_handler.port = port_name
+        self.lock = Lock()
+        self._port_handler = None
+        self._was_open = None
 
     @property
     def name(self):
         return "arduino"
 
+    @property
+    def port_name(self):
+        return self.params.get("arduino")["communication port"]
+
+    @property
+    def baudrate(self):
+        return self.params.get("arduino")["baudrate"]
+
+    @property
+    def port_handler(self):
+        if self._port_handler is None:
+            klass = VirtualSerialPort
+            if not self.running_simulation:
+                klass = serial.Serial                
+            self._port_handler = klass(baudrate=self.baudrate, timeout=1)          
+            # Setting port name here avoid opening the port
+            self.port_handler.port = self.port_name
+            
+        return self._port_handler
+
     def send(self, path, **data):
-        command = {"path": str(path), **data}
-        self.log(f"{command=}")
-        serialized_command = f"{json.dumps(command)}\n"  # Conversion en JSON
-        with self.lock:
-            self.port_handler.write(serialized_command.encode('utf-8'))  # Envoie de la commande
-
-            data = self.port_handler.readline()  # Lit une ligne du port série
-        if not data:
-            raise TimeoutError("No response from Arduino.")
-
-        return self._parse(data)
+        self._was_open = is_open = self.port_handler.is_open
+        if not is_open:
+            self.open()
+        try:
+            return self._send_unsafe(path, **data)
+        finally:
+            if not self._was_open:
+                self.close()
+            
 
     def send_yield(self, path, **data):
         command = {"path": str(path), **data}
@@ -53,6 +69,19 @@ class Arduino(Item):
             if data:
                 break
             yield f"Arduino still processing {command}..."
+
+        return self._parse(data)
+    
+    def _send_unsafe(self, path, **data):
+        command = {"path": path.as_posix(), **data}
+        self.log(f"{command=}")
+        serialized_command = f"{json.dumps(command)}\n"  # Conversion en JSON
+        with self.lock:
+            self.port_handler.write(serialized_command.encode('utf-8'))  # Envoie de la commande
+
+            data = self.port_handler.readline()  # Lit une ligne du port série
+        if not data:
+            raise TimeoutError("No response from Arduino.")
 
         return self._parse(data)
 

@@ -11,7 +11,7 @@ from .neopixels import HeadFemaleNeopixel, BodyFemaleNeopixel, FeetFemaleNeopixe
 # from .conversation import Conversation
 # from threading import Lock
 # from time import sleep
-from colloquy.wsgi.root.body.item import Item
+from colloquy.wsgi.root.body.workspace.item import Item
 
 class Female(Item):
     
@@ -61,12 +61,18 @@ class Female(Item):
         # assert self.dxl_origin is not None, "Calibrate hardware."
         # self.stop_event.clear()
         # self.drives.start()
-        
+
+    @property
+    def female(self):
+        return self   
+
+    @property
+    def html(self):
+        return self.owner.html        
 
     @property
     def arduino(self):
-        return self._arduino
-        
+        return self._arduino        
         
     @property
     def head_neopixel(self):

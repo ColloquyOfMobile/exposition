@@ -16,10 +16,7 @@ class Parameters(Item):
         Item.__init__(self, owner)
         self._file = Path("local/parameters.json")
         self._html = HTML(owner=self)
-        # self._action = Action(owner=self)
         self._commands = Commands(owner=self)
-        # self.name = "parameters"
-        # self._is_open = False
         if not self.file.parent.is_dir():
             self.file.parent.mkdir()
 
@@ -54,13 +51,8 @@ class Parameters(Item):
         Item.__setitem__(self, key, value)
 
     def __call__(self):
-        data = self.post_data
-
-        action = data.get("action")
-        if action:
-            action = action[0]
-        action = self.actions.get(action, self.write_html)
-        return action(**data)
+        if not self.is_opened:
+            self.open()
     
     def get(self, key):
         return self._data[key]
@@ -116,7 +108,7 @@ class Parameters(Item):
             json.dump(json_data, file, indent=2)
 
     def close(self, **kwargs):
-        return self.command.close()
+        return self.commands.close()
         # self.owner.opened = None
 
     def as_dict(self):
@@ -153,29 +145,6 @@ class HTML(_HTML):
 
         self.hardware.arduino.add_html()
         self.hardware.dxl_manager.add_html()
-    
-    # def _call_unsafe(self):
-        # doc, tag, text = self.doc.tagtext()
-        # if not self.owner.is_opened:
-            # self._call_if_is_not_opened()
-            # return
-
-        # with tag("div", style="display: flex; flex-direction: column;"):            
-            # with tag("h2", style="flex: 1;" ):
-                # text(self.owner.name)
-            # self.owner.commands.html()
-                
-            
-
-    # def _call_if_is_not_opened(self):
-        # doc, tag, text = self.doc.tagtext()
-        # with tag("form", method="post", style="display: flex; "):
-            # with tag("button", name="action", value=self.owner.action.value):
-                # text(self.owner.name)
-    
-    # @property
-    # def name(self):
-        # return "HTML"
 
 
 

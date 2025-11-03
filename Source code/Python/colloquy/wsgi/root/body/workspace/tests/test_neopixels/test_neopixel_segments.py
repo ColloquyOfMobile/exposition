@@ -80,7 +80,7 @@ class HTML(HtmlItem):
         doc, tag, text = self.doc.tagtext()       
         for neopixel in self.owner.hardware.neopixels:
             with tag("h4"):
-                text(f"{neopixel.body.name}")   
+                text(f"{neopixel.body.name}/{neopixel.name}")   
                 neopixel.html()
 
     @property

@@ -17,13 +17,16 @@ class Tests(Item):
         Item.__init__(self, owner=owner)
         self._opened = None
         self._html = HTML(owner=self)
-        # self._action = Action(owner=self)
         self._commands = Commands(owner=self)
         
         
         self._test_neopixels = TestNeopixels(owner=self)
         # self._test_speaker = TestSpeaker(owner=self)
         # self._test_photosensors = TestPhotosensors(owner=self)
+
+    def __call__(self):
+        if not self.is_opened:
+            self.open()
 
     @property
     def opened(self):
