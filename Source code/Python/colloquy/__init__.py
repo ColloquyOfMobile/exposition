@@ -4,12 +4,11 @@ from wsgiref.simple_server import make_server, WSGIRequestHandler
 import os
 import webbrowser
 import sys
-# from .calibration import Calibration
-# from .threads import Threads
-# from .http_element import HTTPElement
+
 from utils import CustomDoc
 from .wsgi import WSGI
 from .events import Events
+from .base import Base
 
 
 class CustomHandler(WSGIRequestHandler):
@@ -17,23 +16,20 @@ class CustomHandler(WSGIRequestHandler):
     def log_message(self, *args, **kwargs):
         return
         
-class Colloquy():
+class Colloquy(Base):
     
     def __init__(self, mode=None):
+        super().__init__(owner=None)
         self._mode = mode        
         self._events = Events()
         self._wsgi = WSGI(owner=self)
         # self._threads = Threads()
+        if self._mode == "tests":
+            from .tests import Tests
+            Tests()
+            return
         
         self.run()
-    
-    @property
-    def path(self):
-        return Path()
-    
-    @property
-    def threads(self):
-        return self._threads
     
     @property
     def events(self):

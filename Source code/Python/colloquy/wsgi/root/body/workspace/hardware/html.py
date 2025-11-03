@@ -11,3 +11,7 @@ class HTML(_HTML):
         # self._test_neopixel_communication.html()
         # self._test_speaker.html()
         # self._test_photosensors.html()
+
+    # @property
+    # def doc(self):
+        # return self.parent.doc
