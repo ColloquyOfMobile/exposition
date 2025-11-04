@@ -22,6 +22,7 @@ class Base:
         assert owner is not self
         self._owner = owner
         self._owners = None
+        assert owner is not self.owners
         
         self._dict = {}
 
