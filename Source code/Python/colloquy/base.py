@@ -19,12 +19,12 @@ class Base:
             return "unknown origin"
 
     def __init__(self, owner):
+        self._dict = {}
+        self._path = None
         assert owner is not self
         self._owner = owner
         self._owners = None
         assert owner is not self.owners
-        
-        self._dict = {}
 
     def __repr__(self):
         return f"{type(self).__name__}({self.path.as_posix()})"
@@ -35,7 +35,7 @@ class Base:
         except KeyError:            
             raise KeyError(f"{key} not in {self=}")
             
-        return item # self._elements[key]
+        return item
 
     def __setitem__(self, key, value):
         self._dict[key] = value
@@ -43,15 +43,24 @@ class Base:
     def __contains__(self, key):
         return key in self._dict
 
+    def __iter__(self):
+        yield from self._dict
+
     @property
     def items(self):
         return self._dict.items
 
     @property
     def path(self):
-        if self.owner is None:
-            return Path()
-        return self.owner.path / self.name
+        if self._path is not None:
+            return self._path
+            
+        if self.owner is not None:
+            self._path = self.owner.path / self.name
+            return self._path
+            
+        self._path = Path()
+        return self._path
 
     @property
     def owner(self):
@@ -67,7 +76,11 @@ class Base:
     
     @property
     def events(self):
-        return self.owner.events    
+        return self.owner.events 
+    
+    @property
+    def is_simulated(self):
+        return True
     
     def add(self, element):
         self[element.name] = element

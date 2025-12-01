@@ -9,5 +9,6 @@ sys.path.append(str(source_code.resolve()))
 from colloquy import Colloquy
 
 if __name__ == "__main__":
-    print(f"{sys.argv=}")
-    Colloquy(*sys.argv[1:])
+    args = sys.argv[1:]
+    colloquy = Colloquy()
+    colloquy.cli(*args)

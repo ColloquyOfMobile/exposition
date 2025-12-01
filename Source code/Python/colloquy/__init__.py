@@ -1,65 +1,92 @@
 from pathlib import Path
 import urllib
-from wsgiref.simple_server import make_server, WSGIRequestHandler
 import os
-import webbrowser
 import sys
 
 from utils import CustomDoc
-from .wsgi import WSGI
 from .events import Events
 from .base import Base
-
-
-class CustomHandler(WSGIRequestHandler):
-
-    def log_message(self, *args, **kwargs):
-        return
+from .tests import Tests
+from .server import Server
+from .hardware import Hardware
+from .parameters import Parameters
+from .cli import CLI
+from .log import Log
         
 class Colloquy(Base):
     
-    def __init__(self, mode=None):
+    def __init__(self):
         super().__init__(owner=None)
-        self._mode = mode        
-        self._events = Events()
-        self._wsgi = WSGI(owner=self)
-        # self._threads = Threads()
-        if self._mode == "tests":
-            from .tests import Tests
-            Tests()
-            return
         
-        self.run()
+        self._request = None
+        self._args = None
+        self._log = Log(owner=self)
+        
+        self._params = Parameters(owner=self)
+        
+        self._hardware = Hardware(owner=self)
+        
+        self._server = Server(owner=self)
+        self._cli = CLI(owner=self)
+        
+        self["server"] = self._server
+        self["hardware"] = self._hardware
+               
+        self._events = Events()
+    
+    # def __call__(self):
+        # # if args:
+            # # path, *args = args
+            # # request = Path(path)
+        # # else:
+            # # request = Path()
+
+        # # self._request = request
+        # # self._args = args
+        
+        # # if not request.parts:
+            # # return self._call_root()
+
+        # # key, *leftover = self.request.parts
+        
+        # # if key in self:
+            # # return self[key]()
+
+        # raise NotImplementedError#(f"{self=}, {key=}, {leftover=}")
+
+    @property
+    def name(self):
+        return "colloquy"
+
+    @property
+    def log(self):
+        return self._log
+
+    @property
+    def hardware(self):
+        return self._hardware
+
+    @property
+    def server(self):
+        return self._server        
     
     @property
     def events(self):
-        return self._events
+        return self._events     
+    
+    @property
+    def params(self):
+        return self._params
+    
+    @property
+    def cli(self):
+        return self._cli
 
     def run(self, ):
-        mode = self._mode
-        port = 8000
-        if Path("Local/logs.txt").exists():
-            Path("Local/logs.txt").unlink()
-        with make_server("0.0.0.0", port, self._wsgi, handler_class=CustomHandler) as httpd:
-            WSGIRequestHandler.log_message = lambda *args, **kwargs: None
-            print(f"Serving on port {port}...")
-            
-            print(f"{mode=}")
-            if mode != "restart":
-                webbrowser.open(url=f"http://127.0.0.1:{port}", new=2)
-
-            while True:
-                httpd.handle_request()
-                if self.events.shutdown.is_set():
-                    print(f"Shutdown event!")
-                    break
-                    
-            if self.events.restart.is_set():
-                print(f"restart event!")
-                self.restart()
-    
-    def restart(self):        
-        python = sys.executable
-        args = ["main.py", "restart"]
-        # args.append()
-        os.execl(python, python, *args)
+        return self.server()
+        
+    def _call_root(self):
+        print("Available command:")
+        for name in self:
+            print(f"- {name}")
+        # raise NotImplementedError(f"{self=}")

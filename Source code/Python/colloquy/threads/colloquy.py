@@ -60,9 +60,9 @@ class Colloquy(HTMLElement):
     def near_origin_threashold(self, value):
         self._params["near_origin_threashold"] = value 
 
-    @property
-    def hardware(self):
-        return self._hardware
+    # @property
+    # def hardware(self):
+        # return self._hardware
 
     @property
     def params(self):

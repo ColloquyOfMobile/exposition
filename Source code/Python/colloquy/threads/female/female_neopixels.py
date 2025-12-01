@@ -45,9 +45,9 @@ class BodyFemaleNeopixel(HTMLElement):
     def elements(self):
         return self.owner.elements
     
-    @property
-    def hardware(self):
-        return self.owner.hardware
+    # @property
+    # def hardware(self):
+        # return self.owner.hardware
     
     @property
     def arduino_manager(self):

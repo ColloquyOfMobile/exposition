@@ -1,0 +1,165 @@
+# from colloquy.body import Body
+# from colloquy.drives import Drives
+# from colloquy.thread_element import ThreadElement
+# from colloquy.light_sensor import LightSensor
+# from colloquy.microphone import Microphone
+# from colloquy.neopixel import Neopixel
+from .neopixels import HeadFemaleNeopixel, BodyFemaleNeopixel, FeetFemaleNeopixel
+# from .female_drives import FemaleDrives
+# from .mirror import Mirror
+# from .search import Search
+# from .conversation import Conversation
+# from threading import Lock
+# from time import sleep
+from pathlib import Path
+from colloquy.base import Base
+
+class Female(Base):
+    
+    # _classes = {
+        # "sensor": LightSensor
+    # }
+
+    def __init__(self, owner, name):
+        self._name = name
+        super().__init__(owner=owner)
+        self._arduino = owner.arduino
+        
+        
+        self._neopixels = []
+        # self.neopixel = FemaleNeopixel(owner=self, name="neopixel")
+        self._head_neopixel = HeadFemaleNeopixel(owner=self)
+        self._body_neopixel = BodyFemaleNeopixel(owner=self)
+        self._feet_neopixel = FeetFemaleNeopixel(owner=self)
+        
+        self[self._head_neopixel.name] = self._head_neopixel
+        
+        # self.drives = FemaleDrives(owner=self)
+        # self.sensor = self._classes["sensor"](owner=self, name="sensor")
+        # self.microphone = Microphone(owner=self)
+
+        # self._search = Search(owner=self)
+        # self._conversation = Conversation(owner=self)
+        # self._is_notifing = False
+        # self._emulate_light_sensor = None
+
+        # dxl_manager = kwargs["dynamixel manager"]
+        # dxl_id = kwargs["dynamixel id"]
+        # origin = kwargs["origin"]
+
+
+        # mirror_kwargs = kwargs.get("mirror")
+        # self.mirror = None
+        # if mirror_kwargs:
+            # mirror_kwargs["dynamixel manager"] = dxl_manager
+            # self.mirror = Mirror(owner=self, **mirror_kwargs)
+        # self._target_drive = None
+        # self._male_target_drive = None
+
+    # def __enter__(self):
+        # assert self.dxl_origin is not None, "Calibrate hardware."
+        # self.stop_event.clear()
+        # self.drives.start()
+
+    def __call__(self, request):
+        request = Path(request)
+        if not request.parts:
+            raise NotImplementedError
+            
+        key, *leftover = request.parts
+        
+        if key in self:
+            self[key](request="/".join(leftover))
+            return
+            
+        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
+
+    @property
+    def female(self):
+        return self   
+
+    @property
+    def html(self):
+        return self.owner.html        
+
+    @property
+    def arduino(self):
+        return self._arduino        
+        
+    @property
+    def head_neopixel(self):
+        return self._head_neopixel
+        
+    @property
+    def body_neopixel(self):
+        return self._body_neopixel
+        
+    @property
+    def feet_neopixel(self):
+        return self._feet_neopixel
+    
+    @property
+    def name(self):
+        return self._name
+        
+    @property
+    def neopixels(self):
+        neopixels = [
+            self.head_neopixel,
+            *self.body_neopixel.neopixels,
+            self.feet_neopixel,
+        ]
+        return neopixels
+    
+    # @property
+    # def emulate_light_sensor(self):
+        # if self._emulate_light_sensor is None:
+            # return self.owner.emulate_light_sensors
+        # return self._emulate_light_sensor
+    
+    # @emulate_light_sensor.setter
+    # def emulate_light_sensor(self, value):
+        # self._emulate_light_sensor = value
+
+    # @property
+    # def is_notifing(self):
+        # return self._is_notifing
+
+    # @property
+    # def conversation(self):
+        # return self._conversation
+
+    # def listen_for_confirmation(self):
+        # return True
+
+    # def _loop(self):
+        # pass
+
+    # def stop(self):
+                
+        # # if self._is_started:            
+            # # self.drives.stop()
+        # for segment in self.segments:
+            # segment.off()
+        # Body.stop(self)
+
+    # def open(self):
+        # Body.open(self)
+        # self.head_neopixel.open()
+        # self.body_neopixel.open()
+        # self.feet_neopixel.open()
+        # self.mirror.open()
+
+    # def notify_male(self):
+        # self._is_notifing = True
+        # self.speaker.notify()
+        # self._is_notifing = False
+
+    # def _add_html_start(self):
+        # doc, tag, text = self.html_doc.tagtext()
+        # with tag("form", method="post"):
+            # with tag("button", name="action", value=f"{self.name}/start"):
+                # text(f"Start.")
+            # self.hardware.actions[f"{self.name}/start"] = self.start
+
+        # self._search.add_html()

@@ -13,9 +13,9 @@ class TestNeopixels(ThreadElement):
         self._is_open = False
         self.opened = None
 
-    @property
-    def hardware(self):
-        return self.owner.hardware
+    # @property
+    # def hardware(self):
+        # return self.owner.hardware
 
     @property
     def is_open(self):

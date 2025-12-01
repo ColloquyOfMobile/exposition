@@ -33,9 +33,9 @@ class Agenda(ThreadElement):
     def week(self):
         return self._week
             
-    @property
-    def hardware(self):
-        return self.owner.hardware
+    # @property
+    # def hardware(self):
+        # return self.owner.hardware
     
     def stop(self, **kwargs): 
         self.stop_event.set()
@@ -157,9 +157,9 @@ class Day(HTMLElement):
         if params["end"] is not None:
             self._end = time.fromisoformat(params["end"])
             
-    @property
-    def hardware(self):
-        return self.owner.hardware
+    # @property
+    # def hardware(self):
+        # return self.owner.hardware
     
     @property
     def name(self):

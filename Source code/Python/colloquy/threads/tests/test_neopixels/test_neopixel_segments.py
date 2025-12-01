@@ -6,9 +6,9 @@ class TestNeopixelSegments(ThreadElement):
         ThreadElement.__init__(self, owner=owner, name="test Neopixel segments")
         self._is_open = False
 
-    @property
-    def hardware(self):
-        return self.owner.hardware
+    # @property
+    # def hardware(self):
+        # return self.owner.hardware
 
     @property
     def is_open(self):

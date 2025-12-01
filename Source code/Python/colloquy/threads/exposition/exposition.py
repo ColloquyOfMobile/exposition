@@ -17,9 +17,9 @@ class Exposition(HTMLElement):
     def agenda(self):
         return self.owner.agenda 
 
-    @property
-    def hardware(self):
-        return self.owner.hardware
+    # @property
+    # def hardware(self):
+        # return self.owner.hardware
 
     @property
     def is_open(self):

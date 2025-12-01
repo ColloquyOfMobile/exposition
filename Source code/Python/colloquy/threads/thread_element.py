@@ -104,9 +104,9 @@ class ThreadElement(HTMLElement):
     def path(self):
         return self._path
 
-    @property
-    def hardware(self):
-        return self._owner.hardware
+    # @property
+    # def hardware(self):
+        # return self._owner.hardware
 
     @property
     def elements(self):

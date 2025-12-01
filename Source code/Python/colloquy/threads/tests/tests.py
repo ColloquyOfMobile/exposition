@@ -20,9 +20,9 @@ class Tests(ThreadElement):
         self._test_speaker = TestSpeaker(owner=self)
         self._test_photosensors = TestPhotosensors(owner=self)
 
-    @property
-    def hardware(self):
-        return self.owner.hardware
+    # @property
+    # def hardware(self):
+        # return self.owner.hardware
 
     @property
     def is_open(self):
