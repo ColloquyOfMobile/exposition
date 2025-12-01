@@ -1,6 +1,3 @@
-# from colloquy.wsgi.root.body.action_item import ActionItem
-# from colloquy.wsgi.root.body.workspace.item import Item, Action
-# from colloquy.wsgi.root.body.command import Command, HTML as _HTML
 from utils import CustomDoc
 from colloquy.base import Base
 

@@ -3,10 +3,11 @@ from pathlib import Path
 from utils import CustomDoc
 
 
-class SetWhite(Base):
+class White(Base):
     
     def __init__(self, owner):
         Base.__init__(self, owner)
+        self._value = 0
         
         self._digits = []
         for mult in (100, 10, 1):
@@ -29,21 +30,21 @@ class SetWhite(Base):
             return
             
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
-    
-    # def __call__(self, request):
-        # raise NotImplementedError(request)
-        # value = self.post_data["value"][0]
-        # color = {
-        # "red": self.owner.red,
-        # "green": self.owner.green,
-        # "blue": self.owner.blue,
-        # "white": value,
-        # }
-        # self.owner.color = color
 
     @property
     def name(self):
-        return "set white"
+        return "white"
+    
+    @property
+    def value(self):
+        return self._value
+    
+    @value.setter
+    def value(self, value):
+        
+        print(f"{value=}")
+        self._value = value
+        self.owner.update()
 
     def hex_to_rgb(self, hex_value):
         hex_value = hex_value.lstrip('#')  # Retire le #
@@ -55,49 +56,44 @@ class SetWhite(Base):
         return (r, g, b)
     
     def html(self):
-        raise NotImplementedError
-    
-    def html(self):
         doc, tag, text = CustomDoc().tagtext()
-        white_as_string = f"{self.owner.white:03d}"  # with leading zeros
-        hundreds, tens, units = map(int, white_as_string)
         
-        klass = "int-button"
-        
-        style1 = "display:flex; flex-direction: column; place-content: center; padding: 0 0.1ch;"
         
         with tag("div", style="display:flex; align-items: center;"):
             with tag("div", style="margin-right: 1ch;"):
                 text("set white")
-            with tag("div", style=style1):
-                with tag("div", klass=klass):
-                    with tag("a", href=f"/{self.path.as_posix()}/*100/+", style="text-decoration: none; color: black;"):
-                        text("+")
-                with tag("div", style="display:flex; place-content: center;"):
-                    text(hundreds)
-                with tag("div", klass=klass):
-                    with tag("a", href=f"/{self.path.as_posix()}/*100/-", style="text-decoration: none; color: black;"):
-                        text("-")
+            
+            for digit in self._digits:
+                doc.asis(digit.html())
+            # with tag("div", style=style1):
+                # with tag("div", klass=klass):
+                    # with tag("a", href=f"/{self.path.as_posix()}/*100/+", style="text-decoration: none; color: black;"):
+                        # text("+")
+                # with tag("div", style="display:flex; place-content: center;"):
+                    # text(hundreds)
+                # with tag("div", klass=klass):
+                    # with tag("a", href=f"/{self.path.as_posix()}/*100/-", style="text-decoration: none; color: black;"):
+                        # text("-")
                         
-            with tag("div", style=style1):
-                with tag("div", klass=klass):
-                    with tag("a", href=f"/{self.path.as_posix()}/*10/+", style="text-decoration: none; color: black;"):
-                        text("+")
-                with tag("div", style="display:flex; place-content: center;"):
-                    text(tens)
-                with tag("div", klass=klass):
-                    with tag("a", href=f"/{self.path.as_posix()}/*10/-", style="text-decoration: none; color: black;"):
-                        text("-")
+            # with tag("div", style=style1):
+                # with tag("div", klass=klass):
+                    # with tag("a", href=f"/{self.path.as_posix()}/*10/+", style="text-decoration: none; color: black;"):
+                        # text("+")
+                # with tag("div", style="display:flex; place-content: center;"):
+                    # text(tens)
+                # with tag("div", klass=klass):
+                    # with tag("a", href=f"/{self.path.as_posix()}/*10/-", style="text-decoration: none; color: black;"):
+                        # text("-")
                         
-            with tag("div", style=style1):
-                with tag("div", klass=klass):
-                    with tag("a", href=f"/{self.path.as_posix()}/*1/+", style="text-decoration: none; color: black;"):
-                        text("+")
-                with tag("div", style="display:flex; place-content: center;"):
-                    text(units)
-                with tag("div", klass=klass):
-                    with tag("a", href=f"/{self.path.as_posix()}/*1/-", style="text-decoration: none; color: black;"):
-                        text("-")
+            # with tag("div", style=style1):
+                # with tag("div", klass=klass):
+                    # with tag("a", href=f"/{self.path.as_posix()}/*1/+", style="text-decoration: none; color: black;"):
+                        # text("+")
+                # with tag("div", style="display:flex; place-content: center;"):
+                    # text(units)
+                # with tag("div", klass=klass):
+                    # with tag("a", href=f"/{self.path.as_posix()}/*1/-", style="text-decoration: none; color: black;"):
+                        # text("-")
         
         return doc.getvalue()
 
@@ -119,18 +115,16 @@ class Digit(Base):
             raise NotImplementedError(request)
         
         # Remove the old digit from the number
-        base = self.owner.owner.white - (self.value * self._multiplier)
+        base = self.owner.value - (self.value * self._multiplier)
 
         # Insert the new digit
-        new_white = base + (new_digit * self._multiplier)
+        new_value = base + (new_digit * self._multiplier)
         
-        if new_white > 255:
-            new_white = 255
+        if new_value > 255:
+            new_value = 255
 
         # Store it
-        self.owner.owner.white = new_white
-        
-        return new_white
+        self.owner.value = new_value
 
     @property
     def name(self):
@@ -138,7 +132,7 @@ class Digit(Base):
     
     @property
     def value(self):
-        result = self.owner.owner.white % (self._multiplier * 10)
+        result = self.owner.value % (self._multiplier * 10)
         return result // self._multiplier
     
     def html(self):

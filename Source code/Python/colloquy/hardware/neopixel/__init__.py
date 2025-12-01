@@ -5,7 +5,8 @@ from utils import CustomDoc
 from threading import Event
 from .toggle_on_off import ToggleOnOff
 from .set_rgb import SetRGB
-from .set_white import SetWhite
+# from .set_white import SetWhite
+from .white import White
 from .set_brightness import SetBrightness
 
 class Neopixel(Base):
@@ -17,18 +18,20 @@ class Neopixel(Base):
         
         self._toggle_on_off = ToggleOnOff(owner=self)
         self._set_rgb = SetRGB(owner=self)
-        self._set_white = SetWhite(owner=self)
+        # self._set_white = SetWhite(owner=self)
         self._set_brightness = SetBrightness(owner=self)
         
-        self[self._toggle_on_off.name] = self._toggle_on_off
+        self[self._toggle_on_off.name] = self._toggle_on_off        
         
         self._arduino = owner.arduino
         self._on_off_state = None
         self.red = 0
         self.green = 0
         self.blue = 0
-        self.white = 250
-        self._brightness = 250
+        self._white = White(owner=self)
+        self._brightness = 0
+        
+        self[self.white.name] = self.white
 
     def __call__(self, request):
         request = Path(request)
@@ -98,19 +101,23 @@ class Neopixel(Base):
     @brightness.setter
     def brightness(self, value):
         self._brightness = value
-        self._update()
-
+        self.update()
+    
+    @property
+    def white(self):
+        return self._white
+        
     @property
     def color(self):
-        return dict(red=self.red, green=self.green, blue=self.blue, white=self.white)
+        return dict(red=self.red, green=self.green, blue=self.blue, white=self.white.value)
 
     @color.setter
     def color(self, value):
         self.red = value["red"]
         self.green = value["green"]
         self.blue = value["blue"]
-        self.white = value["white"]
-        self._update()
+        self.white.value = value["white"]
+        self.update()
 
     def open(self):
         self.off()
@@ -119,11 +126,11 @@ class Neopixel(Base):
         self.red = red
         self.green = green
         self.blue = blue
-        self.white = white
-        self.brightness = brightness
-        self._update()
+        self.white.value = white
+        self._brightness = brightness
+        self.update()
 
-    def _update(self):
+    def update(self):
         if not self._on_off_state:
             return
         # path = f"{self._owner.name}/neopixel"
@@ -131,13 +138,13 @@ class Neopixel(Base):
             r = self.red,
             g = self.green,
             b = self.blue,
-            w = self.white,
+            w = self.white.value,
             brightness = self.brightness)
         self.arduino.send(self.arduino_path, **data)
 
     def on(self, **kwargs):
         self._on_off_state = True
-        self._update()
+        self.update()
 
     def off(self, **kwargs):
         # path = f"{self._owner.name}/neopixel"
@@ -187,8 +194,8 @@ class Neopixel(Base):
         doc, tag, text = CustomDoc().tagtext()
         with tag("div"):
             doc.asis(self.toggle_on_off.html())
+            doc.asis(self.white.html())
             # doc.asis(self.set_rgb.html())
-            # doc.asis(self.set_white.html())
             # doc.asis(self.set_brightness.html())
         
         return doc.getvalue()
