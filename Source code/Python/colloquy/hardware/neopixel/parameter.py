@@ -3,10 +3,11 @@ from pathlib import Path
 from utils import CustomDoc
 
 
-class White(Base):
+class Parameter(Base):
     
-    def __init__(self, owner):
+    def __init__(self, owner, name):
         Base.__init__(self, owner)
+        self._name = name
         
         self._neopixel = owner
         
@@ -41,7 +42,7 @@ class White(Base):
 
     @property
     def name(self):
-        return "white"
+        return self._name
     
     @property
     def value(self):

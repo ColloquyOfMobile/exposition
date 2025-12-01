@@ -6,7 +6,7 @@ from threading import Event
 from .toggle_on_off import ToggleOnOff
 from .set_rgb import SetRGB
 # from .set_white import SetWhite
-from .white import White
+from .parameter import Parameter
 from .set_brightness import SetBrightness
 
 class Neopixel(Base):
@@ -28,7 +28,7 @@ class Neopixel(Base):
         self.red = 0
         self.green = 0
         self.blue = 0
-        self._white = White(owner=self)
+        self._white = Parameter(owner=self, name="white")
         self._brightness = 0
         
         self[self.white.name] = self.white
