@@ -41,7 +41,7 @@ class Commands(Base):
 
     def _call_unsafe(self):   
         doc, tag, text = CustomDoc().tagtext()
-        with tag("div", style="display: flex;"):  
+        with tag("div", style="display: flex; margin-bottom: 1rem;"):  
                 doc.asis(self.shutdown.html())
                 with tag("div", style="width: 1ch;"):
                     pass

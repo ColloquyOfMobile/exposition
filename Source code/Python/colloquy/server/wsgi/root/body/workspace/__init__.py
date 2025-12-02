@@ -95,8 +95,9 @@ class Workspace(Base):
         doc, tag, text = CustomDoc().tagtext()
         with tag("div", style="display: flex; flex-direction: column;"):
             for neopixel in self.hardware.neopixels:
-                with tag("h3"):
-                    text(f"{neopixel.body.name}/{neopixel.name}")
+                with tag("div", id=neopixel.path.as_posix(), style="font-size: 1.2rem; margin-bottom: 0.5rem;"):
+                    with tag("strong"):
+                        text(f"{neopixel.body.name}/{neopixel.name}")
                 doc.asis(neopixel.html())
             
         return doc.getvalue()

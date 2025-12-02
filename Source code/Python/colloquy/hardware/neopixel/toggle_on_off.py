@@ -18,10 +18,10 @@ class ToggleOnOff(Base):
     
     def html(self):
         doc, tag, text = CustomDoc().tagtext()
-        label = "on"
+        label = "toggle LEDs on"
         if self.owner.state:
-            label = "off"
-        with tag("div"):
+            label = "toggle LEDs off"
+        with tag("div", style="margin-bottom: 1rem;"):
             with tag("a", href=f"/{self.path.as_posix()}"):
                 text(label)
         

@@ -33,6 +33,8 @@ class Female(Base):
         self._feet_neopixel = FeetFemaleNeopixel(owner=self)
         
         self[self._head_neopixel.name] = self._head_neopixel
+        self[self._body_neopixel.name] = self._body_neopixel
+        self[self._feet_neopixel.name] = self._feet_neopixel
         
         # self.drives = FemaleDrives(owner=self)
         # self.sensor = self._classes["sensor"](owner=self, name="sensor")

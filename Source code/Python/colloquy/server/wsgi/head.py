@@ -8,6 +8,7 @@ BUTTON_STYLE = """
     border: 1px solid darkgrey;
     border-radius: 0.2rem;
     place-content: center;
+    min-width: 1rem;
     }
 .int-button:hover {
     background: lightgrey;

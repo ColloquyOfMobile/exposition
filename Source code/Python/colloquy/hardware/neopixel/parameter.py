@@ -23,6 +23,7 @@ class Parameter(Base):
         for digit in self._digits:
             self[digit.name] = digit
         
+        
     def __call__(self, request):
         request = Path(request)
         if not request.parts:
@@ -55,9 +56,7 @@ class Parameter(Base):
         self._hundreds.value = int(value_as_string[0])
         self._tens.value = int(value_as_string[1])
         self._ones.value = int(value_as_string[2])
-        # raise NotImplementedError
-        # print(f"{value=}")
-        # self._value = value
+        
         self.neopixel.update()
 
     def hex_to_rgb(self, hex_value):
@@ -70,15 +69,16 @@ class Parameter(Base):
         return (r, g, b)
     
     def html(self):
-        doc, tag, text = CustomDoc().tagtext()
+        doc, tag, text = CustomDoc().tagtext()        
         
-        
-        with tag("div", style="display:flex; align-items: center;"):
-            with tag("div", style="margin-right: 1ch;"):
-                text("set white")
+        with tag("div", style="display:flex; flex-direction: column; margin-bottom: 1rem;"):
+            with tag("div", style="margin-bottom: 0.5rem;"):
+                text(f"{self.name} = {self.value:03} units")
+                
+            with tag("div", style="display:flex; flex-direction: column;"):
             
-            for digit in self._digits:
-                doc.asis(digit.html())
+                for digit in reversed(self._digits):
+                    doc.asis(digit.html())
         
         return doc.getvalue()
 
@@ -122,25 +122,25 @@ class Digit(Base):
         doc, tag, text = CustomDoc().tagtext()
 
         klass = "int-button"
-        style1 = "display:flex; flex-direction: column; place-content: center; padding: 0 0.1ch;"
+        style1 = "display:flex; padding: 0 0.1ch;"
 
         with tag("div", style=style1):
-            # + button
-            with tag("div", klass=klass):
-                with tag("a", 
-                         href=f"/{self.path.as_posix()}/+", 
-                         style="text-decoration: none; color: black;"):
-                    text("+")
-
-            # The digit itself
-            with tag("div", style="display:flex; place-content: center;"):
-                text(self._value)
 
             # - button
             with tag("div", klass=klass):
                 with tag("a", 
-                         href=f"/{self.path.as_posix()}/-", 
+                         href=f"/{self.path.as_posix()}/-#{self.owner.neopixel.path.as_posix()}", 
                          style="text-decoration: none; color: black;"):
                     text("-")
+                
+            # + button
+            with tag("div", klass=klass):
+                with tag("a", 
+                         href=f"/{self.path.as_posix()}/+#{self.owner.neopixel.path.as_posix()}", 
+                         style="text-decoration: none; color: black;"):
+                    text("+")
+                    
+            with tag("div", style="display:flex; place-content: center; margin-left: 1ch;"):
+                text(self._multiplier)#
 
         return doc.getvalue()

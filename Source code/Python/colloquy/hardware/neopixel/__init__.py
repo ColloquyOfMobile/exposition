@@ -7,31 +7,36 @@ from .toggle_on_off import ToggleOnOff
 from .set_rgb import SetRGB
 # from .set_white import SetWhite
 from .parameter import Parameter
-from .set_brightness import SetBrightness
+# from .set_brightness import SetBrightness
 
 class Neopixel(Base):
 
     def __init__(self, owner, name):
         self._name = name
         super().__init__(owner=owner)
-        # self._html = HTML(owner=self)
         
         self._toggle_on_off = ToggleOnOff(owner=self)
-        self._set_rgb = SetRGB(owner=self)
+        # self._set_rgb = SetRGB(owner=self)
         # self._set_white = SetWhite(owner=self)
-        self._set_brightness = SetBrightness(owner=self)
+        # self._set_brightness = SetBrightness(owner=self)
         
         self[self._toggle_on_off.name] = self._toggle_on_off        
         
         self._arduino = owner.arduino
         self._on_off_state = None
-        self.red = 0
-        self.green = 0
-        self.blue = 0
-        self._white = Parameter(owner=self, name="white")
-        self._brightness = 0
         
-        self[self.white.name] = self.white
+        self._red = Parameter(owner=self, name="red")
+        self._green = Parameter(owner=self, name="green")
+        self._blue = Parameter(owner=self, name="blue")
+        
+        self._white = Parameter(owner=self, name="white")
+        self._brightness = Parameter(owner=self, name="brightness")
+        
+        self[self.white.name] = self.white        
+        self[self.brightness.name] = self.brightness
+        self[self._red.name] = self._red
+        self[self._green.name] = self._green
+        self[self._blue.name] = self._blue
 
     def __call__(self, request):
         request = Path(request)
@@ -60,17 +65,17 @@ class Neopixel(Base):
     def toggle_on_off(self):
         return self._toggle_on_off             
 
-    @property
-    def set_rgb(self):
-        return self._set_rgb                 
+    # @property
+    # def set_rgb(self):
+        # return self._set_rgb                 
 
-    @property
-    def set_brightness(self):
-        return self._set_brightness            
+    # @property
+    # def set_brightness(self):
+        # return self._set_brightness            
 
-    @property
-    def set_white(self):
-        return self._set_white   
+    # @property
+    # def set_white(self):
+        # return self._set_white   
         
     @property
     def arduino(self):
@@ -87,35 +92,47 @@ class Neopixel(Base):
     @property
     def configuration(self):
         return {
-            "red": self.red,
-            "green": self.green,
-            "blue": self.blue,
-            "white": self.white,
-            "brightness": self.brightness,
+            "red": self.red.value,
+            "green": self.green.value,
+            "blue": self.blue.value,
+            "white": self.white.value,
+            "brightness": self.brightness.value,
         }
     
     @property
     def brightness(self):
         return self._brightness
     
-    @brightness.setter
-    def brightness(self, value):
-        self._brightness = value
-        self.update()
-    
     @property
     def white(self):
         return self._white
+    
+    @property
+    def red(self):
+        return self._red
+    
+    @property
+    def green(self):
+        return self._green
+    
+    @property
+    def blue(self):
+        return self._blue
         
     @property
     def color(self):
-        return dict(red=self.red, green=self.green, blue=self.blue, white=self.white.value)
+        return dict(
+            red=self.red.value, 
+            green=self.green.value, 
+            blue=self.blue.value, 
+            white=self.white.value
+            )
 
     @color.setter
     def color(self, value):
-        self.red = value["red"]
-        self.green = value["green"]
-        self.blue = value["blue"]
+        self.red.value = value["red"]
+        self.green.value = value["green"]
+        self.blue.value = value["blue"]
         self.white.value = value["white"]
         self.update()
 
@@ -123,23 +140,22 @@ class Neopixel(Base):
         self.off()
 
     def configure(self, red, green, blue, white, brightness):
-        self.red = red
-        self.green = green
-        self.blue = blue
+        self.red.value = red
+        self.green.value = green
+        self.blue.value = blue
         self.white.value = white
-        self._brightness = brightness
+        self.brightness.value = brightness
         self.update()
 
     def update(self):
         if not self._on_off_state:
             return
-        # path = f"{self._owner.name}/neopixel"
         data = dict(
-            r = self.red,
-            g = self.green,
-            b = self.blue,
+            r = self.red.value,
+            g = self.green.value,
+            b = self.blue.value,
             w = self.white.value,
-            brightness = self.brightness)
+            brightness = self.brightness.value)
         self.arduino.send(self.arduino_path, **data)
 
     def on(self, **kwargs):
@@ -147,7 +163,6 @@ class Neopixel(Base):
         self.update()
 
     def off(self, **kwargs):
-        # path = f"{self._owner.name}/neopixel"
         data = dict(
             r = 0,
             g = 0,
@@ -175,11 +190,6 @@ class Neopixel(Base):
             self.on()
         else:
             self.off()
-            
-    # def rgb_to_hex(self, red, green, blue):
-        # for value in (red, green, blue):
-            # assert 0 <= value <= 255
-        # return '#{:02X}{:02X}{:02X}'.format(red, green, blue)
 
     def hex_to_rgb(self, hex_value):
         hex_value = hex_value.lstrip('#')  # Retire le #
@@ -195,91 +205,11 @@ class Neopixel(Base):
         with tag("div"):
             doc.asis(self.toggle_on_off.html())
             doc.asis(self.white.html())
+            doc.asis(self.brightness.html())
+            doc.asis(self.red.html())
+            doc.asis(self.green.html())
+            doc.asis(self.blue.html())
             # doc.asis(self.set_rgb.html())
             # doc.asis(self.set_brightness.html())
         
         return doc.getvalue()
-        
-        # self._html_configure()
-        
-        # if self.state:
-            # self._html_action(value=f"{self.path.as_posix()}/off", label=f"{self.name} off", func=self.off)
-            # return
-        
-        # self._html_action(value=f"{self.path.as_posix()}/on", label=f"{self.name} on", func=self.on)
-        # doc.stag("hr")
-    
-    # def _html_configure(self):
-        # doc, tag, text = self.html_doc.tagtext()
-        # config = self.configuration
-        
-        # with tag("div"):
-            # with tag("div"):
-                # with tag("strong"):
-                    # text(self.name)
-            # with tag("form", method="post"): 
-                # self._html_brightness()
-                # self._html_white()
-                # self._html_rgb()
-                
-                # value = f"{self.path.as_posix()}/color"
-                # with tag("button", name="action", value=value):
-                    # text("configure")
-                # self.actions[value] = self._configure_from_html
-    
-    # def _html_rgb(self):
-        # doc, tag, text = self.html_doc.tagtext()
-        # config = self.configuration
-
-        # red = config["red"]
-        # green = config["green"]
-        # blue = config["blue"]
-            
-        # doc.stag("input", type="color", name="hex_rgb", value=self.rgb_to_hex(red, green, blue))
-        
-    
-    # def _html_brightness(self):
-        # doc, tag, text = self.html_doc.tagtext()
-        # config = self.configuration
-        
-        # with tag("div"):            
-            # name = "brightness"
-            # with tag("label"):
-                # text(f"{name} : ")
-            # doc.stag("input", type="number", name=name, value=config[name], max=255, min=0, step=1)
-    
-    # def _html_white(self):
-        # doc, tag, text = self.html_doc.tagtext()
-        # config = self.configuration
-        
-        # with tag("div"):
-            # name = "white"
-            # with tag("label"):
-                # text(f"{name} : ")
-            # doc.stag("input", type="number", name=name, value=config[name], max=255, min=0, step=1)       
-        
-
-# class HTML(_HTML):
-    
-        
-    # def _call_unsafe(self,):          
-        # doc, tag, text = self.doc.tagtext()        
-        # with tag("h4"):
-            # text(f"{self.owner.body.name}/{self.owner.name}")  
-        # self.owner.toggle_on_off.html()
-        # self.owner.set_rgb.html()
-        # self.owner.set_white.html()
-        # self.owner.set_brightness.html()
-        # # if self.owner.state:
-            # # raise NotImplementedError
-
-
-# class Action(ActionItem):
-    
-    # def __call__(self, **kwargs):
-        # hex_color = kwargs["hex_rgb"][0]
-        # (red, green, blue) = self.hex_to_rgb(hex_color)
-        # white = int(kwargs["white"][0])
-        # brightness = int(kwargs["brightness"][0])
-        
-        # self.configure(red, green, blue, white, brightness)

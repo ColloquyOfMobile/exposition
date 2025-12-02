@@ -37,6 +37,21 @@ class BodyFemaleNeopixel(Base):
             self.p_neopixel,
         ]
         
+        self[self._o_neopixel.name] = self._o_neopixel
+        self[self._p_neopixel.name] = self._p_neopixel
+
+    def __call__(self, request):
+        request = Path(request)
+        if not request.parts:
+            raise NotImplementedError
+            
+        key, *leftover = request.parts
+        
+        if key in self:
+            self[key](request="/".join(leftover))
+            return
+            
+        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")        
         
 
     @property
