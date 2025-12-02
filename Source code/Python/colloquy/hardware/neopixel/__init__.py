@@ -4,7 +4,7 @@ from colloquy.base import Base
 from utils import CustomDoc
 from threading import Event
 from .toggle_on_off import ToggleOnOff
-from .set_rgb import SetRGB
+#from .set_rgb import SetRGB
 # from .set_white import SetWhite
 from .parameter import Parameter
 # from .set_brightness import SetBrightness
@@ -16,9 +16,6 @@ class Neopixel(Base):
         super().__init__(owner=owner)
         
         self._toggle_on_off = ToggleOnOff(owner=self)
-        # self._set_rgb = SetRGB(owner=self)
-        # self._set_white = SetWhite(owner=self)
-        # self._set_brightness = SetBrightness(owner=self)
         
         self[self._toggle_on_off.name] = self._toggle_on_off        
         

@@ -34,16 +34,20 @@ class Hardware(Base):
         
         self._mirrors = []
         self._males = []
-        self._bodies = []
         self._speakers = []
         self._moving_elements = []
         
         self._female1 = Female(owner=self, name="female1")
-        # self._female2 = Female(owner=self, name="female2")
-        # self._female3 = Female(owner=self, name="female3")
-        self._females = [self._female1]
+        self._female2 = Female(owner=self, name="female2")
+        self._female3 = Female(owner=self, name="female3")
+        self._females = [
+            self._female1,
+            self._female2,
+            self._female3,
+            ]
         
-        self["female1"] = self._female1
+        for female in self._females:
+            self[female.name] = female
 
     
 
