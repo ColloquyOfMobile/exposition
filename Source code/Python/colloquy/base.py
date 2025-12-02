@@ -3,6 +3,7 @@ import inspect
 from pathlib import Path
 from urllib.parse import unquote
 import urllib.parse
+import socket
 
 class Base:
 
@@ -80,6 +81,8 @@ class Base:
     
     @property
     def is_simulated(self):
+        if socket.gethostname() == 'Colloquy-Laptop':
+            return False
         return True
     
     def add(self, element):
