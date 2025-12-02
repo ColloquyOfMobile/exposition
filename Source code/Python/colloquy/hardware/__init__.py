@@ -150,3 +150,8 @@ class Hardware(Base):
         for body in self.males:
             bodies.append(body)
         return bodies
+    
+    def shutdown(self):
+        with self.arduino:
+            for neopixel in self.neopixels:
+                neopixel.off()

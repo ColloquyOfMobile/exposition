@@ -26,6 +26,15 @@ class Arduino(Base):
         self._port_handler = None
         self._was_open = None
 
+    def __enter__(self):
+        self._was_open = is_open = self.port_handler.is_open
+        if not is_open:
+            self.open()
+
+    def __exit__(self, *args, **kwargs):
+        if not self._was_open:
+            self.close()
+
     @property
     def log(self):
         return self._log
@@ -59,14 +68,16 @@ class Arduino(Base):
         return self._port_handler
 
     def send(self, path, **data):
-        self._was_open = is_open = self.port_handler.is_open
-        if not is_open:
-            self.open()
-        try:
+        with self:
             return self._send_unsafe(path, **data)
-        finally:
-            if not self._was_open:
-                self.close()
+        # self._was_open = is_open = self.port_handler.is_open
+        # if not is_open:
+            # self.open()
+        # try:
+            # return self._send_unsafe(path, **data)
+        # finally:
+            # if not self._was_open:
+                # self.close()
             
 
     def send_yield(self, path, **data):

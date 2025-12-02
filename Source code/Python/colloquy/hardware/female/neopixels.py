@@ -21,8 +21,7 @@ class HeadFemaleNeopixel(Neopixel):
 
     @property
     def arduino_path(self):
-        return Path(f"{self.owner.name}/head neopixel")
-        raise NotImplementedError(f"{self=}")
+        return Path(f"{self.owner.name}/{self.name}")
 
 
 class BodyFemaleNeopixel(Base):
@@ -55,21 +54,17 @@ class BodyFemaleNeopixel(Base):
         
 
     @property
-    def html(self):
-        return self.owner.html
-
-    @property
     def arduino(self):
         return self._arduino
         
-        
-    @property
-    def neopixels(self):
-        return self._neopixels
     
     @property
     def name(self):
         return "body neopixel"
+    
+    @property
+    def neopixels(self):
+        return self._neopixels
     
     @property
     def o_neopixel(self):
@@ -80,24 +75,12 @@ class BodyFemaleNeopixel(Base):
         return self._p_neopixel
     
     @property
-    def segments(self):
-        return self.owner.segments
-    
-    @property
-    def elements(self):
-        return self.owner.elements
-    
-    # @property
-    # def hardware(self):
-        # return self.owner.hardware
-    
-    @property
     def arduino_manager(self):
         return self.owner.arduino_manager
     
-    def open(self):
-        self.o_neopixel.open()
-        self.p_neopixel.open()
+    # def open(self):
+        # self.o_neopixel.open()
+        # self.p_neopixel.open()
     
     def on(self):
         self.o_neopixel.on()
@@ -113,6 +96,10 @@ class FeetFemaleNeopixel(Neopixel):
     def __init__(self, owner):
         super().__init__(owner=owner, name="feet neopixel")  
         self._body = owner
+
+    @property
+    def arduino_path(self):
+        return Path(f"{self.owner.name}/{self.name}")
     
     def set_test_default(self):
         self.configure(red=0, green=0, blue=255, white=0, brightness=255)
@@ -124,6 +111,10 @@ class BodyFemaleONeopixel(Neopixel):
     def __init__(self, owner):
         super().__init__(owner=owner, name="O")  
         self._body = owner.owner
+
+    @property
+    def arduino_path(self):
+        return Path(f"{self.owner.owner.name}/{self.owner.name}/{self.name}")
     
     def set_test_default(self):
         self.configure(red=125, green=125, blue=0, white=0, brightness=255)
@@ -134,6 +125,10 @@ class BodyFemalePNeopixel(Neopixel):
     def __init__(self, owner):
         super().__init__(owner=owner, name="P")  
         self._body = owner.owner
+
+    @property
+    def arduino_path(self):
+        return Path(f"{self.owner.owner.name}/{self.owner.name}/{self.name}")
     
     def set_test_default(self):
         self.configure(red=125, green=0, blue=125, white=0, brightness=255)

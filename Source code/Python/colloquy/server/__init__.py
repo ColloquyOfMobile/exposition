@@ -62,6 +62,7 @@ class Server(Base):
             while True:
                 httpd.handle_request()
                 if self.events.shutdown.is_set():
+                    self.owner.hardware.shutdown()
                     break
         
             
