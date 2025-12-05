@@ -189,7 +189,6 @@ public:
       body(bodyStrip),
       bodyStrip(bodyStrip),
       upRingStrip(upRingStrip) {}
-
 };
 
 Female female1("female1", &female1Strip, FEMALE_NUM_PIXELS);
@@ -215,9 +214,46 @@ void setup() {
 
 void loop() {
   if (Serial.available()) {
-    String input = Serial.readStringUntil('\n');  // Lire la commande
-    String response = processCommand(input);      // Traiter la commande
-    Serial.println(response);                     // Répondre au PC
+    // Create a reusable JSON doc for test colors
+    StaticJsonDocument<64> jsonDoc;
+
+    // -------------------------------
+    // 1. female head BLUE
+    // -------------------------------
+    jsonDoc["r"] = 0;
+    jsonDoc["g"] = 0;
+    jsonDoc["b"] = 255;
+    jsonDoc["w"] = 0;
+    jsonDoc["brightness"] = 255;
+    female1.head.fill(jsonDoc);
+    delay(500);
+
+    // -------------------------------
+    // 2. male o_drive BLUE
+    // -------------------------------
+    male1.body.o_drive.fill(jsonDoc);
+    delay(500);
+
+    // -------------------------------
+    // 3. female head RED
+    // -------------------------------
+    jsonDoc["r"] = 255;
+    jsonDoc["g"] = 0;
+    jsonDoc["b"] = 0;
+    jsonDoc["w"] = 0;
+    jsonDoc["brightness"] = 255;
+    female1.head.fill(jsonDoc);
+    delay(500);
+
+    // -------------------------------
+    // 4. male o_drive RED
+    // -------------------------------
+    male1.body.o_drive.fill(jsonDoc);
+    delay(500);
+
+    // String input = Serial.readStringUntil('\n');  // Lire la commande
+    // String response = processCommand(input);      // Traiter la commande
+    // Serial.println(response);                     // Répondre au PC
   }
 }
 
