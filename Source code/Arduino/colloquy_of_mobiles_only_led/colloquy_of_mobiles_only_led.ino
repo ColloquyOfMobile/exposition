@@ -6,12 +6,9 @@
 
 #define FEMALE_NUM_PIXELS 50  // Nombre de LEDs par groupe
 
-// Initialisation des bandes Neopixel
-Adafruit_NeoPixel female1Strip(
-  FEMALE_NUM_PIXELS,
-  FEMALE1_NEOPIXEL_PIN,
-  NEO_GRBW + NEO_KHZ800);
 
+// ##########################################################
+// Class definitions
 
 class PixelGroup {
 public:
@@ -52,7 +49,6 @@ public:
     }
     strip->show();
   }
-
 private:
   uint8_t scaleBrightness(uint8_t value) {
     return (uint16_t(value) * brightness) / 255;
@@ -62,30 +58,35 @@ private:
 
 class Female {
 public:
-  String name;
-  Adafruit_NeoPixel* strip;
-  // int numPixels;
   PixelGroup head;
   PixelGroup body;
   PixelGroup feet;
 
-  Female(String name, Adafruit_NeoPixel* strip, int numPixels)
-    : name(name),
-      head(strip, 37, 13),
-      body(strip, 0, 28),
-      feet(strip, 29, 7) {}
+  Female(PixelGroup& head, PixelGroup& body, PixelGroup& feet)
+    : head(head),
+      body(body),
+      feet(feet) {}
 };
+// ##########################################################
 
-Female female1("female1", &female1Strip, FEMALE_NUM_PIXELS);
+// ##########################################################
+// Object initialisation
+Adafruit_NeoPixel female1Strip(
+  FEMALE_NUM_PIXELS,
+  FEMALE1_NEOPIXEL_PIN,
+  NEO_GRBW + NEO_KHZ800);
+
+PixelGroup head1(&female1Strip, 37, 13);
+PixelGroup body1(&female1Strip, 0, 28);
+PixelGroup feet1(&female1Strip, 37, 13);
+
+Female female1(head1, body1, feet1);
+// ##########################################################
 
 void setup() {
-  // Initialisation des Neopixels
   female1Strip.begin();
-
   female1Strip.show();
 
-
-  // Initialisation du port série
   Serial.begin(57600);
   // Each time the serial port is opened the Arduino is rebooted.
   // The arduino will be ready when client can read "Hello!" on the serial.
@@ -93,60 +94,57 @@ void setup() {
 }
 
 void loop() {
-  if (Serial.available()) {
-    // Create a reusable JSON doc for test colors
-    StaticJsonDocument<64> jsonDoc;
-    
-    jsonDoc["r"] = 255;
-    jsonDoc["g"] = 0;
-    jsonDoc["b"] = 0;
-    jsonDoc["w"] = 0;
-    jsonDoc["brightness"] = 255;
-    female1.head.fill(jsonDoc);
-    delay(500);
-    
-    jsonDoc["r"] = 0;
-    jsonDoc["g"] = 255;
-    jsonDoc["b"] = 0;
-    jsonDoc["w"] = 0;
-    jsonDoc["brightness"] = 255;    
-    female1.body.fill(jsonDoc);
-    delay(500);
-    
-    jsonDoc["r"] = 0;
-    jsonDoc["g"] = 0;
-    jsonDoc["b"] = 255;
-    jsonDoc["w"] = 0;
-    jsonDoc["brightness"] = 255;
-    female1.feet.fill(jsonDoc);
-    delay(500);
+  // Create a reusable JSON doc for test colors
+  StaticJsonDocument<64> jsonDoc;
+  
+  jsonDoc["r"] = 255;
+  jsonDoc["g"] = 0;
+  jsonDoc["b"] = 0;
+  jsonDoc["w"] = 0;
+  jsonDoc["brightness"] = 255;
+  female1.head.fill(jsonDoc);
+  delay(500);
+  
+  jsonDoc["r"] = 0;
+  jsonDoc["g"] = 255;
+  jsonDoc["b"] = 0;
+  jsonDoc["w"] = 0;
+  jsonDoc["brightness"] = 255;    
+  female1.body.fill(jsonDoc);
+  delay(500);
+  
+  jsonDoc["r"] = 0;
+  jsonDoc["g"] = 0;
+  jsonDoc["b"] = 255;
+  jsonDoc["w"] = 0;
+  jsonDoc["brightness"] = 255;
+  female1.feet.fill(jsonDoc);
+  delay(500);
 
-    // ------------------------------------------
-    jsonDoc["r"] = 255;
-    jsonDoc["g"] = 0;
-    jsonDoc["b"] = 0;
-    jsonDoc["w"] = 0;
-    jsonDoc["brightness"] = 0;
-    female1.head.fill(jsonDoc);
-    delay(500);
-    
-    jsonDoc["r"] = 0;
-    jsonDoc["g"] = 255;
-    jsonDoc["b"] = 0;
-    jsonDoc["w"] = 0;
-    jsonDoc["brightness"] = 0;    
-    female1.body.fill(jsonDoc);
-    delay(500);
-    
-    jsonDoc["r"] = 0;
-    jsonDoc["g"] = 0;
-    jsonDoc["b"] = 255;
-    jsonDoc["w"] = 0;
-    jsonDoc["brightness"] = 0;
-    female1.feet.fill(jsonDoc);
-    delay(500);
-    
-  }
+  // ------------------------------------------
+  jsonDoc["r"] = 255;
+  jsonDoc["g"] = 0;
+  jsonDoc["b"] = 0;
+  jsonDoc["w"] = 0;
+  jsonDoc["brightness"] = 0;
+  female1.head.fill(jsonDoc);
+  delay(500);
+  
+  jsonDoc["r"] = 0;
+  jsonDoc["g"] = 255;
+  jsonDoc["b"] = 0;
+  jsonDoc["w"] = 0;
+  jsonDoc["brightness"] = 0;    
+  female1.body.fill(jsonDoc);
+  delay(500);
+  
+  jsonDoc["r"] = 0;
+  jsonDoc["g"] = 0;
+  jsonDoc["b"] = 255;
+  jsonDoc["w"] = 0;
+  jsonDoc["brightness"] = 0;
+  female1.feet.fill(jsonDoc);
+  delay(500);
 }
 
 
