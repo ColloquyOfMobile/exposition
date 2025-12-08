@@ -96,6 +96,8 @@ void setup() {
   female1Strip.begin();
   female1Strip.show();
 
+  test1();
+
   Serial.begin(57600);
   // Each time the serial port is opened the Arduino is rebooted.
   // The arduino will be ready when client can read "Hello!" on the serial.
@@ -103,6 +105,36 @@ void setup() {
 }
 
 void loop() {
+  if (Serial.available()) {
+    String input = Serial.readStringUntil('\n');
+    processCommand(input);
+  }
+}
+
+void processCommand(const String& input) {
+  // Analyse du JSON
+  StaticJsonDocument<256> jsonDoc;
+  DeserializationError error = deserializeJson(jsonDoc, input);
+  if (error) {
+    return ;
+  }
+
+  if (!jsonDoc.containsKey("path")) return ;
+
+  String path = jsonDoc["path"];
+
+  if (path == "f1/head") {
+    return female1.head.fill(jsonDoc);
+  } else if (path == "f1/bodyO") {
+    return female1.bodyO.fill(jsonDoc);
+  } else if (path == "f1/bodyP") {
+    return female1.bodyP.fill(jsonDoc);
+  } else if (path == "f1/feet") {
+    return female1.feet.fill(jsonDoc);
+  }
+}
+
+void test1(){
   // Create a reusable JSON doc for test colors
   StaticJsonDocument<64> jsonDoc;
   
@@ -158,12 +190,11 @@ void loop() {
   
   jsonDoc["r"] = 0;
   jsonDoc["g"] = 0;
-  jsonDoc["b"] = 255;
+  jsonDoc["b"] = 0;
   jsonDoc["w"] = 0;
   female1.feet.fill(jsonDoc);
   delay(500);
 }
-
 
 
 
