@@ -15,56 +15,64 @@ public:
   Adafruit_NeoPixel* strip;
   int startPixel;
   int numPixels;
-  uint8_t brightness = 255;  // propre au groupe
 
   PixelGroup(Adafruit_NeoPixel* strip, int startPixel, int numPixels)
     : strip(strip), startPixel(startPixel), numPixels(numPixels) {}
 
-  void setBrightness(uint8_t b) {
-    brightness = b;
-  }
-
-  String fill(JsonDocument& doc) {
+  void fill(JsonDocument& doc) {
     for (int i = startPixel; i < startPixel + numPixels; i++) {
       int r = doc["r"] | 0;
       int g = doc["g"] | 0;
       int b = doc["b"] | 0;
       int w = doc["w"] | 0;
-      int newBrightness = doc["brightness"] | 255;
-      setBrightness(newBrightness);
       strip->setPixelColor(i,
                            strip->Color(
-                             scaleBrightness(r),
-                             scaleBrightness(g),
-                             scaleBrightness(b),
-                             scaleBrightness(w)));
+                             r,
+                             g,
+                             b,
+                             w));
     }
     strip->show();
-    return R"({"status": "success", "message": "Neopixel updated"})";
-  }
-
-  void clear() {
-    for (int i = startPixel; i < startPixel + numPixels; i++) {
-      strip->setPixelColor(i, 0);
-    }
-    strip->show();
-  }
-private:
-  uint8_t scaleBrightness(uint8_t value) {
-    return (uint16_t(value) * brightness) / 255;
   }
 };
 
+class PixelGroupForFemaleBody {
+public:
+  Adafruit_NeoPixel* strip;
+  int startPixel;
+  int numPixels;
+
+  PixelGroupForFemaleBody(Adafruit_NeoPixel* strip, int startPixel, int numPixels)
+    : strip(strip), startPixel(startPixel), numPixels(numPixels) {}
+
+  void fill(JsonDocument& doc) {
+    for (int i = startPixel; i < startPixel + numPixels; i += 2) {
+      int r = doc["r"] | 0;
+      int g = doc["g"] | 0;
+      int b = doc["b"] | 0;
+      int w = doc["w"] | 0;
+      strip->setPixelColor(i,
+                           strip->Color(
+                             r,
+                             g,
+                             b,
+                             w));
+    }
+    strip->show();
+  }
+};
 
 class Female {
 public:
   PixelGroup head;
-  PixelGroup body;
+  PixelGroupForFemaleBody bodyO;
+  PixelGroupForFemaleBody bodyP;
   PixelGroup feet;
 
-  Female(PixelGroup& head, PixelGroup& body, PixelGroup& feet)
+  Female(PixelGroup& head, PixelGroupForFemaleBody& bodyO, PixelGroupForFemaleBody& bodyP, PixelGroup& feet)
     : head(head),
-      body(body),
+      bodyO(bodyO),
+      bodyP(bodyP),
       feet(feet) {}
 };
 // ##########################################################
@@ -77,10 +85,11 @@ Adafruit_NeoPixel female1Strip(
   NEO_GRBW + NEO_KHZ800);
 
 PixelGroup head1(&female1Strip, 37, 13);
-PixelGroup body1(&female1Strip, 0, 28);
-PixelGroup feet1(&female1Strip, 37, 13);
+PixelGroupForFemaleBody bodyO1(&female1Strip, 0, 27);
+PixelGroupForFemaleBody bodyP1(&female1Strip, 1, 28);
+PixelGroup feet1(&female1Strip, 29, 7);
 
-Female female1(head1, body1, feet1);
+Female female1(head1, bodyO1, bodyP1, feet1);
 // ##########################################################
 
 void setup() {
@@ -101,48 +110,56 @@ void loop() {
   jsonDoc["g"] = 0;
   jsonDoc["b"] = 0;
   jsonDoc["w"] = 0;
-  jsonDoc["brightness"] = 255;
   female1.head.fill(jsonDoc);
+  delay(500);
+  
+  jsonDoc["r"] = 0;
+  jsonDoc["g"] = 0;
+  jsonDoc["b"] = 255;
+  jsonDoc["w"] = 0; 
+  female1.bodyO.fill(jsonDoc);
   delay(500);
   
   jsonDoc["r"] = 0;
   jsonDoc["g"] = 255;
   jsonDoc["b"] = 0;
   jsonDoc["w"] = 0;
-  jsonDoc["brightness"] = 255;    
-  female1.body.fill(jsonDoc);
+  female1.bodyP.fill(jsonDoc);
   delay(500);
   
-  jsonDoc["r"] = 0;
-  jsonDoc["g"] = 0;
-  jsonDoc["b"] = 255;
-  jsonDoc["w"] = 0;
-  jsonDoc["brightness"] = 255;
-  female1.feet.fill(jsonDoc);
-  delay(500);
-
-  // ------------------------------------------
   jsonDoc["r"] = 255;
   jsonDoc["g"] = 0;
   jsonDoc["b"] = 0;
   jsonDoc["w"] = 0;
-  jsonDoc["brightness"] = 0;
+  female1.feet.fill(jsonDoc);
+  delay(500);
+
+  // ------------------------------------------
+  jsonDoc["r"] = 0;
+  jsonDoc["g"] = 0;
+  jsonDoc["b"] = 0;
+  jsonDoc["w"] = 0;
   female1.head.fill(jsonDoc);
   delay(500);
   
   jsonDoc["r"] = 0;
-  jsonDoc["g"] = 255;
+  jsonDoc["g"] = 0;
   jsonDoc["b"] = 0;
-  jsonDoc["w"] = 0;
-  jsonDoc["brightness"] = 0;    
-  female1.body.fill(jsonDoc);
+  jsonDoc["w"] = 0; 
+  female1.bodyO.fill(jsonDoc);
+  delay(500);
+  
+  jsonDoc["r"] = 0;
+  jsonDoc["g"] = 0;
+  jsonDoc["b"] = 0;
+  jsonDoc["w"] = 0;  
+  female1.bodyP.fill(jsonDoc);
   delay(500);
   
   jsonDoc["r"] = 0;
   jsonDoc["g"] = 0;
   jsonDoc["b"] = 255;
   jsonDoc["w"] = 0;
-  jsonDoc["brightness"] = 0;
   female1.feet.fill(jsonDoc);
   delay(500);
 }
