@@ -55,6 +55,10 @@ class Colloquy(Base):
         # raise NotImplementedError#(f"{self=}, {key=}, {leftover=}")
 
     @property
+    def colloquy(self):
+        return self
+
+    @property
     def name(self):
         return "colloquy"
 

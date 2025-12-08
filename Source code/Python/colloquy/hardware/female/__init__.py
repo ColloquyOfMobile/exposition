@@ -80,6 +80,10 @@ class Female(Base):
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
+    def colloquy(self):
+        return self.owner.colloquy  
+
+    @property
     def id_number(self):
         return self._id_number   
 

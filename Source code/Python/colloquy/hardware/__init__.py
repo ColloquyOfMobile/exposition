@@ -65,6 +65,10 @@ class Hardware(Base):
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
+    def colloquy(self):
+        return self.owner.colloquy
+
+    @property
     def opened(self):
         return self._opened
 

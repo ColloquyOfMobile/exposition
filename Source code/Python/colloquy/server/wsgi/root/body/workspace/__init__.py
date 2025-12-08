@@ -14,10 +14,15 @@ class Workspace(Base):
     
     def __init__(self, owner):
         super().__init__(owner)
-        
+        self.opened = None
+        self._request = None
         self._hardware = self.owners[4].hardware
+                
+        for neopixel in self.hardware.neopixels:        
+            self[neopixel.name] = neopixel.html.handle_request
 
-    def __call__(self):
+    def __call__(self, request=None):
+        self._request = request
         try:   
             html = self._call_unsafe()        
         except Exception as exception:
@@ -42,9 +47,9 @@ class Workspace(Base):
     def name(self):
         return "workspace"
 
-    # @property
-    # def workspace(self):
-        # return self
+    @property
+    def workspace(self):
+        return self
 
     # @property
     # def params(self):
@@ -83,15 +88,32 @@ class Workspace(Base):
     # @property
     # def log(self):
         # return self._log
+    
+    
+
+    def handle_request(self, request):        
+        request = Path(request)
+        if not request.parts:
+            raise NotImplementedError
+            
+        key, *leftover = request.parts
+        
+        if key in self:
+            self[key](request="/".join(leftover))
+            return
+            
+        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")   
         
 
-    def _call_unsafe(self):   
+    def _call_unsafe(self):  
         doc, tag, text = CustomDoc().tagtext()
         with tag("div", style="display: flex; flex-direction: column;"):
-            for neopixel in self.hardware.neopixels:
-                with tag("div", id=neopixel.path.as_posix(), style="font-size: 1.2rem; margin-bottom: 0.5rem;"):
-                    with tag("strong"):
-                        text(f"{neopixel.body.name}/{neopixel.name}")
+            if self.opened is not None:
+                doc.asis(self.opened.html())
+                
+            for neopixel in self.hardware.neopixels:   
+                if neopixel is self.opened:
+                    continue
                 doc.asis(neopixel.html())
             
         return doc.getvalue()

@@ -4,16 +4,18 @@ from colloquy.base import Base
 from utils import CustomDoc
 from threading import Event
 from .toggle_on_off import ToggleOnOff
-#from .set_rgb import SetRGB
-# from .set_white import SetWhite
 from .parameter import Parameter
-# from .set_brightness import SetBrightness
+from .brightness import Brightness
+from .html import HTML
 
 class Neopixel(Base):
 
     def __init__(self, owner, name):
         self._name = name
         super().__init__(owner=owner)
+        self._is_open = False
+        
+        self._html = HTML(owner=self)
         
         self._toggle_on_off = ToggleOnOff(owner=self)
         
@@ -27,13 +29,16 @@ class Neopixel(Base):
         self._blue = Parameter(owner=self, name="blue")
         
         self._white = Parameter(owner=self, name="white")
-        self._brightness = Parameter(owner=self, name="brightness")
+        self._brightness = Brightness(owner=self, name="brightness")
         
         self[self.white.name] = self.white        
         self[self.brightness.name] = self.brightness
         self[self._red.name] = self._red
         self[self._green.name] = self._green
         self[self._blue.name] = self._blue
+        
+        self["open"] = self.open
+        self["close"] = self.close
 
     def __call__(self, request):
         request = Path(request)
@@ -46,7 +51,19 @@ class Neopixel(Base):
             self[key](request="/".join(leftover))
             return
             
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
+        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")  
+
+    @property
+    def colloquy(self):
+        return self.owner.colloquy
+        
+    @property
+    def workspace(self):
+        return self.colloquy.server.wsgi.root.body.workspace
+        
+    @property
+    def is_open(self):
+        return self._is_open   
 
     @property
     def arduino_path(self):
@@ -60,19 +77,7 @@ class Neopixel(Base):
 
     @property
     def toggle_on_off(self):
-        return self._toggle_on_off             
-
-    # @property
-    # def set_rgb(self):
-        # return self._set_rgb                 
-
-    # @property
-    # def set_brightness(self):
-        # return self._set_brightness            
-
-    # @property
-    # def set_white(self):
-        # return self._set_white   
+        return self._toggle_on_off   
         
     @property
     def arduino(self):
@@ -95,6 +100,10 @@ class Neopixel(Base):
             "white": self.white.value,
             "brightness": self.brightness.value,
         }
+    
+    @property
+    def html(self):
+        return self._html
     
     @property
     def brightness(self):
@@ -133,8 +142,15 @@ class Neopixel(Base):
         self.white.value = value["white"]
         self.update()
 
-    def open(self):
-        self.off()
+    def open(self, request):
+        if self.workspace.opened is not None:
+            self.workspace.opened.close()
+        self._is_open = True
+        self.workspace.opened = self
+
+    def close(self, request):
+        self._is_open = False
+        self.workspace.opened = None
 
     def configure(self, red, green, blue, white, brightness):
         self.red.value = red
@@ -148,11 +164,11 @@ class Neopixel(Base):
         if not self._on_off_state:
             return
         data = dict(
-            r = self.red.value,
-            g = self.green.value,
-            b = self.blue.value,
-            w = self.white.value,
-            brightness = self.brightness.value)
+            r = self._adjust_brightness(self.red.value),
+            g = self._adjust_brightness(self.green.value),
+            b = self._adjust_brightness(self.blue.value),
+            w = self._adjust_brightness(self.white.value)
+            )
         self.arduino.send(self.arduino_path, **data)
 
     def on(self, **kwargs):
@@ -164,8 +180,7 @@ class Neopixel(Base):
             r = 0,
             g = 0,
             b = 0,
-            w = 0,
-            brightness = 0,)
+            w = 0,)
         self.arduino.send(self.arduino_path, **data)
         self._on_off_state = False
 
@@ -186,27 +201,7 @@ class Neopixel(Base):
         if value:
             self.on()
         else:
-            self.off()
-
-    def hex_to_rgb(self, hex_value):
-        hex_value = hex_value.lstrip('#')  # Retire le #
-        if len(hex_value) != 6:
-            raise ValueError("La valeur hexadécimale doit contenir exactement 6 caractères.")
-        r = int(hex_value[0:2], 16)
-        g = int(hex_value[2:4], 16)
-        b = int(hex_value[4:6], 16)
-        return (r, g, b)
-
-    def html(self, ui_context = None):
-        doc, tag, text = CustomDoc().tagtext()
-        with tag("div"):
-            doc.asis(self.toggle_on_off.html())
-            doc.asis(self.white.html())
-            doc.asis(self.brightness.html())
-            doc.asis(self.red.html())
-            doc.asis(self.green.html())
-            doc.asis(self.blue.html())
-            # doc.asis(self.set_rgb.html())
-            # doc.asis(self.set_brightness.html())
-        
-        return doc.getvalue()
+            self.off()    
+    
+    def _adjust_brightness(self, value):
+        return int((value * self.brightness.value) / 100)
