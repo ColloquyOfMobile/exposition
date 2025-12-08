@@ -38,12 +38,12 @@ class Hardware(Base):
         self._moving_elements = []
         
         self._female1 = Female(owner=self, name="female1")
-        self._female2 = Female(owner=self, name="female2")
-        self._female3 = Female(owner=self, name="female3")
+        # self._female2 = Female(owner=self, name="female2")
+        # self._female3 = Female(owner=self, name="female3")
         self._females = [
             self._female1,
-            self._female2,
-            self._female3,
+            # self._female2,
+            # self._female3,
             ]
         
         for female in self._females:
