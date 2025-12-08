@@ -142,13 +142,13 @@ class Neopixel(Base):
         self.white.value = value["white"]
         self.update()
 
-    def open(self, request):
+    def open(self, request=None):
         if self.workspace.opened is not None:
             self.workspace.opened.close()
         self._is_open = True
         self.workspace.opened = self
 
-    def close(self, request):
+    def close(self, request=None):
         self._is_open = False
         self.workspace.opened = None
 

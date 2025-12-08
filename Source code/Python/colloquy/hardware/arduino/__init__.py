@@ -101,10 +101,10 @@ class Arduino(Base):
             self.port_handler.write(serialized_command.encode('utf-8'))  # Envoie de la commande
 
             data = self.port_handler.readline()  # Lit une ligne du port série
-        if not data:
-            raise TimeoutError("No response from Arduino.")
+        # if not data:
+            # raise TimeoutError("No response from Arduino.")
 
-        return self._parse(data)
+        return {} # self._parse("{}".encode())
 
     def _parse(self, data):
         """
