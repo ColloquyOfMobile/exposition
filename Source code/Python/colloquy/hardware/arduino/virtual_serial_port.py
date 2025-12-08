@@ -68,7 +68,8 @@ class VirtualSerialPort:
 
     def _load_possible_paths(self):
         """Read arduino code to extract the possible paths."""
-        path = Path("Source code/Arduino/colloquy_of_mobiles/colloquy_of_mobiles.ino")
+        # path = Path("Source code/Arduino/colloquy_of_mobiles/colloquy_of_mobiles.ino")
+        path = Path("Source code/Arduino/colloquy_of_mobiles_only_led/colloquy_of_mobiles_only_led.ino")
         text = path.read_text()
 
         # Expression régulière pour capturer les valeurs de path == "..."

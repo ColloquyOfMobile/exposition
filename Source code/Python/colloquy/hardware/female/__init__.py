@@ -4,7 +4,7 @@
 # from colloquy.light_sensor import LightSensor
 # from colloquy.microphone import Microphone
 # from colloquy.neopixel import Neopixel
-from .neopixels import HeadFemaleNeopixel, BodyFemaleNeopixel, FeetFemaleNeopixel
+from .neopixels import Head, BodyO, BodyP, Feet
 # from .female_drives import FemaleDrives
 # from .mirror import Mirror
 # from .search import Search
@@ -20,21 +20,24 @@ class Female(Base):
         # "sensor": LightSensor
     # }
 
-    def __init__(self, owner, name):
-        self._name = name
+    def __init__(self, owner, id_number):
+        self._name = f"female{id_number}"
+        self._id_number = id_number
         super().__init__(owner=owner)
         self._arduino = owner.arduino
         
         
         self._neopixels = []
         # self.neopixel = FemaleNeopixel(owner=self, name="neopixel")
-        self._head_neopixel = HeadFemaleNeopixel(owner=self)
-        self._body_neopixel = BodyFemaleNeopixel(owner=self)
-        self._feet_neopixel = FeetFemaleNeopixel(owner=self)
+        self._head = Head(owner=self)
+        self._body_o= BodyO(owner=self)
+        self._body_p = BodyP(owner=self)
+        self._feet = Feet(owner=self)
         
-        self[self._head_neopixel.name] = self._head_neopixel
-        self[self._body_neopixel.name] = self._body_neopixel
-        self[self._feet_neopixel.name] = self._feet_neopixel
+        self[self.head.name] = self.head
+        self[self.body_o.name] = self.body_o
+        self[self.body_p.name] = self.body_p
+        self[self.feet.name] = self.feet
         
         # self.drives = FemaleDrives(owner=self)
         # self.sensor = self._classes["sensor"](owner=self, name="sensor")
@@ -77,6 +80,10 @@ class Female(Base):
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
+    def id_number(self):
+        return self._id_number   
+
+    @property
     def female(self):
         return self   
 
@@ -89,16 +96,20 @@ class Female(Base):
         return self._arduino        
         
     @property
-    def head_neopixel(self):
-        return self._head_neopixel
+    def head(self):
+        return self._head
         
     @property
-    def body_neopixel(self):
-        return self._body_neopixel
+    def body_o(self):
+        return self._body_o
         
     @property
-    def feet_neopixel(self):
-        return self._feet_neopixel
+    def body_p(self):
+        return self._body_p
+        
+    @property
+    def feet(self):
+        return self._feet
     
     @property
     def name(self):
@@ -107,9 +118,10 @@ class Female(Base):
     @property
     def neopixels(self):
         neopixels = [
-            self.head_neopixel,
-            *self.body_neopixel.neopixels,
-            self.feet_neopixel,
+            self.head,
+            self.body_o,
+            self.body_p,
+            self.feet,
         ]
         return neopixels
     
@@ -147,9 +159,9 @@ class Female(Base):
 
     # def open(self):
         # Body.open(self)
-        # self.head_neopixel.open()
+        # self.head.open()
         # self.body_neopixel.open()
-        # self.feet_neopixel.open()
+        # self.feet.open()
         # self.mirror.open()
 
     # def notify_male(self):

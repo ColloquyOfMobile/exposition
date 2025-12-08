@@ -14,14 +14,8 @@ class Workspace(Base):
     
     def __init__(self, owner):
         super().__init__(owner)
-        # self._opened = None
-        # self._html = HTML(owner=self)
-        # self._action = Action(owner=self)
         
-        # self._params = Parameters(owner=self)
         self._hardware = self.owners[4].hardware
-        # self._exception = ExceptionHandler(owner=self) 
-        # self._tests = Tests(owner=self)
 
     def __call__(self):
         try:   
