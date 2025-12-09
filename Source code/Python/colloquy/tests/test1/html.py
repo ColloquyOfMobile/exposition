@@ -2,6 +2,7 @@
 from pathlib import Path
 from colloquy.base import Base
 from utils import CustomDoc
+import traceback
 
 class HTML(Base):
 
@@ -36,16 +37,19 @@ class HTML(Base):
                     doc.asis(self._svg_right_arrow())
                     
                 with tag("strong"):
-                    text(f"{self.owner.body.name}/{self.owner.name}")
+                    text(f"{self.owner.name}")
                     
         if self.is_open:
             with tag("div"):
-                doc.asis(self.owner.toggle_on_off.html())
-                doc.asis(self.owner.brightness.html())
-                doc.asis(self.owner.white.html())
-                doc.asis(self.owner.red.html())
-                doc.asis(self.owner.green.html())
-                doc.asis(self.owner.blue.html())
+                if self.owner.is_started:
+                    label = "stop"
+                else:
+                    label = "start"
+                    
+            href=f"/{self.owner.path.as_posix()}/{label}"
+            
+            with tag("a", href=href):
+                text(f"{label}")
         
         return doc.getvalue()    
         
@@ -72,6 +76,7 @@ class HTML(Base):
         self.tests.opened = self
 
     def close(self, request=None):
+        assert not self.owner.is_started
         self._is_open = False
         self.tests.opened = None    
 

@@ -31,7 +31,8 @@ class WSGI(Base):
         
         self["shutdown"] = self.commands.shutdown
         self["restart"] = self.commands.restart
-        self["hardware"] = self.owner.owner.hardware
+        self["hardware"] = self.owner.owner.hardware   
+        self["tests"] = self.colloquy.tests    
         # self["workspace"] = self.root.body.workspace.handle_request
 
     def __call__(self, environ, start_response):
@@ -45,6 +46,10 @@ class WSGI(Base):
         except Exception:
             self.events.shutdown.set()
             raise
+
+    @property
+    def colloquy(self):
+        return self.owner.colloquy
     
     @property
     def name(self):

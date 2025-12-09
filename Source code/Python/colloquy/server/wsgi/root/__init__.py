@@ -26,6 +26,10 @@ class Root(Base):
         return [html.encode()]
 
     @property
+    def colloquy(self):
+        return self.owner.colloquy
+
+    @property
     def server(self):
         return self._server
 

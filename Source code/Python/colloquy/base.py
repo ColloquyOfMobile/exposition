@@ -86,4 +86,21 @@ class Base:
         return True
     
     def add(self, element):
-        self[element.name] = element
+        self[element.name] = element  
+
+    def _svg_down_arrow(self):
+        doc, tag, text = CustomDoc().tagtext()
+        with tag('svg', width='16', height='16', viewBox='0 0 24 24', fill='none',
+             stroke='currentColor', **{'stroke-width': '2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round'}):
+            doc.stag('polyline', points='6 9 12 15 18 9')
+        
+        return doc.getvalue()
+
+
+    def _svg_right_arrow(self):
+        doc, tag, text = CustomDoc().tagtext()
+        with tag('svg', width='16', height='16', viewBox='0 0 24 24', fill='none',
+             stroke='currentColor', **{'stroke-width': '2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round'}):
+            doc.stag('polyline', points='9 6 15 12 9 18')
+        
+        return doc.getvalue()

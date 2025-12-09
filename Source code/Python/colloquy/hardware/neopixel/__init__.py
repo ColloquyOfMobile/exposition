@@ -131,18 +131,18 @@ class Neopixel(Base):
 
     @color.setter
     def color(self, value):
-        self.red.value = value["red"]
-        self.green.value = value["green"]
-        self.blue.value = value["blue"]
-        self.white.value = value["white"]
+        self.red.set_without_updating(value["red"])
+        self.green.set_without_updating(value["green"])
+        self.blue.set_without_updating(value["blue"])
+        self.white.set_without_updating(value["white"])
         self.update()
 
     def configure(self, red, green, blue, white, brightness):
-        self.red.value = red
-        self.green.value = green
-        self.blue.value = blue
-        self.white.value = white
-        self.brightness.value = brightness
+        self.red.set_without_updating(red)
+        self.green.set_without_updating(green)
+        self.blue.set_without_updating(blue)
+        self.white.set_without_updating(white)
+        self.brightness.set_without_updating(brightness)
         self.update()
 
     def update(self):
@@ -190,3 +190,6 @@ class Neopixel(Base):
     
     def _adjust_brightness(self, value):
         return int((value * self.brightness.value) / 100)
+    
+    def set_test_default(self):
+        raise NotImplementedError(self)

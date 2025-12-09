@@ -12,6 +12,7 @@ from .hardware import Hardware
 from .parameters import Parameters
 from .cli import CLI
 from .log import Log
+from .tests import Tests
         
 class Colloquy(Base):
     
@@ -25,6 +26,7 @@ class Colloquy(Base):
         self._params = Parameters(owner=self)
         
         self._hardware = Hardware(owner=self)
+        self._tests = Tests(owner=self)
         
         self._server = Server(owner=self)
         self._cli = CLI(owner=self)
@@ -53,6 +55,10 @@ class Colloquy(Base):
             # # return self[key]()
 
         # raise NotImplementedError#(f"{self=}, {key=}, {leftover=}")
+
+    @property
+    def tests(self):
+        return self._tests
 
     @property
     def colloquy(self):

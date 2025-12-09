@@ -29,6 +29,10 @@ class Body(Base):
         return html
 
     @property
+    def colloquy(self):
+        return self.owner.colloquy
+
+    @property
     def server(self):
         return self._server
 

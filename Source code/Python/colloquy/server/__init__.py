@@ -48,6 +48,10 @@ class Server(Base):
     @property
     def restarted(self):
         return self._restarted
+
+    @property
+    def colloquy(self):
+        return self.owner.colloquy
     
     def restart_process(self):        
         python = sys.executable

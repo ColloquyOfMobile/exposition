@@ -49,13 +49,16 @@ class Parameter(Base):
     
     @value.setter
     def value(self, value):
+        self.set_without_updating(value)        
+        self.neopixel.update()
+    
+    def set_without_updating(self, value):
         if value > 255:
             value = 255
         if value < 0:
             value = 0
         self._value = value
         
-        self.neopixel.update()
     
     def html(self):
         doc, tag, text = CustomDoc().tagtext()        
