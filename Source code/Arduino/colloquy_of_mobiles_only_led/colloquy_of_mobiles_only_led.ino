@@ -96,7 +96,7 @@ void setup() {
   female1Strip.begin();
   female1Strip.show();
 
-  test1();
+  // test1();
 
   Serial.begin(57600);
   // Each time the serial port is opened the Arduino is rebooted.
