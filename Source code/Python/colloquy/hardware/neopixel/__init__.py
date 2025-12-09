@@ -3,6 +3,7 @@ from pathlib import Path
 from colloquy.base import Base
 from utils import CustomDoc
 from threading import Event
+import traceback
 from .toggle_on_off import ToggleOnOff
 from .parameter import Parameter
 from .brightness import Brightness
@@ -13,7 +14,6 @@ class Neopixel(Base):
     def __init__(self, owner, name):
         self._name = name
         super().__init__(owner=owner)
-        self._is_open = False
         
         self._html = HTML(owner=self)
         
@@ -35,10 +35,9 @@ class Neopixel(Base):
         self[self.brightness.name] = self.brightness
         self[self._red.name] = self._red
         self[self._green.name] = self._green
-        self[self._blue.name] = self._blue
+        self[self._blue.name] = self._blue        
         
-        self["open"] = self.open
-        self["close"] = self.close
+        self[self.html.name] = self.html.handle_request
 
     def __call__(self, request):
         request = Path(request)
@@ -60,10 +59,6 @@ class Neopixel(Base):
     @property
     def workspace(self):
         return self.colloquy.server.wsgi.root.body.workspace
-        
-    @property
-    def is_open(self):
-        return self._is_open   
 
     @property
     def arduino_path(self):
@@ -141,16 +136,6 @@ class Neopixel(Base):
         self.blue.value = value["blue"]
         self.white.value = value["white"]
         self.update()
-
-    def open(self, request):
-        if self.workspace.opened is not None:
-            self.workspace.opened.close()
-        self._is_open = True
-        self.workspace.opened = self
-
-    def close(self, request):
-        self._is_open = False
-        self.workspace.opened = None
 
     def configure(self, red, green, blue, white, brightness):
         self.red.value = red

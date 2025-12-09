@@ -45,6 +45,8 @@ class Hardware(Base):
             # self._female2,
             # self._female3,
             ]
+            
+        self[self.arduino.name] = self.arduino
         
         for female in self._females:
             self[female.name] = female

@@ -35,17 +35,23 @@ class HTML(Base):
                 else:
                     doc.asis(self._svg_right_arrow())
                     
-                with tag("strong"):
-                    text(f"{self.owner.body.name}/{self.owner.name}")
+                with tag("strong"):                    
+                    if self.owner.is_open:
+                        label = "open"
+                    else:                    
+                        label = "close" 
+                    text(f"{self.owner.name}, (Port is {label})")
                     
         if self.is_open:
             with tag("div"):
-                doc.asis(self.owner.toggle_on_off.html())
-                doc.asis(self.owner.brightness.html())
-                doc.asis(self.owner.white.html())
-                doc.asis(self.owner.red.html())
-                doc.asis(self.owner.green.html())
-                doc.asis(self.owner.blue.html())
+                if self.owner.is_open:
+                    label = "close"
+                else:                    
+                    label = "open"
+                
+                href=f"/{self.owner.path.as_posix()}/{label}"
+                with tag("a", href=href):
+                    text(f"{label} port")
         
         return doc.getvalue()    
         
@@ -65,7 +71,7 @@ class HTML(Base):
     def workspace(self):
         return self.colloquy.server.wsgi.root.body.workspace
 
-    def open(self, request):
+    def open(self, request=None):
         if self.workspace.opened is not None:
             self.workspace.opened.close()
         self._is_open = True
@@ -76,9 +82,6 @@ class HTML(Base):
         self.workspace.opened = None    
 
     def handle_request(self, request):
-        # request = self._request
-        # if request is None:
-            # return
         request = Path(request)
         if not request.parts:
             raise NotImplementedError

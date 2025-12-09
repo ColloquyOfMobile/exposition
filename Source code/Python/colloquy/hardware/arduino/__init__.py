@@ -1,11 +1,13 @@
 import serial
 import serial.tools.list_ports
 from pathlib import Path
+from utils import CustomDoc
 import json
 from time import sleep, time
 from threading import Lock
 from colloquy.base import Base
 from .virtual_serial_port import VirtualSerialPort
+from .html import HTML
 
 START = time()
 
@@ -24,7 +26,25 @@ class Arduino(Base):
         self._log = owner.log
         self.lock = Lock()
         self._port_handler = None
-        self._was_open = None
+        self._was_open = None        
+        self._html = HTML(owner=self)
+        
+        self[self.html.name] = self.html.handle_request
+        self["open"] = self.open
+        self["close"] = self.close
+
+    def __call__(self, request):
+        request = Path(request)
+        if not request.parts:
+            raise NotImplementedError
+            
+        key, *leftover = request.parts
+        
+        if key in self:
+            self[key](request="/".join(leftover))
+            return
+            
+        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}") 
 
     def __enter__(self):
         self._was_open = is_open = self.port_handler.is_open
@@ -34,6 +54,18 @@ class Arduino(Base):
     def __exit__(self, *args, **kwargs):
         if not self._was_open:
             self.close()
+
+    @property
+    def is_open(self):
+        return self.port_handler.is_open
+
+    @property
+    def colloquy(self):
+        return self.owner.colloquy
+    
+    @property
+    def html(self):
+        return self._html
 
     @property
     def log(self):
@@ -69,16 +101,7 @@ class Arduino(Base):
 
     def send(self, path, **data):
         with self:
-            return self._send_unsafe(path, **data)
-        # self._was_open = is_open = self.port_handler.is_open
-        # if not is_open:
-            # self.open()
-        # try:
-            # return self._send_unsafe(path, **data)
-        # finally:
-            # if not self._was_open:
-                # self.close()
-            
+            return self._send_unsafe(path, **data)            
 
     def send_yield(self, path, **data):
         command = {"path": str(path), **data}
@@ -128,13 +151,13 @@ class Arduino(Base):
         self.log(f"response={data}")
         return data
 
-    def close(self):
+    def close(self, request=None):
         """
         Ferme le port série.
         """
         self.port_handler.close()
 
-    def open(self):
+    def open(self, request=None):
         """
         Ouvre le port série.
         """
@@ -152,9 +175,7 @@ class Arduino(Base):
             if time()-start > 2:
                 raise RuntimeError("Arduino was to long to reboot !")
 
-    def add_html(self):
-        if not self.hardware.is_connected:
-            self._add_html_com()
+    
 
     def _get_com_ports(self):
         return [
@@ -191,10 +212,4 @@ class Arduino(Base):
             self.hardware.actions["arduino/com_port/set"] = self._set_com_port  
         
 
-# class HTML(_HTML):
     
-        
-    # def _call_unsafe(self,):          
-        # doc, tag, text = self.doc.tagtext()        
-        # with tag("h4"):
-            # text(f"{self.owner.name}")  

@@ -21,8 +21,8 @@ class Workspace(Base):
         for neopixel in self.hardware.neopixels:        
             self[neopixel.name] = neopixel.html.handle_request
 
-    def __call__(self, request=None):
-        self._request = request
+    def __call__(self):
+        # self._request = request
         try:   
             html = self._call_unsafe()        
         except Exception as exception:
@@ -109,10 +109,12 @@ class Workspace(Base):
         doc, tag, text = CustomDoc().tagtext()
         with tag("div", style="display: flex; flex-direction: column;"):
             if self.opened is not None:
-                doc.asis(self.opened.html())
+                doc.asis(self.opened())
                 
+            if self.hardware.arduino.html is not self.opened:
+                doc.asis(self.hardware.arduino.html())
             for neopixel in self.hardware.neopixels:   
-                if neopixel is self.opened:
+                if neopixel.html is self.opened:
                     continue
                 doc.asis(neopixel.html())
             
