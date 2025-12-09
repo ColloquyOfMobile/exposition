@@ -63,7 +63,7 @@ class Test1(Base):
         thread.start()
 
     def stop(self, request=None):
-        if self._thread is not None:
+        if self._thread is None:
             return
         self._stop_event.set()
         self._thread.join()
