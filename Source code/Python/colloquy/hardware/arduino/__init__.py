@@ -127,7 +127,7 @@ class Arduino(Base):
         with self.lock:
             self.port_handler.write(serialized_command.encode('utf-8'))  # Envoie de la commande
 
-            data = self.port_handler.readline()  # Lit une ligne du port série
+            # data = self.port_handler.readline()  # Lit une ligne du port série
         # if not data:
             # raise TimeoutError("No response from Arduino.")
 
