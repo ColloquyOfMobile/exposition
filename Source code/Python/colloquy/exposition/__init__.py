@@ -13,7 +13,6 @@ class Exposition(Base):
         super().__init__(owner)
         self._html = HTML(owner=self)
         self._hardware = self.owner.hardware
-        self._is_started = False
         self._thread = None
         self._stop_event = Event()
         
@@ -62,8 +61,9 @@ class Exposition(Base):
         self.stop()
 
     def start(self, request=None):
-        for drive in self.hardware.drives:
-            drive.start()
+        self.hardware.arduino.open()
+        for bodies in self.hardware.bodies:
+            bodies.drives.start()
 
     def stop(self, request=None):
         self.hardware.shutdown()

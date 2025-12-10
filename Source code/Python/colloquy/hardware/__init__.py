@@ -167,6 +167,7 @@ class Hardware(Base):
         return any(element.is_started for element in self._threaded_elements)
     
     def shutdown(self):
-        for element in self._threaded_elements:
-            element.shutdown()
+        with self.arduino:
+            for element in self._threaded_elements:
+                element.shutdown()
         self.arduino.close()

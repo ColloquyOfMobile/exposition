@@ -53,6 +53,18 @@ class Neopixel(Base):
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")  
 
     @property
+    def puce(self):
+        return dict(red=160, green=180, blue=0, white=40)
+
+    @property
+    def orange(self):
+        return dict(red=255, green=80, blue=25, white=16)
+
+    @property
+    def white(self):
+        return dict(red=0, green=0, blue=0, white=255)
+
+    @property
     def colloquy(self):
         return self.owner.colloquy
         
@@ -62,13 +74,7 @@ class Neopixel(Base):
 
     @property
     def arduino_path(self):
-        raise NotImplementedError(f"{self=}")        
-
-    @property
-    def body(self):
-        if self._body is None:
-            raise NotImplementedError(f"{self=}")
-        return self._body        
+        raise NotImplementedError(f"{self=}")            
 
     @property
     def toggle_on_off(self):

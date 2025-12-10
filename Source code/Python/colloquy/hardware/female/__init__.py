@@ -5,6 +5,7 @@
 # from colloquy.microphone import Microphone
 # from colloquy.neopixel import Neopixel
 from .neopixels import Head, BodyO, BodyP, Feet
+from .drives import Drives
 # from .female_drives import FemaleDrives
 # from .mirror import Mirror
 # from .search import Search
@@ -25,10 +26,8 @@ class Female(Base):
         self._id_number = id_number
         super().__init__(owner=owner)
         self._arduino = owner.arduino
-
-        self._threaded_elements = set()
         
-        self._drives = []
+        self._drives = Drives(owner=self)
         
         
         self._neopixels = []
@@ -42,33 +41,10 @@ class Female(Base):
         self[self.body_o.name] = self.body_o
         self[self.body_p.name] = self.body_p
         self[self.feet.name] = self.feet
-        
-        # self.drives = FemaleDrives(owner=self)
-        # self.sensor = self._classes["sensor"](owner=self, name="sensor")
-        # self.microphone = Microphone(owner=self)
 
-        # self._search = Search(owner=self)
-        # self._conversation = Conversation(owner=self)
-        # self._is_notifing = False
-        # self._emulate_light_sensor = None
-
-        # dxl_manager = kwargs["dynamixel manager"]
-        # dxl_id = kwargs["dynamixel id"]
-        # origin = kwargs["origin"]
-
-
-        # mirror_kwargs = kwargs.get("mirror")
-        # self.mirror = None
-        # if mirror_kwargs:
-            # mirror_kwargs["dynamixel manager"] = dxl_manager
-            # self.mirror = Mirror(owner=self, **mirror_kwargs)
-        # self._target_drive = None
-        # self._male_target_drive = None
-
-    # def __enter__(self):
-        # assert self.dxl_origin is not None, "Calibrate hardware."
-        # self.stop_event.clear()
-        # self.drives.start()
+        self._threaded_elements = {
+            *self._drives,
+        }
 
     def __call__(self, request):
         request = Path(request)
@@ -82,6 +58,10 @@ class Female(Base):
             return
             
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
+    
+    @property
+    def is_started(self):
+        return any(element.is_started for element in self._threaded_elements)
 
     @property
     def drives(self):
@@ -143,6 +123,8 @@ class Female(Base):
     
     def shutdown(self):
         with self.arduino:
+            for element in self._threaded_elements:
+                element.shutdown()
             for neopixel in self.neopixels:
                 neopixel.off()
     

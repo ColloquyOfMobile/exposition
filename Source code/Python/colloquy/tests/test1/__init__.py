@@ -12,9 +12,7 @@ class Test1(Base):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
-        self._is_started = False
         self._thread = None
-        self._loop_index = 0
         self._stop_event = Event()
         
         self[self.html.name] = self.html.handle_request
@@ -61,7 +59,6 @@ class Test1(Base):
 
     def start(self, request=None):
         self._stop_event.clear()
-        self._loop_index = 0
         self._thread = thread = Thread(target=self.run, name=self.path.as_posix())
         thread.start()
 

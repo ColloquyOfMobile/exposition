@@ -10,4 +10,5 @@ class Log(Base):
         super().__init__(owner=owner)
     
     def __call__(self, msg):
-        print(f"{self.owner.name}: {msg}")
+        pass
+        # print(f"{self.owner.name}: {msg}")
