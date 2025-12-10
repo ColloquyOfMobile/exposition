@@ -110,17 +110,31 @@ Adafruit_NeoPixel female3Strip(
   FEMALE3_NEOPIXEL_PIN,
   NEO_GRBW + NEO_KHZ800);
 
-PixelGroup head3(&female2Strip, 37, 13);
+PixelGroup head3(&female3Strip, 37, 13);
 PixelGroupForFemaleBody bodyO3(&female3Strip, 0, 27);
 PixelGroupForFemaleBody bodyP3(&female3Strip, 1, 28);
-PixelGroup feet3(&female2Strip, 29, 7);
+PixelGroup feet3(&female3Strip, 29, 7);
 
 Female female3(head3, bodyO3, bodyP3, feet3);
+
+Female females[] = {
+  female1,
+  female2,
+  female3
+};
 // ##########################################################
 
 void setup() {
-  female1Strip.begin();
-  female1Strip.show();
+  for (auto& f : females) {
+    f.head.strip -> begin();
+    f.head.strip -> show();
+  }
+  // female1Strip.begin();
+  // female1Strip.show();
+  // female1Strip.begin();
+  // female1Strip.show();
+  // female1Strip.begin();
+  // female1Strip.show();
 
   Serial.begin(57600);
   // Each time the serial port is opened the Arduino is rebooted.
