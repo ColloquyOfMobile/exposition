@@ -20,37 +20,40 @@ class Hardware(Base):
         self._log = owner.log     
         
         self._opened = None
-        # self._html = HTML(owner=self)
         self._commands = Commands(owner=self)
-        # self._log = Logger(owner=self)
         
         
         self._arduino = Arduino(owner=self)
         self._u2d2 = U2D2(owner=self)
-        # self._neopixels = Neopixels(owner=self)
         self._bar = None
         
-        # self._threads = set()
         
         self._mirrors = []
+        self._drives = []
         self._males = []
         self._speakers = []
         self._moving_elements = []
         
         self._female1 = Female(owner=self, id_number=1)
-        # self._female2 = Female(owner=self, name="female2")
-        # self._female3 = Female(owner=self, name="female3")
+        self._female2 = Female(owner=self, id_number=2)
+        self._female3 = Female(owner=self, id_number=3)
         self._females = [
             self._female1,
-            # self._female2,
-            # self._female3,
+            self._female2,
+            self._female3,
             ]
             
         self[self.arduino.name] = self.arduino
         
         for female in self._females:
             self[female.name] = female
+            self.drives.extend(female.drives)
 
+        self._threaded_elements = {
+            *self.females,
+            *self.males,
+            # bar
+            }
     
 
     def __call__(self, request):
@@ -82,6 +85,10 @@ class Hardware(Base):
                 self._opened.close()
                 
         self._opened = value
+
+    @property
+    def drives(self):
+        return self._drives
 
     @property
     def html(self):
@@ -140,9 +147,7 @@ class Hardware(Base):
         return self._moving_elements
     
     @property
-    def neopixels(self):
-        # return self._neopixels
-        
+    def neopixels(self):        
         neopixels = []
         for body in self.bodies:
             neopixels.extend(body.neopixels)
@@ -157,7 +162,11 @@ class Hardware(Base):
             bodies.append(body)
         return bodies
     
+    @property
+    def is_started(self):
+        return any(element.is_started for element in self._threaded_elements)
+    
     def shutdown(self):
-        with self.arduino:
-            for neopixel in self.neopixels:
-                neopixel.off()
+        for element in self._threaded_elements:
+            element.shutdown()
+        self.arduino.close()

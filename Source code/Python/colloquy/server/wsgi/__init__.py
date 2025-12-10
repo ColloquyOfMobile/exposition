@@ -31,8 +31,9 @@ class WSGI(Base):
         
         self["shutdown"] = self.commands.shutdown
         self["restart"] = self.commands.restart
-        self["hardware"] = self.owner.owner.hardware   
-        self["tests"] = self.colloquy.tests    
+        self["hardware"] = self.colloquy.hardware   
+        self["tests"] = self.colloquy.tests     
+        self["exposition"] = self.colloquy.exposition   
         # self["workspace"] = self.root.body.workspace.handle_request
 
     def __call__(self, environ, start_response):

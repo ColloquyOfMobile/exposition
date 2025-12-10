@@ -13,6 +13,7 @@ from .parameters import Parameters
 from .cli import CLI
 from .log import Log
 from .tests import Tests
+from .exposition import Exposition
         
 class Colloquy(Base):
     
@@ -27,6 +28,7 @@ class Colloquy(Base):
         
         self._hardware = Hardware(owner=self)
         self._tests = Tests(owner=self)
+        self._exposition = Exposition(owner=self)
         
         self._server = Server(owner=self)
         self._cli = CLI(owner=self)
@@ -35,26 +37,6 @@ class Colloquy(Base):
         self["hardware"] = self._hardware
                
         self._events = Events()
-    
-    # def __call__(self):
-        # # if args:
-            # # path, *args = args
-            # # request = Path(path)
-        # # else:
-            # # request = Path()
-
-        # # self._request = request
-        # # self._args = args
-        
-        # # if not request.parts:
-            # # return self._call_root()
-
-        # # key, *leftover = self.request.parts
-        
-        # # if key in self:
-            # # return self[key]()
-
-        # raise NotImplementedError#(f"{self=}, {key=}, {leftover=}")
 
     @property
     def tests(self):
@@ -91,9 +73,17 @@ class Colloquy(Base):
     @property
     def cli(self):
         return self._cli
+    
+    @property
+    def exposition(self):
+        return self._exposition
 
     def run(self, ):
         return self.server()
+    
+    def shutdown(self):
+        self.tests.shutdown()
+        self.hardware.shutdown()
         
     def _call_root(self):
         print("Available command:")

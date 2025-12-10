@@ -20,7 +20,7 @@ class HTML(Base):
         except Exception as exception:
             html = self._call_if_error()
             
-        return html
+        return html  
         
     @property
     def is_open(self):
@@ -31,17 +31,13 @@ class HTML(Base):
         return "html" 
 
     @property
-    def hardware(self):
-        return self.owner.hardware
-
-    @property
     def colloquy(self):
         return self.owner.colloquy
         
     @property
     def workspace(self):
-        return self.colloquy.server.wsgi.root.body.workspace
-
+        return self.owner.workspace
+        
     def open(self, request):
         if self.workspace.opened is not None:
             self.workspace.opened.close()
@@ -50,7 +46,7 @@ class HTML(Base):
 
     def close(self, request=None):
         self._is_open = False
-        self.workspace.opened = None    
+        self.workspace.opened = None     
 
     def handle_request(self, request):
         request = Path(request)
@@ -81,38 +77,29 @@ class HTML(Base):
                 with tag("strong"):          
                     text(f"{self.owner.name}")
         return doc.getvalue()
-        
-
+    
     def _call_unsafe(self):  
         doc, tag, text = CustomDoc().tagtext()
         doc.asis(self._html_title())
-        
-        if not self.is_open:
-            return doc.getvalue()
+        if self.is_open:
+            with tag("div"):
+                if self.owner.is_started:
+                    label = "stop"
+                else:
+                    label = "start"
+                    
+            href=f"/{self.owner.path.as_posix()}/{label}"
             
-        with tag("div", style="display: flex; flex-direction: column;"):
-            if self.owner.opened is not None:
-                doc.asis(self.owner.opened())
-                
-            if self.hardware.arduino.html is not self.owner.opened:
-                doc.asis(self.hardware.arduino.html())
-                
-            if self.owner.test1.html is not self.owner.opened:
-                doc.asis(self.owner.test1.html())
-                
-                
-                
-            for neopixel in self.hardware.neopixels:   
-                if neopixel.html is self.owner.opened:
-                    continue
-                doc.asis(neopixel.html())
+            with tag("a", href=href):
+                text(f"{label}")
+            
+            # doc.asis(self.tests.html())
             
         return doc.getvalue()
     
     def _call_if_error(self):
         doc, tag, text = CustomDoc().tagtext()  
-        # .events.shutdown.set()
-        with tag("body"):
+        with tag("div"):
             with tag("h1"):
                 text(f"Error html for {self.name}!")
                                 
@@ -122,4 +109,4 @@ class HTML(Base):
                     with tag("pre", style=style):
                         text(line)
         
-        return doc.getvalue() 
+        return doc.getvalue()

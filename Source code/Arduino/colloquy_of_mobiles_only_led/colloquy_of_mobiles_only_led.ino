@@ -90,13 +90,35 @@ PixelGroupForFemaleBody bodyP1(&female1Strip, 1, 28);
 PixelGroup feet1(&female1Strip, 29, 7);
 
 Female female1(head1, bodyO1, bodyP1, feet1);
+
+Adafruit_NeoPixel female2Strip(
+  FEMALE_NUM_PIXELS,
+  FEMALE1_NEOPIXEL_PIN,
+  NEO_GRBW + NEO_KHZ800);
+
+PixelGroup head2(&female2Strip, 37, 13);
+PixelGroupForFemaleBody bodyO2(&female2Strip, 0, 27);
+PixelGroupForFemaleBody bodyP2(&female2Strip, 1, 28);
+PixelGroup feet2(&female2Strip, 29, 7);
+
+Female female2(head2, bodyO2, bodyP2, feet2);
+
+Adafruit_NeoPixel female3Strip(
+  FEMALE_NUM_PIXELS,
+  FEMALE1_NEOPIXEL_PIN,
+  NEO_GRBW + NEO_KHZ800);
+
+PixelGroup head3(&female2Strip, 37, 13);
+PixelGroupForFemaleBody bodyO3(&female3Strip, 0, 27);
+PixelGroupForFemaleBody bodyP3(&female3Strip, 1, 28);
+PixelGroup feet3(&female2Strip, 29, 7);
+
+Female female3(head3, bodyO3, bodyP3, feet3);
 // ##########################################################
 
 void setup() {
   female1Strip.begin();
   female1Strip.show();
-
-  // test1();
 
   Serial.begin(57600);
   // Each time the serial port is opened the Arduino is rebooted.
@@ -132,68 +154,26 @@ void processCommand(const String& input) {
   } else if (path == "f1/feet") {
     return female1.feet.fill(jsonDoc);
   }
-}
 
-void test1(){
-  // Create a reusable JSON doc for test colors
-  StaticJsonDocument<64> jsonDoc;
-  
-  jsonDoc["r"] = 255;
-  jsonDoc["g"] = 0;
-  jsonDoc["b"] = 0;
-  jsonDoc["w"] = 0;
-  female1.head.fill(jsonDoc);
-  delay(500);
-  
-  jsonDoc["r"] = 0;
-  jsonDoc["g"] = 0;
-  jsonDoc["b"] = 255;
-  jsonDoc["w"] = 0; 
-  female1.bodyO.fill(jsonDoc);
-  delay(500);
-  
-  jsonDoc["r"] = 0;
-  jsonDoc["g"] = 255;
-  jsonDoc["b"] = 0;
-  jsonDoc["w"] = 0;
-  female1.bodyP.fill(jsonDoc);
-  delay(500);
-  
-  jsonDoc["r"] = 255;
-  jsonDoc["g"] = 0;
-  jsonDoc["b"] = 0;
-  jsonDoc["w"] = 0;
-  female1.feet.fill(jsonDoc);
-  delay(500);
+  if (path == "f2/head") {
+    return female2.head.fill(jsonDoc);
+  } else if (path == "f2/bodyO") {
+    return female2.bodyO.fill(jsonDoc);
+  } else if (path == "f2/bodyP") {
+    return female2.bodyP.fill(jsonDoc);
+  } else if (path == "f2/feet") {
+    return female2.feet.fill(jsonDoc);
+  }
 
-  // ------------------------------------------
-  jsonDoc["r"] = 0;
-  jsonDoc["g"] = 0;
-  jsonDoc["b"] = 0;
-  jsonDoc["w"] = 0;
-  female1.head.fill(jsonDoc);
-  delay(500);
-  
-  jsonDoc["r"] = 0;
-  jsonDoc["g"] = 0;
-  jsonDoc["b"] = 0;
-  jsonDoc["w"] = 0; 
-  female1.bodyO.fill(jsonDoc);
-  delay(500);
-  
-  jsonDoc["r"] = 0;
-  jsonDoc["g"] = 0;
-  jsonDoc["b"] = 0;
-  jsonDoc["w"] = 0;  
-  female1.bodyP.fill(jsonDoc);
-  delay(500);
-  
-  jsonDoc["r"] = 0;
-  jsonDoc["g"] = 0;
-  jsonDoc["b"] = 0;
-  jsonDoc["w"] = 0;
-  female1.feet.fill(jsonDoc);
-  delay(500);
+  if (path == "f3/head") {
+    return female3.head.fill(jsonDoc);
+  } else if (path == "f3/bodyO") {
+    return female3.bodyO.fill(jsonDoc);
+  } else if (path == "f3/bodyP") {
+    return female3.bodyP.fill(jsonDoc);
+  } else if (path == "f3/feet") {
+    return female3.feet.fill(jsonDoc);
+  }
 }
 
 

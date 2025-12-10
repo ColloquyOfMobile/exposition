@@ -25,6 +25,10 @@ class Female(Base):
         self._id_number = id_number
         super().__init__(owner=owner)
         self._arduino = owner.arduino
+
+        self._threaded_elements = set()
+        
+        self._drives = []
         
         
         self._neopixels = []
@@ -80,6 +84,10 @@ class Female(Base):
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
+    def drives(self):
+        return self._drives
+
+    @property
     def colloquy(self):
         return self.owner.colloquy  
 
@@ -128,6 +136,15 @@ class Female(Base):
             self.feet,
         ]
         return neopixels
+    
+    @property
+    def is_started(self):
+        return any(element.is_started for element in self._threaded_elements)
+    
+    def shutdown(self):
+        with self.arduino:
+            for neopixel in self.neopixels:
+                neopixel.off()
     
     # @property
     # def emulate_light_sensor(self):

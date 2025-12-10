@@ -28,7 +28,7 @@ class Arduino(Base):
         self._port_handler = None
         self._was_open = None        
         self._html = HTML(owner=self)
-        self._in_used = False
+        self._context_depth = 0
         
         self[self.html.name] = self.html.handle_request
         self["open"] = self.open
@@ -48,18 +48,15 @@ class Arduino(Base):
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}") 
 
     def __enter__(self):
-        if self._in_used:
-            raise NotImplementedError("Handle the case when already in a context (counter maybe)")
-            
-        self._in_used = True
-        
-        self._was_open = is_open = self.port_handler.is_open
-        if not is_open:
-            self.open()
+        if self._context_depth == 0:
+            self._was_open = self.port_handler.is_open
+            if not self._was_open:
+                self.open()
+        self._context_depth += 1
 
     def __exit__(self, *args, **kwargs):
-        self._in_used = False        
-        if not self._was_open:
+        self._context_depth -= 1     
+        if self._context_depth == 0 and not self._was_open:
             self.close()
 
     @property

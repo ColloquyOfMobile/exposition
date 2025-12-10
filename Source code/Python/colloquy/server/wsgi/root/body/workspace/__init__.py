@@ -1,12 +1,8 @@
-# from colloquy.wsgi.root.body.action_item import ActionItem
 import traceback
 from colloquy.base import Base
 from pathlib import Path
 import traceback
 from utils import CustomDoc
-# from .html import HTML
-# from .parameters import Parameters
-# from .hardware import Hardware
 
 class Workspace(Base):
     
@@ -14,6 +10,7 @@ class Workspace(Base):
         super().__init__(owner)
         self.opened = None
         self._hardware = self.owners[4].hardware
+        self._exposition = self.colloquy.exposition
 
     def __call__(self):
         try:   
@@ -42,6 +39,10 @@ class Workspace(Base):
     @property
     def tests(self):
         return self.colloquy.tests
+
+    @property
+    def exposition(self):
+        return self._exposition
         
 
     def _call_unsafe(self):  
@@ -52,6 +53,7 @@ class Workspace(Base):
                 return doc.getvalue()
             
             doc.asis(self.tests.html())
+            doc.asis(self.exposition.html())
             
         return doc.getvalue()
     

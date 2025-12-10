@@ -3,27 +3,23 @@ import traceback
 from colloquy.base import Base
 from pathlib import Path
 import traceback
-from utils import CustomDoc
+from threading import Thread, Event, Lock
 from .html import HTML
-from .test1 import Test1
+from utils import CustomDoc
 
-class Tests(Base):
+class Exposition(Base):
     
     def __init__(self, owner):
         super().__init__(owner)
-        self.opened = None
-        
         self._html = HTML(owner=self)
-        self._test1 = Test1(owner=self)
         self._hardware = self.owner.hardware
+        self._is_started = False
+        self._thread = None
+        self._stop_event = Event()
         
         self[self.html.name] = self.html.handle_request
-        self.add(self.test1)
-                
-        for neopixel in self.hardware.neopixels:        
-            self[neopixel.name] = neopixel.html.handle_request
-        
-        self._threaded_tests = {self.test1}
+        self["start"] = self.start
+        self["stop"] = self.stop
 
     def __call__(self, request):
         request = Path(request)
@@ -36,32 +32,39 @@ class Tests(Base):
             self[key](request="/".join(leftover))
             return
             
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")   
-    
+        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
+
     @property
-    def colloquy(self):
-        return self.owner.colloquy    
-    
-    @property
-    def test1(self):
-        return self._test1
-        
+    def is_started(self):        
+        return self.hardware.is_started
+
     @property
     def html(self):
         return self._html
 
     @property
     def name(self):
-        return "tests"
+        return "exposition"
 
     @property
     def workspace(self):
-        return self
+        return self.colloquy.server.wsgi.root.body.workspace
 
     @property
     def hardware(self):
         return self._hardware
+
+    @property
+    def colloquy(self):
+        return self.owner.colloquy
     
     def shutdown(self):
-        for test in self._threaded_tests:
-            test.shutdown()
+        self.stop()
+
+    def start(self, request=None):
+        for drive in self.hardware.drives:
+            drive.start()
+
+    def stop(self, request=None):
+        self.hardware.shutdown()
+    

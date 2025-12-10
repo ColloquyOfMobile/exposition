@@ -55,6 +55,9 @@ class Test1(Base):
     @property
     def html(self):
         return self._html
+    
+    def shutdown(self):
+        self.stop()
 
     def start(self, request=None):
         self._stop_event.clear()
