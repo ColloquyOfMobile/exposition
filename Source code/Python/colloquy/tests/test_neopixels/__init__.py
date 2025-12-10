@@ -33,8 +33,8 @@ class TestNeopixels(Base):
 
 
 # class HTML(_HTML):
-    
-    # def _call_body(self):       
+
+    # def _call_body(self):
         # pass
         # # self._test_neopixel_consumption.write_html()
         # # self._test_neopixel_communication.write_html()

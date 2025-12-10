@@ -37,7 +37,7 @@ class MaleDriver(Body):
         self._conversation = Conversation(owner=self)
 
         self.drives = MaleDrives(
-            owner=self, 
+            owner=self,
             )
 
     def open(self):

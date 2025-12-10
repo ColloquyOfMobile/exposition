@@ -25,7 +25,7 @@ class Search(ThreadElement):
     def microphone(self):
         return self.owner.microphone
 
-    def _loop(self):        
+    def _loop(self):
         with self.hardware.lock:
             if not self.hardware.bar.search.is_started:
                 if self.hardware.interaction is None:
@@ -138,7 +138,7 @@ class Blink(ThreadElement):
             self._add_html_start()
         else:
             self._add_html_stop()
-            
+
         self.drives.add_html()
 
     def _add_html_start(self):

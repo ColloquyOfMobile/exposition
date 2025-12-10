@@ -55,7 +55,7 @@ class Hardware(ThreadElement):
         self._init_bar(params)
 
         self.interactions = Interactions(owner=self)
-        
+
         self.bodies = [
             *self.females,
             *self.males,
@@ -87,7 +87,7 @@ class Hardware(ThreadElement):
         self.wait_until_everything_is_still()
         self._dxl_manager.stop()
         return result
-    
+
     @property
     def params(self):
         return self.owner.params
@@ -95,7 +95,7 @@ class Hardware(ThreadElement):
     @property
     def near_origin_threashold(self):
         return self.owner.near_origin_threashold
-    
+
 
     @property
     def lock(self):
@@ -169,7 +169,7 @@ class Hardware(ThreadElement):
         print(f"Waiting until everything is still...")
         while self.is_something_moving():
             sleep(0.5)
-    
+
     def connect(self, **kwargs):
         if self._is_connected:
             return
@@ -185,7 +185,7 @@ class Hardware(ThreadElement):
         self._is_connected = True
         self.turn_to_origin_position(elements=self.moving_elements)
         self.wait_until_everything_is_still()
-        
+
 
     def close(self, **kwargs):
         print(f"{self.interaction_counter.frequency=}")
@@ -195,7 +195,7 @@ class Hardware(ThreadElement):
 
         # if self.thread is not None:
         self.stop()
-        
+
         for element in self.moving_elements:
             element.dxl.torque_enabled = False
 
@@ -211,7 +211,7 @@ class Hardware(ThreadElement):
         doc, tag, text = self.html_doc.tagtext()
 
         self.actions.clear()
-        
+
         if self.opened:
             self.opened.write_html()
             return

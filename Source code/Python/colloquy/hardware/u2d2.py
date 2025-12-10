@@ -11,7 +11,7 @@ from colloquy.base import Base
 
 
 def handle_error(func):
-    
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         self = args[0]
@@ -23,7 +23,7 @@ def handle_error(func):
                     value, dxl_comm_result, dxl_error = func(*args, **kwargs)
                 except IndexError:
                     continue # Look like com error produce index error in the DXL SDK.
-                    
+
             #self._busy.clear()
             if dxl_comm_result != COMM_SUCCESS:
                 print(f"COM ERR: ({dxl_id=}) {self.packet_handler.getTxRxResult(dxl_comm_result)}")

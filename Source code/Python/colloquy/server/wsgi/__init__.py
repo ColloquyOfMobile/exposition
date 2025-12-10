@@ -18,22 +18,22 @@ class WSGI(Base):
         self._server = owner
         self._doc = None
         self._head = Head(owner=self)
-        self._commands= Commands(owner=self)  
+        self._commands= Commands(owner=self)
 
         self._file_handler = FileHandler(owner=self)
-        
+
         self._root = Root(owner=self)
 
         self._handler = None
         self._path = None
         self._start_response = None
         self._post_data = None
-        
+
         self["shutdown"] = self.commands.shutdown
         self["restart"] = self.commands.restart
-        self["hardware"] = self.colloquy.hardware   
-        self["tests"] = self.colloquy.tests     
-        self["exposition"] = self.colloquy.exposition   
+        self["hardware"] = self.colloquy.hardware
+        self["tests"] = self.colloquy.tests
+        self["exposition"] = self.colloquy.exposition
         # self["workspace"] = self.root.body.workspace.handle_request
 
     def __call__(self, environ, start_response):
@@ -42,7 +42,7 @@ class WSGI(Base):
         self._post_data = self.parse_data()
         print(f"request: {self.request}")
         print(f"post_data: {self._post_data}")
-        try:        
+        try:
             yield from self._call_unsafe()
         except Exception:
             self.events.shutdown.set()
@@ -51,7 +51,7 @@ class WSGI(Base):
     @property
     def colloquy(self):
         return self.owner.colloquy
-    
+
     @property
     def name(self):
         return "WSGI"
@@ -63,31 +63,31 @@ class WSGI(Base):
     @property
     def head(self):
         return self._head
-    
+
     @property
     def file_handler(self):
         return self._file_handler
-            
-    
+
+
     @property
     def environ(self):
         return self._environ
-            
-    
+
+
     @property
     def root(self):
         return self._root
-            
-    
+
+
     @property
     def threads(self):
         return self.owner.threads
-    
+
     @property
     def start_response(self):
         return self._start_response
 
-    
+
     @property
     def request(self):
         """Parse the path."""
@@ -98,7 +98,7 @@ class WSGI(Base):
         request = request.encode("iso-8859-1").decode("utf-8")
         request = Path(request)
         return request
-    
+
     @property
     def post_data(self):
         return self._post_data
@@ -106,7 +106,7 @@ class WSGI(Base):
     @property
     def commands(self):
         return self._commands
-    
+
     def parse_data(self):
         """Parse the form data."""
         environ = self.environ
@@ -137,14 +137,14 @@ class WSGI(Base):
         if not self.request.parts:
             yield from self.root()
             return
-            
+
         key, *leftover = self.request.parts
-        
+
         if key in self:
             self[key](request="/".join(leftover))
             yield from self.root()
             return
-        
+
         yield from self.file_handler()
 
     def _parse_data(self, environ):

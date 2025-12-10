@@ -67,7 +67,7 @@ class ThreadElement(HTMLElement):
         self.log(f"Exited thread: {self.thread.name=}")
         self.stop_event.clear()
         return True  # suppress exception if any
-        
+
     @property
     def shutdown_event(self):
         return self.owner.shutdown_event
@@ -146,7 +146,7 @@ class ThreadElement(HTMLElement):
         if self.shutdown_event.is_set():
             print(f"Cannot start shutdown_event is set")
             return
-            
+
         # self.stop_event.clear()
 
         self.log(f"Starting {self.path.as_posix()}...")
@@ -162,9 +162,9 @@ class ThreadElement(HTMLElement):
         self.log(f"...{self.path.as_posix()} started.")
 
     def stop(self, **kwargs):
-        self.stop_event.set()                
-        self._is_started = False            
-            
+        self.stop_event.set()
+        self._is_started = False
+
         for element in self.elements:
             element.stop()
 

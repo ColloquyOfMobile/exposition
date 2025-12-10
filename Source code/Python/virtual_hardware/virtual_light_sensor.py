@@ -9,7 +9,7 @@ class VirtualLightSensor(LightSensor):
         # self._lock = Lock()
         # self.arduino_manager = owner.arduino_manager
         # self._request_path = self._path.relative_to(self.hardware.path).as_posix()
-    
+
     # @property
     # def emulated(self):
         # return self.owner.emulate_light_sensor
@@ -40,11 +40,11 @@ class VirtualLightSensor(LightSensor):
             # if common_drives:
                 # interaction.target_drive = tuple(common_drives)
                 # interaction.start()
-    
+
     def read(self):
         if self.hardware.male1.body_neopixel.ring.state:
             return 500
-            
+
         return 0
         # if self.emulated:
             # raise NotImplementedError

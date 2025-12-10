@@ -70,7 +70,7 @@ class EmulatorThread(HTMLElement):
         self.log(f"Exited thread: {self.thread.name=}")
         self.stop_event.clear()
         return True  # suppress exception if any
-        
+
     @property
     def shutdown_event(self):
         return self.owner.shutdown_event
@@ -163,7 +163,7 @@ class EmulatorThread(HTMLElement):
         # if self.owner.stop_event.is_set():
             # print(f"Cannot start, {self=} {self.owner=} stop_event is set")
             # return
-            
+
         # self.stop_event.clear()
 
         self.log(f"Starting {self.path.as_posix()}...")
@@ -179,12 +179,12 @@ class EmulatorThread(HTMLElement):
         self.log(f"...{self.path.as_posix()} started.")
 
     def stop(self, **kwargs):
-                
+
         if self._is_started:
             self._is_started = False
             self.stop_event.set()
-            
-            
+
+
         for element in self.elements:
             element.stop()
 

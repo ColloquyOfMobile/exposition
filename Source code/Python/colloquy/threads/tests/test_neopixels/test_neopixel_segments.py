@@ -20,11 +20,11 @@ class TestNeopixelSegments(ThreadElement):
         self.hardware.connect()
         self.owner.opened = self
         self._is_open = True
-        
+
         for male in self.hardware.males:
             for segment in male.segments:
                 segment.set_test_default()
-        
+
         for female in self.hardware.females:
             for segment in female.segments:
                 segment.set_test_default()
@@ -38,34 +38,34 @@ class TestNeopixelSegments(ThreadElement):
 
     def write_html(self):
         doc, tag, text = self.html_doc.tagtext()
-        
+
         if not self.is_open:
             self._write_html_open()
             return
-        
 
-        self._add_html_title()            
-            
+
+        self._add_html_title()
+
         self._write_html_action(value=f"hardware/{self.name}/close", label="close", func=self.close)
-        
+
         doc, tag, text = self.html_doc.tagtext()
-        
-        
+
+
         for male in self.hardware.males:
             with tag("h4"):
-                text(male.name)            
+                text(male.name)
             for segment in male.segments:
                 segment.write_html()
-            
-        
+
+
         for female in self.hardware.females:
             with tag("h4"):
-                text(female.name)           
+                text(female.name)
             for segment in female.segments:
                 segment.write_html()
-            
+
         # self._add_html_start()
-    
+
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
         self._write_html_action(value="hardware/tests/communication/open", label=self.name, func=self.open)
@@ -94,8 +94,8 @@ class TestNeopixelSegments(ThreadElement):
             # with tag("button", name="action", value="hardware/test_led_communication"):
                 # text(f"Start.")
 
-            # self.hardware.actions["hardware/test_led_communication"] = self.start            
-            
+            # self.hardware.actions["hardware/test_led_communication"] = self.start
+
         # self._write_html_action(value="hardware/test_led_communication/close", label="close", func=self.close)
 
     # def _add_html_stop(self):

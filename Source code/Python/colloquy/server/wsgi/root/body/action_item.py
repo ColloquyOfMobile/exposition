@@ -6,7 +6,7 @@ import urllib.parse
 from colloquy.wsgi.item import Item as _Item
 
 class ActionItem(_Item):
-    
+
     def __init__(self, owner):
         _Item.__init__(self, owner=owner)
         if self.parent is not None:
@@ -29,11 +29,11 @@ class ActionItem(_Item):
     def parent(self):
         if self.owner.owner is not None:
             return self.owner.owner.action
-            
+
     @property
     def value(self):
         return self.path.as_posix()
-            
+
     @property
     def name(self):
-        return self.owner.name 
+        return self.owner.name

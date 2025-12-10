@@ -39,45 +39,45 @@ class TestPhotosensors(ThreadElement):
 
     def _setup(self, **kwargs):
         hostname = socket.gethostname()
-        if hostname != "DESKTOP-MRSLS88":        
+        if hostname != "DESKTOP-MRSLS88":
             self.hardware.female1.emulate_light_sensor = False
-        
+
         self.hardware.turn_to_origin_position(elements=self.hardware.moving_elements)
         self._detect_pattern.start()
 
     def _loop(self, **kwargs):
         return
-        
-    
+
+
     def stop(self, **kwarg):
         if self.is_started:
             self.hardware.male1.body_neopixel.ring.off()
         self.hardware.female1.emulate_light_sensor = None
-                
-        
+
+
         ThreadElement.stop(self)
 
     def write_html(self):
         doc, tag, text = self.html_doc.tagtext()
-        
+
         if not self.is_open:
             self._write_html_open()
             return
 
         self._add_html_title()
-        
+
         if self._is_started:
             self._write_html_action(value="hardware/tests/photosensors/stop", label="stop", func=self.stop)
-            
-            
+
+
             self.hardware.male1.search.blink.add_html()
             return
-        
-            
+
+
         self._write_html_action(value="hardware/tests/photosensors/close", label="close", func=self.close)
-        
+
         self._write_html_action(value="hardware/tests/photosensors/start", label="start", func=self.start)
-    
+
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
         self._write_html_action(value="hardware/tests/speaker/open", label=self.name, func=self.open)
@@ -89,6 +89,5 @@ class TestPhotosensors(ThreadElement):
             text(self.name.title())
         with tag("div"):
             text("Enable testing photosensors one by one.")
-    
 
 

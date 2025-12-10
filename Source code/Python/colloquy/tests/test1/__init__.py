@@ -14,7 +14,7 @@ class Test1(Base):
         self._html = HTML(owner=self)
         self._thread = None
         self._stop_event = Event()
-        
+
         self[self.html.name] = self.html.handle_request
         self["start"] = self.start
         self["stop"] = self.stop
@@ -23,14 +23,14 @@ class Test1(Base):
         request = Path(request)
         if not request.parts:
             raise NotImplementedError
-            
+
         key, *leftover = request.parts
-        
+
         if key in self:
             self[key](request="/".join(leftover))
             return
-            
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}") 
+
+        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def is_started(self):
@@ -40,20 +40,20 @@ class Test1(Base):
 
     @property
     def colloquy(self):
-        return self.owner.colloquy 
+        return self.owner.colloquy
 
     @property
     def hardware(self):
-        return self.colloquy.hardware 
+        return self.colloquy.hardware
 
     @property
     def name(self):
-        return "test1" 
+        return "test1"
 
     @property
     def html(self):
         return self._html
-    
+
     def shutdown(self):
         self.stop()
 
@@ -67,46 +67,45 @@ class Test1(Base):
             return
         self._stop_event.set()
         self._thread.join()
-        
-        with hardware.arduino:    
+
+        with hardware.arduino:
             for neopixel in self.hardware.neopixels:
                 neopixel.off()
-    
+
     def run(self):
         try:
             self._run_unsafe()
         except Exception as error:
             self._error = error
-            raise 
-    
+            raise
+
     def _run_unsafe(self):
         stop_event = self._stop_event.is_set
         hardware = self.hardware
         neopixels = hardware.neopixels
-        
+
         if stop_event():
             return
-        
-        with hardware.arduino:        
+
+        with hardware.arduino:
             for neopixel in neopixels:
                 neopixel.off()
-            
+
             for i in range(10):
                 for neopixel in neopixels:
                     neopixel.set_test_default()
                     neopixel.on()
-                
+
                 for e in range(10):
-                    sleep(0.1)       
+                    sleep(0.1)
                     if stop_event():
                         return
-                
+
                 for neopixel in neopixels:
                     neopixel.off()
-                    
+
                 for e in range(5):
-                    sleep(0.1)       
+                    sleep(0.1)
                     if stop_event():
                         return
-        
-        
+

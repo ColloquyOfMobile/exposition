@@ -37,31 +37,31 @@ class TestNeopixelConsumption(HTMLElement):
 
     def write_html(self):
         doc, tag, text = self.html_doc.tagtext()
-        
+
         if not self.is_open:
             self._write_html_open()
             return
-            
+
         # if self.hardware.is_started:
         if self.is_started:
             self._add_html_title()
             self._add_html_stop()
             return
-        
+
 
         self._add_html_title()
         self._add_html_start()
-    
+
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
         self._write_html_action(value="hardware/tests/consumption/open", label=self.name, func=self.open)
 
     def _start(self, **kwargs):
         self._is_started = True
-        
+
         brightness = 255
         color = dict(red=254, green=254, blue=254, white=254)
-        
+
         for female in self.hardware.females:
             config = dict(
                 brightness = brightness,
@@ -105,8 +105,8 @@ class TestNeopixelConsumption(HTMLElement):
             with tag("button", name="action", value="hardware/test_led_consumption"):
                 text(f"Start.")
 
-            self.hardware.actions["hardware/test_led_consumption"] = self._start            
-            
+            self.hardware.actions["hardware/test_led_consumption"] = self._start
+
         self._write_html_action(value="hardware/test_led_consumption/close", label="close", func=self.close)
 
     def _add_html_stop(self):

@@ -8,7 +8,7 @@ BUTTON_STYLE = """
     border: 1px solid darkgrey;
     border-radius: 0.2rem;
     place-content: center;
-    min-width: 1rem; 
+    min-width: 1rem;
     padding: 0 0.5ch;
     }
 .int-button:hover {
@@ -32,7 +32,7 @@ class Head(Base):
             )
             with tag("style"):
                 text(BUTTON_STYLE)
-                
+
         return doc.getvalue()
 
     @property

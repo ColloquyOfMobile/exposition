@@ -24,7 +24,7 @@ class Colloquy(HTMLElement):
         self._items = {}
         self.elements = set()
         self.threads = set()
-        self._hardware = None        
+        self._hardware = None
         self._params = Parameters(owner=self)
         self._tests = Tests(owner=self)
         self._exposition = Exposition(owner=self)
@@ -32,7 +32,7 @@ class Colloquy(HTMLElement):
         self._shutdown_event = Event()
         if not self.params.is_calibrated:
             self.params.open()
-        
+
         self.init()
 
     def __call__(self, environ):
@@ -43,7 +43,7 @@ class Colloquy(HTMLElement):
     @property
     def shutdown_event(self):
         return self._shutdown_event
-        
+
     @property
     def stop_event(self):
         return self._shutdown_event
@@ -51,14 +51,14 @@ class Colloquy(HTMLElement):
     @property
     def is_started(self):
         return self._is_started
-        
+
     @property
     def near_origin_threashold(self):
         return self._params["near_origin_threashold"]
 
     @near_origin_threashold.setter
     def near_origin_threashold(self, value):
-        self._params["near_origin_threashold"] = value 
+        self._params["near_origin_threashold"] = value
 
     # @property
     # def hardware(self):
@@ -86,7 +86,7 @@ class Colloquy(HTMLElement):
 
     @property
     def agenda(self):
-        return self._agenda   
+        return self._agenda
 
     @property
     def log(self):
@@ -110,24 +110,24 @@ class Colloquy(HTMLElement):
         doc.asis("<!DOCTYPE html>")
         with tag("html"):
             self._write_html_head()
-            
-            
-            if action == ["shutdown"]:                
+
+
+            if action == ["shutdown"]:
                 with tag("body"):
                     text("Goodbye !")
                 return self.stop()
-                
-            if action == ["restart"]:                
+
+            if action == ["restart"]:
                 with tag("body"):
                     with tag("div"):
                         text("Restarting...")
                     with tag("div"):
                         with tag("a", href=""):
                             text("Click here to see the changes.")
-                    
+
                 return self.restart()
-                
-                
+
+
 
             self._write_body()
 
@@ -174,7 +174,7 @@ class Colloquy(HTMLElement):
                     with tag("div"):
                         with tag("h2"):
                             text(f"Error trying {str_action=}, {action=}!")
-                        
+
                         with tag("pre", ):
                             text(traceback.format_exc())
             try:
@@ -183,26 +183,26 @@ class Colloquy(HTMLElement):
                 with tag("div"):
                     with tag("h2"):
                         text(f"Error building root html!")
-                    
+
                     with tag("pre", ):
                         text(traceback.format_exc())
-            
+
             # raise NotImplementedError(f"{data=}")
 
     def _write_root(self, **data):
         doc, tag, text = self.html_doc.tagtext()
-        
+
         if self.opened:
             self.opened.write_html()
             return
-        with tag("div"):            
+        with tag("div"):
             self.params.write_html()
             self.exposition.write_html()
             self.tests.write_html()
-    
+
     def restart(self):
         self.owner.restart_server = True
-    
+
     def stop(self):
         # self.events.shut.shut_server = True
         self._is_started = False
@@ -210,10 +210,10 @@ class Colloquy(HTMLElement):
         # if self._exposition.is_started:
         self._exposition.stop()
         self._tests.stop()
-        
+
         # self._exposition.join()
         self._tests.join()
-            
+
         if self._hardware.is_started:
             self._hardware.stop()
             print("Waiting hardware thread to stop...")

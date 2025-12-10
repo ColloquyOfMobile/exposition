@@ -37,7 +37,7 @@ class Speaker(ThreadElement):
         path = f"{self._owner.name}/speaker"
         self.arduino_manager.send(path, data="on")
         self._on_off_state = True
-        
+
         if self._ui_context:
             self._ui_context.speaker_on = self
 
@@ -46,7 +46,7 @@ class Speaker(ThreadElement):
         path = f"{self._owner.name}/speaker"
         self.arduino_manager.send(path, data="off")
         self._on_off_state = False
-        
+
         if self._ui_context:
             self._ui_context.speaker_on = None
 
@@ -87,10 +87,10 @@ class Speaker(ThreadElement):
     def write_html(self, ui_context = None):
         doc, tag, text = self.html_doc.tagtext()
         self._ui_context = ui_context
-        
+
         if self.is_on:
             self._write_html_action(value=f"hardware/{self.owner.name}/speaker/off", label=f"{self.owner.name} off", func=self.off)
             return
 
-        
+
         self._write_html_action(value=f"hardware/{self.owner.name}/speaker/on", label=f"{self.owner.name} on", func=self.on)

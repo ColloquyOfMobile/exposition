@@ -29,11 +29,11 @@ class Neopixel(ThreadElement):
             "white": self.white,
             "brightness": self.brightness,
         }
-    
+
     @property
     def brightness(self):
         return self._brightness
-    
+
     @brightness.setter
     def brightness(self, value):
         self._brightness = value
@@ -107,7 +107,7 @@ class Neopixel(ThreadElement):
             self.on()
         else:
             self.off()
-            
+
     def rgb_to_hex(self, red, green, blue):
         for value in (red, green, blue):
             assert 0 <= value <= 255
@@ -125,34 +125,34 @@ class Neopixel(ThreadElement):
     def write_html(self, ui_context = None):
         doc, tag, text = self.html_doc.tagtext()
         self._ui_context = ui_context
-        
+
         self._write_html_configure()
-        
+
         if self.state:
             self._write_html_action(value=f"{self.path.as_posix()}/off", label=f"{self.name} off", func=self.off)
             return
-        
+
         self._write_html_action(value=f"{self.path.as_posix()}/on", label=f"{self.name} on", func=self.on)
         doc.stag("hr")
-    
+
     def _write_html_configure(self):
         doc, tag, text = self.html_doc.tagtext()
         config = self.configuration
-        
+
         with tag("div"):
             with tag("div"):
                 with tag("strong"):
                     text(self.name)
-            with tag("form", method="post"): 
+            with tag("form", method="post"):
                 self._write_html_brightness()
                 self._write_html_white()
                 self._write_html_rgb()
-                
+
                 value = f"{self.path.as_posix()}/color"
                 with tag("button", name="action", value=value):
                     text("configure")
                 self.actions[value] = self._configure_from_html
-    
+
     def _write_html_rgb(self):
         doc, tag, text = self.html_doc.tagtext()
         config = self.configuration
@@ -160,34 +160,34 @@ class Neopixel(ThreadElement):
         red = config["red"]
         green = config["green"]
         blue = config["blue"]
-            
+
         doc.stag("input", type="color", name="hex_rgb", value=self.rgb_to_hex(red, green, blue))
-        
-    
+
+
     def _write_html_brightness(self):
         doc, tag, text = self.html_doc.tagtext()
         config = self.configuration
-        
-        with tag("div"):            
+
+        with tag("div"):
             name = "brightness"
             with tag("label"):
                 text(f"{name} : ")
             doc.stag("input", type="number", name=name, value=config[name], max=255, min=0, step=1)
-    
+
     def _write_html_white(self):
         doc, tag, text = self.html_doc.tagtext()
         config = self.configuration
-        
+
         with tag("div"):
             name = "white"
             with tag("label"):
                 text(f"{name} : ")
-            doc.stag("input", type="number", name=name, value=config[name], max=255, min=0, step=1)       
-        
+            doc.stag("input", type="number", name=name, value=config[name], max=255, min=0, step=1)
+
     def _configure_from_html(self, **kwargs):
         hex_color = kwargs["hex_rgb"][0]
         (red, green, blue) = self.hex_to_rgb(hex_color)
         white = int(kwargs["white"][0])
         brightness = int(kwargs["brightness"][0])
-        
+
         self.configure(red, green, blue, white, brightness)

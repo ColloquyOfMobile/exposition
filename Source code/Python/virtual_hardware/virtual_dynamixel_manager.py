@@ -199,7 +199,7 @@ class VirtualDynamixelManager(DXLU2D2):
         DXLU2D2.close(self)
         for dxl in self.packet_handler.dxls.values():
             dxl.stop()
-        
+
 
     def _get_com_ports(self):
         return ["VirtualCOM1", "VirtualCOM2"]

@@ -24,7 +24,7 @@ class FileHandler(Base):
             message = f'{file_path.as_posix()} not found !'
             print(message)
             yield message.encode()
-    
+
     @property
     def name(self):
         return "file handler"

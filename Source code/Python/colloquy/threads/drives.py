@@ -32,7 +32,7 @@ class Drives(ThreadElement):
 
         self._step_o = 2
         self._step_p = 3
-        
+
         # self._max == 254 in order to clamp the brigtness to avoid blink to 254.
         # Look like when the RGB value are all 255, the white LED is turned on, and RGB LEDs turned off. If white value is 0 then everything is turn off.
         self._max = 254
@@ -138,17 +138,17 @@ class Drives(ThreadElement):
         assert isinstance(value, int)
         self._p_drive = value
         self._update_neopixel()
-    
+
     @property
     def dominant_value(self):
         return max((self._o_drive, self._p_drive))
-    
+
     @property
     def dominant(self):
         if self._o_drive > self._p_drive:
             return self._o_drive
         return self._p_drive
-    
+
     @property
     def dominant_color(self):
         if self._o_drive > self._p_drive:
@@ -217,7 +217,7 @@ class Drives(ThreadElement):
             if "P" in drive:
                 is_satisfied = self.p_drive < self._satisfaction_lim
                 satisfied_drives.append(is_satisfied)
-                
+
 
         return all(satisfied_drives)
 
@@ -228,27 +228,27 @@ class Drives(ThreadElement):
 
     def _update_neopixel(self):
         state, brightness, color = self.value
-        
+
         # Trying to reduce brigtness to avoid blink
         # Look like when the RGB value are all 255, the white LED is turned on, and RGB LEDs turned off. If white value is 0 then everything is turn off.
         if brightness > 254:
             brightness = 254
-            
+
         config = dict(
             brightness = brightness,
             **color,
             )
         self._neopixel.configure(**config)
-    
+
     def _set_p_drive(self, **kwargs):
         value = kwargs["value"][0]
         self._p_drive = int(value)
-        
+
     def _set_o_drive(self, **kwargs):
         value = kwargs["value"][0]
         self._o_drive = int(value)
         # raise NotImplementedError(f"{kwargs=}, {self.post_data=}")
-        
+
 
     def add_html(self):
         doc, tag, text = self.html_doc.tagtext()

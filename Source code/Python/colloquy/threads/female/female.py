@@ -13,7 +13,7 @@ from threading import Lock
 from time import sleep
 
 class FemaleDriver(Body):
-    
+
     _classes = {
         "sensor": LightSensor
     }
@@ -30,7 +30,7 @@ class FemaleDriver(Body):
         self.head_neopixel = HeadFemaleNeopixel(owner=self,)
         self.body_neopixel = BodyFemaleNeopixel(owner=self,)
         self.feet_neopixel = FeetFemaleNeopixel(owner=self,)
-        
+
         self.drives = FemaleDrives(owner=self)
         self.sensor = self._classes["sensor"](owner=self, name="sensor")
         self.microphone = Microphone(owner=self)
@@ -57,17 +57,17 @@ class FemaleDriver(Body):
         assert self.dxl_origin is not None, "Calibrate hardware."
         self.stop_event.clear()
         self.drives.start()
-        
+
     @property
     def neopixel(self):
         raise NotImplementedError
-    
+
     @property
     def emulate_light_sensor(self):
         if self._emulate_light_sensor is None:
             return self.owner.emulate_light_sensors
         return self._emulate_light_sensor
-    
+
     @emulate_light_sensor.setter
     def emulate_light_sensor(self, value):
         self._emulate_light_sensor = value
@@ -87,8 +87,8 @@ class FemaleDriver(Body):
         pass
 
     def stop(self):
-                
-        # if self._is_started:            
+
+        # if self._is_started:
             # self.drives.stop()
         for segment in self.segments:
             segment.off()

@@ -107,7 +107,7 @@ class DXL:
         self.torque_enabled = 0
         # Set velocity base profile.
         self.drive_mode = 0
-        
+
         # set extended position mode.
         self.operating_mode = 4
 

@@ -26,19 +26,19 @@ class Drives(Base):
         Base.__init__(self, owner=owner)
         self._o_drive = Drive(owner=self, name="O")
         self._p_drive = Drive(owner=self, name="P")
-    
+
     def __iter__(self):
         yield self._o_drive
         yield self._p_drive
-    
+
     @property
     def o_drive(self):
         return self._o_drive
-    
+
     @property
     def p_drive(self):
         return self._p_drive
-    
+
     @property
     def name(self):
         return "drives"
@@ -63,13 +63,13 @@ class Drives(Base):
         female.feet.on()
         for drive in self:
             drive.start()
-            
+
     def update(self):
         female = self.owner
-        
+
         o_value = self.o_drive.value
         p_value = self.p_drive.value
-        
+
         female.head.brightness.value = max(o_value, p_value)
         female.body_o.brightness.value = o_value
         female.body_p.brightness.value = p_value
@@ -77,4 +77,3 @@ class Drives(Base):
             female.feet.color = self.orange
         else:
             female.feet.color = self.puce
-

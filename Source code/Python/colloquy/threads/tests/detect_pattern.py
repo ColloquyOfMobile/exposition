@@ -118,6 +118,5 @@ class DetectPattern(ThreadElement):
                             if self.debug:
                                 print(f"Good match: {male} drive={drive} rot={rot} offset={offset} mismatches={mismatches}")
                             return (male, drive)
-                            
-        return None
 
+        return None

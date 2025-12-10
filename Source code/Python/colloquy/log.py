@@ -4,11 +4,11 @@ from threading import Timer
 from colloquy.base import Base
 from datetime import datetime
 
-class Log(Base): 
-    
+class Log(Base):
+
     def __init__(self, owner):
         super().__init__(owner=owner)
-    
+
     def __call__(self, msg):
         pass
         # print(f"{self.owner.name}: {msg}")

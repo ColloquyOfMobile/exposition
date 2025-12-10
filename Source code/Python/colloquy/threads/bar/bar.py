@@ -34,7 +34,7 @@ class BarDriver(MovingPart):
     def __exit__(self, exc_type, exc_value, traceback_obj):
         self.turn_to_origin_position()
         return MovingPart.__exit__(self, exc_type, exc_value, traceback_obj)
-    
+
     # @property
     # def dxl2(self):
         # raise NotImplementedError(f"")

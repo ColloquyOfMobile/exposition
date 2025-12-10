@@ -6,7 +6,7 @@ class UpRing(Neopixel):
 
     def __init__(self, owner, name):
         Neopixel.__init__(self, owner=owner, name=name)
-        
+
         # raise NotImplementedError(f"{kwargs=}")
 
     # def rgb_to_hex(self, red, green, blue):
@@ -22,7 +22,7 @@ class UpRing(Neopixel):
         # g = int(hex_value[2:4], 16)
         # b = int(hex_value[4:6], 16)
         # return (r, g, b)
-    
+
     def set_test_default(self):
         self.configure(red=0, green=0, blue=0, white=255, brightness=255)
         self.on()

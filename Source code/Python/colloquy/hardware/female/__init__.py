@@ -16,7 +16,7 @@ from pathlib import Path
 from colloquy.base import Base
 
 class Female(Base):
-    
+
     # _classes = {
         # "sensor": LightSensor
     # }
@@ -26,17 +26,17 @@ class Female(Base):
         self._id_number = id_number
         super().__init__(owner=owner)
         self._arduino = owner.arduino
-        
+
         self._drives = Drives(owner=self)
-        
-        
+
+
         self._neopixels = []
         # self.neopixel = FemaleNeopixel(owner=self, name="neopixel")
         self._head = Head(owner=self)
         self._body_o= BodyO(owner=self)
         self._body_p = BodyP(owner=self)
         self._feet = Feet(owner=self)
-        
+
         self[self.head.name] = self.head
         self[self.body_o.name] = self.body_o
         self[self.body_p.name] = self.body_p
@@ -50,15 +50,15 @@ class Female(Base):
         request = Path(request)
         if not request.parts:
             raise NotImplementedError
-            
+
         key, *leftover = request.parts
-        
+
         if key in self:
             self[key](request="/".join(leftover))
             return
-            
+
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
-    
+
     @property
     def is_started(self):
         return any(element.is_started for element in self._threaded_elements)
@@ -69,44 +69,44 @@ class Female(Base):
 
     @property
     def colloquy(self):
-        return self.owner.colloquy  
+        return self.owner.colloquy
 
     @property
     def id_number(self):
-        return self._id_number   
+        return self._id_number
 
     @property
     def female(self):
-        return self   
+        return self
 
     @property
     def html(self):
-        return self.owner.html        
+        return self.owner.html
 
     @property
     def arduino(self):
-        return self._arduino        
-        
+        return self._arduino
+
     @property
     def head(self):
         return self._head
-        
+
     @property
     def body_o(self):
         return self._body_o
-        
+
     @property
     def body_p(self):
         return self._body_p
-        
+
     @property
     def feet(self):
         return self._feet
-    
+
     @property
     def name(self):
         return self._name
-        
+
     @property
     def neopixels(self):
         neopixels = [
@@ -116,24 +116,24 @@ class Female(Base):
             self.feet,
         ]
         return neopixels
-    
+
     @property
     def is_started(self):
         return any(element.is_started for element in self._threaded_elements)
-    
+
     def shutdown(self):
         with self.arduino:
             for element in self._threaded_elements:
                 element.shutdown()
             for neopixel in self.neopixels:
                 neopixel.off()
-    
+
     # @property
     # def emulate_light_sensor(self):
         # if self._emulate_light_sensor is None:
             # return self.owner.emulate_light_sensors
         # return self._emulate_light_sensor
-    
+
     # @emulate_light_sensor.setter
     # def emulate_light_sensor(self, value):
         # self._emulate_light_sensor = value
@@ -153,8 +153,8 @@ class Female(Base):
         # pass
 
     # def stop(self):
-                
-        # # if self._is_started:            
+
+        # # if self._is_started:
             # # self.drives.stop()
         # for segment in self.segments:
             # segment.off()

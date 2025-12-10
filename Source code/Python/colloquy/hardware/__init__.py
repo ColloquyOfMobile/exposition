@@ -10,30 +10,30 @@ from .logger import Logger
 
 
 class Hardware(Base):
-    
+
     def __init__(self, owner, surname=""):
         """Use the surname if you want to instanciate 2 instances of hardware. Log file path are compute through names, two object can write to the same file. Mainly intended for tests."""
-        
+
         self._surname = surname
-        
-        super().__init__(owner)   
-        self._log = owner.log     
-        
+
+        super().__init__(owner)
+        self._log = owner.log
+
         self._opened = None
         self._commands = Commands(owner=self)
-        
-        
+
+
         self._arduino = Arduino(owner=self)
         self._u2d2 = U2D2(owner=self)
         self._bar = None
-        
-        
+
+
         self._mirrors = []
         self._drives = []
         self._males = []
         self._speakers = []
         self._moving_elements = []
-        
+
         self._female1 = Female(owner=self, id_number=1)
         self._female2 = Female(owner=self, id_number=2)
         self._female3 = Female(owner=self, id_number=3)
@@ -42,9 +42,9 @@ class Hardware(Base):
             self._female2,
             self._female3,
             ]
-            
+
         self[self.arduino.name] = self.arduino
-        
+
         for female in self._females:
             self[female.name] = female
             self.drives.extend(female.drives)
@@ -54,19 +54,19 @@ class Hardware(Base):
             *self.males,
             # bar
             }
-    
+
 
     def __call__(self, request):
         request = Path(request)
         if not request.parts:
             raise NotImplementedError
-            
+
         key, *leftover = request.parts
-        
+
         if key in self:
             self[key](request="/".join(leftover))
             return
-            
+
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
@@ -83,7 +83,7 @@ class Hardware(Base):
         if value is not None:
             if self._opened is not None:
                 self._opened.close()
-                
+
         self._opened = value
 
     @property
@@ -92,7 +92,7 @@ class Hardware(Base):
 
     @property
     def html(self):
-        return self._html   
+        return self._html
 
     @property
     def log(self):
@@ -145,14 +145,14 @@ class Hardware(Base):
     @property
     def moving_elements(self):
         return self._moving_elements
-    
+
     @property
-    def neopixels(self):        
+    def neopixels(self):
         neopixels = []
         for body in self.bodies:
             neopixels.extend(body.neopixels)
         return neopixels
-    
+
     @property
     def bodies(self):
         bodies = []
@@ -161,11 +161,11 @@ class Hardware(Base):
         for body in self.males:
             bodies.append(body)
         return bodies
-    
+
     @property
     def is_started(self):
         return any(element.is_started for element in self._threaded_elements)
-    
+
     def shutdown(self):
         with self.arduino:
             for element in self._threaded_elements:

@@ -33,9 +33,9 @@ class Base:
     def __getitem__(self, key):
         try:
             item = self._dict[key]
-        except KeyError:            
+        except KeyError:
             raise KeyError(f"{key} not in {self=}")
-            
+
         return item
 
     def __setitem__(self, key, value):
@@ -55,11 +55,11 @@ class Base:
     def path(self):
         if self._path is not None:
             return self._path
-            
+
         if self.owner is not None:
             self._path = self.owner.path / self.name
             return self._path
-            
+
         self._path = Path()
         return self._path
 
@@ -74,26 +74,26 @@ class Base:
         if self._owners is None:
             self._owners = [self.owner] + self.owner.owners
         return self._owners
-    
+
     @property
     def events(self):
-        return self.owner.events 
-    
+        return self.owner.events
+
     @property
     def is_simulated(self):
         if socket.gethostname() == 'Colloquy-Laptop':
             return False
         return True
-    
+
     def add(self, element):
-        self[element.name] = element  
+        self[element.name] = element
 
     def _svg_down_arrow(self):
         doc, tag, text = CustomDoc().tagtext()
         with tag('svg', width='16', height='16', viewBox='0 0 24 24', fill='none',
              stroke='currentColor', **{'stroke-width': '2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round'}):
             doc.stag('polyline', points='6 9 12 15 18 9')
-        
+
         return doc.getvalue()
 
 
@@ -102,5 +102,5 @@ class Base:
         with tag('svg', width='16', height='16', viewBox='0 0 24 24', fill='none',
              stroke='currentColor', **{'stroke-width': '2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round'}):
             doc.stag('polyline', points='9 6 15 12 9 18')
-        
+
         return doc.getvalue()

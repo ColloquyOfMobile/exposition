@@ -2,8 +2,8 @@ from colloquy.wsgi.root.body.workspace.item import Item, HTML as _HTML
 import traceback
 
 class HTML(_HTML):
-    
-    def _call_body(self):        
+
+    def _call_body(self):
         self.owner.arduino.html()
         self.owner.neopixels.html()
         # self._test_neopixel_consumption.html()

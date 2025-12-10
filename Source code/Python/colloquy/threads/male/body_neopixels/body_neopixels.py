@@ -75,7 +75,7 @@ class BodyNeopixels(ThreadElement):
         self.ring.off()
         self.bottom_neopixel_o.off()
         self.bottom_neopixel_p.off()
-    
+
     def on(self):
         self.ring.on()
         self.bottom_neopixel_o.on()
@@ -89,29 +89,29 @@ class BodyNeopixels(ThreadElement):
         # self.sleep_min()
 
     def stop(self):
-                
-        if self._is_started:      
+
+        if self._is_started:
             self.off()
-            
+
         ThreadElement.stop(self)
 
 class Beam(ThreadElement):
 
     def __init__(self, owner):
-        ThreadElement.__init__(self, owner=owner, name=f"beam")        
+        ThreadElement.__init__(self, owner=owner, name=f"beam")
 
     def __enter__(self):
         self.stop_event.clear()
-        self.owner.ring.on()     
-        
+        self.owner.ring.on()
+
     def __exit__(self, exc_type, exc_value, traceback_obj):
         self.owner.ring.off()
         return ThreadElement.__exit__(self, exc_type, exc_value, traceback_obj)
 
     def _loop(self):
         pass
-        
-        
+
+
 
 
 
@@ -119,7 +119,7 @@ class BottomNeopixelO(Neopixel):
 
     def __init__(self, owner):
         Neopixel.__init__(self, owner=owner, name="o_drive")
-    
+
     def set_test_default(self):
         self.configure(red=0, green=255, blue=0, white=0, brightness=255)
         self.on()
@@ -128,8 +128,8 @@ class BottomNeopixelO(Neopixel):
 class BottomNeopixelP(Neopixel):
 
     def __init__(self, owner):
-        Neopixel.__init__(self, owner=owner, name="p_drive")  
-    
+        Neopixel.__init__(self, owner=owner, name="p_drive")
+
     def set_test_default(self):
         self.configure(red=255, green=0, blue=0, white=0, brightness=255)
         self.on()

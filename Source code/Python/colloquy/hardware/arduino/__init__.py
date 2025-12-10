@@ -26,10 +26,10 @@ class Arduino(Base):
         self._log = owner.log
         self.lock = Lock()
         self._port_handler = None
-        self._was_open = None        
+        self._was_open = None
         self._html = HTML(owner=self)
         self._context_depth = 0
-        
+
         self[self.html.name] = self.html.handle_request
         self["open"] = self.open
         self["close"] = self.close
@@ -38,14 +38,14 @@ class Arduino(Base):
         request = Path(request)
         if not request.parts:
             raise NotImplementedError
-            
+
         key, *leftover = request.parts
-        
+
         if key in self:
             self[key](request="/".join(leftover))
             return
-            
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}") 
+
+        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     def __enter__(self):
         if self._context_depth == 0:
@@ -55,7 +55,7 @@ class Arduino(Base):
         self._context_depth += 1
 
     def __exit__(self, *args, **kwargs):
-        self._context_depth -= 1     
+        self._context_depth -= 1
         if self._context_depth == 0 and not self._was_open:
             self.close()
 
@@ -66,7 +66,7 @@ class Arduino(Base):
     @property
     def colloquy(self):
         return self.owner.colloquy
-    
+
     @property
     def html(self):
         return self._html
@@ -96,16 +96,16 @@ class Arduino(Base):
         if self._port_handler is None:
             klass = VirtualSerialPort
             if not self.is_simulated:
-                klass = serial.Serial                
-            self._port_handler = klass(baudrate=self.baudrate, timeout=1)          
+                klass = serial.Serial
+            self._port_handler = klass(baudrate=self.baudrate, timeout=1)
             # Setting port name here avoid opening the port
             self.port_handler.port = self.port_name
-            
+
         return self._port_handler
 
     def send(self, path, **data):
         with self:
-            return self._send_unsafe(path, **data)            
+            return self._send_unsafe(path, **data)
 
     def send_yield(self, path, **data):
         command = {"path": str(path), **data}
@@ -119,7 +119,7 @@ class Arduino(Base):
             yield f"Arduino still processing {command}..."
 
         return self._parse(data)
-    
+
     def _send_unsafe(self, path, **data):
         command = {"path": path.as_posix(), **data}
         self.log(f"{command=}")
@@ -179,7 +179,7 @@ class Arduino(Base):
             if time()-start > 2:
                 raise RuntimeError("Arduino was to long to reboot !")
 
-    
+
 
     def _get_com_ports(self):
         return [
@@ -213,7 +213,6 @@ class Arduino(Base):
             with tag("button", name="action", value="arduino/com_port/set"):
                 text(f"set.")
 
-            self.hardware.actions["arduino/com_port/set"] = self._set_com_port  
-        
+            self.hardware.actions["arduino/com_port/set"] = self._set_com_port
 
-    
+

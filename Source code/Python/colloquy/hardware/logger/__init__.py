@@ -1,7 +1,7 @@
 from time import sleep, time
 from pathlib import Path
 from threading import Timer
-from colloquy.base import Base 
+from colloquy.base import Base
 from datetime import datetime
 
 class Logger(Base):
@@ -11,21 +11,21 @@ class Logger(Base):
     _log_folder = Path("local/logs")
 
     if not _log_folder.is_dir():
-        _log_folder.mkdir()      
+        _log_folder.mkdir()
 
     def __init__(self, owner):
         raise NotImplementedError(f"Fix logger.")
         super().__init__(owner)
-        self._line_count = None    
+        self._line_count = None
         self._folder = self._log_folder / self.owner.name
         self._path = self._folder.parent / f"{owner.name}.log"
 
         assert self._path not in self._instances, f"{self._path=}"
-        self._instances[self._path] = self  
+        self._instances[self._path] = self
 
     def _init(self):
         self._init_file()
-            
+
         lines = self._path.read_text().splitlines()
 
         self._line_count = len(lines)
@@ -35,7 +35,7 @@ class Logger(Base):
             "",)
         )
         text = "\n".join(lines[-500:])
-        self._path.write_text(text) 
+        self._path.write_text(text)
 
     def _init_file(self):
         if not self._path.exists():

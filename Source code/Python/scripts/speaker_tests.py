@@ -36,7 +36,7 @@ def send_command(pin, state):
     cmd = f"{pin} {state}"
     ser.write(cmd.encode())
     response = ser.readline().decode().strip()
-    
+
     if response:
         print(response)
 

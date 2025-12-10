@@ -21,11 +21,11 @@ class TestNeopixelSegments(Base):
         # self.hardware.connect()
         # self.owner.opened = self
         # self._is_open = True
-        
+
         # for male in self.hardware.males:
             # for segment in male.segments:
                 # segment.set_test_default()
-        
+
         # for female in self.hardware.females:
             # for segment in female.segments:
                 # segment.set_test_default()
@@ -36,7 +36,7 @@ class TestNeopixelSegments(Base):
         # self.hardware.close()
         # self._is_open = False
         # self.owner.opened = None
-            
+
         # self._add_html_start()
 
 
@@ -56,8 +56,8 @@ class TestNeopixelSegments(Base):
             # with tag("button", name="action", value="hardware/test_led_communication"):
                 # text(f"Start.")
 
-            # self.hardware.actions["hardware/test_led_communication"] = self.start            
-            
+            # self.hardware.actions["hardware/test_led_communication"] = self.start
+
         # self._write_html_action(value="hardware/test_led_communication/close", label="close", func=self.close)
 
     # def _add_html_stop(self):
@@ -74,13 +74,13 @@ class TestNeopixelSegments(Base):
 
 
 # class HTML(HtmlItem):
-    
-        
-    # def _call_unsafe(self,):          
-        # doc, tag, text = self.doc.tagtext()       
+
+
+    # def _call_unsafe(self,):
+        # doc, tag, text = self.doc.tagtext()
         # for neopixel in self.owner.hardware.neopixels:
             # with tag("h4"):
-                # text(f"{neopixel.body.name}/{neopixel.name}")   
+                # text(f"{neopixel.body.name}/{neopixel.name}")
                 # neopixel.html()
 
     # @property

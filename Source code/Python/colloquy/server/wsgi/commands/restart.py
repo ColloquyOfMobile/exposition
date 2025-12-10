@@ -5,7 +5,7 @@ from utils import CustomDoc
 
 
 class Restart(Base):
-    
+
     def __init__(self, owner):
         super().__init__(owner)
         # self._action = Action(owner=self)
@@ -24,34 +24,34 @@ class Restart(Base):
         return f"/{self.name}"
 
     def html(self):
-        try:   
-            html = self._html_unsafe()  
+        try:
+            html = self._html_unsafe()
         except Exception as exception:
             html = self._html_if_error()
-            
-        return html
-        
 
-    def _html_unsafe(self):   
+        return html
+
+
+    def _html_unsafe(self):
         doc, tag, text = CustomDoc().tagtext()
         with tag("div"):
             with tag("a", href=self.href):
                 text(self.name)
         return doc.getvalue()
-    
+
     def _html_if_error(self):
-        doc, tag, text = CustomDoc().tagtext()  
+        doc, tag, text = CustomDoc().tagtext()
         with tag("div"):
             with tag("div"):
                 with tag("strong"):
                     text(f"Error html for {self.name}!")
-                                
+
             with tag("div", style="display: flex; flex-direction: column;"):
                 style = "white-space: normal; overflow-wrap: break-word; word-break: break-word;"
                 for line in traceback.format_exc().splitlines():
                     with tag("pre", style=style):
                         text(line)
-        
+
         return doc.getvalue()
 
 # class Action(ActionItem):
@@ -60,14 +60,14 @@ class Restart(Base):
         # self.owner.events.shutdown.set()
         # self.owner.events.restart.set()
         # self.owner.open()
-        
-        
+
+
 
 
 # class HTML(_HTML):
-    
-    # def _call_is_opened(self): 
-        # doc, tag, text = self.doc.tagtext()                 
+
+    # def _call_is_opened(self):
+        # doc, tag, text = self.doc.tagtext()
         # with tag("div"):
             # with tag("div"):
                 # text("Restarting...")

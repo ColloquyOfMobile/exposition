@@ -27,25 +27,25 @@ class TestNeopixels(ThreadElement):
 
     def write_html(self):
         doc, tag, text = self.html_doc.tagtext()
-        
+
         if not self.is_open:
             self._write_html_open()
-            return   
-        
+            return
+
         if self.opened:
             self.opened.write_html()
             return
-            
+
         with tag("h2"):
             text(self.name.title())
-            
-            
+
+
         self._write_html_action(value="tests/test Neopixels/close", label="close", func=self.close)
-        
+
         self._test_neopixel_consumption.write_html()
         self._test_neopixel_communication.write_html()
         self._test_neopixel_segments.write_html()
-    
+
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
         self._write_html_action(value="tests/test Neopixels/open", label=self.name, func=self.open)

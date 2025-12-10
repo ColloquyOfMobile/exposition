@@ -9,7 +9,7 @@ from colloquy.wsgi.root.body.item import Item as _Item
 from colloquy.hardware.logger.item import Item as LoggerItem
 
 
-class Item(_Item):    
+class Item(_Item):
 
     def __init__(self, owner):
         _Item.__init__(self, owner=owner)
@@ -50,7 +50,7 @@ class Item(_Item):
     # @property
     # def hardware(self):
         # return self.owner.hardware
-        
+
     @property
     def is_opened(self):
         return self.owner.opened is self
@@ -65,10 +65,10 @@ class Item(_Item):
         if value is not None:
             if self._opened is not None:
                 self._opened.close()
-                
+
         self._opened = value
-        
-        
+
+
     def open(self, **kwargs):
         self.owner.opened = self
 
@@ -90,21 +90,21 @@ class Action(ActionItem):
         action()
 
 class HTML(HtmlItem):
-    
+
     def _call_unsafe(self):
         doc, tag, text = self.doc.tagtext()
         if not self.owner.is_opened:
             self._call_if_is_not_opened()
             return
-            
+
         if self.owner.opened:
             return self.owner.opened.html()
 
-        with tag("div", style="display: flex; flex-direction: column;"):            
+        with tag("div", style="display: flex; flex-direction: column;"):
             with tag("h2", style="flex: 1;" ):
                 text(self.owner.name)
             self.owner.commands.html()
-        
+
         self._call_body()
 
     def _call_if_is_not_opened(self):
@@ -112,10 +112,10 @@ class HTML(HtmlItem):
         with tag("form", method="post", style="display: flex; "):
             with tag("button", name="action", value=self.owner.action.value):
                 text(self.owner.name)
-    
+
     def _call_body(self):
         raise NotImplementedError(f"{self=}")
-    
+
     @property
     def name(self):
         return "HTML"

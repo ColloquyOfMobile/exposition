@@ -11,7 +11,7 @@ from colloquy.base import Base
 from .defaults import DEFAULTS
 
 class Parameters(Base):
-    
+
 
     def __init__(self, owner):
         super().__init__(owner=owner)
@@ -27,7 +27,7 @@ class Parameters(Base):
 
         with self.file.open() as file:
             self._data = json.load(file)
-            
+
         for mirror_name, female_name in zip(self._data["mirrors"]["names"], self._data["females"]["names"]):
             self._data[mirror_name] = self._data[female_name]["mirror"]
 
@@ -39,7 +39,7 @@ class Parameters(Base):
                 ]
             }
         # raise NotImplementedError
-        
+
         # TODO move the process into the as_dict and the __getitem__
         self._process(self._data)
 
@@ -54,10 +54,10 @@ class Parameters(Base):
     # def __call__(self):
         # if not self.is_opened:
             # self.open()
-    
+
     def get(self, key):
         return self._data[key]
-    
+
     def set(self, key, value):
         self._data[key] = value
         self.save()
@@ -131,7 +131,7 @@ class Parameters(Base):
 
 
 # class HTML(_HTML):
-    
+
     # def _call_body(self):
         # doc, tag, text = self.doc.tagtext()
         # if self.owner.is_calibrated:
@@ -139,14 +139,13 @@ class Parameters(Base):
                 # with tag("div",):
                     # text(f" All set :). You can close the parameters and open Hardware!")
             # return
-            
+
         # for element in self._unset_elements:
             # with tag("div",):
                 # text(f"Set the '{element}' to open Hardware!")
 
         # self.hardware.arduino.add_html()
         # self.hardware.dxl_manager.add_html()
-
 
 
 

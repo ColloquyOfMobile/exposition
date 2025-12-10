@@ -2,8 +2,8 @@ from colloquy.female import FemaleDriver
 from .virtual_light_sensor import VirtualLightSensor
 
 
-class VirtualFemale(FemaleDriver):    
-    
+class VirtualFemale(FemaleDriver):
+
     _classes = {
         "sensor": VirtualLightSensor
     }

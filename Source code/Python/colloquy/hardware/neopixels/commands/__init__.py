@@ -3,7 +3,7 @@ from colloquy.base import Base
 from .close import Close
 
 class Commands(Base):
-    
+
     def __init__(self, owner):
         super().__init__(owner)
         # self._html = HTML(owner=self)
@@ -16,7 +16,7 @@ class Commands(Base):
     @property
     def name(self):
         return "command"
-        
-        
+
+
     def open(self, **kwargs):
         pass

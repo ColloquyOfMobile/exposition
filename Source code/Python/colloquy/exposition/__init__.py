@@ -8,14 +8,14 @@ from .html import HTML
 from utils import CustomDoc
 
 class Exposition(Base):
-    
+
     def __init__(self, owner):
         super().__init__(owner)
         self._html = HTML(owner=self)
         self._hardware = self.owner.hardware
         self._thread = None
         self._stop_event = Event()
-        
+
         self[self.html.name] = self.html.handle_request
         self["start"] = self.start
         self["stop"] = self.stop
@@ -24,17 +24,17 @@ class Exposition(Base):
         request = Path(request)
         if not request.parts:
             raise NotImplementedError
-            
+
         key, *leftover = request.parts
-        
+
         if key in self:
             self[key](request="/".join(leftover))
             return
-            
+
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
-    def is_started(self):        
+    def is_started(self):
         return self.hardware.is_started
 
     @property
@@ -56,7 +56,7 @@ class Exposition(Base):
     @property
     def colloquy(self):
         return self.owner.colloquy
-    
+
     def shutdown(self):
         self.stop()
 
@@ -67,4 +67,3 @@ class Exposition(Base):
 
     def stop(self, request=None):
         self.hardware.shutdown()
-    

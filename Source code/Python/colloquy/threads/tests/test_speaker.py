@@ -39,33 +39,33 @@ class TestSpeaker(HTMLElement):
 
     def write_html(self):
         doc, tag, text = self.html_doc.tagtext()
-        
+
         if not self.is_open:
             self._write_html_open()
             return
 
         self._add_html_title()
-            
+
         self._write_html_action(value="hardware/tests/speaker/close", label="close", func=self.close)
-        
+
         print(f"{self.speaker_on=}")
         if self.speaker_on is not None:
             self.speaker_on.write_html(ui_context=self)
-            return 
-        
+            return
+
         for speaker in self.hardware.speakers:
             speaker.write_html(ui_context=self)
-    
+
     def _write_html_open(self):
         doc, tag, text = self.html_doc.tagtext()
         self._write_html_action(value="hardware/tests/speaker/open", label=self.name, func=self.open)
 
     # def _start(self, **kwargs):
         # self._is_started = True
-        
+
         # brightness = 255
         # color = dict(red=254, green=254, blue=254, white=254)
-        
+
         # for female in self.hardware.females:
             # config = dict(
                 # brightness = brightness,
@@ -87,7 +87,7 @@ class TestSpeaker(HTMLElement):
 
 
     # def _stop(self, **kwarg):
-        
+
         # for female in self.hardware.females:
             # female.neopixel.off()
         # for male in self.hardware.males:
@@ -101,4 +101,3 @@ class TestSpeaker(HTMLElement):
             text(self.name.title())
         with tag("div"):
             text("Enable testing speaker one by one.")
-

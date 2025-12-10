@@ -7,7 +7,7 @@ import traceback
 
 
 class Body(MovingPart):
-    
+
     _near_origin_threashold = 400
 
     def __init__(self, owner, **kwargs):

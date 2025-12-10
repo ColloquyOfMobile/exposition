@@ -22,7 +22,7 @@ class VirtualSerialPort:
             to_return = self._to_return
             self._to_return = None
             return to_return
-            
+
         return next(self._readline_results)
 
     def write(self, data):
@@ -40,7 +40,7 @@ class VirtualSerialPort:
             assert "brightness" in data
         if path.endswith("sensor"):
             self._to_return = json.dumps({"status": "success", "value": "10"}).encode()
-            
+
 
     @property
     def is_open(self):

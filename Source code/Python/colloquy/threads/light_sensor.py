@@ -9,7 +9,7 @@ class LightSensor(ThreadElement):
         self._lock = Lock()
         self.arduino_manager = owner.arduino_manager
         self._request_path = self._path.relative_to(self.hardware.path).as_posix()
-    
+
     @property
     def emulated(self):
         return self.owner.emulate_light_sensor
@@ -35,17 +35,16 @@ class LightSensor(ThreadElement):
             male = interaction.male
             if not male.near_origin():
                 return
-            
+
             common_drives = set(female.drives.state).intersection(male.drives.state)
             if common_drives:
                 interaction.target_drive = tuple(common_drives)
                 interaction.start()
-    
+
     def read(self):
         if self.emulated:
             raise NotImplementedError
         # path = f"{self._owner.name}/neopixel"
         response = self.arduino_manager.send(self._request_path)
         return int(response["value"])
-        
-        
+

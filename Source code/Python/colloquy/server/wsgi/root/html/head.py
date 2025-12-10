@@ -2,7 +2,7 @@ from utils import CustomDoc
 from colloquy.wsgi.root.html_item import HtmlItem
 
 class Head(HtmlItem):
-    
+
     def __init__(self, owner):
         HtmlItem.__init__(self, owner)
 
@@ -18,7 +18,7 @@ class Head(HtmlItem):
                 " initial-scale=1,"
                 ' interopened-widget=resizes-content" />'
             )
-        # Insert HTML in parent doc only when it's sure that no error occured. 
+        # Insert HTML in parent doc only when it's sure that no error occured.
         self.parent.doc.asis(self.doc.getvalue())
 
     @property

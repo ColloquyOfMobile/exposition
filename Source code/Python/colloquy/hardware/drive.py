@@ -32,7 +32,7 @@ class Drive(Base):
         self._stop_event = Event()
 
         self._step = 2
-        
+
         # self._max == 254 in order to clamp the brigtness to avoid blink to 254.
         # Look like when the RGB value are all 255, the white LED is turned on, and RGB LEDs turned off. If white value is 0 then everything is turn off.
         self._max = 254
@@ -48,7 +48,7 @@ class Drive(Base):
         if self._thread is None:
             return False
         return self._thread.is_alive()
-    
+
     @property
     def name(self):
         return self._name
@@ -94,7 +94,7 @@ class Drive(Base):
     def satisfy(self):
         self.o_drive = self._satisfaction_lim
         self.p_drive = self._satisfaction_lim
-    
+
     def shutdown(self):
         print(f"Shutdown {self=}")
         self.stop()
@@ -109,16 +109,16 @@ class Drive(Base):
             return
         self._stop_event.set()
         self._thread.join()
-    
+
     def run(self):
         try:
             self._run_unsafe()
         except Exception as error:
             self._error = error
-            raise 
-    
+            raise
+
     def _run_unsafe(self):
-        stop_event = self._stop_event.is_set        
+        stop_event = self._stop_event.is_set
         while not stop_event():
             self.increment()
             sleep(0.01)

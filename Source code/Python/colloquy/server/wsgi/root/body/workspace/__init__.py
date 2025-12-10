@@ -5,7 +5,7 @@ import traceback
 from utils import CustomDoc
 
 class Workspace(Base):
-    
+
     def __init__(self, owner):
         super().__init__(owner)
         self.opened = None
@@ -13,11 +13,11 @@ class Workspace(Base):
         self._exposition = self.colloquy.exposition
 
     def __call__(self):
-        try:   
-            html = self._call_unsafe()        
+        try:
+            html = self._call_unsafe()
         except Exception as exception:
             html = self._call_if_error()
-            
+
         return html
 
     @property
@@ -43,31 +43,31 @@ class Workspace(Base):
     @property
     def exposition(self):
         return self._exposition
-        
 
-    def _call_unsafe(self):  
+
+    def _call_unsafe(self):
         doc, tag, text = CustomDoc().tagtext()
         with tag("div", style="display: flex; flex-direction: column;"):
             if self.opened is not None:
                 doc.asis(self.opened())
                 return doc.getvalue()
-            
+
             doc.asis(self.tests.html())
             doc.asis(self.exposition.html())
-            
+
         return doc.getvalue()
-    
+
     def _call_if_error(self):
-        doc, tag, text = CustomDoc().tagtext()  
+        doc, tag, text = CustomDoc().tagtext()
         # .events.shutdown.set()
         with tag("body"):
             with tag("h1"):
                 text(f"Error html for {self.name}!")
-                                
+
             with tag("div", style="display: flex; flex-direction: column;"):
                 style = "white-space: normal; overflow-wrap: break-word; word-break: break-word;"
                 for line in traceback.format_exc().splitlines():
                     with tag("pre", style=style):
                         text(line)
-        
+
         return doc.getvalue()

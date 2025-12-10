@@ -4,12 +4,12 @@ from colloquy.base import Base
 
 
 class Close(Base):
-    
+
     def __init__(self, owner):
         super().__init__(owner)
         # self._action = Action(owner=self)
         # self._html = HTML(owner=self)
-    
+
     def __call__(self):
         self.owner.opened = None
 
@@ -21,11 +21,11 @@ class Close(Base):
 
     # def __call__(self):
         # self.owner()
-        
-        
 
-    # def _call_is_opened(self): 
-        # doc, tag, text = self.doc.tagtext()                 
+
+
+    # def _call_is_opened(self):
+        # doc, tag, text = self.doc.tagtext()
         # with tag("div"):
             # with tag("div"):
                 # text("Restarting...")

@@ -18,11 +18,11 @@ class Root(Base):
 
     def __call__(self):
         self.owner.start_response('200 OK', [('Content-Type', 'text/html')])
-        try:   
-            html = self._call_unsafe()        
+        try:
+            html = self._call_unsafe()
         except Exception as exception:
             html = self._call_if_error()
-            
+
         return [html.encode()]
 
     @property
@@ -44,39 +44,38 @@ class Root(Base):
     @property
     def name(self):
         return "root"
-        
+
     @property
     def opened(self):
         raise NotImplementedError
-        
-    
+
+
     def _call_unsafe(self):
         doc, tag, text = CustomDoc().tagtext()
         doc.asis("<!DOCTYPE html>")
         with tag("html"):
             doc.asis(self.head())
             doc.asis(self.body())
-        
+
         return doc.getvalue()
-        
-    
+
+
     def _call_if_error(self):
         self.events.shutdown.set()
-        doc, tag, text = CustomDoc().tagtext()  
+        doc, tag, text = CustomDoc().tagtext()
         doc.asis("<!DOCTYPE html>")
         with tag("body"):
             with tag("h1"):
                 text(f"Error html for {self.name}!")
-                
+
             with tag("h2"):
                 text(f"NOTE: Server was shutdown! Restart manually...)")
-                                
+
             with tag("div", style="display: flex; flex-direction: column;"):
                 style = "white-space: normal; overflow-wrap: break-word; word-break: break-word;"
                 for line in traceback.format_exc().splitlines():
                     with tag("pre", style=style):
                         text(line)
-        
+
         return doc.getvalue()
 
-    

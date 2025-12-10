@@ -6,7 +6,7 @@ from .shutdown import Shutdown
 from .restart import Restart
 
 class Commands(Base):
-    
+
     def __init__(self, owner):
         super().__init__(owner)
         self._server = owner.server
@@ -15,11 +15,11 @@ class Commands(Base):
         self._restart = Restart(owner=self)
 
     def __call__(self):
-        try:   
-            html = self._call_unsafe()  
+        try:
+            html = self._call_unsafe()
         except Exception as exception:
             html = self._call_if_error()
-            
+
         return html
 
     @property
@@ -37,28 +37,28 @@ class Commands(Base):
     @property
     def name(self):
         return "command"
-        
 
-    def _call_unsafe(self):   
+
+    def _call_unsafe(self):
         doc, tag, text = CustomDoc().tagtext()
-        with tag("div", style="display: flex; margin-bottom: 1rem;"):  
+        with tag("div", style="display: flex; margin-bottom: 1rem;"):
                 doc.asis(self.shutdown.html())
                 with tag("div", style="width: 1ch;"):
                     pass
                 doc.asis(self.restart.html())
         return doc.getvalue()
-    
+
     def _call_if_error(self):
-        doc, tag, text = CustomDoc().tagtext()  
+        doc, tag, text = CustomDoc().tagtext()
         with tag("div"):
             with tag("div"):
                 with tag("strong"):
                     text(f"Error html for {self.name}!")
-                                
+
             with tag("div", style="display: flex; flex-direction: column;"):
                 style = "white-space: normal; overflow-wrap: break-word; word-break: break-word;"
                 for line in traceback.format_exc().splitlines():
                     with tag("pre", style=style):
                         text(line)
-        
+
         return doc.getvalue()

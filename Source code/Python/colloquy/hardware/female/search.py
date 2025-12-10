@@ -12,7 +12,7 @@ class Search(ThreadElement):
     def _loop(self):
         if not self.owner.is_moving:
             self.owner.toggle_position()
-        
+
         self.owner.sensor.detect_male()
 
         # if self.owner.interaction_event.is_set():
