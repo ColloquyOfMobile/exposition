@@ -1,10 +1,12 @@
 #include <Adafruit_NeoPixel.h>
 #include <ArduinoJson.h>
-// Configuration des Neopixels pour chaque groupe
+
 // PINs
 #define FEMALE1_NEOPIXEL_PIN 6
+#define FEMALE2_NEOPIXEL_PIN 7
+#define FEMALE3_NEOPIXEL_PIN 8
 
-#define FEMALE_NUM_PIXELS 50  // Nombre de LEDs par groupe
+#define FEMALE_NUM_PIXELS 50  // Female LED number
 
 
 // ##########################################################
@@ -93,7 +95,7 @@ Female female1(head1, bodyO1, bodyP1, feet1);
 
 Adafruit_NeoPixel female2Strip(
   FEMALE_NUM_PIXELS,
-  FEMALE1_NEOPIXEL_PIN,
+  FEMALE2_NEOPIXEL_PIN,
   NEO_GRBW + NEO_KHZ800);
 
 PixelGroup head2(&female2Strip, 37, 13);
@@ -105,7 +107,7 @@ Female female2(head2, bodyO2, bodyP2, feet2);
 
 Adafruit_NeoPixel female3Strip(
   FEMALE_NUM_PIXELS,
-  FEMALE1_NEOPIXEL_PIN,
+  FEMALE3_NEOPIXEL_PIN,
   NEO_GRBW + NEO_KHZ800);
 
 PixelGroup head3(&female2Strip, 37, 13);
