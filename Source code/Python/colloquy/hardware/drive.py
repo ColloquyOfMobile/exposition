@@ -121,5 +121,4 @@ class Drive(Base):
         stop_event = self._stop_event.is_set        
         while not stop_event():
             self.increment()
-            sleep(1)
-            # sleep(0.1)
+            sleep(0.1)

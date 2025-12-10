@@ -61,10 +61,6 @@ class Neopixel(Base):
         return dict(red=255, green=80, blue=25, white=16)
 
     @property
-    def white(self):
-        return dict(red=0, green=0, blue=0, white=255)
-
-    @property
     def colloquy(self):
         return self.owner.colloquy
         
