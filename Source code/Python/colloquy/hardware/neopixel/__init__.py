@@ -161,6 +161,8 @@ class Neopixel(Base):
         self.update()
 
     def off(self, **kwargs):
+        if not self._on_off_state:
+            return
         data = dict(
             r = 0,
             g = 0,

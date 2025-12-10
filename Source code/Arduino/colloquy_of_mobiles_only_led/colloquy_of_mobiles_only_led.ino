@@ -155,9 +155,7 @@ void processCommand(const String& input) {
     return female1.bodyP.fill(jsonDoc);
   } else if (path == "f1/feet") {
     return female1.feet.fill(jsonDoc);
-  }
-
-  if (path == "f2/head") {
+  } else if (path == "f2/head") {
     return female2.head.fill(jsonDoc);
   } else if (path == "f2/bodyO") {
     return female2.bodyO.fill(jsonDoc);
@@ -165,9 +163,7 @@ void processCommand(const String& input) {
     return female2.bodyP.fill(jsonDoc);
   } else if (path == "f2/feet") {
     return female2.feet.fill(jsonDoc);
-  }
-
-  if (path == "f3/head") {
+  } else if (path == "f3/head") {
     return female3.head.fill(jsonDoc);
   } else if (path == "f3/bodyO") {
     return female3.bodyO.fill(jsonDoc);

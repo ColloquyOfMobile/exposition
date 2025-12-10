@@ -70,6 +70,10 @@ class Test1(Base):
             return
         self._stop_event.set()
         self._thread.join()
+        
+        with hardware.arduino:    
+            for neopixel in self.hardware.neopixels:
+                neopixel.off()
     
     def run(self):
         try:
