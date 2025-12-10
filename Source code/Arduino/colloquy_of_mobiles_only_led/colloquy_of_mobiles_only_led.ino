@@ -111,9 +111,9 @@ Adafruit_NeoPixel female3Strip(
   NEO_GRBW + NEO_KHZ800);
 
 PixelGroup head3(&female3Strip, 37, 13);
-PixelGroupForFemaleBody bodyO3(&female3Strip, 0, 27);
-PixelGroupForFemaleBody bodyP3(&female3Strip, 1, 28);
-PixelGroup feet3(&female3Strip, 29, 7);
+PixelGroupForFemaleBody bodyO3(&female3Strip, 8, 27);
+PixelGroupForFemaleBody bodyP3(&female3Strip, 9, 28);
+PixelGroup feet3(&female3Strip, 0, 7);
 
 Female female3(head3, bodyO3, bodyP3, feet3);
 
