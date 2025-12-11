@@ -81,7 +81,7 @@ class Body(Base):
                 doc.asis(self.commands())
                 
                 with tag("div", style="margin-bottom: 1rem;"):
-                    text("TODO: Reintegrate the error handling and the logging in the threads.")
+                    text("TODO: Reintegrate the logging and the shutdown.")
                     
                 doc.asis(self.workspace())
 

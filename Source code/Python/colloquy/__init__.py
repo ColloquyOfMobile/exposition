@@ -11,7 +11,7 @@ from .server import Server
 from .hardware import Hardware
 from .parameters import Parameters
 from .cli import CLI
-from .log import Log
+from .logger import Logger
 from .tests import Tests
 from .exposition import Exposition
 
@@ -22,7 +22,7 @@ class Colloquy(Base):
 
         self._request = None
         self._args = None
-        self._log = Log(owner=self)
+        self._log = Logger()
 
         self._params = Parameters(owner=self)
 

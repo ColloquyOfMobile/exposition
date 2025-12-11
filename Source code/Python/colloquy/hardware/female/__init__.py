@@ -17,10 +17,6 @@ from colloquy.base import Base
 
 class Female(Base):
 
-    # _classes = {
-        # "sensor": LightSensor
-    # }
-
     def __init__(self, owner, id_number):
         self._name = f"female{id_number}"
         self._id_number = id_number
@@ -121,7 +117,7 @@ class Female(Base):
     def is_started(self):
         return any(element.is_started for element in self._threaded_elements)
 
-    def shutdown(self):
+    def stop(self):
         with self.arduino:
             for element in self._threaded_elements:
                 element.shutdown()
