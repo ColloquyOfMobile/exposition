@@ -3,16 +3,20 @@ import inspect
 from collections import defaultdict
 import threading
 from pathlib import Path
+import shutil
+from threading import Lock
 
 
 class Logger:
     
     _time_origin = time()
     _log_folder = Path("local/logs")
+    shutil.rmtree(_log_folder)
     _log_folder.mkdir(parents=True, exist_ok=True)
     
     def __init__(self):
         self._line_counts = {}
+        self._lock = Lock()
         
 
     def __call__(self, msg: str):
@@ -25,7 +29,7 @@ class Logger:
         if current == main_thread:
             print(msg)
         
-        self._write(msg)
+        self._write(msg)        
     
     def _write(self, msg: str):
         """Write log to current thread's file, creating directories if needed."""
@@ -41,19 +45,23 @@ class Logger:
             lines = file_path.read_text().splitlines()
             self._line_counts[file_path] = len(lines)
             text = "\n".join(lines)
-            file_path.write_text(text)
+            with self._lock:
+                file_path.write_text(text)
             
         self._line_counts[file_path] += len(msg.splitlines())
-
-        with open(file_path, "a", encoding="utf-8") as f:
-            f.write(msg + "\n")
+        
+        with self._lock:
+            with open(file_path, "a", encoding="utf-8") as f:
+                msg = msg + "\n"
+                f.write(msg)
             
         if self._line_counts[file_path] > 2000:
             lines = file_path.read_text().splitlines()
             lines[-1000:]
             self._line_counts[file_path] = len(lines)
-            text = "\n".join(lines)
-            file_path.write_text(text)
+            text = "\n".join(lines)            
+            with self._lock:
+                file_path.write_text(text)
 
     def _format(self, msg):
         time_header = f"{round(time()-self._time_origin, 2)}:"

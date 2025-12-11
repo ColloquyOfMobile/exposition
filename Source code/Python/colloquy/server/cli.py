@@ -32,15 +32,6 @@ class CLI(Base):
     def name(self, ):
         return "cli"
 
-    # def pprint(self, ):
-        # return self.server()
-
-    # def restart(self):
-        # python = sys.executable
-        # args = ["main.py", "server/restart"]
-        # # args.append()
-        # os.execl(python, python, *args)
-
     def _call_root(self):
         print(f"Available command for {self.owner.path.as_posix()}:")
         for name in self:

@@ -26,10 +26,10 @@ def handle_error(func):
 
             #self._busy.clear()
             if dxl_comm_result != COMM_SUCCESS:
-                print(f"COM ERR: ({dxl_id=}) {self.packet_handler.getTxRxResult(dxl_comm_result)}")
+                self.log(f"COM ERR: ({dxl_id=}) {self.packet_handler.getTxRxResult(dxl_comm_result)}")
                 continue
             if dxl_error != 0:
-                print(f"DXL ERR: ({dxl_id=}) {self.packet_handler.getRxPacketError(dxl_error)}")
+                self.log(f"DXL ERR: ({dxl_id=}) {self.packet_handler.getRxPacketError(dxl_error)}")
                 continue
             return value
 

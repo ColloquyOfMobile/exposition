@@ -1,13 +1,13 @@
 from time import time, sleep
 import traceback
-from colloquy.base import Base
+from colloquy.base_thread import BaseThread
 from pathlib import Path
 import traceback
 from threading import Thread, Event, Lock
 from .html import HTML
 from utils import CustomDoc
 
-class Exposition(Base):
+class Exposition(BaseThread):
 
     def __init__(self, owner):
         super().__init__(owner)
@@ -20,8 +20,8 @@ class Exposition(Base):
         self._child_errors = []
 
         self[self.html.name] = self.html.handle_request
-        self["start"] = self.start
-        self["stop"] = self.stop
+        # self["start"] = self.start
+        # self["stop"] = self.stop
 
     def __call__(self, request):
         request = Path(request)
@@ -69,25 +69,26 @@ class Exposition(Base):
     def shutdown(self):
         self.stop()
 
-    def start(self, request):
-        self.child_errors.clear()
-        self._started_at = time()
-        self._stop_event.clear()
-        self._thread = thread = Thread(target=self.run, name=self.path.as_posix())
-        thread.start()
+    # def start(self, request):
+        # self.child_errors.clear()
+        # self._started_at = time()
+        # self._stop_event.clear()
+        # self._thread = thread = Thread(target=self.run, name=self.path.as_posix())
+        # thread.start()
 
     def stop(self, request=None):
         self.hardware.shutdown()
-        if self._thread is None:
-            return
-        self._stop_event.set()
-        self._thread.join()
+        super().stop()
+        # if self._thread is None:
+            # return
+        # self._stop_event.set()
+        # self._thread.join()
 
-    def run(self):
-        try:
-            self._run_unsafe()
-        except Exception as error:
-            raise NotImplementedError(self)
+    # def run(self):
+        # try:
+            # self._run_unsafe()
+        # except Exception as error:
+            # raise NotImplementedError(self)
 
     def _run_unsafe(self):
         stop_event = self._stop_event.is_set
@@ -101,10 +102,7 @@ class Exposition(Base):
                     self.hardware.shutdown()
                 sleep(0.1)
 
-    def add_error(self, origin, error):
-        print(f"{origin=}")
-        print(f"{error=}")
-        
-        self.child_errors.append(
-            (origin, error)
-        )
+    # def add_error(self, origin, error):        
+        # self.child_errors.append(
+            # (origin, error)
+        # )

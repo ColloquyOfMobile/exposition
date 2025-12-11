@@ -11,7 +11,6 @@ from .server import Server
 from .hardware import Hardware
 from .parameters import Parameters
 from .cli import CLI
-from .logger import Logger
 from .tests import Tests
 from .exposition import Exposition
 
@@ -22,7 +21,6 @@ class Colloquy(Base):
 
         self._request = None
         self._args = None
-        self._log = Logger()
 
         self._params = Parameters(owner=self)
 
@@ -49,10 +47,6 @@ class Colloquy(Base):
     @property
     def name(self):
         return "colloquy"
-
-    @property
-    def log(self):
-        return self._log
 
     @property
     def hardware(self):
@@ -82,9 +76,9 @@ class Colloquy(Base):
         return self.server()
 
     def shutdown(self):
-        self.tests.shutdown()
-        self.hardware.shutdown()
-        self.exposition.shutdown()
+        self.tests.stop()
+        self.hardware.stop()
+        self.exposition.stop()
 
     def _call_root(self):
         print("Available command:")

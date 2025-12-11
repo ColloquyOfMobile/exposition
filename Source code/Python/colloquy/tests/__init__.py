@@ -62,6 +62,6 @@ class Tests(Base):
     def hardware(self):
         return self._hardware
 
-    def shutdown(self):
+    def stop(self):
         for test in self._threaded_tests:
-            test.shutdown()
+            test.stop()

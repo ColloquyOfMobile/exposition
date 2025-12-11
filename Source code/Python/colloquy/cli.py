@@ -13,8 +13,6 @@ class CLI(Base):
         self["server"] = self.owner.server.cli
 
     def __call__(self, *args):
-        if self.is_simulated:
-            print(f"Warning: The hardware is simulated.")
         if args:
             path, *args = args
             request = Path(path)

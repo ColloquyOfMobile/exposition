@@ -11,13 +11,12 @@ from .logger import Logger
 
 class Hardware(Base):
 
-    def __init__(self, owner, surname=""):
-        """Use the surname if you want to instanciate 2 instances of hardware. Log file path are compute through names, two object can write to the same file. Mainly intended for tests."""
-
-        self._surname = surname
+    def __init__(self, owner):
 
         super().__init__(owner)
-        self._log = owner.log
+        
+        if self.is_simulated:
+            self.log(f"Warning: The hardware is simulated.")
 
         self._opened = None
         self._commands = Commands(owner=self)
@@ -93,10 +92,6 @@ class Hardware(Base):
     @property
     def html(self):
         return self._html
-
-    @property
-    def log(self):
-        return self._log
 
     @property
     def name(self):

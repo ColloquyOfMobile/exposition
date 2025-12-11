@@ -23,7 +23,6 @@ class Arduino(Base):
         """
         super().__init__(owner=owner)
         self._params = owner.owner.params
-        self._log = owner.log
         self.lock = Lock()
         self._port_handler = None
         self._was_open = None
@@ -70,10 +69,6 @@ class Arduino(Base):
     @property
     def html(self):
         return self._html
-
-    @property
-    def log(self):
-        return self._log
 
     @property
     def params(self):
@@ -172,7 +167,7 @@ class Arduino(Base):
     def wait_for_reboot(self):
         start = time()
         while True:
-            print("Waiting for Arduino to reboot.")
+            self.log("Waiting for Arduino to reboot.")
             data = self.port_handler.readline().strip()
             if data == b"Hello!":
                 break

@@ -1,38 +1,17 @@
 # from colloquy.wsgi.root.html_item import HtmlItem
 from pathlib import Path
-from colloquy.base import Base
+from colloquy.base_html import BaseHTML
 from utils import CustomDoc
 import traceback
 
-class HTML(Base):
+class HTML(BaseHTML):
 
     def __init__(self, owner):
         super().__init__(owner=owner)
-        self._is_open = False
-
-        self["open"] = self.open
-        self["close"] = self.close
-
-    def __call__(self, request=None):
-        self._request = request
-        try:
-            html = self._call_unsafe()
-        except Exception as exception:
-            html = self._call_if_error()
-
-        return html
-
-    @property
-    def is_open(self):
-        return self._is_open
 
     @property
     def name(self):
         return "html"
-
-    @property
-    def colloquy(self):
-        return self.owner.colloquy
 
     @property
     def workspace(self):
@@ -47,19 +26,6 @@ class HTML(Base):
     def close(self, request=None):
         self._is_open = False
         self.workspace.opened = None
-
-    def handle_request(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     def _html_title(self):
         doc, tag, text = CustomDoc().tagtext()
@@ -96,7 +62,6 @@ class HTML(Base):
             for (origin, error) in self.owner.child_errors:
                 doc.asis(self._html_thread_error(origin=origin, error=error))
 
-            # doc.asis(self.tests.html())
 
         return doc.getvalue()
     
@@ -110,20 +75,6 @@ class HTML(Base):
             with tag("div", style="display: flex; flex-direction: column;"):
                 style = "white-space: normal; overflow-wrap: break-word; word-break: break-word;"
                 for line in traceback.format_exception(error):
-                    with tag("pre", style=style):
-                        text(line)
-
-        return doc.getvalue()
-
-    def _call_if_error(self):
-        doc, tag, text = CustomDoc().tagtext()
-        with tag("div"):
-            with tag("h2"):
-                text(f"Error in {self}!")
-
-            with tag("div", style="display: flex; flex-direction: column;"):
-                style = "white-space: normal; overflow-wrap: break-word; word-break: break-word;"
-                for line in traceback.format_exc().splitlines():
                     with tag("pre", style=style):
                         text(line)
 

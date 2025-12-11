@@ -48,7 +48,7 @@ class TestSpeaker(HTMLElement):
 
         self._write_html_action(value="hardware/tests/speaker/close", label="close", func=self.close)
 
-        print(f"{self.speaker_on=}")
+        self.log(f"{self.speaker_on=}")
         if self.speaker_on is not None:
             self.speaker_on.write_html(ui_context=self)
             return

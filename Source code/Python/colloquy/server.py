@@ -43,16 +43,16 @@ class Server(Base):
             Path("Local/logs.txt").unlink()
         with make_server("0.0.0.0", port, self.wsgi, handler_class=CustomHandler) as httpd:
             # WSGIRequestHandler.log_message = lambda *args, **kwargs: None
-            print(f"Serving on port {port}...")
+            self.log(f"Serving on port {port}...")
 
             while True:
                 httpd.handle_request()
                 if self.events.shutdown.is_set():
-                    print(f"Shutdown event!")
+                    self.log(f"Shutdown event!")
                     break
 
             if self.events.restart.is_set():
-                print(f"restart event!")
+                self.log(f"restart event!")
                 self.owner.restart()
 
     @property

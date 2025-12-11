@@ -26,14 +26,3 @@ class ToggleOnOff(Base):
                 text(label)
 
         return doc.getvalue()
-
-# class HTML(_HTML):
-
-    # def __call__(self):
-        # doc, tag, text = self.doc.tagtext()
-        # label = "on"
-        # if self.owner.owner.state:
-            # label = "off"
-        # with tag("form", method="post", style="display: flex; "):
-            # with tag("button", name="action", value=self.owner.action.value):
-                # text(label)

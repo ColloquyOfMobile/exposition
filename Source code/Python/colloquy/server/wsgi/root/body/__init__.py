@@ -81,7 +81,7 @@ class Body(Base):
                 doc.asis(self.commands())
                 
                 with tag("div", style="margin-bottom: 1rem;"):
-                    text("TODO: Reintegrate the logging and the shutdown.")
+                    text("TODO: Implemet an HTML, a Thread class.")
                     
                 doc.asis(self.workspace())
 

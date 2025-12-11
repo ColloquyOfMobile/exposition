@@ -54,9 +54,6 @@ class White(Base):
         self._hundreds.value = int(value_as_string[0])
         self._tens.value = int(value_as_string[1])
         self._ones.value = int(value_as_string[2])
-        # raise NotImplementedError
-        # print(f"{value=}")
-        # self._value = value
         self.neopixel.update()
 
     def hex_to_rgb(self, hex_value):

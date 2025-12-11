@@ -24,7 +24,7 @@ class Test2(Test1):
 
         assert interaction.female.drives.is_frustated
 
-        print(f"Move bar to interaction.")
+        self.log(f"Move bar to interaction.")
         interaction.move_to_position_and_wait()
 
 

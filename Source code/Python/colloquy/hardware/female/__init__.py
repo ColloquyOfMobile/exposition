@@ -119,8 +119,7 @@ class Female(Base):
 
     def stop(self):
         with self.arduino:
-            for element in self._threaded_elements:
-                element.shutdown()
+            self.drives.stop()
             for neopixel in self.neopixels:
                 neopixel.off()
 

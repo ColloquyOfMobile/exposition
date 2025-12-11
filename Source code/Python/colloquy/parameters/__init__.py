@@ -102,7 +102,6 @@ class Parameters(Base):
         json_data = {}
         for key in DEFAULTS:
             value = self._data[key]
-            # print(value)
             json_data[key] = value
 
         with self._path.open("w") as file:
@@ -129,23 +128,6 @@ class Parameters(Base):
 
 
 
-
-# class HTML(_HTML):
-
-    # def _call_body(self):
-        # doc, tag, text = self.doc.tagtext()
-        # if self.owner.is_calibrated:
-            # with tag("div", style="display: flex;"):
-                # with tag("div",):
-                    # text(f" All set :). You can close the parameters and open Hardware!")
-            # return
-
-        # for element in self._unset_elements:
-            # with tag("div",):
-                # text(f"Set the '{element}' to open Hardware!")
-
-        # self.hardware.arduino.add_html()
-        # self.hardware.dxl_manager.add_html()
 
 
 

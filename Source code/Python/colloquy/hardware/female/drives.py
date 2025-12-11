@@ -60,6 +60,15 @@ class Drives(Base):
     def add_error(self, origin, error):
         self._started_by.add_error(origin=origin, error=error)
 
+    def stop(self):
+        female = self.owner
+        for drive in self:
+            drive.start(started_by=self)
+        female.head.off()
+        female.body_o.off()
+        female.body_p.off()
+        female.feet.off()
+
     def start(self, started_by):
         self._started_by = started_by
         female = self.owner

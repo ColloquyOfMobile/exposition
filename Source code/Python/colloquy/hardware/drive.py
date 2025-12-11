@@ -1,6 +1,6 @@
 from time import time, sleep
 from threading import Lock
-from colloquy.base import Base
+from colloquy.base_thread import BaseThread
 from threading import Thread, Event, Lock
 
 """logic35_systems.ino: line 86
@@ -20,17 +20,17 @@ const int color_orange[4] = {80, 255, 25, 16}; //GRBW/orangish
 const int color_puce[4] = {180, 160, 0, 40}; //GRBW//greenish
 """
 
-class Drive(Base):
+class Drive(BaseThread):
 
     def __init__(self, owner, name):
         assert name in ("O", "P")
         self._name = name
-        Base.__init__(self, owner=owner)
+        super().__init__(owner=owner)
         self._value = 0
         
-        self._thread = None
-        self._stop_event = Event()
-        self._started_by = None
+        # self._thread = None
+        # self._stop_event = Event()
+        # self._started_by = None
 
         self._step = 1
         self._body = owner.owner
@@ -95,7 +95,6 @@ class Drive(Base):
         self.owner.update()
 
         if not self.is_satisfied:
-            print(f"{time()-self._started_at=}")
             self.body.search.start(started_by=self)
             return
 
@@ -103,29 +102,29 @@ class Drive(Base):
         self.o_drive = self._satisfaction_lim
         self.p_drive = self._satisfaction_lim
 
-    def shutdown(self):
-        print(f"Shutdown {self=}")
-        self.stop()
+    # def shutdown(self):
+        # print(f"Shutdown {self=}")
+        # self.stop()
 
-    def start(self, started_by):
-        self._started_at = time()
-        self._started_by = started_by
-        self._stop_event.clear()
-        self._thread = thread = Thread(target=self.run, name=self.path.as_posix())
-        thread.start()
+    # def start(self, started_by):
+        # self._started_at = time()
+        # self._started_by = started_by
+        # self._stop_event.clear()
+        # self._thread = thread = Thread(target=self.run, name=self.path.as_posix())
+        # thread.start()
 
-    def stop(self):
-        if self._thread is None:
-            return
-        self._stop_event.set()
-        self._thread.join()
+    # def stop(self):
+        # if self._thread is None:
+            # return
+        # self._stop_event.set()
+        # self._thread.join()
 
-    def run(self):
-        try:
-            self._run_unsafe()
-        except Exception as error:
-            self._started_by.add_error(origin=self, error=error)
-            # raise
+    # def run(self):
+        # try:
+            # self._run_unsafe()
+        # except Exception as error:
+            # self._started_by.add_error(origin=self, error=error)
+            # # raise
 
     def _run_unsafe(self):
         stop_event = self._stop_event.is_set

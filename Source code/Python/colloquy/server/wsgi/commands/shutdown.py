@@ -48,19 +48,3 @@ class Shutdown(Base):
                         text(line)
 
         return doc.getvalue()
-
-# class Action(ActionItem):
-
-    # def __call__(self):
-        # self.owner.events.shutdown.set()
-        # self.owner.open()
-
-
-
-
-# class HTML(_HTML):
-
-    # def _call_is_opened(self):
-        # doc, tag, text = self.doc.tagtext()
-        # with tag("div"):
-            # text("Goodbye !")

@@ -40,8 +40,8 @@ class WSGI(Base):
         self._start_response = start_response
         self._environ = environ
         self._post_data = self.parse_data()
-        print(f"request: {self.request}")
-        print(f"post_data: {self._post_data}")
+        self.log(f"request: {self.request}")
+        self.log(f"post_data: {self._post_data}")
         try:
             yield from self._call_unsafe()
         except Exception:

@@ -4,6 +4,7 @@ from pathlib import Path
 from urllib.parse import unquote
 import urllib.parse
 import socket
+from .logger import Logger
 
 class Base:
 
@@ -26,6 +27,7 @@ class Base:
         self._owner = owner
         self._owners = None
         assert owner is not self.owners
+        self._log = Logger()
 
     def __repr__(self):
         return f"{type(self).__name__}({self.path.as_posix()})"
@@ -46,6 +48,10 @@ class Base:
 
     def __iter__(self):
         yield from self._dict
+
+    @property
+    def log(self):
+        return self._log
 
     @property
     def items(self):
@@ -89,18 +95,8 @@ class Base:
         self[element.name] = element
 
     def _svg_down_arrow(self):
-        doc, tag, text = CustomDoc().tagtext()
-        with tag('svg', width='16', height='16', viewBox='0 0 24 24', fill='none',
-             stroke='currentColor', **{'stroke-width': '2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round'}):
-            doc.stag('polyline', points='6 9 12 15 18 9')
-
-        return doc.getvalue()
+        raise NotImplementedError("Implemented in BaseHTML class now.")
 
 
     def _svg_right_arrow(self):
-        doc, tag, text = CustomDoc().tagtext()
-        with tag('svg', width='16', height='16', viewBox='0 0 24 24', fill='none',
-             stroke='currentColor', **{'stroke-width': '2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round'}):
-            doc.stag('polyline', points='9 6 15 12 9 18')
-
-        return doc.getvalue()
+        raise NotImplementedError("Implemented in BaseHTML class now.")

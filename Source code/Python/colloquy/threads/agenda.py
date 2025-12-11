@@ -99,7 +99,7 @@ class Agenda(ThreadElement):
 
     def _loop(self):
         if self.stop_event.is_set():
-            print(f"{self.stop_event.is_set()=}")
+            self.log(f"{self.stop_event.is_set()=}")
             return
 
         if not self._is_enabled:
@@ -119,13 +119,13 @@ class Agenda(ThreadElement):
             current_time = now.time()
             if start <= current_time < end:
                 if not self.hardware.is_started:
-                    print(f"Hardware is started...")
+                    self.log(f"Hardware is started...")
                     self.hardware.start()
 
                 self._print("Running...")
             else:
                 if self.hardware.is_started:
-                    print(f"Hardware is stop...")
+                    self.log(f"Hardware is stop...")
                     self.hardware.stop()
 
                 self._print("Waiting next slot...")
@@ -138,7 +138,7 @@ class Agenda(ThreadElement):
     def _print(self, msg):
         if systime() - self._print_origin > 10:
             self._print_origin = systime()
-            print(msg)
+            self.log(msg)
 
 
 class Day(HTMLElement):
