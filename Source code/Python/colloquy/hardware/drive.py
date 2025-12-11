@@ -27,19 +27,26 @@ class Drive(Base):
         self._name = name
         Base.__init__(self, owner=owner)
         self._value = 0
-        self._update_interval = 2
+        
         self._thread = None
         self._stop_event = Event()
+        self._started_by = None
 
-        self._step = 2
+        self._step = 1
+        self._body = owner.owner
 
         # self._max == 254 in order to clamp the brigtness to avoid blink to 254.
         # Look like when the RGB value are all 255, the white LED is turned on, and RGB LEDs turned off. If white value is 0 then everything is turn off.
-        self._max = 254
+        self._max = 100
         self._min = 0
-
-        self._satisfaction_lim = 10
-        self._frustrated_lim = 235
+        
+        seconds_in_4min = 60*4
+        self._update_interval = seconds_in_4min/self._max        
+        
+        self._satisfaction_lim = 30 / self._update_interval
+        
+        seconds_in_3min = 60*3
+        self._frustrated_lim = seconds_in_3min / self._update_interval
 
         self._lock = Lock()
 
@@ -87,8 +94,9 @@ class Drive(Base):
 
         self.owner.update()
 
-        if self.is_frustated:
-            self.owner.search.start()
+        if not self.is_satisfied:
+            print(f"{time()-self._started_at=}")
+            self.body.search.start(started_by=self)
             return
 
     def satisfy(self):
@@ -99,12 +107,14 @@ class Drive(Base):
         print(f"Shutdown {self=}")
         self.stop()
 
-    def start(self, request=None):
+    def start(self, started_by):
+        self._started_at = time()
+        self._started_by = started_by
         self._stop_event.clear()
         self._thread = thread = Thread(target=self.run, name=self.path.as_posix())
         thread.start()
 
-    def stop(self, request=None):
+    def stop(self):
         if self._thread is None:
             return
         self._stop_event.set()
@@ -114,11 +124,11 @@ class Drive(Base):
         try:
             self._run_unsafe()
         except Exception as error:
-            self._error = error
-            raise
+            self._started_by.add_error(origin=self, error=error)
+            # raise
 
     def _run_unsafe(self):
         stop_event = self._stop_event.is_set
         while not stop_event():
             self.increment()
-            sleep(0.01)
+            sleep(self._update_interval)

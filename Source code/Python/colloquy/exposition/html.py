@@ -92,16 +92,34 @@ class HTML(Base):
 
             with tag("a", href=href):
                 text(f"{label}")
+            
+            for (origin, error) in self.owner.child_errors:
+                doc.asis(self._html_thread_error(origin=origin, error=error))
 
             # doc.asis(self.tests.html())
+
+        return doc.getvalue()
+    
+    def _html_thread_error(self, origin, error):
+        doc, tag, text = CustomDoc().tagtext()
+        with tag("div"):
+            with tag("div"):
+                with tag("strong"):
+                    text(f"Error in thread {origin}!")
+
+            with tag("div", style="display: flex; flex-direction: column;"):
+                style = "white-space: normal; overflow-wrap: break-word; word-break: break-word;"
+                for line in traceback.format_exception(error):
+                    with tag("pre", style=style):
+                        text(line)
 
         return doc.getvalue()
 
     def _call_if_error(self):
         doc, tag, text = CustomDoc().tagtext()
         with tag("div"):
-            with tag("h1"):
-                text(f"Error html for {self.name}!")
+            with tag("h2"):
+                text(f"Error in {self}!")
 
             with tag("div", style="display: flex; flex-direction: column;"):
                 style = "white-space: normal; overflow-wrap: break-word; word-break: break-word;"

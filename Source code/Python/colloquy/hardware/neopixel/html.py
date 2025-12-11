@@ -1,4 +1,5 @@
 # from colloquy.wsgi.root.html_item import HtmlItem
+import traceback
 from pathlib import Path
 from colloquy.base import Base
 from utils import CustomDoc
@@ -36,7 +37,7 @@ class HTML(Base):
                     doc.asis(self._svg_right_arrow())
 
                 with tag("strong"):
-                    text(f"{self.owner.body.name}/{self.owner.name}")
+                    text(f"{self.owner.owner.name}/{self.owner.name}")
 
         if self.is_open:
             with tag("div"):

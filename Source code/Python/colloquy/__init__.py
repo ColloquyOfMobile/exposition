@@ -84,6 +84,7 @@ class Colloquy(Base):
     def shutdown(self):
         self.tests.shutdown()
         self.hardware.shutdown()
+        self.exposition.shutdown()
 
     def _call_root(self):
         print("Available command:")

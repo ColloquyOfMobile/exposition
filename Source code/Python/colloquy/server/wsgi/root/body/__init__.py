@@ -79,6 +79,10 @@ class Body(Base):
                 doc.asis(self._call_if_shutdown())
             else:
                 doc.asis(self.commands())
+                
+                with tag("div", style="margin-bottom: 1rem;"):
+                    text("TODO: Reintegrate the error handling and the logging in the threads.")
+                    
                 doc.asis(self.workspace())
 
         return doc.getvalue()

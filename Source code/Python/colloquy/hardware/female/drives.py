@@ -26,6 +26,7 @@ class Drives(Base):
         Base.__init__(self, owner=owner)
         self._o_drive = Drive(owner=self, name="O")
         self._p_drive = Drive(owner=self, name="P")
+        self._started_by = None
 
     def __iter__(self):
         yield self._o_drive
@@ -55,14 +56,19 @@ class Drives(Base):
     def white(self):
         return dict(red=0, green=0, blue=0, white=255)
 
-    def start(self, request=None):
+    
+    def add_error(self, origin, error):
+        self._started_by.add_error(origin=origin, error=error)
+
+    def start(self, started_by):
+        self._started_by = started_by
         female = self.owner
         female.head.on()
         female.body_o.on()
         female.body_p.on()
         female.feet.on()
         for drive in self:
-            drive.start()
+            drive.start(started_by=self)
 
     def update(self):
         female = self.owner
