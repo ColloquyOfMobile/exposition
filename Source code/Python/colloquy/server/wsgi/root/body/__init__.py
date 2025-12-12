@@ -81,7 +81,7 @@ class Body(Base):
                 doc.asis(self.commands())
                 
                 with tag("div", style="margin-bottom: 1rem;"):
-                    text("TODO: Implemet an HTML, a Thread class.")
+                    text("TODO: Reintegrate the search for the Females.")
                     
                 doc.asis(self.workspace())
 
