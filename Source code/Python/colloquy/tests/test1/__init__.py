@@ -12,7 +12,7 @@ class Test1(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
-        
+
         # self._thread = None
         # self._stop_event = Event()
 
@@ -105,4 +105,3 @@ class Test1(BaseThread):
                     sleep(0.1)
                     if stop_event():
                         return
-

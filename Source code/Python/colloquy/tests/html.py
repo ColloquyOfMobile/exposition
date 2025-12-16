@@ -33,12 +33,12 @@ class HTML(BaseHTML):
 
     def _html_title(self):
         doc, tag, text = CustomDoc().tagtext()
-            
+
         style="margin-bottom: 0.5rem; display: flex; align-items: center;"
         if self.is_open:
             style += " justify-content: center;"
-            
-        with tag("div", style=style):               
+
+        with tag("div", style=style):
             if not self.is_open:
                 with tag("div"):
                     if self.is_details_open:
@@ -50,11 +50,11 @@ class HTML(BaseHTML):
                             doc.asis(self._svg_down_arrow())
                         else:
                             doc.asis(self._svg_right_arrow())
-                            
+
             with tag("div", style="font-size: 1.2rem; margin-right: 1ch;"):
                 with tag("strong"):
-                    text(f"{self.owner.name}")            
-            
+                    text(f"{self.owner.name}")
+
             with tag("div"):
                 if self.is_open:
                     href=f"/{self.path.as_posix()}/close"
@@ -62,10 +62,10 @@ class HTML(BaseHTML):
                 else:
                     href=f"/{self.path.as_posix()}/open"
                     label = "open"
-                    
+
                 with tag("a", href=href):
                     text(f"{label}")
-                    
+
         return doc.getvalue()
 
 
@@ -74,7 +74,7 @@ class HTML(BaseHTML):
         if self.owner.opened is not None:
             doc.asis(self.owner.opened())
             return doc.getvalue()
-                
+
         doc.asis(self._html_title())
 
         if not self.is_open:

@@ -78,4 +78,3 @@ class Root(Base):
                         text(line)
 
         return doc.getvalue()
-

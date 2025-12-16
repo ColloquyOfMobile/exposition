@@ -34,4 +34,3 @@ class Start(Base):
         if self.owner.events.restart.is_set():
             print(f"Server should restart...")
             self.owner.restart_process()
-

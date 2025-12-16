@@ -68,4 +68,3 @@ class Server(Base):
                 if self.events.shutdown.is_set():
                     self.owner.colloquy.shutdown()
                     break
-

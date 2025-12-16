@@ -53,4 +53,3 @@ class Restart(Base):
                         text(line)
 
         return doc.getvalue()
-

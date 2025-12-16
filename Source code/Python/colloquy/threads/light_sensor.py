@@ -47,4 +47,3 @@ class LightSensor(ThreadElement):
         # path = f"{self._owner.name}/neopixel"
         response = self.arduino_manager.send(self._request_path)
         return int(response["value"])
-

@@ -39,7 +39,7 @@ class BaseHTML(Base):
     @property
     def colloquy(self):
         if self._colloquy is None:
-            self._colloquy = self.owner.colloquy            
+            self._colloquy = self.owner.colloquy
         return self._colloquy
 
     def open(self, request):
@@ -80,7 +80,7 @@ class BaseHTML(Base):
                         text(line)
 
         return doc.getvalue()
-    
+
 
     def _svg_down_arrow(self):
         doc, tag, text = CustomDoc().tagtext()

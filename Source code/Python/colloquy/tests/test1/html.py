@@ -34,7 +34,7 @@ class HTML(BaseHTML):
 
     def _html_title(self):
         doc, tag, text = CustomDoc().tagtext()
-        with tag("div", style="margin-bottom: 0.5rem; display: flex; align-items: center;"):      
+        with tag("div", style="margin-bottom: 0.5rem; display: flex; align-items: center;"):
             with tag("div"):
                 if self.is_details_open:
                     href=f"/{self.path.as_posix()}/close details"
@@ -45,11 +45,11 @@ class HTML(BaseHTML):
                         doc.asis(self._svg_down_arrow())
                     else:
                         doc.asis(self._svg_right_arrow())
-                        
+
             with tag("div", style="font-size: 1.2rem; margin-right: 1ch;"):
                 with tag("strong"):
-                    text(f"{self.owner.name}")            
-            
+                    text(f"{self.owner.name}")
+
             with tag("div"):
                 if self.is_open:
                     href=f"/{self.path.as_posix()}/close"
@@ -57,10 +57,10 @@ class HTML(BaseHTML):
                 else:
                     href=f"/{self.path.as_posix()}/open"
                     label = "open"
-                    
+
                 with tag("a", href=href):
                     text(f"{label}")
-                    
+
         return doc.getvalue()
 
     def _call_unsafe(self):
@@ -69,7 +69,7 @@ class HTML(BaseHTML):
 
         if not self.is_open:
             return doc.getvalue()
-            
+
         # with tag("div", style="font-size: 1.2rem; margin-bottom: 0.5rem;"):
             # if self.is_open:
                 # href=f"/{self.path.as_posix()}/close"
@@ -83,7 +83,7 @@ class HTML(BaseHTML):
 
                 # with tag("strong"):
                     # text(f"{self.owner.name}")
-                    
+
         with tag("div"):
             if self.owner.is_started:
                 label = "stop"

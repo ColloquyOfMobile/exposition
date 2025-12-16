@@ -12,7 +12,7 @@ class Hardware(BaseThread):
     def __init__(self, owner):
 
         super().__init__(owner)
-        
+
         if self.is_simulated:
             self.log(f"Warning: The hardware is simulated.")
 
@@ -85,7 +85,7 @@ class Hardware(BaseThread):
 
     @property
     def name(self):
-        return "hardware" 
+        return "hardware"
 
     @property
     def arduino(self):
@@ -145,15 +145,15 @@ class Hardware(BaseThread):
             bodies.append(body)
         for body in self.males:
             bodies.append(body)
-        return bodies 
+        return bodies
 
     def loop(self):
         pass
-        
-    def setup(self):        
+
+    def setup(self):
         for bodies in self.hardware.bodies:
-            bodies.start(started_by=self)        
-        
-    def setdown(self):        
+            bodies.start(started_by=self)
+
+    def setdown(self):
         for bodies in self.hardware.bodies:
             bodies.stop()

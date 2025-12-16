@@ -62,15 +62,15 @@ class HTML(BaseHTML):
                         doc.asis(self._svg_down_arrow())
                     else:
                         doc.asis(self._svg_right_arrow())
-                        
+
             with tag("div", style="font-size: 1.2rem; margin-right: 1ch;"):
                 with tag("strong"):
                     if self.owner.is_open:
                         label = "open"
                     else:
                         label = "close"
-                    text(f"{self.owner.name}, (Port is {label})")         
-            
+                    text(f"{self.owner.name}, (Port is {label})")
+
             with tag("div"):
                 if self.is_open:
                     href=f"/{self.path.as_posix()}/close"
@@ -78,9 +78,9 @@ class HTML(BaseHTML):
                 else:
                     href=f"/{self.path.as_posix()}/open"
                     label = "open"
-                    
+
                 with tag("a", href=href):
                     text(f"{label}")
-                    
-                    
+
+
         return doc.getvalue()

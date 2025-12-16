@@ -30,15 +30,15 @@ class Drive(BaseThread):
 
         self._step = 1
         self._body = owner.owner
-        
+
         self._max = 100
         self._min = 0
-        
+
         seconds_in_4min = 60*4
-        self._update_interval = seconds_in_4min/self._max        
-        
+        self._update_interval = seconds_in_4min/self._max
+
         self._satisfaction_lim = 30 / self._update_interval
-        
+
         seconds_in_3min = 60*3
         self._frustrated_lim = seconds_in_3min / self._update_interval
 

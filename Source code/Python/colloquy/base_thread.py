@@ -11,20 +11,20 @@ from threading import Thread, Event, Lock
 class BaseThread(Base):
 
     def __init__(self, owner):
-        super().__init__(owner=owner)   
+        super().__init__(owner=owner)
         self._colloquy = None
         self._hardware = None
         self._started_at = None
-        self._started_by = None  
+        self._started_by = None
         self._error = None
-        
+
         # self._children_threads = set()
-        
+
         self._thread = None
         self._stop_event = Event()
         self._shutdown = Event()
         self._lock = Lock()
-        
+
         self["start"] = self.start_command
         self["stop"] = self.stop_command
 
@@ -59,13 +59,13 @@ class BaseThread(Base):
     @property
     def colloquy(self):
         if self._colloquy is None:
-            self._colloquy = self.owner.colloquy            
+            self._colloquy = self.owner.colloquy
         return self._colloquy
-    
+
     @property
     def hardware(self):
         if self._hardware is None:
-            self._hardware = self.colloquy.hardware          
+            self._hardware = self.colloquy.hardware
         return self._hardware
 
     @property
@@ -91,7 +91,7 @@ class BaseThread(Base):
             return
         if self.is_started:
             return
-        self.log(f"{started_by} is starting {self}.")   
+        self.log(f"{started_by} is starting {self}.")
         self._started_at = time()
         self._started_by = started_by
         self._stop_event.clear()
@@ -115,8 +115,8 @@ class BaseThread(Base):
     def join(self):
         self._thread.join()
 
-    def run(self, run_with=None):  
-        self.log(f"Executing {self}.run().")  
+    def run(self, run_with=None):
+        self.log(f"Executing {self}.run().")
         if run_with is None:
             return self._run_in_context()
         with run_with:
@@ -130,9 +130,9 @@ class BaseThread(Base):
 
     def setdown(self):
         raise NotImplementedError(f"User defined! ({self=})")
-    
-    def _run_in_context(self): 
-        self.log(f"{self} is started.")   
+
+    def _run_in_context(self):
+        self.log(f"{self} is started.")
         try:
             self._run_unsafe()
         except Exception as error:
@@ -141,47 +141,46 @@ class BaseThread(Base):
             self.setdown()
 
     def _run_unsafe(self):
-        self.setup()           
+        self.setup()
         while True:
             if self._break_condition():
                 break
             self.loop()
-            sleep(0.1) 
-    
+            sleep(0.1)
+
     def _break_condition(self):
         if self.error is not None:
-            self.log(f"Break condition: {self.error=}.")  
+            self.log(f"Break condition: {self.error=}.")
             return True
         if self._stop_event.is_set():
-            self.log(f"Break condition: {self._stop_event.is_set()=}.")  
+            self.log(f"Break condition: {self._stop_event.is_set()=}.")
             return True
         if self._shutdown.is_set():
-            self.log(f"Break condition: {self._shutdown.is_set()=}.")  
+            self.log(f"Break condition: {self._shutdown.is_set()=}.")
             return True
         if not self.owner.is_started:
-            self.log(f"Break condition: {not self.owner.is_started=}.")  
+            self.log(f"Break condition: {not self.owner.is_started=}.")
             return True
-        
-        
+
+
 
 
 class ThreadError:
-    
+
     def __init__(self, origin, error):
         self._error = error
         self._origin = origin
-    
+
     def __repr__(self):
         return f"{self.origin=}, {self.error=}"
-    
+
     @property
     def error(self):
         return self._error
-    
+
     @property
     def origin(self):
         return self._origin
-        
-    
 
-    
+
+

@@ -74,4 +74,3 @@ class MaleDrives(Drives):
             # **self.orange,
             # )
         # self.bottom_neopixel_p.configure(**config)
-

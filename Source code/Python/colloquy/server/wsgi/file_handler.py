@@ -22,7 +22,7 @@ class FileHandler(Base):
             # File not found
             self.owner.start_response('404 Not Found', [('Content-Type', 'text/plain')])
             message = f'{file_path.as_posix()} not found !'
-            
+
             self.log(message)
             yield message.encode()
 

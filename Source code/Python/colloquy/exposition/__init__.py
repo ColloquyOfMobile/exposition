@@ -13,7 +13,7 @@ class Exposition(BaseThread):
         super().__init__(owner)
         self._html = HTML(owner=self)
         self._hardware = self.owner.hardware
-        
+
         self._thread = None
         self._stop_event = Event()
         self._started_at = None
@@ -50,7 +50,7 @@ class Exposition(BaseThread):
     def colloquy(self):
         return self.owner.colloquy
 
-    def setup(self): 
+    def setup(self):
         self.hardware.start(started_by=self)
 
     def loop(self):

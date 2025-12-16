@@ -81,7 +81,7 @@ class Body(Base):
                 doc.asis(self.commands())
                 doc.asis(self._thread_counts())
                 doc.asis(self._todo())
-                    
+
                 doc.asis(self.workspace())
 
         return doc.getvalue()
@@ -136,15 +136,15 @@ class Body(Base):
                     )
 
         return doc.getvalue()
-    
+
     def _thread_counts(self):
         doc, tag, text = CustomDoc().tagtext()
         with tag("div", style="margin-bottom: 1rem;"):
             text(f"Thread count: {len(self.all_threads)}")
         return doc.getvalue()
-    
+
     def _todo(self):
-        doc, tag, text = CustomDoc().tagtext()                
+        doc, tag, text = CustomDoc().tagtext()
         with tag("div", style="margin-bottom: 1rem;"):
             text("TODO: Reintegrate the search for the Females.")
         return doc.getvalue()

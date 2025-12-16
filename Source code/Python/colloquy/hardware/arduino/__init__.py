@@ -210,4 +210,3 @@ class Arduino(Base):
 
             self.hardware.actions["arduino/com_port/set"] = self._set_com_port
 
-

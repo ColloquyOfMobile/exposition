@@ -7,7 +7,7 @@ import socket
 from .logger import Logger
 
 class Base:
-    
+
     _all_threads = set()
 
     @staticmethod
