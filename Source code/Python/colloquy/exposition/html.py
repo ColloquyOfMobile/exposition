@@ -27,21 +27,41 @@ class HTML(BaseHTML):
         self._is_open = False
         self.workspace.opened = None
 
+    def open_details(self, request):
+        self._is_details_open = True
+
+    def close_details(self, request=None):
+        self._is_details_open = False
+
     def _html_title(self):
         doc, tag, text = CustomDoc().tagtext()
-        with tag("div", style="font-size: 1.2rem; margin-bottom: 0.5rem;"):
-            if self.is_open:
-                href=f"/{self.path.as_posix()}/close"
-            else:
-                href=f"/{self.path.as_posix()}/open"
-            with tag("a", href=href):
-                if self.is_open:
-                    doc.asis(self._svg_down_arrow())
+        with tag("div", style="margin-bottom: 0.5rem; display: flex; align-items: center;"):            
+            with tag("div"):
+                if self.is_details_open:
+                    href=f"/{self.path.as_posix()}/close details"
                 else:
-                    doc.asis(self._svg_right_arrow())
-
+                    href=f"/{self.path.as_posix()}/open details"
+                with tag("a", href=href):
+                    if self.is_details_open:
+                        doc.asis(self._svg_down_arrow())
+                    else:
+                        doc.asis(self._svg_right_arrow())
+                        
+            with tag("div", style="font-size: 1.2rem; margin-right: 1ch;"):
                 with tag("strong"):
-                    text(f"{self.owner.name}")
+                    text(f"{self.owner.name}")            
+            
+            with tag("div"):
+                if self.is_open:
+                    href=f"/{self.path.as_posix()}/close"
+                    label = "close"
+                else:
+                    href=f"/{self.path.as_posix()}/open"
+                    label = "open"
+                    
+                with tag("a", href=href):
+                    text(f"{label}")
+                    
         return doc.getvalue()
 
     def _call_unsafe(self):
@@ -59,14 +79,16 @@ class HTML(BaseHTML):
             with tag("a", href=href):
                 text(f"{label}")
             
-            for (origin, error) in self.owner.child_errors:
-                doc.asis(self._html_thread_error(origin=origin, error=error))
+            if self.owner.error is not None:
+                doc.asis(self._html_thread_error(error=self.owner.error))
 
 
         return doc.getvalue()
     
-    def _html_thread_error(self, origin, error):
+    def _html_thread_error(self, error):
         doc, tag, text = CustomDoc().tagtext()
+        origin = error.origin
+        error = error.error
         with tag("div"):
             with tag("div"):
                 with tag("strong"):

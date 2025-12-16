@@ -27,16 +27,10 @@ class Drive(BaseThread):
         self._name = name
         super().__init__(owner=owner)
         self._value = 0
-        
-        # self._thread = None
-        # self._stop_event = Event()
-        # self._started_by = None
 
         self._step = 1
         self._body = owner.owner
-
-        # self._max == 254 in order to clamp the brigtness to avoid blink to 254.
-        # Look like when the RGB value are all 255, the white LED is turned on, and RGB LEDs turned off. If white value is 0 then everything is turn off.
+        
         self._max = 100
         self._min = 0
         
@@ -48,17 +42,19 @@ class Drive(BaseThread):
         seconds_in_3min = 60*3
         self._frustrated_lim = seconds_in_3min / self._update_interval
 
-        self._lock = Lock()
-
-    @property
-    def is_started(self):
-        if self._thread is None:
-            return False
-        return self._thread.is_alive()
+    # @property
+    # def is_started(self):
+        # if self._thread is None:
+            # return False
+        # return self._thread.is_alive()
 
     @property
     def name(self):
         return self._name
+
+    @property
+    def body(self):
+        return self._body
 
     @property
     def black(self):
@@ -98,36 +94,22 @@ class Drive(BaseThread):
             self.body.search.start(started_by=self)
             return
 
+    def loop(self):
+        self.increment()
+        sleep(self._update_interval)
+
+    def setup(self):
+        pass
+
+    def setdown(self):
+        pass
+
     def satisfy(self):
         self.o_drive = self._satisfaction_lim
         self.p_drive = self._satisfaction_lim
 
-    # def shutdown(self):
-        # print(f"Shutdown {self=}")
-        # self.stop()
-
-    # def start(self, started_by):
-        # self._started_at = time()
-        # self._started_by = started_by
-        # self._stop_event.clear()
-        # self._thread = thread = Thread(target=self.run, name=self.path.as_posix())
-        # thread.start()
-
-    # def stop(self):
-        # if self._thread is None:
-            # return
-        # self._stop_event.set()
-        # self._thread.join()
-
-    # def run(self):
-        # try:
-            # self._run_unsafe()
-        # except Exception as error:
-            # self._started_by.add_error(origin=self, error=error)
-            # # raise
-
-    def _run_unsafe(self):
-        stop_event = self._stop_event.is_set
-        while not stop_event():
-            self.increment()
-            sleep(self._update_interval)
+    # def _run_unsafe(self):
+        # stop_event = self._stop_event.is_set
+        # while not stop_event():
+            # self.increment()
+            # sleep(self._update_interval)

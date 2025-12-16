@@ -21,13 +21,13 @@ class Logger:
 
     def __call__(self, msg: str):
         
-        msg = self._format(msg=msg)
-        
         current = threading.current_thread()
         main_thread = threading.main_thread()
+        msg = self._format(msg=msg)
         
         if current == main_thread:
             print(msg)
+        
         
         self._write(msg)        
     
@@ -44,7 +44,7 @@ class Logger:
         if file_path not in self._line_counts:
             lines = file_path.read_text().splitlines()
             self._line_counts[file_path] = len(lines)
-            text = "\n".join(lines)
+            text = "\n".join(lines) + "\n"
             with self._lock:
                 file_path.write_text(text)
             
@@ -64,7 +64,7 @@ class Logger:
                 file_path.write_text(text)
 
     def _format(self, msg):
-        time_header = f"{round(time()-self._time_origin, 2)}:"
+        time_header = self._format_time() # f"{round(time()-self._time_origin, 2)}:"
         lines = msg.splitlines()
         if len(lines) == 1:
             return f"{time_header} {msg}"
@@ -74,3 +74,18 @@ class Logger:
             new_lines.append(f"+ {line}")
 
         return "\n".join(new_lines)
+    
+    def _format_time(self):
+        elapsed = time() - self._time_origin
+        h = int(elapsed // 3600)
+        m = int((elapsed % 3600) // 60)
+        s = elapsed % 60
+
+        if h:
+            return f"{h:02d}:{m:02d}:{s:05.2f}"
+        elif m:
+            return f"{m:02d}:{s:05.2f}"
+        else:
+            return f"{s:05.2f}s"
+
+        

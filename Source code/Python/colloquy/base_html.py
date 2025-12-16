@@ -1,5 +1,6 @@
 from utils import CustomDoc
 import inspect
+import traceback
 from pathlib import Path
 from urllib.parse import unquote
 import urllib.parse
@@ -11,8 +12,11 @@ class BaseHTML(Base):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._is_open = False
+        self._is_details_open = False
         self._colloquy = None
 
+        self["open details"] = self.open_details
+        self["close details"] = self.close_details
         self["open"] = self.open
         self["close"] = self.close
 
@@ -29,6 +33,10 @@ class BaseHTML(Base):
         return self._is_open
 
     @property
+    def is_details_open(self):
+        return self._is_details_open
+
+    @property
     def colloquy(self):
         if self._colloquy is None:
             self._colloquy = self.owner.colloquy            
@@ -38,6 +46,12 @@ class BaseHTML(Base):
         raise NotImplementedError
 
     def close(self, request=None):
+        raise NotImplementedError
+
+    def open_details(self, request):
+        raise NotImplementedError
+
+    def close_details(self, request=None):
         raise NotImplementedError
 
     def handle_request(self, request):

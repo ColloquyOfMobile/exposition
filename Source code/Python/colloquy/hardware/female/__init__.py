@@ -13,9 +13,10 @@ from .drives import Drives
 # from threading import Lock
 # from time import sleep
 from pathlib import Path
-from colloquy.base import Base
+from colloquy.base_thread import BaseThread
+from .search import Search
 
-class Female(Base):
+class Female(BaseThread):
 
     def __init__(self, owner, id_number):
         self._name = f"female{id_number}"
@@ -24,6 +25,7 @@ class Female(Base):
         self._arduino = owner.arduino
 
         self._drives = Drives(owner=self)
+        self._search = Search(owner=self)
 
 
         self._neopixels = []
@@ -37,10 +39,6 @@ class Female(Base):
         self[self.body_o.name] = self.body_o
         self[self.body_p.name] = self.body_p
         self[self.feet.name] = self.feet
-
-        self._threaded_elements = {
-            *self._drives,
-        }
 
     def __call__(self, request):
         request = Path(request)
@@ -56,8 +54,8 @@ class Female(Base):
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
-    def is_started(self):
-        return any(element.is_started for element in self._threaded_elements)
+    def search(self):
+        return self._search
 
     @property
     def drives(self):
@@ -113,15 +111,22 @@ class Female(Base):
         ]
         return neopixels
 
-    @property
-    def is_started(self):
-        return any(element.is_started for element in self._threaded_elements)
+    def loop(self):
+        pass
 
-    def stop(self):
-        with self.arduino:
-            self.drives.stop()
-            for neopixel in self.neopixels:
-                neopixel.off()
+    def setup(self):
+        self.drives.start(started_by=self)
+
+    def setdown(self):
+        self.drives.stop()
+        self.search.stop()
+
+    # def stop(self):
+        # with self.arduino:
+            # self.drives.stop()
+            # self.search.stop()
+            # for neopixel in self.neopixels:
+                # neopixel.off()
 
     # @property
     # def emulate_light_sensor(self):

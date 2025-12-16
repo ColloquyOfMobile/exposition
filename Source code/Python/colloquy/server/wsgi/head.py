@@ -30,6 +30,7 @@ class Head(Base):
                 " initial-scale=1,"
                 ' interopened-widget=resizes-content" />'
             )
+            doc.stag("meta", charset="utf-8")
             with tag("style"):
                 text(BUTTON_STYLE)
 

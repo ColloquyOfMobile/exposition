@@ -79,9 +79,8 @@ class Body(Base):
                 doc.asis(self._call_if_shutdown())
             else:
                 doc.asis(self.commands())
-                
-                with tag("div", style="margin-bottom: 1rem;"):
-                    text("TODO: Reintegrate the search for the Females.")
+                doc.asis(self._thread_counts())
+                doc.asis(self._todo())
                     
                 doc.asis(self.workspace())
 
@@ -109,6 +108,12 @@ class Body(Base):
     def _call_if_shutdown(self):
         doc, tag, text = CustomDoc().tagtext()
         with tag("div"):
+            if self.all_threads:
+                for thread in self.all_threads:
+                    print(f"{thread=}")
+                    # thread.kill()
+            doc.asis(self._thread_counts())
+            doc.asis(self._todo())
             text(
                 f"Server was shutdown. You can close this tab. Goodbye."
                 )
@@ -119,6 +124,8 @@ class Body(Base):
     def _call_if_restart(self):
         doc, tag, text = CustomDoc().tagtext()
         with tag("div"):
+            doc.asis(self._thread_counts())
+            doc.asis(self._todo())
             text(
                 f"Server is restarted. Reload to see the changes."
                 )
@@ -128,4 +135,16 @@ class Body(Base):
                     f"Reload."
                     )
 
+        return doc.getvalue()
+    
+    def _thread_counts(self):
+        doc, tag, text = CustomDoc().tagtext()
+        with tag("div", style="margin-bottom: 1rem;"):
+            text(f"Thread count: {len(self.all_threads)}")
+        return doc.getvalue()
+    
+    def _todo(self):
+        doc, tag, text = CustomDoc().tagtext()                
+        with tag("div", style="margin-bottom: 1rem;"):
+            text("TODO: Reintegrate the search for the Females.")
         return doc.getvalue()

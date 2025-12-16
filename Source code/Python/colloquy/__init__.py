@@ -72,6 +72,10 @@ class Colloquy(Base):
     def exposition(self):
         return self._exposition
 
+    @property
+    def is_started(self):
+        return not self.events.shutdown.is_set()
+
     def run(self, ):
         return self.server()
 

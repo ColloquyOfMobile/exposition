@@ -16,25 +16,9 @@ class Exposition(BaseThread):
         
         self._thread = None
         self._stop_event = Event()
-        self._started_at = None        
-        self._child_errors = []
+        self._started_at = None
 
         self[self.html.name] = self.html.handle_request
-        # self["start"] = self.start
-        # self["stop"] = self.stop
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def is_started(self):
@@ -66,43 +50,14 @@ class Exposition(BaseThread):
     def colloquy(self):
         return self.owner.colloquy
 
-    def shutdown(self):
-        self.stop()
+    def setup(self): 
+        self.hardware.start(started_by=self)
 
-    # def start(self, request):
-        # self.child_errors.clear()
-        # self._started_at = time()
-        # self._stop_event.clear()
-        # self._thread = thread = Thread(target=self.run, name=self.path.as_posix())
-        # thread.start()
+    def loop(self):
+        if not self.hardware.is_started:
+            self.stop()
 
-    def stop(self, request=None):
-        self.hardware.shutdown()
-        super().stop()
-        # if self._thread is None:
-            # return
-        # self._stop_event.set()
-        # self._thread.join()
-
-    # def run(self):
-        # try:
-            # self._run_unsafe()
-        # except Exception as error:
-            # raise NotImplementedError(self)
-
-    def _run_unsafe(self):
-        stop_event = self._stop_event.is_set
-        with self.hardware.arduino:
-            for bodies in self.hardware.bodies:
-                bodies.drives.start(started_by=self)        
-            
-            while not stop_event():
-                if self.child_errors:
-                    self._stop_event.set()
-                    self.hardware.shutdown()
-                sleep(0.1)
-
-    # def add_error(self, origin, error):        
-        # self.child_errors.append(
-            # (origin, error)
-        # )
+    def setdown(self):
+        if self.error:
+            self.hardware.shutdown()
+        self.hardware.stop()

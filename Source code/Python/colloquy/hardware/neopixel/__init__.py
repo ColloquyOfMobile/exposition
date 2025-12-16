@@ -156,7 +156,8 @@ class Neopixel(Base):
             b = self._adjust_brightness(self.blue.value),
             w = self._adjust_brightness(self.white.value)
             )
-        self.arduino.send(self.arduino_path, **data)
+        with self.arduino:
+            self.arduino.send(self.arduino_path, **data)
 
     def on(self, **kwargs):
         self._on_off_state = True
@@ -170,7 +171,8 @@ class Neopixel(Base):
             g = 0,
             b = 0,
             w = 0,)
-        self.arduino.send(self.arduino_path, **data)
+        with self.arduino:
+            self.arduino.send(self.arduino_path, **data)
         self._on_off_state = False
 
     def toggle(self):

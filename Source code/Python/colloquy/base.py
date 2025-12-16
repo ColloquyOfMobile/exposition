@@ -7,6 +7,8 @@ import socket
 from .logger import Logger
 
 class Base:
+    
+    _all_threads = set()
 
     @staticmethod
     def retrieve_call_origin():
@@ -48,6 +50,17 @@ class Base:
 
     def __iter__(self):
         yield from self._dict
+
+    @property
+    def all_threads(self):
+        dead_threads = set()
+        # Remove dead threads
+        for thread in self._all_threads:
+            if thread.is_started:
+                continue
+            dead_threads.add(thread)
+        self._all_threads.difference_update(dead_threads)
+        return self._all_threads
 
     @property
     def log(self):

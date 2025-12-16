@@ -27,10 +27,22 @@ class Drives(Base):
         self._o_drive = Drive(owner=self, name="O")
         self._p_drive = Drive(owner=self, name="P")
         self._started_by = None
+        self._error = None
 
     def __iter__(self):
         yield self._o_drive
         yield self._p_drive
+
+    @property
+    def error(self):
+        return self._error
+
+    @error.setter
+    def error(self, value):
+        print(value)
+        self._error = value
+        if self._started_by is not None:
+            self._started_by.error = value
 
     @property
     def o_drive(self):
@@ -56,9 +68,9 @@ class Drives(Base):
     def white(self):
         return dict(red=0, green=0, blue=0, white=255)
 
-    
-    def add_error(self, origin, error):
-        self._started_by.add_error(origin=origin, error=error)
+    @property
+    def is_started(self):
+        return self.owner.is_started
 
     def stop(self):
         female = self.owner

@@ -1,15 +1,13 @@
 from .u2d2 import U2D2
 from .arduino import Arduino
-from colloquy.base import Base
+from colloquy.base_thread import BaseThread
 from .female import Female
 from pathlib import Path
-# from .html import HTML
 from .neopixels import Neopixels
 from .commands import Commands
-from .logger import Logger
 
 
-class Hardware(Base):
+class Hardware(BaseThread):
 
     def __init__(self, owner):
 
@@ -21,11 +19,9 @@ class Hardware(Base):
         self._opened = None
         self._commands = Commands(owner=self)
 
-
         self._arduino = Arduino(owner=self)
         self._u2d2 = U2D2(owner=self)
         self._bar = None
-
 
         self._mirrors = []
         self._drives = []
@@ -47,12 +43,6 @@ class Hardware(Base):
         for female in self._females:
             self[female.name] = female
             self.drives.extend(female.drives)
-
-        self._threaded_elements = {
-            *self.females,
-            *self.males,
-            # bar
-            }
 
 
     def __call__(self, request):
@@ -95,7 +85,7 @@ class Hardware(Base):
 
     @property
     def name(self):
-        return "hardware" # + " " + self._surname
+        return "hardware" 
 
     @property
     def arduino(self):
@@ -155,17 +145,15 @@ class Hardware(Base):
             bodies.append(body)
         for body in self.males:
             bodies.append(body)
-        return bodies
+        return bodies 
 
-    @property
-    def is_started(self):
-        return any(element.is_started for element in self._threaded_elements)
-
-    def shutdown(self):
-        self.stop()
+    def loop(self):
+        pass
         
-    def stop(self):
-        with self.arduino:
-            for element in self._threaded_elements:
-                element.stop()
-        self.arduino.close()
+    def setup(self):        
+        for bodies in self.hardware.bodies:
+            bodies.start(started_by=self)        
+        
+    def setdown(self):        
+        for bodies in self.hardware.bodies:
+            bodies.stop()
