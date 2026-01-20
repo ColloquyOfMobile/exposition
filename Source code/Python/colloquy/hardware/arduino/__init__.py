@@ -102,18 +102,18 @@ class Arduino(Base):
         with self:
             return self._send_unsafe(path, **data)
 
-    def send_yield(self, path, **data):
-        command = {"path": str(path), **data}
-        serialized_command = f"{json.dumps(command)}\n"  # Conversion en JSON
-        self.port_handler.write(serialized_command.encode('utf-8'))  # Envoie de la commande
-        while True:
-            with self.lock:
-                data = self.port_handler.readline()  # Lit une ligne du port série
-            if data:
-                break
-            yield f"Arduino still processing {command}..."
+    # def send_yield(self, path, **data):
+        # command = {"path": str(path), **data}
+        # serialized_command = f"{json.dumps(command)}\n"  # Conversion en JSON
+        # self.port_handler.write(serialized_command.encode('utf-8'))  # Envoie de la commande
+        # while True:
+            # with self.lock:
+                # data = self.port_handler.readline()  # Lit une ligne du port série
+            # if data:
+                # break
+            # yield f"Arduino still processing {command}..."
 
-        return self._parse(data)
+        # return self._parse(data)
 
     def _send_unsafe(self, path, **data):
         command = {"path": path.as_posix(), **data}
@@ -209,4 +209,3 @@ class Arduino(Base):
                 text(f"set.")
 
             self.hardware.actions["arduino/com_port/set"] = self._set_com_port
-

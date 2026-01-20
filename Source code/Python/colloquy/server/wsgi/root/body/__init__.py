@@ -78,6 +78,8 @@ class Body(Base):
             elif self.owner.events.shutdown.is_set():
                 doc.asis(self._call_if_shutdown())
             else:
+                with tag("div"):
+                    text("Note: Unsynchronised UI! Refresh manually to see last updates.")
                 doc.asis(self.commands())
                 doc.asis(self._thread_counts())
                 doc.asis(self._todo())
@@ -141,10 +143,11 @@ class Body(Base):
         doc, tag, text = CustomDoc().tagtext()
         with tag("div", style="margin-bottom: 1rem;"):
             text(f"Thread count: {len(self.all_threads)}")
+            
         return doc.getvalue()
 
     def _todo(self):
         doc, tag, text = CustomDoc().tagtext()
         with tag("div", style="margin-bottom: 1rem;"):
-            text("TODO: Reintegrate the search for the Females.")
+            text("TODO: Make sure the html for threads show the thread errors.")
         return doc.getvalue()

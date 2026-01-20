@@ -1,37 +1,44 @@
 # from colloquy.wsgi.root.html_item import HtmlItem
+import traceback
 from pathlib import Path
 from colloquy.base_html import BaseHTML
 from utils import CustomDoc
-import traceback
+from .details import Details
 
 class HTML(BaseHTML):
 
     def __init__(self, owner):
         super().__init__(owner=owner)
+        self._details = Details(owner=self)
+        self["details"] = self.details.handle_request
+
+    @property
+    def details(self):
+        return self._details
 
     @property
     def name(self):
         return "html"
 
     @property
+    def colloquy(self):
+        return self.owner.colloquy
+
+    @property
     def workspace(self):
-        return self.owner.workspace
+        return self.colloquy.server.wsgi.root.body.workspace
 
     def open(self, request):
         if self.workspace.opened is not None:
             self.workspace.opened.close()
         self._is_open = True
+        self.details.open(request=None)
         self.workspace.opened = self
 
     def close(self, request=None):
         self._is_open = False
         self.workspace.opened = None
-
-    def open_details(self, request):
-        self._is_details_open = True
-
-    def close_details(self, request=None):
-        self._is_details_open = False
+        self.details.close()
 
     def _html_title(self):
         doc, tag, text = CustomDoc().tagtext()
@@ -67,37 +74,6 @@ class HTML(BaseHTML):
     def _call_unsafe(self):
         doc, tag, text = CustomDoc().tagtext()
         doc.asis(self._html_title())
-        if self.is_open:
-            with tag("div"):
-                if self.owner.is_started:
-                    label = "stop"
-                else:
-                    label = "start"
-
-            href=f"/{self.owner.path.as_posix()}/{label}"
-
-            with tag("a", href=href):
-                text(f"{label}")
-
-            if self.owner.error is not None:
-                doc.asis(self._html_thread_error(error=self.owner.error))
-
-
-        return doc.getvalue()
-
-    def _html_thread_error(self, error):
-        doc, tag, text = CustomDoc().tagtext()
-        origin = error.origin
-        error = error.error
-        with tag("div"):
-            with tag("div"):
-                with tag("strong"):
-                    text(f"Error in thread {origin}!")
-
-            with tag("div", style="display: flex; flex-direction: column;"):
-                style = "white-space: normal; overflow-wrap: break-word; word-break: break-word;"
-                for line in traceback.format_exception(error):
-                    with tag("pre", style=style):
-                        text(line)
+        doc.asis(self.details())
 
         return doc.getvalue()

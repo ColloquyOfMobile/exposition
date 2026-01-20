@@ -161,6 +161,7 @@ class BaseThread(Base):
         if not self.owner.is_started:
             self.log(f"Break condition: {not self.owner.is_started=}.")
             return True
+        return False
 
 
 
@@ -181,6 +182,5 @@ class ThreadError:
     @property
     def origin(self):
         return self._origin
-
 
 

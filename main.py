@@ -9,6 +9,7 @@ sys.path.append(str(source_code.resolve()))
 from colloquy import Colloquy
 
 if __name__ == "__main__":
+    raise NotImplementedError("TODO: Make sure the html for threads show the thread errors.")
     args = sys.argv[1:]
     colloquy = Colloquy()
     colloquy.cli(*args)

@@ -5,6 +5,7 @@ from .female import Female
 from pathlib import Path
 from .neopixels import Neopixels
 from .commands import Commands
+from .test import Test
 
 
 class Hardware(BaseThread):
@@ -38,11 +39,15 @@ class Hardware(BaseThread):
             self._female3,
             ]
 
+        self._test = Test(owner=self)
+        
         self[self.arduino.name] = self.arduino
+        self.add(self.test)
 
         for female in self._females:
             self[female.name] = female
             self.drives.extend(female.drives)
+        
 
 
     def __call__(self, request):
@@ -57,6 +62,10 @@ class Hardware(BaseThread):
             return
 
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
+
+    @property
+    def test(self):
+        return self._test
 
     @property
     def colloquy(self):

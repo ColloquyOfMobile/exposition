@@ -2,66 +2,60 @@
 from pathlib import Path
 from colloquy.base_html import BaseHTML
 from utils import CustomDoc
+from .details import Details
 
 class HTML(BaseHTML):
 
     def __init__(self, owner):
         super().__init__(owner=owner)
+        self._details = Details(owner=self)
+        self["details"] = self.details.handle_request
+
+    @property
+    def details(self):
+        return self._details
 
     @property
     def name(self):
         return "html"
 
     @property
-    def tests(self):
-        return self.colloquy.server.wsgi.root.body.workspace.tests
+    def workspace(self):
+        return self.colloquy.server.wsgi.root.body.workspace
 
+    # @property
+    # def tests(self):
+        # return self.colloquy.server.wsgi.root.body.workspace.tests
+        
     def open(self, request):
-        if self.tests.opened is not None:
-            self.tests.opened.close()
+        if self.workspace.opened is not None:
+            self.workspace.opened.close()
         self._is_open = True
-        self.tests.opened = self
+        self.details.open(request=None)
+        self.workspace.opened = self
 
     def close(self, request=None):
         self._is_open = False
-        self.tests.opened = None
-
-    def open_details(self, request):
-        self._is_details_open = True
-
-    def close_details(self, request=None):
-        self._is_details_open = False
+        self.workspace.opened = None
+        self.details.close()
 
     def _call_unsafe(self):
         doc, tag, text = CustomDoc().tagtext()
         doc.asis(self._html_title())
-
-        if self.is_open:
-            with tag("div"):
-                if self.owner.is_open:
-                    label = "close"
-                else:
-                    label = "open"
-
-                href=f"/{self.owner.path.as_posix()}/{label}"
-                with tag("a", href=href):
-                    text(f"{label} port")
+        doc.asis(self.details())
 
         return doc.getvalue()
 
     def _html_title(self):
         doc, tag, text = CustomDoc().tagtext()
-        with tag("div", style="margin-bottom: 0.5rem; display: flex; align-items: center;"):
-            with tag("div"):
-                if self.is_details_open:
-                    href=f"/{self.path.as_posix()}/close details"
-                else:
-                    href=f"/{self.path.as_posix()}/open details"
-                with tag("a", href=href):
-                    if self.is_details_open:
-                        doc.asis(self._svg_down_arrow())
-                    else:
-                        doc.asis(self._svg_right_arrow())
+
+        style="margin-bottom: 0.5rem; display: flex; align-items: center;"
+        if self.is_open:
+            style += " justify-content: center;"
+            
+        with tag("div", style=style):
+            if not self.is_open:
+                doc.asis(self.details.arrow)
 
             with tag("div", style="font-size: 1.2rem; margin-right: 1ch;"):
                 with tag("strong"):

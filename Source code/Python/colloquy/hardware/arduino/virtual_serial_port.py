@@ -2,6 +2,7 @@ from time import sleep
 import json
 from pathlib import Path
 import re
+from queue import Queue
 
 class VirtualSerialPort:
 
@@ -14,7 +15,7 @@ class VirtualSerialPort:
         self._possible_paths = set()
         self._load_possible_paths()
         self._to_return = None
-        self._readline_results = self._iter_readline_results()
+        self._buffer = []
 
     def readline(self):
         if self._to_return is not None:
@@ -22,7 +23,7 @@ class VirtualSerialPort:
             self._to_return = None
             return to_return
 
-        return next(self._readline_results)
+        return b'{"status": "success"}'
 
     def write(self, data):
         if not self._is_open:
@@ -63,7 +64,7 @@ class VirtualSerialPort:
     def open(self):
         assert not self.is_open
         assert self._port is not None
-        self._readline_results = self._iter_readline_results()
+        self._to_return = b"Hello!"
         self._is_open = True
 
     def _load_possible_paths(self):
@@ -78,9 +79,3 @@ class VirtualSerialPort:
         # Stocker les chemins extraits
         self._possible_paths = sorted(paths)
 
-    def _iter_readline_results(self):
-        sleep(0.1)
-        yield b"Hello!"
-        while self.is_open:
-            sleep(0.1)
-            yield b'{"status": "success"}'

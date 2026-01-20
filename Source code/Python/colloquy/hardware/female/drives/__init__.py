@@ -1,7 +1,10 @@
 from time import time
+from pathlib import Path
 from threading import Lock
 from colloquy.base import Base
 from colloquy.hardware.drive import Drive
+from .html import HTML
+from .test import Test
 
 """logic35_systems.ino: line 86
 //act_drive
@@ -24,14 +27,43 @@ class Drives(Base):
 
     def __init__(self, owner):
         Base.__init__(self, owner=owner)
+        self._html = HTML(owner=self)
+        
         self._o_drive = Drive(owner=self, name="O")
         self._p_drive = Drive(owner=self, name="P")
+        self._test = Test(owner=self)
         self._started_by = None
         self._error = None
+
+        self[self.html.name] = self.html.handle_request
+        self[self.o_drive.name] = self.o_drive
+        self[self.p_drive.name] = self.p_drive
+        self[self.test.name] = self.test
 
     def __iter__(self):
         yield self._o_drive
         yield self._p_drive
+        
+    def __call__(self, request):
+        request = Path(request)
+        if not request.parts:
+            raise NotImplementedError
+
+        key, *leftover = request.parts
+
+        if key in self:
+            self[key](request="/".join(leftover))
+            return
+
+        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
+
+    @property
+    def test(self):
+        return self._test
+
+    @property
+    def colloquy(self):
+        return self.owner.colloquy
 
     @property
     def error(self):
@@ -71,6 +103,10 @@ class Drives(Base):
     @property
     def is_started(self):
         return self.owner.is_started
+
+    @property
+    def html(self):
+        return self._html
 
     def stop(self):
         female = self.owner

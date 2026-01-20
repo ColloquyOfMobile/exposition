@@ -4,7 +4,7 @@
 # from colloquy.light_sensor import LightSensor
 # from colloquy.microphone import Microphone
 # from colloquy.neopixel import Neopixel
-from .neopixels import Head, BodyO, BodyP, Feet
+from .neopixels import Neopixels # Head, BodyO, BodyP, Feet
 from .drives import Drives
 # from .female_drives import FemaleDrives
 # from .mirror import Mirror
@@ -15,6 +15,8 @@ from .drives import Drives
 from pathlib import Path
 from colloquy.base_thread import BaseThread
 from .search import Search
+from .html import HTML
+from .test import Test
 
 class Female(BaseThread):
 
@@ -22,23 +24,19 @@ class Female(BaseThread):
         self._name = f"female{id_number}"
         self._id_number = id_number
         super().__init__(owner=owner)
+        self._html = HTML(owner=self)
         self._arduino = owner.arduino
 
         self._drives = Drives(owner=self)
         self._search = Search(owner=self)
 
+        self._neopixels = Neopixels(owner=self)
+        self._test = Test(owner=self)
 
-        self._neopixels = []
-        # self.neopixel = FemaleNeopixel(owner=self, name="neopixel")
-        self._head = Head(owner=self)
-        self._body_o= BodyO(owner=self)
-        self._body_p = BodyP(owner=self)
-        self._feet = Feet(owner=self)
-
-        self[self.head.name] = self.head
-        self[self.body_o.name] = self.body_o
-        self[self.body_p.name] = self.body_p
-        self[self.feet.name] = self.feet
+        self[self.html.name] = self.html.handle_request
+        self[self.neopixels.name] = self.neopixels
+        self[self.drives.name] = self.drives
+        self[self.test.name] = self.test
 
     def __call__(self, request):
         request = Path(request)
@@ -54,16 +52,16 @@ class Female(BaseThread):
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
+    def test(self):
+        return self._test
+
+    @property
     def search(self):
         return self._search
 
     @property
     def drives(self):
         return self._drives
-
-    @property
-    def colloquy(self):
-        return self.owner.colloquy
 
     @property
     def id_number(self):
@@ -75,27 +73,11 @@ class Female(BaseThread):
 
     @property
     def html(self):
-        return self.owner.html
+        return self._html
 
     @property
     def arduino(self):
         return self._arduino
-
-    @property
-    def head(self):
-        return self._head
-
-    @property
-    def body_o(self):
-        return self._body_o
-
-    @property
-    def body_p(self):
-        return self._body_p
-
-    @property
-    def feet(self):
-        return self._feet
 
     @property
     def name(self):
@@ -103,13 +85,7 @@ class Female(BaseThread):
 
     @property
     def neopixels(self):
-        neopixels = [
-            self.head,
-            self.body_o,
-            self.body_p,
-            self.feet,
-        ]
-        return neopixels
+        return self._neopixels
 
     def loop(self):
         pass

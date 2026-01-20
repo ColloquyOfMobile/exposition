@@ -12,40 +12,8 @@ class Test1(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
-
-        # self._thread = None
-        # self._stop_event = Event()
-
         self[self.html.name] = self.html.handle_request
-        # self["start"] = self.start
-        # self["stop"] = self.stop
 
-    # def __call__(self, request):
-        # request = Path(request)
-        # if not request.parts:
-            # raise NotImplementedError
-
-        # key, *leftover = request.parts
-
-        # if key in self:
-            # self[key](request="/".join(leftover))
-            # return
-
-        # raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
-
-    # @property
-    # def is_started(self):
-        # if self._thread is None:
-            # return False
-        # return self._thread.is_alive()
-
-    # @property
-    # def colloquy(self):
-        # return self.owner.colloquy
-
-    # @property
-    # def hardware(self):
-        # return self.colloquy.hardware
 
     @property
     def name(self):
@@ -55,26 +23,9 @@ class Test1(BaseThread):
     def html(self):
         return self._html
 
-    # def shutdown(self):
-        # self.stop()
-
-    # def start(self, request=None):
-        # self._stop_event.clear()
-        # self._thread = thread = Thread(target=self.run, name=self.path.as_posix())
-        # thread.start()
-
-    def stop(self, request=None):
-        super().stop()
-        with self.hardware.arduino:
-            for neopixel in self.hardware.neopixels:
-                neopixel.off()
-
-    # def run(self):
-        # try:
-            # self._run_unsafe()
-        # except Exception as error:
-            # self._error = error
-            # raise
+    def setdown(self):
+        for neopixel in self.hardware.neopixels:
+            neopixel.off()
 
     def _run_unsafe(self):
         stop_event = self._stop_event.is_set

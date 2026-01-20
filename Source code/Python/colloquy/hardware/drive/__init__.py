@@ -2,6 +2,8 @@ from time import time, sleep
 from threading import Lock
 from colloquy.base_thread import BaseThread
 from threading import Thread, Event, Lock
+from .html import HTML
+from .test import Test
 
 """logic35_systems.ino: line 86
 //act_drive
@@ -26,6 +28,9 @@ class Drive(BaseThread):
         assert name in ("O", "P")
         self._name = name
         super().__init__(owner=owner)
+        self._html = HTML(owner=self)
+        self._test = Test(owner=self)
+        
         self._value = 0
 
         self._step = 1
@@ -42,11 +47,16 @@ class Drive(BaseThread):
         seconds_in_3min = 60*3
         self._frustrated_lim = seconds_in_3min / self._update_interval
 
-    # @property
-    # def is_started(self):
-        # if self._thread is None:
-            # return False
-        # return self._thread.is_alive()
+        self[self.html.name] = self.html.handle_request
+        self[self.test.name] = self.test
+
+    @property
+    def test(self):
+        return self._test
+
+    @property
+    def html(self):
+        return self._html
 
     @property
     def name(self):
@@ -90,12 +100,15 @@ class Drive(BaseThread):
 
         self.owner.update()
 
-        if not self.is_satisfied:
-            self.body.search.start(started_by=self)
-            return
+        # if not self.is_satisfied:
+            # self.body.search.start(started_by=self)
+            # return
 
     def loop(self):
         self.increment()
+        if not self.is_satisfied:
+            self.body.search.start(started_by=self)
+            return
         sleep(self._update_interval)
 
     def setup(self):

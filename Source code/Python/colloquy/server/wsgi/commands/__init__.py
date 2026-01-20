@@ -46,6 +46,12 @@ class Commands(Base):
                 with tag("div", style="width: 1ch;"):
                     pass
                 doc.asis(self.restart.html())
+                with tag("div", style="width: 1ch;"):
+                    pass
+                with tag("div"):
+                    with tag("a", href="/"):
+                        text("refresh")
+                
         return doc.getvalue()
 
     def _call_if_error(self):

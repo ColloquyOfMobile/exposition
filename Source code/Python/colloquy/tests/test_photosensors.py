@@ -89,4 +89,3 @@ class TestPhotosensors(ThreadElement):
             text(self.name.title())
         with tag("div"):
             text("Enable testing photosensors one by one.")
-

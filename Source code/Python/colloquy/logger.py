@@ -24,7 +24,7 @@ class Logger:
         current = threading.current_thread()
         main_thread = threading.main_thread()
         msg = self._format(msg=msg)
-
+        
         if current == main_thread:
             print(msg)
 
@@ -87,4 +87,3 @@ class Logger:
             return f"{m:02d}:{s:05.2f}"
         else:
             return f"{s:05.2f}s"
-
