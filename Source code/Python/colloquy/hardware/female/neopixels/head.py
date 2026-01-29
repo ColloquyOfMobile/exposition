@@ -13,7 +13,11 @@ class Head(Neopixel):
 
     def set_test_default(self):
         self.configure(red=0, green=255, blue=0, white=0, brightness=255)
+    
+    @property
+    def female(self):
+        return self.owner.owner
 
     @property
     def arduino_path(self):
-        return Path(f"f{self.owner.id_number}/{self.name}")
+        return Path(f"f{self.female.id_number}/{self.name}")

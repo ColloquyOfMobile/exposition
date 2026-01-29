@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# colloquy/base_thread/__init__.py
 from time import time, sleep
 from utils import CustomDoc
 import inspect
@@ -7,6 +9,7 @@ import urllib.parse
 import socket
 from colloquy.base import Base
 from threading import Thread, Event, Lock
+from .thread_error import ThreadError
 
 class BaseThread(Base):
 
@@ -16,7 +19,7 @@ class BaseThread(Base):
         self._hardware = None
         self._started_at = None
         self._started_by = None
-        self._error = None
+        self._errors = []
 
         # self._children_threads = set()
 
@@ -46,15 +49,19 @@ class BaseThread(Base):
         return self._children_threads
 
     @property
+    def errors(self):
+        return self._errors
+
+    @property
     def error(self):
-        return self._error
+        raise NotImplementedError("Error is a list now. Use errors instead!")
+        return self._errors
 
     @error.setter
     def error(self, value):
-        # print(value)
-        self._error = value
-        if self._started_by is not None:
-            self._started_by.error = value
+        if value == None:
+            raise NotImplementedError("Error is a list now. Use clear instead.")
+        raise NotImplementedError("use append_error instead (clear)")
 
     @property
     def colloquy(self):
@@ -73,6 +80,11 @@ class BaseThread(Base):
         if self._thread is None:
             return False
         return self._thread.is_alive()
+    
+    def append_error(self, value):
+        self._errors.append(value)
+        if self._started_by is not None:
+            self._started_by.append_error(value)
 
     def leave_some_time_to_other_threads(self):
         sleep(0.01)
@@ -87,7 +99,8 @@ class BaseThread(Base):
     def start(self, started_by):
         if self._shutdown.is_set():
             return
-        if self.error is not None:
+        if self.errors:
+            raise NotImplementedError(f"Implement a clear error")
             return
         if self.is_started:
             return
@@ -136,7 +149,9 @@ class BaseThread(Base):
         try:
             self._run_unsafe()
         except Exception as error:
-            self.error = ThreadError(origin=self, error=error)
+            thread_error = ThreadError(owner=self, origin=self, error=error)
+            self.append_error(value=thread_error)
+            self[thread_error.name] = thread_error
         finally:
             self.setdown()
 
@@ -149,8 +164,8 @@ class BaseThread(Base):
             sleep(0.1)
 
     def _break_condition(self):
-        if self.error is not None:
-            self.log(f"Break condition: {self.error=}.")
+        if self.errors:
+            self.log(f"Break condition: {self.errors=}.")
             return True
         if self._stop_event.is_set():
             self.log(f"Break condition: {self._stop_event.is_set()=}.")
@@ -162,25 +177,5 @@ class BaseThread(Base):
             self.log(f"Break condition: {not self.owner.is_started=}.")
             return True
         return False
-
-
-
-
-class ThreadError:
-
-    def __init__(self, origin, error):
-        self._error = error
-        self._origin = origin
-
-    def __repr__(self):
-        return f"{self.origin=}, {self.error=}"
-
-    @property
-    def error(self):
-        return self._error
-
-    @property
-    def origin(self):
-        return self._origin
 
 

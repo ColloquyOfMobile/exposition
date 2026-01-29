@@ -10,10 +10,14 @@ class BodyO(Neopixel):
         super().__init__(owner=owner, name="bodyO")
         self._body = owner
         self.color = self.orange
+    
+    @property
+    def female(self):
+        return self.owner.owner
 
     @property
     def arduino_path(self):
-        return Path(f"f{self.owner.id_number}/{self.name}")
+        return Path(f"f{self.female.id_number}/{self.name}")
 
     def set_test_default(self):
         self.configure(red=125, green=125, blue=0, white=0, brightness=255)

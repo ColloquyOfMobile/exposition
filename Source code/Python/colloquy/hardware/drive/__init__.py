@@ -105,6 +105,7 @@ class Drive(BaseThread):
             # return
 
     def loop(self):
+        raise NotImplementedError("To speed up test.")
         self.increment()
         if not self.is_satisfied:
             self.body.search.start(started_by=self)

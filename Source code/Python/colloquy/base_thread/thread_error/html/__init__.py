@@ -2,7 +2,7 @@
 from pathlib import Path
 from colloquy.base_html import BaseHTML
 from utils import CustomDoc
-# import traceback
+import traceback
 from .details import Details
 
 class HTML(BaseHTML):
@@ -21,8 +21,12 @@ class HTML(BaseHTML):
         return "html"
 
     @property
+    def hardware(self):
+        return self.owner.hardware
+
+    @property
     def workspace(self):
-        return self.owner.workspace
+        return self.colloquy.server.wsgi.root.body.workspace
 
     def open(self, request):
         if self.workspace.opened is not None:
@@ -38,16 +42,17 @@ class HTML(BaseHTML):
 
     def _html_title(self):
         doc, tag, text = CustomDoc().tagtext()
+
         style="margin-bottom: 0.5rem; display: flex; align-items: center;"
-        
         if self.is_open:
             style += " justify-content: center;"
-            
+
         with tag("div", style=style):
             if not self.is_open:
+                # with tag("div"):
                 doc.asis(self.details.arrow)
 
-            with tag("div", style="font-size: 1.2rem; margin-right: 1ch;"):
+            with tag("div", style="font-size: 1.2rem; margin-right: 1ch; overflow:auto; text-wrap: nowrap;"):
                 with tag("strong"):
                     text(f"{self.owner.name}")
 
@@ -64,27 +69,11 @@ class HTML(BaseHTML):
 
         return doc.getvalue()
 
+
     def _call_unsafe(self):
         doc, tag, text = CustomDoc().tagtext()
+
         doc.asis(self._html_title())
         doc.asis(self.details())
 
-
         return doc.getvalue()
-
-    # def _html_thread_error(self, error):
-        # doc, tag, text = CustomDoc().tagtext()
-        # origin = error.origin
-        # error = error.error
-        # with tag("div"):
-            # with tag("div"):
-                # with tag("strong"):
-                    # text(f"Error in thread {origin}!")
-
-            # with tag("div", style="display: flex; flex-direction: column;"):
-                # style = "white-space: normal; overflow-wrap: break-word; word-break: break-word;"
-                # for line in traceback.format_exception(error):
-                    # with tag("pre", style=style):
-                        # text(line)
-
-        # return doc.getvalue()

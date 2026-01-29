@@ -8,6 +8,14 @@ class Details(BaseHTML):
 
     def __init__(self, owner):
         super().__init__(owner=owner)
+    
+    @property
+    def drives(self):
+        return self.owner.owner
+    
+    @property
+    def hardware(self):
+        return self.owner.hardware
 
     @property
     def name(self):
@@ -40,31 +48,9 @@ class Details(BaseHTML):
     def _call_unsafe(self):
         if not self.is_open:
             return ""
-            
         doc, tag, text = CustomDoc().tagtext()
-        with tag("div"):
-            if self.owner.owner.is_started:
-                label = "stop"
-            else:
-                label = "start"
-
-        href=f"/{self.owner.owner.path.as_posix()}/{label}"
-
-        with tag("a", href=href):
-            text(f"{label}")
-
-        if self.owner.owner.errors:
-            with tag("div", name="errors"):
-                for error in self.owner.owner.errors:
-                    doc.asis(error.html())
-                    # doc.asis(self._html_thread_error(error=error))
-
-        return doc.getvalue()
-
-    def _html_thread_error(self, error):
-        doc, tag, text = CustomDoc().tagtext()
-        origin = error.origin
-        error = error.error
+        origin = self.owner.owner.origin
+        error = self.owner.owner.error
         with tag("div"):
             with tag("div"):
                 with tag("strong"):

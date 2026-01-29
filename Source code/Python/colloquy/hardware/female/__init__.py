@@ -1,17 +1,5 @@
-# from colloquy.body import Body
-# from colloquy.drives import Drives
-# from colloquy.thread_element import ThreadElement
-# from colloquy.light_sensor import LightSensor
-# from colloquy.microphone import Microphone
-# from colloquy.neopixel import Neopixel
 from .neopixels import Neopixels # Head, BodyO, BodyP, Feet
 from .drives import Drives
-# from .female_drives import FemaleDrives
-# from .mirror import Mirror
-# from .search import Search
-# from .conversation import Conversation
-# from threading import Lock
-# from time import sleep
 from pathlib import Path
 from colloquy.base_thread import BaseThread
 from .search import Search
@@ -37,6 +25,7 @@ class Female(BaseThread):
         self[self.neopixels.name] = self.neopixels
         self[self.drives.name] = self.drives
         self[self.test.name] = self.test
+        self[self.search.name] = self.search
 
     def __call__(self, request):
         request = Path(request)

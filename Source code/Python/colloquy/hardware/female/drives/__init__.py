@@ -33,7 +33,7 @@ class Drives(Base):
         self._p_drive = Drive(owner=self, name="P")
         self._test = Test(owner=self)
         self._started_by = None
-        self._error = None
+        self._errors = []
 
         self[self.html.name] = self.html.handle_request
         self[self.o_drive.name] = self.o_drive
@@ -64,17 +64,22 @@ class Drives(Base):
     @property
     def colloquy(self):
         return self.owner.colloquy
-
-    @property
-    def error(self):
-        return self._error
-
-    @error.setter
-    def error(self, value):
-        print(value)
-        self._error = value
+    
+    def append_error(self, value):
+        self._errors.append(value)
         if self._started_by is not None:
-            self._started_by.error = value
+            self._started_by.append_error(value)
+
+    # @property
+    # def error(self):
+        # return self._error
+
+    # @error.setter
+    # def error(self, value):
+        # print(value)
+        # self._error = value
+        # if self._started_by is not None:
+            # self._started_by.error = value
 
     @property
     def o_drive(self):
@@ -112,18 +117,18 @@ class Drives(Base):
         female = self.owner
         for drive in self:
             drive.start(started_by=self)
-        female.head.off()
-        female.body_o.off()
-        female.body_p.off()
-        female.feet.off()
+        female.neopixels.head.off()
+        female.neopixels.body_o.off()
+        female.neopixels.body_p.off()
+        female.neopixels.feet.off()
 
     def start(self, started_by):
         self._started_by = started_by
         female = self.owner
-        female.head.on()
-        female.body_o.on()
-        female.body_p.on()
-        female.feet.on()
+        female.neopixels.head.on()
+        female.neopixels.body_o.on()
+        female.neopixels.body_p.on()
+        female.neopixels.feet.on()
         for drive in self:
             drive.start(started_by=self)
 
@@ -133,10 +138,10 @@ class Drives(Base):
         o_value = self.o_drive.value
         p_value = self.p_drive.value
 
-        female.head.brightness.value = max(o_value, p_value)
-        female.body_o.brightness.value = o_value
-        female.body_p.brightness.value = p_value
+        female.neopixels.head.brightness.value = max(o_value, p_value)
+        female.neopixels.body_o.brightness.value = o_value
+        female.neopixels.body_p.brightness.value = p_value
         if o_value < p_value:
-            female.feet.color = self.orange
+            female.neopixels.feet.color = self.orange
         else:
-            female.feet.color = self.puce
+            female.neopixels.feet.color = self.puce
