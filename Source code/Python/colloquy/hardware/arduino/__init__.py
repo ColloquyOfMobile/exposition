@@ -175,7 +175,6 @@ class Arduino(Base):
                 raise RuntimeError("Arduino was to long to reboot !")
 
 
-
     def _get_com_ports(self):
         return [
             port.device

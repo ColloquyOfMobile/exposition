@@ -11,4 +11,9 @@ from colloquy import Colloquy
 if __name__ == "__main__":
     args = sys.argv[1:]
     colloquy = Colloquy()
+    colloquy.hardware.u2d2.com_port.set("u2d2 com")
+    colloquy.hardware.u2d2.html.open(request=None)
+    colloquy.hardware.u2d2.html.open(request=None)
+    colloquy.hardware.u2d2.dxl_list[0].html.open(request=None)
+    # colloquy.exposition.start_command()    
     colloquy.cli(*args)

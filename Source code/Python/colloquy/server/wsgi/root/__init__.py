@@ -53,7 +53,7 @@ class Root(Base):
     def _call_unsafe(self):
         doc, tag, text = CustomDoc().tagtext()
         doc.asis("<!DOCTYPE html>")
-        with tag("html"):
+        with tag("html", style="display: flex; height: 100%; flex-direction: column;"):
             doc.asis(self.head())
             doc.asis(self.body())
 

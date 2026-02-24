@@ -9,7 +9,7 @@ import urllib.parse
 import socket
 from colloquy.base import Base
 from threading import Thread, Event, Lock
-from .thread_error import ThreadError
+from .thread_errors import ThreadErrors
 
 class BaseThread(Base):
 
@@ -19,9 +19,9 @@ class BaseThread(Base):
         self._hardware = None
         self._started_at = None
         self._started_by = None
-        self._errors = []
+        self._thread_errors = ThreadErrors(owner=self)
 
-        # self._children_threads = set()
+        self._children = set()
 
         self._thread = None
         self._stop_event = Event()
@@ -30,6 +30,7 @@ class BaseThread(Base):
 
         self["start"] = self.start_command
         self["stop"] = self.stop_command
+        self[self.thread_errors.name] = self.thread_errors
 
     def __call__(self, request):
         request = Path(request)
@@ -45,23 +46,12 @@ class BaseThread(Base):
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
-    def children_threads(self):
-        return self._children_threads
+    def thread_errors(self):
+        return self._thread_errors
 
     @property
-    def errors(self):
-        return self._errors
-
-    @property
-    def error(self):
-        raise NotImplementedError("Error is a list now. Use errors instead!")
-        return self._errors
-
-    @error.setter
-    def error(self, value):
-        if value == None:
-            raise NotImplementedError("Error is a list now. Use clear instead.")
-        raise NotImplementedError("use append_error instead (clear)")
+    def children(self):
+        return self._children
 
     @property
     def colloquy(self):
@@ -82,9 +72,7 @@ class BaseThread(Base):
         return self._thread.is_alive()
     
     def append_error(self, value):
-        self._errors.append(value)
-        if self._started_by is not None:
-            self._started_by.append_error(value)
+        raise NotImplementedError
 
     def leave_some_time_to_other_threads(self):
         sleep(0.01)
@@ -97,10 +85,14 @@ class BaseThread(Base):
         self.join()
 
     def start(self, started_by):
+        if started_by is not None:
+            if self in started_by.children:
+                raise NotImplementedError(f"Should be deleted when stop.")
+            started_by.children.add(self)
         if self._shutdown.is_set():
             return
-        if self.errors:
-            raise NotImplementedError(f"Implement a clear error")
+        if self.thread_errors:
+            raise NotImplementedError(f"Implement a clear error! ({self=})")
             return
         if self.is_started:
             return
@@ -148,10 +140,11 @@ class BaseThread(Base):
         self.log(f"{self} is started.")
         try:
             self._run_unsafe()
+            # TODO: Find the best moment to discard the children. Might actually not need at all.
+            # self.owner.children.discard(self)
         except Exception as error:
-            thread_error = ThreadError(owner=self, origin=self, error=error)
-            self.append_error(value=thread_error)
-            self[thread_error.name] = thread_error
+            self.thread_errors.append(error)
+            # self.owner.children.discard(self) !! Can't be here, I need the childrens to process to errors
         finally:
             self.setdown()
 
@@ -164,8 +157,8 @@ class BaseThread(Base):
             sleep(0.1)
 
     def _break_condition(self):
-        if self.errors:
-            self.log(f"Break condition: {self.errors=}.")
+        if self.thread_errors:
+            self.log(f"Break condition: {self.thread_errors=}.")
             return True
         if self._stop_event.is_set():
             self.log(f"Break condition: {self._stop_event.is_set()=}.")

@@ -4,6 +4,7 @@ import os
 import sys
 
 from utils import CustomDoc
+from colloquy.base_thread import BaseThread
 from .events import Events
 from .base import Base
 from .tests import Tests
@@ -14,7 +15,7 @@ from .cli import CLI
 from .tests import Tests
 from .exposition import Exposition
 
-class Colloquy(Base):
+class Colloquy(BaseThread):
 
     def __init__(self):
         super().__init__(owner=None)
@@ -35,6 +36,7 @@ class Colloquy(Base):
         self["hardware"] = self._hardware
 
         self._events = Events()
+        
 
     @property
     def tests(self):

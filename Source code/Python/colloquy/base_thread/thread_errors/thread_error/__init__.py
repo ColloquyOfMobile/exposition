@@ -11,12 +11,8 @@ class ThreadError(Base):
     _counter = 0
     _counter_lock = Lock()
 
-    def __init__(self, owner, origin, error):
-        
-        with ThreadError._counter_lock:
-            self._name = f"thread error {ThreadError._counter}"
-            ThreadError._counter += 1
-        
+    def __init__(self, owner, name, origin, error):        
+        self._name = name        
         super().__init__(owner=owner)
         self._error = error
         self._origin = origin

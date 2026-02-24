@@ -6,6 +6,7 @@ from pathlib import Path
 from .neopixels import Neopixels
 from .commands import Commands
 from .test import Test
+from .html import HTML
 
 
 class Hardware(BaseThread):
@@ -16,12 +17,21 @@ class Hardware(BaseThread):
 
         if self.is_simulated:
             self.log(f"Warning: The hardware is simulated.")
-
+        
+        self._html = HTML(owner=self)
+        self[self.html.name] = self.html.handle_request
+        
+        self.dxl_ids = {
+            "female1": 1,
+            "female2": 3,
+            "female3": 5,
+        }
         self._opened = None
         self._commands = Commands(owner=self)
 
         self._arduino = Arduino(owner=self)
         self._u2d2 = U2D2(owner=self)
+        self[self.u2d2.name] = self.u2d2
         self._bar = None
 
         self._mirrors = []

@@ -52,11 +52,13 @@ class Details(BaseHTML):
 
         with tag("a", href=href):
             text(f"{label}")
-
-        if self.owner.owner.errors:
-            with tag("div", name="errors"):
-                for error in self.owner.owner.errors:
-                    doc.asis(error.html())
+        
+        doc.asis(self.owner.owner.thread_errors.html())
+        
+        # if self.owner.owner.errors:
+            # with tag("div", name="errors"):
+                # for error in self.owner.owner.errors:
+                    # doc.asis(error.html())
                     # doc.asis(self._html_thread_error(error=error))
 
         return doc.getvalue()

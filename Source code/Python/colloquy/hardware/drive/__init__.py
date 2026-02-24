@@ -100,12 +100,7 @@ class Drive(BaseThread):
 
         self.owner.update()
 
-        # if not self.is_satisfied:
-            # self.body.search.start(started_by=self)
-            # return
-
     def loop(self):
-        raise NotImplementedError("To speed up test.")
         self.increment()
         if not self.is_satisfied:
             self.body.search.start(started_by=self)
@@ -121,9 +116,3 @@ class Drive(BaseThread):
     def satisfy(self):
         self.o_drive = self._satisfaction_lim
         self.p_drive = self._satisfaction_lim
-
-    # def _run_unsafe(self):
-        # stop_event = self._stop_event.is_set
-        # while not stop_event():
-            # self.increment()
-            # sleep(self._update_interval)

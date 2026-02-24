@@ -52,6 +52,7 @@ class Workspace(Base):
                 doc.asis(self.opened())
                 return doc.getvalue()
 
+            doc.asis(self.hardware.html())
             doc.asis(self.tests.html())
             doc.asis(self.exposition.html())
 

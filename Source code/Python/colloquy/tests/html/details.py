@@ -62,17 +62,6 @@ class Details(BaseHTML):
             
             with tag("div", style="display: flex; flex-direction: column;"):
                 doc.asis(self.hardware.test.html())
-                # with tag("div"):
-                    # text("NEOPIXELS")
-                # for female in self.hardware.females:
-                    # doc.asis(female.html())
-            
-            
-            # with tag("div", style="display: flex; flex-direction: column;"):
-                # for neopixel in self.hardware.neopixels:
-                    # if neopixel.html is self.tests.opened:
-                        # continue
-                    # doc.asis(neopixel.html())
 
         return doc.getvalue()
 

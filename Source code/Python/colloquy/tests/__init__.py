@@ -20,9 +20,6 @@ class Tests(Base):
         self[self.html.name] = self.html.handle_request
         self.add(self.test1)
 
-        # for neopixel in self.hardware.neopixels:
-            # self[neopixel.name] = neopixel.html.handle_request
-
         self._threaded_tests = {self.test1}
 
     def __call__(self, request):

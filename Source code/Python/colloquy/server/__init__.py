@@ -24,7 +24,6 @@ class Server(Base):
         self._restarted = Restarted(owner=self)
         self._cli = CLI(owner=self)
 
-
     @property
     def name(self):
         return "server"

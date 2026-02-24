@@ -68,9 +68,9 @@ class Body(Base):
 
     def _call_unsafe(self):
         doc, tag, text = CustomDoc().tagtext()
-        with tag("body", style="display: flex; flex-direction: column;"):
+        with tag("body", style="display: flex; flex:1; flex-direction: column;"):
             
-            with tag("h1", style="display: flex; flex: 1; justify-items: center;"):
+            with tag("h1", style="display: flex; justify-items: center;"):
                 text(
                     f"Colloquy of Mobiles"
                     )
@@ -144,6 +144,10 @@ class Body(Base):
         doc, tag, text = CustomDoc().tagtext()
         with tag("div", style="margin-bottom: 1rem;"):
             text(f"Thread count: {len(self.all_threads)}")
+        
+        for thread in self.all_threads:
+            with tag("div", style="margin-bottom: 1rem;"):
+                text(f"{thread}")
             
         return doc.getvalue()
 

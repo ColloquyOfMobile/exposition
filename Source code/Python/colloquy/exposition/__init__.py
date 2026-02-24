@@ -58,6 +58,6 @@ class Exposition(BaseThread):
             self.stop()
 
     def setdown(self):
-        if self.errors:
+        if self.thread_errors:
             self.hardware.shutdown()
         self.hardware.stop()

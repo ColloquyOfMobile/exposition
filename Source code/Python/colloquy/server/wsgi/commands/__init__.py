@@ -38,7 +38,6 @@ class Commands(Base):
     def name(self):
         return "command"
 
-
     def _call_unsafe(self):
         doc, tag, text = CustomDoc().tagtext()
         with tag("div", style="display: flex; margin-bottom: 1rem;"):

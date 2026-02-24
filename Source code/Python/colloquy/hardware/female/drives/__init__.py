@@ -3,6 +3,7 @@ from pathlib import Path
 from threading import Lock
 from colloquy.base import Base
 from colloquy.hardware.drive import Drive
+from colloquy.base_thread import BaseThread
 from .html import HTML
 from .test import Test
 
@@ -23,17 +24,17 @@ const int color_orange[4] = {80, 255, 25, 16}; //GRBW/orangish
 const int color_puce[4] = {180, 160, 0, 40}; //GRBW//greenish
 """
 
-class Drives(Base):
+class Drives(BaseThread):
 
     def __init__(self, owner):
-        Base.__init__(self, owner=owner)
+        super().__init__(owner=owner)
         self._html = HTML(owner=self)
         
         self._o_drive = Drive(owner=self, name="O")
         self._p_drive = Drive(owner=self, name="P")
         self._test = Test(owner=self)
-        self._started_by = None
-        self._errors = []
+        # self._started_by = None
+        # self._errors = []
 
         self[self.html.name] = self.html.handle_request
         self[self.o_drive.name] = self.o_drive
@@ -44,42 +45,26 @@ class Drives(Base):
         yield self._o_drive
         yield self._p_drive
         
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
+    # def __call__(self, request):
+        # request = Path(request)
+        # if not request.parts:
+            # raise NotImplementedError
 
-        key, *leftover = request.parts
+        # key, *leftover = request.parts
 
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
+        # if key in self:
+            # self[key](request="/".join(leftover))
+            # return
 
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
+        # raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def test(self):
         return self._test
 
-    @property
-    def colloquy(self):
-        return self.owner.colloquy
-    
-    def append_error(self, value):
-        self._errors.append(value)
-        if self._started_by is not None:
-            self._started_by.append_error(value)
-
     # @property
-    # def error(self):
-        # return self._error
-
-    # @error.setter
-    # def error(self, value):
-        # print(value)
-        # self._error = value
-        # if self._started_by is not None:
-            # self._started_by.error = value
+    # def colloquy(self):
+        # return self.owner.colloquy
 
     @property
     def o_drive(self):
@@ -105,25 +90,25 @@ class Drives(Base):
     def white(self):
         return dict(red=0, green=0, blue=0, white=255)
 
-    @property
-    def is_started(self):
-        return self.owner.is_started
+    # @property
+    # def is_started(self):
+        # return self.owner.is_started
 
     @property
     def html(self):
         return self._html
 
-    def stop(self):
+    def loop(self):
+        pass
+
+    def setdown(self):
         female = self.owner
-        for drive in self:
-            drive.start(started_by=self)
         female.neopixels.head.off()
         female.neopixels.body_o.off()
         female.neopixels.body_p.off()
         female.neopixels.feet.off()
 
-    def start(self, started_by):
-        self._started_by = started_by
+    def setup(self):
         female = self.owner
         female.neopixels.head.on()
         female.neopixels.body_o.on()

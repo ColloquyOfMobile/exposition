@@ -51,16 +51,15 @@ class Details(BaseHTML):
             
         doc, tag, text = CustomDoc().tagtext()
 
-        if self.is_open:
-            with tag("div"):
-                if self.arduino.is_open:
-                    label = "close"
-                else:
-                    label = "open"
+        with tag("div"):
+            if self.arduino.is_open:
+                label = "close"
+            else:
+                label = "open"
 
-                href=f"/{self.arduino.path.as_posix()}/{label}"
-                with tag("a", href=href):
-                    text(f"{label} port")
+            href=f"/{self.arduino.path.as_posix()}/{label}"
+            with tag("a", href=href):
+                text(f"{label} port")
 
         return doc.getvalue()
 
