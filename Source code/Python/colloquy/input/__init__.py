@@ -9,7 +9,7 @@ from colloquy.base import Base
 
 
 from .line import Line
-from .key import Key
+# from .key import Key
 from .erase import Erase
 from .html import HTML
 
