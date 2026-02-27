@@ -8,11 +8,14 @@ class Details(BaseHTML):
 
     def __init__(self, owner):
         super().__init__(owner=owner)
-        self.opened = None
     
     @property
-    def female(self):
-        return self.owner.owner
+    def dxl_origin(self):
+        return self.owner.dxl_origin
+    
+    @property
+    def dxl(self):
+        return self.owner.dxl
     
     @property
     def hardware(self):
@@ -46,26 +49,15 @@ class Details(BaseHTML):
     def close(self, request=None):
         self._is_open = False
 
-
     def _call_unsafe(self):
         if not self.is_open:
-            return ""
+            return ""        
         
         doc, tag, text = CustomDoc().tagtext()
-        
-        if self.opened is not None:
-            doc.asis(self.opened())
-            return doc.getvalue()
             
-        with tag("div", style="display: flex; flex-direction: column;"):         
+        with tag("div",  name=self.name, style="display: flex; flex:1; flex-direction: column;"):
             
-            with tag("div", style="display: flex; flex-direction: column;"):
-                doc.asis(self.female.drives.html())
-                doc.asis(self.female.neopixels.html())
-                doc.asis(self.female.position.html())
-                doc.asis(self.female.torque_enabled.html())
-                doc.asis(self.female.goal_position.html())
-                doc.asis(self.female.dxl_origin.html())
+            doc.asis(self.dxl_origin.input.html())
 
         return doc.getvalue()
 

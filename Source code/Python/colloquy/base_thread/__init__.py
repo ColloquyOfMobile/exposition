@@ -140,11 +140,8 @@ class BaseThread(Base):
         self.log(f"{self} is started.")
         try:
             self._run_unsafe()
-            # TODO: Find the best moment to discard the children. Might actually not need at all.
-            # self.owner.children.discard(self)
         except Exception as error:
             self.thread_errors.append(error)
-            # self.owner.children.discard(self) !! Can't be here, I need the childrens to process to errors
         finally:
             self.setdown()
 
@@ -166,9 +163,10 @@ class BaseThread(Base):
         if self._shutdown.is_set():
             self.log(f"Break condition: {self._shutdown.is_set()=}.")
             return True
-        if not self.owner.is_started:
-            self.log(f"Break condition: {not self.owner.is_started=}.")
-            return True
+        if self._started_by is not None:
+            if not self._started_by.is_started:
+                self.log(f"Break condition: {not self._started_by.is_started=}.")
+                return True
         return False
 
 

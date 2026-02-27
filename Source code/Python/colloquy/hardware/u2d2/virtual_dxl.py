@@ -76,10 +76,6 @@ class VirtualDXL(Base):
         if self._lim_min < self._position < self._lim_max:
             self.stop_event.set()
             return
-            # with self._lock:
-                # self._position = self.goal_position
-                # self.stop_event.set()
-                # return
 
         if self._position < self.goal_position:
             self._position += self._step

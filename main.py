@@ -11,9 +11,17 @@ from colloquy import Colloquy
 if __name__ == "__main__":
     args = sys.argv[1:]
     colloquy = Colloquy()
-    colloquy.hardware.u2d2.com_port.set("u2d2 com")
-    colloquy.hardware.u2d2.html.open(request=None)
-    colloquy.hardware.u2d2.html.open(request=None)
-    colloquy.hardware.u2d2.dxl_list[0].html.open(request=None)
+    colloquy.hardware.u2d2.com_port.set("COM4")
+    # colloquy.hardware.u2d2.dxl_list[0].html.open(request=None)
+    
+    # colloquy.hardware.u2d2.dxl_list[0].goal_position.write(400)
+    
+    colloquy.hardware.female1.html.open(request=None)
+    # colloquy.hardware.female1.torque_enabled.write(value=1)
+    
+    # colloquy.hardware.u2d2.html.open(request=None)
+    # colloquy.hardware.u2d2.dxl_list[0].html.open(request=None)
+    
+    # colloquy.exposition.html.open(request=None)
     # colloquy.exposition.start_command()    
     colloquy.cli(*args)

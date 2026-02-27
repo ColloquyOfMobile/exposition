@@ -8,21 +8,17 @@ from .html import HTML
 from time import time, sleep
 from colloquy.input import Input
 
-class RegisterHanlder(Base):
-    def __init__(self, owner, name, register, read_func, write_func=None, open_in=None, html_class=None):
+class IntValue(Base):
+    def __init__(self, owner, name, getter, setter=None):
         self._name = name
         super().__init__(owner=owner)
-        self._read_func = read_func
-        self._write_func = write_func
-        self._register = register
+        self._getter = getter
+        self._setter = setter
         
-        if html_class is None:
-            self._html = HTML(owner=self)
-        else:
-            self._html = html_class(owner=self)
+        self._html = HTML(owner=self)
         self[self.html.name] = self.html.handle_request
         
-        self["read"] = self.read
+        self["get"] = self.get
         
         # if not self.is_readonly():
         self._input = Input(owner=self)
@@ -44,14 +40,6 @@ class RegisterHanlder(Base):
     @property
     def input(self):
         return self._input
-    
-    @property
-    def dxl(self):
-        return self.owner
-
-    @property
-    def u2d2(self):
-        return self.owner.u2d2
 
     @property
     def colloquy(self):
@@ -64,22 +52,18 @@ class RegisterHanlder(Base):
     @property
     def name(self):
         return self._name
-
-    @property
-    def dxl_id(self):
-        return self.owner.dxl_id
     
     def is_readonly(self):
-        return self._write_func is None
+        return self._setter is None
         
     def commit(self, value):
         value = int(value)
-        return self.write(value=value)
+        return self.set(value=value)
         
-    def read(self, request=None):
-        return self._read_func(self.dxl_id, self._register)
+    def get(self, request=None):
+        return self._getter()
     
-    def write(self, value):
-        if self._write_func is None:
+    def set(self, value):
+        if self._setter is None:
             raise NotImplementedError(self)
-        return self._write_func(self.dxl_id, self._register, value)
+        return self._setter(value)

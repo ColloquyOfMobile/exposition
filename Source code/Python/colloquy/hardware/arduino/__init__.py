@@ -22,7 +22,6 @@ class Arduino(Base):
         Initialise la communication série avec l'Arduino.
         """
         super().__init__(owner=owner)
-        self._params = owner.owner.params
         self.lock = Lock()
         self._port_handler = None
         self._was_open = None
@@ -72,7 +71,7 @@ class Arduino(Base):
 
     @property
     def params(self):
-        return self._params
+        return self.owner.params
 
     @property
     def name(self):
@@ -80,11 +79,11 @@ class Arduino(Base):
 
     @property
     def port_name(self):
-        return self.params.get("arduino")["communication port"]
+        return self.params["arduino"]["communication port"]
 
     @property
     def baudrate(self):
-        return self.params.get("arduino")["baudrate"]
+        return self.params["arduino"]["baudrate"]
 
     @property
     def port_handler(self):

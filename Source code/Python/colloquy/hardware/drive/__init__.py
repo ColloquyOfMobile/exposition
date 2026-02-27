@@ -102,9 +102,6 @@ class Drive(BaseThread):
 
     def loop(self):
         self.increment()
-        if not self.is_satisfied:
-            self.body.search.start(started_by=self)
-            return
         sleep(self._update_interval)
 
     def setup(self):

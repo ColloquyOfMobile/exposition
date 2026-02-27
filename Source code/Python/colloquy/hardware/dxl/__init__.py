@@ -5,6 +5,8 @@ from dynamixel_sdk import PortHandler, PacketHandler, COMM_SUCCESS  # Uses Dynam
 from colloquy.base import Base
 from .html import HTML
 from .register_handler import RegisterHanlder
+from .torque_enabled import TorqueEnabled
+from .goal_position import GoalPosition
 from time import time, sleep
 
 class DXL(Base):
@@ -38,9 +40,9 @@ class DXL(Base):
 
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
-    @property
-    def goal_position(self):
-        return self._goal_position
+    # @property
+    # def goal_position(self):
+        # return self._goal_position
 
     @property
     def u2d2(self):
@@ -167,8 +169,6 @@ class DXL(Base):
             # ("elec current",            126     True        2),
             ("drive mode",              10,    False,      1),
             ("position",                132,    True,       4),
-            ("goal position",           116,    False,      4),
-            ("torque enabled",          64,     False,      1),
             ("operating mode",          11,     False,      1),
             ("profile velocity",        112,     False,      4),
             ("profile acceleration",    108,     False,      4),
@@ -177,5 +177,11 @@ class DXL(Base):
         
         for name, adress, readonly, byte_count in params:
             self._add_register(name=name, adress=adress, readonly=readonly, byte_count=byte_count)
+        
+        torque_enabled = TorqueEnabled(owner=self)
+        self[torque_enabled.name] = torque_enabled
+        
+        goal_position = GoalPosition(owner=self)
+        self[goal_position.name] = goal_position
     
     

@@ -14,10 +14,8 @@ class Search(BaseThread):
         if not self.owner.is_moving:
             self.owner.toggle_position()
 
-        self.owner.sensor.detect_male()
-
     def setup(self):
-        print(f"Set up {self=}")
+        self.owner.light_sensor.detect_pattern.start(started_by=self)
         pass
 
     def setdown(self):

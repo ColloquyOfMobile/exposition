@@ -40,9 +40,9 @@ class Hardware(BaseThread):
         self._speakers = []
         self._moving_elements = []
 
-        self._female1 = Female(owner=self, id_number=1)
-        self._female2 = Female(owner=self, id_number=2)
-        self._female3 = Female(owner=self, id_number=3)
+        self._female1 = Female(owner=self, id_number=1, dxl_origin=107)
+        self._female2 = Female(owner=self, id_number=2, dxl_origin=1000)
+        self._female3 = Female(owner=self, id_number=3, dxl_origin=3000)
         self._females = [
             self._female1,
             self._female2,
@@ -72,6 +72,10 @@ class Hardware(BaseThread):
             return
 
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
+
+    @property
+    def params(self):
+        return self.owner.params
 
     @property
     def test(self):

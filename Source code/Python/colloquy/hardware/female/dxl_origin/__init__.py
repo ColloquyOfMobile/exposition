@@ -8,21 +8,14 @@ from .html import HTML
 from time import time, sleep
 from colloquy.input import Input
 
-class RegisterHanlder(Base):
-    def __init__(self, owner, name, register, read_func, write_func=None, open_in=None, html_class=None):
-        self._name = name
+class DXLOrigin(Base):
+    def __init__(self, owner):
         super().__init__(owner=owner)
-        self._read_func = read_func
-        self._write_func = write_func
-        self._register = register
         
-        if html_class is None:
-            self._html = HTML(owner=self)
-        else:
-            self._html = html_class(owner=self)
+        self._html = HTML(owner=self)
         self[self.html.name] = self.html.handle_request
         
-        self["read"] = self.read
+        self["get"] = self.get
         
         # if not self.is_readonly():
         self._input = Input(owner=self)
@@ -44,18 +37,14 @@ class RegisterHanlder(Base):
     @property
     def input(self):
         return self._input
-    
-    @property
-    def dxl(self):
-        return self.owner
-
-    @property
-    def u2d2(self):
-        return self.owner.u2d2
 
     @property
     def colloquy(self):
         return self.owner.colloquy
+
+    @property
+    def params(self):
+        return self.colloquy.params
 
     @property
     def html(self):
@@ -63,23 +52,21 @@ class RegisterHanlder(Base):
 
     @property
     def name(self):
-        return self._name
-
+        return "dxl origin"
+    
     @property
-    def dxl_id(self):
-        return self.owner.dxl_id
+    def female(self):
+        return self.owner
     
     def is_readonly(self):
-        return self._write_func is None
+        return False
         
     def commit(self, value):
         value = int(value)
-        return self.write(value=value)
+        return self.set(value=value)
         
-    def read(self, request=None):
-        return self._read_func(self.dxl_id, self._register)
+    def get(self, request=None):
+        return self.params[self.owner.name][self.name]
     
-    def write(self, value):
-        if self._write_func is None:
-            raise NotImplementedError(self)
-        return self._write_func(self.dxl_id, self._register, value)
+    def set(self, value):
+        self.params[self.owner.name][self.name] = value

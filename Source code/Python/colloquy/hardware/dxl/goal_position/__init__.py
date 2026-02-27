@@ -4,38 +4,23 @@ from pathlib import Path
 from dynamixel_sdk import PortHandler, PacketHandler, COMM_SUCCESS  # Uses Dynamixel SDK library
 from utils import CustomDoc
 from colloquy.base import Base
+from ..register_handler import RegisterHanlder
 from .html import HTML
 from time import time, sleep
 from colloquy.input import Input
 
-class RegisterHanlder(Base):
-    def __init__(self, owner, name, register, read_func, write_func=None, open_in=None, html_class=None):
-        self._name = name
-        super().__init__(owner=owner)
-        self._read_func = read_func
-        self._write_func = write_func
-        self._register = register
-        
-        if html_class is None:
-            self._html = HTML(owner=self)
-        else:
-            self._html = html_class(owner=self)
-        self[self.html.name] = self.html.handle_request
-        
-        self["read"] = self.read
-        
-        # if not self.is_readonly():
-        self._input = Input(owner=self)
-        self[self.input.name] = self.input
+class GoalPosition(RegisterHanlder):
+    def __init__(self, owner,):
+        super().__init__(owner=owner, name="goal position", register=116, read_func=owner.u2d2.read_4_bytes, write_func=owner.u2d2.write_4_bytes, html_class=HTML)
 
-    def __call__(self, request):
+    def __call__(self, request): 
         request = Path(request)
         if not request.parts:
             raise NotImplementedError
 
         key, *leftover = request.parts
 
-        if key in self:
+        if key in self:        
             self[key](request="/".join(leftover))
             return
 
@@ -80,6 +65,4 @@ class RegisterHanlder(Base):
         return self._read_func(self.dxl_id, self._register)
     
     def write(self, value):
-        if self._write_func is None:
-            raise NotImplementedError(self)
         return self._write_func(self.dxl_id, self._register, value)

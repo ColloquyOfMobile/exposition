@@ -10,20 +10,20 @@ from .base import Base
 from .tests import Tests
 from .server import Server
 from .hardware import Hardware
-from .parameters import Parameters
 from .cli import CLI
 from .tests import Tests
 from .exposition import Exposition
+from .params import Params
 
 class Colloquy(BaseThread):
 
     def __init__(self):
         super().__init__(owner=None)
 
+        self._params = Params.load(Path("local/params.json"))
+
         self._request = None
         self._args = None
-
-        self._params = Parameters(owner=self)
 
         self._hardware = Hardware(owner=self)
         self._tests = Tests(owner=self)
