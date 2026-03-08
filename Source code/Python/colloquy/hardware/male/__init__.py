@@ -9,26 +9,6 @@ from .search import Search
 from .html import HTML
 from collections import deque
 
-# During search the male blinks.
-# The blink pattern define 2 things:
-# - the male identity: 1 or 2
-# - which kind of interation the male is look for (drive state): "O" or "P" or both
-# Extracted from TJ's arduino code "logic35_system.ino, line 87."
-LIGHT_PATTERNS = {
-    "male1": {
-        tuple():     (1, 1, 0, 0, 1, 1, 0, 0, 0, 1),
-        ("O",):      (1, 1, 0, 0, 0, 0, 0, 1, 1, 1),
-        ("P",):      (1, 1, 0, 0, 0, 0, 1, 1, 1, 0),
-        ("O", "P"): (1, 1, 0, 0, 0, 1, 0, 1, 0, 1),
-    },
-    "male2": {
-        tuple():     (1, 1, 0, 0, 1, 1, 1, 0, 0, 0),
-        ("O",):      (1, 1, 0, 0, 0, 1, 1, 1, 0, 0),
-        ("P",):      (1, 1, 0, 0, 1, 0, 0, 0, 1, 1),
-        ("O", "P"): (1, 1, 0, 0, 1, 0, 1, 0, 1, 0),
-    }
-}
-
 
 class Male(BaseThread):
 
@@ -38,7 +18,7 @@ class Male(BaseThread):
         super().__init__(owner=owner)
         self._position_memory = None
         self._light_pattern_deques = {}
-        for k, v in LIGHT_PATTERNS[self.name].items():
+        for k, v in self.colloquy.light_patterns[self.name].items():
             # The deque with max_len will act as circular list
             self._light_pattern_deques[k] = deque(v, maxlen=len(v))
         

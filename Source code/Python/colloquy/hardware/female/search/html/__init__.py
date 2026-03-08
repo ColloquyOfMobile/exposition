@@ -13,6 +13,10 @@ class HTML(BaseHTML):
         self["details"] = self.details.handle_request
 
     @property
+    def search(self):
+        return self.owner
+
+    @property
     def details(self):
         return self._details
 

@@ -8,10 +8,23 @@ class Details(BaseHTML):
 
     def __init__(self, owner):
         super().__init__(owner=owner)
+        self._opened = None
+    
+    @property
+    def opened(self):
+        return self._opened
+    
+    @opened.setter
+    def opened(self, value):
+        self._opened = value
 
     @property
     def name(self):
         return "details"
+
+    @property
+    def search(self):
+        return self.owner.search
 
     @property
     def workspace(self):
@@ -52,6 +65,8 @@ class Details(BaseHTML):
 
             with tag("a", href=href):
                 text(f"{label}")
+            
+        doc.asis(self.search.read_pattern.html())
         
         doc.asis(self.owner.owner.thread_errors.html())
         

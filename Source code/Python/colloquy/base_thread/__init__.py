@@ -151,7 +151,7 @@ class BaseThread(Base):
             if self._break_condition():
                 break                
             self.loop()
-            sleep(0.1)
+            sleep(0.01)
 
     def _break_condition(self):
         if self.thread_errors:

@@ -58,16 +58,16 @@ class VirtualSerialPort(Base):
         self._to_return = None
         self._states = states = {}
         for i in range(3):
-            states[f"f{i+1}"] = female = {}
+            states[f"female{i+1}"] = female = {}
             for name in ("head", "bodyO", "bodyP", "feet"):
                 female[name] = dict(r=0, g=0, b=0)
             
             female["light sensor"] = 0
                     
         for i in range(2):
-            states[f"m{i+1}"] = male = {}
+            states[f"male{i+1}"] = male = {}
             for name in ("ring", "p drive level", "o drive level"):
-                male[name] = dict(r=0, g=0, b=0)
+                male[name] = dict(r=0, g=0, b=0, w=0)
             
             male[f"light sensor"] = sensors = {}
             for name in "abcd":
@@ -89,8 +89,6 @@ class VirtualSerialPort(Base):
         path = data["path"]
         assert path in self._possible_paths, f"{path=}, {self._possible_paths=}"
         self._to_return = self._path_handlers[path](data)
-        if path.endswith("sensor"):
-            self._to_return = "10".encode()
 
     @property
     def is_open(self):
@@ -107,6 +105,10 @@ class VirtualSerialPort(Base):
     @property
     def name(self):
         return self._port
+
+    @property
+    def colloquy(self):
+        return self.owner.colloquy
 
     def close(self):
         self._is_open = False
@@ -146,63 +148,45 @@ class VirtualSerialPort(Base):
         female_dxl = self.owner.dxls[1]
         bar_dxl = self.owner.dxls[8]
         if not self._is_near_origin(name="female1", dxl=female_dxl):
-            return params["photosensor_threshold"] - 100
-            
-        if bar_dxl.position:
-            bar_dxl.position
-            return bar_dxl.position
+            return params["photosensor_threashold"] - 100
         
-        raise NotImplementedError(self.owner)
-        return 10
+        male = self._get_nearest_male(female="female1")
+        if male is None:
+            return  params["photosensor_threashold"] - 100
+        
+        # print()
+        if self._states[male]["ring"]["w"] != 0: 
+            return params["photosensor_threashold"] + 100
+        return params["photosensor_threashold"] - 100
     
     def _is_near_origin(self, name, dxl):
         params = self.colloquy.params
         threashold = params["near_origin_threashold"]
-        origin = params[name]["origin"]
+        origin = params[name]["dxl origin"]
         position = dxl.position
         return origin - threashold < position < origin + threashold
         
     
-    def _is_a_male_near(self, name):
-        for i, dxl_id for enumerate((6, 7)):
-            bar_dxl = self.owner.dxls[dxls]
-        if self._is_near_origin
-            
-            
+    def _get_nearest_male(self, female):
+        male = None
+        for i, dxl_id in enumerate((6, 7)):
+            dxl = self.owner.dxls[dxl_id]
+            name = f"male{i+1}"
+            if self._is_near_origin(name, dxl):
+                male = name
+                break
+        if male is None:
+            return
+                
         params = self.colloquy.params
         bar_dxl = self.owner.dxls[8]
-        threashold = params["bar"]["near_origin_threashold"]
+        threashold = params["near_origin_threashold"]
         position = dxl.position
         conditions = []
-        for origin in params["bar"]["interation_origins"][name]
-            conditions.append(origin - threashold < position < origin + threashold)
-        return any(conditions)
-        
-    
-    def _is_bar_near(self, name):
-        params = self.colloquy.params
-        bar_dxl = self.owner.dxls[8]
-        threashold = params["bar"]["near_origin_threashold"]
-        position = dxl.position
-        conditions = []
-        for origin in params["bar"]["interation_origins"][name]
-            conditions.append(origin - threashold < position < origin + threashold)
-        return any(conditions)
-        
-        
-        # name, _ = Path(data["path"]).parts
-        # if name.startswith("f"):
-            # return self._read_female_sensor(data)
-        # raise NotImplementedError(data)
-    
-    # def _read_female_sensor(self, data):
-        # name, _ = Path(data["path"]).parts
-        # if name == "f1":
-            # female_position = self.
-            # male_1_position = self.
-            # male_2_position = self.
-            # return self._read_female_sensor(data)
-        # raise NotImplementedError(data)
+        origin = params["bar"]["interaction_origins"][male][female]
+        if origin - threashold < position < origin + threashold:
+            return male
+        return
 
     def _load_possible_paths(self):
         """Read arduino code to extract the possible paths."""

@@ -66,8 +66,8 @@ class Details(BaseHTML):
             
         with tag("div",  name=self.name, style="display: flex; flex:1; flex-direction: column;"):
             
-            doc.asis(self.light_sensor.read_pattern.html())
-            # raise NotImplementedError(self)
+            # doc.asis(self.light_sensor.read_pattern.html())
+            raise NotImplementedError(self)
 
         return doc.getvalue()
 
