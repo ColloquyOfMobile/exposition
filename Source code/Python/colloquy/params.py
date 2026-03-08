@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 DEFAULTS={
+    'emulate light sensor': False,
     "arduino": {
         "baudrate": 57600,
         "communication port": None,

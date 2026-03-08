@@ -6,10 +6,8 @@ from pathlib import Path
 import serial.tools.list_ports
 from colloquy.base import Base
 from .html import HTML
-from colloquy.hardware.com_port import ComPort
+from .com_port import ComPort
 from colloquy.hardware.dxl import DXL
-from .virtual_port_handler import VirtualPortHandler
-from .virtual_packet_handler import VirtualPacketHandler
 
 
 def handle_error(func):
@@ -54,7 +52,6 @@ class U2D2(Base):
         # port_name = kwargs["communication port"]
         self._lock = Lock()
         self._baudrate = 57600
-        self._port_name = None
         self._port_handler = None # port_handler(port_name)
         self._packet_handler = None #PacketHandler(2.0)
         self._com_port = ComPort(owner=self)
@@ -70,6 +67,9 @@ class U2D2(Base):
         self._dxls[f"female1"] = self._dxl_list[0]
         self._dxls[f"female2"] = self._dxl_list[2]
         self._dxls[f"female3"] = self._dxl_list[4]
+        self._dxls[f"male1"] = self._dxl_list[6]
+        self._dxls[f"male2"] = self._dxl_list[7]
+        self._dxls[f"bar"] = self._dxl_list[8]
 
     def __call__(self, request):
         request = Path(request)
@@ -99,12 +99,17 @@ class U2D2(Base):
     @property
     def packet_handler(self):
         if self._packet_handler is None:
-            klass = VirtualPacketHandler
+            # self._packet_handler = VirtualPacketHandler(owner=self.virtual_hardware)
             if not self.is_simulated:
-                klass = PacketHandler
-            self._packet_handler = klass(2.0)
+                self._packet_handler = klass(2.0)
+            else:
+                self._packet_handler = self.colloquy.virtual_hardware.u2d2_packet_handler 
 
         return self._packet_handler
+
+    @property
+    def virtual_hardware(self):
+        return self.colloquy.virtual_hardware
 
     @property
     def lock(self):
@@ -209,10 +214,11 @@ class U2D2(Base):
 
     def open(self):
         assert self.port_name
-        klass = VirtualPortHandler
         if not self.is_simulated:
-            klass = PortHandler
-        self._port_handler = klass(self.port_name)# PortHandler(self.port_name)
+            self._port_handler = PortHandler(self.port_name)
+        else:
+            self._port_handler = self.colloquy.virtual_hardware.u2d2_port_handler(self.port_name)
+        # PortHandler(self.port_name)
         self.port_handler.setBaudRate(self._baudrate)
         self._is_open = True
 

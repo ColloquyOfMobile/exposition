@@ -16,7 +16,10 @@ if __name__ == "__main__":
     
     # colloquy.hardware.u2d2.dxl_list[0].goal_position.write(400)
     
+    # colloquy.hardware.female1.html.open(request=None)
     colloquy.hardware.female1.html.open(request=None)
+    # colloquy.hardware.female1.light_sensor.html.open(request=None)
+    # colloquy.hardware.female1.light_sensor.read_pattern.html.open(request=None)
     # colloquy.hardware.female1.torque_enabled.write(value=1)
     
     # colloquy.hardware.u2d2.html.open(request=None)

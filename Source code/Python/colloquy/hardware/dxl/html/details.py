@@ -8,7 +8,15 @@ class Details(BaseHTML):
 
     def __init__(self, owner):
         super().__init__(owner=owner)
-        self.opened = None
+        self._opened = None
+    
+    @property
+    def opened(self):
+        return self._opened
+    
+    @opened.setter
+    def opened(self, value):
+        self._opened = value
     
     @property
     def dxl(self):

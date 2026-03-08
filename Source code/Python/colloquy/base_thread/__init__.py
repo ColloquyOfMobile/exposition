@@ -140,7 +140,7 @@ class BaseThread(Base):
         self.log(f"{self} is started.")
         try:
             self._run_unsafe()
-        except Exception as error:
+        except Exception as error:            
             self.thread_errors.append(error)
         finally:
             self.setdown()
@@ -149,7 +149,7 @@ class BaseThread(Base):
         self.setup()
         while True:
             if self._break_condition():
-                break
+                break                
             self.loop()
             sleep(0.1)
 

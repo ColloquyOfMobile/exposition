@@ -103,6 +103,14 @@ class Base:
         if socket.gethostname() == 'Colloquy-Laptop':
             return False
         return True
+    
+    @property
+    def opened(self):
+        raise NotImplementedError(self)
+    
+    @opened.setter
+    def opened(self, value):
+        raise NotImplementedError(self)
 
     def add(self, element):
         self[element.name] = element

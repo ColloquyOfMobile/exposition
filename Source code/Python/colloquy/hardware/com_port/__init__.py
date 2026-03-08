@@ -12,13 +12,13 @@ from .html import HTML
 class ComPort(Base):
 
 
-    def __init__(self, owner):
+    def __init__(self, owner, value=None):
         super().__init__(owner=owner)
         
         self._html = HTML(owner=self)
         self[self.html.name] = self.html.handle_request
         
-        self._value = None
+        self._value = value
         self._ports = []
 
     def __call__(self, request):
@@ -70,4 +70,4 @@ class ComPort(Base):
         return self._ports
 
     def set(self, com_port, *args, **kwargs):
-        self._value = com_port
+        raise NotImplementedError(self)

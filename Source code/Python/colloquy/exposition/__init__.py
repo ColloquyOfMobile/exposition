@@ -15,8 +15,8 @@ class Exposition(BaseThread):
         self._hardware = self.owner.hardware
 
         self._thread = None
-        self._stop_event = Event()
-        self._started_at = None
+        # self._stop_event = Event()
+        # self._started_at = None
 
         self[self.html.name] = self.html.handle_request
 

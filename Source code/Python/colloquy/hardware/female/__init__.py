@@ -2,7 +2,7 @@ from .neopixels import Neopixels # Head, BodyO, BodyP, Feet
 from .drives import Drives
 from pathlib import Path
 from colloquy.base_thread import BaseThread
-from colloquy.hardware.light_sensor import LightSensor
+from .light_sensor import LightSensor
 from .dxl_origin import DXLOrigin
 from .dxl_position import DXLPosition
 from .search import Search
@@ -12,7 +12,7 @@ from .test import Test
 
 class Female(BaseThread):
 
-    def __init__(self, owner, id_number, dxl_origin):
+    def __init__(self, owner, id_number):
         self._name = f"female{id_number}"
         self._id_number = id_number
         super().__init__(owner=owner)
@@ -41,6 +41,7 @@ class Female(BaseThread):
         self[self.dxl_origin.name] = self.dxl_origin
         self[self.position.name] = self.position
         self["set current position as dxl origin"] = self.set_current_position_as_dxl_origin
+        self[self.light_sensor.name] = self.light_sensor
 
     def __call__(self, request):
         request = Path(request)
@@ -54,6 +55,10 @@ class Female(BaseThread):
             return
 
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
+
+    @property
+    def params(self):
+        return self.owner.params
 
     @property
     def dxl_origin(self):
@@ -126,12 +131,12 @@ class Female(BaseThread):
         return self.drives.o_drive.is_satisfied or self.drives.p_drive.is_satisfied
 
     def turn_to_max_position(self):
-        value = self._dxl_origin + self._motion_range/2
+        value = self._dxl_origin.get() + self._motion_range / 2
         self.dxl.goal_position.write(value)
         self._position_memory = "max"
 
     def turn_to_min_position(self):
-        value = self._dxl_origin - self._motion_range/2
+        value = self._dxl_origin.get() - self._motion_range / 2
         self.dxl.goal_position.write(value)
         self._position_memory = "min"
 

@@ -129,12 +129,6 @@ void setup() {
     f.head.strip -> begin();
     f.head.strip -> show();
   }
-  // female1Strip.begin();
-  // female1Strip.show();
-  // female1Strip.begin();
-  // female1Strip.show();
-  // female1Strip.begin();
-  // female1Strip.show();
 
   Serial.begin(57600);
   // Each time the serial port is opened the Arduino is rebooted.

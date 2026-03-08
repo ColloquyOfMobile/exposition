@@ -3,7 +3,6 @@ from threading import Lock
 from colloquy.base_thread import BaseThread
 from threading import Thread, Event, Lock
 from .html import HTML
-from .test import Test
 
 """logic35_systems.ino: line 86
 //act_drive
@@ -29,7 +28,7 @@ class Drive(BaseThread):
         self._name = name
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
-        self._test = Test(owner=self)
+        self._lock = Lock()
         
         self._value = 0
 
@@ -48,11 +47,10 @@ class Drive(BaseThread):
         self._frustrated_lim = seconds_in_3min / self._update_interval
 
         self[self.html.name] = self.html.handle_request
-        self[self.test.name] = self.test
 
     @property
-    def test(self):
-        return self._test
+    def lock(self):
+        return self._lock
 
     @property
     def html(self):
@@ -80,23 +78,24 @@ class Drive(BaseThread):
 
     @property
     def is_satisfied(self):
-        with self._lock:
-            return self.value < self._satisfaction_lim
+        return self.value < self._satisfaction_lim
+        
     @property
     def is_frustated(self):
-        with self._lock:
-            return self.value > self._frustrated_lim
+        return self.value > self._frustrated_lim
 
     def decrease(self):
-        self._value -= 20 * self._step
-        if self._value < 0:
-            self._value = 0
+        with self.lock:
+            self._value -= 20 * self._step
+            if self._value < 0:
+                self._value = 0
         self.owner.update()
 
     def increment(self):
-        self._value += self._step
-        if self._value > self._max:
-            self._value = self._max
+        with self.lock:
+            self._value += self._step
+            if self._value > self._max:
+                self._value = self._max
 
         self.owner.update()
 

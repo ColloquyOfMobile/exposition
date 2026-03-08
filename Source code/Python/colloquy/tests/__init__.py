@@ -11,7 +11,7 @@ class Tests(Base):
 
     def __init__(self, owner):
         super().__init__(owner)
-        self.opened = None
+        # self.opened = None
 
         self._html = HTML(owner=self)
         self._test1 = Test1(owner=self)

@@ -147,7 +147,7 @@ class Neopixel(Base):
         self.brightness.set_without_updating(brightness)
         self.update()
 
-    def update(self):
+    def update(self):        
         if not self._on_off_state:
             return
         data = dict(

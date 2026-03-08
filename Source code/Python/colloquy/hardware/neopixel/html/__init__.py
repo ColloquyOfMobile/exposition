@@ -42,6 +42,15 @@ class HTML(BaseHTML):
 
     def _html_title(self):
         doc, tag, text = CustomDoc().tagtext()
+        try:
+            doc.asis(self._html_title_unsafe())
+        except Exception as exception:
+            doc.asis(self._html_title_if_error())
+
+        return doc.getvalue()
+    
+    def _html_title_unsafe(self):
+        doc, tag, text = CustomDoc().tagtext()
 
         style="margin-bottom: 0.5rem; display: flex; align-items: center;"
         if self.is_open:
@@ -66,6 +75,20 @@ class HTML(BaseHTML):
 
                 with tag("a", href=href):
                     text(f"{label}")
+
+        return doc.getvalue()
+
+    def _html_title_if_error(self):
+        doc, tag, text = CustomDoc().tagtext()
+        with tag("div"):
+            with tag("h2"):
+                text(f"Error in {self}!")
+
+            with tag("div", style="display: flex; flex-direction: column;"):
+                style = "white-space: normal; overflow-wrap: break-word; word-break: break-word;"
+                for line in traceback.format_exc().splitlines():
+                    with tag("pre", style=style):
+                        text(line)
 
         return doc.getvalue()
 

@@ -2,6 +2,8 @@ from .u2d2 import U2D2
 from .arduino import Arduino
 from colloquy.base_thread import BaseThread
 from .female import Female
+from .male import Male
+from .bar import Bar
 from pathlib import Path
 from .neopixels import Neopixels
 from .commands import Commands
@@ -32,33 +34,38 @@ class Hardware(BaseThread):
         self._arduino = Arduino(owner=self)
         self._u2d2 = U2D2(owner=self)
         self[self.u2d2.name] = self.u2d2
-        self._bar = None
 
         self._mirrors = []
         self._drives = []
-        self._males = []
+        self._males = (
+            Male(owner=self, id_number=1),
+            Male(owner=self, id_number=2),
+        )
         self._speakers = []
         self._moving_elements = []
-
-        self._female1 = Female(owner=self, id_number=1, dxl_origin=107)
-        self._female2 = Female(owner=self, id_number=2, dxl_origin=1000)
-        self._female3 = Female(owner=self, id_number=3, dxl_origin=3000)
-        self._females = [
-            self._female1,
-            self._female2,
-            self._female3,
-            ]
+        
+        self._females = (
+            Female(owner=self, id_number=1),
+            Female(owner=self, id_number=2),
+            Female(owner=self, id_number=3),
+            )
+        
+        self._bar = Bar(owner=self)
 
         self._test = Test(owner=self)
         
         self[self.arduino.name] = self.arduino
         self.add(self.test)
+        
+        self[self.bar.name] = self.bar
 
         for female in self._females:
             self[female.name] = female
             self.drives.extend(female.drives)
-        
 
+        for male in self.males:
+            self[male.name] = male
+            self.drives.extend(male.drives)
 
     def __call__(self, request):
         request = Path(request)
@@ -131,6 +138,14 @@ class Hardware(BaseThread):
         return self._males
 
     @property
+    def male1(self):
+        return self._males[0]
+
+    @property
+    def male2(self):
+        return self._males[1]
+
+    @property
     def speakers(self):
         return self._speakers
 
@@ -140,15 +155,15 @@ class Hardware(BaseThread):
 
     @property
     def female1(self):
-        return self._female1
+        return self._females[0]
 
     @property
     def female2(self):
-        return self._female2
+        return self._females[1]
 
     @property
     def female3(self):
-        return self._female3
+        return self._females[2]
 
     @property
     def moving_elements(self):
@@ -176,6 +191,7 @@ class Hardware(BaseThread):
     def setup(self):
         for bodies in self.hardware.bodies:
             bodies.start(started_by=self)
+        self.bar.start(started_by=self)
 
     def setdown(self):
         for bodies in self.hardware.bodies:

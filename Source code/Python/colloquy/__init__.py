@@ -14,6 +14,7 @@ from .cli import CLI
 from .tests import Tests
 from .exposition import Exposition
 from .params import Params
+from .virtual_hardware import VirtualHardware
 
 class Colloquy(BaseThread):
 
@@ -24,6 +25,7 @@ class Colloquy(BaseThread):
 
         self._request = None
         self._args = None
+        self._virtual_hardware = None
 
         self._hardware = Hardware(owner=self)
         self._tests = Tests(owner=self)
@@ -77,6 +79,12 @@ class Colloquy(BaseThread):
     @property
     def is_started(self):
         return not self.events.shutdown.is_set()
+
+    @property
+    def virtual_hardware(self):
+        if self._virtual_hardware is None:
+            self._virtual_hardware = VirtualHardware(owner=self)
+        return self._virtual_hardware
 
     def run(self, ):
         return self.server()

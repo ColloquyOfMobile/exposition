@@ -57,7 +57,12 @@ class Details(BaseHTML):
 
             doc.asis(self.hardware.u2d2.html())
             
+            doc.asis(self.hardware.bar.html())
+            
             for female in self.hardware.females:                
+                doc.asis(female.html())
+            
+            for female in self.hardware.males:                
                 doc.asis(female.html())
 
         return doc.getvalue()

@@ -8,7 +8,7 @@ class Workspace(Base):
 
     def __init__(self, owner):
         super().__init__(owner)
-        self.opened = None
+        self._opened = None
         self._hardware = self.owners[4].hardware
         self._exposition = self.colloquy.exposition
 
@@ -19,6 +19,14 @@ class Workspace(Base):
             html = self._call_if_error()
 
         return html
+        
+    @property
+    def opened(self):
+        return self._opened
+    
+    @opened.setter
+    def opened(self, value):
+        self._opened = value
 
     @property
     def name(self):

@@ -50,6 +50,8 @@ class Details(BaseHTML):
             return ""
             
         doc, tag, text = CustomDoc().tagtext()
+        
+        doc.asis(self.arduino.com_port.html())
 
         with tag("div"):
             if self.arduino.is_open:
@@ -59,7 +61,7 @@ class Details(BaseHTML):
 
             href=f"/{self.arduino.path.as_posix()}/{label}"
             with tag("a", href=href):
-                text(f"{label} port")
+                text(f"{label} port='{self.arduino.port_name}'")
 
         return doc.getvalue()
 
