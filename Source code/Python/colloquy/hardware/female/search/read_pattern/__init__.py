@@ -108,6 +108,7 @@ class ReadPattern(BaseThread):
         convert each bin to 0/1 by majority (>0.5), then compare to every
         LIGHT_PATTERNS entry and rotations. Return (male, drive) on success.
         """
+        print(f"Trying match")
         buf = list(self.sample_buffer)
         s = self.samples_per_step
         needed = s * self.steps + (s - 1)

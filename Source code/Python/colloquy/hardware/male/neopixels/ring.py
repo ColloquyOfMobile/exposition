@@ -11,10 +11,10 @@ class Ring(Neopixel):
         self._body = owner
         self.white.value = 255
         self.brightness.value = 100
-    
+
     @property
     def male(self):
-        return self.owner.owner
+        return self.owner.male
 
     @property
     def arduino_path(self):

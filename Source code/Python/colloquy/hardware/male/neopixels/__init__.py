@@ -3,6 +3,7 @@ from colloquy.base import Base
 from pathlib import Path
 from .html import HTML
 
+from .up_ring import UpRing
 from .o_drive_level import ODriveLevel
 from .p_drive_level import PDriveLevel
 from .ring import Ring
@@ -16,6 +17,7 @@ class Neopixels(Base):
         self._html = HTML(owner=self)
         self._arduino = owner.arduino
         
+        self._up_ring = UpRing(owner=self)
         self._ring = Ring(owner=self)
         self._o_drive_level= ODriveLevel(owner=self)
         self._p_drive_level = PDriveLevel(owner=self)
@@ -24,8 +26,10 @@ class Neopixels(Base):
         self[self.ring.name] = self.ring
         self[self.o_drive_level.name] = self.o_drive_level
         self[self.p_drive_level.name] = self.p_drive_level
+        self[self.up_ring.name] = self.up_ring
     
     def __iter__(self):
+        yield self.up_ring
         yield self.ring
         yield self.o_drive_level
         yield self.p_drive_level
@@ -42,6 +46,10 @@ class Neopixels(Base):
             return
 
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
+
+    @property
+    def male(self):
+        return self.owner
 
     @property
     def colloquy(self):
@@ -62,6 +70,10 @@ class Neopixels(Base):
     @property
     def ring(self):
         return self._ring
+
+    @property
+    def up_ring(self):
+        return self._up_ring
 
     @property
     def o_drive_level(self):

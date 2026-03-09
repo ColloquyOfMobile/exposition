@@ -33,7 +33,7 @@ class VirtualDXL(Base):
 
     @property
     def position(self):
-        return self._position
+        return self["position"]
 
     
     def get(self, label):
