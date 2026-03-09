@@ -14,35 +14,35 @@ class VirtualSerialPort(Base):
                 
                     
         self._path_handlers = {
-            "f1/head": self._set_neopixel,
-            "f1/bodyO": self._set_neopixel,
-            "f1/bodyP": self._set_neopixel,
-            "f1/feet": self._set_neopixel,
+            "f1/head": self._set_female_neopixel,
+            "f1/bodyO": self._set_female_neopixel,
+            "f1/bodyP": self._set_female_neopixel,
+            "f1/feet": self._set_female_neopixel,
             "f1/light sensor": self._read_f1_sensor,
             
-            "f2/head": self._set_neopixel,
-            "f2/bodyO": self._set_neopixel,
-            "f2/bodyP": self._set_neopixel,
-            "f2/feet": self._set_neopixel,
+            "f2/head": self._set_female_neopixel,
+            "f2/bodyO": self._set_female_neopixel,
+            "f2/bodyP": self._set_female_neopixel,
+            "f2/feet": self._set_female_neopixel,
             "f2/light sensor": self._read_sensor,
             
-            "f3/head": self._set_neopixel,
-            "f3/bodyO": self._set_neopixel,
-            "f3/bodyP": self._set_neopixel,
-            "f3/feet": self._set_neopixel,
+            "f3/head": self._set_female_neopixel,
+            "f3/bodyO": self._set_female_neopixel,
+            "f3/bodyP": self._set_female_neopixel,
+            "f3/feet": self._set_female_neopixel,
             "f3/light sensor": self._read_sensor,
             
-            "m1/ring": self._set_neopixel,
-            "m1/p drive level": self._set_neopixel,
-            "m1/o drive level": self._set_neopixel,
+            "m1/ring": self._set_male_neopixel,
+            "m1/p drive level": self._set_male_neopixel,
+            "m1/o drive level": self._set_male_neopixel,
             "m1/light sensor/a": self._read_sensor,
             "m1/light sensor/b": self._read_sensor,
             "m1/light sensor/c": self._read_sensor,
             "m1/light sensor/d": self._read_sensor,
             
-            "m2/ring": self._set_neopixel,
-            "m2/p drive level": self._set_neopixel,
-            "m2/o drive level": self._set_neopixel,
+            "m2/ring": self._set_male_neopixel,
+            "m2/p drive level": self._set_male_neopixel,
+            "m2/o drive level": self._set_male_neopixel,
             "m2/light sensor/a": self._read_sensor,
             "m2/light sensor/b": self._read_sensor,
             "m2/light sensor/c": self._read_sensor,
@@ -119,15 +119,27 @@ class VirtualSerialPort(Base):
         self._to_return = b"Hello!"
         self._is_open = True
     
-    def _set_neopixel(self, data):
+    def _set_female_neopixel(self, data):
         states = self._states
-        for part in Path(data["path"]).parts[:-1]:
-            states = states[part]
-            
-        states[Path(data["path"]).parts[-1]]["r"] = data["r"]
-        states[Path(data["path"]).parts[-1]]["g"] = data["g"]
-        states[Path(data["path"]).parts[-1]]["b"] = data["b"]
-        states[Path(data["path"]).parts[-1]]["w"] = data["w"]
+        female, name = Path(data["path"]).parts
+        female = female.replace("f", "female")
+        neopixel = states[female][name]
+        
+        neopixel["r"] = data["r"]
+        neopixel["g"] = data["g"]
+        neopixel["b"] = data["b"]
+        neopixel["w"] = data["w"]
+    
+    def _set_male_neopixel(self, data):
+        states = self._states
+        male, name = Path(data["path"]).parts
+        male = male.replace("m", "male")
+        neopixel = states[male][name]
+        
+        neopixel["r"] = data["r"]
+        neopixel["g"] = data["g"]
+        neopixel["b"] = data["b"]
+        neopixel["w"] = data["w"]
             
         # if part.startswith("f"):
             # return self._check_neopixel(data)
@@ -151,6 +163,7 @@ class VirtualSerialPort(Base):
             return params["photosensor_threashold"] - 100
         
         male = self._get_nearest_male(female="female1")
+        print(f"{male=}")
         if male is None:
             return  params["photosensor_threashold"] - 100
         
@@ -168,24 +181,28 @@ class VirtualSerialPort(Base):
         
     
     def _get_nearest_male(self, female):
-        male = None
+        males = []
         for i, dxl_id in enumerate((6, 7)):
             dxl = self.owner.dxls[dxl_id]
             name = f"male{i+1}"
             if self._is_near_origin(name, dxl):
-                male = name
+                males.append(name)
                 break
-        if male is None:
+        if not males:
             return
                 
         params = self.colloquy.params
         bar_dxl = self.owner.dxls[8]
         threashold = params["near_origin_threashold"]
-        position = dxl.position
-        conditions = []
-        origin = params["bar"]["interaction_origins"][male][female]
-        if origin - threashold < position < origin + threashold:
-            return male
+        position = bar_dxl.position
+        for male in males:
+            conditions = []
+            origin = params["bar"]["interaction_origins"][male][female]
+            print(f"{position=}")
+            print(f"{origin=}")
+        
+            if origin - threashold < position < origin + threashold:
+                return male
         return
 
     def _load_possible_paths(self):

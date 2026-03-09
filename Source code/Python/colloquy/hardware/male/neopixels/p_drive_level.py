@@ -13,10 +13,10 @@ class PDriveLevel(Neopixel):
 
     def set_test_default(self):
         self.configure(red=0, green=255, blue=0, white=0, brightness=255)
-    
+
     @property
     def male(self):
-        return self.owner.owner
+        return self.owner.male
 
     @property
     def arduino_path(self):

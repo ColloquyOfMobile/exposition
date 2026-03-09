@@ -8,6 +8,12 @@
 
 #define FEMALE_NUM_PIXELS 50  // Female LED number
 
+#define MALE1_BODY_NEOPIXEL_PIN 9
+#define MALE2_BODY_NEOPIXEL_PIN 10
+#define MALE1_UP_RING_NEOPIXEL_PIN 5
+#define MALE2_UP_RING_NEOPIXEL_PIN 4
+
+#define NUMBER_OF_PIXEL_IN_MALE_BODY 40
 
 // ##########################################################
 // Class definitions
@@ -34,6 +40,33 @@ public:
 
   String fill(JsonDocument& doc) {
     for (int i = startPixel; i < startPixel + numPixels; i++) {
+      int r = doc["r"] | 0;
+      int g = doc["g"] | 0;
+      int b = doc["b"] | 0;
+      int w = doc["w"] | 0;
+      strip->setPixelColor(i,
+                           strip->Color(
+                             r,
+                             g,
+                             b,
+                             w));
+    }
+    strip->show();
+    return "";
+  }
+};
+
+class PixelGroupBeam {
+public:
+  Adafruit_NeoPixel* strip;
+  int startPixel;
+  int numPixels;
+
+  PixelGroupBeam(Adafruit_NeoPixel* strip, int startPixel, int numPixels)
+    : strip(strip), startPixel(startPixel), numPixels(numPixels) {}
+
+  String fill(JsonDocument& doc) {
+    for (int i = startPixel; i < startPixel + numPixels; i += 2) {
       int r = doc["r"] | 0;
       int g = doc["g"] | 0;
       int b = doc["b"] | 0;
@@ -92,6 +125,32 @@ public:
       feet(feet),
       lightSensor(lightSensor) {}
 };
+
+class Male {
+public:
+  PixelGroup upRing;
+  PixelGroup ring;
+  PixelGroupBeam beam;
+  PixelGroup pDriveLevel;
+  PixelGroup oDriveLevel;
+  LightSensor lightSensorA;
+  LightSensor lightSensorB;
+  LightSensor lightSensorC;
+  LightSensor lightSensorD;
+
+  Male(PixelGroup& upRing, PixelGroup& ring, PixelGroupBeam& beam, PixelGroup& pDriveLevel, PixelGroup& oDriveLevel,
+        LightSensor& lightSensorA, LightSensor& lightSensorB, LightSensor& lightSensorC, 
+        LightSensor& lightSensorD)
+    : upRing(upRing),
+      ring(ring),
+      beam(beam),
+      pDriveLevel(pDriveLevel),
+      oDriveLevel(oDriveLevel),
+      lightSensorA(lightSensorA),
+      lightSensorB(lightSensorB),
+      lightSensorC(lightSensorC),
+      lightSensorD(lightSensorD) {}
+};
 // ##########################################################
 
 // ##########################################################
@@ -139,6 +198,63 @@ Female females[] = {
   female1,
   female2,
   female3
+};
+
+Adafruit_NeoPixel male1UpRingStrip(
+  24,
+  4,
+  NEO_GRBW + NEO_KHZ800);
+
+Adafruit_NeoPixel male1Strip(
+  NUMBER_OF_PIXEL_IN_MALE_BODY,
+  MALE1_BODY_NEOPIXEL_PIN,
+  NEO_GRBW + NEO_KHZ800);
+
+PixelGroup upRing1(&male1UpRingStrip, 0, 24);
+PixelGroup ring1(&male1Strip, 0, 24);
+PixelGroupBeam beam1(&male1Strip, 0, 24);
+PixelGroup pDriveLevel1(&male1Strip, 24, 8);
+PixelGroup oDriveLevel1(&male1Strip, 32, 8);
+
+
+LightSensor lightSensorA1(A8);
+LightSensor lightSensorB1(A9);
+LightSensor lightSensorC1(A10);
+LightSensor lightSensorD1(A11);
+
+Male male1(upRing1, ring1, beam1, pDriveLevel1, oDriveLevel1,
+        lightSensorA1, lightSensorB1, lightSensorC1, 
+        lightSensorD1);
+
+Adafruit_NeoPixel male2UpRingStrip(
+  24,
+  5,
+  NEO_GRBW + NEO_KHZ800);
+
+Adafruit_NeoPixel male2Strip(
+  NUMBER_OF_PIXEL_IN_MALE_BODY,
+  MALE2_BODY_NEOPIXEL_PIN,
+  NEO_GRBW + NEO_KHZ800);
+
+PixelGroup upRing2(&male2UpRingStrip, 0, 24);
+PixelGroup ring2(&male1Strip, 0, 24);
+PixelGroupBeam beam2(&male1Strip, 0, 24);
+PixelGroup pDriveLevel2(&male1Strip, 24, 8);
+PixelGroup oDriveLevel2(&male1Strip, 32, 8);
+
+
+LightSensor lightSensorA2(A12);
+LightSensor lightSensorB2(A13);
+LightSensor lightSensorC2(A14);
+LightSensor lightSensorD2(A15);
+
+Male male2(upRing2, ring2, beam2, pDriveLevel2, oDriveLevel2,
+        lightSensorA2, lightSensorB2, lightSensorC2, 
+        lightSensorD2);
+
+Male males[] = {
+  male1,
+  male2,
 };
 // ##########################################################
 
@@ -218,9 +334,9 @@ String processCommand(const String& input) {
   } else if (path == "m1/beam") {
     return male1.beam.fill(jsonDoc);
   } else if (path == "m1/p drive level") {
-    return male1.p_drive_level.fill(jsonDoc);
+    return male1.pDriveLevel.fill(jsonDoc);
   } else if (path == "m1/o drive level") {
-    return male1.o_drive_level.fill(jsonDoc);
+    return male1.oDriveLevel.fill(jsonDoc);
   } else if (path == "m1/light sensor/a") {
     return male1.lightSensorA.read();
   }  else if (path == "m1/light sensor/b") {
@@ -237,9 +353,9 @@ String processCommand(const String& input) {
   } else if (path == "m2/beam") {
     return male2.beam.fill(jsonDoc);
   } else if (path == "m2/p drive level") {
-    return male2.p_drive_level.fill(jsonDoc);
+    return male2.pDriveLevel.fill(jsonDoc);
   } else if (path == "m2/o drive level") {
-    return male2.o_drive_level.fill(jsonDoc);
+    return male2.oDriveLevel.fill(jsonDoc);
   } else if (path == "m2/light sensor/a") {
     return male2.lightSensorA.read();
   }  else if (path == "m2/light sensor/b") {
