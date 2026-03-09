@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 DEFAULTS={
+    "near_origin_threashold": 400,
     'emulate light sensor': False,
     "arduino": {
         "baudrate": 57600,
@@ -16,6 +17,27 @@ DEFAULTS={
     "female3": {
         "dxl origin": 0,
         },
+    "bar": {
+        "dxl origin": 0,
+        "interaction_origins": {
+          "male1": {
+            "female1": 0,
+            "female2": 2200,
+            "female3": 4300
+          },
+          "male2": {
+            "female1": 6200,
+            "female2": 8400,
+            "female3": 10400
+          }
+        }
+    },
+    "male1": {
+        "dxl origin": 0
+      },
+    "male2": {
+        "dxl origin": 0
+      }
     }
 
 class Params(dict):
