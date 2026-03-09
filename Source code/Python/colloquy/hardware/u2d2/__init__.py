@@ -57,9 +57,9 @@ class U2D2(Base):
         self._com_port = ComPort(owner=self)
         self[self.com_port.name] = self.com_port
         self._dxl_list = [
-            DXL(owner=self, dynamixel_id=i)
+            DXL(owner=self, dynamixel_id=i+1)
             for i
-            in range(10)
+            in range(9)
             ]
         for dxl in self.dxl_list:
             self[dxl.name] = dxl
@@ -101,7 +101,7 @@ class U2D2(Base):
         if self._packet_handler is None:
             # self._packet_handler = VirtualPacketHandler(owner=self.virtual_hardware)
             if not self.is_simulated:
-                self._packet_handler = klass(2.0)
+                self._packet_handler = PacketHandler(2.0)
             else:
                 self._packet_handler = self.colloquy.virtual_hardware.u2d2_packet_handler 
 

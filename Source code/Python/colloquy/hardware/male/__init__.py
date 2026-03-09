@@ -2,7 +2,7 @@ from .neopixels import Neopixels # Head, BodyO, BodyP, Feet
 from .drives import Drives
 from pathlib import Path
 from colloquy.base_thread import BaseThread
-from .light_sensor import LightSensor
+# from .light_sensor import LightSensor
 from .dxl_origin import DXLOrigin
 from .dxl_position import DXLPosition
 from .search import Search
@@ -26,7 +26,7 @@ class Male(BaseThread):
         self._dxl_origin = DXLOrigin(owner=self)
         self._position = DXLPosition(owner=self)
         
-        self._light_sensor = LightSensor(owner=self, name="light sensor")
+        # self._light_sensor = LightSensor(owner=self, name="light sensor")
         self._dxl = owner.u2d2.dxls[self.name]
         self._html = HTML(owner=self)
         self._arduino = owner.arduino
@@ -43,7 +43,7 @@ class Male(BaseThread):
         self[self.dxl_origin.name] = self.dxl_origin
         self[self.position.name] = self.position
         self["set current position as dxl origin"] = self.set_current_position_as_dxl_origin
-        self[self.light_sensor.name] = self.light_sensor
+        # self[self.light_sensor.name] = self.light_sensor
 
     def __call__(self, request):
         request = Path(request)
@@ -110,9 +110,9 @@ class Male(BaseThread):
     def is_moving(self):
         return self.dxl.is_moving
     
-    @property
-    def light_sensor(self):
-        return self._light_sensor
+    # @property
+    # def light_sensor(self):
+        # return self._light_sensor
     
     @property
     def position(self):
