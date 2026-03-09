@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 DEFAULTS={
+    "photosensor_threashold":300,
     "near_origin_threashold": 400,
     'emulate light sensor': False,
     "arduino": {
