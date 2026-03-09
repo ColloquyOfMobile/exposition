@@ -12,6 +12,9 @@ if __name__ == "__main__":
     args = sys.argv[1:]
     colloquy = Colloquy()
     colloquy.hardware.u2d2.com_port.set("COM4")
+    colloquy.hardware.arduino.open()
+    for dxl in colloquy.hardware.u2d2.dxl_list:
+        dxl.init_hardware()
     # colloquy.hardware.u2d2.dxl_list[0].html.open(request=None)
     
     # colloquy.hardware.u2d2.dxl_list[0].goal_position.write(400)
@@ -19,7 +22,7 @@ if __name__ == "__main__":
     # colloquy.hardware.female1.html.open(request=None)
     colloquy.hardware.male1.neopixels.ring.on()
     colloquy.hardware.female1.html.open(request=None)
-    colloquy.hardware.bar.dxl.torque_enabled.write(1)
+    colloquy.hardware.bar.dxl.init_hardware()
     colloquy.hardware.bar.goal_position.write(1000)
     # colloquy.hardware.male1.neopixels.html.open(request=None)
     # colloquy.hardware.female1.light_sensor.html.open(request=None)

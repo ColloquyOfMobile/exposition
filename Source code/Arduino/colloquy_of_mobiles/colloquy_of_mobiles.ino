@@ -256,12 +256,22 @@ Male males[] = {
   male1,
   male2,
 };
+
+Adafruit_NeoPixel strips[] = {
+  female1Strip,
+  female2Strip,
+  female3Strip,
+  male1Strip,
+  male2Strip,
+  male1UpRingStrip,
+  male2UpRingStrip,
+};
 // ##########################################################
 
 void setup() {
-  for (auto& f : females) {
-    f.head.strip -> begin();
-    f.head.strip -> show();
+  for (auto& strip : strips) {
+    strip.begin();
+    strip.show();
   }
 
   Serial.begin(57600);

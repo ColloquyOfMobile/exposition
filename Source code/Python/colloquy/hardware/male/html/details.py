@@ -19,7 +19,7 @@ class Details(BaseHTML):
         self._opened = value
     
     @property
-    def female(self):
+    def male(self):
         return self.owner.owner
     
     @property
@@ -81,14 +81,14 @@ class Details(BaseHTML):
         with tag("div", style="display: flex; flex-direction: column;"):         
             
             with tag("div", style="display: flex; flex-direction: column;"):
-                doc.asis(self.female.drives.html())
-                doc.asis(self.female.neopixels.html())
-                doc.asis(self.female.position.html())
-                doc.asis(self.female.torque_enabled.html())
-                doc.asis(self.female.goal_position.html())
-                doc.asis(self.female.dxl_origin.html())
-                doc.asis(self.female.light_sensor.html())
-                doc.asis(self.female.search.html())
+                doc.asis(self.male.drives.html())
+                doc.asis(self.male.neopixels.html())
+                doc.asis(self.male.position.html())
+                doc.asis(self.male.torque_enabled.html())
+                doc.asis(self.male.goal_position.html())
+                doc.asis(self.male.dxl_origin.html())
+                # doc.asis(self.male.light_sensor.html())
+                doc.asis(self.male.search.html())
 
         return doc.getvalue()
 
