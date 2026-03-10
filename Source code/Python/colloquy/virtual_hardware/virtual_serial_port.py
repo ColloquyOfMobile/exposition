@@ -33,6 +33,7 @@ class VirtualSerialPort(Base):
             "f3/light sensor": self._read_sensor,
             
             "m1/ring": self._set_male_neopixel,
+            "m1/up ring": self._set_male_neopixel,
             "m1/p drive level": self._set_male_neopixel,
             "m1/o drive level": self._set_male_neopixel,
             "m1/light sensor/a": self._read_sensor,
@@ -41,6 +42,7 @@ class VirtualSerialPort(Base):
             "m1/light sensor/d": self._read_sensor,
             
             "m2/ring": self._set_male_neopixel,
+            "m2/up ring": self._set_male_neopixel,
             "m2/p drive level": self._set_male_neopixel,
             "m2/o drive level": self._set_male_neopixel,
             "m2/light sensor/a": self._read_sensor,
@@ -66,7 +68,7 @@ class VirtualSerialPort(Base):
                     
         for i in range(2):
             states[f"male{i+1}"] = male = {}
-            for name in ("ring", "p drive level", "o drive level"):
+            for name in ("ring", "p drive level", "o drive level", "up ring"):
                 male[name] = dict(r=0, g=0, b=0, w=0)
             
             male[f"light sensor"] = sensors = {}
@@ -163,11 +165,9 @@ class VirtualSerialPort(Base):
             return params["photosensor_threashold"] - 100
         
         male = self._get_nearest_male(female="female1")
-        print(f"{male=}")
         if male is None:
             return  params["photosensor_threashold"] - 100
-        
-        # print()
+            
         if self._states[male]["ring"]["w"] != 0: 
             return params["photosensor_threashold"] + 100
         return params["photosensor_threashold"] - 100
@@ -192,14 +192,13 @@ class VirtualSerialPort(Base):
             return
                 
         params = self.colloquy.params
-        bar_dxl = self.owner.dxls[8]
+        bar_dxl = self.owner.dxls[9]
         threashold = params["near_origin_threashold"]
         position = bar_dxl.position
+        
         for male in males:
             conditions = []
             origin = params["bar"]["interaction_origins"][male][female]
-            print(f"{position=}")
-            print(f"{origin=}")
         
             if origin - threashold < position < origin + threashold:
                 return male

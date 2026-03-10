@@ -71,13 +71,11 @@ class Drives(BaseThread):
                 return tuple()
             if self.o_drive.is_frustated and self.p_drive.is_frustated:
                 return ("O", "P")
-            if self.o_drive > self.p_drive:
-                assert not o_satisfaction_lim
+            if self.o_drive.value > self.p_drive.value:
                 return ("O", )
-            if self.p_drive > self.o_drive:
-                assert not p_satisfaction_lim
+            if self.p_drive.value > self.o_drive.value:
                 return ("P", )
-            if self.p_drive == self.o_drive:
+            if self.p_drive.value == self.o_drive.value:
                 return ("O", "P")
 
             raise ValueError(f"Drive Error, {self.o_drive=}, {self.p_drive=}")
@@ -121,13 +119,13 @@ class Drives(BaseThread):
         male = self.owner
         male.neopixels.o_drive_level.off()
         male.neopixels.p_drive_level.off()
-        male.neopixels.drive_value.off()
+        male.neopixels.up_ring.off()
 
     def setup(self):
         male = self.owner
         male.neopixels.o_drive_level.on()
         male.neopixels.p_drive_level.on()
-        male.neopixels.drive_value.on()
+        male.neopixels.up_ring.on()
         for drive in self:
             drive.start(started_by=self)
 
@@ -137,6 +135,6 @@ class Drives(BaseThread):
         o_value = self.o_drive.value
         p_value = self.p_drive.value
 
-        male.neopixels.drive_value.brightness.value = max(o_value, p_value)
+        male.neopixels.up_ring.brightness.value = max(o_value, p_value)
         male.neopixels.o_drive_level.brightness.value = o_value
         male.neopixels.p_drive_level.brightness.value = p_value

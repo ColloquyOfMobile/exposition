@@ -37,7 +37,7 @@ class Colloquy(BaseThread):
         self["server"] = self._server
         self["hardware"] = self._hardware
 
-        self._events = Events()
+        self._events = Events(shutdown=BaseThread._shutdown)
     
     @property
     def light_patterns(self):

@@ -341,6 +341,8 @@ String processCommand(const String& input) {
   
   else if (path == "m1/ring") {
     return male1.ring.fill(jsonDoc);
+  } else if (path == "m1/up ring") {
+    return male1.upRing.fill(jsonDoc);
   } else if (path == "m1/beam") {
     return male1.beam.fill(jsonDoc);
   } else if (path == "m1/p drive level") {
@@ -360,6 +362,8 @@ String processCommand(const String& input) {
   
   else if (path == "m2/ring") {
     return male2.ring.fill(jsonDoc);
+  } else if (path == "m2/up ring") {
+    return male2.upRing.fill(jsonDoc);
   } else if (path == "m2/beam") {
     return male2.beam.fill(jsonDoc);
   } else if (path == "m2/p drive level") {

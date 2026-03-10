@@ -53,15 +53,17 @@ class Details(BaseHTML):
         with tag("div"):
             if self.drive.is_started:
                 label = "stop"
-                command = "test_start"
+                command = "stop"
             else:
                 label = "start"
-                command = "test_stop"
+                command = "start"
 
             href=f"/{self.drive.path.as_posix()}/{command}"
 
             with tag("a", href=href):
                 text(f"{label}")
+            
+            doc.asis(self.drive.input.html())
 
         return doc.getvalue()
 

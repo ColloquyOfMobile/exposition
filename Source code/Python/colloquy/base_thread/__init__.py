@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # colloquy/base_thread/__init__.py
+import traceback
 from time import time, sleep
 from utils import CustomDoc
 import inspect
@@ -12,6 +13,8 @@ from threading import Thread, Event, Lock
 from .thread_errors import ThreadErrors
 
 class BaseThread(Base):
+    
+    _shutdown = Event()
 
     def __init__(self, owner):
         super().__init__(owner=owner)
@@ -25,7 +28,6 @@ class BaseThread(Base):
 
         self._thread = None
         self._stop_event = Event()
-        self._shutdown = Event()
         self._lock = Lock()
 
         self["start"] = self.start_command
@@ -140,7 +142,9 @@ class BaseThread(Base):
         self.log(f"{self} is started.")
         try:
             self._run_unsafe()
-        except Exception as error:            
+        except Exception as error:  
+            print(f"error in {self=}")
+            self.log("".join(traceback.format_exception(error)))
             self.thread_errors.append(error)
         finally:
             self.setdown()

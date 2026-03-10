@@ -31,8 +31,6 @@ class Drives(BaseThread):
         
         self._o_drive = Drive(owner=self, name="O")
         self._p_drive = Drive(owner=self, name="P")
-        # self._started_by = None
-        # self._errors = []
 
         self[self.html.name] = self.html.handle_request
         self[self.o_drive.name] = self.o_drive
@@ -65,10 +63,6 @@ class Drives(BaseThread):
     @property
     def white(self):
         return dict(red=0, green=0, blue=0, white=255)
-
-    # @property
-    # def is_started(self):
-        # return self.owner.is_started
 
     @property
     def html(self):

@@ -117,20 +117,26 @@ class Bar(BaseThread):
             self.turn_to_max_position()
             return
 
-    def loop(self):        
-        
+    def loop(self):   
         if self.search.is_started:
             return
             
-        raise NotImplementedError
-        if not self.is_satisfied():
-            self.search.start(started_by=self)
-            return        
-        pass
+        for male in self.males:
+            if male.search.is_started:
+                self.search.start(started_by=self)
+                return
+        
+        # if self.search.is_started:
+            # return
+        
+        # raise NotImplementedError
+        # if not self.is_satisfied():
+            # self.search.start(started_by=self)
+            # return        
+        # pass
 
     def setup(self):
-        for male in self.males:
-            male.start(started_by=self)
+        self.dxl.init_hardware()
         return
 
     def setdown(self):

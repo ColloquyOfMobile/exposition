@@ -18,7 +18,7 @@ class ReadPattern(BaseThread):
         self._html = HTML(owner=self)      
         self[self.html.name] = self.html.handle_request  
 
-        self.sample_rate = 0.05 # seconds between internal samples
+        self.sample_rate = 0.01 # seconds between internal samples
         self.step_duration = 0.5    # duration of one pattern step (your blink step)
         self.steps = 10             # number of steps in pattern (10 in LIGHT_PATTERNS)
         self.max_mismatches = 1     # how many bit-differences we tolerate
@@ -78,29 +78,7 @@ class ReadPattern(BaseThread):
         pass
 
     def setdown(self):
-        print(f"Set down {self=}")        
-        pass
-        
-    
-    # def fyi(self):
-        # female = self.owner
-        # with self.hardware.lock:
-
-            # if not female.near_origin():
-                # return
-
-            # interaction = self.hardware.bar.nearby(female)
-            # if interaction is None:
-                # return
-
-            # male = interaction.male
-            # if not male.near_origin():
-                # return
-
-            # common_drives = set(female.drives.state).intersection(male.drives.state)
-            # if common_drives:
-                # interaction.target_drive = tuple(common_drives)
-                # interaction.start()
+        print(f"Set down {self=}")  
     
     def _try_match(self):
         """
@@ -108,7 +86,6 @@ class ReadPattern(BaseThread):
         convert each bin to 0/1 by majority (>0.5), then compare to every
         LIGHT_PATTERNS entry and rotations. Return (male, drive) on success.
         """
-        print(f"Trying match")
         buf = list(self.sample_buffer)
         s = self.samples_per_step
         needed = s * self.steps + (s - 1)
@@ -117,6 +94,7 @@ class ReadPattern(BaseThread):
 
         # Take the last `needed` samples so we can shift offsets from 0..s-1
         chunk = buf[-needed:]
+        # print(f"{chunk=}")
 
         best_candidate = None
         best_mismatches = self.steps + 1
@@ -152,8 +130,8 @@ class ReadPattern(BaseThread):
 
                         # early accept if within tolerance
                         if mismatches <= self.max_mismatches:
-                            if self.debug:
-                                print(f"Good match: {male} drive={drive} rot={rot} offset={offset} mismatches={mismatches}")
+                            # if self.debug:
+                            print(f"Good match: {male} drive={drive} rot={rot} offset={offset} mismatches={mismatches}")
                             return (male, drive)
 
         return None

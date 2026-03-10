@@ -43,7 +43,6 @@ class Male(BaseThread):
         self[self.dxl_origin.name] = self.dxl_origin
         self[self.position.name] = self.position
         self["set current position as dxl origin"] = self.set_current_position_as_dxl_origin
-        # self[self.light_sensor.name] = self.light_sensor
 
     def __call__(self, request):
         request = Path(request)
@@ -110,10 +109,6 @@ class Male(BaseThread):
     def is_moving(self):
         return self.dxl.is_moving
     
-    # @property
-    # def light_sensor(self):
-        # return self._light_sensor
-    
     @property
     def position(self):
         return self._position
@@ -127,6 +122,7 @@ class Male(BaseThread):
         return self.dxl.torque_enabled
         
     def get_blink_pattern(self):
+        # print(f"{self.drives.which_is_frustated()=}")
         return self._light_pattern_deques[self.drives.which_is_frustated()]
     
     def set_current_position_as_dxl_origin(self, request=None):
@@ -161,7 +157,6 @@ class Male(BaseThread):
     def loop(self):        
         
         if self.search.is_started:
-            # self.light_sensor.detected_male.is_set()
             return
             
         if not self.is_satisfied():

@@ -2,6 +2,7 @@ from time import time, sleep
 from threading import Lock
 from colloquy.base_thread import BaseThread
 from threading import Thread, Event, Lock
+from colloquy.input import Input
 from .html import HTML
 
 """logic35_systems.ino: line 86
@@ -45,7 +46,10 @@ class Drive(BaseThread):
 
         seconds_in_3min = 60*3
         self._frustrated_lim = seconds_in_3min / self._update_interval
-
+        
+        self._input = Input(owner=self)
+        
+        self[self.input.name] = self.input
         self[self.html.name] = self.html.handle_request
 
     @property
@@ -75,6 +79,10 @@ class Drive(BaseThread):
     @property
     def value(self):
         return self._value
+        
+    @property
+    def input(self):
+        return self._input
 
     @property
     def is_satisfied(self):
@@ -83,6 +91,12 @@ class Drive(BaseThread):
     @property
     def is_frustated(self):
         return self.value > self._frustrated_lim
+        
+    def commit(self, value):
+        self._value = int(value)
+        if self._value > self._max:
+            self._value = self._max
+        self.owner.update()
 
     def decrease(self):
         with self.lock:

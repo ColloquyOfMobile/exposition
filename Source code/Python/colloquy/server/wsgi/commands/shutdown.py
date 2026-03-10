@@ -9,7 +9,12 @@ class Shutdown(Base):
         super().__init__(owner)
 
     def __call__(self, request):
+        for thread in self.all_threads:
+            thread.shutdown()
+        for thread in self.all_threads:
+            thread.join()
         self.owner.server.events.shutdown.set()
+        # self.colloquy.hardware.shutdown()
 
     @property
     def name(self):

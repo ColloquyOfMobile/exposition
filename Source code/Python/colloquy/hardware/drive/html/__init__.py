@@ -56,7 +56,7 @@ class HTML(BaseHTML):
 
             with tag("div", style="font-size: 1.2rem; margin-right: 1ch;"):
                 with tag("strong"):
-                    text(f"{self.owner.name}")
+                    text(f"{self.owner.name} = {self.owner.value}")
 
             with tag("div"):
                 if self.is_open:

@@ -32,7 +32,7 @@ class Search(BaseThread):
             self.owner.toggle_position()
 
     def setup(self):
-        self.owner.light_sensor.read_pattern.start(started_by=self)
+        self.owner.read_pattern.start(started_by=self)
         pass
 
     def setdown(self):

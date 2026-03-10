@@ -124,6 +124,10 @@ class Female(BaseThread):
     def torque_enabled(self):
         return self.dxl.torque_enabled
     
+    @property
+    def read_pattern(self):
+        return self.search.read_pattern
+    
     def set_current_position_as_dxl_origin(self, request=None):
         self.dxl_origin.set(self.dxl.position.read())
     
@@ -156,7 +160,6 @@ class Female(BaseThread):
     def loop(self):        
         
         if self.search.is_started:
-            # self.light_sensor.detected_male.is_set()
             return
             
         if not self.is_satisfied():
