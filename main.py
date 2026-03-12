@@ -20,11 +20,11 @@ if __name__ == "__main__":
     # colloquy.hardware.u2d2.dxl_list[0].goal_position.write(400)
     
     # colloquy.hardware.female1.html.open(request=None)
-    colloquy.hardware.male1.neopixels.ring.on()
+    # colloquy.hardware.male1.neopixels.ring.on()
     # colloquy.hardware.male1.search.blink.start(started_by=None)
     # colloquy.hardware.female1.search.read_pattern.start(started_by=None)
     # colloquy.hardware.female1.html.open(request=None)
-    colloquy.hardware.bar.dxl.init_hardware()
+    # colloquy.hardware.bar.dxl.init_hardware()
     # colloquy.hardware.bar.goal_position.write(1000)
     # colloquy.hardware.male1.neopixels.html.open(request=None)
     # colloquy.hardware.female1.light_sensor.html.open(request=None)
