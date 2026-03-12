@@ -12,6 +12,7 @@ if __name__ == "__main__":
     args = sys.argv[1:]
     colloquy = Colloquy()
     colloquy.hardware.u2d2.com_port.set("COM4")
+    colloquy.hardware.u2d2.open()
     colloquy.hardware.arduino.open()
     for dxl in colloquy.hardware.u2d2.dxl_list:
         dxl.init_hardware()
