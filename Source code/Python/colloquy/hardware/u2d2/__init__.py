@@ -214,9 +214,12 @@ class U2D2(Base):
 
     def open(self):
         assert self.port_name
+            
         if not self.is_simulated:
             self._port_handler = PortHandler(self.port_name)
         else:
+            if self._port_handler is not None:
+                assert not self._port_handler.is_open
             self._port_handler = self.colloquy.virtual_hardware.u2d2_port_handler(self.port_name)
         # PortHandler(self.port_name)
         self.port_handler.setBaudRate(self._baudrate)
