@@ -8,6 +8,8 @@ from threading import Lock
 from colloquy.base import Base
 from .com_port import ComPort
 from .html import HTML
+from .neopixel_command import NeopixelCommand
+from .light_sensor_command import LightSensorCommand
 
 START = time()
 
@@ -27,6 +29,46 @@ class Arduino(Base):
         self._was_open = None
         self._html = HTML(owner=self)
         self._context_depth = 0
+        self._commands = [
+            NeopixelCommand(owner=self, arduino_path="f1/head"),
+            NeopixelCommand(owner=self, arduino_path="f1/bodyO"),
+            NeopixelCommand(owner=self, arduino_path="f1/bodyP"),
+            NeopixelCommand(owner=self, arduino_path="f1/feet"),
+            LightSensorCommand(owner=self, arduino_path="f1/light sensor"),
+            
+            NeopixelCommand(owner=self, arduino_path="f2/head"),
+            NeopixelCommand(owner=self, arduino_path="f2/bodyO"),
+            NeopixelCommand(owner=self, arduino_path="f2/bodyP"),
+            NeopixelCommand(owner=self, arduino_path="f2/feet"),
+            LightSensorCommand(owner=self, arduino_path="f2/light sensor"),
+            
+            NeopixelCommand(owner=self, arduino_path="f3/head"),
+            NeopixelCommand(owner=self, arduino_path="f3/bodyO"),
+            NeopixelCommand(owner=self, arduino_path="f3/bodyP"),
+            NeopixelCommand(owner=self, arduino_path="f3/feet"),
+            LightSensorCommand(owner=self, arduino_path="f3/light sensor"),
+            
+            NeopixelCommand(owner=self, arduino_path="m1/ring"),
+            NeopixelCommand(owner=self, arduino_path="m1/up ring"),
+            NeopixelCommand(owner=self, arduino_path="m1/p drive level"),
+            NeopixelCommand(owner=self, arduino_path="m1/o drive level"),
+            LightSensorCommand(owner=self, arduino_path="m1/light sensor/a"),
+            LightSensorCommand(owner=self, arduino_path="m1/light sensor/b"),
+            LightSensorCommand(owner=self, arduino_path="m1/light sensor/c"),
+            LightSensorCommand(owner=self, arduino_path="m1/light sensor/d"),
+            
+            NeopixelCommand(owner=self, arduino_path="m2/ring"),
+            NeopixelCommand(owner=self, arduino_path="m2/up ring"),
+            NeopixelCommand(owner=self, arduino_path="m2/p drive level"),
+            NeopixelCommand(owner=self, arduino_path="m2/o drive level"),
+            LightSensorCommand(owner=self, arduino_path="m2/light sensor/a"),
+            LightSensorCommand(owner=self, arduino_path="m2/light sensor/b"),
+            LightSensorCommand(owner=self, arduino_path="m2/light sensor/c"),
+            LightSensorCommand(owner=self, arduino_path="m2/light sensor/d"),
+        ]
+        
+        for command in self._commands:
+            self[command.name] = command
 
         self[self.html.name] = self.html.handle_request
         self._com_port = ComPort(owner=self)
@@ -58,6 +100,10 @@ class Arduino(Base):
         self._context_depth -= 1
         if self._context_depth == 0 and not self._was_open:
             self.close()
+
+    @property
+    def commands(self):
+        return self._commands
 
     @property
     def port_name(self):

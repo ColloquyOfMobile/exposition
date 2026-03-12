@@ -8,19 +8,14 @@ class Details(BaseHTML):
 
     def __init__(self, owner):
         super().__init__(owner=owner)
-        self._opened = None
     
     @property
-    def opened(self):
-        return self._opened
-    
-    @opened.setter
-    def opened(self, value):
-        self._opened = value
+    def register(self):
+        return self.owner.register
     
     @property
-    def arduino(self):
-        return self.owner.owner
+    def dxl(self):
+        return self.owner.dxl
     
     @property
     def hardware(self):
@@ -57,24 +52,13 @@ class Details(BaseHTML):
     def _call_unsafe(self):
         if not self.is_open:
             return ""
-            
-        doc, tag, text = CustomDoc().tagtext()
         
-        doc.asis(self.arduino.com_port.html())
-
-        with tag("div"):
-            with tag("div"):
-                if self.arduino.is_open:
-                    label = "close"
-                else:
-                    label = "open"
-
-                href=f"/{self.arduino.path.as_posix()}/{label}"
-                with tag("a", href=href):
-                    text(f"{label} port='{self.arduino.port_name}'")
+        
+        doc, tag, text = CustomDoc().tagtext()
             
-            for command in self.arduino.commands:
-                doc.asis(command.html())
+        with tag("div",  name=self.name, style="display: flex; flex:1; flex-direction: column;"):
+            
+            doc.asis(self.register.input.html())
 
         return doc.getvalue()
 

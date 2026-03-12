@@ -19,8 +19,8 @@ class Details(BaseHTML):
         self._opened = value
     
     @property
-    def arduino(self):
-        return self.owner.owner
+    def command(self):
+        return self.owner.command
     
     @property
     def hardware(self):
@@ -57,24 +57,17 @@ class Details(BaseHTML):
     def _call_unsafe(self):
         if not self.is_open:
             return ""
-            
-        doc, tag, text = CustomDoc().tagtext()
         
-        doc.asis(self.arduino.com_port.html())
-
-        with tag("div"):
-            with tag("div"):
-                if self.arduino.is_open:
-                    label = "close"
-                else:
-                    label = "open"
-
-                href=f"/{self.arduino.path.as_posix()}/{label}"
-                with tag("a", href=href):
-                    text(f"{label} port='{self.arduino.port_name}'")
+        
+        doc, tag, text = CustomDoc().tagtext()
             
-            for command in self.arduino.commands:
-                doc.asis(command.html())
+        with tag("div",  name=self.name, style="display: flex; flex:1; flex-direction: column;"):
+            with tag("div"):
+                with tag("a", href=f"/{self.command.path.as_posix()}/send"):
+                    text("send")
+            
+            for setter in self.command.value_setters:
+                doc.asis(setter.html())
 
         return doc.getvalue()
 
