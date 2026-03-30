@@ -1,4 +1,4 @@
-from utils import CustomDoc
+
 import inspect
 from pathlib import Path
 from urllib.parse import unquote
@@ -30,6 +30,7 @@ class Base:
         self._owners = None
         assert owner is not self.owners
         self._log = Logger()
+        self._is_opened = False
 
     def __repr__(self):
         return f"{type(self).__name__}({self.path.as_posix()})"
@@ -121,3 +122,9 @@ class Base:
 
     def _svg_right_arrow(self):
         raise NotImplementedError("Implemented in BaseHTML class now.")
+        
+    def open(self):
+        self._is_opened = True 
+        
+    def close(self):
+        self._is_opened = False

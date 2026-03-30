@@ -2,7 +2,7 @@ from pathlib import Path
 import traceback
 import socket
 from threading import Thread, Event, Lock
-from utils import CustomDoc
+
 from colloquy.base import Base
 
 # from .html import HTML

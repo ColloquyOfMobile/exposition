@@ -3,7 +3,7 @@ import traceback
 from colloquy.base import Base
 from pathlib import Path
 import traceback
-from utils import CustomDoc
+
 from .html import HTML
 from .test1 import Test1
 

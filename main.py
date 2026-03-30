@@ -7,9 +7,11 @@ source_code = cwd / "Source code" / "Python"
 sys.path.append(str(source_code.resolve()))
 
 from colloquy import Colloquy
+from colloquy.server2 import Server2
 
 if __name__ == "__main__":
     args = sys.argv[1:]
+    
     colloquy = Colloquy()
     colloquy.hardware.u2d2.com_port.set("COM4")
     colloquy.hardware.u2d2.open()
@@ -18,6 +20,8 @@ if __name__ == "__main__":
         dxl.init_hardware()
     colloquy.hardware.arduino.html.open(request=None)
     colloquy.hardware.arduino.commands[0]._send()
+    
+    Server2(colloquy=colloquy)
     # colloquy.hardware.u2d2.dxl_list[0].html.open(request=None)
     
     # colloquy.hardware.u2d2.dxl_list[0].goal_position.write(400)
@@ -39,4 +43,4 @@ if __name__ == "__main__":
     
     # colloquy.exposition.html.open(request=None)
     # colloquy.exposition.start_command()    
-    colloquy.cli(*args)
+    # colloquy.cli(*args)

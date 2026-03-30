@@ -3,7 +3,7 @@ import urllib
 import os
 import sys
 
-from utils import CustomDoc
+# 
 from colloquy.base_thread import BaseThread
 from .events import Events
 from .base import Base
@@ -22,7 +22,8 @@ class Colloquy(BaseThread):
         super().__init__(owner=None)
 
         self._params = Params.load(Path("local/params.json"))
-
+        
+        self._is_opened = False
         self._request = None
         self._args = None
         self._virtual_hardware = None
@@ -34,7 +35,8 @@ class Colloquy(BaseThread):
         self._server = Server(owner=self)
         self._cli = CLI(owner=self)
 
-        self["server"] = self._server
+        # self["server"] = self._server
+        # self["server2"] = self._server2
         self["hardware"] = self._hardware
 
         self._events = Events(shutdown=BaseThread._shutdown)
@@ -107,6 +109,13 @@ class Colloquy(BaseThread):
         if self._virtual_hardware is None:
             self._virtual_hardware = VirtualHardware(owner=self)
         return self._virtual_hardware
+        
+    def open(self):
+        self._is_opened = True
+        
+    def close(self):
+        raise NotImplementedError
+        self._is_opened = False
 
     def run(self, ):
         return self.server()
@@ -120,4 +129,45 @@ class Colloquy(BaseThread):
         print("Available command:")
         for name in self:
             print(f"- {name}")
-        # raise NotImplementedError(f"{self=}")
+    
+    def snapshot(self):
+        path = tuple()
+        states = {
+            "path": path,
+            "name": self.name,
+            "hardware": self._hardware.snapshot(path=path),
+            "exposition": self._exposition.snapshot(path=path),
+        }
+        return states 
+    
+    def get_focus(self, *args, states):        
+        if args:
+            key, *leftovers = args
+            if key != "call":
+                states, leftovers = self.get_focus(*leftovers, states=states[key])
+            return states, leftovers
+        
+        return states, tuple()
+        
+        
+    def get_states(self, *args):
+        states = self.snapshot()
+        focus, leftovers = self.get_focus(*args, states=states)
+        
+        if leftovers:                
+            self.update(*leftovers, states=focus)
+                
+            states = self.snapshot()
+            focus, leftovers = self.get_focus(*args, states=states)
+            
+        return focus
+        
+    def update(self, *args, states):
+        if not isinstance(states, dict):
+            return states(*args)
+        if args:
+            key, *leftovers = args
+            if key not in states:
+                raise NotImplementedError(key, states["name"],)
+            return self.update(*leftovers, states=states[key])
+        return states

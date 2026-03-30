@@ -2,7 +2,7 @@
 # Source code/Python/colloquy/hardware/dxl/__init__.py
 from pathlib import Path
 from dynamixel_sdk import PortHandler, PacketHandler, COMM_SUCCESS  # Uses Dynamixel SDK library
-from utils import CustomDoc
+
 from colloquy.base import Base
 from .html import HTML
 from time import time, sleep
@@ -70,3 +70,13 @@ class DXLOrigin(Base):
     
     def set(self, value):
         self.params[self.owner.name][self.name] = value
+    
+    def snapshot(self, path):
+        states = {
+            "path": path + (self.name, ),
+            "name": self.name,
+            "close": self.close,
+            "open": self.open,
+            "opened": self._is_opened,
+        }
+        return states 

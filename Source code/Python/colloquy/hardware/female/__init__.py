@@ -3,7 +3,7 @@ from .drives import Drives
 from pathlib import Path
 from colloquy.base_thread import BaseThread
 from .light_sensor import LightSensor
-from .dxl_origin import DXLOrigin
+from ..dxl_origin import DXLOrigin
 from .dxl_position import DXLPosition
 from .search import Search
 from .html import HTML
@@ -176,3 +176,19 @@ class Female(BaseThread):
     def setdown(self):
         self.drives.stop()
         self.search.stop()
+    
+    def snapshot(self, path):        
+        path = path + (self.name,)
+        states = {
+            "path": path,
+            "name": self.name,
+            "close": self.close,
+            "open": self.open,
+            "opened": self._is_opened,
+            "dxl origin": self.dxl_origin.snapshot(path=path),
+            self.dxl.name: self.dxl.snapshot(path=path),
+            "search": self.search.snapshot(path=path),
+            "drives": self.drives.snapshot(path=path),
+            "neopixels": self.neopixels.snapshot(path=path),
+        }
+        return states 

@@ -1,7 +1,7 @@
 import serial
 import serial.tools.list_ports
 from pathlib import Path
-from utils import CustomDoc
+
 import json
 from time import sleep, time
 from threading import Lock

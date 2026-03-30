@@ -100,3 +100,13 @@ class Drives(BaseThread):
             female.neopixels.feet.color = self.orange
         else:
             female.neopixels.feet.color = self.puce
+    
+    def snapshot(self, path):
+        states = {
+            "path": path + (self.name, ),
+            "name": self.name,
+            "close": self.close,
+            "open": self.open,
+            "opened": self._is_opened,
+        }
+        return states

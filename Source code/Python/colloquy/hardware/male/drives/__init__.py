@@ -138,3 +138,13 @@ class Drives(BaseThread):
         male.neopixels.up_ring.brightness.value = max(o_value, p_value)
         male.neopixels.o_drive_level.brightness.value = o_value
         male.neopixels.p_drive_level.brightness.value = p_value
+    
+    def snapshot(self, path):
+        states = {
+            "path": path + (self.name, ),
+            "name": self.name,
+            "close": self.close,
+            "open": self.open,
+            "opened": self._is_opened,
+        }
+        return states

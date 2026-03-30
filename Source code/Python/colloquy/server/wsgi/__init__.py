@@ -8,7 +8,7 @@ from .root import Root
 from .head import Head
 from .commands import Commands
 # from colloquy.colloquy_item import ColloquyItem
-from utils import CustomDoc
+
 from urllib.parse import unquote
 import urllib.parse
 

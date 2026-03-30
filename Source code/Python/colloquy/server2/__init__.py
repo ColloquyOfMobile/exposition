@@ -1,0 +1,64 @@
+
+import sys, os
+import json
+from yattag import Doc, indent
+from urllib.parse import unquote
+from pathlib import Path
+from colloquy.utils import remove_folder_and_subfolders
+from colloquy.base import Base
+from threading import Event
+from wsgiref.simple_server import make_server, WSGIRequestHandler
+from .wsgi import WSGI
+WSGIRequestHandler.log_message = lambda *args, **kwargs: None
+
+
+class Server2(Base):
+    def __init__(self, colloquy):
+        super().__init__(owner=None,)
+        self._shutdown_event = Event()
+        self._restart_event = Event()
+        self._colloquy= colloquy
+        self.run()
+
+    @property
+    def colloquy(self):
+        return self._colloquy
+
+    @property
+    def shutdown_event(self):
+        return self._shutdown_event
+
+    @property
+    def restart_event(self):
+        return self._restart_event
+    
+    def run(self, port=8000):
+        hostname = "localhost" # socket.gethostname()
+        with make_server("localhost", port, self.wsgi) as httpd:
+            WSGIRequestHandler.log_message = lambda *args, **kwargs: None
+            print(f"Accessible at http://{hostname}:{port}/")
+
+            while True:
+                httpd.handle_request()
+
+                if self.shutdown_event.is_set():
+                    print(f"Shutdown event!")
+                    break
+            print("Out from server loop.")
+        print("Out from server context.")
+        if self.restart_event.is_set():
+            self.restart_process()
+            
+
+    def wsgi(self, environ, start_response):
+        try:
+            return WSGI(server=self, environ=environ, start_response=start_response)
+        except Exception:
+            self.shutdown_event.set()
+            raise
+
+    def restart_process(self):
+        python = sys.executable
+        args = ["main.py", "server/restarted"]
+        # args.append()
+        os.execl(python, python, *args)

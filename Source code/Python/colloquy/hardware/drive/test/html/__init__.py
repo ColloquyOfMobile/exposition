@@ -2,7 +2,7 @@
 import traceback
 from pathlib import Path
 from colloquy.base_html import BaseHTML
-from utils import CustomDoc
+
 from .details import Details
 
 class HTML(BaseHTML):

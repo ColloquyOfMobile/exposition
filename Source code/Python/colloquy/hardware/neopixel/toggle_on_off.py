@@ -1,4 +1,4 @@
-from utils import CustomDoc
+
 from colloquy.base import Base
 
 

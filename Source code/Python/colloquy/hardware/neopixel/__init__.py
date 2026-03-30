@@ -1,7 +1,7 @@
 # from colloquy.wsgi.root.html_item import HtmlItem
 from pathlib import Path
 from colloquy.base import Base
-from utils import CustomDoc
+
 from threading import Event
 import traceback
 from .toggle_on_off import ToggleOnOff
@@ -199,3 +199,23 @@ class Neopixel(Base):
 
     def set_test_default(self):
         raise NotImplementedError(self)
+    
+    def snapshot(self, path):
+        path = path + (self.name, )
+        states = {
+            "path": path,
+            "name": self.name,
+            "close": self.close,
+            "open": self.open,
+            "opened": self._is_opened,
+            "on": self.on,
+            "off": self.off,
+            "toggle": self.toggle,
+            "brightness": self.brightness.snapshot(path=path),
+            "white": self.white.snapshot(path=path),
+            "red": self.red.snapshot(path=path),
+            "green": self.green.snapshot(path=path),
+            "blue": self.blue.snapshot(path=path),
+            
+        }
+        return states

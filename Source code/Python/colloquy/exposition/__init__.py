@@ -5,7 +5,7 @@ from pathlib import Path
 import traceback
 from threading import Thread, Event, Lock
 from .html import HTML
-from utils import CustomDoc
+
 
 class Exposition(BaseThread):
 
@@ -49,6 +49,12 @@ class Exposition(BaseThread):
     @property
     def colloquy(self):
         return self.owner.colloquy
+        
+    def open(self):
+        self._is_opened = True 
+        
+    def close(self):
+        self._is_opened = False
 
     def setup(self):
         self.hardware.start(started_by=self)
@@ -61,3 +67,22 @@ class Exposition(BaseThread):
         if self.thread_errors:
             self.hardware.shutdown()
         self.hardware.stop()
+    
+    def snapshot(self, path):
+        path = path + (self.name,)
+        states = {
+            "path": path,
+            "name": self.name,
+            "open": self.open,
+            "close": self.close,
+        }
+        return states 
+        
+    # def get_states(self, *args):
+        # states = {
+            # "path": ("exposition",),
+            # "name": self.name,
+        # }
+        # if args:
+            # raise NotImplementedError(self)
+        # return states

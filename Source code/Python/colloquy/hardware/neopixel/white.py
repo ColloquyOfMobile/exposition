@@ -1,6 +1,6 @@
 from colloquy.base import Base
 from pathlib import Path
-from utils import CustomDoc
+
 
 
 class White(Base):

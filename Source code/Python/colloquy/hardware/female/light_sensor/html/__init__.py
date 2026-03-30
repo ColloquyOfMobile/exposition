@@ -1,7 +1,7 @@
 # from colloquy.wsgi.root.html_item import HtmlItem
 from pathlib import Path
 from colloquy.base_html import BaseHTML
-from utils import CustomDoc
+
 import traceback
 from .details import Details
 

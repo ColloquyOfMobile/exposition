@@ -2,7 +2,7 @@
 # colloquy/base_thread/__init__.py
 import traceback
 from time import time, sleep
-from utils import CustomDoc
+
 import inspect
 from pathlib import Path
 from urllib.parse import unquote

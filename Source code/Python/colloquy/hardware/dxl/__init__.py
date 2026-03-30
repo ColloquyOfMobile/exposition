@@ -184,4 +184,14 @@ class DXL(Base):
         goal_position = GoalPosition(owner=self)
         self[goal_position.name] = goal_position
     
+    def snapshot(self, path):
+        states = {
+            "path": path + (self.name, ),
+            "name": self.name,
+            "close": self.close,
+            "open": self.open,
+            "opened": self._is_opened,
+        }
+        return states
+    
     

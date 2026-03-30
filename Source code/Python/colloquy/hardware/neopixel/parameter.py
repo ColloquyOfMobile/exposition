@@ -1,6 +1,6 @@
 from colloquy.base import Base
 from pathlib import Path
-from utils import CustomDoc
+
 from .increment import Increment
 
 
@@ -51,6 +51,13 @@ class Parameter(Base):
     def value(self, value):
         self.set_without_updating(value)
         self.neopixel.update()
+    
+    def _value_setter(self, value):
+        
+        def setter():
+            self.value = value
+        
+        return setter
 
     def set_without_updating(self, value):
         if value > 255:
@@ -58,6 +65,20 @@ class Parameter(Base):
         if value < 0:
             value = 0
         self._value = value
+    
+    def snapshot(self, path):
+        path = path + (self.name, )
+        states = {
+            "path": path,
+            "name": self.name,
+            "close": self.close,
+            "open": self.open,
+            "opened": self._is_opened,
+            "value": self.value,
+        }
+        for i in range(256):
+            states[f"set {i}"] = self._value_setter(i)
+        return states
 
 
     def html(self):

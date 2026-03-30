@@ -1,6 +1,6 @@
 from colloquy.base import Base
 import traceback
-from utils import CustomDoc
+
 # from .html import HTML
 from .shutdown import Shutdown
 from .restart import Restart

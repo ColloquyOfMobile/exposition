@@ -28,7 +28,7 @@ class Hardware(BaseThread):
             "female2": 3,
             "female3": 5,
         }
-        self._opened = None
+        self._is_opened = False
         self._commands = Commands(owner=self)
 
         self._arduino = Arduino(owner=self)
@@ -184,15 +184,49 @@ class Hardware(BaseThread):
         for body in self.males:
             bodies.append(body)
         return bodies
-
+        
+    def open(self):
+        self._is_opened = True 
+        
+    def close(self):
+        self._is_opened = False
+        
     def loop(self):
         pass
 
     def setup(self):
-        for bodies in self.hardware.bodies:
+        for bodies in self.bodies:
             bodies.start(started_by=self)
         self.bar.start(started_by=self)
 
     def setdown(self):
-        for bodies in self.hardware.bodies:
+        for bodies in self.bodies:
             bodies.stop()
+    
+    def snapshot(self, path):
+        path = path + (self.name,)
+        states = {
+            "path": path,
+            "name": self.name,
+            "close": self.close,
+            "open": self.open,
+            "opened": self._is_opened,
+        }
+        for body in self.bodies:
+            states[body.name] = body.snapshot(path=path)
+        return states 
+        
+    # def get_states(self, *args):
+        # states = {
+            # "path": ("hardware", ),
+            # "name": self.name,
+            # "close": self.close,
+            # "open": self.open,
+            # "opened": self._is_opened,
+        # }
+        # for bodies in self.bodies:
+            # bodies.get_states()
+        # self.bar.get_states()
+        # if args:
+            # raise NotImplementedError(self)
+        # return states

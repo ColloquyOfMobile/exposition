@@ -125,15 +125,6 @@ class Bar(BaseThread):
             if male.search.is_started:
                 self.search.start(started_by=self)
                 return
-        
-        # if self.search.is_started:
-            # return
-        
-        # raise NotImplementedError
-        # if not self.is_satisfied():
-            # self.search.start(started_by=self)
-            # return        
-        # pass
 
     def setup(self):
         self.dxl.init_hardware()
@@ -141,3 +132,12 @@ class Bar(BaseThread):
 
     def setdown(self):
         return
+        
+    def get_states(self, *args):
+        states = {
+            "path": ("hardware", self.name),
+            "name": self.name,
+        }
+        if args:
+            raise NotImplementedError(self)
+        return states

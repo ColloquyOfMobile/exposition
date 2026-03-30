@@ -1,6 +1,6 @@
 from colloquy.base import Base
 import traceback
-from utils import CustomDoc
+
 # from colloquy.wsgi.root.body.command import Command, HTML as _HTML
 
 class Shutdown(Base):

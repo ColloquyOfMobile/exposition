@@ -3,7 +3,7 @@ import traceback
 import socket
 from threading import Thread, Event, Lock
 from colloquy.base import Base
-from utils import CustomDoc
+
 # from colloquy.wsgi.root.html_item import HtmlItem
 # from server.html_element import HTMLElement
 # from .html import HTML

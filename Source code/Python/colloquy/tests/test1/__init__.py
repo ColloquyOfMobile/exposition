@@ -1,6 +1,6 @@
 from pathlib import Path
 from colloquy.base_thread import BaseThread
-from utils import CustomDoc
+
 from threading import Event
 import traceback
 from threading import Thread, Event, Lock
