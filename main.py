@@ -19,7 +19,7 @@ if __name__ == "__main__":
     for dxl in colloquy.hardware.u2d2.dxl_list:
         dxl.init_hardware()
     colloquy.hardware.arduino.html.open(request=None)
-    colloquy.hardware.arduino.commands[0]._send()
+    # colloquy.hardware.arduino.commands[0]._send()
     
     Server2(colloquy=colloquy)
     # colloquy.hardware.u2d2.dxl_list[0].html.open(request=None)
