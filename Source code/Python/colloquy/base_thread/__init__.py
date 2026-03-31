@@ -86,7 +86,7 @@ class BaseThread(Base):
         self.stop()
         self.join()
 
-    def start(self, started_by):
+    def start(self, started_by=None):
         if started_by is not None:
             if self in started_by.children:
                 raise NotImplementedError(f"Should be deleted when stop.")
@@ -172,5 +172,21 @@ class BaseThread(Base):
                 self.log(f"Break condition: {not self._started_by.is_started=}.")
                 return True
         return False
+    
+    def snapshot(self, path):
+        path = path + (self.name,)
+        states = {
+            "path": path,
+            "name": self.name,
+            "close": self.close,
+            "open": self.open,
+            "opened": self._is_opened,
+        }
+        if self.is_started:
+            states["stop"] = self.stop
+        else:
+            states["start"] = self.start
+        return states
+        
 
 

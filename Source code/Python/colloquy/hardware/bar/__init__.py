@@ -1,6 +1,6 @@
 from pathlib import Path
 from colloquy.base_thread import BaseThread
-from .dxl_origin import DXLOrigin
+from ..dxl_origin import DXLOrigin
 from .dxl_position import DXLPosition
 from .search import Search
 from .html import HTML
@@ -141,3 +141,17 @@ class Bar(BaseThread):
         if args:
             raise NotImplementedError(self)
         return states
+    
+    def snapshot(self, path):
+        path = path + (self.name,)
+        states = {
+            "path": path,
+            "name": self.name,
+            "close": self.close,
+            "open": self.open,
+            "opened": self._is_opened,
+            "dxl origin": self.dxl_origin.snapshot(path=path),
+            self.dxl.name: self.dxl.snapshot(path=path),
+            "search": self.search.snapshot(path=path),
+        }
+        return states 

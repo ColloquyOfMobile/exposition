@@ -231,11 +231,13 @@ def pprint4(obj):
     print("colloquy/", end="")
     print(*obj["path"], sep="/")
     
-    lines = pformat_lines3(obj)
+    lines = pformat_lines3(obj, depth=2)
     for tokens in lines:
         print(*tokens)
 
-def pformat_lines3(obj):
+def pformat_lines3(obj, depth):
+    if depth <= 0:
+        return []
     lines = []
     if obj["name"] == "value":
         lines.append(f"{value}")    
@@ -253,17 +255,9 @@ def pformat_lines3(obj):
                 lines.append([f"{key}()"])                
                 continue
                 
-            # if key in ("open", "close", "toggle", "on", "off"):
-                # lines.append([f"{key}()"])
-                # continue
-            
-            # if key == "inherit":
-                # lines.append([f"inherited from {value.get('from')}"])
-                # continue
-                
             if "opened" in value:
                 lines.append([f'{value["name"]}:'])
-                lines += pformat_lines3(value)
+                lines += pformat_lines3(value, depth=depth-1)
                 continue
                 
             if "value" in value:

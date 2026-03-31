@@ -126,3 +126,9 @@ class Drive(BaseThread):
     def satisfy(self):
         self.o_drive = self._satisfaction_lim
         self.p_drive = self._satisfaction_lim
+    
+    def snapshot(self, path):
+        states = super().snapshot(path=path)
+        _path = states["path"]
+        states["value"] = self.value
+        return states

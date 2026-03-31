@@ -163,7 +163,6 @@ class Male(BaseThread):
             self.search.start(started_by=self)
             return
             
-
     def setup(self):
         self.dxl.init_hardware()
         self.drives.start(started_by=self)

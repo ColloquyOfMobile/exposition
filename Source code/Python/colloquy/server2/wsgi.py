@@ -106,6 +106,11 @@ class WSGI(Base):
                         with tag("a", href="/restart"):
                             text("restart")
                             
+                    with tag("div", style=""):
+                        path = self._root / self._base_path
+                        with tag("a", href=f"/{path.as_posix()}"):
+                            text("refresh")
+                            
                 with tag("div", style="display: flex;"):
                     with tag("div", style="f"):
                         with tag("a", href=f"/"):
@@ -120,7 +125,7 @@ class WSGI(Base):
                 with tag("div", style="overflow: auto; flex: 1; display: flex; flex-direction: column;"):
                     doc.asis(self._html_recursion(obj=to_render, ))
                 
-                doc.asis(self._html_keyboard(obj=to_render))
+                # doc.asis(self._html_keyboard(obj=to_render))
 
         html = doc.getvalue()
         html = indent(html)

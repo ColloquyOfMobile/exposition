@@ -178,17 +178,13 @@ class Female(BaseThread):
         self.search.stop()
     
     def snapshot(self, path):        
-        path = path + (self.name,)
-        states = {
-            "path": path,
-            "name": self.name,
-            "close": self.close,
-            "open": self.open,
-            "opened": self._is_opened,
-            "dxl origin": self.dxl_origin.snapshot(path=path),
-            self.dxl.name: self.dxl.snapshot(path=path),
-            "search": self.search.snapshot(path=path),
-            "drives": self.drives.snapshot(path=path),
-            "neopixels": self.neopixels.snapshot(path=path),
-        }
+        states = super().snapshot(path=path)
+        _path = states["path"]
+        states.update({
+            "dxl origin": self.dxl_origin.snapshot(path=_path),
+            self.dxl.name: self.dxl.snapshot(path=_path),
+            "search": self.search.snapshot(path=_path),
+            "drives": self.drives.snapshot(path=_path),
+            "neopixels": self.neopixels.snapshot(path=_path),
+        })
         return states 

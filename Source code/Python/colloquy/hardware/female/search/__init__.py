@@ -40,11 +40,9 @@ class Search(BaseThread):
         pass
     
     def snapshot(self, path):
-        states = {
-            "path": path + (self.name, ),
-            "name": self.name,
-            "close": self.close,
-            "open": self.open,
-            "opened": self._is_opened,
-        }
+        states = super().snapshot(path=path)
+        _path = states["path"]
+        states.update({
+            self.read_pattern.name: self.read_pattern.snapshot(_path),
+        })
         return states

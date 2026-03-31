@@ -135,6 +135,18 @@ class ReadPattern(BaseThread):
                             return (male, drive)
 
         return None
+    
+    def snapshot(self, path):
+        path = path + (self.name, )
+        states = {
+            "path": path,
+            "name": self.name,
+            "close": self.close,
+            "open": self.open,
+            "opened": self._is_opened,
+            "start": self.start,
+        }
+        return states
 
 
 

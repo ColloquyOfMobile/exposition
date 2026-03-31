@@ -102,11 +102,8 @@ class Drives(BaseThread):
             female.neopixels.feet.color = self.puce
     
     def snapshot(self, path):
-        states = {
-            "path": path + (self.name, ),
-            "name": self.name,
-            "close": self.close,
-            "open": self.open,
-            "opened": self._is_opened,
-        }
+        states = super().snapshot(path=path)
+        _path = states["path"]
+        states[self.o_drive.name] = self.o_drive.snapshot(_path)
+        states[self.p_drive.name] = self.p_drive.snapshot(_path)
         return states

@@ -204,29 +204,9 @@ class Hardware(BaseThread):
             bodies.stop()
     
     def snapshot(self, path):
-        path = path + (self.name,)
-        states = {
-            "path": path,
-            "name": self.name,
-            "close": self.close,
-            "open": self.open,
-            "opened": self._is_opened,
-        }
+        states = super().snapshot(path=path)
+        _path = states["path"]
         for body in self.bodies:
-            states[body.name] = body.snapshot(path=path)
+            states[body.name] = body.snapshot(path=_path)
+        states[self.bar.name] = self.bar.snapshot(path=_path)
         return states 
-        
-    # def get_states(self, *args):
-        # states = {
-            # "path": ("hardware", ),
-            # "name": self.name,
-            # "close": self.close,
-            # "open": self.open,
-            # "opened": self._is_opened,
-        # }
-        # for bodies in self.bodies:
-            # bodies.get_states()
-        # self.bar.get_states()
-        # if args:
-            # raise NotImplementedError(self)
-        # return states
