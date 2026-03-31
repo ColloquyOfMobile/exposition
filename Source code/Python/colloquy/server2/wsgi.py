@@ -305,6 +305,8 @@ class WSGI(Base):
         
         
     def _parse_shutdown(self):
+        self.colloquy.shutdown()
+        self.colloquy.join()
         self.shutdown_event.set()
         
         content_type = 'text/plain'
@@ -316,6 +318,8 @@ class WSGI(Base):
         
         
     def _parse_restart(self):
+        self.colloquy.shutdown()
+        self.colloquy.join()
         self.shutdown_event.set()
         self.restart_event.set()
         

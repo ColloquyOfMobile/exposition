@@ -46,6 +46,7 @@ class Server2(Base):
                     break
             print("Out from server loop.")
         print("Out from server context.")
+        
         if self.restart_event.is_set():
             self.restart_process()
             

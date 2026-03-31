@@ -120,7 +120,10 @@ class BaseThread(Base):
         # self._thread.join()
 
     def join(self):
-        self._thread.join()
+        if self._thread is not None:
+            self._thread.join()
+        for thread in self.children:
+            thread.join()
 
     def run(self, run_with=None):
         self.log(f"Executing {self}.run().")
