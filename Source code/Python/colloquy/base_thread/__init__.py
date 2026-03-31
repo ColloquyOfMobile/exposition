@@ -125,6 +125,10 @@ class BaseThread(Base):
         for thread in self.children:
             thread.join()
 
+    def join_all(self):
+        for thread in self.all_threads:
+            thread.join()
+
     def run(self, run_with=None):
         self.log(f"Executing {self}.run().")
         if run_with is None:

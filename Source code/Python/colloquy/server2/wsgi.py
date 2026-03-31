@@ -121,6 +121,9 @@ class WSGI(Base):
                         with tag("div", style="f"):
                             with tag("a", href=f"/{href.as_posix()}"):
                                 text("/" + name)
+                                
+                with tag("div", name="thread count", style="display: flex;"):
+                        text(f"thread count: {len(self.all_threads)}")
                 
                 with tag("div", style="overflow: auto; flex: 1; display: flex; flex-direction: column;"):
                     doc.asis(self._html_recursion(obj=to_render, ))
@@ -214,17 +217,6 @@ class WSGI(Base):
                 # print(f"{key=}")
                 if key in ("name", "subject", "id", "path", "focus", "func", "ref", "checked", "keyboard", "close", "open", "opened", ):
                     continue
-                
-                # if key in ("toggle", "on", "off"):  
-                    # func_path = Path(*obj["path"]) / key
-                    # call_path = func_path.relative_to(self._base_path)
-                    # path = self._root / self._base_path / "call" / call_path
-                    
-                    # style={"flex": "1"}
-                    # with tag("div", name=key, style=export_style(style)):
-                        # with tag("a", href=f"/{path.as_posix()}"):
-                            # text(f"{key}()")
-                    # continue
                     
                     
                 if key == "value":
@@ -306,20 +298,24 @@ class WSGI(Base):
         
     def _parse_shutdown(self):
         self.colloquy.shutdown()
-        self.colloquy.join()
+        self.colloquy.join_all()
         self.shutdown_event.set()
         
         content_type = 'text/plain'
         status = '200 OK'
         headers = [("Content-Type", content_type)]
-        content = b"Goodbye!"
+        lines = [
+            f"thread count: {len(self.all_threads)}",
+            "Goodbye!",
+            ]
+        content = "\n".join(lines).encode()
         
         return status, headers, content
         
         
     def _parse_restart(self):
         self.colloquy.shutdown()
-        self.colloquy.join()
+        self.colloquy.join_all()
         self.shutdown_event.set()
         self.restart_event.set()
         
