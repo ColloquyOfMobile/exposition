@@ -107,10 +107,10 @@ class BaseThread(Base):
         thread.start()
 
     def shutdown(self):
+        self._shutdown.set()
         if self._thread is None:
             return
         self.log(f"Shuting down {self}.")
-        self._shutdown.set()
 
     def stop(self):
         if self._thread is None:
@@ -174,6 +174,7 @@ class BaseThread(Base):
         if self._shutdown.is_set():
             self.log(f"Break condition: {self._shutdown.is_set()=}.")
             return True
+            
         if self._started_by is not None:
             if not self._started_by.is_started:
                 self.log(f"Break condition: {not self._started_by.is_started=}.")
@@ -181,14 +182,8 @@ class BaseThread(Base):
         return False
     
     def snapshot(self, path):
-        path = path + (self.name,)
-        states = {
-            "path": path,
-            "name": self.name,
-            "close": self.close,
-            "open": self.open,
-            "opened": self._is_opened,
-        }
+        _path = path + (self.name,)
+        states = super().snapshot(path=path)
         if self.is_started:
             states["stop"] = self.stop
         else:

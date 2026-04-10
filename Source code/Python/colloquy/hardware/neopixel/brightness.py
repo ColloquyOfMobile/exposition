@@ -1,6 +1,7 @@
 from colloquy.base import Base
 from pathlib import Path
 
+from colloquy.hardware.value_setter import ValueSetter
 from .increment import Increment
 
 
@@ -12,14 +13,16 @@ class Brightness(Base):
         self._value = 0
 
         self._neopixel = owner
+        
+        self._setter = ValueSetter(owner=self, limit=101)
 
-        self._increment1 = Increment(owner=self, multiplier=1)
-        self._increment10 = Increment(owner=self, multiplier=10)
-        self._increment100 = Increment(owner=self, multiplier=100)
+        # self._increment1 = Increment(owner=self, multiplier=1)
+        # self._increment10 = Increment(owner=self, multiplier=10)
+        # self._increment100 = Increment(owner=self, multiplier=100)
 
-        self[self._increment1.name] = self._increment1
-        self[self._increment10.name] = self._increment10
-        self[self._increment100.name] = self._increment100
+        # self[self._increment1.name] = self._increment1
+        # self[self._increment10.name] = self._increment10
+        # self[self._increment100.name] = self._increment100
 
 
     def __call__(self, request):
@@ -46,18 +49,18 @@ class Brightness(Base):
     @property
     def value(self):
         return self._value
+    
+    @property
+    def setter(self):
+        return self._setter
 
     @value.setter
     def value(self, value):
         self.set_without_updating(value)
         self.neopixel.update()
     
-    def _value_setter(self, value):
-        
-        def setter():
-            self.value = value
-        
-        return setter
+    def set(self, value):        
+        self.value = value
 
     def set_without_updating(self, value):
         if value > 100:
@@ -67,19 +70,14 @@ class Brightness(Base):
         self._value = value
     
     def snapshot(self, path):
-        path = path + (self.name, )
-        states = {
-            "path": path,
-            "name": self.name,
-            "close": self.close,
-            "open": self.open,
-            "opened": self._is_opened,
+        _path = path + (self.name, )        
+        states = super().snapshot(path=path)
+        
+        states.update({
             "value": self.value,
-        }
-        for i in range(101):
-            states[f"set {i}"] = self._value_setter(i)
-            
-        return states
+            self.setter.name: self.setter.snapshot(_path),
+        })
+        return states 
 
 
     def html(self):

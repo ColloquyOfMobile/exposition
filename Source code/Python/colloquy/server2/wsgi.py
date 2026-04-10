@@ -220,7 +220,7 @@ class WSGI(Base):
                     
                     
                 if key == "value":
-                    with tag("div", style="flex: 1;"):
+                    with tag("div"):
                         text(f"value: {value}")  
                     continue  
             
@@ -332,27 +332,3 @@ class WSGI(Base):
         content = html.encode()
         
         return status, headers, content
-        
-        # doc, tag, text = Doc().tagtext()
-        # with tag("div"):
-            # with tag("div"):
-                # with tag("strong"):
-                    # text(f"Error html for {self.name}!")
-
-            # with tag("div", style="display: flex; flex-direction: column;"):
-                # style = "white-space: normal; overflow-wrap: break-word; word-break: break-word;"
-                # for line in traceback.format_exc().splitlines():
-                    # with tag("pre", style=style):
-                        # text(line)
-
-        # return doc.getvalue()
-        
-        # doc, tag, text = Doc().tagtext()
-        # self.shutdown_event.set()
-        
-        # content_type = 'text/plain'
-        # status = '200 OK'
-        # headers = [("Content-Type", content_type)]
-        # content = b"Goodbye!"
-        
-        # return status, headers, content

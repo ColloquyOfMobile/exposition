@@ -120,10 +120,10 @@ class Colloquy(BaseThread):
     def run(self, ):
         return self.server()
 
-    def shutdown(self):
-        self.tests.stop()
-        self.hardware.stop()
-        self.exposition.stop()
+    # def shutdown(self):
+        # self.tests.stop()
+        # self.hardware.stop()
+        # self.exposition.stop()
 
     def _call_root(self):
         print("Available command:")
