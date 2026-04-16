@@ -9,7 +9,7 @@ from threading import Event
 from wsgiref.simple_server import make_server, WSGIRequestHandler
 WSGIRequestHandler.log_message = lambda *args, **kwargs: None     
   
-class WSGI(Base):
+class WSGI2(Base):
     
     def __init__(self, server, environ, start_response, db_path=None):
         super().__init__(owner=server)
@@ -207,7 +207,17 @@ class WSGI(Base):
     def _html_recursion(self, obj):
         doc, tag, text = Doc().tagtext()
                 
-        style={"margin-left": "1ch", "padding-left": "0.5ch", "border-left": "1px gray dashed", "display": "flex", "flex-direction": "column", "flex": "1", "overflow": "auto", "min-height": "10"}
+        style={
+            "margin-left": "1ch", 
+            "padding-left": "0.5ch", 
+            "border-left": "1px gray dashed", 
+            "display": "flex", 
+            "flex-direction": "column", 
+            "flex": "1", 
+            "overflow": "auto", 
+            "min-height": "10rem",
+            "justify-content": "space-between",
+            }
                 
         with tag("div", name=obj["name"], style=export_style(style)): 
             
@@ -239,7 +249,7 @@ class WSGI(Base):
                     continue
                 
                 name = value["name"]
-                # assert key == name, f"{key=}, {name=}"
+                
                 value_path = Path(*value["path"])
     
                 style={"display": "flex", "gap": "1ch", "flex": "1"}
@@ -272,22 +282,31 @@ class WSGI(Base):
         doc, tag, text = Doc().tagtext()
         name = obj["name"]  
         
-        style={"display": "flex", "gap": "1ch", "margin-bottom": "1rem"}  
+        style={
+            "margin-bottom": "0.5rem", 
+            "flex": "1",
+            "overflow": "auto", 
+            "min-height": "10rem",
+            }  
         
-        with tag("div", name="title", style=export_style(style)):            
-            with tag("div", name="close"):               
-                call_path = Path(*obj["path"]).relative_to(self._base_path)
-                path = self._root / self._base_path / "call" / call_path / "close"
-                
-                with tag("a", href=f"/{path.as_posix()}"):
-                    text(f"<")
+        with tag("div", name="opened", style=export_style(style)):
+        
+            style={"display": "flex", "gap": "1ch", "margin-bottom": "0.5rem"}  
+            
+            with tag("div", name="title", style=export_style(style)):            
+                with tag("div", name="close"):               
+                    call_path = Path(*obj["path"]).relative_to(self._base_path)
+                    path = self._root / self._base_path / "call" / call_path / "close"
                     
-            with tag("div", name="name"):
-                path = self._root / Path(*obj["path"])
-                with tag("a", href=f"/{path.as_posix()}"):
-                    text(f"{name}:")
-                    
-        doc.asis(self._html_recursion(obj=obj))
+                    with tag("a", href=f"/{path.as_posix()}"):
+                        text(f"<")
+                        
+                with tag("div", name="name"):
+                    path = self._root / Path(*obj["path"])
+                    with tag("a", href=f"/{path.as_posix()}"):
+                        text(f"{name}:")
+                        
+            doc.asis(self._html_recursion(obj=obj))
         
         html = doc.getvalue()
         return indent(html)  

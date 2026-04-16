@@ -9,6 +9,7 @@ from colloquy.base import Base
 from threading import Event
 from wsgiref.simple_server import make_server, WSGIRequestHandler
 from .wsgi import WSGI
+from .wsgi2 import WSGI2
 WSGIRequestHandler.log_message = lambda *args, **kwargs: None
 
 
@@ -53,7 +54,7 @@ class Server2(Base):
 
     def wsgi(self, environ, start_response):
         try:
-            return WSGI(server=self, environ=environ, start_response=start_response)
+            return WSGI2(server=self, environ=environ, start_response=start_response)
         except Exception:
             self.shutdown_event.set()
             raise

@@ -31,7 +31,8 @@ def handle_error(func):
                     continue
                 if dxl_error != 0:
                     self.log(f"DXL ERR: ({dxl_id=}) {self.packet_handler.getRxPacketError(dxl_error)}")
-                    continue
+                    continue                
+                
                 return value
 
     return wrapper
@@ -224,43 +225,3 @@ class U2D2(Base):
         # PortHandler(self.port_name)
         self.port_handler.setBaudRate(self._baudrate)
         self._is_open = True
-
-    # def _get_com_ports(self):
-        # return [
-            # port.device
-            # for port
-            # in serial.tools.list_ports.comports()]
-
-    # def _set_com_port(self, com_port, **kwargs):
-        # com_port = com_port[0]
-        # self.port_handler.closePort()
-        # self.port_handler = self._classes["port_handler"](com_port)
-
-        # self.hardware.params["dynamixel network"]["communication port"] = com_port
-        # self.hardware.save()
-
-    # def _add_html_com(self, ):
-        # doc, tag, text = self.html_doc.tagtext()
-        # # with tag("h3"):
-            # # text("DXL manager:")
-
-        # port_list = self._get_com_ports()
-
-        # with tag("form", method="post"):
-            # with tag("label", **{"id": "dxl_manager/com_port"}):
-                # text(f"DXL com port:")
-
-            # with tag("select", id="dxl_manager/com_port", name="com_port"):
-                # for port in port_list:
-                    # kwargs = {}
-                    # if port == self.port_handler.getPortName():
-                        # kwargs["selected"] = True
-                    # with tag('option', value=port, **kwargs):
-                        # text(port)
-
-            # with tag("button", name="action", value="dxl_manager/com_port/set"):
-                # text(f"set.")
-
-            # self.hardware.actions["dxl_manager/com_port/set"] = self._set_com_port
-
-        # # yield doc.read().encode()

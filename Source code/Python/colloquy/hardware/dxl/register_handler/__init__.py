@@ -1,20 +1,33 @@
 # -*- coding: utf-8 -*-
 # Source code/Python/colloquy/hardware/dxl/__init__.py
 from pathlib import Path
-from dynamixel_sdk import PortHandler, PacketHandler, COMM_SUCCESS  # Uses Dynamixel SDK library
 
 from colloquy.base import Base
 from .html import HTML
 from time import time, sleep
 from colloquy.input import Input
 
+from colloquy.hardware.value_setter2 import ValueSetter2
+
 class RegisterHanlder(Base):
-    def __init__(self, owner, name, register, read_func, write_func=None, open_in=None, html_class=None):
+    def __init__(
+            self, 
+            owner, 
+            name, 
+            register, 
+            read_func, 
+            write_func=None, 
+            open_in=None, 
+            html_class=None):
+                
         self._name = name
         super().__init__(owner=owner)
         self._read_func = read_func
         self._write_func = write_func
         self._register = register
+        
+        if write_func is not None:
+            self._setter = ValueSetter2(owner=self, min_value=-1000, max_value=1000, set_func=write_func)
         
         if html_class is None:
             self._html = HTML(owner=self)
@@ -83,3 +96,13 @@ class RegisterHanlder(Base):
         if self._write_func is None:
             raise NotImplementedError(self)
         return self._write_func(self.dxl_id, self._register, value)
+    
+    def snapshot(self, path):
+        states = super().snapshot(path=path)
+        _path = states["path"]
+        states["value"]  = self.read()
+        
+        if self._write_func is not None:
+            states[self._setter.name] = self._setter.snapshot(_path)
+        
+        return states

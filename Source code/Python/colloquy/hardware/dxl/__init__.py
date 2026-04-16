@@ -19,6 +19,7 @@ class DXL(Base):
         self.moving_threshold = 20
         self._old_position = None
         self._old_goal_position = None
+        self._registers = []
         
         self._html = HTML(owner=self)
         self[self.html.name] = self.html.handle_request        
@@ -160,6 +161,7 @@ class DXL(Base):
             )
             
         self[register.name] = register
+        self._registers.append(register)
         
     
     def _init_registers(self):
@@ -185,13 +187,10 @@ class DXL(Base):
         self[goal_position.name] = goal_position
     
     def snapshot(self, path):
-        states = {
-            "path": path + (self.name, ),
-            "name": self.name,
-            "close": self.close,
-            "open": self.open,
-            "opened": self._is_opened,
-        }
+        states = super().snapshot(path=path)
+        _path = states["path"]
+        for register in self._registers:
+            states[register.name] = register.snapshot(path=_path)
         return states
     
     
