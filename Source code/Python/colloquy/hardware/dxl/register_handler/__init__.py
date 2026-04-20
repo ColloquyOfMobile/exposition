@@ -27,7 +27,7 @@ class RegisterHanlder(Base):
         self._register = register
         
         if write_func is not None:
-            self._setter = ValueSetter2(owner=self, min_value=-1000, max_value=1000, set_func=write_func)
+            self._setter = ValueSetter2(owner=self, min_value=-5000, max_value=5000, set_func=write_func)
         
         if html_class is None:
             self._html = HTML(owner=self)
