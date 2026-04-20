@@ -182,9 +182,11 @@ class DXL(Base):
         
         torque_enabled = TorqueEnabled(owner=self)
         self[torque_enabled.name] = torque_enabled
+        self._registers.append(torque_enabled)
         
         goal_position = GoalPosition(owner=self)
         self[goal_position.name] = goal_position
+        self._registers.append(goal_position)
     
     def snapshot(self, path):
         states = super().snapshot(path=path)

@@ -102,7 +102,7 @@ class RegisterHanlder(Base):
         _path = states["path"]
         states["value"]  = self.read()
         
-        if self._write_func is not None:
+        if not self.is_readonly():
             states[self._setter.name] = self._setter.snapshot(_path)
         
         return states
