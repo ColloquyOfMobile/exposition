@@ -102,7 +102,7 @@ class ValueSetter2(Base):
 
     @property
     def set(self):
-        return self.owner.set
+        return self._set_func
 
     def _make_setter(self, value):
         def wrap():

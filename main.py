@@ -7,11 +7,29 @@ source_code = cwd / "Source code" / "Python"
 sys.path.append(str(source_code.resolve()))
 
 from colloquy import Colloquy
+from colloquy2 import colloquy2 as _colloquy2
 from colloquy.server2 import Server2
+from server import server
 
-if __name__ == "__main__":
-    args = sys.argv[1:]
+def main(*args):
+    memory = {
+        "colloquy1": colloquy1,
+        "colloquy2": colloquy2,
+    }
     
+    if args:    
+        key, *leftovers = args
+        if key in memory:
+            return memory[key](*leftovers)
+    
+    print(as_text(memory))
+        
+
+def colloquy2(*args):    
+    server(colloquy=_colloquy2)
+        
+
+def colloquy1(*args):    
     colloquy = Colloquy()
     colloquy.hardware.u2d2.com_port.set("COM4")
     colloquy.hardware.u2d2.open()
@@ -22,25 +40,40 @@ if __name__ == "__main__":
     # colloquy.hardware.arduino.commands[0]._send()
     
     Server2(colloquy=colloquy)
-    # colloquy.hardware.u2d2.dxl_list[0].html.open(request=None)
+
+def as_text(memory):    
+    lines = as_lines(memory)
+    return "\n".join( "".join(tokens) for tokens in lines) 
+
+def as_lines(memory):
+    if not isinstance(memory, dict):
+        raise NotImplementedError(memory) 
+        
+    lines = []    
+    for key, value in memory.items():
+        tokens = []
+        
+        if not isinstance(value, dict):
+            lines.append([f"{key}()"])
+            continue
+            
+        if "opened" in value:
+            lines.append([f'{value["name"]}:'])
+            lines += as_lines(value)
+            continue
+            
+        if "value" in value:
+            lines.append([f'{value["name"]}: {value["value"]}'])
+            continue
+            
+        lines.append([f'{value["name"]}'])
     
-    # colloquy.hardware.u2d2.dxl_list[0].goal_position.write(400)
+    return add_indent(lines)
     
-    # colloquy.hardware.female1.html.open(request=None)
-    # colloquy.hardware.male1.neopixels.ring.on()
-    # colloquy.hardware.male1.search.blink.start(started_by=None)
-    # colloquy.hardware.female1.search.read_pattern.start(started_by=None)
-    # colloquy.hardware.female1.html.open(request=None)
-    # colloquy.hardware.bar.dxl.init_hardware()
-    # colloquy.hardware.bar.goal_position.write(1000)
-    # colloquy.hardware.male1.neopixels.html.open(request=None)
-    # colloquy.hardware.female1.light_sensor.html.open(request=None)
-    # colloquy.hardware.female1.light_sensor.read_pattern.html.open(request=None)
-    # colloquy.hardware.female1.torque_enabled.write(value=1)
+def add_indent(lines):
+    return  [["|", *tokens] for tokens in lines]
     
-    # colloquy.hardware.u2d2.html.open(request=None)
-    # colloquy.hardware.u2d2.dxl_list[0].html.open(request=None)
-    
-    # colloquy.exposition.html.open(request=None)
-    # colloquy.exposition.start_command()    
-    # colloquy.cli(*args)
+
+if __name__ == "__main__":
+    args = sys.argv[1:]
+    main(*args)
