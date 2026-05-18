@@ -19,8 +19,6 @@ def build_children(ui, focus, iframe_href, app_href, base_href):
         children = ui["children"]
         for nickname in sorted(children):
             print(f"{nickname=}")
-            # if nickname == "handlers":
-                # continue
             
             child = children[nickname]
             

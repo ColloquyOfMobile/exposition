@@ -11,14 +11,11 @@ from wsgiref.simple_server import make_server, WSGIRequestHandler
 from wsgi import make_wsgi
 WSGIRequestHandler.log_message = lambda *args, **kwargs: None
 
-shutdown_event = Event()
-restart_event = Event()
-
-def server(colloquy):
+def server(wsgi, shutdown_event, restart_event):
         
     port=8000
     hostname = "localhost" # socket.gethostname()
-    wsgi = make_wsgi(colloquy=colloquy, shutdown_event=shutdown_event, restart_event=restart_event)
+    
     with make_server("localhost", port, wsgi) as httpd:
         WSGIRequestHandler.log_message = lambda *args, **kwargs: None
         print(f"Accessible at http://{hostname}:{port}/")
@@ -38,6 +35,6 @@ def server(colloquy):
 
 def restart_process():
     python = sys.executable
-    args = ["main.py", "colloquy2"]
+    args = ["main.py", "app2"]
     # args.append()
     os.execl(python, python, *args)

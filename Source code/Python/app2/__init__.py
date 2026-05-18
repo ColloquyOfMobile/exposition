@@ -11,19 +11,15 @@ from .handlers import ui_handlers
 PARAMS = params.load(path=Path("local/params.json"))
 
 
-STATES = {    
-    "focus": tuple(),
-    "handlers": ui_handlers(),
-    "children": {
-        "hardware driver": hardware_drivers.STATES,
-        "tests": tests.STATES,
-        "exposition": exposition.STATES,        
-    },
-}
+def shutdown():
+    hardware_drivers.shutdown()
+    tests.shutdown()
+    
 
-def colloquy2(*args):
+def app2(*args):
 
     content = STATES
+    
     leftovers = args
     
     focus = list()
@@ -50,8 +46,6 @@ def call(*args, content):
     
     key, *leftovers = args
     handlers[key](*leftovers, content=content)
-
-
 
 
 def as_json(data):
@@ -112,10 +106,23 @@ def as_json2(data, _seen=None):
             filename = filename.relative_to(Path().resolve())
             return f"{filename.as_posix()}/{data.__name__}"
         
-        raise NotImplementedError(data)
+        return repr(data)
 
     finally:
         # Important :
         # permet de gérer les DAGs sans faux positifs
         _seen.remove(obj_id)
     
+STATES = {  
+    "func": app2,
+    "focus": tuple(),
+    "shutdown": shutdown,
+    "hardware drivers": hardware_drivers.STATES,
+    "tests": tests.STATES,
+    "handlers": ui_handlers(),
+    "children": {
+        "hardware drivers": hardware_drivers.STATES,
+        "tests": tests.STATES,
+        "exposition": exposition.STATES,        
+    },
+}

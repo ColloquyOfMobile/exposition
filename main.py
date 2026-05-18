@@ -7,14 +7,16 @@ source_code = cwd / "Source code" / "Python"
 sys.path.append(str(source_code.resolve()))
 
 from colloquy import Colloquy
-from colloquy2 import colloquy2 as _colloquy2
+import app2
 from colloquy.server2 import Server2
 from server import server
+from wsgi import make_wsgi
+from threading import Event
 
 def main(*args):
     memory = {
         "colloquy1": colloquy1,
-        "colloquy2": colloquy2,
+        "app2": handle_app2,
     }
     
     if args:    
@@ -25,8 +27,19 @@ def main(*args):
     print(as_text(memory))
         
 
-def colloquy2(*args):    
-    server(colloquy=_colloquy2)
+def handle_app2(*args):
+    shutdown_event = Event()
+    restart_event = Event()
+    wsgi = make_wsgi(
+        app=app2.STATES, 
+        shutdown_event=shutdown_event, 
+        restart_event=restart_event,
+    )
+    server(
+        wsgi=wsgi,
+        shutdown_event=shutdown_event, 
+        restart_event=restart_event,
+    )
         
 
 def colloquy1(*args):    

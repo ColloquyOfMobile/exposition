@@ -80,9 +80,6 @@ def body(ui, app_href, iframe_href, base_href):
                 iframe_href=iframe_href,
             )
         )
-        
-        
-            
 
     html = doc.getvalue()
     html = indent(html)    
