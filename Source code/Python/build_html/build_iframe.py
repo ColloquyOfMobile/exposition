@@ -4,7 +4,7 @@ from build_css import build_css
 from .build_children import build_children
     
 
-def build_iframe2(ui, app_href, iframe_href):
+def build_iframe(ui, app_href, iframe_href):
         
     css_style = {
         "display": "flex",

@@ -14,7 +14,6 @@ class Test1(BaseThread):
         self._html = HTML(owner=self)
         self[self.html.name] = self.html.handle_request
 
-
     @property
     def name(self):
         return "test1"

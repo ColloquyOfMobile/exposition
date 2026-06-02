@@ -4,8 +4,10 @@ from colloquy.base import Base
 from pathlib import Path
 import traceback
 
+
 from .html import HTML
 from .test1 import Test1
+from .test_drive_light_values import TestDriveLightValues
 
 class Tests(Base):
 
@@ -15,12 +17,17 @@ class Tests(Base):
 
         self._html = HTML(owner=self)
         self._test1 = Test1(owner=self)
+        self.test_drive_light_values = TestDriveLightValues(owner=self)
         self._hardware = self.owner.hardware
 
         self[self.html.name] = self.html.handle_request
         self.add(self.test1)
 
-        self._threaded_tests = {self.test1}
+        self._threaded_tests = {
+            self.test1,
+            self.test_drive_light_values,
+            }
+        
 
     def __call__(self, request):
         request = Path(request)
@@ -62,3 +69,9 @@ class Tests(Base):
     def stop(self):
         for test in self._threaded_tests:
             test.stop()
+    
+    def snapshot(self, path):
+        states = super().snapshot(path=path)
+        _path = states["path"]
+        states[self.test_drive_light_values.name] = self.test_drive_light_values.snapshot(path=_path)
+        return states 

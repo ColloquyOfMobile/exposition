@@ -151,7 +151,8 @@ class BaseThread(Base):
             self._run_unsafe()
         except Exception as error:  
             print(f"error in {self=}")
-            self.log("".join(traceback.format_exception(error)))
+            error_text = "".join(traceback.format_exception(error))
+            self.log(error_text)
             self.thread_errors.append(error)
         finally:
             self.setdown()
@@ -182,12 +183,15 @@ class BaseThread(Base):
         return False
     
     def snapshot(self, path):
-        _path = path + (self.name,)
         states = super().snapshot(path=path)
+        _path = states["path"]
         if self.is_started:
             states["stop"] = self.stop
         else:
             states["start"] = self.start
+        
+        if self.thread_errors:
+            states[self.thread_errors.name] = self.thread_errors.snapshot(path=_path)
         return states
         
 

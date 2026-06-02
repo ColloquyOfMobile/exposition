@@ -26,7 +26,7 @@ class Drive(BaseThread):
 
     def __init__(self, owner, name):
         assert name in ("O", "P")
-        self._name = name
+        self._name = f"{owner.owner.name}'s {name} drive" # name
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
         self._lock = Lock()

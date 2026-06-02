@@ -3,15 +3,10 @@ from pathlib import Path
 from build_css import build_css
 from .build_children import build_children
 from .build_title import build_title
-from .build_iframe import build_iframe2
+from .build_iframe import build_iframe
 from .show_all import show_all
 
-NOTES = """Starting Values (set manually)
-- Male A: 0 = 600; P = 400
-- Male B: 0 = 400; P = 600
-- Female C: 0 = 300; P = 1200
-- Female D: 0 = 600; P = 600
-- Female E: 0 = 1200; P = 300"""
+NOTES = """Implement update_neopixels"""
     
 
 def build_html(ui, app_href, iframe_href, base_href):    
@@ -87,6 +82,9 @@ def body(ui, app_href, iframe_href, base_href):
     
 
 def notes():
+    if not NOTES.strip():
+        return ""
+        
     doc, tag, text = Doc().tagtext()
         
     with tag("div", name="text"):

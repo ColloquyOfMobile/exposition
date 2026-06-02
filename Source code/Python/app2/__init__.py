@@ -7,13 +7,15 @@ from . import exposition
 from . import tests
 from . import hardware_drivers
 from .handlers import ui_handlers
+from colloquy.hardware.arduino import Arduino
 
 PARAMS = params.load(path=Path("local/params.json"))
 
+arduino = Arduino(owner=None)
 
 def shutdown():
-    hardware_drivers.shutdown()
-    tests.shutdown()
+    hardware_drivers["shutdown"]()
+    tests["stop and wait"]()
     
 
 def app2(*args):
@@ -48,31 +50,6 @@ def call(*args, content):
     handlers[key](*leftovers, content=content)
 
 
-def as_json(data):
-    # print(data)
-    if data is None:
-        return data
-        
-    if isinstance(data, (str, int)):
-        return data
-    
-    if isinstance(data, (list, tuple)):
-        return [as_json(e) for e in data]
-    
-    if isinstance(data, dict):
-        return {
-            k: as_json(v)
-            for k, v
-            in data.items()
-            # if k != "handlers"
-        } 
-    
-    if isinstance(data, FunctionType):
-        filename = Path(getsourcefile(data))
-        filename = filename.relative_to(Path().resolve())
-        return f"{filename.as_posix()}/{data.__name__}"
-        
-    raise NotImplementedError
 
 def as_json2(data, _seen=None):
     if _seen is None:
@@ -109,20 +86,24 @@ def as_json2(data, _seen=None):
         return repr(data)
 
     finally:
-        # Important :
-        # permet de gérer les DAGs sans faux positifs
         _seen.remove(obj_id)
+
+hardware_drivers = hardware_drivers.build(arduino=arduino)
+drives = tuple(
+    female["drives"] for female in hardware_drivers["females"]
+)
+tests = tests.build(drives=drives)
     
 STATES = {  
     "func": app2,
     "focus": tuple(),
     "shutdown": shutdown,
-    "hardware drivers": hardware_drivers.STATES,
-    "tests": tests.STATES,
+    "hardware drivers": hardware_drivers,
+    "tests": tests,
     "handlers": ui_handlers(),
     "children": {
-        "hardware drivers": hardware_drivers.STATES,
-        "tests": tests.STATES,
+        "hardware drivers": hardware_drivers,
+        "tests": tests,
         "exposition": exposition.STATES,        
     },
 }

@@ -89,13 +89,13 @@ def build_closed_title(ui, focus, app_href, nickname, base_href):
         
         doc.asis(hide(nickname, app_focus))
         
-        doc.asis(
-            show_all(
-                focus=focus, 
-                app_href=app_href, 
-                nickname=nickname,                
-                )
-        )
+        # doc.asis(
+            # show_all(
+                # focus=focus, 
+                # app_href=app_href, 
+                # nickname=nickname,                
+                # )
+        # )
 
     html = doc.getvalue()
     html = indent(html)    

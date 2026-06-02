@@ -63,4 +63,11 @@ class ThreadErrors(Base):
         thread_error = ThreadError(owner=self, name=f"error{len(self._errors)}", origin=self.owner, error=error)
         self[thread_error.name] = thread_error
         self._errors.append(thread_error)
+    
+    def snapshot(self, path):
+        states = super().snapshot(path=path)
+        _path = states["path"]
+        for error in self._errors:
+            states[error.name] = error.snapshot(path=_path)
+        return states 
             

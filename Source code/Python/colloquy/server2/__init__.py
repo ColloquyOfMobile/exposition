@@ -60,7 +60,8 @@ class Server2(Base):
             raise
 
     def restart_process(self):
+        # raise NotImplementedError
         python = sys.executable
-        args = ["main.py", "server/restarted"]
+        args = ["main.py", "colloquy1"]
         # args.append()
         os.execl(python, python, *args)

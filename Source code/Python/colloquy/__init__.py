@@ -34,9 +34,8 @@ class Colloquy(BaseThread):
 
         self._server = Server(owner=self)
         self._cli = CLI(owner=self)
-
-        # self["server"] = self._server
-        # self["server2"] = self._server2
+        
+        
         self["hardware"] = self._hardware
 
         self._events = Events(shutdown=BaseThread._shutdown)
@@ -120,11 +119,6 @@ class Colloquy(BaseThread):
     def run(self, ):
         return self.server()
 
-    # def shutdown(self):
-        # self.tests.stop()
-        # self.hardware.stop()
-        # self.exposition.stop()
-
     def _call_root(self):
         print("Available command:")
         for name in self:
@@ -137,6 +131,7 @@ class Colloquy(BaseThread):
             "name": self.name,
             "hardware": self._hardware.snapshot(path=path),
             "exposition": self._exposition.snapshot(path=path),
+            "tests": self._tests.snapshot(path=path),
         }
         return states 
     

@@ -86,6 +86,9 @@ def closed_title(child, focus, app_href, nickname, base_href):
         elif "value" in child:
             doc.asis(as_value(nickname, child))
             
+        elif "text" in child:
+            doc.asis(as_text(nickname, child))
+            
         else:
             raise NotImplementedError(child)
 
@@ -98,6 +101,17 @@ def as_value(nickname, child):
     value = child["value"]
     with tag("div"):
         text(f"{nickname}: {value}")    
+    html = doc.getvalue()
+    return indent(html) 
+
+def as_text(nickname, child):
+    doc, tag, text = Doc().tagtext()
+    value = child["text"]
+    with tag("div"):
+        with tag("strong"):
+            text(f"{nickname}:") 
+    # with tag("pre"):
+        # text(value)    
     html = doc.getvalue()
     return indent(html) 
     

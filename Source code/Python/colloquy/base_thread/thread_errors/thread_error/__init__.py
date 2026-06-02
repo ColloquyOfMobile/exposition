@@ -52,3 +52,9 @@ class ThreadError(Base):
     @property
     def html(self):
         return self._html
+    
+    def snapshot(self, path):
+        states = super().snapshot(path=path)
+        _path = states["path"]
+        
+        return states 

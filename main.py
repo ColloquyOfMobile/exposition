@@ -23,6 +23,9 @@ def main(*args):
         key, *leftovers = args
         if key in memory:
             return memory[key](*leftovers)
+    else:
+        # default
+        colloquy1()
     
     print(as_text(memory))
         

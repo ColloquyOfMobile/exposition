@@ -18,7 +18,7 @@ def build_children(ui, focus, iframe_href, app_href, base_href):
     
         children = ui["children"]
         for nickname in sorted(children):
-            print(f"{nickname=}")
+            # print(f"{nickname=}")
             
             child = children[nickname]
             
@@ -41,6 +41,10 @@ def build_children(ui, focus, iframe_href, app_href, base_href):
             if "value" in child:
                 doc.asis(as_value(nickname=nickname, value=child["value"]))
                 continue
+                
+            if "text" in child:
+                doc.asis(as_text(nickname=nickname, value=child["text"]))
+                continue
             
             if "func" in child:
                 doc.asis(
@@ -53,6 +57,17 @@ def build_children(ui, focus, iframe_href, app_href, base_href):
             
             raise NotImplementedError(child)
     
+    html = doc.getvalue()
+    return indent(html) 
+
+def as_text(nickname, value):
+    doc, tag, text = Doc().tagtext()
+    # value = child["text"]
+    with tag("div"):
+        with tag("div"):
+            text(f"{nickname}:") 
+        with tag("div", style="margin-left: 0.5ch;white-space: pre-wrap;"):
+            text(value)    
     html = doc.getvalue()
     return indent(html) 
 
