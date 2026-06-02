@@ -13,6 +13,9 @@ class TestDriveLightValues(BaseThread):
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
         self[self.html.name] = self.html.handle_request
+        
+        for drive in self.hardware.drives:
+            self[drive.name] = drive
 
 
     @property
@@ -42,8 +45,7 @@ class TestDriveLightValues(BaseThread):
     def snapshot(self, path):
         states = super().snapshot(path=path)
         _path = states["path"]
-        if self.is_started:
-            
         for drive in self.hardware.drives:
-            states[name] = drive.snapshot(path=_path)
+            name = f"{drive.body.name}'s {drive.name} drive"
+            states[drive.name] = drive.snapshot(path=_path)
         return states 
