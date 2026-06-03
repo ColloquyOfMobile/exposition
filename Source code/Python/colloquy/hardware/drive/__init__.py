@@ -31,7 +31,7 @@ class Drive(BaseThread):
         self._html = HTML(owner=self)
         self._lock = Lock()
         
-        self._value = self.params["drive start values"][self.body.name][name]
+        self._value = self.body.params["drive start values"][self.body.name][name]
 
         self._step = 1
         self._body = owner.owner
@@ -66,7 +66,7 @@ class Drive(BaseThread):
 
     @property
     def body(self):
-        return self._body
+        return self.owner.owner
 
     @property
     def black(self):
