@@ -156,6 +156,8 @@ class BaseThread(Base):
             self.thread_errors.append(error)
         finally:
             self.setdown()
+            if started_by is not None:
+                started_by.children.discard(self)
 
     def _run_unsafe(self):
         self.setup()
