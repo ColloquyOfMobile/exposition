@@ -31,7 +31,7 @@ class Drive(BaseThread):
         self._html = HTML(owner=self)
         self._lock = Lock()
         
-        self._value = 0
+        self._value = self.params["drive start values"][self.body.name][name]
 
         self._step = 1
         self._body = owner.owner

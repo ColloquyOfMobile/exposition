@@ -12,7 +12,7 @@ from .test import Test
 
 class Female(BaseThread):
 
-    def __init__(self, owner, id_number):
+    def __init__(self, owner, id_number, ):
         self._name = f"female{id_number}"
         self._id_number = id_number
         super().__init__(owner=owner)
@@ -157,16 +157,13 @@ class Female(BaseThread):
             self.turn_to_max_position()
             return
 
-    def loop(self):        
-        
+    def loop(self): 
         if self.search.is_started:
             return
             
         if not self.is_satisfied():
             self.search.start(started_by=self)
             return
-            
-        
         pass
 
     def setup(self):
