@@ -143,26 +143,30 @@ class Drives(BaseThread):
     def set_o_to_0_p_to_100(self): 
         self._o_drive.value = 0
         self._p_drive.value = 100
+        self.update()
         
     def set_p_to_0_o_to_100(self):         
         self._o_drive.value = 100
         self._p_drive.value = 0
+        self.update()
         
     def set_o_and_p_to_30(self):     
         self._o_drive.value = 30
         self._p_drive.value = 30
+        self.update()
         
     def set_o_and_p_to_100(self):     
         self._o_drive.value = 100
         self._p_drive.value = 100
+        self.update()
     
     def snapshot(self, path):
         states = super().snapshot(path)
         path = states["path"]
         states["set O=0 and P=100"] = self.set_o_to_0_p_to_100
         states["set O=100 and P=0"] = self.set_p_to_0_o_to_100
-        states["set O=30 and P=30"] = self.set_p_to_0_o_to_100
-        states["set O=30 and P=30"] = self.set_p_to_0_o_to_100
+        states["set O=30 and P=30"] = self.set_o_and_p_to_30
+        states["set O=100 and P=100"] = self.set_o_and_p_to_100
         states[self.o_drive.name] = self.o_drive.snapshot(path)
         states[self.p_drive.name] = self.p_drive.snapshot(path)
         # states = {
