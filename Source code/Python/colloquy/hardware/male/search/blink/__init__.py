@@ -5,6 +5,7 @@ from .html import HTML
 class Blink(BaseThread):
 
     def __init__(self, owner):
+        self._name = f"blink {owner.male.name}"
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
         self[self.html.name] = self.html.handle_request
@@ -21,7 +22,7 @@ class Blink(BaseThread):
 
     @property
     def name(self):
-        return "blink"
+        return self._name
 
     @property
     def white(self):

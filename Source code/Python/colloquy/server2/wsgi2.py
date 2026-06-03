@@ -81,7 +81,7 @@ class WSGI2(Base):
         to_render = self.get_states(*args)
         self._base_path= Path(*to_render['path'])
         
-        pprint4(obj=to_render)
+        # pprint4(obj=to_render)
         content_type = 'text/html'
         status = '200 OK'
         headers = [("Content-Type", content_type)]            
