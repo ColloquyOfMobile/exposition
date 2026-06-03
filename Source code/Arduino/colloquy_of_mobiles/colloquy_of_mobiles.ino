@@ -237,10 +237,10 @@ Adafruit_NeoPixel male2Strip(
   NEO_GRBW + NEO_KHZ800);
 
 PixelGroup upRing2(&male2UpRingStrip, 0, 24);
-PixelGroup ring2(&male1Strip, 0, 24);
-PixelGroupBeam beam2(&male1Strip, 0, 24);
-PixelGroup pDriveLevel2(&male1Strip, 24, 8);
-PixelGroup oDriveLevel2(&male1Strip, 32, 8);
+PixelGroup ring2(&male2Strip, 0, 24);
+PixelGroupBeam beam2(&male2Strip, 0, 24);
+PixelGroup pDriveLevel2(&male2Strip, 24, 8);
+PixelGroup oDriveLevel2(&male2Strip, 32, 8);
 
 
 LightSensor lightSensorA2(A12);
