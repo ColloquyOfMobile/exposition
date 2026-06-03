@@ -15,10 +15,15 @@ class TestMalePatterns(BaseThread):
         self[self.html.name] = self.html.handle_request
         
         self._blink_handlers = []
+        self._drives = []
         for male in self.hardware.males:
             blink_handler = male.search.blink
             self[blink_handler.name] = blink_handler
-            self._blink_handlers.append(blink_handler)        
+            self._blink_handlers.append(blink_handler) 
+            
+            drives = male.drives                
+            self[drives.name] = drives
+            self._drives.append(drives)        
         
         self._start_time = None
         self._timelap = None
@@ -50,6 +55,9 @@ class TestMalePatterns(BaseThread):
     def snapshot(self, path):
         states = super().snapshot(path=path)
         _path = states["path"]
+        for drives in self._drives:
+            states[drives.name] = drives.snapshot(path=_path)
+            
         for blink_handler in self._blink_handlers:
             states[blink_handler.name] = blink_handler.snapshot(path=_path)
         return states 

@@ -28,6 +28,7 @@ class Drives(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
+        self._name = f"{owner.name}'s drives"
         
         self._o_drive = Drive(owner=self, name="O")
         self._p_drive = Drive(owner=self, name="P")
@@ -90,7 +91,7 @@ class Drives(BaseThread):
 
     @property
     def name(self):
-        return "drives"
+        return self._name
 
     @property
     def puce(self):
@@ -138,13 +139,37 @@ class Drives(BaseThread):
         male.neopixels.up_ring.brightness.value = max(o_value, p_value)
         male.neopixels.o_drive_level.brightness.value = o_value
         male.neopixels.p_drive_level.brightness.value = p_value
+        
+    def set_o_to_0_p_to_100(self): 
+        self._o_drive.value = 0
+        self._p_drive.value = 100
+        
+    def set_p_to_0_o_to_100(self):         
+        self._o_drive.value = 100
+        self._p_drive.value = 0
+        
+    def set_o_and_p_to_30(self):     
+        self._o_drive.value = 30
+        self._p_drive.value = 30
+        
+    def set_o_and_p_to_100(self):     
+        self._o_drive.value = 100
+        self._p_drive.value = 100
     
     def snapshot(self, path):
-        states = {
-            "path": path + (self.name, ),
-            "name": self.name,
-            "close": self.close,
-            "open": self.open,
-            "opened": self._is_opened,
-        }
+        states = super().snapshot(path)
+        path = states["path"]
+        states["set O=0 and P=100"] = self.set_o_to_0_p_to_100
+        states["set O=100 and P=0"] = self.set_p_to_0_o_to_100
+        states["set O=30 and P=30"] = self.set_p_to_0_o_to_100
+        states["set O=30 and P=30"] = self.set_p_to_0_o_to_100
+        states[self.o_drive.name] = self.o_drive.snapshot(path)
+        states[self.p_drive.name] = self.p_drive.snapshot(path)
+        # states = {
+            # "path": path + (self.name, ),
+            # "name": self.name,
+            # "close": self.close,
+            # "open": self.open,
+            # "opened": self._is_opened,
+        # }
         return states
