@@ -48,7 +48,9 @@ class LightSensor(BaseThread):
         return Path(f"f{self.owner.id_number}/light sensor")
 
     def read_as_bool(self):
-        return self.read() > self.threashold
+        value = self.read() > self.threashold
+        self.log(value)
+        return value
 
     def read(self):
         # if self.is_emulated:
@@ -56,4 +58,6 @@ class LightSensor(BaseThread):
         
         with self.arduino:
             response = self.arduino.send(self.arduino_path)
+        
+        # rint(response)
         return int(response)

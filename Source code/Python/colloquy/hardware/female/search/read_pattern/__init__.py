@@ -71,7 +71,7 @@ class ReadPattern(BaseThread):
             if match:
                 male, drive = match
                 if (now - self._last_detection_time) > self.detection_cooldown:
-                    print(f"Pattern detected: {male}  drive={drive}")
+                    # print(f"Pattern detected: {male}  drive={drive}")
                     self._last_detection_time = now
 
     def setup(self):
@@ -131,7 +131,7 @@ class ReadPattern(BaseThread):
                         # early accept if within tolerance
                         if mismatches <= self.max_mismatches:
                             # if self.debug:
-                            print(f"Good match: {male} drive={drive} rot={rot} offset={offset} mismatches={mismatches}")
+                            # print(f"Good match: {male} drive={drive} rot={rot} offset={offset} mismatches={mismatches}")
                             return (male, drive)
 
         return None
@@ -214,7 +214,7 @@ class DetectPattern():
             if match:
                 male, drive = match
                 if (now - self._last_detection_time) > self.detection_cooldown:
-                    print(f"Pattern detected: {male}  drive={drive}")
+                    # print(f"Pattern detected: {male}  drive={drive}")
                     self._last_detection_time = now
 
     def _try_match(self):
@@ -267,7 +267,8 @@ class DetectPattern():
                         # early accept if within tolerance
                         if mismatches <= self.max_mismatches:
                             if self.debug:
-                                print(f"Good match: {male} drive={drive} rot={rot} offset={offset} mismatches={mismatches}")
+                                pass
+                                # print(f"Good match: {male} drive={drive} rot={rot} offset={offset} mismatches={mismatches}")
                             return (male, drive)
 
         return None
