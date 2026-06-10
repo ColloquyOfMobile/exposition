@@ -1,17 +1,14 @@
 from colloquy.base_thread import BaseThread
 from time import time, sleep
 from .html import HTML
-from .read_pattern import ReadPattern
 
-class Search(BaseThread):
+class TurnBackAndForth(BaseThread):
 
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
-        self._read_pattern = None
 
         self[self.html.name] = self.html.handle_request
-        self[self.read_pattern.name] = self.read_pattern
 
     @property
     def html(self):
@@ -19,22 +16,13 @@ class Search(BaseThread):
 
     @property
     def name(self):
-        return "search"
-
-    @property
-    def read_pattern(self):
-        if self._read_pattern is None:
-            self._read_pattern = ReadPattern(owner=self)
-        return self._read_pattern
+        return "turn back and forth"
 
     def loop(self):
-        raise NotImplementedError("use the turn_back_and_forth thread")
         if not self.owner.is_moving:
             self.owner.toggle_position()
 
     def setup(self):
-        raise NotImplementedError("use the turn_back_and_forth thread")
-        self.owner.read_pattern.start(started_by=self)
         pass
 
     def setdown(self):
@@ -43,7 +31,4 @@ class Search(BaseThread):
     def snapshot(self, path):
         states = super().snapshot(path=path)
         _path = states["path"]
-        states.update({
-            self.read_pattern.name: self.read_pattern.snapshot(_path),
-        })
         return states

@@ -16,7 +16,7 @@ class BaseThread(Base):
     
     _shutdown = Event()
 
-    def __init__(self, owner):
+    def __init__(self, owner, run_with=None):
         super().__init__(owner=owner)
         self._colloquy = None
         self._hardware = None
@@ -25,6 +25,7 @@ class BaseThread(Base):
         self._thread_errors = ThreadErrors(owner=self)
 
         self._children = set()
+        self._run_with = run_with
 
         self._thread = None
         self._stop_event = Event()

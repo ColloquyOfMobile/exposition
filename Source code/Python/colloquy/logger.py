@@ -44,9 +44,9 @@ class Logger:
         if file_path not in self._line_counts:
             lines = file_path.read_text().splitlines()
             self._line_counts[file_path] = len(lines)
-            text = "\n".join(lines) + "\n"
-            with self._lock:
-                file_path.write_text(text)
+            # text = "\n".join(lines) + "\n"
+            # with self._lock:
+                # file_path.write_text(text)
 
         self._line_counts[file_path] += len(msg.splitlines())
 

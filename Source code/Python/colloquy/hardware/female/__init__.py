@@ -6,6 +6,7 @@ from .light_sensor import LightSensor
 from ..dxl_origin import DXLOrigin
 from .dxl_position import DXLPosition
 from .search import Search
+from .turn_back_and_forth import TurnBackAndForth
 from .html import HTML
 from .test import Test
 
@@ -29,6 +30,7 @@ class Female(BaseThread):
 
         self._drives = Drives(owner=self)
         self._search = Search(owner=self)
+        self.turn_back_and_forth = TurnBackAndForth(owner=self)
 
         self._neopixels = Neopixels(owner=self)
         self._test = Test(owner=self)
