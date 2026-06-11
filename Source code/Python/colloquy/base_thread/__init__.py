@@ -88,6 +88,7 @@ class BaseThread(Base):
         self.join()
 
     def start(self, started_by=None):
+        self.children.clear()
         if started_by is not None:
             if self in started_by.children:
                 raise NotImplementedError(f"Should be deleted when stop.")
@@ -118,13 +119,15 @@ class BaseThread(Base):
             return
         self.log(f"Stopping {self}.")
         self._stop_event.set()
+        for child in self.children:
+            child.stop()
         # self._thread.join()
 
     def join(self):
         if self._thread is not None:
             self._thread.join()
-        for thread in self.children:
-            thread.join()
+        for child in self.children:
+            child.join()
 
     def join_all(self):
         for thread in self.all_threads:
@@ -157,8 +160,9 @@ class BaseThread(Base):
             self.thread_errors.append(error)
         finally:
             self.setdown()
-            if self._started_by is not None:
-                self._started_by.children.discard(self)
+            self.stop()
+            # if self._started_by is not None:
+                # self._started_by.children.discard(self)
 
     def _run_unsafe(self):
         self.setup()

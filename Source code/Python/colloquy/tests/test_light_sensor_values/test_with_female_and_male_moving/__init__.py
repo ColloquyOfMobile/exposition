@@ -17,7 +17,7 @@ class TestWithFemaleAndMaleMoving(BaseThread):
         
         self._start_time = None
         self._timelap = None
-        self._duration = 10*60 # test running 'self._duration' seconds
+        self._duration = 1*60 # test running 'self._duration' seconds
         
         
         self._dir_path = Path("local") / self.name
@@ -58,7 +58,7 @@ class TestWithFemaleAndMaleMoving(BaseThread):
 
     def loop(self):   
         timestamp = time() - self._start_time
-        value = self.hardware.female1.light_sensor.read_as_bool()        
+        value = self.hardware.female1.light_sensor.read()  
         self._file.write(f"{timestamp}, {value}" + "\n")
         if timestamp > self._duration:
             self.stop()
