@@ -46,6 +46,8 @@ class TestWithOnlyFemaleMoving(BaseThread):
     def setup(self):            
         self._file.write("seconds, value" + "\n")
         self._start_time = time()
+        self.hardware.male1.turn_to_origin()
+        self.hardware.male1.dxl.wait_for_servo()
         self.hardware.female1.turn_back_and_forth.start(started_by=self)
         self.hardware.male1.neopixels.ring.on()
 
