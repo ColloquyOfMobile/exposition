@@ -17,12 +17,12 @@ class HTML(BaseHTML):
         return self._details
 
     @property
-    def name(self):
-        return "html"
+    def is_open(self):
+        return self._is_open
 
     @property
-    def hardware(self):
-        return self.owner.hardware
+    def name(self):
+        return "html"
 
     @property
     def workspace(self):
@@ -46,10 +46,9 @@ class HTML(BaseHTML):
         style="margin-bottom: 0.5rem; display: flex; align-items: center;"
         if self.is_open:
             style += " justify-content: center;"
-
+            
         with tag("div", style=style):
             if not self.is_open:
-                # with tag("div"):
                 doc.asis(self.details.arrow)
 
             with tag("div", style="font-size: 1.2rem; margin-right: 1ch;"):
@@ -69,10 +68,8 @@ class HTML(BaseHTML):
 
         return doc.getvalue()
 
-
     def _call_unsafe(self):
         doc, tag, text = CustomDoc().tagtext()
-
         doc.asis(self._html_title())
         doc.asis(self.details())
 

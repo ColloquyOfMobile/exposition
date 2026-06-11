@@ -10,7 +10,7 @@ class Details(BaseHTML):
         super().__init__(owner=owner)
     
     @property
-    def tests(self):
+    def test(self):
         return self.owner.owner
     
     @property
@@ -49,19 +49,18 @@ class Details(BaseHTML):
     def _call_unsafe(self):
         if not self.is_open:
             return ""
-            
+
         doc, tag, text = CustomDoc().tagtext()
-        with tag("div", style="display: flex; flex-direction: column;"):
+        with tag("div"):
+            if self.test.is_started:
+                label = "stop"
+            else:
+                label = "start"
 
-            if self.hardware.arduino.html is not self.tests.opened:
-                doc.asis(self.hardware.arduino.html())
+            href=f"/{self.test.path.as_posix()}/{label}"
 
-            if self.tests.test1.html is not self.tests.opened:
-                doc.asis(self.tests.test1.html())
-            
-            
-            with tag("div", style="display: flex; flex-direction: column;"):
-                doc.asis(self.hardware.test.html())
+            with tag("a", href=href):
+                text(f"{label}")
 
         return doc.getvalue()
 

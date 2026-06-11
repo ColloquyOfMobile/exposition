@@ -6,6 +6,7 @@ from colloquy.base_thread import BaseThread
 from ..dxl_origin import DXLOrigin
 from .dxl_position import DXLPosition
 from .search import Search
+from ..turn_back_and_forth import TurnBackAndForth
 from .html import HTML
 from collections import deque
 
@@ -33,6 +34,7 @@ class Male(BaseThread):
 
         self._drives = Drives(owner=self)
         self._search = Search(owner=self)
+        self.turn_back_and_forth = TurnBackAndForth(owner=self)
 
         self._neopixels = Neopixels(owner=self)
 

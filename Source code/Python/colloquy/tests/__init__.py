@@ -15,13 +15,12 @@ class Tests(Base):
 
     def __init__(self, owner):
         super().__init__(owner)
-        # self.opened = None
+        self._hardware = self.owner.hardware
 
         self._html = HTML(owner=self)
         self.test_drive_light_values = TestDriveLightValues(owner=self)
         self.test_male_patterns = TestMalePatterns(owner=self)
         self.test_light_sensor_values = TestLightSensorValues(owner=self)
-        self._hardware = self.owner.hardware
 
         self[self.html.name] = self.html.handle_request
         # self.add(self.test1)

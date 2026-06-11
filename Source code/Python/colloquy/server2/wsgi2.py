@@ -97,7 +97,7 @@ class WSGI2(Base):
         doc.asis("<!DOCTYPE html>")
         with tag("html", style=export_style(css_style)):
             with tag("body", style="flex:1; display: flex; flex-direction: column; overflow: auto;"):
-                with tag("div", style="display: flex; gap: 1ch;"):
+                with tag("div", name="server commands", style="display: flex; gap: 1ch;"):
                     with tag("div", style=""):
                         with tag("a", href="/shutdown"):
                             text("shutdown")
@@ -110,17 +110,9 @@ class WSGI2(Base):
                         path = self._root / self._base_path
                         with tag("a", href=f"/{path.as_posix()}"):
                             text("refresh")
-                            
-                with tag("div", style="display: flex;"):
-                    with tag("div", style="f"):
-                        with tag("a", href=f"/"):
-                            text("/home")
-                    href = self._root
-                    for name in to_render["path"]:
-                        href = href / name
-                        with tag("div", style="f"):
-                            with tag("a", href=f"/{href.as_posix()}"):
-                                text("/" + name)
+                
+                doc.asis(self._html_navigation(to_render=to_render, ))
+                
                                 
                 with tag("div", name="thread count", style="display: flex;"):
                         text(f"thread count: {len(self.all_threads)}")
@@ -133,6 +125,27 @@ class WSGI2(Base):
         content = html.encode()
         
         return status, headers, content
+    
+    def _html_navigation(self, to_render): 
+        doc, tag, text = Doc().tagtext() 
+        css_style = {
+            "display": "flex",
+            "overflow-x": "auto",
+            "text-wrap": "nowrap",
+        }
+        with tag("div", name="navigation", style=export_style(css_style)):
+            with tag("div"):
+                with tag("a", href=f"/"):
+                    text("/home")
+            href = self._root
+            for name in to_render["path"]:
+                href = href / name
+                with tag("div"):
+                    with tag("a", href=f"/{href.as_posix()}"):
+                        text("/" + name)
+
+        html = doc.getvalue()
+        return indent(html)
     
     def _html_keyboard(self, obj):        
         doc, tag, text = Doc().tagtext() 

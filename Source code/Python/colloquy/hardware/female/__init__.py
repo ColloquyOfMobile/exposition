@@ -6,7 +6,7 @@ from .light_sensor import LightSensor
 from ..dxl_origin import DXLOrigin
 from .dxl_position import DXLPosition
 from .search import Search
-from .turn_back_and_forth import TurnBackAndForth
+from ..turn_back_and_forth import TurnBackAndForth
 from .html import HTML
 from .test import Test
 
