@@ -17,6 +17,7 @@ class TestLightSensorValues(BaseThread):
         
         self._start_time = None
         self._timelap = None
+        self._duration = 10*60 # test running 'self._duration' seconds
         
         
         self._dir_path = Path("local") / self.name
@@ -29,7 +30,8 @@ class TestLightSensorValues(BaseThread):
 
     @property
     def name(self):
-        return "test light sensor values"
+        duration = self._timelap_to_string(self._duration)
+        return f"test light sensor values for {duration}"
 
     @property
     def html(self):
@@ -56,6 +58,8 @@ class TestLightSensorValues(BaseThread):
         timestamp = time() - self._start_time
         value = self.hardware.female1.light_sensor.read_as_bool()        
         self._file.write(f"{timestamp}, {value}" + "\n")
+        if timestamp > self._duration:
+            self.stop()
     
     def snapshot(self, path):
         states = super().snapshot(path=path)
@@ -74,7 +78,10 @@ class TestLightSensorValues(BaseThread):
         if seconds_elapsed > 60:
             minutes = seconds_elapsed // 60
             seconds = seconds_elapsed % 60
-            seconds_elapsed_as_string = f"{minutes}min {seconds}s"
+            tokens = [f"{minutes}min"]
+            if seconds != 0:
+                tokens.append(f"{seconds}s")
+            seconds_elapsed_as_string = " ".join(tokens)
         else:
             seconds_elapsed_as_string = f"{seconds_elapsed}s"
             

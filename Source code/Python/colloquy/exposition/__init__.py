@@ -15,8 +15,6 @@ class Exposition(BaseThread):
         self._hardware = self.owner.hardware
 
         self._thread = None
-        # self._stop_event = Event()
-        # self._started_at = None
 
         self[self.html.name] = self.html.handle_request
 
@@ -77,12 +75,3 @@ class Exposition(BaseThread):
             "close": self.close,
         }
         return states 
-        
-    # def get_states(self, *args):
-        # states = {
-            # "path": ("exposition",),
-            # "name": self.name,
-        # }
-        # if args:
-            # raise NotImplementedError(self)
-        # return states
