@@ -134,12 +134,12 @@ class Male(BaseThread):
         return self.drives.o_drive.is_satisfied or self.drives.p_drive.is_satisfied
 
     def turn_to_max_position(self):
-        value = self._dxl_origin.get() + self._motion_range / 2
+        value = self._dxl_origin.get() + self._motion_range // 2
         self.dxl.goal_position.write(value)
         self._position_memory = "max"
 
     def turn_to_min_position(self):
-        value = self._dxl_origin.get() - self._motion_range / 2
+        value = self._dxl_origin.get() - self._motion_range // 2
         self.dxl.goal_position.write(value)
         self._position_memory = "min"
 
