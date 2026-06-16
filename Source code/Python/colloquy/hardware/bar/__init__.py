@@ -53,7 +53,7 @@ class Bar(BaseThread):
     @property
     def male1_in_front_of_f1(self):
         origin = self.params["bar"]["dxl origin"]
-        return self.params["bar"]["interaction_origins"]["male1"]["female1"]
+        return self.params["bar"]["interaction_origins"]["male1"]["female1"] + origin
 
     @property
     def dxl(self):

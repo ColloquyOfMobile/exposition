@@ -133,7 +133,7 @@ class DXL(Base):
         self.operating_mode.write(value=4)
 
         # set velocity and acceleration profile.
-        self.profile_velocity.write(value=40)
+        self.profile_velocity.write(value=20)
         self.profile_acceleration.write(value=1)
 
         # Enable torque.

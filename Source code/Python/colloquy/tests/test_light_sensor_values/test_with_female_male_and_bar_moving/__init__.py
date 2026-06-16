@@ -49,6 +49,9 @@ class TestWithFemaleMaleAndBarMoving(BaseThread):
         super().run(run_with=run_with)
         
     def setup(self):            
+        assert self.hardware.bar.dxl.profile_velocity.read() == 20, self.hardware.bar.dxl.profile_velocity.read()
+        assert self.hardware.male1.dxl.profile_velocity.read() == 20, self.hardware.male1.dxl.profile_velocity.read()
+        assert self.hardware.female1.dxl.profile_velocity.read() == 20, self.hardware.female1.dxl.profile_velocity.read()
         self._file.write("seconds, value" + "\n")
         self._start_time = time()
         self.hardware.male1.neopixels.ring.on()
