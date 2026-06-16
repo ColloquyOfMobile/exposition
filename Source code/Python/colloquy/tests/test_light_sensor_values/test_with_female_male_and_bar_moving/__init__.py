@@ -8,6 +8,7 @@ import traceback
 from threading import Thread, Event, Lock
 from time import sleep, time
 from .html import HTML
+from ..utils import read_and_store, post_process
 
 class TestWithFemaleMaleAndBarMoving(BaseThread):
 
@@ -19,6 +20,8 @@ class TestWithFemaleMaleAndBarMoving(BaseThread):
         self._start_time = None
         self._timelap = None
         self._duration = test_duration # test running 'self._duration' seconds
+        
+        self._sensors_read = tuple(female.light_sensor.read for female in self.hardware.females)
         
         
         self._dir_path = result_folder / self.name
@@ -47,12 +50,13 @@ class TestWithFemaleMaleAndBarMoving(BaseThread):
         self._file_path = self._dir_path / f"{now.year}_{now.month:02}_{now.day:02}_{now.hour:02}h_{now.minute:02}min_{now.second:02}s.csv"
         run_with = self._file = self._file_path.open("a")      
         super().run(run_with=run_with)
+        post_process(file=self._file_path)
         
     def setup(self):            
         assert self.hardware.bar.dxl.profile_velocity.read() == 20, self.hardware.bar.dxl.profile_velocity.read()
         assert self.hardware.male1.dxl.profile_velocity.read() == 20, self.hardware.male1.dxl.profile_velocity.read()
         assert self.hardware.female1.dxl.profile_velocity.read() == 20, self.hardware.female1.dxl.profile_velocity.read()
-        self._file.write("seconds, value" + "\n")
+        self._file.write("seconds, female1, female2, female3" + "\n")
         self._start_time = time()
         self.hardware.male1.neopixels.ring.on()
         self.hardware.female1.turn_back_and_forth.start(started_by=self)
@@ -67,11 +71,18 @@ class TestWithFemaleMaleAndBarMoving(BaseThread):
         self.hardware.bar.turn_back_and_forth_around_f1.stop()
 
     def loop(self):   
-        timestamp = time() - self._start_time
-        value = self.hardware.female1.light_sensor.read()  
-        self._file.write(f"{timestamp}, {value}" + "\n")
-        if timestamp > self._duration:
-            self.stop()
+        return read_and_store(
+            start_time=self._start_time, 
+            sensors_read=self._sensors_read,
+            file=self._file,
+            stop=self.stop,
+            duration=self._duration,
+            ) 
+        # timestamp = time() - self._start_time
+        # value = self.hardware.female1.light_sensor.read()  
+        # self._file.write(f"{timestamp}, {value}" + "\n")
+        # if timestamp > self._duration:
+            # self.stop()
     
     def snapshot(self, path):
         states = super().snapshot(path=path)

@@ -3,11 +3,20 @@ from colloquy.base_thread import BaseThread
 from datetime import datetime
 from colloquy.utils import timelap_to_string
 
+from ..utils import read_and_store, post_process
+
 from threading import Event
 import traceback
 from threading import Thread, Event, Lock
 from time import sleep, time
 from .html import HTML
+
+"""
+move male1 in front of the female1
+start moving the female1
+start moving the male1
+after 30s stop
+"""
 
 class TestWithFemaleAndMaleMoving(BaseThread):
 
@@ -19,6 +28,8 @@ class TestWithFemaleAndMaleMoving(BaseThread):
         self._start_time = None
         self._timelap = None
         self._duration = test_duration # test running 'self._duration' seconds
+        
+        self._sensors_read = tuple(female.light_sensor.read for female in self.hardware.females)
         
         
         self._dir_path = result_folder / self.name
@@ -47,11 +58,16 @@ class TestWithFemaleAndMaleMoving(BaseThread):
         self._file_path = self._dir_path / f"{now.year}_{now.month:02}_{now.day:02}_{now.hour:02}h_{now.minute:02}min_{now.second:02}s.csv"
         run_with = self._file = self._file_path.open("a")      
         super().run(run_with=run_with)
+        post_process(file=self._file_path)
         
     def setup(self):            
-        self._file.write("seconds, value" + "\n")
+        self._file.write("seconds, female1, female2, female3" + "\n")
         self._start_time = time()
         self.hardware.male1.neopixels.ring.on()
+        
+        position = self.hardware.bar.male1_in_front_of_f1
+        self.hardware.bar.dxl.move_and_wait(position)
+        
         self.hardware.female1.turn_back_and_forth.start(started_by=self)
         self.hardware.male1.turn_back_and_forth.start(started_by=self)
 
@@ -61,12 +77,22 @@ class TestWithFemaleAndMaleMoving(BaseThread):
         self.hardware.male1.turn_back_and_forth.stop()
         self.hardware.male1.neopixels.ring.off()
 
-    def loop(self):   
-        timestamp = time() - self._start_time
-        value = self.hardware.female1.light_sensor.read()  
-        self._file.write(f"{timestamp}, {value}" + "\n")
-        if timestamp > self._duration:
-            self.stop()
+    def loop(self):  
+        return read_and_store(
+            start_time=self._start_time, 
+            sensors_read=self._sensors_read,
+            file=self._file,
+            stop=self.stop,
+            duration=self._duration,
+            )
+        # timestamp = time() - self._start_time
+        # tokens = [str(timestamp)]
+        # tokens.extend(read() for read in self._sensors_read)
+        # line = ", ".join(str(token) for token in tokens)
+        
+        # self._file.write(line + "\n")
+        # if timestamp > self._duration:
+            # self.stop()
     
     def snapshot(self, path):
         states = super().snapshot(path=path)

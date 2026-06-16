@@ -9,6 +9,7 @@ from .neopixels import Neopixels
 from .commands import Commands
 from .test import Test
 from .html import HTML
+from .bodies import Bodies
 
 
 class Hardware(BaseThread):
@@ -49,6 +50,7 @@ class Hardware(BaseThread):
             Female(owner=self, id_number=2),
             Female(owner=self, id_number=3),
             )
+        self._bodies = Bodies(owner=owner, males=self.males, females= self.females)
         
         self._bar = Bar(owner=self)
 
@@ -95,6 +97,10 @@ class Hardware(BaseThread):
     @property
     def opened(self):
         return self._opened
+
+    @property
+    def bodies(self):
+        return self._bodies
 
     @opened.setter
     def opened(self, value):
@@ -176,14 +182,14 @@ class Hardware(BaseThread):
             neopixels.extend(body.neopixels)
         return neopixels
 
-    @property
-    def bodies(self):
-        bodies = []
-        for body in self.females:
-            bodies.append(body)
-        for body in self.males:
-            bodies.append(body)
-        return bodies
+    # @property
+    # def bodies(self):
+        # bodies = []
+        # for body in self.females:
+            # bodies.append(body)
+        # for body in self.males:
+            # bodies.append(body)
+        # return bodies
         
     def open(self):
         self._is_opened = True 
@@ -206,6 +212,7 @@ class Hardware(BaseThread):
     def snapshot(self, path):
         states = super().snapshot(path=path)
         _path = states["path"]
+        states["bodies"] = self.bodies.snapshot(path=_path)
         for body in self.bodies:
             states[body.name] = body.snapshot(path=_path)
         states[self.bar.name] = self.bar.snapshot(path=_path)

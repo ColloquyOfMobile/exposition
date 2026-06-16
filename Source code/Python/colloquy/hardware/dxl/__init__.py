@@ -111,7 +111,7 @@ class DXL(Base):
     def move_and_wait(self, position):
         """Blocking function that sets the body's goal position and wait for it to move."""
         # self.dxl_body.torque_enabled = 1
-        self.goal_position = position
+        self.goal_position.write(position)
         self.wait_for_servo()
 
     def wait_for_servo(self):

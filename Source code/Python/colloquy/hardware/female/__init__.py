@@ -159,6 +159,10 @@ class Female(BaseThread):
             self.turn_to_max_position()
             return
 
+    def turn_to_origin(self):
+        value = self._dxl_origin.get()
+        self.dxl.goal_position.write(value)
+
     def loop(self): 
         if self.search.is_started:
             return
