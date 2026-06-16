@@ -4,6 +4,7 @@ from ..dxl_origin import DXLOrigin
 from .dxl_position import DXLPosition
 from .search import Search
 from .html import HTML
+from .turn_back_and_forth_around_f1 import TurnBackAndForthAroundF1
 
 
 class Bar(BaseThread):
@@ -15,6 +16,7 @@ class Bar(BaseThread):
         self._motion_range = 10000
         self._dxl_origin = DXLOrigin(owner=self)
         self._position = DXLPosition(owner=self)
+        self.turn_back_and_forth_around_f1 = TurnBackAndForthAroundF1(owner=self)
         
         self._dxl = owner.u2d2.dxls[self.name]
         self._html = HTML(owner=self)
@@ -47,6 +49,11 @@ class Bar(BaseThread):
     @property
     def dxl_origin(self):
         return self._dxl_origin
+
+    @property
+    def male1_in_front_of_f1(self):
+        origin = self.params["bar"]["dxl origin"]
+        return self.params["bar"]["interaction_origins"]["male1"]["female1"]
 
     @property
     def dxl(self):

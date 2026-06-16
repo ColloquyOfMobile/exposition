@@ -4,24 +4,42 @@ from colloquy.base import Base
 from pathlib import Path
 import traceback
 from time import time
+from colloquy.utils import timelap_to_string
 
 from colloquy.base_thread import BaseThread
 
 from .html import HTML
 from .test_with_only_female_moving import TestWithOnlyFemaleMoving
 from .test_with_female_and_male_moving import TestWithFemaleAndMaleMoving
+from .test_with_female_male_and_bar_moving import TestWithFemaleMaleAndBarMoving
 
 class TestLightSensorValues(BaseThread):
 
-    def __init__(self, owner):
+    def __init__(self, owner, result_folder):
         super().__init__(owner)
         # self.opened = None
         self._queue = None
         self._running_test = None
+        self._start_time = None
+        
+        test_duration = 30 # seconds
 
         self._html = HTML(owner=self)
-        self.test_with_only_female_moving = TestWithOnlyFemaleMoving(owner=self)
-        self.test_with_female_and_male_moving = TestWithFemaleAndMaleMoving(owner=self)
+        self.test_with_only_female_moving = TestWithOnlyFemaleMoving(
+            owner=self, 
+            result_folder=result_folder, 
+            test_duration=test_duration,
+            )
+        self.test_with_female_and_male_moving = TestWithFemaleAndMaleMoving(
+            owner=self, 
+            result_folder=result_folder, 
+            test_duration=test_duration,
+            )
+        self.test_with_female_male_and_bar_moving = TestWithFemaleMaleAndBarMoving(
+            owner=self, 
+            result_folder=result_folder, 
+            test_duration=test_duration,
+            )
         self._hardware = self.owner.hardware
 
         self[self.html.name] = self.html.handle_request
@@ -30,7 +48,10 @@ class TestLightSensorValues(BaseThread):
         self._threaded_tests = [
             self.test_with_only_female_moving,
             self.test_with_female_and_male_moving,
+            self.test_with_female_male_and_bar_moving,
             ]
+        
+        self._duration = sum(test.duration for test in self._threaded_tests)
 
     @property
     def colloquy(self):
@@ -59,9 +80,12 @@ class TestLightSensorValues(BaseThread):
         test.start(started_by=self)
 
     def setdown(self):
+        self._start_time  = None
         self._queue = None
         self._running_test = None
         self.hardware.male1.neopixels.ring.off()
+        for test in self._threaded_tests:
+            test.stop()
 
     def loop(self):   
         if self._running_test.is_started:
@@ -71,16 +95,27 @@ class TestLightSensorValues(BaseThread):
             return
         self._running_test = test = self._queue.pop(0)
         test.start(started_by=self)
-        
-
-    # def stop(self):
-        # for test in self._threaded_tests:
-            # test.stop()
-        # super
     
     def snapshot(self, path):
         states = super().snapshot(path=path)
         _path = states["path"]
+        if self._start_time is not None:
+            seconds_elapsed = time() - self._start_time   
+            states["running during"] = {
+                "path": _path + ("running during", ),
+                "name": "running during",
+                "value": timelap_to_string(seconds_elapsed=seconds_elapsed),
+                }
+            states["progress"] = {
+                "path": _path + ("progress", ),
+                "name": "progress",
+                "value": f"{round(100*seconds_elapsed/self._duration)}%",
+                }
+            states["total duration"] = {
+                "path": _path + ("total duration", ),
+                "name": "duration",
+                "value": timelap_to_string(seconds_elapsed=self._duration),
+                }
         for test in self._threaded_tests:            
             states[test.name] = test.snapshot(path=_path)
         return states 

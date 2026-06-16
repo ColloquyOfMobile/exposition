@@ -1,5 +1,6 @@
 from pathlib import Path
 from colloquy.base_thread import BaseThread
+from colloquy.utils import timelap_to_string
 
 from threading import Event
 import traceback
@@ -57,21 +58,10 @@ class TestDriveLightValues(BaseThread):
             states["timelap"] = {
                 "path": _path + ("timelap", ),
                 "name": "timelap",
-                "value": self._timelap_to_string(seconds_elapsed=self._timelap),
+                "value": timelap_to_string(seconds_elapsed=self._timelap),
                 }
         for drive in self.hardware.drives:
             name = f"{drive.body.name}'s {drive.name} drive"
             states[drive.name] = drive.snapshot(path=_path)
         return states 
-    
-    def _timelap_to_string(self, seconds_elapsed):
-        seconds_elapsed = round(seconds_elapsed)
-        if seconds_elapsed > 60:
-            minutes = seconds_elapsed // 60
-            seconds = seconds_elapsed % 60
-            seconds_elapsed_as_string = f"{minutes}min {seconds}s"
-        else:
-            seconds_elapsed_as_string = f"{seconds_elapsed}s"
-            
-        return seconds_elapsed_as_string
         

@@ -18,9 +18,12 @@ class Tests(Base):
         self._hardware = self.owner.hardware
 
         self._html = HTML(owner=self)
+        result_folder = Path("local/test results")
+        if not result_folder.exists():
+            result_folder.mkdir() 
         self.test_drive_light_values = TestDriveLightValues(owner=self)
         self.test_male_patterns = TestMalePatterns(owner=self)
-        self.test_light_sensor_values = TestLightSensorValues(owner=self)
+        self.test_light_sensor_values = TestLightSensorValues(owner=self, result_folder=result_folder)
 
         self[self.html.name] = self.html.handle_request
         # self.add(self.test1)

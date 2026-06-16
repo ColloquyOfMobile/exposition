@@ -90,8 +90,6 @@ class BaseThread(Base):
     def start(self, started_by=None):
         self.children.clear()
         if started_by is not None:
-            if self in started_by.children:
-                raise NotImplementedError(f"Should be deleted when stop.")
             started_by.children.add(self)
         if self._shutdown.is_set():
             return

@@ -9,7 +9,7 @@ from threading import Thread, Event, Lock
 from time import sleep, time
 from .html import HTML
 
-class TestWithOnlyFemaleMoving(BaseThread):
+class TestWithFemaleMaleAndBarMoving(BaseThread):
 
     def __init__(self, owner, result_folder, test_duration):
         super().__init__(owner=owner)
@@ -32,7 +32,7 @@ class TestWithOnlyFemaleMoving(BaseThread):
     @property
     def name(self):
         duration = timelap_to_string(self._duration)
-        return f"test with only female moving for {duration}"
+        return f"test with female male and bar moving for {duration}"
 
     @property
     def html(self):
@@ -51,19 +51,21 @@ class TestWithOnlyFemaleMoving(BaseThread):
     def setup(self):            
         self._file.write("seconds, value" + "\n")
         self._start_time = time()
-        self.hardware.male1.turn_to_origin()
-        self.hardware.male1.dxl.wait_for_servo()
-        self.hardware.female1.turn_back_and_forth.start(started_by=self)
         self.hardware.male1.neopixels.ring.on()
+        self.hardware.female1.turn_back_and_forth.start(started_by=self)
+        self.hardware.male1.turn_back_and_forth.start(started_by=self)
+        self.hardware.bar.turn_back_and_forth_around_f1.start(started_by=self)
 
     def setdown(self):
         self._start_time  = None
         self.hardware.female1.turn_back_and_forth.stop()
+        self.hardware.male1.turn_back_and_forth.stop()
         self.hardware.male1.neopixels.ring.off()
+        self.hardware.bar.turn_back_and_forth_around_f1.stop()
 
     def loop(self):   
         timestamp = time() - self._start_time
-        value = self.hardware.female1.light_sensor.read()        
+        value = self.hardware.female1.light_sensor.read()  
         self._file.write(f"{timestamp}, {value}" + "\n")
         if timestamp > self._duration:
             self.stop()

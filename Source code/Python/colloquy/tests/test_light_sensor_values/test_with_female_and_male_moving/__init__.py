@@ -1,6 +1,7 @@
 from pathlib import Path
 from colloquy.base_thread import BaseThread
 from datetime import datetime
+from colloquy.utils import timelap_to_string
 
 from threading import Event
 import traceback
@@ -10,17 +11,17 @@ from .html import HTML
 
 class TestWithFemaleAndMaleMoving(BaseThread):
 
-    def __init__(self, owner):
+    def __init__(self, owner, result_folder, test_duration):
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
         self[self.html.name] = self.html.handle_request
         
         self._start_time = None
         self._timelap = None
-        self._duration = 1*60 # test running 'self._duration' seconds
+        self._duration = test_duration # test running 'self._duration' seconds
         
         
-        self._dir_path = Path("local") / self.name
+        self._dir_path = result_folder / self.name
         if not self._dir_path.exists():
             self._dir_path.mkdir()
             
@@ -30,12 +31,16 @@ class TestWithFemaleAndMaleMoving(BaseThread):
 
     @property
     def name(self):
-        duration = self._timelap_to_string(self._duration)
+        duration = timelap_to_string(self._duration)
         return f"test with female and male moving for {duration}"
 
     @property
     def html(self):
         return self._html
+
+    @property
+    def duration(self):
+        return self._duration
 
     def run(self):        
         now = datetime.now()
@@ -71,21 +76,12 @@ class TestWithFemaleAndMaleMoving(BaseThread):
             states["running during"] = {
                 "path": _path + ("running during", ),
                 "name": "running during",
-                "value": self._timelap_to_string(seconds_elapsed=seconds_elapsed),
+                "value": timelap_to_string(seconds_elapsed=seconds_elapsed),
+                }
+            states["progress"] = {
+                "path": _path + ("progress", ),
+                "name": "progress",
+                "value": f"{round(100*seconds_elapsed/self._duration)}%",
                 }
         return states 
-    
-    def _timelap_to_string(self, seconds_elapsed):
-        seconds_elapsed = round(seconds_elapsed)
-        if seconds_elapsed > 60:
-            minutes = seconds_elapsed // 60
-            seconds = seconds_elapsed % 60
-            tokens = [f"{minutes}min"]
-            if seconds != 0:
-                tokens.append(f"{seconds}s")
-            seconds_elapsed_as_string = " ".join(tokens)
-        else:
-            seconds_elapsed_as_string = f"{seconds_elapsed}s"
-            
-        return seconds_elapsed_as_string
         
