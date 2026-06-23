@@ -322,7 +322,7 @@ String processCommand(const String& input) {
   } else if (path == "f2/feet") {
     return female2.feet.fill(jsonDoc);
   } else if (path == "f2/light sensor") {
-    return female1.lightSensor.read();
+    return female2.lightSensor.read();
   }  
   
   
@@ -335,7 +335,7 @@ String processCommand(const String& input) {
   } else if (path == "f3/feet") {
     return female3.feet.fill(jsonDoc);
   } else if (path == "f3/light sensor") {
-    return female1.lightSensor.read();
+    return female3.lightSensor.read();
   } 
   
   
