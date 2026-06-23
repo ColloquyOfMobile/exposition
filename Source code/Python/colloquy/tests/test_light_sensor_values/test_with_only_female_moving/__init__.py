@@ -3,7 +3,7 @@ from colloquy.base_thread import BaseThread
 from datetime import datetime
 from colloquy.utils import timelap_to_string
 
-from ..utils import read_and_store, post_process
+from ..utils import read_and_store, post_process, plot_as_svg
 
 from threading import Event
 import traceback
@@ -51,7 +51,11 @@ class TestWithOnlyFemaleMoving(BaseThread):
         self._file_path = self._dir_path / f"{now.year}_{now.month:02}_{now.day:02}_{now.hour:02}h_{now.minute:02}min_{now.second:02}s.csv"
         run_with = self._file = self._file_path.open("a")      
         super().run(run_with=run_with)
-        post_process(file=self._file_path)
+        
+        file_path = self._file_path
+        output=file_path.with_name(f"post {file_path.stem}.csv")
+        post_process(file=file_path, output=output)
+        plot_as_svg(path=output)
         
     def setup(self):            
         self._file.write("seconds, female1, female2, female3" + "\n")

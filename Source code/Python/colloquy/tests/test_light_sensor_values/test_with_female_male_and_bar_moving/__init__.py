@@ -8,7 +8,7 @@ import traceback
 from threading import Thread, Event, Lock
 from time import sleep, time
 from .html import HTML
-from ..utils import read_and_store, post_process
+from ..utils import read_and_store, post_process, plot_as_svg
 
 class TestWithFemaleMaleAndBarMoving(BaseThread):
 
@@ -50,7 +50,11 @@ class TestWithFemaleMaleAndBarMoving(BaseThread):
         self._file_path = self._dir_path / f"{now.year}_{now.month:02}_{now.day:02}_{now.hour:02}h_{now.minute:02}min_{now.second:02}s.csv"
         run_with = self._file = self._file_path.open("a")      
         super().run(run_with=run_with)
-        post_process(file=self._file_path)
+        
+        file_path = self._file_path
+        output=file_path.with_name(f"post {file_path.stem}.csv")
+        post_process(file=file_path, output=output)
+        plot_as_svg(path=output)
         
     def setup(self):            
         assert self.hardware.bar.dxl.profile_velocity.read() == 20, self.hardware.bar.dxl.profile_velocity.read()

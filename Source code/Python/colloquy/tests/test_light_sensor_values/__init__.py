@@ -8,7 +8,7 @@ from colloquy.utils import timelap_to_string
 
 from colloquy.base_thread import BaseThread
 
-from .html import HTML
+#from .handle_html import HTML
 from .test_with_only_female_moving import TestWithOnlyFemaleMoving
 from .test_with_female_and_male_moving import TestWithFemaleAndMaleMoving
 from .test_with_female_male_and_bar_moving import TestWithFemaleMaleAndBarMoving
@@ -24,7 +24,7 @@ class TestLightSensorValues(BaseThread):
         
         test_duration = 30 # seconds
 
-        self._html = HTML(owner=self)
+        # self._html = HTML(owner=self)
         self.test_with_only_female_moving = TestWithOnlyFemaleMoving(
             owner=self, 
             result_folder=result_folder, 
@@ -42,7 +42,7 @@ class TestLightSensorValues(BaseThread):
             )
         self._hardware = self.owner.hardware
 
-        self[self.html.name] = self.html.handle_request
+        # self[self.html.name] = self.html.handle_request
         # self.add(self.test1)
 
         self._threaded_tests = [
