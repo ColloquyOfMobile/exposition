@@ -59,3 +59,12 @@ class LightSensor(BaseThread):
         
         # rint(response)
         return int(response)
+    
+    def snapshot(self, path):        
+        states = super().snapshot(path=path)
+        _path = states["path"]
+        states.update({
+            "read": self.read,
+            "value": self.read(),
+        })
+        return states 

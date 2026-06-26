@@ -189,5 +189,6 @@ class Female(BaseThread):
             "search": self.search.snapshot(path=_path),
             "drives": self.drives.snapshot(path=_path),
             "neopixels": self.neopixels.snapshot(path=_path),
+            "light sensor": self.light_sensor.snapshot(path=_path),
         })
         return states 

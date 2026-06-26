@@ -64,9 +64,7 @@ class TestWithOnlyFemaleMoving(BaseThread):
         self.hardware.male1.turn_to_origin()
         self.hardware.male1.dxl.wait_for_servo()
         
-        position = self.hardware.bar.male1_in_front_of_f1
-        self.hardware.bar.dxl.goal_position.write(position)
-        self.hardware.bar.dxl.wait_for_servo
+        self.hardware.bar.move_male1_in_front_of_female1_and_wait()
         
         self.hardware.female1.turn_back_and_forth.start(started_by=self)
         self.hardware.male1.neopixels.ring.on()

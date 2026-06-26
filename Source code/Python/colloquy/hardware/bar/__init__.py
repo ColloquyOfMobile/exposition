@@ -149,6 +149,23 @@ class Bar(BaseThread):
             raise NotImplementedError(self)
         return states
     
+    def move_male1_in_front_of_female1_and_wait(self):
+        position = self.male1_in_front_of_f1
+        self.dxl.move_and_wait(position)
+    
+    def move_male1_in_front_of_female2_and_wait(self):
+        origin = self.params["bar"]["dxl origin"]
+        position = self.params["bar"]["interaction_origins"]["male1"]["female2"] + origin
+        
+        self.dxl.move_and_wait(position)
+    
+    def move_male1_in_front_of_female3_and_wait(self):
+        origin = self.params["bar"]["dxl origin"]
+        position = self.params["bar"]["interaction_origins"]["male1"]["female3"] + origin
+        
+        self.dxl.move_and_wait(position)
+        
+    
     def snapshot(self, path):
         path = path + (self.name,)
         states = {
@@ -160,5 +177,8 @@ class Bar(BaseThread):
             "dxl origin": self.dxl_origin.snapshot(path=path),
             self.dxl.name: self.dxl.snapshot(path=path),
             "search": self.search.snapshot(path=path),
+            "move male1 in front of female1 and wait": self.move_male1_in_front_of_female1_and_wait,
+            "move male1 in front of female2 and wait": self.move_male1_in_front_of_female2_and_wait,
+            "move male1 in front of female3 and wait": self.move_male1_in_front_of_female3_and_wait,
         }
         return states 

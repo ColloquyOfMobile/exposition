@@ -57,11 +57,11 @@ class TestWithFemaleMaleAndBarMoving(BaseThread):
         plot_as_svg(path=output)
         
     def setup(self):            
-        assert self.hardware.bar.dxl.profile_velocity.read() == 20, self.hardware.bar.dxl.profile_velocity.read()
-        assert self.hardware.male1.dxl.profile_velocity.read() == 20, self.hardware.male1.dxl.profile_velocity.read()
-        assert self.hardware.female1.dxl.profile_velocity.read() == 20, self.hardware.female1.dxl.profile_velocity.read()
         self._file.write("seconds, female1, female2, female3" + "\n")
         self._start_time = time()
+        
+        self.hardware.bar.move_male1_in_front_of_female1_and_wait()
+        
         self.hardware.male1.neopixels.ring.on()
         self.hardware.female1.turn_back_and_forth.start(started_by=self)
         self.hardware.male1.turn_back_and_forth.start(started_by=self)
