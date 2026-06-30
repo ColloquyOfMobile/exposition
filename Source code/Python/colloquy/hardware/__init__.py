@@ -1,3 +1,4 @@
+from time import sleep
 from .u2d2 import U2D2
 from .arduino import Arduino
 from colloquy.base_thread import BaseThread
@@ -71,7 +72,9 @@ class Hardware(BaseThread):
             self[male.name] = male
             self.drives.extend(male.drives)
         
+        # Arduino reboot can turn LEDs on at random. Turn them all on and off again.
         self.neopixels.turn_all_on()
+        sleep(0.5)
         self.neopixels.turn_all_off()
 
     def __call__(self, request):
