@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 from io import StringIO
 from pathlib import Path
 
+    
+threshold = 310
 
 def plot_as_svg(path):
     if isinstance(path, str):
@@ -19,6 +21,11 @@ def plot_as_svg(path):
     ax1.plot(df["seconds"], df["female2"], label="female2", linewidth=2)
     ax1.plot(df["seconds"], df["female3"], label="female3", linewidth=2)
     ax1.plot(df["seconds"], df["f1 unfiltered"], label="f1 unfiltered", alpha=0.7)
+    ax1.axhline(
+        y=threshold,
+        label=f"threshold ({threshold})",
+        linewidth=2,
+    )
 
     ax1.set_xlabel("Time (s)")
     ax1.set_ylabel("Sensor value")
@@ -70,8 +77,6 @@ def post_process(file, output=None, window_size=5):
             .rolling(window=window_size, min_periods=1)
             .mean()
         )
-    
-    threashold = 310
     df["f1 logic"] = df["female1"].where(df["female1"] > threshold, 0)
     
     high = df["female1"] > threshold

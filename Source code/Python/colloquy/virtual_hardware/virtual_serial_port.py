@@ -4,6 +4,7 @@ from pathlib import Path
 import re
 from queue import Queue
 from colloquy.base import Base
+from random import randrange
 
 class VirtualSerialPort(Base):
 
@@ -161,16 +162,18 @@ class VirtualSerialPort(Base):
         params = self.colloquy.params
         female_dxl = self.owner.dxls[1]
         bar_dxl = self.owner.dxls[8]
+        
+        noise = 100 + randrange(10)
         if not self._is_near_origin(name="female1", dxl=female_dxl):
-            return params["photosensor_threashold"] - 100
+            return params["photosensor_threashold"] - noise
         
         male = self._get_nearest_male(female="female1")
         if male is None:
-            return  params["photosensor_threashold"] - 100
+            return  params["photosensor_threashold"] - noise
             
         if self._states[male]["ring"]["w"] != 0: 
-            return params["photosensor_threashold"] + 100
-        return params["photosensor_threashold"] - 100
+            return params["photosensor_threashold"] + noise
+        return params["photosensor_threashold"] - noise
     
     def _is_near_origin(self, name, dxl):
         params = self.colloquy.params
