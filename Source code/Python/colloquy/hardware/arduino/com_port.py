@@ -6,7 +6,6 @@ from pathlib import Path
 import serial.tools.list_ports
 from colloquy.base import Base
 from functools import partial
-from .html import HTML
 from colloquy.hardware.com_port import ComPort
 
 

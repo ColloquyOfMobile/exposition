@@ -8,7 +8,7 @@ from colloquy.base_thread import BaseThread
 from .events import Events
 from .base import Base
 from .tests import Tests
-from .server import Server
+# from .server import Server
 from .hardware import Hardware
 from .cli import CLI
 from .tests import Tests
@@ -32,8 +32,8 @@ class Colloquy(BaseThread):
         self._tests = Tests(owner=self)
         self._exposition = Exposition(owner=self)
 
-        self._server = Server(owner=self)
-        self._cli = CLI(owner=self)
+        # self._server = Server(owner=self)
+        # self._cli = CLI(owner=self)
         
         
         self["hardware"] = self._hardware
@@ -78,10 +78,7 @@ class Colloquy(BaseThread):
     @property
     def hardware(self):
         return self._hardware
-
-    @property
-    def server(self):
-        return self._server
+        
 
     @property
     def events(self):
@@ -166,3 +163,18 @@ class Colloquy(BaseThread):
                 raise NotImplementedError(key, states["name"],)
             return self.update(*leftovers, states=states[key])
         return states
+    
+    def shutdown_neopixels(self):
+        neopixels = self._hardware.neopixels
+        assert neopixels
+        for neopixel in neopixels:
+            neopixel.off()
+        # raise NotImplementedError 
+    
+    def move_to_origin(self):
+        self._hardware.bodies.turn_all_bodies_origin()
+        self._hardware.bar.turn_to_origin()
+        self._hardware.wait_until_everything_is_still()
+    
+    def disable_torque(self):
+        self._hardware.disable_torque()

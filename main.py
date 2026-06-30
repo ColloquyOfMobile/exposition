@@ -16,7 +16,6 @@ from threading import Event
 def main(*args):
     memory = {
         "colloquy1": colloquy1,
-        # "app2": handle_app2,
     }
     
     if args:    
@@ -26,23 +25,6 @@ def main(*args):
     else:
         # default
         colloquy1()
-    
-    # print(as_text(memory))
-        
-
-# def handle_app2(*args):
-    # shutdown_event = Event()
-    # restart_event = Event()
-    # wsgi = make_wsgi(
-        # app=app2.STATES, 
-        # shutdown_event=shutdown_event, 
-        # restart_event=restart_event,
-    # )
-    # server(
-        # wsgi=wsgi,
-        # shutdown_event=shutdown_event, 
-        # restart_event=restart_event,
-    # )
         
 
 def colloquy1(*args):    
@@ -52,7 +34,7 @@ def colloquy1(*args):
     colloquy.hardware.arduino.open()
     for dxl in colloquy.hardware.u2d2.dxl_list:
         dxl.init_hardware()
-    colloquy.hardware.arduino.html.open(request=None)
+    # colloquy.hardware.arduino.html.open(request=None)
     # colloquy.hardware.arduino.commands[0]._send()
     
     Server2(colloquy=colloquy)

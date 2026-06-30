@@ -181,15 +181,14 @@ class Hardware(BaseThread):
         for body in self.bodies:
             neopixels.extend(body.neopixels)
         return neopixels
-
-    # @property
-    # def bodies(self):
-        # bodies = []
-        # for body in self.females:
-            # bodies.append(body)
-        # for body in self.males:
-            # bodies.append(body)
-        # return bodies
+    
+    def wait_until_everything_is_still(self):        
+        while any(dxl.is_moving for dxl in self._u2d2.dxl_list):
+            pass   
+    
+    def disable_torque(self):        
+        for dxl in self._u2d2.dxl_list:
+            dxl.torque_enabled.write(value=0)
         
     def open(self):
         self._is_opened = True 

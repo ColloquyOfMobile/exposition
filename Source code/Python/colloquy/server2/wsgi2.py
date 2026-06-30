@@ -328,6 +328,10 @@ class WSGI2(Base):
     def _parse_shutdown(self):
         self.colloquy.shutdown()
         self.colloquy.join_all()
+        self.colloquy.shutdown_neopixels()
+        self.colloquy.move_to_origin()
+        self.colloquy.disable_torque()
+        
         self.shutdown_event.set()
         
         content_type = 'text/plain'

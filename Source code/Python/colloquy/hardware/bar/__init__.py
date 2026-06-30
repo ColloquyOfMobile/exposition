@@ -149,6 +149,10 @@ class Bar(BaseThread):
             raise NotImplementedError(self)
         return states
     
+    def turn_to_origin(self):
+        value = self._dxl_origin.get()
+        self.dxl.goal_position.write(value)
+    
     def move_male1_in_front_of_female1_and_wait(self):
         position = self.male1_in_front_of_f1
         self.dxl.move_and_wait(position)

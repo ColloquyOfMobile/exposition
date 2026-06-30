@@ -7,7 +7,7 @@ from time import sleep, time
 from threading import Lock
 from colloquy.base import Base
 from .com_port import ComPort
-from .html import HTML
+# from .html import HTML
 from .neopixel_command import NeopixelCommand
 from .light_sensor_command import LightSensorCommand
 
@@ -27,7 +27,7 @@ class Arduino(Base):
         self.lock = Lock()
         self._port_handler = None
         self._was_open = None
-        self._html = HTML(owner=self)
+        # self._html = HTML(owner=self)
         self._context_depth = 0
         self._commands = [
             NeopixelCommand(owner=self, arduino_path="f1/head"),
@@ -70,7 +70,7 @@ class Arduino(Base):
         for command in self._commands:
             self[command.name] = command
 
-        self[self.html.name] = self.html.handle_request
+        # self[self.html.name] = self.html.handle_request
         self._com_port = ComPort(owner=self)
         self[self.com_port.name] = self.com_port
         self["open"] = self.open
@@ -121,9 +121,9 @@ class Arduino(Base):
     def colloquy(self):
         return self.owner.colloquy
 
-    @property
-    def html(self):
-        return self._html
+    # @property
+    # def html(self):
+        # return self._html
 
     @property
     def params(self):
