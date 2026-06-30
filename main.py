@@ -1,4 +1,5 @@
 import sys
+from time import sleep
 from pathlib import Path
 cwd = Path(__file__).parent
 # server_code = cwd / "Server"
@@ -34,8 +35,11 @@ def colloquy1(*args):
     colloquy.hardware.arduino.open()
     for dxl in colloquy.hardware.u2d2.dxl_list:
         dxl.init_hardware()
-    # colloquy.hardware.arduino.html.open(request=None)
-    # colloquy.hardware.arduino.commands[0]._send()
+        
+    # Arduino reboot can turn LEDs on at random. Turn them all on and off again.
+    colloquy.hardware.neopixels.turn_all_on()
+    sleep(0.5)
+    colloquy.hardware.neopixels.turn_all_off()
     
     Server2(colloquy=colloquy)
 

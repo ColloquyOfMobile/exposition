@@ -71,11 +71,6 @@ class Hardware(BaseThread):
         for male in self.males:
             self[male.name] = male
             self.drives.extend(male.drives)
-        
-        # Arduino reboot can turn LEDs on at random. Turn them all on and off again.
-        self.neopixels.turn_all_on()
-        sleep(0.5)
-        self.neopixels.turn_all_off()
 
     def __call__(self, request):
         request = Path(request)
