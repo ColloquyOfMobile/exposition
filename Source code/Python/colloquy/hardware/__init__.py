@@ -10,6 +10,7 @@ from .commands import Commands
 from .test import Test
 from .html import HTML
 from .bodies import Bodies
+from .all_neopixels import AllNeopixels
 
 
 class Hardware(BaseThread):
@@ -51,6 +52,7 @@ class Hardware(BaseThread):
             Female(owner=self, id_number=3),
             )
         self._bodies = Bodies(owner=owner, males=self.males, females= self.females)
+        self._neopixels = AllNeopixels(owner=self, bodies=self._bodies)
         
         self._bar = Bar(owner=self)
 
@@ -68,6 +70,9 @@ class Hardware(BaseThread):
         for male in self.males:
             self[male.name] = male
             self.drives.extend(male.drives)
+        
+        self.neopixels.turn_all_on()
+        self.neopixels.turn_all_off()
 
     def __call__(self, request):
         request = Path(request)
@@ -177,10 +182,7 @@ class Hardware(BaseThread):
 
     @property
     def neopixels(self):
-        neopixels = []
-        for body in self.bodies:
-            neopixels.extend(body.neopixels)
-        return neopixels
+        return self._neopixels
     
     def wait_until_everything_is_still(self):        
         while any(dxl.is_moving for dxl in self._u2d2.dxl_list):
