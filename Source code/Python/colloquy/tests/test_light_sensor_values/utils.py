@@ -12,19 +12,35 @@ def plot_as_svg(path):
         path = Path(path)
     df = pd.read_csv(path, skipinitialspace=True)
 
-    plt.figure(figsize=(10, 5))
+    fig, ax1 = plt.subplots(figsize=(10, 5))
+    
+    # Main sensor signals
+    ax1.plot(df["seconds"], df["female1"], label="female1", linewidth=2)
+    ax1.plot(df["seconds"], df["female2"], label="female2", linewidth=2)
+    ax1.plot(df["seconds"], df["female3"], label="female3", linewidth=2)
+    ax1.plot(df["seconds"], df["f1 unfiltered"], label="f1 unfiltered", alpha=0.7)
 
-    plt.plot(df["seconds"], df["female1"], label="female1", linewidth=2)
-    plt.plot(df["seconds"], df["female2"], label="female2", linewidth=2)
-    plt.plot(df["seconds"], df["female3"], label="female3", linewidth=2)
-    plt.plot(df["seconds"], df["f1 unfiltered"], label="f1 unfiltered", alpha=0.7)
+    ax1.set_xlabel("Time (s)")
+    ax1.set_ylabel("Sensor value")
+    ax1.grid(True)
 
-    plt.xlabel("Time (s)")
-    plt.ylabel("Value")
+    # Secondary axis for logic signal
+    ax2 = ax1.twinx()
+    ax2.step(
+        df["seconds"],
+        df["f1 logic"],
+        label="f1 logic",
+        linewidth=2,
+    )
+    ax2.set_ylabel("Logic")
+    ax2.set_ylim(-0.1, 1.1)
+    
+    # Combine legends from both axes
+    lines = ax1.get_lines() + ax2.get_lines()
+    labels = [line.get_label() for line in lines]
+    ax1.legend(lines, labels)
+
     plt.title("Sensor Data")
-    plt.grid(True)
-    plt.legend()
-
     plt.tight_layout()
     plt.savefig(path.with_suffix(".svg"), format="svg")
     # plt.show()
@@ -54,57 +70,21 @@ def post_process(file, output=None, window_size=5):
             .rolling(window=window_size, min_periods=1)
             .mean()
         )
+    
+    threashold = 310
+    df["f1 logic"] = df["female1"].where(df["female1"] > threshold, 0)
+    
+    high = df["female1"] > threshold
+
+    df["rising_edge"] = high & ~high.shift(fill_value=False)
+    df["pulse_id"] = df["rising_edge"].cumsum()
+
+    # Set pulse_id to 0 when not inside a pulse
+    df["pulse_id"] = df["pulse_id"].where(high, 0)
 
     df.to_csv(output, index=False)
-
     return output
 
-def post_process_old(file, output=None):
-    if output is None:
-        output=file.with_name(f"post process {file.stem}.csv")
-        
-    window_size = 5
-    windows = [
-        deque(maxlen=window_size),
-        deque(maxlen=window_size),
-        deque(maxlen=window_size),
-        ]
-    with (
-        file.open(newline="", encoding="utf-8") as infile,
-        output.open("a", newline="", encoding="utf-8") as outfile,
-        ):
-        reader = csv.reader(infile)
-        writer = csv.writer(outfile)
-    
-        
-        for row in reader:
-            new_row = []
-            if row[0] == "seconds":
-                new_row.append("seconds")
-                new_row.append("f1 unfiltered")
-                new_row.append("female1")
-                new_row.append("female2")
-                new_row.append("female3")
-                writer.writerow(new_row)
-                continue
-            
-            time, *values = row
-            
-            new_row.append(float(time))
-            new_row.append(float(values[0]))
-            
-            for value, window in zip(values, windows):
-                value = float(value)
-                window.append(value)
-            
-                filtered_value = sum(window) / len(window)
-            
-                new_row.append(filtered_value)
-            
-            if len(windows[0])<5:
-                continue
-                
-            writer.writerow(new_row)
 
 def read_and_store(start_time, file, duration, stop, sensors_read):
 	timestamp = time() - start_time
