@@ -38,7 +38,7 @@ class TestLightSensorValues(BaseThread):
         self.test_with_female_male_and_bar_moving = TestWithFemaleMaleAndBarMoving(
             owner=self, 
             result_folder=result_folder, 
-            test_duration=test_duration,
+            test_duration=15*60,
             )
         self._hardware = self.owner.hardware
 
@@ -86,6 +86,9 @@ class TestLightSensorValues(BaseThread):
         self.hardware.male1.neopixels.ring.off()
         for test in self._threaded_tests:
             test.stop()
+            test.join()
+        for test in self._threaded_tests:
+            test.plot()
 
     def loop(self):   
         if self._running_test.is_started:

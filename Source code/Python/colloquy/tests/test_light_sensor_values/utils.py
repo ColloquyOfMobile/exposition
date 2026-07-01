@@ -50,7 +50,9 @@ def plot_as_svg(path):
     plt.title("Sensor Data")
     plt.tight_layout()
     plt.savefig(path.with_suffix(".svg"), format="svg")
-    # plt.show()
+    plt.close()
+    
+    
     
 def post_process(file, output=None, window_size=5):
     file = Path(file)
@@ -82,13 +84,20 @@ def post_process(file, output=None, window_size=5):
     high = df["female1"] > threshold
 
     df["rising_edge"] = high & ~high.shift(fill_value=False)
+    df["falling_edge"] = ~high & high.shift(fill_value=False)
     df["pulse_id"] = df["rising_edge"].cumsum()
 
     # Set pulse_id to 0 when not inside a pulse
     df["pulse_id"] = df["pulse_id"].where(high, 0)
-
     df.to_csv(output, index=False)
-    return output
+    
+    start_times = df.loc[df["rising_edge"], "seconds"].to_numpy()
+    stop_times = df.loc[df["falling_edge"], "seconds"].to_numpy()
+    durations = stop_times[:len(start_times)] - start_times[:len(stop_times)]
+    # duration_output = file.with_name(f"durations {file.stem}.csv")
+    # durations.to_csv(duration_output, index=False)
+    
+    return output, durations
 
 
 def read_and_store(start_time, file, duration, stop, sensors_read):
@@ -100,6 +109,49 @@ def read_and_store(start_time, file, duration, stop, sensors_read):
 	file.write(line + "\n")
 	if timestamp > duration:
 		stop()
+
+def plot_duration_histogram_as_svg(output, durations):
+
+    # Plot histogram
+    plt.figure(figsize=(8, 4))
+
+    plt.hist(
+        durations,
+        bins=20,
+    )
+
+    plt.xlabel("Pulse duration (s)")
+    plt.ylabel("Number of pulses")
+    plt.title("Pulse duration distribution")
+
+    plt.grid(True)
+
+    # Add statistics
+    mean = durations.mean()
+    median = pd.Series(durations).median()
+
+    plt.axvline(
+        mean,
+        linestyle="--",
+        label=f"Mean: {mean:.3f}s",
+    )
+
+    plt.axvline(
+        median,
+        linestyle=":",
+        label=f"Median: {median:.3f}s",
+    )
+
+    plt.legend()
+
+    plt.savefig(
+        output,
+        format="svg",
+        bbox_inches="tight",
+    )
+    plt.close()
+
+    return output
 
 if __name__ == "__main__":
     plot(path="docs/test_results/week24/test with female male and bar moving for 30s/post process 2026_06_16_17h_43min_26s.csv")

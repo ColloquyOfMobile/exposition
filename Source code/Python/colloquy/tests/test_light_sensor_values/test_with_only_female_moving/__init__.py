@@ -3,7 +3,7 @@ from colloquy.base_thread import BaseThread
 from datetime import datetime
 from colloquy.utils import timelap_to_string
 
-from ..utils import read_and_store, post_process, plot_as_svg
+from ..utils import read_and_store, post_process, plot_as_svg, plot_duration_histogram_as_svg
 
 from threading import Event
 import traceback
@@ -52,10 +52,8 @@ class TestWithOnlyFemaleMoving(BaseThread):
         run_with = self._file = self._file_path.open("a")      
         super().run(run_with=run_with)
         
-        file_path = self._file_path
-        output=file_path.with_name(f"post {file_path.stem}.csv")
-        post_process(file=file_path, output=output)
-        plot_as_svg(path=output)
+        if self._started_by is None:
+            self.plot()
         
     def setup(self):            
         self._file.write("seconds, female1, female2, female3" + "\n")
@@ -104,4 +102,12 @@ class TestWithOnlyFemaleMoving(BaseThread):
                 "value": f"{round(100*seconds_elapsed/self._duration)}%",
                 }
         return states 
+        
+    def plot(self):
+        file_path = self._file_path
+        output=file_path.with_name(f"post {file_path.stem}.csv")
+        output, durations = post_process(file=file_path, output=output)
+        plot_as_svg(path=output)
+        hist_output=file_path.with_name(f"hist {file_path.stem}.svg")
+        plot_duration_histogram_as_svg(output=hist_output, durations=durations)
         
