@@ -12,6 +12,7 @@ from colloquy.base_thread import BaseThread
 from .test_with_only_female_moving import TestWithOnlyFemaleMoving
 from .test_with_female_and_male_moving import TestWithFemaleAndMaleMoving
 from .test_with_female_male_and_bar_moving import TestWithFemaleMaleAndBarMoving
+from .test_with_everything_moving import TestWithEveryThingMoving
 
 class TestLightSensorValues(BaseThread):
 
@@ -38,7 +39,12 @@ class TestLightSensorValues(BaseThread):
         self.test_with_female_male_and_bar_moving = TestWithFemaleMaleAndBarMoving(
             owner=self, 
             result_folder=result_folder, 
-            test_duration=15*60,
+            test_duration=30 #15*60,
+            )
+        self.test_with_everything_moving = TestWithEveryThingMoving(
+            owner=self, 
+            result_folder=result_folder, 
+            test_duration=30,
             )
         self._hardware = self.owner.hardware
 
@@ -49,6 +55,7 @@ class TestLightSensorValues(BaseThread):
             self.test_with_only_female_moving,
             self.test_with_female_and_male_moving,
             self.test_with_female_male_and_bar_moving,
+            self.test_with_everything_moving,
             ]
         
         self._duration = sum(test.duration for test in self._threaded_tests)

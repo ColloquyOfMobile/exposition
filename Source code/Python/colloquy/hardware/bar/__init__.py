@@ -5,6 +5,7 @@ from .dxl_position import DXLPosition
 from .search import Search
 from .html import HTML
 from .turn_back_and_forth_around_f1 import TurnBackAndForthAroundF1
+from .turn_back_and_forth import TurnBackAndForth
 
 
 class Bar(BaseThread):
@@ -17,6 +18,7 @@ class Bar(BaseThread):
         self._dxl_origin = DXLOrigin(owner=self)
         self._position = DXLPosition(owner=self)
         self.turn_back_and_forth_around_f1 = TurnBackAndForthAroundF1(owner=self)
+        self.turn_back_and_forth = TurnBackAndForth(owner=self)
         
         self._dxl = owner.u2d2.dxls[self.name]
         self._html = HTML(owner=self)
@@ -102,12 +104,12 @@ class Bar(BaseThread):
         self.dxl_origin.set(self.dxl.position.read())
 
     def turn_to_max_position(self):
-        value = self._dxl_origin.get() + self._motion_range/2
+        value = self._dxl_origin.get() + self._motion_range
         self.dxl.goal_position.write(value)
         self._position_memory = "max"
 
     def turn_to_min_position(self):
-        value = self._dxl_origin.get() - self._motion_range/2
+        value = self._dxl_origin.get()
         self.dxl.goal_position.write(value)
         self._position_memory = "min"
 
