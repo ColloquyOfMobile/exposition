@@ -44,7 +44,7 @@ class TestLightSensorValues(BaseThread):
         self.test_with_everything_moving = TestWithEveryThingMoving(
             owner=self, 
             result_folder=result_folder, 
-            test_duration=30,
+            test_duration=20*60,
             )
         self._hardware = self.owner.hardware
 

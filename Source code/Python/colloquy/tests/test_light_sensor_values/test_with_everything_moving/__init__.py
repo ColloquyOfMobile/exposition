@@ -76,6 +76,7 @@ class TestWithEveryThingMoving(BaseThread):
         self.hardware.female1.turn_back_and_forth.stop()
         self.hardware.male1.turn_back_and_forth.stop()
         self.hardware.male1.neopixels.ring.off()
+        self.hardware.male2.neopixels.ring.off()
         self.hardware.bar.turn_back_and_forth_around_f1.stop()
 
     def loop(self):   
