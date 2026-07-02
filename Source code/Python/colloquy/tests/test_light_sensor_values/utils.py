@@ -3,6 +3,7 @@ from collections import deque
 import csv
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 from io import StringIO
 from pathlib import Path
 
@@ -94,10 +95,12 @@ def post_process(file, output=None, window_size=5):
     start_times = df.loc[df["rising_edge"], "seconds"].to_numpy()
     stop_times = df.loc[df["falling_edge"], "seconds"].to_numpy()
     durations = stop_times[:len(start_times)] - start_times[:len(stop_times)]
-    # duration_output = file.with_name(f"durations {file.stem}.csv")
-    # durations.to_csv(duration_output, index=False)
     
-    return output, durations
+    # survival function (or complementary cumulative histogram)
+    seconds = np.arange(int(np.ceil(durations.max())) + 1)
+    counts = (durations[:, None] >= seconds).sum(axis=0)
+    
+    return output, durations, counts
 
 
 def read_and_store(start_time, file, duration, stop, sensors_read):
@@ -152,6 +155,35 @@ def plot_duration_histogram_as_svg(output, durations):
     plt.close()
 
     return output
+
+
+def plot_counts_as_svg(output, counts, title):
+    """
+    Plot the complementary cumulative histogram.
+
+    Parameters
+    ----------
+    output : Path or str
+        Output SVG filename.
+    counts : array-like
+        counts[i] = number of pulses lasting at least i seconds.
+    title : str
+        Plot title.
+    """
+    seconds = np.arange(len(counts))
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    ax.step(seconds, counts, where="post", linewidth=2)
+    ax.set_xlabel("Pulse duration (s)")
+    ax.set_ylabel("Number of pulses ≥ duration")
+    ax.set_title(title)
+
+    ax.grid(True, alpha=0.3)
+
+    fig.tight_layout()
+    fig.savefig(output, format="svg")
+    plt.close(fig)
 
 if __name__ == "__main__":
     plot(path="docs/test_results/week24/test with female male and bar moving for 30s/post process 2026_06_16_17h_43min_26s.csv")
