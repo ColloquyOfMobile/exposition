@@ -16,7 +16,8 @@ HISTORY = 200          # Number of samples displayed
 ser = serial.Serial(PORT, BAUDRATE, timeout=1)
 
 # Skip header
-ser.readline()
+line = ser.readline()
+print(*line)
 
 # One deque per analog channel
 data = [deque([0] * HISTORY, maxlen=HISTORY) for _ in range(16)]
@@ -44,6 +45,7 @@ ax.legend(ncol=4)
 # -------------------------
 def update(frame):
     line = ser.readline().decode(errors="ignore").strip()
+    print(*line)
 
     if not line:
         return lines
