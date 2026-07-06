@@ -31,10 +31,6 @@ class Colloquy(BaseThread):
         self._hardware = Hardware(owner=self)
         self._tests = Tests(owner=self)
         self._exposition = Exposition(owner=self)
-
-        # self._server = Server(owner=self)
-        # self._cli = CLI(owner=self)
-        
         
         self["hardware"] = self._hardware
 

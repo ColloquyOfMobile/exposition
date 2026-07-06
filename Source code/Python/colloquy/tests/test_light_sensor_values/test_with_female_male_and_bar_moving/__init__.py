@@ -108,8 +108,15 @@ class TestWithFemaleMaleAndBarMoving(BaseThread):
     def plot(self):
         file_path = self._file_path
         output=file_path.with_name(f"post {file_path.stem}.csv")
-        output, durations = post_process(file=file_path, output=output)
+        output, durations, counts = post_process(file=file_path, output=output)
         plot_as_svg(path=output)
         hist_output=file_path.with_name(f"hist {file_path.stem}.svg")
         plot_duration_histogram_as_svg(output=hist_output, durations=durations)
+        
+        count_output=file_path.with_name(f"count {file_path.stem}.svg")
+        plot_counts_as_svg(
+            output=count_output,
+            counts=counts,
+            title=f"pulse complementary cumulative histogram for a {timelap_to_string(seconds_elapsed=self._duration)} test."
+        )
         

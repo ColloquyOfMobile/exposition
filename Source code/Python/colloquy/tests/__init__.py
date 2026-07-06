@@ -16,6 +16,10 @@ class Tests(Base):
     def __init__(self, owner):
         super().__init__(owner)
         self._hardware = self.owner.hardware
+        if self.name not in self.owner.params:
+            self._params = self.owner.params[self.name] = {}
+        else:
+            self._params = self.owner.params[self.name]
 
         self._html = HTML(owner=self)
         result_folder = Path("local/test results")
@@ -47,6 +51,11 @@ class Tests(Base):
             return
 
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
+
+
+    @property
+    def params(self):
+        return self._params
 
     @property
     def colloquy(self):

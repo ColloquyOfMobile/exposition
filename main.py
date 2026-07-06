@@ -1,9 +1,9 @@
 import sys
 from time import sleep
 from pathlib import Path
-import matplotlib
-# run matplotlib without GUI
-matplotlib.use("Agg") 
+# import matplotlib
+# # run matplotlib without GUI
+# matplotlib.use("Agg") 
 
 
 cwd = Path(__file__).parent

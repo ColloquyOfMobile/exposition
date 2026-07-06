@@ -103,15 +103,19 @@ def post_process(file, output=None, window_size=5):
     return output, durations, counts
 
 
-def read_and_store(start_time, file, duration, stop, sensors_read):
-	timestamp = time() - start_time
-	tokens = [str(timestamp)]
-	tokens.extend(read() for read in sensors_read)
-	line = ", ".join(str(token) for token in tokens)
-	
-	file.write(line + "\n")
-	if timestamp > duration:
-		stop()
+def read_and_store(start_time, file, duration, stop, sensors_read, result_rows=None):
+    timestamp = time() - start_time
+    tokens = [str(timestamp)]
+    tokens.extend(read() for read in sensors_read)
+    
+    if result_rows is not None:
+        result_rows.append(tokens)
+        
+    line = ", ".join(str(token) for token in tokens)
+    
+    file.write(line + "\n")
+    if timestamp > duration:
+        stop()
 
 def plot_duration_histogram_as_svg(output, durations):
 
@@ -185,5 +189,39 @@ def plot_counts_as_svg(output, counts, title):
     fig.savefig(output, format="svg")
     plt.close(fig)
 
+
+
+
+def plot(path):
+    if isinstance(path, str):
+        path = Path(path)
+    df = pd.read_csv(path, skipinitialspace=True)
+
+    fig, ax1 = plt.subplots(figsize=(10, 5))
+    
+    # Main sensor signals
+    ax1.plot(df["seconds"], df["female1"], label="female1", linewidth=2)
+    ax1.plot(df["seconds"], df["female2"], label="female2", linewidth=2)
+    ax1.plot(df["seconds"], df["female3"], label="female3", linewidth=2)
+    ax1.axhline(
+        y=threshold,
+        label=f"threshold ({threshold})",
+        linewidth=2,
+    )
+
+    ax1.set_xlabel("Time (s)")
+    ax1.set_ylabel("Sensor value")
+    ax1.grid(True)
+    
+    # Combine legends from both axes
+    lines = ax1.get_lines()
+    labels = [line.get_label() for line in lines]
+    ax1.legend(lines, labels)
+
+    plt.title("Sensor Data")
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+    
 if __name__ == "__main__":
-    plot(path="docs/test_results/week24/test with female male and bar moving for 30s/post process 2026_06_16_17h_43min_26s.csv")
+    plot(path=r"C:\workspace\workspace2\Colloquy\exposition\docs\test_results\week26\2026_07_02_12h_08min_04s.csv")

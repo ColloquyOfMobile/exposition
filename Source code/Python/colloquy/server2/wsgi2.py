@@ -232,12 +232,12 @@ class WSGI2(Base):
             "justify-content": "space-between",
             }
                 
-        with tag("div", name=obj["name"], style=export_style(style)): 
+        with tag("div", name=obj["name"], style=export_style(style)):  
             
             for key, value in obj.items():
                 # print(f"{key=}")
                 if key in ("name", "subject", "id", "path", "focus", "func", "ref", "checked", "keyboard", "close", "open", "opened", ):
-                    continue                    
+                    continue 
                     
                 if key == "value":
                     with tag("div"):
@@ -253,6 +253,10 @@ class WSGI2(Base):
                     with tag("div", name=key, style=export_style(style)):
                         with tag("a", href=f"/{path.as_posix()}"):
                             text(f"{key}()")
+                    continue
+                    
+                if "svg" in value:
+                    doc.asis(value["svg"])
                     continue
                     
                 # print(f"{value=}")

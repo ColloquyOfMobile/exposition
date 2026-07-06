@@ -23,6 +23,11 @@ class TestLightSensorValues(BaseThread):
         self._running_test = None
         self._start_time = None
         
+        if self.name not in self.owner.params:
+            self._params = self.owner.params[self.name] = {}
+        else:
+            self._params = self.owner.params[self.name]
+        
         test_duration = 30 # seconds
 
         # self._html = HTML(owner=self)
@@ -59,6 +64,11 @@ class TestLightSensorValues(BaseThread):
             ]
         
         self._duration = sum(test.duration for test in self._threaded_tests)
+
+
+    @property
+    def params(self):
+        return self._params
 
     @property
     def colloquy(self):

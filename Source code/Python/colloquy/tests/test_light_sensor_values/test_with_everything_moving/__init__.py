@@ -7,19 +7,27 @@ from threading import Event
 import traceback
 from threading import Thread, Event, Lock
 from time import sleep, time
-from .html import HTML
 from ..utils import read_and_store, post_process, plot_as_svg, plot_duration_histogram_as_svg, plot_counts_as_svg
+from .test_results import TestResults
 
 class TestWithEveryThingMoving(BaseThread):
 
     def __init__(self, owner, result_folder, test_duration):
         super().__init__(owner=owner)
-        self._html = HTML(owner=self)
-        self[self.html.name] = self.html.handle_request
+        self._default_duration = 5*60
+        if self.name not in self.owner.params:
+            self._params = self.owner.params[self.name] = {"duration": self._default_duration}
+        else:
+            self._params = self.owner.params[self.name]
+            
+        self._result_rows = None
+        self._test_results = None
         
         self._start_time = None
         self._timelap = None
-        self._duration = test_duration # test running 'self._duration' seconds
+        if "duration" not in self.params:
+            self.params["duration"] = self._default_duration
+        self._duration = self.params["duration"]
         
         self._sensors_read = tuple(female.light_sensor.read for female in self.hardware.females)
         
@@ -33,9 +41,13 @@ class TestWithEveryThingMoving(BaseThread):
 
 
     @property
+    def params(self):
+        return self._params
+
+
+    @property
     def name(self):
-        duration = timelap_to_string(self._duration)
-        return f"test with everything moving for {duration}"
+        return f"test with everything moving"
 
     @property
     def html(self):
@@ -51,14 +63,14 @@ class TestWithEveryThingMoving(BaseThread):
         run_with = self._file = self._file_path.open("a")      
         super().run(run_with=run_with)
         
-        if self._started_by is None:
-            self.plot()
-        
+        # if self._started_by is None:
+            # self.plot()
         
         
     def setup(self):            
         self._file.write("seconds, female1, female2, female3" + "\n")
         self._start_time = time()
+        self._result_rows = []
         
         self.hardware.bar.move_male1_in_front_of_female1_and_wait()
         
@@ -78,24 +90,32 @@ class TestWithEveryThingMoving(BaseThread):
         self.hardware.male1.neopixels.ring.off()
         self.hardware.male2.neopixels.ring.off()
         self.hardware.bar.turn_back_and_forth_around_f1.stop()
+        self._test_results = TestResults(owner=self, result_rows=self._result_rows)
 
     def loop(self):   
-        return read_and_store(
-            start_time=self._start_time, 
-            sensors_read=self._sensors_read,
-            file=self._file,
-            stop=self.stop,
-            duration=self._duration,
-            ) 
-        # timestamp = time() - self._start_time
-        # value = self.hardware.female1.light_sensor.read()  
-        # self._file.write(f"{timestamp}, {value}" + "\n")
-        # if timestamp > self._duration:
-            # self.stop()
+        timestamp = time() - self._start_time
+        tokens = [timestamp]
+        tokens.extend(read() for read in self._sensors_read)
+        
+        if self._result_rows is not None:
+            self._result_rows.append(tokens)
+            
+        # line = ", ".join(str(token) for token in tokens)        
+        
+        if timestamp > self._duration:
+            self.stop()
     
     def snapshot(self, path):
         states = super().snapshot(path=path)
-        _path = states["path"]
+        _path = states["path"]  
+        states["duration"] = {
+            "path": _path + ("duration", ),
+            "name": "duration",
+            "value": timelap_to_string(seconds_elapsed=self._duration),
+            }
+        if self._test_results is not None:
+            states["test results"] = self._test_results.snapshot(path=_path)
+            
         if self._start_time is not None:
             seconds_elapsed = time() - self._start_time   
             states["running during"] = {
@@ -118,11 +138,10 @@ class TestWithEveryThingMoving(BaseThread):
         hist_output=file_path.with_name(f"hist {file_path.stem}.svg")
         plot_duration_histogram_as_svg(output=hist_output, durations=durations)
         
-        # ChatGPT can you give me the an implementation 
         count_output=file_path.with_name(f"count {file_path.stem}.svg")
         plot_counts_as_svg(
             output=count_output,
             counts=counts,
-            title="pulse complementary cumulative histogram for a {timelap_to_string(seconds_elapsed=self._duration)} test."
+            title=f"pulse complementary cumulative histogram for a {timelap_to_string(seconds_elapsed=self._duration)} test."
         )
         
