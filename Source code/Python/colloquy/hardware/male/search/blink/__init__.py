@@ -46,6 +46,10 @@ class Blink(BaseThread):
     def setdown(self):
         self.male.ring.off()   
         pass
+    
+    @property
+    def snapshot_children(self):
+        return {}
 
 
 # class _Blink():

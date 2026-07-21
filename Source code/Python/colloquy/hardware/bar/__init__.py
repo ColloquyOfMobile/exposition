@@ -172,19 +172,32 @@ class Bar(BaseThread):
         self.dxl.move_and_wait(position)
         
     
-    def snapshot(self, path):
-        path = path + (self.name,)
-        states = {
-            "path": path,
-            "name": self.name,
-            "close": self.close,
-            "open": self.open,
-            "opened": self._is_opened,
-            "dxl origin": self.dxl_origin.snapshot(path=path),
-            self.dxl.name: self.dxl.snapshot(path=path),
-            "search": self.search.snapshot(path=path),
+    # def snapshot(self, path):
+        # path = path + (self.name,)
+        # states = {
+            # "path": path,
+            # "name": self.name,
+            # "close": self.close,
+            # "open": self.open,
+            # "opened": self._is_opened,
+            # "dxl origin": self.dxl_origin.snapshot(path=path),
+            # self.dxl.name: self.dxl.snapshot(path=path),
+            # "search": self.search.snapshot(path=path),
+            # "move male1 in front of female1 and wait": self.move_male1_in_front_of_female1_and_wait,
+            # "move male1 in front of female2 and wait": self.move_male1_in_front_of_female2_and_wait,
+            # "move male1 in front of female3 and wait": self.move_male1_in_front_of_female3_and_wait,
+        # }
+        # return states 
+    
+    @property
+    def snapshot_children(self):
+        children = {}
+        children.update({
+            "dxl origin": self.dxl_origin,
+            self.dxl.name: self.dxl,
+            "search": self.search,
             "move male1 in front of female1 and wait": self.move_male1_in_front_of_female1_and_wait,
             "move male1 in front of female2 and wait": self.move_male1_in_front_of_female2_and_wait,
             "move male1 in front of female3 and wait": self.move_male1_in_front_of_female3_and_wait,
-        }
-        return states 
+        })
+        return children

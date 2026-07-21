@@ -108,21 +108,34 @@ class ValueSetter2(Base):
         def wrap():
             self._set_func(value)
         return wrap
-
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        _path = path + (self.name,)
+    
+    
+    @property
+    def snapshot_children(self):
+        children = {}
 
         for setter in self._setters:
-            if callable(setter):
-                if self._sign == -1:
-                    states["-" + setter.name] = setter
-                else:
-                    states[setter.name] = setter
+            if self._sign == -1:
+                children["-" + setter.name] = setter
             else:
-                states[setter.name] = setter.snapshot(_path)
+                children[setter.name] = setter
+                
+        return children
 
-        return states
+    # def snapshot(self, path):
+        # states = super().snapshot(path=path)
+        # _path = path + (self.name,)
+
+        # for setter in self._setters:
+            # if callable(setter):
+                # if self._sign == -1:
+                    # states["-" + setter.name] = setter
+                # else:
+                    # states[setter.name] = setter
+            # else:
+                # states[setter.name] = setter.snapshot(_path)
+
+        # return states
 
 
 class Set(Base):

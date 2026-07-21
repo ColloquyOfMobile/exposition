@@ -219,3 +219,19 @@ class Neopixel(Base):
             
         }
         return states
+    
+    @property
+    def snapshot_children(self):
+        children = {}
+        children.update({
+            "on": self.on,
+            "off": self.off,
+            "toggle": self.toggle,
+            "brightness": self.brightness,
+            "white": self.white,
+            "red": self.red,
+            "green": self.green,
+            "blue": self.blue,
+            
+        })
+        return children

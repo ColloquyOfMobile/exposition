@@ -138,3 +138,10 @@ class Drives(BaseThread):
         states[self.o_drive.name] = self.o_drive.snapshot(_path)
         states[self.p_drive.name] = self.p_drive.snapshot(_path)
         return states
+    
+    @property
+    def snapshot_children(self):
+        children = {}        
+        children[self.o_drive.name] = self.o_drive
+        children[self.p_drive.name] = self.p_drive
+        return children

@@ -188,11 +188,18 @@ class DXL(Base):
         self[goal_position.name] = goal_position
         self._registers.append(goal_position)
     
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        _path = states["path"]
+    @property
+    def snapshot_children(self):
+        children = {}
         for register in self._registers:
-            states[register.name] = register.snapshot(path=_path)
-        return states
+            children[register.name] = register
+        return children
+    
+    # def snapshot(self, path):
+        # states = super().snapshot(path=path)
+        # _path = states["path"]
+        # for register in self._registers:
+            # states[register.name] = register.snapshot(path=_path)
+        # return states
     
     

@@ -180,15 +180,26 @@ class Female(BaseThread):
         self.drives.stop()
         self.search.stop()
     
-    def snapshot(self, path):        
-        states = super().snapshot(path=path)
-        _path = states["path"]
-        states.update({
-            "dxl origin": self.dxl_origin.snapshot(path=_path),
-            self.dxl.name: self.dxl.snapshot(path=_path),
-            "search": self.search.snapshot(path=_path),
-            "drives": self.drives.snapshot(path=_path),
-            "neopixels": self.neopixels.snapshot(path=_path),
-            "light sensor": self.light_sensor.snapshot(path=_path),
-        })
-        return states 
+    @property
+    def snapshot_children(self):
+        children = {}
+        children["dxl origin"] = self.dxl_origin
+        children[self.dxl.name] = self.dxl
+        children["search"] = self.search
+        children["drives"] = self.drives
+        children["neopixels"] = self.neopixels
+        children["light sensor"] = self.light_sensor
+        return children
+    
+    # def snapshot(self, path):        
+        # states = super().snapshot(path=path)
+        # _path = states["path"]
+        # states.update({
+            # "dxl origin": self.dxl_origin.snapshot(path=_path),
+            # self.dxl.name: self.dxl.snapshot(path=_path),
+            # "search": self.search.snapshot(path=_path),
+            # "drives": self.drives.snapshot(path=_path),
+            # "neopixels": self.neopixels.snapshot(path=_path),
+            # "light sensor": self.light_sensor.snapshot(path=_path),
+        # })
+        # return states 

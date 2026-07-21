@@ -60,11 +60,20 @@ class LightSensor(BaseThread):
         # rint(response)
         return int(response)
     
-    def snapshot(self, path):        
-        states = super().snapshot(path=path)
-        _path = states["path"]
-        states.update({
+    # def snapshot(self, path):        
+        # states = super().snapshot(path=path)
+        # _path = states["path"]
+        # states.update({
+            # "read": self.read,
+            # "value": self.read(),
+        # })
+        # return states 
+    
+    @property
+    def snapshot_children(self):
+        children = {}
+        children.update({
             "read": self.read,
             "value": self.read(),
         })
-        return states 
+        return children

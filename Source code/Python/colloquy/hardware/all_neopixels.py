@@ -23,9 +23,16 @@ class AllNeopixels(Base):
     def turn_all_off(self):
         for neopixel in self:
             neopixel.off()
+    
+    @property
+    def snapshot_children(self):
+        children = {}
+        children["turn all neopixels on"] = self.turn_all_on
+        children["turn all neopixels off"] = self.turn_all_off
+        return children
         
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        states["turn all neopixels on"] = self.turn_all_on
-        states["turn all neopixels off"] = self.turn_all_off
-        return states 
+    # def snapshot(self, path):
+        # states = super().snapshot(path=path)
+        # states["turn all neopixels on"] = self.turn_all_on
+        # states["turn all neopixels off"] = self.turn_all_off
+        # return states 

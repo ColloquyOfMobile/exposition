@@ -41,12 +41,17 @@ class Search(BaseThread):
         print(f"Set down {self=}")        
         pass
     
-    def snapshot(self, path):
-        states = {
-            "path": path + (self.name, ),
-            "name": self.name,
-            "close": self.close,
-            "open": self.open,
-            "opened": self._is_opened,
-        }
-        return states
+    # def snapshot(self, path):
+        # states = {
+            # "path": path + (self.name, ),
+            # "name": self.name,
+            # "close": self.close,
+            # "open": self.open,
+            # "opened": self._is_opened,
+        # }
+        # return states
+    
+    @property
+    def snapshot_children(self):
+        children = {}
+        return children

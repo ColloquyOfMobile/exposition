@@ -87,23 +87,6 @@ class TestWithFemaleMaleAndBarMoving(BaseThread):
         # self._file.write(f"{timestamp}, {value}" + "\n")
         # if timestamp > self._duration:
             # self.stop()
-    
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        _path = states["path"]
-        if self._start_time is not None:
-            seconds_elapsed = time() - self._start_time   
-            states["running during"] = {
-                "path": _path + ("running during", ),
-                "name": "running during",
-                "value": timelap_to_string(seconds_elapsed=seconds_elapsed),
-                }
-            states["progress"] = {
-                "path": _path + ("progress", ),
-                "name": "progress",
-                "value": f"{round(100*seconds_elapsed/self._duration)}%",
-                }
-        return states 
         
     def plot(self):
         file_path = self._file_path
@@ -119,4 +102,41 @@ class TestWithFemaleMaleAndBarMoving(BaseThread):
             counts=counts,
             title=f"pulse complementary cumulative histogram for a {timelap_to_string(seconds_elapsed=self._duration)} test."
         )
+    
+    # def snapshot(self, path):
+        # states = super().snapshot(path=path)
+        # _path = states["path"]
+        # if self._start_time is not None:
+            # seconds_elapsed = time() - self._start_time   
+            # states["running during"] = {
+                # "path": _path + ("running during", ),
+                # "name": "running during",
+                # "value": timelap_to_string(seconds_elapsed=seconds_elapsed),
+                # }
+            # states["progress"] = {
+                # "path": _path + ("progress", ),
+                # "name": "progress",
+                # "value": f"{round(100*seconds_elapsed/self._duration)}%",
+                # }
+        # return states 
+    
+    def _snapshot_if_opened(self, path):
+        states = {}
+        if self._start_time is not None:
+            seconds_elapsed = time() - self._start_time   
+            states["running during"] = {
+                "path": path + ("running during", ),
+                "name": "running during",
+                "value": timelap_to_string(seconds_elapsed=seconds_elapsed),
+                }
+            states["progress"] = {
+                "path": path + ("progress", ),
+                "name": "progress",
+                "value": f"{round(100*seconds_elapsed/self._duration)}%",
+                }
+        return states
+    
+    @property
+    def snapshot_children(self):
+        return {}
         

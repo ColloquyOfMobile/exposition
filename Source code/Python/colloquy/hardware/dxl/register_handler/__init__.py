@@ -97,12 +97,23 @@ class RegisterHanlder(Base):
             raise NotImplementedError(self)
         return self._write_func(self.dxl_id, self._register, value)
     
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        _path = states["path"]
-        states["value"]  = self.read()
+    # def snapshot(self, path):
+        # states = super().snapshot(path=path)
+        # _path = states["path"]
+        # states["value"]  = self.read()
+        
+        # if not self.is_readonly():
+            # states[self._setter.name] = self._setter.snapshot(_path)
+        
+        # return states
+    
+    @property
+    def snapshot_children(self):
+        children = {}
+        
+        children["value"]  = self.read()
         
         if not self.is_readonly():
-            states[self._setter.name] = self._setter.snapshot(_path)
-        
-        return states
+            children[self._setter.name] = self._setter
+            
+        return children

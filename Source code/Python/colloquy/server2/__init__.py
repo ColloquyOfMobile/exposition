@@ -8,7 +8,7 @@ from colloquy.utils import remove_folder_and_subfolders
 from colloquy.base import Base
 from threading import Event
 from wsgiref.simple_server import make_server, WSGIRequestHandler
-from .wsgi import WSGI
+# from .wsgi import WSGI
 from .wsgi2 import WSGI2
 WSGIRequestHandler.log_message = lambda *args, **kwargs: None
 

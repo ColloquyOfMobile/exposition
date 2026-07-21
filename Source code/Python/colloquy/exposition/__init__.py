@@ -66,12 +66,17 @@ class Exposition(BaseThread):
             self.hardware.shutdown()
         self.hardware.stop()
     
-    def snapshot(self, path):
-        path = path + (self.name,)
-        states = {
-            "path": path,
-            "name": self.name,
-            "open": self.open,
-            "close": self.close,
-        }
-        return states 
+    # def snapshot(self, path):
+        # path = path + (self.name,)
+        # states = {
+            # "path": path,
+            # "name": self.name,
+            # "open": self.open,
+            # "close": self.close,
+        # }
+        # return states 
+    
+    @property
+    def snapshot_children(self):
+        children = {}
+        return children

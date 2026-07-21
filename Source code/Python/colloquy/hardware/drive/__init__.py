@@ -130,9 +130,15 @@ class Drive(BaseThread):
     def satisfy(self):
         self.o_drive = self._satisfaction_lim
         self.p_drive = self._satisfaction_lim
+        
+    @property
+    def snapshot_children(self):
+        return {}
     
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        _path = states["path"]
-        states["value"] = self.value
+    def snapshot_as_child(self, path):
+        states = self._snapshot_base_states(path)        
+        if self._is_opened:
+            states.update({
+            "value": self.value,
+        })
         return states

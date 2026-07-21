@@ -83,18 +83,29 @@ class Neopixels(Base):
     def p_drive_level(self):
         return self._p_drive_level
     
-    def snapshot(self, path):
-        path = path + (self.name, )
-        states = {
-            "path": path,
-            "name": self.name,
-            "close": self.close,
-            "open": self.open,
-            "opened": self._is_opened,
-            self.up_ring.name: self.up_ring.snapshot(path=path),
-            self.ring.name: self.ring.snapshot(path=path),
-            self.o_drive_level.name: self.o_drive_level.snapshot(path=path),
-            self.p_drive_level.name: self.p_drive_level.snapshot(path=path),
-        }
-        return states
+    # def snapshot(self, path):
+        # path = path + (self.name, )
+        # states = {
+            # "path": path,
+            # "name": self.name,
+            # "close": self.close,
+            # "open": self.open,
+            # "opened": self._is_opened,
+            # self.up_ring.name: self.up_ring.snapshot(path=path),
+            # self.ring.name: self.ring.snapshot(path=path),
+            # self.o_drive_level.name: self.o_drive_level.snapshot(path=path),
+            # self.p_drive_level.name: self.p_drive_level.snapshot(path=path),
+        # }
+        # return states
+    
+    @property
+    def snapshot_children(self):
+        children = {}
+        children.update({
+            self.up_ring.name: self.up_ring,
+            self.ring.name: self.ring,
+            self.o_drive_level.name: self.o_drive_level,
+            self.p_drive_level.name: self.p_drive_level,
+        })
+        return children
 

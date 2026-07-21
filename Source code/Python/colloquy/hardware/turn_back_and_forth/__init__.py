@@ -28,7 +28,7 @@ class TurnBackAndForth(BaseThread):
     def setdown(self):
         pass
     
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        _path = states["path"]
-        return states
+    @property
+    def snapshot_children(self):
+        children = {}
+        return children

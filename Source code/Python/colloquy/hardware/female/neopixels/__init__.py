@@ -81,16 +81,27 @@ class Neopixels(Base):
     
     def snapshot(self, path):
         path = path + (self.name, )
-        states = {
-            "path": path,
-            "name": self.name,
-            "close": self.close,
-            "open": self.open,
-            "opened": self._is_opened,
-            "head": self.head.snapshot(path=path),
-            self.body_o.name: self.body_o.snapshot(path=path),
-            self.body_p.name: self.body_p.snapshot(path=path),
-            "feet": self.feet.snapshot(path=path),
-        }
-        return states
+        # states = {
+            # "path": path,
+            # "name": self.name,
+            # "close": self.close,
+            # "open": self.open,
+            # "opened": self._is_opened,
+            # "head": self.head.snapshot(path=path),
+            # self.body_o.name: self.body_o.snapshot(path=path),
+            # self.body_p.name: self.body_p.snapshot(path=path),
+            # "feet": self.feet.snapshot(path=path),
+        # }
+        # return states
+    
+    @property
+    def snapshot_children(self):
+        children = {}
+        children.update({
+            "head": self.head,
+            self.body_o.name: self.body_o,
+            self.body_p.name: self.body_p,
+            "feet": self.feet,
+        })
+        return children
 

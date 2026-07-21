@@ -177,18 +177,28 @@ class Male(BaseThread):
         self.drives.stop()
         self.search.stop()
     
-    def snapshot(self, path):
-        path = path + (self.name, )
-        states = {
-            "path": path,
-            "name": self.name,
-            "close": self.close,
-            "open": self.open,
-            "opened": self._is_opened,
-            "dxl origin": self.dxl_origin.snapshot(path=path),
-            self.dxl.name: self.dxl.snapshot(path=path),
-            "search": self.search.snapshot(path=path),
-            "drives": self.drives.snapshot(path=path),
-            "neopixels": self.neopixels.snapshot(path=path),
-        }
-        return states
+    @property
+    def snapshot_children(self):
+        children = {}
+        children["dxl origin"] = self.dxl_origin
+        children[self.dxl.name] = self.dxl
+        children["search"] = self.search
+        children["drives"] = self.drives
+        children["neopixels"] = self.neopixels
+        return children
+    
+    # def snapshot(self, path):
+        # path = path + (self.name, )
+        # states = {
+            # "path": path,
+            # "name": self.name,
+            # "close": self.close,
+            # "open": self.open,
+            # "opened": self._is_opened,
+            # "dxl origin": self.dxl_origin.snapshot(path=path),
+            # self.dxl.name: self.dxl.snapshot(path=path),
+            # "search": self.search.snapshot(path=path),
+            # "drives": self.drives.snapshot(path=path),
+            # "neopixels": self.neopixels.snapshot(path=path),
+        # }
+        # return states

@@ -34,10 +34,10 @@ class TurnBackAndForthAroundF1(BaseThread):
     def setdown(self):
         pass
     
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        _path = states["path"]
-        return states
+    # def snapshot(self, path):
+        # states = super().snapshot(path=path)
+        # _path = states["path"]
+        # return states
 
     def toggle_position(self):
         if self._position_memory is None:
@@ -61,3 +61,8 @@ class TurnBackAndForthAroundF1(BaseThread):
         value = self.origin - self._motion_range // 2
         self.owner.dxl.goal_position.write(value)
         self._position_memory = "min"
+    
+    @property
+    def snapshot_children(self):
+        children = {}
+        return children

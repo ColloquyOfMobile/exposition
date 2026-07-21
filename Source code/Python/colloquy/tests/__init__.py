@@ -39,18 +39,18 @@ class Tests(Base):
             }
         
 
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
+    # def __call__(self, request):
+        # request = Path(request)
+        # if not request.parts:
+            # raise NotImplementedError
 
-        key, *leftover = request.parts
+        # key, *leftover = request.parts
 
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
+        # if key in self:
+            # self[key](request="/".join(leftover))
+            # return
 
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
+        # raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
 
     @property
@@ -81,10 +81,26 @@ class Tests(Base):
         for test in self._threaded_tests:
             test.stop()
     
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        _path = states["path"]
-        states[self.test_drive_light_values.name] = self.test_drive_light_values.snapshot(path=_path)
-        states[self.test_male_patterns.name] = self.test_male_patterns.snapshot(path=_path)
-        states[self.test_light_sensor_values.name] = self.test_light_sensor_values.snapshot(path=_path)
-        return states 
+    @property
+    def snapshot_children(self):
+        children = {}
+        for test in self._threaded_tests:
+            children[test.name] = test
+        return children
+    
+    # def snapshot(self, path, focus_path):
+        # states = super().snapshot(path=path)
+        # _path = states["path"]
+        # states[self.test_drive_light_values.name] = self.test_drive_light_values.snapshot(path=_path)
+        # states[self.test_male_patterns.name] = self.test_male_patterns.snapshot(path=_path)
+        # states[self.test_light_sensor_values.name] = self.test_light_sensor_values.snapshot(path=_path)
+        # return states 
+    
+    # def snapshot_as_child(self, path):
+        # states = super().snapshot(path=path)
+        # _path = states["path"]
+        # if self._is_opened:
+            # states[self.test_drive_light_values.name] = self.test_drive_light_values.snapshot(path=_path)
+            # states[self.test_male_patterns.name] = self.test_male_patterns.snapshot(path=_path)
+            # states[self.test_light_sensor_values.name] = self.test_light_sensor_values.snapshot(path=_path)
+        # return states 

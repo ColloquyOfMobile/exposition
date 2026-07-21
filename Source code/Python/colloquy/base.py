@@ -6,6 +6,9 @@ import urllib.parse
 import socket
 from .logger import Logger
 
+class SnapchotError(Exception):
+    pass
+
 class Base:
 
     _all_threads = set()
@@ -129,13 +132,53 @@ class Base:
     def close(self):
         self._is_opened = False
     
-    def snapshot(self, path):
-        path = path + (self.name,)
-        states = {
+    def _snapshot_base_states(self, path):
+        return {
             "path": path,
             "name": self.name,
             "close": self.close,
             "open": self.open,
             "opened": self._is_opened,
         }
+    
+    @property
+    def snapshot_children(self):
+        raise NotImplementedError(f"{self=}. Property returning a dictionnary with UI children.")
+    
+    def _snapshot_if_opened(self, path):
+        states = {}
+        for k, v in self.snapshot_children.items():
+            child_path = path + (k, )
+            states[k] = v.snapshot_as_child(path=child_path)
+        return states
+        
+    
+    def snapshot(self, path, focus_path):   
+        try:
+            states = self._snapshot_base_states(path)
+            if focus_path == path:
+                states.update(self._snapshot_if_opened(path))
+                return states
+                
+            for k, v in self.snapshot_children.items():
+                if not callable(v):
+                    states[k] = v.snapshot(
+                        path = path + (k,), 
+                        focus_path=focus_path
+                        )
+                    continue                    
+                states[k] = v
+                
+        except SnapchotError:
+            raise
+        except Exception as error:
+            raise SnapchotError(f"Error getting snapshot from {self}") from error
+            
+        return states
+    
+    def snapshot_as_child(self, path):
+        states = self._snapshot_base_states(path)        
+        if self._is_opened:
+            states.update(self._snapshot_if_opened(path))
+            
         return states

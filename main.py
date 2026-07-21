@@ -5,6 +5,7 @@ from pathlib import Path
 # # run matplotlib without GUI
 # matplotlib.use("Agg") 
 
+raise NotImplementedError("Fix the test result UI!")
 
 cwd = Path(__file__).parent
 # server_code = cwd / "Server"
@@ -13,10 +14,9 @@ source_code = cwd / "Source code" / "Python"
 sys.path.append(str(source_code.resolve()))
 
 from colloquy import Colloquy
-# import app2
 from colloquy.server2 import Server2
-from server import server
-from wsgi import make_wsgi
+# from server import server
+# from wsgi import make_wsgi
 from threading import Event
 
 def main(*args):

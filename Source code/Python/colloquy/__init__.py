@@ -117,48 +117,56 @@ class Colloquy(BaseThread):
         for name in self:
             print(f"- {name}")
     
-    def snapshot(self):
-        path = tuple()
-        states = {
-            "path": path,
-            "name": self.name,
-            "hardware": self._hardware.snapshot(path=path),
-            "exposition": self._exposition.snapshot(path=path),
-            "tests": self._tests.snapshot(path=path),
+    @property
+    def snapshot_children(self):
+        return {
+            "hardware": self._hardware,
+            "exposition": self._exposition,
+            "tests": self._tests,
         }
-        return states 
     
-    def get_focus(self, *args, states):        
+    def get_focus(self, *args, obj, path=None):
+        if path is None:
+            path = list()
+        
+        # self.snapshot(path=path, focus_path=focus_path)
         if args:
             key, *leftovers = args
             if key != "call":
-                states, leftovers = self.get_focus(*leftovers, states=states[key])
-            return states, leftovers
+                path.append(key)
+                if key not in obj.snapshot_children:
+                    raise NotImplementedError(f"{obj.snapshot_children=}, {obj=}")
+                obj = obj.snapshot_children[key]
+                return self.get_focus(*leftovers, obj=obj, path=path)
+                
+            return obj.snapshot(path=tuple(path), focus_path=tuple(path)), leftovers
         
-        return states, tuple()
+        return obj.snapshot(path=tuple(path), focus_path=tuple(path)), tuple()
         
         
     def get_states(self, *args):
-        states = self.snapshot()
-        focus, leftovers = self.get_focus(*args, states=states)
+        states = self.snapshot(path=tuple(), focus_path=tuple())
+        focus, leftovers = self.get_focus(*args, obj=self)
         
         if leftovers:                
-            self.update(*leftovers, states=focus)
+            self.update(*leftovers, focus=focus)
                 
-            states = self.snapshot()
-            focus, leftovers = self.get_focus(*args, states=states)
-            
+            states = self.snapshot(path=tuple(), focus_path=focus["path"])
+            focus, leftovers = self.get_focus(*args, obj=self)
+        
+        states = self.snapshot(path=tuple(), focus_path=focus["path"])
+        focus, leftovers = self.get_focus(*args, obj=self)
         return focus
         
-    def update(self, *args, states):
-        if not isinstance(states, dict):
-            return states(*args)
+    def update(self, *args, focus):
+        if not isinstance(focus, dict):
+            return focus(*args)
         if args:
             key, *leftovers = args
-            if key not in states:
-                raise NotImplementedError(key, states["name"],)
-            return self.update(*leftovers, states=states[key])
-        return states
+            if key not in focus:
+                raise NotImplementedError(key, focus["name"],)
+            return self.update(*leftovers, focus=focus[key])
+        return focus
     
     def shutdown_neopixels(self):
         neopixels = self._hardware.neopixels

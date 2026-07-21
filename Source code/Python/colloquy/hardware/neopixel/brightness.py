@@ -68,16 +68,6 @@ class Brightness(Base):
         if value < 0:
             value = 0
         self._value = value
-    
-    def snapshot(self, path):
-        _path = path + (self.name, )        
-        states = super().snapshot(path=path)
-        
-        states.update({
-            "value": self.value,
-            self.setter.name: self.setter.snapshot(_path),
-        })
-        return states 
 
 
     def html(self):
@@ -93,3 +83,22 @@ class Brightness(Base):
                     doc.asis(self[command].html())
 
         return doc.getvalue()
+    
+    # def snapshot(self, path):
+        # _path = path + (self.name, )        
+        # states = super().snapshot(path=path)
+        
+        # states.update({
+            # "value": self.value,
+            # self.setter.name: self.setter.snapshot(_path),
+        # })
+        # return states 
+    
+    @property
+    def snapshot_children(self):
+        children = {}
+        children.update({
+            "value": self.value,
+            self.setter.name: self.setter,
+        })
+        return children

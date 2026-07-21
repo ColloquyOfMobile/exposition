@@ -51,19 +51,29 @@ class ValueSetter(Base):
 
     @property
     def set(self):
-        return self.owner.set
-
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        _path = path + (self.name,)
+        return self.owner.set    
+    
+    
+    @property
+    def snapshot_children(self):
+        children = {}
 
         for setter in self._setters:
-            if callable(setter):
-                states[setter.name] = setter
-            else:
-                states[setter.name] = setter.snapshot(_path)
+            children[setter.name] = setter
+                
+        return children
 
-        return states
+    # def snapshot(self, path):
+        # states = super().snapshot(path=path)
+        # _path = path + (self.name,)
+
+        # for setter in self._setters:
+            # if callable(setter):
+                # states[setter.name] = setter
+            # else:
+                # states[setter.name] = setter.snapshot(_path)
+
+        # return states
 
 class Set(Base):
     

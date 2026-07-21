@@ -51,17 +51,31 @@ class TestDriveLightValues(BaseThread):
             self.stop()
         return
     
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        _path = states["path"]
+    # def snapshot(self, path):
+        # states = super().snapshot(path=path)
+        # _path = states["path"]
+        # if self._timelap is not None:
+            # states["timelap"] = {
+                # "path": _path + ("timelap", ),
+                # "name": "timelap",
+                # "value": timelap_to_string(seconds_elapsed=self._timelap),
+                # }
+        # for drive in self.hardware.drives:
+            # name = f"{drive.body.name}'s {drive.name} drive"
+            # states[drive.name] = drive.snapshot(path=_path)
+        # return states 
+    
+    @property
+    def snapshot_children(self):
+        children = {}
         if self._timelap is not None:
-            states["timelap"] = {
+            children["timelap"] = {
                 "path": _path + ("timelap", ),
                 "name": "timelap",
                 "value": timelap_to_string(seconds_elapsed=self._timelap),
                 }
         for drive in self.hardware.drives:
             name = f"{drive.body.name}'s {drive.name} drive"
-            states[drive.name] = drive.snapshot(path=_path)
-        return states 
+            children[drive.name] = drive
+        return children
         

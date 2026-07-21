@@ -19,8 +19,14 @@ class Bodies(Base):
     def turn_all_bodies_origin(self):
         for body in self:
             body.turn_to_origin()
+    
+    @property
+    def snapshot_children(self):
+        children = {}
+        children["turn all bodies to origin"] = self.turn_all_bodies_origin
+        return children
         
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        states["turn all bodies to origin"] = self.turn_all_bodies_origin
-        return states 
+    # def snapshot(self, path):
+        # states = super().snapshot(path=path)
+        # states["turn all bodies to origin"] = self.turn_all_bodies_origin
+        # return states 

@@ -52,13 +52,23 @@ class TestMalePatterns(BaseThread):
             self.stop()
         return
     
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        _path = states["path"]
+    # def snapshot(self, path):
+        # states = super().snapshot(path=path)
+        # _path = states["path"]
+        # for drives in self._drives:
+            # states[drives.name] = drives.snapshot(path=_path)
+            
+        # for blink_handler in self._blink_handlers:
+            # states[blink_handler.name] = blink_handler.snapshot(path=_path)
+        # return states 
+    
+    @property
+    def snapshot_children(self):
+        children = {}
         for drives in self._drives:
-            states[drives.name] = drives.snapshot(path=_path)
+            children[drives.name] = drives
             
         for blink_handler in self._blink_handlers:
-            states[blink_handler.name] = blink_handler.snapshot(path=_path)
-        return states 
+            children[blink_handler.name] = blink_handler
+        return children
         

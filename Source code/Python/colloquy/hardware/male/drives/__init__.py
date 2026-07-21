@@ -160,20 +160,31 @@ class Drives(BaseThread):
         self._p_drive.value = 100
         self.update()
     
-    def snapshot(self, path):
-        states = super().snapshot(path)
-        path = states["path"]
-        states["set O=0 and P=100"] = self.set_o_to_0_p_to_100
-        states["set O=100 and P=0"] = self.set_p_to_0_o_to_100
-        states["set O=30 and P=30"] = self.set_o_and_p_to_30
-        states["set O=100 and P=100"] = self.set_o_and_p_to_100
-        states[self.o_drive.name] = self.o_drive.snapshot(path)
-        states[self.p_drive.name] = self.p_drive.snapshot(path)
-        # states = {
-            # "path": path + (self.name, ),
-            # "name": self.name,
-            # "close": self.close,
-            # "open": self.open,
-            # "opened": self._is_opened,
-        # }
-        return states
+    # def snapshot(self, path):
+        # states = super().snapshot(path)
+        # path = states["path"]
+        # states["set O=0 and P=100"] = self.set_o_to_0_p_to_100
+        # states["set O=100 and P=0"] = self.set_p_to_0_o_to_100
+        # states["set O=30 and P=30"] = self.set_o_and_p_to_30
+        # states["set O=100 and P=100"] = self.set_o_and_p_to_100
+        # states[self.o_drive.name] = self.o_drive.snapshot(path)
+        # states[self.p_drive.name] = self.p_drive.snapshot(path)
+        # # states = {
+            # # "path": path + (self.name, ),
+            # # "name": self.name,
+            # # "close": self.close,
+            # # "open": self.open,
+            # # "opened": self._is_opened,
+        # # }
+        # return states
+    
+    @property
+    def snapshot_children(self):
+        children = {}
+        children["set O=0 and P=100"] = self.set_o_to_0_p_to_100
+        children["set O=100 and P=0"] = self.set_p_to_0_o_to_100
+        children["set O=30 and P=30"] = self.set_o_and_p_to_30
+        children["set O=100 and P=100"] = self.set_o_and_p_to_100
+        children[self.o_drive.name] = self.o_drive
+        children[self.p_drive.name] = self.p_drive
+        return children

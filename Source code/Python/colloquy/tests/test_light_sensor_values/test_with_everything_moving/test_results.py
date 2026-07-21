@@ -27,17 +27,6 @@ class TestResults(Base):
     def name(self):
         return f"test results"
     
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        _path = states["path"]
-        states["show full measurement in GUI"] = self.show_full_measurement_in_gui
-        states["plot"] =  {
-            "path": _path + ("plot", ),
-            "name": "plot",
-            "svg": self.counts_as_svg(),
-        }
-        return states
-    
     def show_full_measurement_in_gui(self):     
         df = self._data_frame
 
@@ -151,4 +140,40 @@ class TestResults(Base):
             # survival function (or complementary cumulative histogram)
             seconds = np.arange(int(np.ceil(durations.max())) + 1)
             self._counts = (durations[:, None] >= seconds).sum(axis=0)
+    
+    # def snapshot(self, path, focus_path):
+        # states = super().snapshot(path=path)
+        # _path = states["path"]
+        # states["show full measurement in GUI"] = self.show_full_measurement_in_gui
+        # states["plot"] =  {
+            # "path": _path + ("plot", ),
+            # "name": "plot",
+            # "svg": self.counts_as_svg(),
+        # }
+        # return states
+    
+    def _snapshot_if_opened(self, path):
+        states = {}
+        states["show full measurement in GUI"] = self.show_full_measurement_in_gui
+        states["plot"] =  {
+            "path": path + ("plot", ),
+            "name": "plot",
+            "svg": self.counts_as_svg(),
+        }
+        return states
+    
+    @property
+    def snapshot_children(self):
+        return {}
+    
+    # @property
+    # def snapshot_children(self):
+        # children = {}
+        # children["show full measurement in GUI"] = self.show_full_measurement_in_gui
+        # children["plot"] =  {
+            # "path": _path + ("plot", ),
+            # "name": "plot",
+            # "svg": self.counts_as_svg(),
+        # }
+        # return children
         

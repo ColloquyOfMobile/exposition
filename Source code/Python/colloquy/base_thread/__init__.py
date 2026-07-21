@@ -35,18 +35,18 @@ class BaseThread(Base):
         self["stop"] = self.stop_command
         self[self.thread_errors.name] = self.thread_errors
 
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
+    # def __call__(self, request):
+        # request = Path(request)
+        # if not request.parts:
+            # raise NotImplementedError
 
-        key, *leftover = request.parts
+        # key, *leftover = request.parts
 
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
+        # if key in self:
+            # self[key](request="/".join(leftover))
+            # return
 
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
+        # raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def thread_errors(self):
@@ -187,16 +187,22 @@ class BaseThread(Base):
                 return True
         return False
     
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        _path = states["path"]
+    def _snapshot_if_opened(self, path):        
+        states = super()._snapshot_if_opened(path=path)
         if self.is_started:
             states["stop"] = self.stop
         else:
             states["start"] = self.start
         
+        return states
+    
+    def snapshot(self, path, focus_path):
+        states = super().snapshot(path=path, focus_path=focus_path)
+        path = states["path"]
+        
         if self.thread_errors:
-            states[self.thread_errors.name] = self.thread_errors.snapshot(path=_path)
+            states[self.thread_errors.name] = self.thread_errors.snapshot(path=path)
+            
         return states
         
 
