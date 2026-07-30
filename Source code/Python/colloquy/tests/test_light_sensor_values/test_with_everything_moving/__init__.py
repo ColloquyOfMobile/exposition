@@ -117,17 +117,23 @@ class TestWithEveryThingMoving(BaseThread):
     def plot(self):
         file_path = self._file_path
         output = file_path.with_name(f"post {file_path.stem}.csv")
-        output, durations, counts = post_process(file=file_path, output=output)
+        output, results = post_process(file=file_path, output=output)
         plot_as_svg(path=output)
-        hist_output = file_path.with_name(f"hist {file_path.stem}.svg")
-        plot_duration_histogram_as_svg(output=hist_output, durations=durations)
 
-        count_output = file_path.with_name(f"count {file_path.stem}.svg")
-        plot_counts_as_svg(
-            output=count_output,
-            counts=counts,
-            title=f"pulse complementary cumulative histogram for a {timelap_to_string(seconds_elapsed=self._duration)} test.",
-        )
+        for column, data in results.items():
+            durations = data["durations"]
+            if len(durations) == 0:
+                continue
+
+            hist_output = file_path.with_name(f"hist {column} {file_path.stem}.svg")
+            plot_duration_histogram_as_svg(output=hist_output, durations=durations)
+
+            count_output = file_path.with_name(f"count {column} {file_path.stem}.svg")
+            plot_counts_as_svg(
+                output=count_output,
+                counts=data["counts"],
+                title=f"{column} pulse complementary cumulative histogram for a {timelap_to_string(seconds_elapsed=self._duration)} test.",
+            )
 
     # def snapshot(self, path):
     # states = super().snapshot(path=path)
@@ -156,7 +162,10 @@ class TestWithEveryThingMoving(BaseThread):
 
     @property
     def snapshot_children(self):
-        return {}
+        children = {}
+        if self._test_results is not None:
+            children[self._test_results.name] = self._test_results
+        return children
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
@@ -165,8 +174,6 @@ class TestWithEveryThingMoving(BaseThread):
             "name": "duration",
             "value": timelap_to_string(seconds_elapsed=self._duration),
         }
-        if self._test_results is not None:
-            states["test results"] = self._test_results
 
         if self._start_time is not None:
             seconds_elapsed = time() - self._start_time
