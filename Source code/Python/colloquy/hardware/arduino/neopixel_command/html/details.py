@@ -4,24 +4,24 @@ from colloquy.base_html import BaseHTML
 
 import traceback
 
-class Details(BaseHTML):
 
+class Details(BaseHTML):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._opened = None
-    
+
     @property
     def opened(self):
         return self._opened
-    
+
     @opened.setter
     def opened(self, value):
         self._opened = value
-    
+
     @property
     def command(self):
         return self.owner.command
-    
+
     @property
     def hardware(self):
         return self.owner.hardware
@@ -33,15 +33,15 @@ class Details(BaseHTML):
     @property
     def workspace(self):
         return self.owner.workspace
-    
+
     @property
     def arrow(self):
         doc, tag, text = CustomDoc().tagtext()
         if self.is_open:
-            href=f"/{self.path.as_posix()}/close"
+            href = f"/{self.path.as_posix()}/close"
             svg = self._svg_down_arrow()
         else:
-            href=f"/{self.path.as_posix()}/open"
+            href = f"/{self.path.as_posix()}/open"
             svg = self._svg_right_arrow()
         with tag("div", name=self.name):
             with tag("a", href=href):
@@ -57,15 +57,18 @@ class Details(BaseHTML):
     def _call_unsafe(self):
         if not self.is_open:
             return ""
-        
-        
+
         doc, tag, text = CustomDoc().tagtext()
-            
-        with tag("div",  name=self.name, style="display: flex; flex:1; flex-direction: column;"):
+
+        with tag(
+            "div",
+            name=self.name,
+            style="display: flex; flex:1; flex-direction: column;",
+        ):
             with tag("div"):
                 with tag("a", href=f"/{self.command.path.as_posix()}/send"):
                     text("send")
-            
+
             for setter in self.command.value_setters:
                 doc.asis(setter.html())
 

@@ -4,24 +4,24 @@ from colloquy.base_html import BaseHTML
 
 import traceback
 
-class Details(BaseHTML):
 
+class Details(BaseHTML):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._opened = None
-    
+
     @property
     def opened(self):
         return self._opened
-    
+
     @opened.setter
     def opened(self, value):
         self._opened = value
-    
+
     @property
     def male(self):
         return self.owner.owner
-    
+
     @property
     def hardware(self):
         return self.owner.hardware
@@ -33,15 +33,15 @@ class Details(BaseHTML):
     @property
     def workspace(self):
         return self.owner.workspace
-    
+
     @property
     def arrow(self):
         doc, tag, text = CustomDoc().tagtext()
         if self.is_open:
-            href=f"/{self.path.as_posix()}/close"
+            href = f"/{self.path.as_posix()}/close"
             svg = self._svg_down_arrow()
         else:
-            href=f"/{self.path.as_posix()}/open"
+            href = f"/{self.path.as_posix()}/open"
             svg = self._svg_right_arrow()
         with tag("div", name=self.name):
             with tag("a", href=href):
@@ -54,32 +54,30 @@ class Details(BaseHTML):
     def close(self, request=None):
         self._is_open = False
 
-
     def _call_unsafe(self):
         if not self.is_open:
             return ""
-        
+
         doc, tag, text = CustomDoc().tagtext()
-        
+
         doc.asis(self.owner.owner.thread_errors.html())
-        
+
         with tag("div"):
             if self.owner.owner.is_started:
                 label = "stop"
             else:
                 label = "start"
 
-            href=f"/{self.owner.owner.path.as_posix()}/{label}"
+            href = f"/{self.owner.owner.path.as_posix()}/{label}"
 
             with tag("a", href=href):
                 text(f"{label}")
-        
+
         if self.opened is not None:
             doc.asis(self.opened())
             return doc.getvalue()
-            
-        with tag("div", style="display: flex; flex-direction: column;"):         
-            
+
+        with tag("div", style="display: flex; flex-direction: column;"):
             with tag("div", style="display: flex; flex-direction: column;"):
                 doc.asis(self.male.drives.html())
                 doc.asis(self.male.neopixels.html())

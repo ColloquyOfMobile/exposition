@@ -4,13 +4,13 @@ from colloquy.base import Base
 from pathlib import Path
 from threading import Event
 
-class BodyP(Neopixel):
 
+class BodyP(Neopixel):
     def __init__(self, owner):
         super().__init__(owner=owner, name="bodyP")
         self._body = owner
         self.color = self.puce
-    
+
     @property
     def female(self):
         return self.owner.owner

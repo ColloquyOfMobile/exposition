@@ -6,6 +6,7 @@ from colloquy.dxl_u2d2 import DXLU2D2
 from .emulator_thread import EmulatorThread
 from colloquy.logger import Logger
 
+
 class VirtualPortHandler:
     def __init__(self, port_name):
         self._port_name = port_name
@@ -22,6 +23,7 @@ class VirtualPortHandler:
 
     def getPortName(self):
         return self._port_name
+
 
 class VirtualDxl(EmulatorThread):
     def __init__(self, owner, dxl_id):
@@ -55,8 +57,8 @@ class VirtualDxl(EmulatorThread):
     def goal_position(self, value):
         with self._lock:
             self._goal_position = value
-            self._lim_min = value - 2*self._step
-            self._lim_max = value + 2*self._step
+            self._lim_min = value - 2 * self._step
+            self._lim_max = value + 2 * self._step
 
         self.log(f"Goal position set to {self.goal_position}.")
         if self._thread is not None:
@@ -68,15 +70,15 @@ class VirtualDxl(EmulatorThread):
         self.stop_event.clear()
 
     def _loop(self):
-        lim_min, lim_max  = self._lim_min, self._lim_max
+        lim_min, lim_max = self._lim_min, self._lim_max
 
         if self._lim_min < self._position < self._lim_max:
             self.stop_event.set()
             return
             # with self._lock:
-                # self._position = self.goal_position
-                # self.stop_event.set()
-                # return
+            # self._position = self.goal_position
+            # self.stop_event.set()
+            # return
 
         if self._position < self.goal_position:
             self._position += self._step
@@ -84,8 +86,10 @@ class VirtualDxl(EmulatorThread):
 
         self._position -= self._step
 
+
 def default_dict_init():
-    return {"position":0, "goal position": 0}
+    return {"position": 0, "goal position": 0}
+
 
 class VirtualPacketHandler:
     def __init__(self, protocol):
@@ -101,12 +105,9 @@ class VirtualPacketHandler:
             108: "profile acceleration",
             132: "position",
             116: "goal position",
-            }
-        self._register_writer = {
-            "goal position": self._write_goal_position
         }
-        self._register_reader = {
-        }
+        self._register_writer = {"goal position": self._write_goal_position}
+        self._register_reader = {}
         self.dxls = None
         self._log = Logger(owner=self)
 
@@ -132,11 +133,9 @@ class VirtualPacketHandler:
     def _read_register(self, dxl_id, label):
         return self.dxls[dxl_id][label]
 
-
     def _write_goal_position(self, dxl_id, value):
         self.log(f"Write goal position {value=} to dxl{dxl_id=}")
         self.dxls[dxl_id].goal_position = value
-
 
     def write1ByteTxRx(self, port_handler, dxl_id, register_address, value):
         if register_address not in self._register_map:
@@ -170,12 +169,13 @@ class VirtualPacketHandler:
         raise NotImplementedError
         return None
 
-class VirtualDynamixelManager(DXLU2D2):
 
+class VirtualDynamixelManager(DXLU2D2):
     _classes = {
         "port_handler": VirtualPortHandler,
         "packet_handler": VirtualPacketHandler,
     }
+
     def __init__(self, owner, **kwargs):
         DXLU2D2.__init__(self, owner, **kwargs)
         self.emulators = set()
@@ -187,9 +187,9 @@ class VirtualDynamixelManager(DXLU2D2):
         return self._dxls
 
     # def stop(self):
-        # for element in self.elements:
-            # element.stop()
-        # # self._dxls.clear()
+    # for element in self.elements:
+    # element.stop()
+    # # self._dxls.clear()
 
     def open(self):
         DXLU2D2.open(self)
@@ -199,7 +199,6 @@ class VirtualDynamixelManager(DXLU2D2):
         DXLU2D2.close(self)
         for dxl in self.packet_handler.dxls.values():
             dxl.stop()
-
 
     def _get_com_ports(self):
         return ["VirtualCOM1", "VirtualCOM2"]

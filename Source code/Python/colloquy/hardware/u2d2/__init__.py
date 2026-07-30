@@ -1,4 +1,8 @@
-from dynamixel_sdk import PortHandler, PacketHandler, COMM_SUCCESS  # Uses Dynamixel SDK library
+from dynamixel_sdk import (
+    PortHandler,
+    PacketHandler,
+    COMM_SUCCESS,
+)  # Uses Dynamixel SDK library
 from functools import wraps
 from threading import Lock
 from time import sleep
@@ -15,53 +19,51 @@ def handle_error(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         self = args[0]
-        with self:        
+        with self:
             dxl_id = args[1]
             for i in range(5):
-                
                 with self.lock:
                     try:
                         value, dxl_comm_result, dxl_error = func(*args, **kwargs)
                     except IndexError:
-                        continue # Look like com error produce index error in the DXL SDK.
+                        continue  # Look like com error produce index error in the DXL SDK.
 
-                #self._busy.clear()
+                # self._busy.clear()
                 if dxl_comm_result != COMM_SUCCESS:
-                    self.log(f"COM ERR: ({dxl_id=}) {self.packet_handler.getTxRxResult(dxl_comm_result)}")
+                    self.log(
+                        f"COM ERR: ({dxl_id=}) {self.packet_handler.getTxRxResult(dxl_comm_result)}"
+                    )
                     continue
                 if dxl_error != 0:
-                    self.log(f"DXL ERR: ({dxl_id=}) {self.packet_handler.getRxPacketError(dxl_error)}")
-                    continue                
-                
+                    self.log(
+                        f"DXL ERR: ({dxl_id=}) {self.packet_handler.getRxPacketError(dxl_error)}"
+                    )
+                    continue
+
                 return value
 
     return wrapper
 
 
 class U2D2(Base):
-
     def __init__(self, owner, **kwargs):
         super().__init__(owner=owner)
-        
+
         self._html = HTML(owner=self)
         self[self.html.name] = self.html.handle_request
         # self._path = Path("dxl manager")
         self._was_open = None
         self._context_depth = 0
         self._is_open = False
-        
+
         # port_name = kwargs["communication port"]
         self._lock = Lock()
         self._baudrate = 57600
-        self._port_handler = None # port_handler(port_name)
-        self._packet_handler = None #PacketHandler(2.0)
+        self._port_handler = None  # port_handler(port_name)
+        self._packet_handler = None  # PacketHandler(2.0)
         self._com_port = ComPort(owner=self)
         self[self.com_port.name] = self.com_port
-        self._dxl_list = [
-            DXL(owner=self, dynamixel_id=i+1)
-            for i
-            in range(9)
-            ]
+        self._dxl_list = [DXL(owner=self, dynamixel_id=i + 1) for i in range(9)]
         for dxl in self.dxl_list:
             self[dxl.name] = dxl
         self._dxls = {}
@@ -104,7 +106,9 @@ class U2D2(Base):
             if not self.is_simulated:
                 self._packet_handler = PacketHandler(2.0)
             else:
-                self._packet_handler = self.colloquy.virtual_hardware.u2d2_packet_handler 
+                self._packet_handler = (
+                    self.colloquy.virtual_hardware.u2d2_packet_handler
+                )
 
         return self._packet_handler
 
@@ -164,10 +168,8 @@ class U2D2(Base):
     @handle_error
     def write_1_byte(self, dxl_id, register_address, value):
         dxl_comm_result, dxl_error = self.packet_handler.write1ByteTxRx(
-            self.port_handler,
-            dxl_id,
-            register_address,
-            value)
+            self.port_handler, dxl_id, register_address, value
+        )
 
         return None, dxl_comm_result, dxl_error
 
@@ -183,10 +185,8 @@ class U2D2(Base):
     @handle_error
     def write_4_bytes(self, dxl_id, register_address, value):
         dxl_comm_result, dxl_error = self.packet_handler.write4ByteTxRx(
-            self.port_handler,
-            dxl_id,
-            register_address,
-            value)
+            self.port_handler, dxl_id, register_address, value
+        )
 
         return None, dxl_comm_result, dxl_error
 
@@ -202,10 +202,8 @@ class U2D2(Base):
     @handle_error
     def _write_2_bytes_at(self, dxl_id, register_address, value):
         dxl_comm_result, dxl_error = self.packet_handler.write2ByteTxRx(
-            self.port_handler,
-            dxl_id,
-            register_address,
-            value)
+            self.port_handler, dxl_id, register_address, value
+        )
 
         return None, dxl_comm_result, dxl_error
 
@@ -215,13 +213,15 @@ class U2D2(Base):
 
     def open(self):
         assert self.port_name
-            
+
         if not self.is_simulated:
             self._port_handler = PortHandler(self.port_name)
         else:
             if self._port_handler is not None:
                 assert not self._port_handler.is_open
-            self._port_handler = self.colloquy.virtual_hardware.u2d2_port_handler(self.port_name)
+            self._port_handler = self.colloquy.virtual_hardware.u2d2_port_handler(
+                self.port_name
+            )
         # PortHandler(self.port_name)
         self.port_handler.setBaudRate(self._baudrate)
         self._is_open = True

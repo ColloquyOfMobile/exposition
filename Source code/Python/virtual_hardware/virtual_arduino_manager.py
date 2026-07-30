@@ -4,8 +4,8 @@ import json
 from pathlib import Path
 import re
 
-class VirtualSerialPort:
 
+class VirtualSerialPort:
     def __init__(self, baudrate, timeout, port=None):
         assert port is None, f"Port should be none to avoid opening! ({port=})"
         self._port = port
@@ -40,7 +40,6 @@ class VirtualSerialPort:
             assert "brightness" in data
         if path.endswith("sensor"):
             self._to_return = json.dumps({"status": "success", "value": "10"}).encode()
-
 
     @property
     def is_open(self):
@@ -85,8 +84,8 @@ class VirtualSerialPort:
             sleep(0.1)
             yield b'{"status": "success"}'
 
-class VirtualArduinoManager(ArduinoManager):
 
+class VirtualArduinoManager(ArduinoManager):
     _classes = {
         "serial": VirtualSerialPort,
     }

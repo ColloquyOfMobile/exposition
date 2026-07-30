@@ -4,15 +4,15 @@ from pathlib import Path
 from copy import deepcopy
 import serial
 import serial.tools.list_ports
+
 # from colloquy.wsgi.root.body.workspace.item import Item, HTML as _HTML
 # from colloquy.colloquy_item import ColloquyItem
 # from colloquy.wsgi.root.body.workspace.share_commands import Commands
 from colloquy.base import Base
 from .defaults import DEFAULTS
 
+
 class Parameters(Base):
-
-
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._file = Path("local/parameters.json")
@@ -28,7 +28,9 @@ class Parameters(Base):
         with self.file.open() as file:
             self._data = json.load(file)
 
-        for mirror_name, female_name in zip(self._data["mirrors"]["names"], self._data["females"]["names"]):
+        for mirror_name, female_name in zip(
+            self._data["mirrors"]["names"], self._data["females"]["names"]
+        ):
             self._data[mirror_name] = self._data[female_name]["mirror"]
 
         self._data["elements"] = {
@@ -36,24 +38,24 @@ class Parameters(Base):
                 *self._data["females"]["names"],
                 *self._data["mirrors"]["names"],
                 *self._data["males"]["names"],
-                ]
-            }
+            ]
+        }
         # raise NotImplementedError
 
         # TODO move the process into the as_dict and the __getitem__
         self._process(self._data)
 
     # def __getitem__(self, key):
-        # return self._data[key]
+    # return self._data[key]
 
     # def __setitem__(self, key, value):
-        # if not isinstance(value, ColloquyItem):
-            # raise NotImplementedError(f"{key=}, {value=}")
-        # Item.__setitem__(self, key, value)
+    # if not isinstance(value, ColloquyItem):
+    # raise NotImplementedError(f"{key=}, {value=}")
+    # Item.__setitem__(self, key, value)
 
     # def __call__(self):
-        # if not self.is_opened:
-            # self.open()
+    # if not self.is_opened:
+    # self.open()
 
     def get(self, key):
         return self._data[key]
@@ -94,9 +96,8 @@ class Parameters(Base):
                 elements.add(f"{name}/origin")
 
         if self.get("bar")["origin"] is None:
-                elements.add(f"bar/origin")
+            elements.add(f"bar/origin")
         return elements
-
 
     def save(self):
         json_data = {}
@@ -123,9 +124,5 @@ class Parameters(Base):
                 continue
             names = value.get("names", [])
             for name in names:
-                self._data[name].update( value.get("share", {}))
+                self._data[name].update(value.get("share", {}))
                 self._data[name]["name"] = name
-
-
-
-

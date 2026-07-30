@@ -1,4 +1,3 @@
-
 import sys, os
 import json
 from yattag import Doc, indent
@@ -8,17 +7,21 @@ from colloquy.utils import remove_folder_and_subfolders
 from colloquy.base import Base
 from threading import Event
 from wsgiref.simple_server import make_server, WSGIRequestHandler
+
 # from .wsgi import WSGI
 from .wsgi2 import WSGI2
+
 WSGIRequestHandler.log_message = lambda *args, **kwargs: None
 
 
 class Server2(Base):
     def __init__(self, colloquy):
-        super().__init__(owner=None,)
+        super().__init__(
+            owner=None,
+        )
         self._shutdown_event = Event()
         self._restart_event = Event()
-        self._colloquy= colloquy
+        self._colloquy = colloquy
         self.run()
 
     @property
@@ -32,9 +35,9 @@ class Server2(Base):
     @property
     def restart_event(self):
         return self._restart_event
-    
+
     def run(self, port=8000):
-        hostname = "localhost" # socket.gethostname()
+        hostname = "localhost"  # socket.gethostname()
         with make_server("localhost", port, self.wsgi) as httpd:
             WSGIRequestHandler.log_message = lambda *args, **kwargs: None
             print(f"Accessible at http://{hostname}:{port}/")
@@ -47,10 +50,9 @@ class Server2(Base):
                     break
             print("Out from server loop.")
         print("Out from server context.")
-        
+
         if self.restart_event.is_set():
             self.restart_process()
-            
 
     def wsgi(self, environ, start_response):
         try:

@@ -23,13 +23,13 @@ const int color_orange[4] = {80, 255, 25, 16}; //GRBW/orangish
 const int color_puce[4] = {180, 160, 0, 40}; //GRBW//greenish
 """
 
-class Drives(BaseThread):
 
+class Drives(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
         self._name = f"{owner.name}'s drives"
-        
+
         self._o_drive = Drive(owner=self, name="O")
         self._p_drive = Drive(owner=self, name="P")
         # self._started_by = None
@@ -44,38 +44,37 @@ class Drives(BaseThread):
     def __iter__(self):
         yield self._o_drive
         yield self._p_drive
-        
+
     # def __call__(self, request):
-        # request = Path(request)
-        # if not request.parts:
-            # raise NotImplementedError
+    # request = Path(request)
+    # if not request.parts:
+    # raise NotImplementedError
 
-        # key, *leftover = request.parts
+    # key, *leftover = request.parts
 
-        # if key in self:
-            # self[key](request="/".join(leftover))
-            # return
+    # if key in self:
+    # self[key](request="/".join(leftover))
+    # return
 
-        # raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
-        
+    # raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
+
     def which_is_frustated(self):
         # raise NotImplementedError(f"Update to return a tuple for the states")
-        
+
         with self.o_drive.lock, self.p_drive.lock:
             # o_satisfaction_lim = self.o_drive < self._satisfaction_lim
             # p_satisfaction_lim = self.p_drive < self._satisfaction_lim
             # o_frustated = self.o_drive > self._frustrated_lim
             # p_frustated = self.p_drive > self._frustrated_lim
-            
 
             if self.o_drive.is_satisfied and self.p_drive.is_satisfied:
                 return tuple()
             if self.o_drive.is_frustated and self.p_drive.is_frustated:
                 return ("O", "P")
             if self.o_drive.value > self.p_drive.value:
-                return ("O", )
+                return ("O",)
             if self.p_drive.value > self.o_drive.value:
-                return ("P", )
+                return ("P",)
             if self.p_drive.value == self.o_drive.value:
                 return ("O", "P")
 
@@ -107,7 +106,7 @@ class Drives(BaseThread):
 
     # @property
     # def is_started(self):
-        # return self.owner.is_started
+    # return self.owner.is_started
 
     @property
     def html(self):
@@ -139,45 +138,45 @@ class Drives(BaseThread):
         male.neopixels.up_ring.brightness.value = max(o_value, p_value)
         male.neopixels.o_drive_level.brightness.value = o_value
         male.neopixels.p_drive_level.brightness.value = p_value
-        
-    def set_o_to_0_p_to_100(self): 
+
+    def set_o_to_0_p_to_100(self):
         self._o_drive.value = 0
         self._p_drive.value = 100
         self.update()
-        
-    def set_p_to_0_o_to_100(self):         
+
+    def set_p_to_0_o_to_100(self):
         self._o_drive.value = 100
         self._p_drive.value = 0
         self.update()
-        
-    def set_o_and_p_to_30(self):     
+
+    def set_o_and_p_to_30(self):
         self._o_drive.value = 30
         self._p_drive.value = 30
         self.update()
-        
-    def set_o_and_p_to_100(self):     
+
+    def set_o_and_p_to_100(self):
         self._o_drive.value = 100
         self._p_drive.value = 100
         self.update()
-    
+
     # def snapshot(self, path):
-        # states = super().snapshot(path)
-        # path = states["path"]
-        # states["set O=0 and P=100"] = self.set_o_to_0_p_to_100
-        # states["set O=100 and P=0"] = self.set_p_to_0_o_to_100
-        # states["set O=30 and P=30"] = self.set_o_and_p_to_30
-        # states["set O=100 and P=100"] = self.set_o_and_p_to_100
-        # states[self.o_drive.name] = self.o_drive.snapshot(path)
-        # states[self.p_drive.name] = self.p_drive.snapshot(path)
-        # # states = {
-            # # "path": path + (self.name, ),
-            # # "name": self.name,
-            # # "close": self.close,
-            # # "open": self.open,
-            # # "opened": self._is_opened,
-        # # }
-        # return states
-    
+    # states = super().snapshot(path)
+    # path = states["path"]
+    # states["set O=0 and P=100"] = self.set_o_to_0_p_to_100
+    # states["set O=100 and P=0"] = self.set_p_to_0_o_to_100
+    # states["set O=30 and P=30"] = self.set_o_and_p_to_30
+    # states["set O=100 and P=100"] = self.set_o_and_p_to_100
+    # states[self.o_drive.name] = self.o_drive.snapshot(path)
+    # states[self.p_drive.name] = self.p_drive.snapshot(path)
+    # # states = {
+    # # "path": path + (self.name, ),
+    # # "name": self.name,
+    # # "close": self.close,
+    # # "open": self.open,
+    # # "opened": self._is_opened,
+    # # }
+    # return states
+
     @property
     def snapshot_children(self):
         children = {}

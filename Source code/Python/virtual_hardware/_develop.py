@@ -6,8 +6,8 @@ from tests import Tests
 
 PARAMETERS = Parameters().as_dict()
 
-class _Develop(Tests):
 
+class _Develop(Tests):
     classes = Tests.classes.copy()
     classes["hardware"] = VirtualColloquyDriver
 

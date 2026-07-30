@@ -9,9 +9,11 @@ from colloquy.base import Base
 
 
 from .line import Line
+
 # from .key import Key
 from .erase import Erase
 from .html import HTML
+
 
 class Input(Base):
     def __init__(self, owner):
@@ -24,11 +26,11 @@ class Input(Base):
             self.value = self.value[:-1]
             if not self.value:
                 self.value = "0"
-            return 
+            return
         if request == "commit":
             self.owner.commit(self.value)
             self.value = "0"
-            return 
+            return
         if self.value == "0":
             self.value = request
             return

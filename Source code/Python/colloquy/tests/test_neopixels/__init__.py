@@ -1,11 +1,12 @@
 from colloquy.base import Base
 from .commands import Commands
+
 # from .test_neopixel_consumption import TestNeopixelConsumption
 # from .test_neopixel_communication import TestNeopixelCommunication
 from .test_neopixel_segments import TestNeopixelSegments
 
-class TestNeopixels(Base):
 
+class TestNeopixels(Base):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._commands = Commands(owner=self)

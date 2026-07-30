@@ -33,16 +33,14 @@ class ValueSetter(Base):
             else:
                 self._setters.append(
                     ValueSetter(
-                        owner=self,
-                        limit=limit,
-                        digits=digits - 1,
-                        prefix=new_prefix
+                        owner=self, limit=limit, digits=digits - 1, prefix=new_prefix
                     )
                 )
 
     def _make_setter(self, value):
         def wrap():
             self.dxl_origin.set(value)
+
         return wrap
 
     @property
@@ -51,36 +49,35 @@ class ValueSetter(Base):
 
     @property
     def set(self):
-        return self.owner.set    
-    
-    
+        return self.owner.set
+
     @property
     def snapshot_children(self):
         children = {}
 
         for setter in self._setters:
             children[setter.name] = setter
-                
+
         return children
 
     # def snapshot(self, path):
-        # states = super().snapshot(path=path)
-        # _path = path + (self.name,)
+    # states = super().snapshot(path=path)
+    # _path = path + (self.name,)
 
-        # for setter in self._setters:
-            # if callable(setter):
-                # states[setter.name] = setter
-            # else:
-                # states[setter.name] = setter.snapshot(_path)
+    # for setter in self._setters:
+    # if callable(setter):
+    # states[setter.name] = setter
+    # else:
+    # states[setter.name] = setter.snapshot(_path)
 
-        # return states
+    # return states
+
 
 class Set(Base):
-    
     def __init__(self, owner, value):
         self._value = value
         super().__init__(owner=owner)
-    
+
     def __call__(self):
         self.set(self._value)
 
@@ -91,4 +88,3 @@ class Set(Base):
     @property
     def name(self):
         return str(self._value) + " set"
-    

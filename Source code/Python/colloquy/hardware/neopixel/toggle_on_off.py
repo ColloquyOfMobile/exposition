@@ -1,9 +1,7 @@
-
 from colloquy.base import Base
 
 
 class ToggleOnOff(Base):
-
     def __init__(self, owner):
         super().__init__(owner=owner)
         # self._action = Action(owner=self)

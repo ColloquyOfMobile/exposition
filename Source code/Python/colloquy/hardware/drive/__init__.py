@@ -22,15 +22,15 @@ const int color_orange[4] = {80, 255, 25, 16}; //GRBW/orangish
 const int color_puce[4] = {180, 160, 0, 40}; //GRBW//greenish
 """
 
-class Drive(BaseThread):
 
+class Drive(BaseThread):
     def __init__(self, owner, name):
         assert name in ("O", "P")
-        self._name = f"{owner.owner.name}'s {name} drive" # name
+        self._name = f"{owner.owner.name}'s {name} drive"  # name
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
         self._lock = Lock()
-        
+
         self._value = self.body.params["drive start values"][self.body.name][name]
 
         self._step = 1
@@ -39,16 +39,16 @@ class Drive(BaseThread):
         self._max = 100
         self._min = 0
 
-        seconds_in_4min = 60*4
-        self._update_interval = seconds_in_4min/self._max
+        seconds_in_4min = 60 * 4
+        self._update_interval = seconds_in_4min / self._max
 
         self._satisfaction_lim = 30 / self._update_interval
 
-        seconds_in_3min = 60*3
+        seconds_in_3min = 60 * 3
         self._frustrated_lim = seconds_in_3min / self._update_interval
-        
+
         self._input = Input(owner=self)
-        
+
         self[self.input.name] = self.input
         self[self.html.name] = self.html.handle_request
 
@@ -83,7 +83,7 @@ class Drive(BaseThread):
     @value.setter
     def value(self, value):
         self._value = value
-        
+
     @property
     def input(self):
         return self._input
@@ -91,11 +91,11 @@ class Drive(BaseThread):
     @property
     def is_satisfied(self):
         return self.value < self._satisfaction_lim
-        
+
     @property
     def is_frustated(self):
         return self.value > self._frustrated_lim
-        
+
     def commit(self, value):
         self._value = int(value)
         if self._value > self._max:
@@ -130,15 +130,17 @@ class Drive(BaseThread):
     def satisfy(self):
         self.o_drive = self._satisfaction_lim
         self.p_drive = self._satisfaction_lim
-        
+
     @property
     def snapshot_children(self):
         return {}
-    
+
     def snapshot_as_child(self, path):
-        states = self._snapshot_base_states(path)        
+        states = self._snapshot_base_states(path)
         if self._is_opened:
-            states.update({
-            "value": self.value,
-        })
+            states.update(
+                {
+                    "value": self.value,
+                }
+            )
         return states

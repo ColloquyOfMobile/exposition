@@ -7,27 +7,26 @@ from threading import Thread, Event, Lock
 from time import sleep, time
 from .html import HTML
 
-class TestMalePatterns(BaseThread):
 
+class TestMalePatterns(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
         self[self.html.name] = self.html.handle_request
-        
+
         self._blink_handlers = []
         self._drives = []
         for male in self.hardware.males:
             blink_handler = male.search.blink
             self[blink_handler.name] = blink_handler
-            self._blink_handlers.append(blink_handler) 
-            
-            drives = male.drives                
+            self._blink_handlers.append(blink_handler)
+
+            drives = male.drives
             self[drives.name] = drives
-            self._drives.append(drives)        
-        
+            self._drives.append(drives)
+
         self._start_time = None
         self._timelap = None
-
 
     @property
     def name(self):
@@ -36,10 +35,10 @@ class TestMalePatterns(BaseThread):
     @property
     def html(self):
         return self._html
-        
-    def setup(self):        
+
+    def setup(self):
         self._start_time = time()
-        
+
         for blink_handler in self._blink_handlers:
             blink_handler.start(started_by=self)
 
@@ -47,28 +46,27 @@ class TestMalePatterns(BaseThread):
         for blink_handler in self._blink_handlers:
             blink_handler.stop()
 
-    def loop(self):       
+    def loop(self):
         if any(not blink_handler.is_started for blink_handler in self._blink_handlers):
             self.stop()
         return
-    
+
     # def snapshot(self, path):
-        # states = super().snapshot(path=path)
-        # _path = states["path"]
-        # for drives in self._drives:
-            # states[drives.name] = drives.snapshot(path=_path)
-            
-        # for blink_handler in self._blink_handlers:
-            # states[blink_handler.name] = blink_handler.snapshot(path=_path)
-        # return states 
-    
+    # states = super().snapshot(path=path)
+    # _path = states["path"]
+    # for drives in self._drives:
+    # states[drives.name] = drives.snapshot(path=_path)
+
+    # for blink_handler in self._blink_handlers:
+    # states[blink_handler.name] = blink_handler.snapshot(path=_path)
+    # return states
+
     @property
     def snapshot_children(self):
         children = {}
         for drives in self._drives:
             children[drives.name] = drives
-            
+
         for blink_handler in self._blink_handlers:
             children[blink_handler.name] = blink_handler
         return children
-        

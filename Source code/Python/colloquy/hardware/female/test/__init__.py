@@ -2,8 +2,8 @@ from pathlib import Path
 from colloquy.base import Base
 from .html import HTML
 
-class Test(Base):
 
+class Test(Base):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._html = HTML(owner=self)

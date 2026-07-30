@@ -4,11 +4,11 @@ from colloquy.base import Base
 from pathlib import Path
 from threading import Event
 
-class ODriveLevel(Neopixel):
 
+class ODriveLevel(Neopixel):
     def __init__(self, owner):
         super().__init__(owner=owner, name="o drive level")
-        self._body = owner        
+        self._body = owner
         self.color = self.orange
 
     @property

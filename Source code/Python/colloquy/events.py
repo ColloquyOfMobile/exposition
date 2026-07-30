@@ -1,10 +1,10 @@
 from threading import Event
 
-class Events():
 
+class Events:
     def __init__(self, shutdown):
-        self._shutdown = Event() # shutdown
-        self._restart= Event()
+        self._shutdown = Event()  # shutdown
+        self._restart = Event()
 
     @property
     def shutdown(self):

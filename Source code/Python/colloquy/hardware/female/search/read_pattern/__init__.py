@@ -10,19 +10,19 @@ from time import time
 from .html import HTML
 # from colloquy import LIGHT_PATTERNS
 
-class ReadPattern(BaseThread):
 
+class ReadPattern(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._lock = Lock()
-        self._html = HTML(owner=self)      
-        self[self.html.name] = self.html.handle_request  
+        self._html = HTML(owner=self)
+        self[self.html.name] = self.html.handle_request
 
-        self.sample_rate = 0.01 # seconds between internal samples
-        self.step_duration = 0.5    # duration of one pattern step (your blink step)
-        self.steps = 10             # number of steps in pattern (10 in LIGHT_PATTERNS)
-        self.max_mismatches = 1     # how many bit-differences we tolerate
-        self.detection_cooldown = 2.0 # seconds before reporting same pattern again
+        self.sample_rate = 0.01  # seconds between internal samples
+        self.step_duration = 0.5  # duration of one pattern step (your blink step)
+        self.steps = 10  # number of steps in pattern (10 in LIGHT_PATTERNS)
+        self.max_mismatches = 1  # how many bit-differences we tolerate
+        self.detection_cooldown = 2.0  # seconds before reporting same pattern again
 
         # how many samples per one pattern step (should be >= 2)
         self.samples_per_step = int(round(self.step_duration / self.sample_rate))
@@ -36,14 +36,14 @@ class ReadPattern(BaseThread):
 
         self._last_sample_time = 0.0
         self._last_detection_time = 0.0
-    
+
     @property
     def light_sensor(self):
-        return self.owner.owner.light_sensor  
+        return self.owner.owner.light_sensor
 
     @property
     def html(self):
-        return self._html        
+        return self._html
 
     @property
     def name(self):
@@ -78,8 +78,8 @@ class ReadPattern(BaseThread):
         pass
 
     def setdown(self):
-        print(f"Set down {self=}")  
-    
+        print(f"Set down {self=}")
+
     def _try_match(self):
         """
         Try different sub-step offsets to build candidate 10-bit sequences,
@@ -101,12 +101,12 @@ class ReadPattern(BaseThread):
 
         # For each offset inside one step (handles unknown alignment)
         for offset in range(s):
-            block = chunk[offset: offset + s * self.steps]  # contiguous block
+            block = chunk[offset : offset + s * self.steps]  # contiguous block
             # build the candidate 10-bit pattern by averaging each bin
             candidate = []
             for i in range(self.steps):
                 start = i * s
-                avg = sum(block[start:start + s]) / float(s)
+                avg = sum(block[start : start + s]) / float(s)
                 bit = 1 if avg > 0.5 else 0
                 candidate.append(bit)
 
@@ -121,12 +121,21 @@ class ReadPattern(BaseThread):
                         else:
                             rotated = ref_list[-rot:] + ref_list[:-rot]
 
-                        mismatches = sum(1 for a, b in zip(candidate, rotated) if a != b)
+                        mismatches = sum(
+                            1 for a, b in zip(candidate, rotated) if a != b
+                        )
 
                         # remember best so far for debug/logging
                         if mismatches < best_mismatches:
                             best_mismatches = mismatches
-                            best_candidate = (male, drive, candidate, rotated, offset, mismatches)
+                            best_candidate = (
+                                male,
+                                drive,
+                                candidate,
+                                rotated,
+                                offset,
+                                mismatches,
+                            )
 
                         # early accept if within tolerance
                         if mismatches <= self.max_mismatches:
@@ -135,45 +144,43 @@ class ReadPattern(BaseThread):
                             return (male, drive)
 
         return None
-    
+
     # def snapshot(self, path):
-        # path = path + (self.name, )
-        # states = {
-            # "path": path,
-            # "name": self.name,
-            # "close": self.close,
-            # "open": self.open,
-            # "opened": self._is_opened,
-            # "start": self.start,
-        # }
-        # return states
-    
+    # path = path + (self.name, )
+    # states = {
+    # "path": path,
+    # "name": self.name,
+    # "close": self.close,
+    # "open": self.open,
+    # "opened": self._is_opened,
+    # "start": self.start,
+    # }
+    # return states
+
     @property
     def snapshot_children(self):
         children = {}
         return children
 
 
-
-
-
-
-
-class DetectPattern():
+class DetectPattern:
     """
     Sample the photosensor at a high rate, bin the samples into N steps
     (step_duration each), then match the resulting N-bit pattern against
     LIGHT_PATTERNS (trying all circular rotations and allowing a few mismatches).
     """
 
-    def __init__(self, owner,
-                 threshold=300,        # analog threshold for raw -> digital
-                 sample_rate=0.05,     # seconds between internal samples
-                 step_duration=0.5,    # duration of one pattern step (your blink step)
-                 steps=10,             # number of steps in pattern (10 in LIGHT_PATTERNS)
-                 max_mismatches=1,     # how many bit-differences we tolerate
-                 detection_cooldown=2.0, # seconds before reporting same pattern again
-                 debug=False):
+    def __init__(
+        self,
+        owner,
+        threshold=300,  # analog threshold for raw -> digital
+        sample_rate=0.05,  # seconds between internal samples
+        step_duration=0.5,  # duration of one pattern step (your blink step)
+        steps=10,  # number of steps in pattern (10 in LIGHT_PATTERNS)
+        max_mismatches=1,  # how many bit-differences we tolerate
+        detection_cooldown=2.0,  # seconds before reporting same pattern again
+        debug=False,
+    ):
         super().__init__(owner=owner, name="pattern_detector")
 
         self.threshold = threshold
@@ -242,12 +249,12 @@ class DetectPattern():
 
         # For each offset inside one step (handles unknown alignment)
         for offset in range(s):
-            block = chunk[offset: offset + s * self.steps]  # contiguous block
+            block = chunk[offset : offset + s * self.steps]  # contiguous block
             # build the candidate 10-bit pattern by averaging each bin
             candidate = []
             for i in range(self.steps):
                 start = i * s
-                avg = sum(block[start:start + s]) / float(s)
+                avg = sum(block[start : start + s]) / float(s)
                 bit = 1 if avg > 0.5 else 0
                 candidate.append(bit)
 
@@ -262,12 +269,21 @@ class DetectPattern():
                         else:
                             rotated = ref_list[-rot:] + ref_list[:-rot]
 
-                        mismatches = sum(1 for a, b in zip(candidate, rotated) if a != b)
+                        mismatches = sum(
+                            1 for a, b in zip(candidate, rotated) if a != b
+                        )
 
                         # remember best so far for debug/logging
                         if mismatches < best_mismatches:
                             best_mismatches = mismatches
-                            best_candidate = (male, drive, candidate, rotated, offset, mismatches)
+                            best_candidate = (
+                                male,
+                                drive,
+                                candidate,
+                                rotated,
+                                offset,
+                                mismatches,
+                            )
 
                         # early accept if within tolerance
                         if mismatches <= self.max_mismatches:

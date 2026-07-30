@@ -7,19 +7,18 @@ from pathlib import Path
 
 
 class ThreadError(Base):
-    
     _counter = 0
     _counter_lock = Lock()
 
-    def __init__(self, owner, name, origin, error):        
-        self._name = name        
+    def __init__(self, owner, name, origin, error):
+        self._name = name
         super().__init__(owner=owner)
         self._error = error
         self._origin = origin
         self._html = HTML(owner=self)
 
         self[self.html.name] = self.html.handle_request
-        
+
     def __call__(self, request):
         request = Path(request)
         if not request.parts:
@@ -32,7 +31,7 @@ class ThreadError(Base):
             return
 
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
-    
+
     @property
     def colloquy(self):
         return self.owner.colloquy
@@ -52,9 +51,9 @@ class ThreadError(Base):
     @property
     def html(self):
         return self._html
-    
+
     def snapshot(self, path):
         states = super().snapshot(path=path)
         _path = states["path"]
-        
-        return states 
+
+        return states

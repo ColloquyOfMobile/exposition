@@ -9,17 +9,15 @@ from .p_drive_level import PDriveLevel
 from .ring import Ring
 
 
-
 class Neopixels(Base):
-    
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
         self._arduino = owner.arduino
-        
+
         self._up_ring = UpRing(owner=self)
         self._ring = Ring(owner=self)
-        self._o_drive_level= ODriveLevel(owner=self)
+        self._o_drive_level = ODriveLevel(owner=self)
         self._p_drive_level = PDriveLevel(owner=self)
 
         self[self.html.name] = self.html.handle_request
@@ -27,13 +25,13 @@ class Neopixels(Base):
         self[self.o_drive_level.name] = self.o_drive_level
         self[self.p_drive_level.name] = self.p_drive_level
         self[self.up_ring.name] = self.up_ring
-    
+
     def __iter__(self):
         yield self.up_ring
         yield self.ring
         yield self.o_drive_level
         yield self.p_drive_level
-        
+
     def __call__(self, request):
         request = Path(request)
         if not request.parts:
@@ -82,30 +80,31 @@ class Neopixels(Base):
     @property
     def p_drive_level(self):
         return self._p_drive_level
-    
+
     # def snapshot(self, path):
-        # path = path + (self.name, )
-        # states = {
-            # "path": path,
-            # "name": self.name,
-            # "close": self.close,
-            # "open": self.open,
-            # "opened": self._is_opened,
-            # self.up_ring.name: self.up_ring.snapshot(path=path),
-            # self.ring.name: self.ring.snapshot(path=path),
-            # self.o_drive_level.name: self.o_drive_level.snapshot(path=path),
-            # self.p_drive_level.name: self.p_drive_level.snapshot(path=path),
-        # }
-        # return states
-    
+    # path = path + (self.name, )
+    # states = {
+    # "path": path,
+    # "name": self.name,
+    # "close": self.close,
+    # "open": self.open,
+    # "opened": self._is_opened,
+    # self.up_ring.name: self.up_ring.snapshot(path=path),
+    # self.ring.name: self.ring.snapshot(path=path),
+    # self.o_drive_level.name: self.o_drive_level.snapshot(path=path),
+    # self.p_drive_level.name: self.p_drive_level.snapshot(path=path),
+    # }
+    # return states
+
     @property
     def snapshot_children(self):
         children = {}
-        children.update({
-            self.up_ring.name: self.up_ring,
-            self.ring.name: self.ring,
-            self.o_drive_level.name: self.o_drive_level,
-            self.p_drive_level.name: self.p_drive_level,
-        })
+        children.update(
+            {
+                self.up_ring.name: self.up_ring,
+                self.ring.name: self.ring,
+                self.o_drive_level.name: self.o_drive_level,
+                self.p_drive_level.name: self.p_drive_level,
+            }
+        )
         return children
-

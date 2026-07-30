@@ -8,7 +8,6 @@ from .html import HTML
 
 
 class Exposition(BaseThread):
-
     def __init__(self, owner):
         super().__init__(owner)
         self._html = HTML(owner=self)
@@ -47,10 +46,10 @@ class Exposition(BaseThread):
     @property
     def colloquy(self):
         return self.owner.colloquy
-        
+
     def open(self):
-        self._is_opened = True 
-        
+        self._is_opened = True
+
     def close(self):
         self._is_opened = False
 
@@ -65,17 +64,17 @@ class Exposition(BaseThread):
         if self.thread_errors:
             self.hardware.shutdown()
         self.hardware.stop()
-    
+
     # def snapshot(self, path):
-        # path = path + (self.name,)
-        # states = {
-            # "path": path,
-            # "name": self.name,
-            # "open": self.open,
-            # "close": self.close,
-        # }
-        # return states 
-    
+    # path = path + (self.name,)
+    # states = {
+    # "path": path,
+    # "name": self.name,
+    # "open": self.open,
+    # "close": self.close,
+    # }
+    # return states
+
     @property
     def snapshot_children(self):
         children = {}

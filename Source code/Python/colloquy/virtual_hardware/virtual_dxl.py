@@ -16,7 +16,7 @@ class VirtualDXL(Base):
             "profile velocity": 0,
             "profile acceleration": 0,
             "torque enabled": 0,
-            }
+        }
         # self._owner = owner
         self._dxl_id = dxl_id
         self._thread = None
@@ -35,47 +35,44 @@ class VirtualDXL(Base):
     def position(self):
         return self["position"]
 
-    
     def get(self, label):
         return self._dict[label]
-    
+
     def set(self, label, value):
         self._dict[label] = value
         if label == "goal position":
-            if self._dict["torque enabled"] == 0:                
+            if self._dict["torque enabled"] == 0:
                 raise NotImplementedError
-                        
+
             if self._thread is not None:
                 if self._thread.is_alive():
                     return
-            
-            self._thread = thread = Thread(target=self.run, name=self.path.as_posix(), daemon=True)
+
+            self._thread = thread = Thread(
+                target=self.run, name=self.path.as_posix(), daemon=True
+            )
             thread.start()
-    
+
     def run(self):
-        
-        while True:    
+
+        while True:
             position = self._dict["position"]
             goal = self._dict["goal position"]
-                
-            lim_min = goal - 2*self._step
-            lim_max = goal + 2*self._step
-                
+
+            lim_min = goal - 2 * self._step
+            lim_max = goal + 2 * self._step
+
             if lim_min < position < lim_max:
                 return
-            
-            
-            if position < goal:                
+
+            if position < goal:
                 self._dict["position"] += self._step
             else:
                 self._dict["position"] -= self._step
             sleep(0.025)
-        
-            
-        
 
     def _loop(self):
-        lim_min, lim_max  = self._lim_min, self._lim_max
+        lim_min, lim_max = self._lim_min, self._lim_max
 
         if self._lim_min < self._position < self._lim_max:
             self.stop_event.set()

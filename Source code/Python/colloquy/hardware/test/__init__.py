@@ -4,10 +4,8 @@ from .html import HTML
 
 
 class Test(Base):
-
     def __init__(self, owner):
         super().__init__(owner)
-
 
     def __call__(self, request):
         request = Path(request)
@@ -33,5 +31,3 @@ class Test(Base):
     @property
     def colloquy(self):
         return self.owner.colloquy
-
-    

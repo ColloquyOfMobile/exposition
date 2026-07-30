@@ -1,4 +1,8 @@
-from dynamixel_sdk import PortHandler, PacketHandler, COMM_SUCCESS  # Uses Dynamixel SDK library
+from dynamixel_sdk import (
+    PortHandler,
+    PacketHandler,
+    COMM_SUCCESS,
+)  # Uses Dynamixel SDK library
 from functools import wraps
 from threading import Lock
 from time import sleep
@@ -10,14 +14,12 @@ from .html import HTML
 
 
 class ComPort(Base):
-
-
     def __init__(self, owner, value=None):
         super().__init__(owner=owner)
-        
+
         self._html = HTML(owner=self)
         self[self.html.name] = self.html.handle_request
-        
+
         self._value = value
         self._ports = []
 
@@ -49,24 +51,21 @@ class ComPort(Base):
     @property
     def name(self):
         return "com port"
-    
+
     @property
-    def ports(self):        
-        
+    def ports(self):
+
         for name in self._ports:
             self._dict.pop(name)
-        
-        if self.is_simulated:     
-            self._ports = ["simulated u2d2 port", "simulated arduino port"] 
+
+        if self.is_simulated:
+            self._ports = ["simulated u2d2 port", "simulated arduino port"]
         else:
-            self._ports = [
-                port.device
-                for port
-                in serial.tools.list_ports.comports()]  
-        
+            self._ports = [port.device for port in serial.tools.list_ports.comports()]
+
         for name in self._ports:
             self[name] = partial(self.set, com_port=name)
-        
+
         return self._ports
 
     def set(self, com_port, *args, **kwargs):

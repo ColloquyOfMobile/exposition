@@ -9,8 +9,8 @@ from .parameter import Parameter
 from .brightness import Brightness
 from .html import HTML
 
-class Neopixel(Base):
 
+class Neopixel(Base):
     def __init__(self, owner, name):
         self._name = name
         super().__init__(owner=owner)
@@ -128,8 +128,8 @@ class Neopixel(Base):
             red=self.red.value,
             green=self.green.value,
             blue=self.blue.value,
-            white=self.white.value
-            )
+            white=self.white.value,
+        )
 
     @color.setter
     def color(self, value):
@@ -147,15 +147,15 @@ class Neopixel(Base):
         self.brightness.set_without_updating(brightness)
         self.update()
 
-    def update(self):        
+    def update(self):
         if not self._on_off_state:
             return
         data = dict(
-            r = self._adjust_brightness(self.red.value),
-            g = self._adjust_brightness(self.green.value),
-            b = self._adjust_brightness(self.blue.value),
-            w = self._adjust_brightness(self.white.value)
-            )
+            r=self._adjust_brightness(self.red.value),
+            g=self._adjust_brightness(self.green.value),
+            b=self._adjust_brightness(self.blue.value),
+            w=self._adjust_brightness(self.white.value),
+        )
         with self.arduino:
             self.arduino.send(self.arduino_path, **data)
 
@@ -167,10 +167,11 @@ class Neopixel(Base):
         if not self._on_off_state:
             return
         data = dict(
-            r = 0,
-            g = 0,
-            b = 0,
-            w = 0,)
+            r=0,
+            g=0,
+            b=0,
+            w=0,
+        )
         with self.arduino:
             self.arduino.send(self.arduino_path, **data)
         self._on_off_state = False
@@ -199,9 +200,9 @@ class Neopixel(Base):
 
     def set_test_default(self):
         raise NotImplementedError(self)
-    
+
     def snapshot(self, path):
-        path = path + (self.name, )
+        path = path + (self.name,)
         states = {
             "path": path,
             "name": self.name,
@@ -216,22 +217,22 @@ class Neopixel(Base):
             "red": self.red.snapshot(path=path),
             "green": self.green.snapshot(path=path),
             "blue": self.blue.snapshot(path=path),
-            
         }
         return states
-    
+
     @property
     def snapshot_children(self):
         children = {}
-        children.update({
-            "on": self.on,
-            "off": self.off,
-            "toggle": self.toggle,
-            "brightness": self.brightness,
-            "white": self.white,
-            "red": self.red,
-            "green": self.green,
-            "blue": self.blue,
-            
-        })
+        children.update(
+            {
+                "on": self.on,
+                "off": self.off,
+                "toggle": self.toggle,
+                "brightness": self.brightness,
+                "white": self.white,
+                "red": self.red,
+                "green": self.green,
+                "blue": self.blue,
+            }
+        )
         return children

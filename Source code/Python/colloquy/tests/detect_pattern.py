@@ -3,6 +3,7 @@ from colloquy.male.body_neopixels import LIGHT_PATTERNS
 from collections import deque
 from time import time
 
+
 class DetectPattern(ThreadElement):
     """
     Sample the photosensor at a high rate, bin the samples into N steps
@@ -10,14 +11,17 @@ class DetectPattern(ThreadElement):
     LIGHT_PATTERNS (trying all circular rotations and allowing a few mismatches).
     """
 
-    def __init__(self, owner,
-                 threshold=300,        # analog threshold for raw -> digital
-                 sample_rate=0.05,     # seconds between internal samples
-                 step_duration=0.5,    # duration of one pattern step (your blink step)
-                 steps=10,             # number of steps in pattern (10 in LIGHT_PATTERNS)
-                 max_mismatches=1,     # how many bit-differences we tolerate
-                 detection_cooldown=2.0, # seconds before reporting same pattern again
-                 debug=False):
+    def __init__(
+        self,
+        owner,
+        threshold=300,  # analog threshold for raw -> digital
+        sample_rate=0.05,  # seconds between internal samples
+        step_duration=0.5,  # duration of one pattern step (your blink step)
+        steps=10,  # number of steps in pattern (10 in LIGHT_PATTERNS)
+        max_mismatches=1,  # how many bit-differences we tolerate
+        detection_cooldown=2.0,  # seconds before reporting same pattern again
+        debug=False,
+    ):
         super().__init__(owner=owner, name="pattern_detector")
 
         self.threshold = threshold
@@ -86,12 +90,12 @@ class DetectPattern(ThreadElement):
 
         # For each offset inside one step (handles unknown alignment)
         for offset in range(s):
-            block = chunk[offset: offset + s * self.steps]  # contiguous block
+            block = chunk[offset : offset + s * self.steps]  # contiguous block
             # build the candidate 10-bit pattern by averaging each bin
             candidate = []
             for i in range(self.steps):
                 start = i * s
-                avg = sum(block[start:start + s]) / float(s)
+                avg = sum(block[start : start + s]) / float(s)
                 bit = 1 if avg > 0.5 else 0
                 candidate.append(bit)
 
@@ -106,17 +110,28 @@ class DetectPattern(ThreadElement):
                         else:
                             rotated = ref_list[-rot:] + ref_list[:-rot]
 
-                        mismatches = sum(1 for a, b in zip(candidate, rotated) if a != b)
+                        mismatches = sum(
+                            1 for a, b in zip(candidate, rotated) if a != b
+                        )
 
                         # remember best so far for debug/logging
                         if mismatches < best_mismatches:
                             best_mismatches = mismatches
-                            best_candidate = (male, drive, candidate, rotated, offset, mismatches)
+                            best_candidate = (
+                                male,
+                                drive,
+                                candidate,
+                                rotated,
+                                offset,
+                                mismatches,
+                            )
 
                         # early accept if within tolerance
                         if mismatches <= self.max_mismatches:
                             if self.debug:
-                                print(f"Good match: {male} drive={drive} rot={rot} offset={offset} mismatches={mismatches}")
+                                print(
+                                    f"Good match: {male} drive={drive} rot={rot} offset={offset} mismatches={mismatches}"
+                                )
                             return (male, drive)
 
         return None

@@ -21,7 +21,6 @@ class Line(Base):
 
 
 class HTML(BaseHTML):
-
     def html_independant_args(self):
         doc, tag, text = Doc().tagtext()
         style = [

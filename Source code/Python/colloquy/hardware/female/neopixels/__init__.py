@@ -9,16 +9,14 @@ from .body_o import BodyO
 from .body_p import BodyP
 
 
-
 class Neopixels(Base):
-    
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
         self._arduino = owner.arduino
-        
+
         self._head = Head(owner=self)
-        self._body_o= BodyO(owner=self)
+        self._body_o = BodyO(owner=self)
         self._body_p = BodyP(owner=self)
         self._feet = Feet(owner=self)
 
@@ -27,13 +25,13 @@ class Neopixels(Base):
         self[self.body_o.name] = self.body_o
         self[self.body_p.name] = self.body_p
         self[self.feet.name] = self.feet
-    
+
     def __iter__(self):
         yield self.head
         yield self.body_o
         yield self.body_p
         yield self.feet
-        
+
     def __call__(self, request):
         request = Path(request)
         if not request.parts:
@@ -78,30 +76,31 @@ class Neopixels(Base):
     @property
     def feet(self):
         return self._feet
-    
+
     def snapshot(self, path):
-        path = path + (self.name, )
+        path = path + (self.name,)
         # states = {
-            # "path": path,
-            # "name": self.name,
-            # "close": self.close,
-            # "open": self.open,
-            # "opened": self._is_opened,
-            # "head": self.head.snapshot(path=path),
-            # self.body_o.name: self.body_o.snapshot(path=path),
-            # self.body_p.name: self.body_p.snapshot(path=path),
-            # "feet": self.feet.snapshot(path=path),
+        # "path": path,
+        # "name": self.name,
+        # "close": self.close,
+        # "open": self.open,
+        # "opened": self._is_opened,
+        # "head": self.head.snapshot(path=path),
+        # self.body_o.name: self.body_o.snapshot(path=path),
+        # self.body_p.name: self.body_p.snapshot(path=path),
+        # "feet": self.feet.snapshot(path=path),
         # }
         # return states
-    
+
     @property
     def snapshot_children(self):
         children = {}
-        children.update({
-            "head": self.head,
-            self.body_o.name: self.body_o,
-            self.body_p.name: self.body_p,
-            "feet": self.feet,
-        })
+        children.update(
+            {
+                "head": self.head,
+                self.body_o.name: self.body_o,
+                self.body_p.name: self.body_p,
+                "feet": self.feet,
+            }
+        )
         return children
-

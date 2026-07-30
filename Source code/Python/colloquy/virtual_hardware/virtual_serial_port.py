@@ -6,33 +6,29 @@ from queue import Queue
 from colloquy.base import Base
 from random import randrange
 
-class VirtualSerialPort(Base):
 
+class VirtualSerialPort(Base):
     def __init__(self, owner, port=None):
         super().__init__(owner=owner)
         assert port is None, f"Port should be none to avoid opening! ({port=})"
         self._near_origin_threashold = 400
-                
-                    
+
         self._path_handlers = {
             "f1/head": self._set_female_neopixel,
             "f1/bodyO": self._set_female_neopixel,
             "f1/bodyP": self._set_female_neopixel,
             "f1/feet": self._set_female_neopixel,
             "f1/light sensor": self._read_f1_sensor,
-            
             "f2/head": self._set_female_neopixel,
             "f2/bodyO": self._set_female_neopixel,
             "f2/bodyP": self._set_female_neopixel,
             "f2/feet": self._set_female_neopixel,
             "f2/light sensor": self._read_sensor,
-            
             "f3/head": self._set_female_neopixel,
             "f3/bodyO": self._set_female_neopixel,
             "f3/bodyP": self._set_female_neopixel,
             "f3/feet": self._set_female_neopixel,
             "f3/light sensor": self._read_sensor,
-            
             "m1/ring": self._set_male_neopixel,
             "m1/up ring": self._set_male_neopixel,
             "m1/p drive level": self._set_male_neopixel,
@@ -41,7 +37,6 @@ class VirtualSerialPort(Base):
             "m1/light sensor/b": self._read_sensor,
             "m1/light sensor/c": self._read_sensor,
             "m1/light sensor/d": self._read_sensor,
-            
             "m2/ring": self._set_male_neopixel,
             "m2/up ring": self._set_male_neopixel,
             "m2/p drive level": self._set_male_neopixel,
@@ -51,27 +46,27 @@ class VirtualSerialPort(Base):
             "m2/light sensor/c": self._read_sensor,
             "m2/light sensor/d": self._read_sensor,
         }
-        
+
         self._port = port
         self._is_open = False
         # if port is not None:
-            # self._is_open = True
+        # self._is_open = True
         self._possible_paths = set()
         self._load_possible_paths()
         self._to_return = None
         self._states = states = {}
         for i in range(3):
-            states[f"female{i+1}"] = female = {}
+            states[f"female{i + 1}"] = female = {}
             for name in ("head", "bodyO", "bodyP", "feet"):
                 female[name] = dict(r=0, g=0, b=0)
-            
+
             female["light sensor"] = 0
-                    
+
         for i in range(2):
-            states[f"male{i+1}"] = male = {}
+            states[f"male{i + 1}"] = male = {}
             for name in ("ring", "p drive level", "o drive level", "up ring"):
                 male[name] = dict(r=0, g=0, b=0, w=0)
-            
+
             male[f"light sensor"] = sensors = {}
             for name in "abcd":
                 sensors[name] = 0
@@ -121,88 +116,87 @@ class VirtualSerialPort(Base):
         assert self._port is not None
         self._to_return = b"Hello!"
         self._is_open = True
-    
+
     def _set_female_neopixel(self, data):
         states = self._states
         female, name = Path(data["path"]).parts
         female = female.replace("f", "female")
         neopixel = states[female][name]
-        
+
         neopixel["r"] = data["r"]
         neopixel["g"] = data["g"]
         neopixel["b"] = data["b"]
         neopixel["w"] = data["w"]
-    
+
     def _set_male_neopixel(self, data):
         states = self._states
         male, name = Path(data["path"]).parts
         male = male.replace("m", "male")
         neopixel = states[male][name]
-        
+
         neopixel["r"] = data["r"]
         neopixel["g"] = data["g"]
         neopixel["b"] = data["b"]
         neopixel["w"] = data["w"]
-            
+
         # if part.startswith("f"):
-            # return self._check_neopixel(data)
+        # return self._check_neopixel(data)
         # raise NotImplementedError(self, data)
-    
+
     def _check_neopixel(self, data):
         assert "r" in data, f"{data=}"
         assert "g" in data, f"{data=}"
         assert "b" in data, f"{data=}"
         assert "w" in data, f"{data=}"
         # assert "brightness" in data, f"{data=}"
-    
+
     def _read_sensor(self, data):
         return 10
-    
+
     def _read_f1_sensor(self, data):
         params = self.colloquy.params
         female_dxl = self.owner.dxls[1]
         bar_dxl = self.owner.dxls[8]
-        
+
         noise = 100 + randrange(10)
         if not self._is_near_origin(name="female1", dxl=female_dxl):
             return params["photosensor_threashold"] - noise
-        
+
         male = self._get_nearest_male(female="female1")
         if male is None:
-            return  params["photosensor_threashold"] - noise
-            
-        if self._states[male]["ring"]["w"] != 0: 
+            return params["photosensor_threashold"] - noise
+
+        if self._states[male]["ring"]["w"] != 0:
             return params["photosensor_threashold"] + noise
         return params["photosensor_threashold"] - noise
-    
+
     def _is_near_origin(self, name, dxl):
         params = self.colloquy.params
         threashold = params["near_origin_threashold"]
         origin = params[name]["dxl origin"]
         position = dxl.position
         return origin - threashold < position < origin + threashold
-        
-    
+
     def _get_nearest_male(self, female):
         males = []
         for i, dxl_id in enumerate((6, 7)):
             dxl = self.owner.dxls[dxl_id]
-            name = f"male{i+1}"
+            name = f"male{i + 1}"
             if self._is_near_origin(name, dxl):
                 males.append(name)
                 break
         if not males:
             return
-                
+
         params = self.colloquy.params
         bar_dxl = self.owner.dxls[9]
         threashold = params["near_origin_threashold"]
         position = bar_dxl.position
-        
+
         for male in males:
             conditions = []
             origin = params["bar"]["interaction_origins"][male][female]
-        
+
             if origin - threashold < position < origin + threashold:
                 return male
         return
@@ -218,4 +212,3 @@ class VirtualSerialPort(Base):
 
         # Stocker les chemins extraits
         self._possible_paths = sorted(paths)
-

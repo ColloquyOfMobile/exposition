@@ -6,14 +6,13 @@ from .increment import Increment
 
 
 class Brightness(Base):
-
     def __init__(self, owner, name):
         Base.__init__(self, owner)
         self._name = name
         self._value = 0
 
         self._neopixel = owner
-        
+
         self._setter = ValueSetter(owner=self, limit=101)
 
         # self._increment1 = Increment(owner=self, multiplier=1)
@@ -23,7 +22,6 @@ class Brightness(Base):
         # self[self._increment1.name] = self._increment1
         # self[self._increment10.name] = self._increment10
         # self[self._increment100.name] = self._increment100
-
 
     def __call__(self, request):
         request = Path(request)
@@ -49,7 +47,7 @@ class Brightness(Base):
     @property
     def value(self):
         return self._value
-    
+
     @property
     def setter(self):
         return self._setter
@@ -58,8 +56,8 @@ class Brightness(Base):
     def value(self, value):
         self.set_without_updating(value)
         self.neopixel.update()
-    
-    def set(self, value):        
+
+    def set(self, value):
         self.value = value
 
     def set_without_updating(self, value):
@@ -69,36 +67,38 @@ class Brightness(Base):
             value = 0
         self._value = value
 
-
     def html(self):
         doc, tag, text = CustomDoc().tagtext()
 
-        with tag("div", style="display:flex; flex-direction: column; margin-bottom: 1rem;"):
+        with tag(
+            "div", style="display:flex; flex-direction: column; margin-bottom: 1rem;"
+        ):
             with tag("div", style="margin-bottom: 0.5rem;"):
                 text(f"{self.name} = {self.value:03} %")
 
             with tag("div", style="display:flex;"):
-
                 for command in self:
                     doc.asis(self[command].html())
 
         return doc.getvalue()
-    
+
     # def snapshot(self, path):
-        # _path = path + (self.name, )        
-        # states = super().snapshot(path=path)
-        
-        # states.update({
-            # "value": self.value,
-            # self.setter.name: self.setter.snapshot(_path),
-        # })
-        # return states 
-    
+    # _path = path + (self.name, )
+    # states = super().snapshot(path=path)
+
+    # states.update({
+    # "value": self.value,
+    # self.setter.name: self.setter.snapshot(_path),
+    # })
+    # return states
+
     @property
     def snapshot_children(self):
         children = {}
-        children.update({
-            "value": self.value,
-            self.setter.name: self.setter,
-        })
+        children.update(
+            {
+                "value": self.value,
+                self.setter.name: self.setter,
+            }
+        )
         return children

@@ -1,49 +1,37 @@
 import json
 from pathlib import Path
 
-DEFAULTS={
+DEFAULTS = {
     "name": "params",
-    "photosensor_threashold":300,
+    "photosensor_threashold": 300,
     "near_origin_threashold": 400,
-    'emulate light sensor': False,
+    "emulate light sensor": False,
     "arduino": {
         "baudrate": 57600,
         "communication port": None,
-            },
+    },
     "female1": {
         "dxl origin": 0,
-        },
+    },
     "female2": {
         "dxl origin": 0,
-        },
+    },
     "female3": {
         "dxl origin": 0,
-        },
+    },
     "bar": {
         "dxl origin": 0,
         "interaction_origins": {
-          "male1": {
-            "female1": 0,
-            "female2": 2200,
-            "female3": 4300
-          },
-          "male2": {
-            "female1": 6200,
-            "female2": 8400,
-            "female3": 10400
-          }
-        }
+            "male1": {"female1": 0, "female2": 2200, "female3": 4300},
+            "male2": {"female1": 6200, "female2": 8400, "female3": 10400},
+        },
     },
-    "male1": {
-        "dxl origin": 0
-      },
-    "male2": {
-        "dxl origin": 0
-      }
-    }
+    "male1": {"dxl origin": 0},
+    "male2": {"dxl origin": 0},
+}
+
 
 class Params(dict):
-        
     def __init__(self, path: Path, initial=None, _root=None):
         super().__init__()
         self._path = path
@@ -80,6 +68,7 @@ class Params(dict):
             else:
                 result[k] = v
         return result
+
 
 def load(path: Path):
     if path.exists():

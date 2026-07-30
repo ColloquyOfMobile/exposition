@@ -4,24 +4,24 @@ from colloquy.base_html import BaseHTML
 
 import traceback
 
-class Details(BaseHTML):
 
+class Details(BaseHTML):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._opened = None
-    
+
     @property
     def opened(self):
         return self._opened
-    
+
     @opened.setter
     def opened(self, value):
         self._opened = value
-    
+
     @property
     def dxl(self):
         return self.owner.owner
-    
+
     @property
     def hardware(self):
         return self.owner.hardware
@@ -33,15 +33,15 @@ class Details(BaseHTML):
     @property
     def workspace(self):
         return self.owner.workspace
-    
+
     @property
     def arrow(self):
         doc, tag, text = CustomDoc().tagtext()
         if self.is_open:
-            href=f"/{self.path.as_posix()}/close"
+            href = f"/{self.path.as_posix()}/close"
             svg = self._svg_down_arrow()
         else:
-            href=f"/{self.path.as_posix()}/open"
+            href = f"/{self.path.as_posix()}/open"
             svg = self._svg_right_arrow()
         with tag("div", name=self.name):
             with tag("a", href=href):
@@ -54,28 +54,26 @@ class Details(BaseHTML):
     def close(self, request=None):
         self._is_open = False
 
-
     def _call_unsafe(self):
         if not self.is_open:
             return ""
-            
+
         doc, tag, text = CustomDoc().tagtext()
         if self.opened is not None:
             # raise NotImplementedError(self.opened, self)
             doc.asis(self.opened())
             return doc.getvalue()
-            
+
         with tag("div", style="display: flex; flex-direction: column;"):
-            
             with tag("div"):
                 with tag("a", href=f"/{self.dxl.path.as_posix()}/init hardware"):
                     text("Init hardware")
-            
+
             doc.asis(self.dxl.temperature.html())
             doc.asis(self.dxl.drive_mode.html())
             doc.asis(self.dxl.position.html())
             doc.asis(self.dxl.goal_position.html())
-            
+
             doc.asis(self.dxl.torque_enabled.html())
             doc.asis(self.dxl.operating_mode.html())
             doc.asis(self.dxl.profile_velocity.html())

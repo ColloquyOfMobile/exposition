@@ -8,7 +8,6 @@ from threading import Lock
 
 
 class Logger:
-
     _time_origin = time()
     _log_folder = Path("local/logs")
     shutil.rmtree(_log_folder)
@@ -18,16 +17,14 @@ class Logger:
         self._line_counts = {}
         self._lock = Lock()
 
-
     def __call__(self, msg: str):
 
         current = threading.current_thread()
         main_thread = threading.main_thread()
         msg = self._format(msg=msg)
-        
+
         if current == main_thread:
             print(msg)
-
 
         self._write(msg)
 
@@ -46,7 +43,7 @@ class Logger:
             self._line_counts[file_path] = len(lines)
             # text = "\n".join(lines) + "\n"
             # with self._lock:
-                # file_path.write_text(text)
+            # file_path.write_text(text)
 
         self._line_counts[file_path] += len(msg.splitlines())
 
@@ -64,7 +61,7 @@ class Logger:
                 file_path.write_text(text)
 
     def _format(self, msg):
-        time_header = self._format_time() # f"{round(time()-self._time_origin, 2)}:"
+        time_header = self._format_time()  # f"{round(time()-self._time_origin, 2)}:"
         lines = msg.splitlines()
         if len(lines) == 1:
             return f"{time_header} {msg}"

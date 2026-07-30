@@ -7,8 +7,9 @@ import numpy as np
 from io import StringIO
 from pathlib import Path
 
-    
+
 threshold = 310
+
 
 def plot_as_svg(path):
     if isinstance(path, str):
@@ -16,7 +17,7 @@ def plot_as_svg(path):
     df = pd.read_csv(path, skipinitialspace=True)
 
     fig, ax1 = plt.subplots(figsize=(10, 5))
-    
+
     # Main sensor signals
     ax1.plot(df["seconds"], df["female1"], label="female1", linewidth=2)
     ax1.plot(df["seconds"], df["female2"], label="female2", linewidth=2)
@@ -42,7 +43,7 @@ def plot_as_svg(path):
     )
     ax2.set_ylabel("Logic")
     ax2.set_ylim(-0.1, 1.1)
-    
+
     # Combine legends from both axes
     lines = ax1.get_lines() + ax2.get_lines()
     labels = [line.get_label() for line in lines]
@@ -52,9 +53,8 @@ def plot_as_svg(path):
     plt.tight_layout()
     plt.savefig(path.with_suffix(".svg"), format="svg")
     plt.close()
-    
-    
-    
+
+
 def post_process(file, output=None, window_size=5):
     file = Path(file)
 
@@ -75,13 +75,9 @@ def post_process(file, output=None, window_size=5):
 
     # Moyennes glissantes
     for column in ("female1", "female2", "female3"):
-        df[column] = (
-            df[column]
-            .rolling(window=window_size, min_periods=1)
-            .mean()
-        )
+        df[column] = df[column].rolling(window=window_size, min_periods=1).mean()
     df["f1 logic"] = df["female1"].where(df["female1"] > threshold, 0)
-    
+
     high = df["female1"] > threshold
 
     df["rising_edge"] = high & ~high.shift(fill_value=False)
@@ -91,15 +87,15 @@ def post_process(file, output=None, window_size=5):
     # Set pulse_id to 0 when not inside a pulse
     df["pulse_id"] = df["pulse_id"].where(high, 0)
     df.to_csv(output, index=False)
-    
+
     start_times = df.loc[df["rising_edge"], "seconds"].to_numpy()
     stop_times = df.loc[df["falling_edge"], "seconds"].to_numpy()
-    durations = stop_times[:len(start_times)] - start_times[:len(stop_times)]
-    
+    durations = stop_times[: len(start_times)] - start_times[: len(stop_times)]
+
     # survival function (or complementary cumulative histogram)
     seconds = np.arange(int(np.ceil(durations.max())) + 1)
     counts = (durations[:, None] >= seconds).sum(axis=0)
-    
+
     return output, durations, counts
 
 
@@ -107,15 +103,16 @@ def read_and_store(start_time, file, duration, stop, sensors_read, result_rows=N
     timestamp = time() - start_time
     tokens = [str(timestamp)]
     tokens.extend(read() for read in sensors_read)
-    
+
     if result_rows is not None:
         result_rows.append(tokens)
-        
+
     line = ", ".join(str(token) for token in tokens)
-    
+
     file.write(line + "\n")
     if timestamp > duration:
         stop()
+
 
 def plot_duration_histogram_as_svg(output, durations):
 
@@ -190,15 +187,13 @@ def plot_counts_as_svg(output, counts, title):
     plt.close(fig)
 
 
-
-
 def plot(path):
     if isinstance(path, str):
         path = Path(path)
     df = pd.read_csv(path, skipinitialspace=True)
 
     fig, ax1 = plt.subplots(figsize=(10, 5))
-    
+
     # Main sensor signals
     ax1.plot(df["seconds"], df["female1"], label="female1", linewidth=2)
     ax1.plot(df["seconds"], df["female2"], label="female2", linewidth=2)
@@ -212,7 +207,7 @@ def plot(path):
     ax1.set_xlabel("Time (s)")
     ax1.set_ylabel("Sensor value")
     ax1.grid(True)
-    
+
     # Combine legends from both axes
     lines = ax1.get_lines()
     labels = [line.get_label() for line in lines]
@@ -222,6 +217,9 @@ def plot(path):
     plt.tight_layout()
     plt.show()
     plt.close()
-    
+
+
 if __name__ == "__main__":
-    plot(path=r"C:\workspace\workspace2\Colloquy\exposition\docs\test_results\week26\2026_07_02_12h_08min_04s.csv")
+    plot(
+        path=r"C:\workspace\workspace2\Colloquy\exposition\docs\test_results\week26\2026_07_02_12h_08min_04s.csv"
+    )

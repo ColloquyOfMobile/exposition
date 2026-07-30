@@ -4,8 +4,8 @@ from colloquy.base import Base
 from pathlib import Path
 from threading import Event
 
-class PDriveLevel(Neopixel):
 
+class PDriveLevel(Neopixel):
     def __init__(self, owner):
         super().__init__(owner=owner, name="p drive level")
         self._body = owner

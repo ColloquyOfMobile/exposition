@@ -6,9 +6,9 @@ from matplotlib.animation import FuncAnimation
 # -------------------------
 # Configuration
 # -------------------------
-PORT = "COM4"          # Change to your Arduino port
+PORT = "COM4"  # Change to your Arduino port
 BAUDRATE = 57600
-HISTORY = 200          # Number of samples displayed
+HISTORY = 200  # Number of samples displayed
 
 # -------------------------
 # Serial
@@ -29,7 +29,7 @@ fig, ax = plt.subplots(figsize=(12, 6))
 
 lines = []
 for i in range(16):
-    line, = ax.plot(data[i], label=f"A{i}")
+    (line,) = ax.plot(data[i], label=f"A{i}")
     lines.append(line)
 
 ax.set_ylim(0, 1023)

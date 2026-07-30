@@ -1,4 +1,4 @@
-from .neopixels import Neopixels # Head, BodyO, BodyP, Feet
+from .neopixels import Neopixels  # Head, BodyO, BodyP, Feet
 from .drives import Drives
 from pathlib import Path
 from colloquy.base_thread import BaseThread
@@ -12,17 +12,20 @@ from .test import Test
 
 
 class Female(BaseThread):
-
-    def __init__(self, owner, id_number, ):
+    def __init__(
+        self,
+        owner,
+        id_number,
+    ):
         self._name = f"female{id_number}"
         self._id_number = id_number
         super().__init__(owner=owner)
         self._position_memory = None
-        
+
         self._motion_range = 2000
         self._dxl_origin = DXLOrigin(owner=self)
         self._position = DXLPosition(owner=self)
-        
+
         self._light_sensor = LightSensor(owner=self, name="light sensor")
         self._dxl = owner.u2d2.dxls[self.name]
         self._html = HTML(owner=self)
@@ -42,7 +45,9 @@ class Female(BaseThread):
         self[self.search.name] = self.search
         self[self.dxl_origin.name] = self.dxl_origin
         self[self.position.name] = self.position
-        self["set current position as dxl origin"] = self.set_current_position_as_dxl_origin
+        self["set current position as dxl origin"] = (
+            self.set_current_position_as_dxl_origin
+        )
         self[self.light_sensor.name] = self.light_sensor
 
     def __call__(self, request):
@@ -109,30 +114,30 @@ class Female(BaseThread):
     @property
     def is_moving(self):
         return self.dxl.is_moving
-    
+
     @property
     def light_sensor(self):
         return self._light_sensor
-    
+
     @property
     def position(self):
         return self._position
-    
+
     @property
-    def goal_position(self):         
+    def goal_position(self):
         return self.dxl.goal_position
-    
+
     @property
     def torque_enabled(self):
         return self.dxl.torque_enabled
-    
+
     @property
     def read_pattern(self):
         return self.search.read_pattern
-    
+
     def set_current_position_as_dxl_origin(self, request=None):
         self.dxl_origin.set(self.dxl.position.read())
-    
+
     def is_satisfied(self):
         return self.drives.o_drive.is_satisfied or self.drives.p_drive.is_satisfied
 
@@ -163,10 +168,10 @@ class Female(BaseThread):
         value = self._dxl_origin.get()
         self.dxl.goal_position.write(value)
 
-    def loop(self): 
+    def loop(self):
         if self.search.is_started:
             return
-            
+
         if not self.is_satisfied():
             self.search.start(started_by=self)
             return
@@ -179,7 +184,7 @@ class Female(BaseThread):
     def setdown(self):
         self.drives.stop()
         self.search.stop()
-    
+
     @property
     def snapshot_children(self):
         children = {}
@@ -190,16 +195,16 @@ class Female(BaseThread):
         children["neopixels"] = self.neopixels
         children["light sensor"] = self.light_sensor
         return children
-    
-    # def snapshot(self, path):        
-        # states = super().snapshot(path=path)
-        # _path = states["path"]
-        # states.update({
-            # "dxl origin": self.dxl_origin.snapshot(path=_path),
-            # self.dxl.name: self.dxl.snapshot(path=_path),
-            # "search": self.search.snapshot(path=_path),
-            # "drives": self.drives.snapshot(path=_path),
-            # "neopixels": self.neopixels.snapshot(path=_path),
-            # "light sensor": self.light_sensor.snapshot(path=_path),
-        # })
-        # return states 
+
+    # def snapshot(self, path):
+    # states = super().snapshot(path=path)
+    # _path = states["path"]
+    # states.update({
+    # "dxl origin": self.dxl_origin.snapshot(path=_path),
+    # self.dxl.name: self.dxl.snapshot(path=_path),
+    # "search": self.search.snapshot(path=_path),
+    # "drives": self.drives.snapshot(path=_path),
+    # "neopixels": self.neopixels.snapshot(path=_path),
+    # "light sensor": self.light_sensor.snapshot(path=_path),
+    # })
+    # return states

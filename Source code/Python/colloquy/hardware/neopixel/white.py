@@ -2,9 +2,7 @@ from colloquy.base import Base
 from pathlib import Path
 
 
-
 class White(Base):
-
     def __init__(self, owner):
         Base.__init__(self, owner)
 
@@ -57,9 +55,11 @@ class White(Base):
         self.neopixel.update()
 
     def hex_to_rgb(self, hex_value):
-        hex_value = hex_value.lstrip('#')  # Retire le #
+        hex_value = hex_value.lstrip("#")  # Retire le #
         if len(hex_value) != 6:
-            raise ValueError("La valeur hexadécimale doit contenir exactement 6 caractères.")
+            raise ValueError(
+                "La valeur hexadécimale doit contenir exactement 6 caractères."
+            )
         r = int(hex_value[0:2], 16)
         g = int(hex_value[2:4], 16)
         b = int(hex_value[4:6], 16)
@@ -67,7 +67,6 @@ class White(Base):
 
     def html(self):
         doc, tag, text = CustomDoc().tagtext()
-
 
         with tag("div", style="display:flex; align-items: center;"):
             with tag("div", style="margin-right: 1ch;"):
@@ -78,8 +77,8 @@ class White(Base):
 
         return doc.getvalue()
 
-class Digit(Base):
 
+class Digit(Base):
     def __init__(self, owner, multiplier):
         super().__init__(owner=owner)
         self._multiplier = multiplier
@@ -123,9 +122,11 @@ class Digit(Base):
         with tag("div", style=style1):
             # + button
             with tag("div", klass=klass):
-                with tag("a",
-                         href=f"/{self.path.as_posix()}/+",
-                         style="text-decoration: none; color: black;"):
+                with tag(
+                    "a",
+                    href=f"/{self.path.as_posix()}/+",
+                    style="text-decoration: none; color: black;",
+                ):
                     text("+")
 
             # The digit itself
@@ -134,9 +135,11 @@ class Digit(Base):
 
             # - button
             with tag("div", klass=klass):
-                with tag("a",
-                         href=f"/{self.path.as_posix()}/-",
-                         style="text-decoration: none; color: black;"):
+                with tag(
+                    "a",
+                    href=f"/{self.path.as_posix()}/-",
+                    style="text-decoration: none; color: black;",
+                ):
                     text("-")
 
         return doc.getvalue()

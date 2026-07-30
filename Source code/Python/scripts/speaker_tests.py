@@ -2,7 +2,7 @@ import serial
 import time
 
 # Adjust this to your Arduino serial port:
-PORT = "COM3"   # Windows example
+PORT = "COM3"  # Windows example
 # PORT = "/dev/ttyACM0"  # Linux example
 BAUD = 115200
 
@@ -32,6 +32,7 @@ print("  <pin> <0/1>       (e.g. '11 1')")
 print("  q                 quit")
 print("Available pins:", ", ".join(PIN_MAP.keys()))
 
+
 def send_command(pin, state):
     cmd = f"{pin} {state}"
     ser.write(cmd.encode())
@@ -39,6 +40,7 @@ def send_command(pin, state):
 
     if response:
         print(response)
+
 
 try:
     while True:

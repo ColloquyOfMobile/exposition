@@ -7,12 +7,13 @@ from colloquy.hardware import Hardware
 
 
 class VirtualHardware(Hardware):
-
     _classes = Hardware._classes.copy()
-    _classes.update({
-        "dxl_manager": VirtualDynamixelManager,
-        "arduino_manager": VirtualArduinoManager,
-        "female": VirtualFemale,
-    })
+    _classes.update(
+        {
+            "dxl_manager": VirtualDynamixelManager,
+            "arduino_manager": VirtualArduinoManager,
+            "female": VirtualFemale,
+        }
+    )
     # def __init__(self, owner, ):
-        # Hardware.__init__(self, owner)
+    # Hardware.__init__(self, owner)

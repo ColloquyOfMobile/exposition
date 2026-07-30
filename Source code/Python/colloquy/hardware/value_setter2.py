@@ -2,7 +2,17 @@ from colloquy.base import Base
 
 
 class ValueSetter2(Base):
-    def __init__(self, owner, min_value, max_value, set_func, digits=None, prefix="", sign=1, _is_root=True):
+    def __init__(
+        self,
+        owner,
+        min_value,
+        max_value,
+        set_func,
+        digits=None,
+        prefix="",
+        sign=1,
+        _is_root=True,
+    ):
         super().__init__(owner=owner)
 
         # --- DETERMINE DIGITS ---
@@ -27,7 +37,7 @@ class ValueSetter2(Base):
                             owner=self,
                             min_value=0,
                             max_value=abs(min_value),
-                            set_func = set_func,
+                            set_func=set_func,
                             digits=len(str(abs(min_value) - 1)),
                             prefix="-",
                             sign=-1,
@@ -41,7 +51,7 @@ class ValueSetter2(Base):
                             owner=self,
                             min_value=0,
                             max_value=max_value,
-                            set_func = set_func,
+                            set_func=set_func,
                             digits=len(str(max_value - 1)) if max_value > 0 else 1,
                             prefix="",
                             sign=1,
@@ -73,7 +83,7 @@ class ValueSetter2(Base):
             if sign == 1:
                 if value >= max_value:
                     break
-                    
+
             else:
                 if value < min_value:
                     break
@@ -88,7 +98,7 @@ class ValueSetter2(Base):
                         owner=self,
                         min_value=min_value,
                         max_value=max_value,
-                        set_func = set_func,
+                        set_func=set_func,
                         digits=digits - 1,
                         prefix=new_prefix,
                         sign=sign,
@@ -107,9 +117,9 @@ class ValueSetter2(Base):
     def _make_setter(self, value):
         def wrap():
             self._set_func(value)
+
         return wrap
-    
-    
+
     @property
     def snapshot_children(self):
         children = {}
@@ -119,23 +129,23 @@ class ValueSetter2(Base):
                 children["-" + setter.name] = setter
             else:
                 children[setter.name] = setter
-                
+
         return children
 
     # def snapshot(self, path):
-        # states = super().snapshot(path=path)
-        # _path = path + (self.name,)
+    # states = super().snapshot(path=path)
+    # _path = path + (self.name,)
 
-        # for setter in self._setters:
-            # if callable(setter):
-                # if self._sign == -1:
-                    # states["-" + setter.name] = setter
-                # else:
-                    # states[setter.name] = setter
-            # else:
-                # states[setter.name] = setter.snapshot(_path)
+    # for setter in self._setters:
+    # if callable(setter):
+    # if self._sign == -1:
+    # states["-" + setter.name] = setter
+    # else:
+    # states[setter.name] = setter
+    # else:
+    # states[setter.name] = setter.snapshot(_path)
 
-        # return states
+    # return states
 
 
 class Set(Base):

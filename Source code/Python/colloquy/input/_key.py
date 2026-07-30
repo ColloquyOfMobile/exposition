@@ -13,9 +13,8 @@ class Key(Debug):
 
     def __call__(self):
         self.input.value += self.name
-        return self.owner.owner # Too much responsibility. Opening state should handle in OpenedClasses separatly
+        return self.owner.owner  # Too much responsibility. Opening state should handle in OpenedClasses separatly
 
     @property
     def input(self):
         return self.owner.input
-

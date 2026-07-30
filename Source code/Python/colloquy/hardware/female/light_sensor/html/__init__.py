@@ -5,17 +5,17 @@ from colloquy.base_html import BaseHTML
 import traceback
 from .details import Details
 
-class HTML(BaseHTML):
 
+class HTML(BaseHTML):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._details = Details(owner=self)
         self["details"] = self.details.handle_request
-    
+
     @property
     def light_sensor(self):
         return self.owner
-    
+
     @property
     def female(self):
         return self.owner.female
@@ -64,15 +64,15 @@ class HTML(BaseHTML):
             doc.asis(self._html_title_if_error())
 
         return doc.getvalue()
-    
+
     def _html_title_unsafe(self):
         doc, tag, text = CustomDoc().tagtext()
-        
-        style="margin-bottom: 0.5rem; display: flex; align-items: center;"
+
+        style = "margin-bottom: 0.5rem; display: flex; align-items: center;"
         if self.is_open:
             style += " justify-content: center;"
 
-        with tag("div",style=style):
+        with tag("div", style=style):
             if self.arduino.port_name is None:
                 with tag("div", style="font-size: 1.2rem; margin-right: 1ch;"):
                     with tag("strong"):
@@ -80,7 +80,7 @@ class HTML(BaseHTML):
                         with tag("a", href="hardware/arduino/html/open"):
                             text("com port ")
                         text("to read the value!")
-                            
+
             else:
                 if not self.is_open:
                     doc.asis(self.details.arrow)
@@ -91,10 +91,10 @@ class HTML(BaseHTML):
 
                 with tag("div"):
                     if self.is_open:
-                        href=f"/{self.path.as_posix()}/close"
+                        href = f"/{self.path.as_posix()}/close"
                         label = "close"
                     else:
-                        href=f"/{self.path.as_posix()}/open"
+                        href = f"/{self.path.as_posix()}/open"
                         label = "open"
 
                     with tag("a", href=href):
@@ -115,7 +115,6 @@ class HTML(BaseHTML):
                         text(line)
 
         return doc.getvalue()
-
 
     def _call_unsafe(self):
         doc, tag, text = CustomDoc().tagtext()

@@ -7,14 +7,13 @@ from .increment import Increment
 
 
 class Parameter(Base):
-
     def __init__(self, owner, name):
         Base.__init__(self, owner)
         self._name = name
         self._value = 0
 
         self._neopixel = owner
-        
+
         self._setter = ValueSetter(owner=self, limit=256)
 
         # self._increment1 = Increment(owner=self, multiplier=1)
@@ -24,7 +23,6 @@ class Parameter(Base):
         # self[self._increment1.name] = self._increment1
         # self[self._increment10.name] = self._increment10
         # self[self._increment100.name] = self._increment100
-
 
     def __call__(self, request):
         request = Path(request)
@@ -42,7 +40,7 @@ class Parameter(Base):
     @property
     def neopixel(self):
         return self._neopixel
-    
+
     @property
     def setter(self):
         return self._setter
@@ -59,8 +57,8 @@ class Parameter(Base):
     def value(self, value):
         self.set_without_updating(value)
         self.neopixel.update()
-    
-    def set(self, value):        
+
+    def set(self, value):
         self.value = value
 
     def set_without_updating(self, value):
@@ -70,33 +68,35 @@ class Parameter(Base):
             value = 0
         self._value = value
 
-
     def html(self):
         doc, tag, text = CustomDoc().tagtext()
 
-        with tag("div", style="display:flex; flex-direction: column; margin-bottom: 1rem;"):
+        with tag(
+            "div", style="display:flex; flex-direction: column; margin-bottom: 1rem;"
+        ):
             with tag("div", style="margin-bottom: 0.5rem;"):
                 text(f"{self.name} = {self.value:03} units")
 
             with tag("div", style="display:flex;"):
-
                 for command in self:
                     doc.asis(self[command].html())
 
         return doc.getvalue()
-    
+
     # def snapshot(self, path):
-        # _path = path + (self.name, )        
-        # states = super().snapshot(path=path)
-        
-        # states.update()
-        # return states
-    
+    # _path = path + (self.name, )
+    # states = super().snapshot(path=path)
+
+    # states.update()
+    # return states
+
     @property
     def snapshot_children(self):
         children = {}
-        children.update({
-            "value": self.value,
-            self.setter.name: self.setter,
-        })
+        children.update(
+            {
+                "value": self.value,
+                self.setter.name: self.setter,
+            }
+        )
         return children

@@ -12,8 +12,8 @@ from colloquy.base import Base
 from threading import Thread, Event, Lock
 from .thread_errors import ThreadErrors
 
+
 class BaseThread(Base):
-    
     _shutdown = Event()
 
     def __init__(self, owner, run_with=None):
@@ -36,17 +36,17 @@ class BaseThread(Base):
         self[self.thread_errors.name] = self.thread_errors
 
     # def __call__(self, request):
-        # request = Path(request)
-        # if not request.parts:
-            # raise NotImplementedError
+    # request = Path(request)
+    # if not request.parts:
+    # raise NotImplementedError
 
-        # key, *leftover = request.parts
+    # key, *leftover = request.parts
 
-        # if key in self:
-            # self[key](request="/".join(leftover))
-            # return
+    # if key in self:
+    # self[key](request="/".join(leftover))
+    # return
 
-        # raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
+    # raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def thread_errors(self):
@@ -73,7 +73,7 @@ class BaseThread(Base):
         if self._thread is None:
             return False
         return self._thread.is_alive()
-    
+
     def append_error(self, value):
         raise NotImplementedError
 
@@ -151,7 +151,7 @@ class BaseThread(Base):
         self.log(f"{self} is started.")
         try:
             self._run_unsafe()
-        except Exception as error:  
+        except Exception as error:
             print(f"error in {self=}")
             error_text = "".join(traceback.format_exception(error))
             self.log(error_text)
@@ -160,13 +160,13 @@ class BaseThread(Base):
             self.setdown()
             self.stop()
             # if self._started_by is not None:
-                # self._started_by.children.discard(self)
+            # self._started_by.children.discard(self)
 
     def _run_unsafe(self):
         self.setup()
         while True:
             if self._break_condition():
-                break                
+                break
             self.loop()
             sleep(0.01)
 
@@ -180,30 +180,27 @@ class BaseThread(Base):
         if self._shutdown.is_set():
             self.log(f"Break condition: {self._shutdown.is_set()=}.")
             return True
-            
+
         if self._started_by is not None:
             if not self._started_by.is_started:
                 self.log(f"Break condition: {not self._started_by.is_started=}.")
                 return True
         return False
-    
-    def _snapshot_if_opened(self, path):        
+
+    def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path=path)
         if self.is_started:
             states["stop"] = self.stop
         else:
             states["start"] = self.start
-        
+
         return states
-    
+
     def snapshot(self, path, focus_path):
         states = super().snapshot(path=path, focus_path=focus_path)
         path = states["path"]
-        
+
         if self.thread_errors:
             states[self.thread_errors.name] = self.thread_errors.snapshot(path=path)
-            
+
         return states
-        
-
-

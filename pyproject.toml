@@ -1,0 +1,16 @@
+[tool.ruff]
+# Archived/pre-refactor code lives in "#"-prefixed folders and files
+# (e.g. "colloquy/# threads/", "tests/# test2.py"). It's inert (can't be
+# imported) and kept only as reference for the ongoing rebuild — leave it
+# untouched by formatting and linting.
+extend-exclude = ["**/#*"]
+
+[tool.ruff.lint]
+# Start narrow: only rules that are almost never a style choice, to avoid
+# a wall of noise on a codebase that leans on dynamic dispatch
+# (self["key"] = ..., __getitem__ lookups) that a stricter default ruleset
+# would misread as errors.
+select = [
+    "F",   # pyflakes: unused imports/vars, undefined names, etc.
+    "E9",  # syntax errors
+]

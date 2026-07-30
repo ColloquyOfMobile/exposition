@@ -2,8 +2,8 @@ from colloquy.base_thread import BaseThread
 from time import time, sleep
 from .html import HTML
 
-class Search(BaseThread):
 
+class Search(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
@@ -26,19 +26,19 @@ class Search(BaseThread):
         pass
 
     def setdown(self):
-        print(f"Set down {self=}")        
+        print(f"Set down {self=}")
         pass
-    
+
     # def snapshot(self, path):
-        # states = {
-            # "path": path + (self.name, ),
-            # "name": self.name,
-            # "close": self.close,
-            # "open": self.open,
-            # "opened": self._is_opened,
-        # }
-        # return states
-    
+    # states = {
+    # "path": path + (self.name, ),
+    # "name": self.name,
+    # "close": self.close,
+    # "open": self.open,
+    # "opened": self._is_opened,
+    # }
+    # return states
+
     @property
     def snapshot_children(self):
         children = {}

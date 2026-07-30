@@ -5,17 +5,17 @@ from colloquy.base_html import BaseHTML
 import traceback
 from .details import Details
 
-class HTML(BaseHTML):
 
+class HTML(BaseHTML):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._details = Details(owner=self)
         self["details"] = self.details.handle_request
-    
+
     @property
     def register(self):
         return self.owner
-    
+
     @property
     def dxl(self):
         return self.owner.dxl
@@ -60,16 +60,16 @@ class HTML(BaseHTML):
             doc.asis(self._title_if_not_readonly())
 
         return doc.getvalue()
-        
+
     def _title_if_not_readonly(self):
         doc, tag, text = CustomDoc().tagtext()
         value = self.owner.get()
 
-        style="margin-bottom: 0.5rem; display: flex; align-items: center;"
+        style = "margin-bottom: 0.5rem; display: flex; align-items: center;"
         if self.is_open:
             style += " justify-content: center;"
 
-        with tag("div",style=style):
+        with tag("div", style=style):
             if not self.is_open:
                 doc.asis(self.details.arrow)
 
@@ -79,39 +79,37 @@ class HTML(BaseHTML):
 
             with tag("div", style="margin-right: 1ch;"):
                 if self.is_open:
-                    href=f"/{self.path.as_posix()}/close"
+                    href = f"/{self.path.as_posix()}/close"
                     label = "close"
                 else:
-                    href=f"/{self.path.as_posix()}/open"
+                    href = f"/{self.path.as_posix()}/open"
                     label = "open"
 
                 with tag("a", href=href):
                     text(f"{label}")
-                    
+
             with tag("div"):
                 with tag("a", href=f"/{self.owner.path.as_posix()}/get"):
                     text("get")
 
         return doc.getvalue()
-        
+
     def _title_if_readonly(self):
         doc, tag, text = CustomDoc().tagtext()
         value = self.owner.get()
 
-        style="margin-bottom: 0.5rem; display: flex; align-items: center;"
+        style = "margin-bottom: 0.5rem; display: flex; align-items: center;"
 
-        with tag("div",style=style):
-
+        with tag("div", style=style):
             with tag("div", style="font-size: 1.2rem; margin-right: 1ch;"):
                 with tag("strong"):
                     text(f"{self.owner.name}={value}")
-                    
+
             with tag("div"):
                 with tag("a", href=f"/{self.owner.path.as_posix()}/get"):
                     text("get")
 
         return doc.getvalue()
-
 
     def _call_unsafe(self):
         doc, tag, text = CustomDoc().tagtext()

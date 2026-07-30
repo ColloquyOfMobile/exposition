@@ -2,7 +2,6 @@ from colloquy.base import Base
 
 
 class Close(Base):
-
     def __init__(self, owner):
         super().__init__(owner)
 

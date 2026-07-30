@@ -3,7 +3,6 @@ from pathlib import Path
 
 
 class Increment(Base):
-
     def __init__(self, owner, multiplier):
         super().__init__(owner=owner)
         self._multiplier = multiplier
@@ -37,22 +36,25 @@ class Increment(Base):
         style1 = "display:flex;"
 
         with tag("div", style=style1):
-
             # - button
             with tag("div", klass=klass):
-                with tag("a",
-                         href=f"/{self.path.as_posix()}/-",
-                         style="text-decoration: none; color: black;"):
+                with tag(
+                    "a",
+                    href=f"/{self.path.as_posix()}/-",
+                    style="text-decoration: none; color: black;",
+                ):
                     text(f"- {self._multiplier}")
 
             # + button
             with tag("div", klass=klass):
-                with tag("a",
-                         href=f"/{self.path.as_posix()}/+",
-                         style="text-decoration: none; color: black;"):
+                with tag(
+                    "a",
+                    href=f"/{self.path.as_posix()}/+",
+                    style="text-decoration: none; color: black;",
+                ):
                     text(f"+ {self._multiplier}")
 
             # with tag("div", style="display:flex; place-content: center; margin-left: 1ch;"):
-                # text(self._multiplier)#
+            # text(self._multiplier)#
 
         return doc.getvalue()

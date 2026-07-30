@@ -1,13 +1,13 @@
 from colloquy.thread_element import ThreadElement
 from time import time, sleep
 
-class Conversation(ThreadElement):
 
+class Conversation(ThreadElement):
     def __init__(self, owner):
         ThreadElement.__init__(self, owner=owner, name=f"conversation")
         # self._watch_out_for_beam = WatchOutForBeam(owner=self)
         self._timeout_start = None
-        self._timeout = 10 # seconds
+        self._timeout = 10  # seconds
 
     def __enter__(self):
         self.stop_event.clear()
@@ -65,7 +65,7 @@ class Conversation(ThreadElement):
         orange = self.owner.drives.orange
         puce = self.owner.drives.puce
         # neopixel.on()
-        while time()-start < 6:
+        while time() - start < 6:
             for element in segments:
                 element.configure(brightness=255, **orange)
 
@@ -93,11 +93,10 @@ class Conversation(ThreadElement):
 
 
 class WatchOutForBeam(ThreadElement):
-
     def __init__(self, owner):
         ThreadElement.__init__(self, owner=owner, name=f"watch out for beam")
         self._timeout_start = None
-        self.timeout = 4 # seconds
+        self.timeout = 4  # seconds
 
     def __enter__(self):
         self.stop_event.clear()

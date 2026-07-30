@@ -2,8 +2,8 @@ from colloquy.base_thread import BaseThread
 from time import time, sleep
 from .html import HTML
 
-class TurnBackAndForth(BaseThread):
 
+class TurnBackAndForth(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
@@ -27,7 +27,7 @@ class TurnBackAndForth(BaseThread):
 
     def setdown(self):
         pass
-    
+
     @property
     def snapshot_children(self):
         children = {}

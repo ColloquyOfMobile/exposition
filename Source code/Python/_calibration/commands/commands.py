@@ -1,6 +1,4 @@
-
 class Command:
-
     def __init__(self, owner, name):
         self._owner = owner
         self.name = name
@@ -27,12 +25,16 @@ with tag("form", action="", method="post"):
         text(self.name)
         """)
 
-class BarMoveToPositionAndWait(Command):
 
+class BarMoveToPositionAndWait(Command):
     def __init__(self, owner, position, actors):
         self.position = position
         self.actors = actors
-        Command.__init__(self, owner, name=f"bar/move to interaction between {self.actors.male.name} and {self.actors.female.name}")
+        Command.__init__(
+            self,
+            owner,
+            name=f"bar/move to interaction between {self.actors.male.name} and {self.actors.female.name}",
+        )
 
     def __call__(self, **kwargs):
         position = int(kwargs["position"][0])
@@ -44,14 +46,16 @@ class BarMoveToPositionAndWait(Command):
         doc, tag, text = self._owner._doc.tagtext()
         hardware = self._owner.hardware
         position = round(self.position)
-        with tag("form", action="", method="post", style="display: flex; flex-wrap: wrap;"):
+        with tag(
+            "form", action="", method="post", style="display: flex; flex-wrap: wrap;"
+        ):
             with tag("input", type="number", name="position", value=position, step="1"):
                 pass
             with tag("button", type="submit", name="command", value=self.name):
                 text(self.name)
 
-class BarMoveToOriginAndWait(Command):
 
+class BarMoveToOriginAndWait(Command):
     def __init__(self, owner):
         Command.__init__(self, owner, name=f"bar/move to origin")
 
@@ -67,14 +71,18 @@ class BarMoveToOriginAndWait(Command):
         doc, tag, text = self._owner._doc.tagtext()
         hardware = self._owner.hardware
         position = hardware.bar.dxl_origin
-        with tag("form", action="", method="post", style="display: flex; flex-wrap: wrap;"):
-            with tag("input", type="number", name="position", value=position, disabled="True"):
+        with tag(
+            "form", action="", method="post", style="display: flex; flex-wrap: wrap;"
+        ):
+            with tag(
+                "input", type="number", name="position", value=position, disabled="True"
+            ):
                 pass
             with tag("button", type="submit", name="command", value=self.name):
                 text(self.name)
 
-class BodyMoveToOriginAndWait(Command):
 
+class BodyMoveToOriginAndWait(Command):
     def __init__(self, owner, body):
         self.body = body
         Command.__init__(self, owner, name=f"{body.name}/move to origin")
@@ -91,15 +99,18 @@ class BodyMoveToOriginAndWait(Command):
         doc, tag, text = self._owner._doc.tagtext()
         hardware = self._owner.hardware
         position = self.body.dxl_origin
-        with tag("form", action="", method="post", style="display: flex; flex-wrap: wrap;"):
-            with tag("input", type="number", name="position", value=position, disabled="True"):
+        with tag(
+            "form", action="", method="post", style="display: flex; flex-wrap: wrap;"
+        ):
+            with tag(
+                "input", type="number", name="position", value=position, disabled="True"
+            ):
                 pass
             with tag("button", type="submit", name="command", value=self.name):
                 text(self.name)
 
 
 class BodyToggleSpeaker(Command):
-
     def __init__(self, owner, body):
         self.body = body
         Command.__init__(self, owner, name=f"{body.name}/toggle speaker")
@@ -118,14 +129,16 @@ class BodyToggleSpeaker(Command):
             value = "On"
         if value is False:
             value = "Off"
-        with tag("form", action="", method="post", style="display: flex; flex-wrap: wrap;"):
+        with tag(
+            "form", action="", method="post", style="display: flex; flex-wrap: wrap;"
+        ):
             with tag("input", name="state", value=value, disabled=True):
                 pass
             with tag("button", type="submit", name="command", value=self.name):
                 text(self.name)
 
-class BodyMoveAndWait(Command):
 
+class BodyMoveAndWait(Command):
     def __init__(self, owner, body):
         self.body = body
         Command.__init__(self, owner, name=f"{body.name}/move and wait")
@@ -141,14 +154,16 @@ class BodyMoveAndWait(Command):
         doc, tag, text = self._owner._doc.tagtext()
         hardware = self._owner.hardware
         position = round(self.body.position)
-        with tag("form", action="", method="post", style="display: flex; flex-wrap: wrap;"):
+        with tag(
+            "form", action="", method="post", style="display: flex; flex-wrap: wrap;"
+        ):
             with tag("input", type="number", name="position", value=position, step="1"):
                 pass
             with tag("button", type="submit", name="command", value=self.name):
                 text(self.name)
 
-class BarMoveAndWait(Command):
 
+class BarMoveAndWait(Command):
     def __init__(self, owner):
         Command.__init__(self, owner, name="bar/move and wait")
 

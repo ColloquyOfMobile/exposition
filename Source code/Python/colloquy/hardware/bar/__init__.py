@@ -9,27 +9,28 @@ from .turn_back_and_forth import TurnBackAndForth
 
 
 class Bar(BaseThread):
-
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._position_memory = None
-        
+
         self._motion_range = 10000
         self._dxl_origin = DXLOrigin(owner=self)
         self._position = DXLPosition(owner=self)
         self.turn_back_and_forth_around_f1 = TurnBackAndForthAroundF1(owner=self)
         self.turn_back_and_forth = TurnBackAndForth(owner=self)
-        
+
         self._dxl = owner.u2d2.dxls[self.name]
         self._html = HTML(owner=self)
 
         self._search = Search(owner=self)
-        
+
         self[self.html.name] = self.html.handle_request
         self[self.search.name] = self.search
         self[self.dxl_origin.name] = self.dxl_origin
         self[self.position.name] = self.position
-        self["set current position as dxl origin"] = self.set_current_position_as_dxl_origin
+        self["set current position as dxl origin"] = (
+            self.set_current_position_as_dxl_origin
+        )
 
     def __call__(self, request):
         request = Path(request)
@@ -60,6 +61,7 @@ class Bar(BaseThread):
     @property
     def dxl(self):
         return self._dxl
+
     @property
     def search(self):
         return self._search
@@ -83,23 +85,23 @@ class Bar(BaseThread):
     @property
     def is_moving(self):
         return self.dxl.is_moving
-    
+
     @property
     def position(self):
         return self._position
-    
+
     @property
-    def goal_position(self):         
+    def goal_position(self):
         return self.dxl.goal_position
-    
+
     @property
     def torque_enabled(self):
         return self.dxl.torque_enabled
-    
+
     @property
     def males(self):
         return self.owner.males
-    
+
     def set_current_position_as_dxl_origin(self, request=None):
         self.dxl_origin.set(self.dxl.position.read())
 
@@ -126,10 +128,10 @@ class Bar(BaseThread):
             self.turn_to_max_position()
             return
 
-    def loop(self):   
+    def loop(self):
         if self.search.is_started:
             return
-            
+
         for male in self.males:
             if male.search.is_started:
                 self.search.start(started_by=self)
@@ -141,7 +143,7 @@ class Bar(BaseThread):
 
     def setdown(self):
         return
-        
+
     def get_states(self, *args):
         states = {
             "path": ("hardware", self.name),
@@ -150,54 +152,59 @@ class Bar(BaseThread):
         if args:
             raise NotImplementedError(self)
         return states
-    
+
     def turn_to_origin(self):
         value = self._dxl_origin.get()
         self.dxl.goal_position.write(value)
-    
+
     def move_male1_in_front_of_female1_and_wait(self):
         position = self.male1_in_front_of_f1
         self.dxl.move_and_wait(position)
-    
+
     def move_male1_in_front_of_female2_and_wait(self):
         origin = self.params["bar"]["dxl origin"]
-        position = self.params["bar"]["interaction_origins"]["male1"]["female2"] + origin
-        
+        position = (
+            self.params["bar"]["interaction_origins"]["male1"]["female2"] + origin
+        )
+
         self.dxl.move_and_wait(position)
-    
+
     def move_male1_in_front_of_female3_and_wait(self):
         origin = self.params["bar"]["dxl origin"]
-        position = self.params["bar"]["interaction_origins"]["male1"]["female3"] + origin
-        
+        position = (
+            self.params["bar"]["interaction_origins"]["male1"]["female3"] + origin
+        )
+
         self.dxl.move_and_wait(position)
-        
-    
+
     # def snapshot(self, path):
-        # path = path + (self.name,)
-        # states = {
-            # "path": path,
-            # "name": self.name,
-            # "close": self.close,
-            # "open": self.open,
-            # "opened": self._is_opened,
-            # "dxl origin": self.dxl_origin.snapshot(path=path),
-            # self.dxl.name: self.dxl.snapshot(path=path),
-            # "search": self.search.snapshot(path=path),
-            # "move male1 in front of female1 and wait": self.move_male1_in_front_of_female1_and_wait,
-            # "move male1 in front of female2 and wait": self.move_male1_in_front_of_female2_and_wait,
-            # "move male1 in front of female3 and wait": self.move_male1_in_front_of_female3_and_wait,
-        # }
-        # return states 
-    
+    # path = path + (self.name,)
+    # states = {
+    # "path": path,
+    # "name": self.name,
+    # "close": self.close,
+    # "open": self.open,
+    # "opened": self._is_opened,
+    # "dxl origin": self.dxl_origin.snapshot(path=path),
+    # self.dxl.name: self.dxl.snapshot(path=path),
+    # "search": self.search.snapshot(path=path),
+    # "move male1 in front of female1 and wait": self.move_male1_in_front_of_female1_and_wait,
+    # "move male1 in front of female2 and wait": self.move_male1_in_front_of_female2_and_wait,
+    # "move male1 in front of female3 and wait": self.move_male1_in_front_of_female3_and_wait,
+    # }
+    # return states
+
     @property
     def snapshot_children(self):
         children = {}
-        children.update({
-            "dxl origin": self.dxl_origin,
-            self.dxl.name: self.dxl,
-            "search": self.search,
-            "move male1 in front of female1 and wait": self.move_male1_in_front_of_female1_and_wait,
-            "move male1 in front of female2 and wait": self.move_male1_in_front_of_female2_and_wait,
-            "move male1 in front of female3 and wait": self.move_male1_in_front_of_female3_and_wait,
-        })
+        children.update(
+            {
+                "dxl origin": self.dxl_origin,
+                self.dxl.name: self.dxl,
+                "search": self.search,
+                "move male1 in front of female1 and wait": self.move_male1_in_front_of_female1_and_wait,
+                "move male1 in front of female2 and wait": self.move_male1_in_front_of_female2_and_wait,
+                "move male1 in front of female3 and wait": self.move_male1_in_front_of_female3_and_wait,
+            }
+        )
         return children

@@ -1,8 +1,8 @@
 from colloquy.thread_element import ThreadElement
 from time import time, sleep
 
-class Search(ThreadElement):
 
+class Search(ThreadElement):
     def __init__(self, owner):
         ThreadElement.__init__(self, owner=owner, name=f"search")
 

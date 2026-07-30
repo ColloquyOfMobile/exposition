@@ -6,9 +6,8 @@ from .virtual_packet_handler import VirtualPacketHandler
 
 
 class VirtualHardware(BaseThread):
-
     def __init__(self, owner):
-        super().__init__(owner) 
+        super().__init__(owner)
         self._arduino_serial_port = None
         self._u2d2_port_handler = None
         self._u2d2_packet_handler = None

@@ -5,8 +5,8 @@ import traceback
 from threading import Thread, Event, Lock
 from server.html_element import HTMLElement
 
-class EmulatorThread(HTMLElement):
 
+class EmulatorThread(HTMLElement):
     _thread_pool = set()
 
     def __init__(self, name, owner):
@@ -60,7 +60,9 @@ class EmulatorThread(HTMLElement):
             # self.stop()
             self.hardware.stop()
             self._exception = exc_value
-            msg = ''.join(traceback.format_exception(exc_type, exc_value, traceback_obj))
+            msg = "".join(
+                traceback.format_exception(exc_type, exc_value, traceback_obj)
+            )
             self.log(msg)
             print(f"Error ({exc_type=}) in {self.path.as_posix()}")
         for element in self.elements:
@@ -86,9 +88,9 @@ class EmulatorThread(HTMLElement):
     @is_started.setter
     def is_started(self, value):
         # if value:
-            # self._is_started = value
-            # self.owner.is_started = value
-            # return
+        # self._is_started = value
+        # self.owner.is_started = value
+        # return
         self._is_started = value
 
     @property
@@ -147,7 +149,7 @@ class EmulatorThread(HTMLElement):
             self._thread_pool.add(value)
 
     def iter_thread_pool(self):
-        yield from sorted(self._thread_pool, key=lambda x:x.name)
+        yield from sorted(self._thread_pool, key=lambda x: x.name)
 
     def _sleep_min(self):
         sleep(0.01)
@@ -158,11 +160,11 @@ class EmulatorThread(HTMLElement):
 
     def start(self, **kwargs):
         # if self.stop_event.is_set():
-            # print(f"Cannot start, {self=} stop_event is set")
-            # return
+        # print(f"Cannot start, {self=} stop_event is set")
+        # return
         # if self.owner.stop_event.is_set():
-            # print(f"Cannot start, {self=} {self.owner=} stop_event is set")
-            # return
+        # print(f"Cannot start, {self=} {self.owner=} stop_event is set")
+        # return
 
         # self.stop_event.clear()
 
@@ -184,7 +186,6 @@ class EmulatorThread(HTMLElement):
             self._is_started = False
             self.stop_event.set()
 
-
         for element in self.elements:
             element.stop()
 
@@ -193,25 +194,25 @@ class EmulatorThread(HTMLElement):
             self._setup(**kwargs)
             while not self.stop_event.is_set():
                 # if self.shutdown_event.is_set():
-                    # break
+                # break
                 self._loop()
                 self._sleep_min()
 
     def _loop(self):
-        raise NotImplementedError(
-            f"Called repeatedly until stopped! ({self=})"
-            )
+        raise NotImplementedError(f"Called repeatedly until stopped! ({self=})")
 
     def _add_html_thread_count(self):
         doc, tag, text = self.html_doc.tagtext()
         if self.thread_count:
-            with tag("details",):
-                with tag("summary",):
-                    text(
-                        f"threads: {self.thread_count}"
-                        )
+            with tag(
+                "details",
+            ):
+                with tag(
+                    "summary",
+                ):
+                    text(f"threads: {self.thread_count}")
                 for e in self.iter_thread_pool():
-                    with tag("summary",):
-                        text(
-                            f"{e.name}"
-                            )
+                    with tag(
+                        "summary",
+                    ):
+                        text(f"{e.name}")

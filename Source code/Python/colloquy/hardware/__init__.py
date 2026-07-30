@@ -15,17 +15,16 @@ from .all_neopixels import AllNeopixels
 
 
 class Hardware(BaseThread):
-
     def __init__(self, owner):
 
         super().__init__(owner)
 
         if self.is_simulated:
             self.log(f"Warning: The hardware is simulated.")
-        
+
         self._html = HTML(owner=self)
         self[self.html.name] = self.html.handle_request
-        
+
         self.dxl_ids = {
             "female1": 1,
             "female2": 3,
@@ -46,22 +45,22 @@ class Hardware(BaseThread):
         )
         self._speakers = []
         self._moving_elements = []
-        
+
         self._females = (
             Female(owner=self, id_number=1),
             Female(owner=self, id_number=2),
             Female(owner=self, id_number=3),
-            )
-        self._bodies = Bodies(owner=owner, males=self.males, females= self.females)
+        )
+        self._bodies = Bodies(owner=owner, males=self.males, females=self.females)
         self._neopixels = AllNeopixels(owner=self, bodies=self._bodies)
-        
+
         self._bar = Bar(owner=self)
 
         self._test = Test(owner=self)
-        
+
         self[self.arduino.name] = self.arduino
         self.add(self.test)
-        
+
         self[self.bar.name] = self.bar
 
         for female in self._females:
@@ -181,21 +180,21 @@ class Hardware(BaseThread):
     @property
     def neopixels(self):
         return self._neopixels
-    
-    def wait_until_everything_is_still(self):        
+
+    def wait_until_everything_is_still(self):
         while any(dxl.is_moving for dxl in self._u2d2.dxl_list):
-            pass   
-    
-    def disable_torque(self):        
+            pass
+
+    def disable_torque(self):
         for dxl in self._u2d2.dxl_list:
             dxl.torque_enabled.write(value=0)
-        
+
     def open(self):
-        self._is_opened = True 
-        
+        self._is_opened = True
+
     def close(self):
         self._is_opened = False
-        
+
     def loop(self):
         pass
 
@@ -207,7 +206,7 @@ class Hardware(BaseThread):
     def setdown(self):
         for bodies in self.bodies:
             bodies.stop()
-    
+
     @property
     def snapshot_children(self):
         children = {}
@@ -216,12 +215,12 @@ class Hardware(BaseThread):
             children[body.name] = body
         children[self.bar.name] = self
         return children
-        
+
     # def snapshot(self, path):
-        # states = super().snapshot(path=path)
-        # _path = states["path"]
-        # states["bodies"] = self.bodies.snapshot(path=_path)
-        # for body in self.bodies:
-            # states[body.name] = body.snapshot(path=_path)
-        # states[self.bar.name] = self.bar.snapshot(path=_path)
-        # return states 
+    # states = super().snapshot(path=path)
+    # _path = states["path"]
+    # states["bodies"] = self.bodies.snapshot(path=_path)
+    # for body in self.bodies:
+    # states[body.name] = body.snapshot(path=_path)
+    # states[self.bar.name] = self.bar.snapshot(path=_path)
+    # return states

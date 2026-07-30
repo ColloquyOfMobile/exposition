@@ -5,8 +5,8 @@ from pathlib import Path
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-class FileModifiedHandler(FileSystemEventHandler):
 
+class FileModifiedHandler(FileSystemEventHandler):
     def __init__(self):
         FileSystemEventHandler.__init__(self)
         self.last_call = time.time()
@@ -40,8 +40,8 @@ class FileModifiedHandler(FileSystemEventHandler):
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             bufsize=1,  # Line-buffered output
-            universal_newlines=True  # Required for text mode and line buffering
-            )
+            universal_newlines=True,  # Required for text mode and line buffering
+        )
 
         # Start a thread to read the subprocess output
         self.subprocess_thread = threading.Thread(target=self._print_subprocess_output)
@@ -49,8 +49,8 @@ class FileModifiedHandler(FileSystemEventHandler):
 
     def _print_subprocess_output(self):
         """Continuously read the subprocess stdout and print to main console"""
-        for line in iter(self.subprocess.stdout.readline, ''):
-            print(f"# {line}", end='')
+        for line in iter(self.subprocess.stdout.readline, ""):
+            print(f"# {line}", end="")
             self.subprocess.stdout.flush()  # Flush the output to ensure real-time display
 
     def _strip_lines(self, src_path):
@@ -71,9 +71,11 @@ def monitor_folder(folder_to_watch):
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         bufsize=1,  # Line-buffered output
-        universal_newlines=True  # Required for text mode and line buffering
-        )
-    event_handler.subprocess_thread = threading.Thread(target=event_handler._print_subprocess_output)
+        universal_newlines=True,  # Required for text mode and line buffering
+    )
+    event_handler.subprocess_thread = threading.Thread(
+        target=event_handler._print_subprocess_output
+    )
     event_handler.subprocess_thread.start()
 
     print("Server running...")

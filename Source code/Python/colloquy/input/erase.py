@@ -8,8 +8,6 @@ from colloquy.base import Base
 from colloquy.base_html import BaseHTML
 
 
-
-
 class Erase(Base):
     def __init__(self, owner):
         Base.__init__(self, owner=owner)
@@ -20,7 +18,7 @@ class Erase(Base):
 
     def http_response(self):
         headers = [("Content-Type", "text/html; charset=utf-8")]
-        status = '200 OK'
+        status = "200 OK"
         args = self.path.parts
         content = self.server.html.doc(*args)
         return status, headers, content.encode()
@@ -39,10 +37,13 @@ class Erase(Base):
 
 
 class HTML(BaseHTML):
-
     def _call_unsafe(self, *args):
         doc, tag, text = Doc().tagtext()
-        with tag("a", href=f"/{self.owner.path.as_posix()}", style="margin-left: 0.5ch; margin-right: 0.5ch;"):
+        with tag(
+            "a",
+            href=f"/{self.owner.path.as_posix()}",
+            style="margin-left: 0.5ch; margin-right: 0.5ch;",
+        ):
             with tag("div"):
                 text(f"<{self.owner.name}|")
 

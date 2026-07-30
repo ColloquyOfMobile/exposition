@@ -1,4 +1,3 @@
-
 import inspect
 from pathlib import Path
 from urllib.parse import unquote
@@ -6,11 +5,12 @@ import urllib.parse
 import socket
 from .logger import Logger
 
+
 class SnapchotError(Exception):
     pass
 
-class Base:
 
+class Base:
     _all_threads = set()
 
     @staticmethod
@@ -20,7 +20,7 @@ class Base:
         if len(stack) > 2:
             caller_frame = stack[2]
             caller_filename = caller_frame.filename  # File where the call happened
-            caller_lineno = caller_frame.lineno      # Line number of the call
+            caller_lineno = caller_frame.lineno  # Line number of the call
             return f"{caller_filename}:{caller_lineno}"
         else:
             return "unknown origin"
@@ -104,14 +104,14 @@ class Base:
 
     @property
     def is_simulated(self):
-        if socket.gethostname() == 'Colloquy-Laptop':
+        if socket.gethostname() == "Colloquy-Laptop":
             return False
         return True
-    
+
     @property
     def opened(self):
         raise NotImplementedError(self)
-    
+
     @opened.setter
     def opened(self, value):
         raise NotImplementedError(self)
@@ -122,16 +122,15 @@ class Base:
     def _svg_down_arrow(self):
         raise NotImplementedError("Implemented in BaseHTML class now.")
 
-
     def _svg_right_arrow(self):
         raise NotImplementedError("Implemented in BaseHTML class now.")
-        
+
     def open(self):
-        self._is_opened = True 
-        
+        self._is_opened = True
+
     def close(self):
         self._is_opened = False
-    
+
     def _snapshot_base_states(self, path):
         return {
             "path": path,
@@ -140,45 +139,43 @@ class Base:
             "open": self.open,
             "opened": self._is_opened,
         }
-    
+
     @property
     def snapshot_children(self):
-        raise NotImplementedError(f"{self=}. Property returning a dictionnary with UI children.")
-    
+        raise NotImplementedError(
+            f"{self=}. Property returning a dictionnary with UI children."
+        )
+
     def _snapshot_if_opened(self, path):
         states = {}
         for k, v in self.snapshot_children.items():
-            child_path = path + (k, )
+            child_path = path + (k,)
             states[k] = v.snapshot_as_child(path=child_path)
         return states
-        
-    
-    def snapshot(self, path, focus_path):   
+
+    def snapshot(self, path, focus_path):
         try:
             states = self._snapshot_base_states(path)
             if focus_path == path:
                 states.update(self._snapshot_if_opened(path))
                 return states
-                
+
             for k, v in self.snapshot_children.items():
                 if not callable(v):
-                    states[k] = v.snapshot(
-                        path = path + (k,), 
-                        focus_path=focus_path
-                        )
-                    continue                    
+                    states[k] = v.snapshot(path=path + (k,), focus_path=focus_path)
+                    continue
                 states[k] = v
-                
+
         except SnapchotError:
             raise
         except Exception as error:
             raise SnapchotError(f"Error getting snapshot from {self}") from error
-            
+
         return states
-    
+
     def snapshot_as_child(self, path):
-        states = self._snapshot_base_states(path)        
+        states = self._snapshot_base_states(path)
         if self._is_opened:
             states.update(self._snapshot_if_opened(path))
-            
+
         return states

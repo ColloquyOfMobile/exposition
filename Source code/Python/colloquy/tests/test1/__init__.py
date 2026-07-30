@@ -7,8 +7,8 @@ from threading import Thread, Event, Lock
 from time import sleep
 from .html import HTML
 
-class Test1(BaseThread):
 
+class Test1(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._html = HTML(owner=self)

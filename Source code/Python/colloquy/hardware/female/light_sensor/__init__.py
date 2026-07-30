@@ -4,26 +4,26 @@ from threading import Lock
 from pathlib import Path
 from .html import HTML
 
-class LightSensor(BaseThread):
 
+class LightSensor(BaseThread):
     def __init__(self, name, owner):
         self._name = name
         super().__init__(owner=owner)
         self._lock = Lock()
-        self._html = HTML(owner=self) 
-        self[self.html.name] = self.html.handle_request  
-    
+        self._html = HTML(owner=self)
+        self[self.html.name] = self.html.handle_request
+
     @property
     def female(self):
         return self.owner
 
     @property
     def arduino(self):
-        return self.owner.arduino       
+        return self.owner.arduino
 
     @property
     def html(self):
-        return self._html        
+        return self._html
 
     @property
     def is_simulated(self):
@@ -52,28 +52,30 @@ class LightSensor(BaseThread):
 
     def read(self):
         # if self.is_emulated:
-            # raise NotImplementedError
-        
+        # raise NotImplementedError
+
         with self.arduino:
             response = self.arduino.send(self.arduino_path)
-        
+
         # rint(response)
         return int(response)
-    
-    # def snapshot(self, path):        
-        # states = super().snapshot(path=path)
-        # _path = states["path"]
-        # states.update({
-            # "read": self.read,
-            # "value": self.read(),
-        # })
-        # return states 
-    
+
+    # def snapshot(self, path):
+    # states = super().snapshot(path=path)
+    # _path = states["path"]
+    # states.update({
+    # "read": self.read,
+    # "value": self.read(),
+    # })
+    # return states
+
     @property
     def snapshot_children(self):
         children = {}
-        children.update({
-            "read": self.read,
-            "value": self.read(),
-        })
+        children.update(
+            {
+                "read": self.read,
+                "value": self.read(),
+            }
+        )
         return children

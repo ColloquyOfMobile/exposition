@@ -2,8 +2,8 @@ from pathlib import Path
 
 from .base import Base
 
-class CLI(Base):
 
+class CLI(Base):
     def __init__(self, owner):
         super().__init__(owner=owner)
 
@@ -34,10 +34,14 @@ class CLI(Base):
         raise NotImplementedError(f"{self=}, {key=}, {leftover=}")
 
     @property
-    def name(self, ):
+    def name(
+        self,
+    ):
         return "cli"
 
-    def run(self, ):
+    def run(
+        self,
+    ):
         return self.server()
 
     def restart(self):

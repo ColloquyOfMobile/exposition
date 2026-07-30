@@ -1,4 +1,8 @@
-from dynamixel_sdk import PortHandler, PacketHandler, COMM_SUCCESS  # Uses Dynamixel SDK library
+from dynamixel_sdk import (
+    PortHandler,
+    PacketHandler,
+    COMM_SUCCESS,
+)  # Uses Dynamixel SDK library
 from functools import wraps
 from threading import Lock
 from time import sleep
@@ -11,8 +15,6 @@ from colloquy.hardware.com_port import ComPort
 
 
 class ComPort(ComPort):
-
-
     def __init__(self, owner, value=None):
         super().__init__(owner=owner, value=None)
 

@@ -5,12 +5,7 @@ from pathlib import Path
 from colloquy.base import Base
 from .virtual_dxl import VirtualDXL
 
-_1_BYTE_REGISTERS = {
-    "drive mode",
-    "temperature",
-    "torque enabled",
-    "operating mode"
-}
+_1_BYTE_REGISTERS = {"drive mode", "temperature", "torque enabled", "operating mode"}
 _4_BYTE_REGISTERS = {
     "position",
     "goal position",
@@ -18,7 +13,7 @@ _4_BYTE_REGISTERS = {
     "profile acceleration",
 }
 
-    
+
 class VirtualPacketHandler(Base):
     def __init__(self, owner):
         super().__init__(owner=owner)
@@ -34,14 +29,9 @@ class VirtualPacketHandler(Base):
             132: "position",
             116: "goal position",
             146: "temperature",
-            }
-        self._register_reader = {
         }
-        self._dxls = [
-            VirtualDXL(owner=self, dxl_id=i)
-            for i
-            in range(10)
-        ]
+        self._register_reader = {}
+        self._dxls = [VirtualDXL(owner=self, dxl_id=i) for i in range(10)]
 
     @property
     def dxls(self):
@@ -69,33 +59,32 @@ class VirtualPacketHandler(Base):
     def _read_register(self, dxl_id, label):
         return self.dxls[dxl_id][label]
 
-
     def _write_goal_position(self, dxl_id, value):
         self.log(f"Write goal position {value=} to dxl{dxl_id=}")
         self.dxls[dxl_id].goal_position = value
 
-    def write1ByteTxRx(self, port_handler, dxl_id, register_address, value):            
-        label = self._register_map[register_address]        
-        assert label in _1_BYTE_REGISTERS, f"{label=}, {value=}"            
-        value = self._dxls[dxl_id].set(label, value)
-        return COMM_SUCCESS, 0
-
-    def read1ByteTxRx(self, port_handler, dxl_id, register_address):          
+    def write1ByteTxRx(self, port_handler, dxl_id, register_address, value):
         label = self._register_map[register_address]
         assert label in _1_BYTE_REGISTERS, f"{label=}, {value=}"
-        value = self._dxls[dxl_id].get(label)        
-        return value, COMM_SUCCESS, 0
-
-    def write4ByteTxRx(self, port_handler, dxl_id, register_address, value):          
-        label = self._register_map[register_address]        
-        assert label in _4_BYTE_REGISTERS, f"{label=}, {value=}"            
         value = self._dxls[dxl_id].set(label, value)
         return COMM_SUCCESS, 0
 
-    def read4ByteTxRx(self, port_handler, dxl_id, register_address):     
+    def read1ByteTxRx(self, port_handler, dxl_id, register_address):
+        label = self._register_map[register_address]
+        assert label in _1_BYTE_REGISTERS, f"{label=}, {value=}"
+        value = self._dxls[dxl_id].get(label)
+        return value, COMM_SUCCESS, 0
+
+    def write4ByteTxRx(self, port_handler, dxl_id, register_address, value):
         label = self._register_map[register_address]
         assert label in _4_BYTE_REGISTERS, f"{label=}, {value=}"
-        value = self._dxls[dxl_id].get(label)        
+        value = self._dxls[dxl_id].set(label, value)
+        return COMM_SUCCESS, 0
+
+    def read4ByteTxRx(self, port_handler, dxl_id, register_address):
+        label = self._register_map[register_address]
+        assert label in _4_BYTE_REGISTERS, f"{label=}, {value=}"
+        value = self._dxls[dxl_id].get(label)
         return value, COMM_SUCCESS, 0
 
     def getTxRxResult(self, result):
@@ -105,4 +94,3 @@ class VirtualPacketHandler(Base):
     def getRxPacketError(self, result):
         raise NotImplementedError
         return None
-

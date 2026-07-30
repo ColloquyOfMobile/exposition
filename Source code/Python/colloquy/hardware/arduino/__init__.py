@@ -7,14 +7,15 @@ from time import sleep, time
 from threading import Lock
 from colloquy.base import Base
 from .com_port import ComPort
+
 # from .html import HTML
 from .neopixel_command import NeopixelCommand
 from .light_sensor_command import LightSensorCommand
 
 START = time()
 
-class Arduino(Base):
 
+class Arduino(Base):
     _classes = {
         "serial": serial.Serial,
     }
@@ -35,19 +36,16 @@ class Arduino(Base):
             NeopixelCommand(owner=self, arduino_path="f1/bodyP"),
             NeopixelCommand(owner=self, arduino_path="f1/feet"),
             LightSensorCommand(owner=self, arduino_path="f1/light sensor"),
-            
             NeopixelCommand(owner=self, arduino_path="f2/head"),
             NeopixelCommand(owner=self, arduino_path="f2/bodyO"),
             NeopixelCommand(owner=self, arduino_path="f2/bodyP"),
             NeopixelCommand(owner=self, arduino_path="f2/feet"),
             LightSensorCommand(owner=self, arduino_path="f2/light sensor"),
-            
             NeopixelCommand(owner=self, arduino_path="f3/head"),
             NeopixelCommand(owner=self, arduino_path="f3/bodyO"),
             NeopixelCommand(owner=self, arduino_path="f3/bodyP"),
             NeopixelCommand(owner=self, arduino_path="f3/feet"),
             LightSensorCommand(owner=self, arduino_path="f3/light sensor"),
-            
             NeopixelCommand(owner=self, arduino_path="m1/ring"),
             NeopixelCommand(owner=self, arduino_path="m1/up ring"),
             NeopixelCommand(owner=self, arduino_path="m1/p drive level"),
@@ -56,7 +54,6 @@ class Arduino(Base):
             LightSensorCommand(owner=self, arduino_path="m1/light sensor/b"),
             LightSensorCommand(owner=self, arduino_path="m1/light sensor/c"),
             LightSensorCommand(owner=self, arduino_path="m1/light sensor/d"),
-            
             NeopixelCommand(owner=self, arduino_path="m2/ring"),
             NeopixelCommand(owner=self, arduino_path="m2/up ring"),
             NeopixelCommand(owner=self, arduino_path="m2/p drive level"),
@@ -66,7 +63,7 @@ class Arduino(Base):
             LightSensorCommand(owner=self, arduino_path="m2/light sensor/c"),
             LightSensorCommand(owner=self, arduino_path="m2/light sensor/d"),
         ]
-        
+
         for command in self._commands:
             self[command.name] = command
 
@@ -123,7 +120,7 @@ class Arduino(Base):
 
     # @property
     # def html(self):
-        # return self._html
+    # return self._html
 
     @property
     def params(self):
@@ -143,8 +140,8 @@ class Arduino(Base):
             if not self.is_simulated:
                 self._port_handler = serial.Serial(baudrate=self.baudrate, timeout=1)
             else:
-                self._port_handler = self.colloquy.virtual_hardware.arduino_serial_port 
-                
+                self._port_handler = self.colloquy.virtual_hardware.arduino_serial_port
+
             # Setting port name here avoid opening the port
             self.port_handler.port = self.params["arduino"]["communication port"]
 
@@ -159,11 +156,13 @@ class Arduino(Base):
         self.log(f"{command=}")
         serialized_command = f"{json.dumps(command)}\n"  # Conversion en JSON
         with self.lock:
-            self.port_handler.write(serialized_command.encode('utf-8'))  # Envoie de la commande
+            self.port_handler.write(
+                serialized_command.encode("utf-8")
+            )  # Envoie de la commande
 
             data = self.port_handler.readline()  # Lit une ligne du port série
         # if not data:
-            # raise TimeoutError("No response from Arduino.")
+        # raise TimeoutError("No response from Arduino.")
 
         return data
 
@@ -177,7 +176,7 @@ class Arduino(Base):
         Retourne :
         - Un type natif Python (par exemple dictionnaire).
         """
-        data = data.decode('utf-8')
+        data = data.decode("utf-8")
         try:
             data = json.loads(data)  # Convertir JSON en dictionnaire
         except json.JSONDecodeError:
@@ -202,7 +201,6 @@ class Arduino(Base):
         self.port_handler.open()
         self.wait_for_reboot()
 
-
     def wait_for_reboot(self):
         start = time()
         while True:
@@ -210,12 +208,8 @@ class Arduino(Base):
             data = self.port_handler.readline().strip()
             if data == b"Hello!":
                 break
-            if time()-start > 2:
+            if time() - start > 2:
                 raise RuntimeError("Arduino was to long to reboot !")
 
-
     def _get_com_ports(self):
-        return [
-            port.device
-            for port
-            in serial.tools.list_ports.comports()]
+        return [port.device for port in serial.tools.list_ports.comports()]

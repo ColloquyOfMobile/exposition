@@ -5,9 +5,7 @@ from time import sleep
 from time import time as systime
 
 
-
 class Agenda(Base):
-
     def __init__(self, owner):
         Base.__init__(self, owner=owner, name="agenda")
         self._days = []
@@ -16,7 +14,15 @@ class Agenda(Base):
         self._is_enabled = False
         self._print_origin = None
 
-        for name in ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]:
+        for name in [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday",
+        ]:
             day = Day(owner=self, name=name)
             setattr(self, name, day)
 
@@ -34,9 +40,11 @@ class Agenda(Base):
 
     # @property
     # def hardware(self):
-        # return self.owner.hardware
+    # return self.owner.hardware
 
-    def stop(self,):
+    def stop(
+        self,
+    ):
         raise NotImplementedError
         self.stop_event.set()
         self.hardware.shutdown()
@@ -51,13 +59,15 @@ class Agenda(Base):
             self._write_html_action(
                 value="hardware/exposition/agenda/enable",
                 label="enable agenda",
-                func=self._toggle_enable)
+                func=self._toggle_enable,
+            )
             return
 
         self._write_html_action(
             value="hardware/exposition/agenda/disable",
             label="disable agenda",
-            func=self._toggle_enable)
+            func=self._toggle_enable,
+        )
 
         with tag("div"):
             for day in self._days:
@@ -129,7 +139,6 @@ class Agenda(Base):
 
                 self._print("Waiting next slot...")
         else:
-
             self._print("Waiting next slot...")
 
         sleep(1)
@@ -141,7 +150,6 @@ class Agenda(Base):
 
 
 class Day(HTMLElement):
-
     def __init__(self, owner, name, params):
         HTMLElement.__init__(self, owner)
         owner.days.append(self)
@@ -158,7 +166,7 @@ class Day(HTMLElement):
 
     # @property
     # def hardware(self):
-        # return self.owner.hardware
+    # return self.owner.hardware
 
     @property
     def name(self):
@@ -180,7 +188,7 @@ class Day(HTMLElement):
         return self.owner.save()
 
     def _set_end_start(self, **kwargs):
-        start = kwargs["start"][0] # gives "17:20"
+        start = kwargs["start"][0]  # gives "17:20"
         end = kwargs["end"][0]  # gives "17:20"
 
         self._start = time.fromisoformat(start)
@@ -194,9 +202,9 @@ class Day(HTMLElement):
         self.hardware.params["agenda"][self.name]["state"] = self._state
         self.save()
         # if self._state:
-            # self._state = False
-            # self.save()
-            # return
+        # self._state = False
+        # self.save()
+        # return
         # self._state = True
         # self.hardware.params["agenda"][self.name]["state"] = self._state
         # self.save()
@@ -208,7 +216,7 @@ class Day(HTMLElement):
             with tag("label"):
                 text(f"{self.name}: ")
 
-            path =f"hardware/{self._name}/toggle"
+            path = f"hardware/{self._name}/toggle"
             self.actions[path] = self._toggle_state
             if not self._state:
                 with tag("button", name="action", value=path):
@@ -218,17 +226,16 @@ class Day(HTMLElement):
             with tag("button", name="action", value=path):
                 text("set off")
 
-            path =f"hardware/{self._name}/set"
+            path = f"hardware/{self._name}/set"
 
             kwargs = {}
             if self._start is not None:
-                kwargs["value"]=self._start.strftime("%H:%M")
+                kwargs["value"] = self._start.strftime("%H:%M")
             doc.stag("input", type="time", name="start", **kwargs)
-
 
             kwargs = {}
             if self._end is not None:
-                kwargs["value"]=self._end.strftime("%H:%M")
+                kwargs["value"] = self._end.strftime("%H:%M")
             doc.stag("input", type="time", name="end", **kwargs)
 
             with tag("button", name="action", value=path):

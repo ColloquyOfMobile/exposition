@@ -5,17 +5,17 @@ from colloquy.base_html import BaseHTML
 import traceback
 from .details import Details
 
-class HTML(BaseHTML):
 
+class HTML(BaseHTML):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._details = Details(owner=self)
         self["details"] = self.details.handle_request
-    
+
     @property
     def dxl_origin(self):
         return self.owner
-    
+
     @property
     def female(self):
         return self.owner.female
@@ -56,26 +56,27 @@ class HTML(BaseHTML):
         doc, tag, text = CustomDoc().tagtext()
         value = self.owner.get()
 
-        style="margin-bottom: 0.5rem; display: flex; align-items: center;"
+        style = "margin-bottom: 0.5rem; display: flex; align-items: center;"
         # if self.is_open:
-            # style += " justify-content: center;"
+        # style += " justify-content: center;"
 
-        with tag("div",style=style):
+        with tag("div", style=style):
             # if not self.is_open:
-                # doc.asis(self.details.arrow)
+            # doc.asis(self.details.arrow)
 
             with tag("div", style="font-size: 1.2rem; margin-right: 1ch;"):
                 with tag("strong"):
                     text(f"{self.owner.name}={value}")
 
             with tag("div", style="margin-right: 1ch;"):
-                href=f"/{self.female.path.as_posix()}/set current position as dxl origin"
+                href = (
+                    f"/{self.female.path.as_posix()}/set current position as dxl origin"
+                )
 
                 with tag("a", href=href):
                     text(f"set current position as dxl origin")
 
         return doc.getvalue()
-
 
     def _call_unsafe(self):
         doc, tag, text = CustomDoc().tagtext()

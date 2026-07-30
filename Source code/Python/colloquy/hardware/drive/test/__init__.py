@@ -21,8 +21,8 @@ const int color_orange[4] = {80, 255, 25, 16}; //GRBW/orangish
 const int color_puce[4] = {180, 160, 0, 40}; //GRBW//greenish
 """
 
-class Test(BaseThread):
 
+class Test(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._html = HTML(owner=self)
@@ -39,34 +39,33 @@ class Test(BaseThread):
 
     # @property
     # def body(self):
-        # return self.owner.body
+    # return self.owner.body
 
     # @property
     # def black(self):
-        # return self.owner.black
+    # return self.owner.black
 
     # @property
     # def color(self):
-        # return self.owner.color
+    # return self.owner.color
 
     # @property
     # def value(self):
-        # return self.owner.value
+    # return self.owner.value
 
     # @property
     # def is_satisfied(self):
-        # return self.owner.is_satisfied
-        
+    # return self.owner.is_satisfied
+
     # @property
     # def is_frustated(self):
-        # return self.owner.is_frustated
+    # return self.owner.is_frustated
 
     # def decrease(self):
-        # return self.owner.decrease()
+    # return self.owner.decrease()
 
     # def increment(self):
-        # return self.owner.increment()
-
+    # return self.owner.increment()
 
     def loop(self):
         self.owner.increment()
@@ -77,8 +76,6 @@ class Test(BaseThread):
 
     def setdown(self):
         pass
-
-
 
     def _break_condition(self):
         if self.error is not None:
@@ -91,15 +88,15 @@ class Test(BaseThread):
             self.log(f"Break condition: {self._shutdown.is_set()=}.")
             return True
         # if not self.owner.is_started:
-            # self.log(f"Break condition: {not self.owner.is_started=}.")
-            # return True
+        # self.log(f"Break condition: {not self.owner.is_started=}.")
+        # return True
 
     # def satisfy(self):
-        # self.o_drive = self._satisfaction_lim
-        # self.p_drive = self._satisfaction_lim
+    # self.o_drive = self._satisfaction_lim
+    # self.p_drive = self._satisfaction_lim
 
     # def _run_unsafe(self):
-        # stop_event = self._stop_event.is_set
-        # while not stop_event():
-            # self.increment()
-            # sleep(self._update_interval)
+    # stop_event = self._stop_event.is_set
+    # while not stop_event():
+    # self.increment()
+    # sleep(self._update_interval)

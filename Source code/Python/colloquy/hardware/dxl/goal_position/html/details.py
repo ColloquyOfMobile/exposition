@@ -4,19 +4,19 @@ from colloquy.base_html import BaseHTML
 
 import traceback
 
-class Details(BaseHTML):
 
+class Details(BaseHTML):
     def __init__(self, owner):
         super().__init__(owner=owner)
-    
+
     @property
     def register(self):
         return self.owner.register
-    
+
     @property
     def dxl(self):
         return self.owner.dxl
-    
+
     @property
     def hardware(self):
         return self.owner.hardware
@@ -28,15 +28,15 @@ class Details(BaseHTML):
     @property
     def workspace(self):
         return self.owner.workspace
-    
+
     @property
     def arrow(self):
         doc, tag, text = CustomDoc().tagtext()
         if self.is_open:
-            href=f"/{self.path.as_posix()}/close"
+            href = f"/{self.path.as_posix()}/close"
             svg = self._svg_down_arrow()
         else:
-            href=f"/{self.path.as_posix()}/open"
+            href = f"/{self.path.as_posix()}/open"
             svg = self._svg_right_arrow()
         with tag("div", name=self.name):
             with tag("a", href=href):
@@ -52,14 +52,19 @@ class Details(BaseHTML):
     def _call_unsafe(self):
         if not self.is_open:
             return ""
-        
-        
+
         doc, tag, text = CustomDoc().tagtext()
-            
-        with tag("div",  name=self.name, style="display: flex; flex:1; flex-direction: column;"):
-            
+
+        with tag(
+            "div",
+            name=self.name,
+            style="display: flex; flex:1; flex-direction: column;",
+        ):
             if self.dxl.torque_enabled.read() == 0:
-                with tag("div", style="display: flex; justify-content: center; background-color: orange; padding: 1ch;"):
+                with tag(
+                    "div",
+                    style="display: flex; justify-content: center; background-color: orange; padding: 1ch;",
+                ):
                     text("Enable torque first!")
             else:
                 doc.asis(self.register.input.html())

@@ -1,8 +1,8 @@
 from colloquy.moving_part import MovingPart
 from .search import Search
 
-class Mirror(MovingPart):
 
+class Mirror(MovingPart):
     def __init__(self, owner, **kwargs):
         MovingPart.__init__(self, owner, **kwargs)
         self._search = Search(owner=self)
@@ -21,7 +21,6 @@ class Mirror(MovingPart):
         assert self.dxl_origin is not None, "Calibrate hardware."
         self.stop_event.clear()
 
-
     def __exit__(self, exc_type, exc_value, traceback_obj):
         self.turn_to_origin_position()
         self._search.stop()
@@ -33,7 +32,7 @@ class Mirror(MovingPart):
             return False
         self.log(f"{self.dxl.goal=}")
         self.log(f"{self.dxl_origin - self.motion_range/2=}")
-        if self.dxl.goal_position == self.dxl_origin - self.motion_range/2:
+        if self.dxl.goal_position == self.dxl_origin - self.motion_range / 2:
             return True
         return False
 
@@ -43,7 +42,7 @@ class Mirror(MovingPart):
             return False
         self.log(f"{self.dxl.goal=}")
         self.log(f"{self.dxl_origin - self.motion_range/2=}")
-        if self.dxl.goal_position == self.dxl_origin - self.motion_range/2:
+        if self.dxl.goal_position == self.dxl_origin - self.motion_range / 2:
             return True
         return False
 
@@ -65,7 +64,7 @@ class Mirror(MovingPart):
         target_drive = self.hardware.interaction.target_drive
         if len(target_drive) == 1:
             self._move_to_target_position = self._memory[male.name][target_drive[0]]
-        elif len(target_drive)==2:
+        elif len(target_drive) == 2:
             # Just pick the first one here.
             self._move_to_target_position = self._memory[male.name][target_drive[0]]
             # raise NotImplementedError(f"{target_drive=}")
@@ -104,14 +103,26 @@ class Mirror(MovingPart):
             with tag("label", **{"for": f"{self.name}/fem_o_drive"}):
                 text(f"Fem O drive:")
 
-            with tag("input", type="number", id=f"{self.name}/fem_o_drive", name="fem_o_drive", value=0):
+            with tag(
+                "input",
+                type="number",
+                id=f"{self.name}/fem_o_drive",
+                name="fem_o_drive",
+                value=0,
+            ):
                 pass
 
         with tag("div"):
             with tag("label", **{"for": f"{self.name}/fem_p_drive"}):
                 text(f"Fem P drive:")
 
-            with tag("input", type="number", id=f"{self.name}/fem_p_drive", name="fem_p_drive", value=0):
+            with tag(
+                "input",
+                type="number",
+                id=f"{self.name}/fem_p_drive",
+                name="fem_p_drive",
+                value=0,
+            ):
                 pass
 
         with tag("button", name="action", value=f"{self.name}/start"):
@@ -119,9 +130,9 @@ class Mirror(MovingPart):
         self.hardware.actions[f"{self.name}/start"] = self.start
 
     # def stop(self, **kwargs):
-        # raise NotImplementedError
-        # if self._is_started:
-            # self.stop_event.set()
-            # return
-        # for element in self.elements:
-            # element.stop()
+    # raise NotImplementedError
+    # if self._is_started:
+    # self.stop_event.set()
+    # return
+    # for element in self.elements:
+    # element.stop()

@@ -5,13 +5,13 @@ from colloquy.base_html import BaseHTML
 import traceback
 from .details import Details
 
-class HTML(BaseHTML):
 
+class HTML(BaseHTML):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._details = Details(owner=self)
         self["details"] = self.details.handle_request
-        
+
     @property
     def tested(self):
         return self.owner.owner
@@ -47,7 +47,7 @@ class HTML(BaseHTML):
     def _html_title(self):
         doc, tag, text = CustomDoc().tagtext()
 
-        style="margin-bottom: 0.5rem; display: flex; align-items: center;"
+        style = "margin-bottom: 0.5rem; display: flex; align-items: center;"
         if self.is_open:
             style += " justify-content: center;"
 
@@ -62,17 +62,16 @@ class HTML(BaseHTML):
 
             with tag("div"):
                 if self.is_open:
-                    href=f"/{self.path.as_posix()}/close"
+                    href = f"/{self.path.as_posix()}/close"
                     label = "close"
                 else:
-                    href=f"/{self.path.as_posix()}/open"
+                    href = f"/{self.path.as_posix()}/open"
                     label = "open"
 
                 with tag("a", href=href):
                     text(f"{label}")
 
         return doc.getvalue()
-
 
     def _call_unsafe(self):
         doc, tag, text = CustomDoc().tagtext()

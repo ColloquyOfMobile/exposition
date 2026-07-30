@@ -1,9 +1,10 @@
 from colloquy.base import Base
+
 # from .html import HTML
 from .close import Close
 
-class Commands(Base):
 
+class Commands(Base):
     def __init__(self, owner):
         super().__init__(owner)
         # self._html = HTML(owner=self)
@@ -11,7 +12,7 @@ class Commands(Base):
 
     # @property
     # def workspace(self):
-        # return self.owner.tests
+    # return self.owner.tests
 
     @property
     def close(self):

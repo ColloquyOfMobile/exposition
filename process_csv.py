@@ -3,10 +3,9 @@ from pathlib import Path
 from collections import deque
 
 p1 = r"C:\workspace\workspace2\Colloquy\exposition\docs\female_only_10min.csv"
-p2 =  r"C:\workspace\workspace2\Colloquy\exposition\docs\female_and_male_10min.csv"
+p2 = r"C:\workspace\workspace2\Colloquy\exposition\docs\female_and_male_10min.csv"
 
 path = Path(p2)
-
 
 
 window_size = 5
@@ -37,9 +36,9 @@ with path.open(newline="", encoding="utf-8") as f:
         # temps du milieu de la fenêtre
         center_index = window_size // 2
         final_seconds = window[center_index][0]
-        
+
         rows.append((final_seconds, final_value))
-        
+
 
 output = path.parent / f"{path.stem}_averaged.csv"
 with output.open("w", newline="", encoding="utf-8") as f:

@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 # Source code/Python/colloquy/hardware/dxl/__init__.py
 from pathlib import Path
-from dynamixel_sdk import PortHandler, PacketHandler, COMM_SUCCESS  # Uses Dynamixel SDK library
+from dynamixel_sdk import (
+    PortHandler,
+    PacketHandler,
+    COMM_SUCCESS,
+)  # Uses Dynamixel SDK library
 
 from colloquy.base import Base
 from ..register_handler import RegisterHanlder
@@ -9,27 +13,38 @@ from .html import HTML
 from time import time, sleep
 from colloquy.input import Input
 
-class GoalPosition(RegisterHanlder):
-    def __init__(self, owner,):
-        super().__init__(owner=owner, name="goal position", register=116, read_func=owner.u2d2.read_4_bytes, write_func=owner.u2d2.write_4_bytes, html_class=HTML)
 
-    def __call__(self, request): 
+class GoalPosition(RegisterHanlder):
+    def __init__(
+        self,
+        owner,
+    ):
+        super().__init__(
+            owner=owner,
+            name="goal position",
+            register=116,
+            read_func=owner.u2d2.read_4_bytes,
+            write_func=owner.u2d2.write_4_bytes,
+            html_class=HTML,
+        )
+
+    def __call__(self, request):
         request = Path(request)
         if not request.parts:
             raise NotImplementedError
 
         key, *leftover = request.parts
 
-        if key in self:        
+        if key in self:
             self[key](request="/".join(leftover))
             return
 
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
-    
+
     @property
     def input(self):
         return self._input
-    
+
     @property
     def dxl(self):
         return self.owner
@@ -53,16 +68,16 @@ class GoalPosition(RegisterHanlder):
     @property
     def dxl_id(self):
         return self.owner.dxl_id
-    
+
     def is_readonly(self):
         return self._write_func is None
-        
+
     def commit(self, value):
         value = int(value)
         return self.write(value=value)
-        
+
     def read(self, request=None):
         return self._read_func(self.dxl_id, self._register)
-    
+
     def write(self, value):
         return self._write_func(self.dxl_id, self._register, value)

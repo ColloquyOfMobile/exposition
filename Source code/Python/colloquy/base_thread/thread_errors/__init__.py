@@ -8,14 +8,13 @@ from .thread_error import ThreadError
 
 
 class ThreadErrors(Base):
-
-    def __init__(self, owner):        
+    def __init__(self, owner):
         super().__init__(owner=owner)
         self._errors = []
         self._html = HTML(owner=self)
 
         self[self.html.name] = self.html.handle_request
-        
+
     def __call__(self, request):
         request = Path(request)
         if not request.parts:
@@ -28,14 +27,14 @@ class ThreadErrors(Base):
             return
 
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
-    
+
     def __bool__(self):
         conditions = {bool(child.thread_errors) for child in self.owner.children}
         conditions.add(bool(self._errors))
         # print(f"{conditions}")
-        result =  any(conditions)
+        result = any(conditions)
         return result
-    
+
     @property
     def colloquy(self):
         return self.owner.colloquy
@@ -58,16 +57,17 @@ class ThreadErrors(Base):
         for child in self.owner.children:
             count += child.thread_errors.count
         return count
-    
+
     def append(self, error):
-        thread_error = ThreadError(owner=self, name=f"error{len(self._errors)}", origin=self.owner, error=error)
+        thread_error = ThreadError(
+            owner=self, name=f"error{len(self._errors)}", origin=self.owner, error=error
+        )
         self[thread_error.name] = thread_error
         self._errors.append(thread_error)
-    
+
     def snapshot(self, path):
         states = super().snapshot(path=path)
         _path = states["path"]
         for error in self._errors:
             states[error.name] = error.snapshot(path=_path)
-        return states 
-            
+        return states

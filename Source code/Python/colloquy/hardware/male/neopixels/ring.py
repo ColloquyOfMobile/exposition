@@ -4,8 +4,8 @@ from colloquy.base import Base
 from pathlib import Path
 from threading import Event
 
-class Ring(Neopixel):
 
+class Ring(Neopixel):
     def __init__(self, owner):
         super().__init__(owner=owner, name="ring")
         self._body = owner

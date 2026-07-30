@@ -4,19 +4,19 @@ from colloquy.base_html import BaseHTML
 
 import traceback
 
-class Details(BaseHTML):
 
+class Details(BaseHTML):
     def __init__(self, owner):
         super().__init__(owner=owner)
-    
+
     @property
     def light_sensor(self):
         return self.owner.light_sensor
-    
+
     @property
     def dxl(self):
         return self.owner.dxl
-    
+
     @property
     def hardware(self):
         return self.owner.hardware
@@ -28,15 +28,15 @@ class Details(BaseHTML):
     @property
     def workspace(self):
         return self.owner.workspace
-    
+
     @property
     def arrow(self):
         doc, tag, text = CustomDoc().tagtext()
         if self.is_open:
-            href=f"/{self.path.as_posix()}/close"
+            href = f"/{self.path.as_posix()}/close"
             svg = self._svg_down_arrow()
         else:
-            href=f"/{self.path.as_posix()}/open"
+            href = f"/{self.path.as_posix()}/open"
             svg = self._svg_right_arrow()
         with tag("div", name=self.name):
             with tag("a", href=href):
@@ -51,8 +51,8 @@ class Details(BaseHTML):
 
     def _call_unsafe(self):
         if not self.is_open:
-            return ""       
-            
+            return ""
+
         doc, tag, text = CustomDoc().tagtext()
         with tag("div"):
             if self.owner.owner.is_started:
@@ -60,11 +60,11 @@ class Details(BaseHTML):
             else:
                 label = "start"
 
-            href=f"/{self.owner.owner.path.as_posix()}/{label}"
+            href = f"/{self.owner.owner.path.as_posix()}/{label}"
 
             with tag("a", href=href):
                 text(f"{label}")
-        
+
         doc.asis(self.owner.owner.thread_errors.html())
 
         return doc.getvalue()
