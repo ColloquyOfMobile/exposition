@@ -5,7 +5,7 @@ from pathlib import Path
 # # run matplotlib without GUI
 # matplotlib.use("Agg")
 
-raise NotImplementedError("Fix the test result UI!")
+# raise NotImplementedError("Fix the test result UI!")
 
 cwd = Path(__file__).parent
 # server_code = cwd / "Server"
