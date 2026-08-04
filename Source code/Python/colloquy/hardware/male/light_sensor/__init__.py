@@ -1,29 +1,28 @@
-from colloquy.base_thread import BaseThread
-from time import sleep
-from threading import Lock
+from colloquy.base import Base
 from pathlib import Path
-from .html import HTML
 
 
-class LightSensor(BaseThread):
-    def __init__(self, name, owner):
-        self._name = name
+class LightSensor(Base):
+    """One of a male's 4 light sensors (a/b/c/d). Mirrors Female's
+    LightSensor (same threshold param, same read/read_as_bool shape) - the
+    firmware already implements maleN.lightSensorX.read() for all 4, but
+    there was previously no working Python-side reader: the only prior
+    attempt (colloquy/hardware/arduino/light_sensor_command) never set
+    _read_func/_register/dxl_id, so calling it would raise AttributeError.
+    """
+
+    def __init__(self, owner, letter):
+        assert letter in "abcd"
+        self._letter = letter
         super().__init__(owner=owner)
-        self._lock = Lock()
-        self._html = HTML(owner=self)
-        self[self.html.name] = self.html.handle_request
 
     @property
-    def female(self):
+    def male(self):
         return self.owner
 
     @property
     def arduino(self):
         return self.owner.arduino
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def is_simulated(self):
@@ -41,33 +40,19 @@ class LightSensor(BaseThread):
 
     @property
     def name(self):
-        return self._name
+        return f"light sensor {self._letter}"
 
     @property
     def arduino_path(self):
-        return Path(f"f{self.owner.id_number}/light sensor")
+        return Path(f"m{self.owner.id_number}/light sensor/{self._letter}")
 
     def read_as_bool(self):
         return self.read() > self.threashold
 
     def read(self):
-        # if self.is_emulated:
-        # raise NotImplementedError
-
         with self.arduino:
             response = self.arduino.send(self.arduino_path)
-
-        # rint(response)
         return int(response)
-
-    # def snapshot(self, path):
-    # states = super().snapshot(path=path)
-    # _path = states["path"]
-    # states.update({
-    # "read": self.read,
-    # "value": self.read(),
-    # })
-    # return states
 
     @property
     def snapshot_children(self):
