@@ -1,5 +1,4 @@
 from colloquy.base_thread import BaseThread
-from pathlib import Path
 from .virtual_serial_port import VirtualSerialPort
 from .virtual_port_handler import VirtualPortHandler
 from .virtual_packet_handler import VirtualPacketHandler

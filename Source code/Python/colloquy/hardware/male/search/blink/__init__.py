@@ -1,5 +1,5 @@
 from colloquy.base_thread import BaseThread
-from time import time, sleep
+from time import time
 from .html import HTML
 
 
@@ -49,45 +49,3 @@ class Blink(BaseThread):
     @property
     def snapshot_children(self):
         return {}
-
-
-# class _Blink():
-
-# def __init__(self, owner):
-# ThreadElement.__init__(self, owner=owner, name=f"blink")
-# self._timestamp = None
-# self._blink_step = 0.5
-
-# def __enter__(self):
-# self.stop_event.clear()
-# self._timestamp = 0
-# self.ring.configure(
-# red = 0,
-# green = 0,
-# blue = 0,
-# white = 255,
-# brightness = 255,)
-
-# def _loop(self):
-# if (time() - self._timestamp) > self._blink_step:
-# light_pattern = self.light_patterns[self.drives.state]
-# value = light_pattern.popleft()
-# light_pattern.append(value)
-# self.ring.set(value)
-# self._timestamp = time()
-
-# @property
-# def light_patterns(self):
-# return self.owner.body_neopixel.light_patterns
-
-# @property
-# def drives(self):
-# return self.owner.body_neopixel.drives
-
-# @property
-# def ring(self):
-# return self.owner.body_neopixel.ring
-
-# @property
-# def body_neopixel(self):
-# return self.owner.body_neopixel

@@ -9,9 +9,7 @@ from .events import Events
 from .base import Base
 from .tests import Tests
 
-# from .server import Server
 from .hardware import Hardware
-from .cli import CLI
 from .exposition import Exposition
 from .params import Params
 from .virtual_hardware import VirtualHardware
@@ -81,10 +79,6 @@ class Colloquy(BaseThread):
     @property
     def params(self):
         return self._params
-
-    @property
-    def cli(self):
-        return self._cli
 
     @property
     def exposition(self):
