@@ -1,11 +1,12 @@
 import sys
 from time import sleep
 from pathlib import Path
-# import matplotlib
-# # run matplotlib without GUI
-# matplotlib.use("Agg")
+import matplotlib
 
-# raise NotImplementedError("Fix the test result UI!")
+# Plots are built in background threads (test_light_sensor_values,
+# test_movements); matplotlib's default GUI backend isn't thread-safe and
+# throws "main thread is not in main loop" errors from a non-main thread.
+matplotlib.use("Agg")
 
 cwd = Path(__file__).parent
 # server_code = cwd / "Server"
