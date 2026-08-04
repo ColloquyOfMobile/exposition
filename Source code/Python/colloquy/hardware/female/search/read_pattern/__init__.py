@@ -7,6 +7,7 @@ from threading import Lock
 from pathlib import Path
 from collections import deque
 from time import time
+from bisect import bisect_left
 from .html import HTML
 # from colloquy import LIGHT_PATTERNS
 
@@ -18,21 +19,21 @@ class ReadPattern(BaseThread):
         self._html = HTML(owner=self)
         self[self.html.name] = self.html.handle_request
 
-        self.sample_rate = 0.01  # seconds between internal samples
+        self.sample_rate = 0.01  # nominal seconds between internal samples
         self.step_duration = 0.5  # duration of one pattern step (your blink step)
         self.steps = 10  # number of steps in pattern (10 in LIGHT_PATTERNS)
         self.max_mismatches = 1  # how many bit-differences we tolerate
         self.detection_cooldown = 2.0  # seconds before reporting same pattern again
+        self.offset_substeps = 10  # how many start-time offsets to try per step
 
-        # how many samples per one pattern step (should be >= 2)
-        self.samples_per_step = int(round(self.step_duration / self.sample_rate))
-        if self.samples_per_step < 2:
-            # make sample_rate smaller or step_duration larger
-            self.samples_per_step = max(2, self.samples_per_step)
-
-        # buffer length: keep one extra step's worth so we can try different offsets
-        self.buffer_len = self.samples_per_step * (self.steps + 1)
-        self.sample_buffer = deque(maxlen=self.buffer_len)  # stores 0/1 samples
+        # Samples are timestamped and binned by measured wall-clock time
+        # rather than by a fixed samples-per-step count: the thread loop
+        # can't actually sustain `sample_rate` exactly (loop overhead, the
+        # blocking arduino round-trip), and that drift accumulates enough
+        # over one full pattern (steps * step_duration) to desync a
+        # fixed-count binning from the real bit boundaries.
+        self._buffer_seconds = self.step_duration * (self.steps + 1)
+        self.sample_buffer = deque()  # stores (timestamp, 0/1) samples
 
         self._last_sample_time = 0.0
         self._last_detection_time = 0.0
@@ -60,15 +61,17 @@ class ReadPattern(BaseThread):
         if (now - self._last_sample_time) < self.sample_rate:
             return
 
-        # raw = self.hardware.female1.sensor.read()  # analog reading
         state = self.light_sensor.read_as_bool()
-        self.sample_buffer.append(state)
+        self.sample_buffer.append((now, 1 if state else 0))
         self._last_sample_time = now
 
-        # Only attempt detection when we have enough samples to form
-        # steps * samples_per_step plus (samples_per_step - 1) extra for offsets.
-        needed = self.samples_per_step * self.steps + (self.samples_per_step - 1)
-        if len(self.sample_buffer) >= needed:
+        cutoff = now - self._buffer_seconds
+        while self.sample_buffer and self.sample_buffer[0][0] < cutoff:
+            self.sample_buffer.popleft()
+
+        needed_duration = self.step_duration * self.steps
+        span = self.sample_buffer[-1][0] - self.sample_buffer[0][0]
+        if span >= needed_duration:
             match = self._try_match()
             if match:
                 male, drive = match
@@ -86,33 +89,41 @@ class ReadPattern(BaseThread):
 
     def _try_match(self):
         """
-        Try different sub-step offsets to build candidate 10-bit sequences,
-        convert each bin to 0/1 by majority (>0.5), then compare to every
-        LIGHT_PATTERNS entry and rotations. Return (male, drive) on success.
+        Try different start-time offsets (rather than sample-count offsets,
+        which drift out of sync with real bit boundaries once the loop
+        can't sustain `sample_rate` exactly), bin each candidate's samples
+        by majority vote per step, then compare to every LIGHT_PATTERNS
+        entry and rotation. Return (male, drive) on success.
         """
         buf = list(self.sample_buffer)
-        s = self.samples_per_step
-        needed = s * self.steps + (s - 1)
-        if len(buf) < needed:
+        if not buf:
             return None
 
-        # Take the last `needed` samples so we can shift offsets from 0..s-1
-        chunk = buf[-needed:]
-        # print(f"{chunk=}")
+        timestamps = [t for t, _bit in buf]
+        bits = [bit for _t, bit in buf]
+        t_end = timestamps[-1]
+        needed_duration = self.step_duration * self.steps
+        sub_step = self.step_duration / self.offset_substeps
 
-        best_candidate = None
-        best_mismatches = self.steps + 1
+        # For each start-time offset inside one step (handles unknown alignment)
+        for offset_index in range(self.offset_substeps):
+            t0 = t_end - needed_duration - offset_index * sub_step
 
-        # For each offset inside one step (handles unknown alignment)
-        for offset in range(s):
-            block = chunk[offset : offset + s * self.steps]  # contiguous block
-            # build the candidate 10-bit pattern by averaging each bin
             candidate = []
             for i in range(self.steps):
-                start = i * s
-                avg = sum(block[start : start + s]) / float(s)
-                bit = 1 if avg > 0.5 else 0
-                candidate.append(bit)
+                bin_start = t0 + i * self.step_duration
+                bin_end = bin_start + self.step_duration
+                lo = bisect_left(timestamps, bin_start)
+                hi = bisect_left(timestamps, bin_end)
+                if hi <= lo:
+                    candidate = None
+                    break
+                bin_bits = bits[lo:hi]
+                avg = sum(bin_bits) / len(bin_bits)
+                candidate.append(1 if avg > 0.5 else 0)
+
+            if candidate is None:
+                continue
 
             # compare candidate to all known patterns and all rotations
             for male, patterns in self.colloquy.light_patterns.items():
@@ -129,22 +140,7 @@ class ReadPattern(BaseThread):
                             1 for a, b in zip(candidate, rotated) if a != b
                         )
 
-                        # remember best so far for debug/logging
-                        if mismatches < best_mismatches:
-                            best_mismatches = mismatches
-                            best_candidate = (
-                                male,
-                                drive,
-                                candidate,
-                                rotated,
-                                offset,
-                                mismatches,
-                            )
-
-                        # early accept if within tolerance
                         if mismatches <= self.max_mismatches:
-                            # if self.debug:
-                            # print(f"Good match: {male} drive={drive} rot={rot} offset={offset} mismatches={mismatches}")
                             return (male, drive)
 
         return None
