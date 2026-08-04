@@ -300,6 +300,15 @@ class WSGI2(Base):
 
                 name = value["name"]
 
+                # Plain informational leaves (e.g. _snapshot_if_opened
+                # entries like "sender"/"matches"/"last match") aren't real
+                # openable nodes - they have no "open" handler, so drawing
+                # the open-arrow/call-link below would 404/crash on click.
+                if "value" in value:
+                    with tag("div", name="value"):
+                        text(f"{name}: {value['value']}")
+                    continue
+
                 value_path = Path(*value["path"])
 
                 style = {"display": "flex", "gap": "1ch", "flex": "1"}
@@ -316,12 +325,6 @@ class WSGI2(Base):
 
                     # name = obj["name"]
                     path = self._root / value_path
-                    if "value" in value:
-                        with tag("div", name="value"):
-                            with tag("a", href=f"/{path.as_posix()}"):
-                                text(f"{name}: {value['value']}")
-                        continue
-
                     with tag("div", name="name"):
                         with tag("a", href=f"/{path.as_posix()}"):
                             text(f"{name}")
