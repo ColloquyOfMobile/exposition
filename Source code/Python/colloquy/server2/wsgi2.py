@@ -15,19 +15,18 @@ from wsgiref.simple_server import make_server, WSGIRequestHandler
 
 WSGIRequestHandler.log_message = lambda *args, **kwargs: None
 
-# Vendored locally (not a CDN) - this app is meant to run at the
-# exhibition, possibly offline. MIT licensed, see vendor/uplot/LICENSE.
-_UPLOT_DIR = Path(__file__).parent / "vendor" / "uplot"
-UPLOT_JS = (_UPLOT_DIR / "uPlot.iife.min.js").read_text(encoding="utf-8")
-UPLOT_CSS = (_UPLOT_DIR / "uPlot.min.css").read_text(encoding="utf-8")
-
-# First-party JS, inlined the same way (still a single self-contained
-# response, no separate static-file route/request - important for
-# offline use at the exhibition). Kept as real .js files rather than
-# Python string constants so they can be edited/highlighted as JS.
-_STATIC_DIR = Path(__file__).parent / "static"
-SVG_ZOOM_SCRIPT = (_STATIC_DIR / "svg_zoom.js").read_text(encoding="utf-8")
-UPLOT_INIT_SCRIPT = (_STATIC_DIR / "uplot_chart.js").read_text(encoding="utf-8")
+# Served as real external requests via /static/... and /vendor/... (see
+# _parse_static below) - not inlined into the HTML. Still entirely local
+# (same server, same machine), so this works fine offline at the
+# exhibition; it just isn't embedded in every page response anymore.
+_STATIC_ROOTS = {
+    "static": Path(__file__).parent / "static",
+    "vendor": Path(__file__).parent / "vendor",
+}
+_STATIC_CONTENT_TYPES = {
+    ".js": "application/javascript; charset=utf-8",
+    ".css": "text/css; charset=utf-8",
+}
 
 
 class WSGI2(Base):
@@ -86,10 +85,37 @@ class WSGI2(Base):
         if key == self._root.name:
             return self._parse_app(*leftovers)
 
+        if key in _STATIC_ROOTS:
+            return self._parse_static(_STATIC_ROOTS[key], *leftovers)
+
         content_type = "text/text; charset=utf-8"
         status = "404 Not found"
         headers = [("Content-Type", content_type)]
         return status, headers, b""
+
+    def _parse_static(self, root, *parts):
+        """Serve a file from a static asset root (static/ or vendor/) as a
+        real external resource - entirely local (same server, same
+        machine), so this still works offline at the exhibition, it just
+        isn't inlined into every HTML response anymore."""
+        content_type = "text/plain; charset=utf-8"
+        not_found = ("404 Not found", [("Content-Type", content_type)], b"")
+
+        if not parts or ".." in parts:
+            return not_found
+
+        file_path = root.joinpath(*parts)
+        if not file_path.is_file():
+            return not_found
+
+        content_type = _STATIC_CONTENT_TYPES.get(
+            file_path.suffix, "application/octet-stream"
+        )
+        headers = [
+            ("Content-Type", content_type),
+            ("Cache-Control", "public, max-age=3600"),
+        ]
+        return "200 OK", headers, file_path.read_bytes()
 
     def _parse_path(self):
         """Parse the path."""
@@ -119,8 +145,9 @@ class WSGI2(Base):
         doc.asis("<!DOCTYPE html>")
         with tag("html", style=export_style(css_style)):
             with tag("head"):
-                with tag("style"):
-                    doc.asis(UPLOT_CSS)
+                doc.stag(
+                    "link", rel="stylesheet", href="/vendor/uplot/uPlot.min.css"
+                )
 
             with tag(
                 "body",
@@ -130,10 +157,10 @@ class WSGI2(Base):
                 # emits inline <script> calls to colloquyRenderChart() for
                 # each chart, which needs uPlot and colloquyRenderChart
                 # itself to already be defined by the time those run.
-                with tag("script"):
-                    doc.asis(UPLOT_JS)
-                with tag("script"):
-                    doc.asis(UPLOT_INIT_SCRIPT)
+                with tag("script", src="/vendor/uplot/uPlot.iife.min.js"):
+                    pass
+                with tag("script", src="/static/uplot_chart.js"):
+                    pass
 
                 with tag(
                     "div", name="server commands", style="display: flex; gap: 1ch;"
@@ -174,8 +201,8 @@ class WSGI2(Base):
                     )
                 )
 
-                with tag("script"):
-                    doc.asis(SVG_ZOOM_SCRIPT)
+                with tag("script", src="/static/svg_zoom.js"):
+                    pass
 
         html = doc.getvalue()
         html = indent(html)
