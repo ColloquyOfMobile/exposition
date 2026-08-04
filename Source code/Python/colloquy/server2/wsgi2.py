@@ -126,7 +126,10 @@ class WSGI2(Base):
         return Path(request_path).parts
 
     def _parse_app(self, *args):
-        to_render = self.get_states(*args)
+        try:
+            to_render = self.get_states(*args)
+        except NotImplementedError as error:
+            return self._parse_not_found(args, error)
         self._base_path = Path(*to_render["path"])
 
         # pprint4(obj=to_render)
@@ -209,6 +212,37 @@ class WSGI2(Base):
         content = html.encode()
 
         return status, headers, content
+
+    def _parse_not_found(self, args, error):
+        """A mistyped/stale path segment - NotImplementedError is this
+        codebase's routing idiom for "no such key" (get_focus/update walk
+        snapshot_children/the states dict and raise it on a miss), not a
+        sign anything is actually broken. Previously this reached
+        Server2.wsgi()'s catch-all, which treats ANY unhandled exception
+        as a fault serious enough to emergency-stop the hardware and take
+        the whole server down - a single bad/stale link shouldn't do
+        that. Logged and returned as a plain 404 instead; genuine faults
+        (anything other than NotImplementedError) still propagate to that
+        catch-all unchanged.
+        """
+        self.log(f"404: no such path /{'/'.join(('app',) + args)} ({error=})")
+
+        content_type = "text/html; charset=utf-8"
+        status = "404 Not Found"
+        headers = [("Content-Type", content_type)]
+
+        doc, tag, text = Doc().tagtext()
+        with tag("div"):
+            with tag("strong"):
+                text("404: no such path.")
+        with tag("div"):
+            text("/" + "/".join(("app",) + args))
+        with tag("div"):
+            with tag("a", href="/app"):
+                text("home")
+
+        html = doc.getvalue()
+        return status, headers, html.encode()
 
     def _html_navigation(self, to_render):
         doc, tag, text = Doc().tagtext()
