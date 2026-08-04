@@ -11,6 +11,7 @@ from .html import HTML
 from .test_drive_light_values import TestDriveLightValues
 from .test_male_patterns import TestMalePatterns
 from .test_light_sensor_values import TestLightSensorValues
+from .test_read_pattern import TestReadPattern
 
 
 class Tests(Base):
@@ -31,6 +32,9 @@ class Tests(Base):
         self.test_light_sensor_values = TestLightSensorValues(
             owner=self, result_folder=result_folder
         )
+        self.test_read_pattern = TestReadPattern(
+            owner=self, result_folder=result_folder
+        )
 
         self[self.html.name] = self.html.handle_request
         # self.add(self.test1)
@@ -39,6 +43,7 @@ class Tests(Base):
             self.test_drive_light_values,
             self.test_male_patterns,
             self.test_light_sensor_values,
+            self.test_read_pattern,
         }
 
     # def __call__(self, request):

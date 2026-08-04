@@ -36,6 +36,8 @@ class ReadPattern(BaseThread):
 
         self._last_sample_time = 0.0
         self._last_detection_time = 0.0
+        self.last_match = None
+        self.last_match_time = None
 
     @property
     def light_sensor(self):
@@ -70,8 +72,10 @@ class ReadPattern(BaseThread):
             match = self._try_match()
             if match:
                 male, drive = match
+                self.last_match = match
+                self.last_match_time = now
                 if (now - self._last_detection_time) > self.detection_cooldown:
-                    # print(f"Pattern detected: {male}  drive={drive}")
+                    self.log(f"Pattern detected: {male} drive={drive}")
                     self._last_detection_time = now
 
     def setup(self):
@@ -161,6 +165,18 @@ class ReadPattern(BaseThread):
     def snapshot_children(self):
         children = {}
         return children
+
+    def _snapshot_if_opened(self, path):
+        states = super()._snapshot_if_opened(path)
+        if self.last_match is not None:
+            male, drive = self.last_match
+            seconds_ago = round(time() - self.last_match_time, 1)
+            states["last match"] = {
+                "path": path + ("last match",),
+                "name": "last match",
+                "value": f"{male} drive={drive} ({seconds_ago}s ago)",
+            }
+        return states
 
 
 class DetectPattern:
