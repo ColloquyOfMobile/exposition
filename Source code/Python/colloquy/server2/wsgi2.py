@@ -59,6 +59,9 @@ class WSGI2(Base):
             return self._parse_app()
 
         key, *leftovers = args
+        if key == "emergency-stop":
+            return self._parse_emergency_stop(*leftovers)
+
         if key == "shutdown":
             return self._parse_shutdown(*leftovers)
 
@@ -107,6 +110,14 @@ class WSGI2(Base):
                 with tag(
                     "div", name="server commands", style="display: flex; gap: 1ch;"
                 ):
+                    with tag("div", style=""):
+                        with tag(
+                            "a",
+                            href="/emergency-stop",
+                            style="color: white; background: red; font-weight: bold; padding: 0 1ch;",
+                        ):
+                            text("EMERGENCY STOP")
+
                     with tag("div", style=""):
                         with tag("a", href="/shutdown"):
                             text("shutdown")
@@ -363,6 +374,38 @@ class WSGI2(Base):
 
         html = doc.getvalue()
         return indent(html)
+
+    def _parse_emergency_stop(self):
+        """Disable torque and signal every thread to stop right now - no
+        homing, no coordinated move (that's the opposite of an emergency
+        stop). Unlike /shutdown, the HTTP server itself is kept alive so
+        this page (and /restart) stay reachable; the hardware side is
+        inert until a real process restart, since BaseThread._shutdown is
+        never cleared once set.
+        """
+        self.colloquy.emergency_stop()
+
+        content_type = "text/html"
+        status = "200 OK"
+        headers = [("Content-Type", content_type)]
+
+        doc, tag, text = Doc().tagtext()
+        with tag("div"):
+            with tag("strong"):
+                text("EMERGENCY STOP: torque disabled, all threads signaled to stop.")
+        with tag("div"):
+            text(
+                "Motion is inert until the process is restarted "
+                "(BaseThread._shutdown does not clear on its own)."
+            )
+        with tag("div"):
+            with tag("a", href="/restart"):
+                text("restart")
+
+        html = doc.getvalue()
+        content = html.encode()
+
+        return status, headers, content
 
     def _parse_shutdown(self):
         self.colloquy.shutdown()

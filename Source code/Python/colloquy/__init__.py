@@ -185,3 +185,21 @@ class Colloquy(BaseThread):
 
     def disable_torque(self):
         self._hardware.disable_torque()
+
+    def emergency_stop(self):
+        """Immediately halt all motion: no homing, no coordinated move
+        (unlike shutdown()'s move_to_origin - commanding more movement is
+        the opposite of what an emergency stop should do). Disable torque
+        first since that's the actual physical halt, then signal every
+        thread to stop.
+
+        Deliberately does not wait/join: once torque is off, a stale
+        goal_position no longer converges, so DXL.is_moving can read True
+        forever - a thread stuck in wait_for_servo() won't notice torque
+        was cut and will keep busy-spinning until its own 30s timeout. The
+        request handling this must return immediately regardless, since
+        the single-threaded dev server can't serve anything else (including
+        another emergency-stop click) while blocked in a request.
+        """
+        self._hardware.disable_torque()
+        self.shutdown()

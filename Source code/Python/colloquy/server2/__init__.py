@@ -58,6 +58,13 @@ class Server2(Base):
         try:
             return WSGI2(server=self, environ=environ, start_response=start_response)
         except Exception:
+            # An unhandled exception here only kills the HTTP loop below
+            # (self.shutdown_event) - it does NOT touch BaseThread._shutdown,
+            # so any hardware thread that's running (bar/body oscillation,
+            # blink, search, ...) would otherwise keep moving completely
+            # unsupervised with no UI left to stop it. Treat any crash as an
+            # emergency stop.
+            self.colloquy.emergency_stop()
             self.shutdown_event.set()
             raise
 
