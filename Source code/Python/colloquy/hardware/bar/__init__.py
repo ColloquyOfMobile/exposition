@@ -204,9 +204,25 @@ class Bar(BaseThread):
                 "dxl origin": self.dxl_origin,
                 self.dxl.name: self.dxl,
                 "search": self.search,
-                "move male1 in front of female1 and wait": self.move_male1_in_front_of_female1_and_wait,
-                "move male1 in front of female2 and wait": self.move_male1_in_front_of_female2_and_wait,
-                "move male1 in front of female3 and wait": self.move_male1_in_front_of_female3_and_wait,
             }
         )
         return children
+
+    def _snapshot_if_opened(self, path):
+        # The move-and-wait commands used to live in snapshot_children,
+        # which is walked with .snapshot_as_child() (see Base._snapshot_
+        # if_opened) whenever this node is itself opened - fine for the
+        # real Base children above, but a bare bound method has no such
+        # method and crashes the instant this node is opened directly.
+        # Inject them the same way BaseThread injects "start"/"stop".
+        states = super()._snapshot_if_opened(path)
+        states["move male1 in front of female1 and wait"] = (
+            self.move_male1_in_front_of_female1_and_wait
+        )
+        states["move male1 in front of female2 and wait"] = (
+            self.move_male1_in_front_of_female2_and_wait
+        )
+        states["move male1 in front of female3 and wait"] = (
+            self.move_male1_in_front_of_female3_and_wait
+        )
+        return states

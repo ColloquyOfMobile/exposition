@@ -220,7 +220,7 @@ class Hardware(BaseThread):
         children["bodies"] = self.bodies
         for body in self.bodies:
             children[body.name] = body
-        children[self.bar.name] = self
+        children[self.bar.name] = self.bar
         return children
 
     # def snapshot(self, path):
