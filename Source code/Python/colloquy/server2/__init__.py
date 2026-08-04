@@ -46,7 +46,7 @@ class Server2(Base):
                 httpd.handle_request()
 
                 if self.shutdown_event.is_set():
-                    print(f"Shutdown event!")
+                    print("Shutdown event!")
                     break
             print("Out from server loop.")
         print("Out from server context.")

@@ -172,7 +172,7 @@ def test_pformat_lines():
     lines = pformat_lines(obj=obj)
     expected = [["test", "test2"], ["|", "test value", ":", "some value"]]
     assert expected == lines, (
-        f"pformat_lines shouldn't be modified, copy a new version instead!"
+        "pformat_lines shouldn't be modified, copy a new version instead!"
     )
 
 
@@ -194,7 +194,7 @@ def pformat_lines2(obj, lines=None):
     lines[0][0] += f"{obj['name']}"
 
     if "focus" in obj:
-        lines[0][0] += f"/"
+        lines[0][0] += "/"
         focus = obj["focus"]
         return pformat_lines2(obj=obj[focus], lines=lines)
 

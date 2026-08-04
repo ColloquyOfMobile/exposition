@@ -5,7 +5,7 @@ from colloquy.utils import timelap_to_string
 
 from threading import Event
 import traceback
-from threading import Thread, Event, Lock
+from threading import Thread, Lock
 from time import sleep, time
 from ..utils import (
     read_and_store,
@@ -54,7 +54,7 @@ class TestWithEveryThingMoving(BaseThread):
 
     @property
     def name(self):
-        return f"test with everything moving"
+        return "test with everything moving"
 
     @property
     def html(self):

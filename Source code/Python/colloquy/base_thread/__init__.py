@@ -95,7 +95,6 @@ class BaseThread(Base):
             return
         if self.thread_errors:
             raise NotImplementedError(f"Implement a clear error! ({self=})")
-            return
         if self.is_started:
             return
         self.log(f"{started_by} is starting {self}.")

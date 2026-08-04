@@ -2,7 +2,6 @@
 import traceback
 from colloquy.base import Base
 from pathlib import Path
-import traceback
 
 
 from .html import HTML

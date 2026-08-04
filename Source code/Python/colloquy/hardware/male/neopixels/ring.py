@@ -1,8 +1,6 @@
 from colloquy.hardware.neopixel import Neopixel
-from colloquy.base import Base
 
 from pathlib import Path
-from threading import Event
 
 
 class Ring(Neopixel):

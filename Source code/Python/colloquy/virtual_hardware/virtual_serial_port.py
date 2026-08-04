@@ -1,8 +1,6 @@
-from time import sleep
 import json
 from pathlib import Path
 import re
-from queue import Queue
 from colloquy.base import Base
 from random import randrange
 
@@ -67,7 +65,7 @@ class VirtualSerialPort(Base):
             for name in ("ring", "p drive level", "o drive level", "up ring"):
                 male[name] = dict(r=0, g=0, b=0, w=0)
 
-            male[f"light sensor"] = sensors = {}
+            male["light sensor"] = sensors = {}
             for name in "abcd":
                 sensors[name] = 0
 
@@ -81,7 +79,7 @@ class VirtualSerialPort(Base):
 
     def write(self, data):
         if not self._is_open:
-            raise AssertionError(f"Port should be open before using it.")
+            raise AssertionError("Port should be open before using it.")
         data = data.decode()
         data = json.loads(data)
         path = data["path"]

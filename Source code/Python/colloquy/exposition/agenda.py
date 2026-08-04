@@ -90,17 +90,17 @@ class Agenda(Base):
         doc, tag, text = self.html_doc.tagtext()
         with tag("form", method="post"):
             with tag("button", name="action", value="hardware/start"):
-                text(f"Start.")
+                text("Start.")
                 self.actions["hardware/start"] = self.start
             with tag("button", name="action", value="exposition/close"):
-                text(f"Close.")
+                text("Close.")
                 self.actions["exposition/close"] = self.owner.exposition.close
 
     def _add_html_stop(self):
         doc, tag, text = self.html_doc.tagtext()
         with tag("form", method="post"):
             with tag("button", name="action", value="hardware/stop"):
-                text(f"Stop.")
+                text("Stop.")
         self.actions["hardware/stop"] = self.stop
 
     def _setup(self):
@@ -128,13 +128,13 @@ class Agenda(Base):
             current_time = now.time()
             if start <= current_time < end:
                 if not self.hardware.is_started:
-                    self.log(f"Hardware is started...")
+                    self.log("Hardware is started...")
                     self.hardware.start()
 
                 self._print("Running...")
             else:
                 if self.hardware.is_started:
-                    self.log(f"Hardware is stop...")
+                    self.log("Hardware is stop...")
                     self.hardware.stop()
 
                 self._print("Waiting next slot...")

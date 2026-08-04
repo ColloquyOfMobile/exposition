@@ -14,3 +14,8 @@ select = [
     "F",   # pyflakes: unused imports/vars, undefined names, etc.
     "E9",  # syntax errors
 ]
+
+[tool.vulture]
+min_confidence = 80
+paths = ["Source code/Python/colloquy"]
+exclude = ["*/#*"]

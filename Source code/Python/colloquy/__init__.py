@@ -12,7 +12,6 @@ from .tests import Tests
 # from .server import Server
 from .hardware import Hardware
 from .cli import CLI
-from .tests import Tests
 from .exposition import Exposition
 from .params import Params
 from .virtual_hardware import VirtualHardware

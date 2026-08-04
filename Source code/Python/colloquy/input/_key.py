@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 # project2/my_server/solution1/input/key.py
 
-import textwrap
-from yattag import Doc, indent
 from my_server.debug import Debug
 
 

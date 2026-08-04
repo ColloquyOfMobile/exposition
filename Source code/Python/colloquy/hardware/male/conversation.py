@@ -4,7 +4,7 @@ from time import time, sleep
 
 class Conversation(ThreadElement):
     def __init__(self, owner):
-        ThreadElement.__init__(self, owner=owner, name=f"conversation")
+        ThreadElement.__init__(self, owner=owner, name="conversation")
         # self._watch_out_for_beam = WatchOutForBeam(owner=self)
         self._timeout_start = None
         self._timeout = 10  # seconds
@@ -94,7 +94,7 @@ class Conversation(ThreadElement):
 
 class WatchOutForBeam(ThreadElement):
     def __init__(self, owner):
-        ThreadElement.__init__(self, owner=owner, name=f"watch out for beam")
+        ThreadElement.__init__(self, owner=owner, name="watch out for beam")
         self._timeout_start = None
         self.timeout = 4  # seconds
 

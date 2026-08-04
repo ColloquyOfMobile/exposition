@@ -4,14 +4,10 @@ from yattag import Doc, indent
 from urllib.parse import unquote
 from pathlib import Path
 from colloquy.utils import (
-    remove_folder_and_subfolders,
-    pprint4,
     export_style,
-    get_value,
 )
 from colloquy.base import Base
-from threading import Event
-from wsgiref.simple_server import make_server, WSGIRequestHandler
+from wsgiref.simple_server import WSGIRequestHandler
 
 WSGIRequestHandler.log_message = lambda *args, **kwargs: None
 
@@ -253,7 +249,7 @@ class WSGI2(Base):
         }
         with tag("div", name="navigation", style=export_style(css_style)):
             with tag("div"):
-                with tag("a", href=f"/"):
+                with tag("a", href="/"):
                     text("/home")
             href = self._root
             for name in to_render["path"]:
@@ -270,7 +266,7 @@ class WSGI2(Base):
 
         call_path = Path(*obj["path"]).relative_to(self._base_path)
         base_path = self._root / self._base_path / "call" / call_path
-        keyboard_path = base_path / f"keyboard"
+        keyboard_path = base_path / "keyboard"
 
         with tag(
             "div", name="keyboard", style="display: flex; flex-direction: column; "
@@ -504,7 +500,7 @@ class WSGI2(Base):
                         )
 
                         with tag("a", href=f"/{path.as_posix()}"):
-                            text(f">")
+                            text(">")
 
                     # name = obj["name"]
                     path = self._root / value_path
@@ -535,7 +531,7 @@ class WSGI2(Base):
                     path = self._root / self._base_path / "call" / call_path / "close"
 
                     with tag("a", href=f"/{path.as_posix()}"):
-                        text(f"<")
+                        text("<")
 
                 with tag("div", name="name"):
                     path = self._root / Path(*obj["path"])
@@ -611,7 +607,7 @@ class WSGI2(Base):
 
         doc, tag, text = Doc().tagtext()
         with tag("div"):
-            with tag("a", href=f"/"):
+            with tag("a", href="/"):
                 text("reload")
 
         html = doc.getvalue()

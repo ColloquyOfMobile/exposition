@@ -74,7 +74,7 @@ class HTML(BaseHTML):
                 )
 
                 with tag("a", href=href):
-                    text(f"set current position as dxl origin")
+                    text("set current position as dxl origin")
 
         return doc.getvalue()
 

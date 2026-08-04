@@ -4,7 +4,7 @@ from colloquy.utils import timelap_to_string
 
 from threading import Event
 import traceback
-from threading import Thread, Event, Lock
+from threading import Thread, Lock
 from time import sleep, time
 from .html import HTML
 

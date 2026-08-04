@@ -3,7 +3,6 @@ from pathlib import Path
 
 from colloquy.hardware.value_setter import ValueSetter
 
-from .increment import Increment
 
 
 class Parameter(Base):

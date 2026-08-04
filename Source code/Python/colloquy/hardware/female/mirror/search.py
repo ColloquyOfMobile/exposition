@@ -1,10 +1,9 @@
 from colloquy.thread_element import ThreadElement
-from time import time, sleep
 
 
 class Search(ThreadElement):
     def __init__(self, owner):
-        ThreadElement.__init__(self, owner=owner, name=f"search")
+        ThreadElement.__init__(self, owner=owner, name="search")
 
     def __enter__(self):
         self.stop_event.clear()

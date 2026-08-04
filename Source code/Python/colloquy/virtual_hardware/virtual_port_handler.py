@@ -1,8 +1,3 @@
-from time import sleep
-import json
-from pathlib import Path
-import re
-from queue import Queue
 
 
 class VirtualPortHandler:

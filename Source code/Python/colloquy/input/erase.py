@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # project2/my_server/solution1/input/erase.py
 
-import textwrap
 from yattag import Doc, indent
 from colloquy.base import Base
 

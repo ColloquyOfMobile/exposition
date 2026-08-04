@@ -1,7 +1,7 @@
 from time import time, sleep
 from threading import Lock
 from colloquy.base_thread import BaseThread
-from threading import Thread, Event, Lock
+from threading import Thread, Event
 from colloquy.input import Input
 from .html import HTML
 

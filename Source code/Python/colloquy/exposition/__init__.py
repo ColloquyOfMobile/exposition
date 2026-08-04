@@ -2,7 +2,6 @@ from time import time, sleep
 import traceback
 from colloquy.base_thread import BaseThread
 from pathlib import Path
-import traceback
 from threading import Thread, Event, Lock
 from .html import HTML
 

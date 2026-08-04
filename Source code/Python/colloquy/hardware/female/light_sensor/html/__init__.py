@@ -60,7 +60,7 @@ class HTML(BaseHTML):
         doc, tag, text = CustomDoc().tagtext()
         try:
             doc.asis(self._html_title_unsafe())
-        except Exception as exception:
+        except Exception:
             doc.asis(self._html_title_if_error())
 
         return doc.getvalue()

@@ -96,7 +96,7 @@ class Parameters(Base):
                 elements.add(f"{name}/origin")
 
         if self.get("bar")["origin"] is None:
-            elements.add(f"bar/origin")
+            elements.add("bar/origin")
         return elements
 
     def save(self):

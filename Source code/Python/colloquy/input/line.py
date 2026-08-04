@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 # project2/my_server/solution1/input/line.py
 
-import textwrap
-import ast
 from yattag import Doc, indent
-import string
 from colloquy.base_html import BaseHTML
 from colloquy.base import Base
 

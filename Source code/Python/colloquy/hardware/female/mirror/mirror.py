@@ -91,17 +91,17 @@ class Mirror(MovingPart):
         doc, tag, text = self.html_doc.tagtext()
         with tag("div"):
             with tag("label", **{"for": f"{self.name}/interacting_with"}):
-                text(f"Interacting with:")
+                text("Interacting with:")
 
             with tag("select", name="male", id=f"{self.name}/interacting_with"):
                 with tag("option", value="male1"):
-                    text(f"male1")
+                    text("male1")
                 with tag("option", value="male2"):
-                    text(f"male2")
+                    text("male2")
 
         with tag("div"):
             with tag("label", **{"for": f"{self.name}/fem_o_drive"}):
-                text(f"Fem O drive:")
+                text("Fem O drive:")
 
             with tag(
                 "input",
@@ -114,7 +114,7 @@ class Mirror(MovingPart):
 
         with tag("div"):
             with tag("label", **{"for": f"{self.name}/fem_p_drive"}):
-                text(f"Fem P drive:")
+                text("Fem P drive:")
 
             with tag(
                 "input",
@@ -126,7 +126,7 @@ class Mirror(MovingPart):
                 pass
 
         with tag("button", name="action", value=f"{self.name}/start"):
-            text(f"Start.")
+            text("Start.")
         self.hardware.actions[f"{self.name}/start"] = self.start
 
     # def stop(self, **kwargs):

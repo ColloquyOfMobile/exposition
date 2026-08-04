@@ -20,7 +20,7 @@ class Hardware(BaseThread):
         super().__init__(owner)
 
         if self.is_simulated:
-            self.log(f"Warning: The hardware is simulated.")
+            self.log("Warning: The hardware is simulated.")
 
         self._html = HTML(owner=self)
         self[self.html.name] = self.html.handle_request

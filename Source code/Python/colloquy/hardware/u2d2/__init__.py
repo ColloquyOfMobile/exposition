@@ -67,12 +67,12 @@ class U2D2(Base):
         for dxl in self.dxl_list:
             self[dxl.name] = dxl
         self._dxls = {}
-        self._dxls[f"female1"] = self._dxl_list[0]
-        self._dxls[f"female2"] = self._dxl_list[2]
-        self._dxls[f"female3"] = self._dxl_list[4]
-        self._dxls[f"male1"] = self._dxl_list[6]
-        self._dxls[f"male2"] = self._dxl_list[7]
-        self._dxls[f"bar"] = self._dxl_list[8]
+        self._dxls["female1"] = self._dxl_list[0]
+        self._dxls["female2"] = self._dxl_list[2]
+        self._dxls["female3"] = self._dxl_list[4]
+        self._dxls["male1"] = self._dxl_list[6]
+        self._dxls["male2"] = self._dxl_list[7]
+        self._dxls["bar"] = self._dxl_list[8]
 
     def __call__(self, request):
         request = Path(request)

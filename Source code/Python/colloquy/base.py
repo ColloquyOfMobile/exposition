@@ -1,7 +1,5 @@
 import inspect
 from pathlib import Path
-from urllib.parse import unquote
-import urllib.parse
 import socket
 from .logger import Logger
 

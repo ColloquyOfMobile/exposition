@@ -1,9 +1,5 @@
-import inspect
 import traceback
 from pathlib import Path
-from urllib.parse import unquote
-import urllib.parse
-import socket
 from colloquy.base import Base
 
 
@@ -22,7 +18,7 @@ class BaseHTML(Base):
     def __call__(self):
         try:
             html = self._call_unsafe()
-        except Exception as exception:
+        except Exception:
             html = self._call_if_error()
 
         return html

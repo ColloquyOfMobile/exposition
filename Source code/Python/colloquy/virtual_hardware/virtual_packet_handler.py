@@ -1,6 +1,4 @@
 from dynamixel_sdk import COMM_SUCCESS  # Uses Dynamixel SDK library
-from time import time, sleep
-from threading import Thread, Lock
 from pathlib import Path
 from colloquy.base import Base
 from .virtual_dxl import VirtualDXL
@@ -71,7 +69,7 @@ class VirtualPacketHandler(Base):
 
     def read1ByteTxRx(self, port_handler, dxl_id, register_address):
         label = self._register_map[register_address]
-        assert label in _1_BYTE_REGISTERS, f"{label=}, {value=}"
+        assert label in _1_BYTE_REGISTERS, f"{label=}"
         value = self._dxls[dxl_id].get(label)
         return value, COMM_SUCCESS, 0
 
@@ -83,14 +81,12 @@ class VirtualPacketHandler(Base):
 
     def read4ByteTxRx(self, port_handler, dxl_id, register_address):
         label = self._register_map[register_address]
-        assert label in _4_BYTE_REGISTERS, f"{label=}, {value=}"
+        assert label in _4_BYTE_REGISTERS, f"{label=}"
         value = self._dxls[dxl_id].get(label)
         return value, COMM_SUCCESS, 0
 
     def getTxRxResult(self, result):
         raise NotImplementedError
-        return None
 
     def getRxPacketError(self, result):
         raise NotImplementedError
-        return None

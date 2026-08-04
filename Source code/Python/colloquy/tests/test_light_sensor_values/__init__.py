@@ -2,7 +2,6 @@
 import traceback
 from colloquy.base import Base
 from pathlib import Path
-import traceback
 from time import time
 from colloquy.utils import timelap_to_string
 

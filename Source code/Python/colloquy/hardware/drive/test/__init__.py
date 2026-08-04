@@ -1,7 +1,7 @@
 from time import time, sleep
 from threading import Lock
 from colloquy.base_thread import BaseThread
-from threading import Thread, Event, Lock
+from threading import Thread, Event
 from .html import HTML
 
 """logic35_systems.ino: line 86

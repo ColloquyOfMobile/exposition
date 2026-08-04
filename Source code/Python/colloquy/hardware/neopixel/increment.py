@@ -1,5 +1,4 @@
 from colloquy.base import Base
-from pathlib import Path
 
 
 class Increment(Base):
