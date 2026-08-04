@@ -3,11 +3,11 @@
 from pathlib import Path
 
 from colloquy.base import Base
-from .html import HTML
 from time import time, sleep
 from colloquy.input import Input
 
 from colloquy.hardware.value_setter2 import ValueSetter2
+
 
 class RegisterHanlder(Base):
     def __init__(
@@ -17,8 +17,6 @@ class RegisterHanlder(Base):
         register,
         read_func,
         write_func=None,
-        open_in=None,
-        html_class=None,
     ):
 
         self._name = name
@@ -31,12 +29,6 @@ class RegisterHanlder(Base):
             self._setter = ValueSetter2(
                 owner=self, min_value=-5000, max_value=5000, set_func=self.write
             )
-
-        if html_class is None:
-            self._html = HTML(owner=self)
-        else:
-            self._html = html_class(owner=self)
-        self[self.html.name] = self.html.handle_request
 
         self["read"] = self.read
 
@@ -59,10 +51,6 @@ class RegisterHanlder(Base):
     @property
     def colloquy(self):
         return self.owner.colloquy
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def name(self):

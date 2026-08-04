@@ -10,14 +10,11 @@ from pathlib import Path
 import serial.tools.list_ports
 from colloquy.base import Base
 from functools import partial
-from .html import HTML
+
 
 class ComPort(Base):
     def __init__(self, owner, value=None):
         super().__init__(owner=owner)
-
-        self._html = HTML(owner=self)
-        self[self.html.name] = self.html.handle_request
 
         self._value = value
         self._ports = []
@@ -25,10 +22,6 @@ class ComPort(Base):
     @property
     def colloquy(self):
         return self.owner.colloquy
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def value(self):

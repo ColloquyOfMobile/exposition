@@ -117,12 +117,6 @@ class Base:
     def add(self, element):
         self[element.name] = element
 
-    def _svg_down_arrow(self):
-        raise NotImplementedError("Implemented in BaseHTML class now.")
-
-    def _svg_right_arrow(self):
-        raise NotImplementedError("Implemented in BaseHTML class now.")
-
     def open(self):
         self._is_opened = True
 

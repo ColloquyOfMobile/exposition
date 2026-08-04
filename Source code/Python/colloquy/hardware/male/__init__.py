@@ -8,8 +8,8 @@ from ..dxl_origin import DXLOrigin
 from .dxl_position import DXLPosition
 from .search import Search
 from ..turn_back_and_forth import TurnBackAndForth
-from .html import HTML
 from collections import deque
+
 
 class Male(BaseThread):
     def __init__(self, owner, id_number):
@@ -30,7 +30,6 @@ class Male(BaseThread):
             letter: LightSensor(owner=self, letter=letter) for letter in "abcd"
         }
         self._dxl = owner.u2d2.dxls[self.name]
-        self._html = HTML(owner=self)
         self._arduino = owner.arduino
 
         self._drives = Drives(owner=self)
@@ -39,7 +38,6 @@ class Male(BaseThread):
 
         self._neopixels = Neopixels(owner=self)
 
-        self[self.html.name] = self.html.handle_request
         self[self.neopixels.name] = self.neopixels
         self[self.drives.name] = self.drives
         self[self.search.name] = self.search
@@ -82,10 +80,6 @@ class Male(BaseThread):
     @property
     def female(self):
         return self
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def arduino(self):

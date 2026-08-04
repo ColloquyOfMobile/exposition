@@ -7,11 +7,11 @@ from dynamixel_sdk import (
     COMM_SUCCESS,
 )  # Uses Dynamixel SDK library
 from colloquy.base import Base
-from .html import HTML
 from .register_handler import RegisterHanlder
 from .torque_enabled import TorqueEnabled
 from .goal_position import GoalPosition
 from time import time, sleep
+
 
 class DXL(Base):
     def __init__(self, owner, dynamixel_id):
@@ -24,9 +24,6 @@ class DXL(Base):
         self._old_position = None
         self._old_goal_position = None
         self._registers = []
-
-        self._html = HTML(owner=self)
-        self[self.html.name] = self.html.handle_request
 
         self["init hardware"] = self.init_hardware
         self._init_registers()
@@ -43,10 +40,6 @@ class DXL(Base):
     @property
     def colloquy(self):
         return self.owner.colloquy
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def name(self):

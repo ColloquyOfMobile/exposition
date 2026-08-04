@@ -9,7 +9,6 @@ from time import sleep
 from pathlib import Path
 import serial.tools.list_ports
 from colloquy.base import Base
-from .html import HTML
 from .com_port import ComPort
 from colloquy.hardware.dxl import DXL
 
@@ -43,12 +42,11 @@ def handle_error(func):
 
     return wrapper
 
+
 class U2D2(Base):
     def __init__(self, owner, **kwargs):
         super().__init__(owner=owner)
 
-        self._html = HTML(owner=self)
-        self[self.html.name] = self.html.handle_request
         # self._path = Path("dxl manager")
         self._was_open = None
         self._context_depth = 0
@@ -118,10 +116,6 @@ class U2D2(Base):
     @property
     def colloquy(self):
         return self.owner.colloquy
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def port_name(self):

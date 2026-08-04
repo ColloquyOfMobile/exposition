@@ -16,6 +16,7 @@ from ..utils import (
 )
 from .test_results import TestResults
 
+
 class TestWithEveryThingMoving(BaseThread):
     def __init__(self, owner, result_folder, test_duration):
         super().__init__(owner=owner)
@@ -54,10 +55,6 @@ class TestWithEveryThingMoving(BaseThread):
     @property
     def name(self):
         return "test with everything moving"
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def duration(self):

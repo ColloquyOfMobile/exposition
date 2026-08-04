@@ -6,14 +6,12 @@ from threading import Lock
 from collections import deque
 from time import time
 from bisect import bisect_left
-from .html import HTML
+
 
 class ReadPattern(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._lock = Lock()
-        self._html = HTML(owner=self)
-        self[self.html.name] = self.html.handle_request
 
         self.sample_rate = 0.01  # nominal seconds between internal samples
         self.step_duration = 0.5  # duration of one pattern step (your blink step)
@@ -39,10 +37,6 @@ class ReadPattern(BaseThread):
     @property
     def light_sensor(self):
         return self.owner.owner.light_sensor
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def name(self):

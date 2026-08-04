@@ -3,7 +3,6 @@ from pathlib import Path
 from threading import Lock
 from colloquy.base import Base
 from colloquy.hardware.drive import Drive
-from .html import HTML
 
 """logic35_systems.ino: line 86
 //act_drive
@@ -22,22 +21,17 @@ const int color_orange[4] = {80, 255, 25, 16}; //GRBW/orangish
 const int color_puce[4] = {180, 160, 0, 40}; //GRBW//greenish
 """
 
+
 class Test(Base):
     def __init__(self, owner):
         Base.__init__(self, owner=owner)
-        self._html = HTML(owner=self)
 
-        self[self.html.name] = self.html.handle_request
         self[self.o_drive.name] = self.o_drive.test
         self[self.p_drive.name] = self.p_drive.test
 
     @property
     def colloquy(self):
         return self.owner.colloquy
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def o_drive(self):

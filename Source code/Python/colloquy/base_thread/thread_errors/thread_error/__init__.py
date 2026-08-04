@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # colloquy/base_thread/thread_error/__init__.py
 from colloquy.base import Base
-from .html import HTML
 from threading import Lock
 from pathlib import Path
+
 
 class ThreadError(Base):
     _counter = 0
@@ -14,9 +14,6 @@ class ThreadError(Base):
         super().__init__(owner=owner)
         self._error = error
         self._origin = origin
-        self._html = HTML(owner=self)
-
-        self[self.html.name] = self.html.handle_request
 
     @property
     def colloquy(self):
@@ -33,10 +30,6 @@ class ThreadError(Base):
     @property
     def origin(self):
         return self._origin
-
-    @property
-    def html(self):
-        return self._html
 
     def snapshot(self, path):
         states = super().snapshot(path=path)

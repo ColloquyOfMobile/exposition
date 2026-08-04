@@ -7,8 +7,8 @@ from ..dxl_origin import DXLOrigin
 from .dxl_position import DXLPosition
 from .search import Search
 from ..turn_back_and_forth import TurnBackAndForth
-from .html import HTML
 from .test import Test
+
 
 class Female(BaseThread):
     def __init__(
@@ -27,7 +27,6 @@ class Female(BaseThread):
 
         self._light_sensor = LightSensor(owner=self, name="light sensor")
         self._dxl = owner.u2d2.dxls[self.name]
-        self._html = HTML(owner=self)
         self._arduino = owner.arduino
 
         self._drives = Drives(owner=self)
@@ -37,7 +36,6 @@ class Female(BaseThread):
         self._neopixels = Neopixels(owner=self)
         self._test = Test(owner=self)
 
-        self[self.html.name] = self.html.handle_request
         self[self.neopixels.name] = self.neopixels
         self[self.drives.name] = self.drives
         self[self.test.name] = self.test
@@ -80,10 +78,6 @@ class Female(BaseThread):
     @property
     def female(self):
         return self
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def arduino(self):

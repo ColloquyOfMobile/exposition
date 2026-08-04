@@ -2,7 +2,6 @@ from time import time, sleep
 from threading import Lock
 from colloquy.base_thread import BaseThread
 from threading import Thread, Event
-from .html import HTML
 
 """logic35_systems.ino: line 86
 //act_drive
@@ -25,13 +24,6 @@ const int color_puce[4] = {180, 160, 0, 40}; //GRBW//greenish
 class Test(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
-        self._html = HTML(owner=self)
-
-        self[self.html.name] = self.html.handle_request
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def name(self):

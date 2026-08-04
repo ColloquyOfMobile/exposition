@@ -2,15 +2,13 @@ from colloquy.base_thread import BaseThread
 from time import sleep
 from threading import Lock
 from pathlib import Path
-from .html import HTML
+
 
 class LightSensor(BaseThread):
     def __init__(self, name, owner):
         self._name = name
         super().__init__(owner=owner)
         self._lock = Lock()
-        self._html = HTML(owner=self)
-        self[self.html.name] = self.html.handle_request
 
     @property
     def female(self):
@@ -19,10 +17,6 @@ class LightSensor(BaseThread):
     @property
     def arduino(self):
         return self.owner.arduino
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def is_simulated(self):

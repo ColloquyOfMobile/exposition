@@ -1,17 +1,16 @@
 from colloquy.base import Base
 
 from pathlib import Path
-from .html import HTML
 
 from .up_ring import UpRing
 from .o_drive_level import ODriveLevel
 from .p_drive_level import PDriveLevel
 from .ring import Ring
 
+
 class Neopixels(Base):
     def __init__(self, owner):
         super().__init__(owner=owner)
-        self._html = HTML(owner=self)
         self._arduino = owner.arduino
 
         self._up_ring = UpRing(owner=self)
@@ -19,7 +18,6 @@ class Neopixels(Base):
         self._o_drive_level = ODriveLevel(owner=self)
         self._p_drive_level = PDriveLevel(owner=self)
 
-        self[self.html.name] = self.html.handle_request
         self[self.ring.name] = self.ring
         self[self.o_drive_level.name] = self.o_drive_level
         self[self.p_drive_level.name] = self.p_drive_level
@@ -38,10 +36,6 @@ class Neopixels(Base):
     @property
     def colloquy(self):
         return self.owner.colloquy
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def arduino(self):

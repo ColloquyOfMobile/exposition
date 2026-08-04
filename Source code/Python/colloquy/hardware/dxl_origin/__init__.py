@@ -8,17 +8,14 @@ from dynamixel_sdk import (
 )  # Uses Dynamixel SDK library
 
 from colloquy.base import Base
-from .html import HTML
 from time import time, sleep
 from colloquy.input import Input
 from colloquy.hardware.value_setter import ValueSetter
 
+
 class DXLOrigin(Base):
     def __init__(self, owner):
         super().__init__(owner=owner)
-
-        self._html = HTML(owner=self)
-        self[self.html.name] = self.html.handle_request
 
         self["get"] = self.get
         self._setter = ValueSetter(owner=self, limit=101)
@@ -38,10 +35,6 @@ class DXLOrigin(Base):
     @property
     def params(self):
         return self.colloquy.params
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def name(self):

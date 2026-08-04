@@ -7,14 +7,12 @@ import traceback
 from .toggle_on_off import ToggleOnOff
 from .parameter import Parameter
 from .brightness import Brightness
-from .html import HTML
+
 
 class Neopixel(Base):
     def __init__(self, owner, name):
         self._name = name
         super().__init__(owner=owner)
-
-        self._html = HTML(owner=self)
 
         self._toggle_on_off = ToggleOnOff(owner=self)
 
@@ -35,8 +33,6 @@ class Neopixel(Base):
         self[self._red.name] = self._red
         self[self._green.name] = self._green
         self[self._blue.name] = self._blue
-
-        self[self.html.name] = self.html.handle_request
 
     @property
     def puce(self):
@@ -83,10 +79,6 @@ class Neopixel(Base):
             "white": self.white.value,
             "brightness": self.brightness.value,
         }
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def brightness(self):

@@ -3,8 +3,6 @@ import traceback
 from colloquy.base import Base
 from pathlib import Path
 
-from .html import HTML
-
 # from .test1 import Test1
 from .test_drive_light_values import TestDriveLightValues
 from .test_male_patterns import TestMalePatterns
@@ -15,6 +13,7 @@ from .test_graph_zoom import TestGraphZoom
 from .test_neopixels import TestNeopixels
 from .test_sensors import TestSensors
 
+
 class Tests(Base):
     def __init__(self, owner):
         super().__init__(owner)
@@ -24,7 +23,6 @@ class Tests(Base):
         else:
             self._params = self.owner.params[self.name]
 
-        self._html = HTML(owner=self)
         result_folder = Path("local/test results")
         if not result_folder.exists():
             result_folder.mkdir()
@@ -41,7 +39,6 @@ class Tests(Base):
         self.test_neopixels = TestNeopixels(owner=self, result_folder=result_folder)
         self.test_sensors = TestSensors(owner=self, result_folder=result_folder)
 
-        self[self.html.name] = self.html.handle_request
         # self.add(self.test1)
 
         self._threaded_tests = {
@@ -61,10 +58,6 @@ class Tests(Base):
     @property
     def colloquy(self):
         return self.owner.colloquy
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def name(self):

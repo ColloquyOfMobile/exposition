@@ -52,18 +52,6 @@ class White(Base):
         b = int(hex_value[4:6], 16)
         return (r, g, b)
 
-    def html(self):
-        doc, tag, text = CustomDoc().tagtext()
-
-        with tag("div", style="display:flex; align-items: center;"):
-            with tag("div", style="margin-right: 1ch;"):
-                text("set white")
-
-            for digit in self._digits:
-                doc.asis(digit.html())
-
-        return doc.getvalue()
-
 
 class Digit(Base):
     def __init__(self, owner, multiplier):
@@ -99,34 +87,3 @@ class Digit(Base):
     @value.setter
     def value(self, value):
         self._value = value
-
-    def html(self):
-        doc, tag, text = CustomDoc().tagtext()
-
-        klass = "int-button"
-        style1 = "display:flex; flex-direction: column; place-content: center; padding: 0 0.1ch;"
-
-        with tag("div", style=style1):
-            # + button
-            with tag("div", klass=klass):
-                with tag(
-                    "a",
-                    href=f"/{self.path.as_posix()}/+",
-                    style="text-decoration: none; color: black;",
-                ):
-                    text("+")
-
-            # The digit itself
-            with tag("div", style="display:flex; place-content: center;"):
-                text(self._value)
-
-            # - button
-            with tag("div", klass=klass):
-                with tag(
-                    "a",
-                    href=f"/{self.path.as_posix()}/-",
-                    style="text-decoration: none; color: black;",
-                ):
-                    text("-")
-
-        return doc.getvalue()

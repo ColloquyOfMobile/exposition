@@ -15,7 +15,6 @@ from threading import Event
 import traceback
 from threading import Thread, Lock
 from time import sleep, time
-from .html import HTML
 
 """
 move male1 in front of the female1
@@ -24,11 +23,10 @@ start moving the male1
 after 30s stop
 """
 
+
 class TestWithFemaleAndMaleMoving(BaseThread):
     def __init__(self, owner, result_folder, test_duration):
         super().__init__(owner=owner)
-        self._html = HTML(owner=self)
-        self[self.html.name] = self.html.handle_request
 
         self._start_time = None
         self._timelap = None
@@ -49,10 +47,6 @@ class TestWithFemaleAndMaleMoving(BaseThread):
     def name(self):
         duration = timelap_to_string(self._duration)
         return f"test with female and male moving for {duration}"
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def duration(self):

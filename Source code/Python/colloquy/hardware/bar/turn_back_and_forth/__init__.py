@@ -1,6 +1,6 @@
 from colloquy.base_thread import BaseThread
 from time import time, sleep
-from .html import HTML
+
 
 class TurnBackAndForth(BaseThread):
     def __init__(self, owner):

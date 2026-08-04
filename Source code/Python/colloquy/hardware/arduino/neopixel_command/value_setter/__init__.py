@@ -8,16 +8,14 @@ from dynamixel_sdk import (
 )  # Uses Dynamixel SDK library
 
 from colloquy.base import Base
-from .html import HTML
 from time import time, sleep
 from colloquy.input import Input
+
 
 class ValueSetter(Base):
     def __init__(self, owner, name):
         self._name = name
         super().__init__(owner=owner)
-        self._html = HTML(owner=self)
-        self[self.html.name] = self.html.handle_request
 
         self._value = 255
 
@@ -40,10 +38,6 @@ class ValueSetter(Base):
     @property
     def colloquy(self):
         return self.owner.colloquy
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def name(self):

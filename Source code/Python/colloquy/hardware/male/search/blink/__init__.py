@@ -1,24 +1,17 @@
 from colloquy.base_thread import BaseThread
 from time import time
-from .html import HTML
 
 
 class Blink(BaseThread):
     def __init__(self, owner):
         self._name = f"blink {owner.male.name}"
         super().__init__(owner=owner)
-        self._html = HTML(owner=self)
-        self[self.html.name] = self.html.handle_request
         self._timestamp = 0
         self._blink_step = 0.5
 
     @property
     def male(self):
         return self.owner.male
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def name(self):

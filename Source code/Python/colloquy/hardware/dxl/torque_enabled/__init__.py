@@ -1,17 +1,7 @@
 # -*- coding: utf-8 -*-
 # Source code/Python/colloquy/hardware/dxl/__init__.py
-from pathlib import Path
-from dynamixel_sdk import (
-    PortHandler,
-    PacketHandler,
-    COMM_SUCCESS,
-)  # Uses Dynamixel SDK library
-
-from colloquy.base import Base
 from ..register_handler import RegisterHanlder
-from .html import HTML
-from time import time, sleep
-from colloquy.input import Input
+
 
 class TorqueEnabled(RegisterHanlder):
     def __init__(
@@ -24,7 +14,6 @@ class TorqueEnabled(RegisterHanlder):
             register=64,
             read_func=owner.u2d2.read_1_byte,
             write_func=owner.u2d2.write_1_byte,
-            html_class=HTML,
         )
 
     @property
@@ -42,10 +31,6 @@ class TorqueEnabled(RegisterHanlder):
     @property
     def colloquy(self):
         return self.owner.colloquy
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def name(self):

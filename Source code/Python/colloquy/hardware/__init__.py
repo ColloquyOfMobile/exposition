@@ -9,9 +9,9 @@ from pathlib import Path
 from .neopixels import Neopixels
 from .commands import Commands
 from .test import Test
-from .html import HTML
 from .bodies import Bodies
 from .all_neopixels import AllNeopixels
+
 
 class Hardware(BaseThread):
     def __init__(self, owner):
@@ -20,9 +20,6 @@ class Hardware(BaseThread):
 
         if self.is_simulated:
             self.log("Warning: The hardware is simulated.")
-
-        self._html = HTML(owner=self)
-        self[self.html.name] = self.html.handle_request
 
         self.dxl_ids = {
             "female1": 1,
@@ -102,10 +99,6 @@ class Hardware(BaseThread):
     @property
     def drives(self):
         return self._drives
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def name(self):

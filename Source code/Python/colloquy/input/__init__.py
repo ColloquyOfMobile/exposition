@@ -4,7 +4,6 @@
 import textwrap
 import ast
 import string
-from colloquy.base_html import BaseHTML
 from colloquy.base import Base
 
 
@@ -12,13 +11,11 @@ from .line import Line
 
 # from .key import Key
 from .erase import Erase
-from .html import HTML
 
 
 class Input(Base):
     def __init__(self, owner):
         super().__init__(owner=owner)
-        self._html = HTML(owner=self)
         self.value = "0"
 
     def __call__(self, request):
@@ -58,10 +55,6 @@ class Input(Base):
     @property
     def input(self):
         return self
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def name(self):

@@ -27,33 +27,3 @@ class Increment(Base):
     @property
     def multiplier(self):
         return self._multiplier
-
-    def html(self):
-        doc, tag, text = CustomDoc().tagtext()
-
-        klass = "int-button"
-        style1 = "display:flex;"
-
-        with tag("div", style=style1):
-            # - button
-            with tag("div", klass=klass):
-                with tag(
-                    "a",
-                    href=f"/{self.path.as_posix()}/-",
-                    style="text-decoration: none; color: black;",
-                ):
-                    text(f"- {self._multiplier}")
-
-            # + button
-            with tag("div", klass=klass):
-                with tag(
-                    "a",
-                    href=f"/{self.path.as_posix()}/+",
-                    style="text-decoration: none; color: black;",
-                ):
-                    text(f"+ {self._multiplier}")
-
-            # with tag("div", style="display:flex; place-content: center; margin-left: 1ch;"):
-            # text(self._multiplier)#
-
-        return doc.getvalue()

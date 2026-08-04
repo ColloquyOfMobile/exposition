@@ -6,13 +6,11 @@ from threading import Event
 import traceback
 from threading import Thread, Lock
 from time import sleep, time
-from .html import HTML
+
 
 class TestDriveLightValues(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
-        self._html = HTML(owner=self)
-        self[self.html.name] = self.html.handle_request
 
         for drive in self.hardware.drives:
             self[drive.name] = drive
@@ -23,10 +21,6 @@ class TestDriveLightValues(BaseThread):
     @property
     def name(self):
         return "test drives light values"
-
-    @property
-    def html(self):
-        return self._html
 
     def setup(self):
         self._start_time = time()

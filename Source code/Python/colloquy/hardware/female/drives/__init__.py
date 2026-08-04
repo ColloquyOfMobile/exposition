@@ -4,7 +4,6 @@ from threading import Lock
 from colloquy.base import Base
 from colloquy.hardware.drive import Drive
 from colloquy.base_thread import BaseThread
-from .html import HTML
 
 """logic35_systems.ino: line 86
 //act_drive
@@ -22,7 +21,6 @@ int         internal_drive_state = 0;     //Undefined, Neither[Inert], O, P, OP
 const int color_orange[4] = {80, 255, 25, 16}; //GRBW/orangish
 const int color_puce[4] = {180, 160, 0, 40}; //GRBW//greenish
 """
-
 
 def build_map_to_compensate_brightness_to_human_eye():
     map_from_tj = (
@@ -307,12 +305,10 @@ def build_map_to_compensate_brightness_to_human_eye():
 class Drives(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
-        self._html = HTML(owner=self)
 
         self._o_drive = Drive(owner=self, name="O")
         self._p_drive = Drive(owner=self, name="P")
 
-        self[self.html.name] = self.html.handle_request
         self[self.o_drive.name] = self.o_drive
         self[self.p_drive.name] = self.p_drive
 
@@ -347,10 +343,6 @@ class Drives(BaseThread):
     @property
     def white(self):
         return dict(red=0, green=0, blue=0, white=255)
-
-    @property
-    def html(self):
-        return self._html
 
     def loop(self):
         pass

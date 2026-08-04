@@ -5,22 +5,15 @@ from threading import Event
 import traceback
 from threading import Thread, Lock
 from time import sleep
-from .html import HTML
 
 
 class Test1(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
-        self._html = HTML(owner=self)
-        self[self.html.name] = self.html.handle_request
 
     @property
     def name(self):
         return "test1"
-
-    @property
-    def html(self):
-        return self._html
 
     def setdown(self):
         for neopixel in self.hardware.neopixels:

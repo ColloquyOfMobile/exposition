@@ -4,7 +4,6 @@ from threading import Lock
 from colloquy.base import Base
 from colloquy.hardware.drive import Drive
 from colloquy.base_thread import BaseThread
-from .html import HTML
 
 """logic35_systems.ino: line 86
 //act_drive
@@ -23,10 +22,10 @@ const int color_orange[4] = {80, 255, 25, 16}; //GRBW/orangish
 const int color_puce[4] = {180, 160, 0, 40}; //GRBW//greenish
 """
 
+
 class Drives(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
-        self._html = HTML(owner=self)
         self._name = f"{owner.name}'s drives"
 
         self._o_drive = Drive(owner=self, name="O")
@@ -34,7 +33,6 @@ class Drives(BaseThread):
         # self._started_by = None
         # self._errors = []
 
-        self[self.html.name] = self.html.handle_request
         self[self.o_drive.name] = self.o_drive
         self[self.p_drive.name] = self.p_drive
 
@@ -93,10 +91,6 @@ class Drives(BaseThread):
     # @property
     # def is_started(self):
     # return self.owner.is_started
-
-    @property
-    def html(self):
-        return self._html
 
     def loop(self):
         pass

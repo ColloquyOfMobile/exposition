@@ -1,18 +1,15 @@
 # -*- coding: utf-8 -*-
 # colloquy/base_thread/thread_error/__init__.py
 from colloquy.base import Base
-from .html import HTML
 from threading import Lock
 from pathlib import Path
 from .thread_error import ThreadError
+
 
 class ThreadErrors(Base):
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._errors = []
-        self._html = HTML(owner=self)
-
-        self[self.html.name] = self.html.handle_request
 
     def __bool__(self):
         conditions = {bool(child.thread_errors) for child in self.owner.children}
@@ -32,10 +29,6 @@ class ThreadErrors(Base):
     @property
     def errors(self):
         return self._errors
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def count(self):

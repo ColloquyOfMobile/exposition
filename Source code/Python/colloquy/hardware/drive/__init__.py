@@ -3,7 +3,6 @@ from threading import Lock
 from colloquy.base_thread import BaseThread
 from threading import Thread, Event
 from colloquy.input import Input
-from .html import HTML
 
 """logic35_systems.ino: line 86
 //act_drive
@@ -28,7 +27,6 @@ class Drive(BaseThread):
         assert name in ("O", "P")
         self._name = f"{owner.owner.name}'s {name} drive"  # name
         super().__init__(owner=owner)
-        self._html = HTML(owner=self)
         self._lock = Lock()
 
         self._value = self.body.params["drive start values"][self.body.name][name]
@@ -50,15 +48,10 @@ class Drive(BaseThread):
         self._input = Input(owner=self)
 
         self[self.input.name] = self.input
-        self[self.html.name] = self.html.handle_request
 
     @property
     def lock(self):
         return self._lock
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def name(self):

@@ -3,17 +3,14 @@ import traceback
 from colloquy.base_thread import BaseThread
 from pathlib import Path
 from threading import Thread, Event, Lock
-from .html import HTML
+
 
 class Exposition(BaseThread):
     def __init__(self, owner):
         super().__init__(owner)
-        self._html = HTML(owner=self)
         self._hardware = self.owner.hardware
 
         self._thread = None
-
-        self[self.html.name] = self.html.handle_request
 
     @property
     def is_started(self):
@@ -24,10 +21,6 @@ class Exposition(BaseThread):
     @property
     def child_errors(self):
         return self._child_errors
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def name(self):

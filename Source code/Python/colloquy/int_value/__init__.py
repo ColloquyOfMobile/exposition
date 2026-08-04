@@ -8,9 +8,9 @@ from dynamixel_sdk import (
 )  # Uses Dynamixel SDK library
 
 from colloquy.base import Base
-from .html import HTML
 from time import time, sleep
 from colloquy.input import Input
+
 
 class IntValue(Base):
     def __init__(self, owner, name, getter, setter=None):
@@ -18,9 +18,6 @@ class IntValue(Base):
         super().__init__(owner=owner)
         self._getter = getter
         self._setter = setter
-
-        self._html = HTML(owner=self)
-        self[self.html.name] = self.html.handle_request
 
         self["get"] = self.get
 
@@ -35,10 +32,6 @@ class IntValue(Base):
     @property
     def colloquy(self):
         return self.owner.colloquy
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def name(self):

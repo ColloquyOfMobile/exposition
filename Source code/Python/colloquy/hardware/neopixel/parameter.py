@@ -51,21 +51,6 @@ class Parameter(Base):
             value = 0
         self._value = value
 
-    def html(self):
-        doc, tag, text = CustomDoc().tagtext()
-
-        with tag(
-            "div", style="display:flex; flex-direction: column; margin-bottom: 1rem;"
-        ):
-            with tag("div", style="margin-bottom: 0.5rem;"):
-                text(f"{self.name} = {self.value:03} units")
-
-            with tag("div", style="display:flex;"):
-                for command in self:
-                    doc.asis(self[command].html())
-
-        return doc.getvalue()
-
     @property
     def snapshot_children(self):
         children = {}

@@ -3,9 +3,9 @@ from colloquy.base_thread import BaseThread
 from ..dxl_origin import DXLOrigin
 from .dxl_position import DXLPosition
 from .search import Search
-from .html import HTML
 from .turn_back_and_forth_around_f1 import TurnBackAndForthAroundF1
 from .turn_back_and_forth import TurnBackAndForth
+
 
 class Bar(BaseThread):
     def __init__(self, owner):
@@ -19,11 +19,9 @@ class Bar(BaseThread):
         self.turn_back_and_forth = TurnBackAndForth(owner=self)
 
         self._dxl = owner.u2d2.dxls[self.name]
-        self._html = HTML(owner=self)
 
         self._search = Search(owner=self)
 
-        self[self.html.name] = self.html.handle_request
         self[self.search.name] = self.search
         self[self.dxl_origin.name] = self.dxl_origin
         self[self.position.name] = self.position
@@ -55,10 +53,6 @@ class Bar(BaseThread):
     @property
     def drives(self):
         return self._drives
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def arduino(self):
