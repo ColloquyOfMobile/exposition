@@ -173,10 +173,7 @@ class TestReadPattern(BaseThread):
             children[male.drives.name] = male.drives
             children[male.search.blink.name] = male.search.blink
         for female in self._females.values():
-            # ReadPattern.name is the fixed literal "read pattern" on every
-            # body, so keying by it directly here would collide across the
-            # three females and silently drop all but the last one.
-            children[f"read pattern {female.name}"] = female.search.read_pattern
+            children[female.search.read_pattern.name] = female.search.read_pattern
         return children
 
     def _snapshot_if_opened(self, path):

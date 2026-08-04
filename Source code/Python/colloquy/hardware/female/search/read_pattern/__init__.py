@@ -50,7 +50,7 @@ class ReadPattern(BaseThread):
 
     @property
     def name(self):
-        return "read pattern"
+        return f"read pattern {self.owner.owner.name}"
 
     def loop(self):
         """
