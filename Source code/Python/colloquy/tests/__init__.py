@@ -13,6 +13,7 @@ from .test_male_patterns import TestMalePatterns
 from .test_light_sensor_values import TestLightSensorValues
 from .test_read_pattern import TestReadPattern
 from .test_movements import TestMovements
+from .test_graph_zoom import TestGraphZoom
 
 
 class Tests(Base):
@@ -37,6 +38,7 @@ class Tests(Base):
             owner=self, result_folder=result_folder
         )
         self.test_movements = TestMovements(owner=self, result_folder=result_folder)
+        self.test_graph_zoom = TestGraphZoom(owner=self)
 
         self[self.html.name] = self.html.handle_request
         # self.add(self.test1)
@@ -95,6 +97,7 @@ class Tests(Base):
         children = {}
         for test in self._threaded_tests:
             children[test.name] = test
+        children[self.test_graph_zoom.name] = self.test_graph_zoom
         return children
 
     # def snapshot(self, path, focus_path):
