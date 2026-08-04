@@ -34,7 +34,14 @@ class Params(dict):
     def __init__(self, path: Path, initial=None, _root=None):
         super().__init__()
         self._path = path
-        self._root = _root or self
+        # NOT `_root or self`: Params is a dict subclass, so an empty dict
+        # is falsy - the top-level Params object is still empty while its
+        # own __init__ is constructing nested Params for its first
+        # dict-valued key below, which made that one child's `_root`
+        # silently point at itself instead of the true root. Writes into
+        # just that one nested sub-dict then saved only that fragment to
+        # disk, clobbering the rest of params.json.
+        self._root = self if _root is None else _root
 
         if initial:
             for k, v in initial.items():
