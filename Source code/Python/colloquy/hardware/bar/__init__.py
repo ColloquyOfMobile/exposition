@@ -157,25 +157,19 @@ class Bar(BaseThread):
         value = self._dxl_origin.get()
         self.dxl.goal_position.write(value)
 
-    def move_male1_in_front_of_female1_and_wait(self):
-        position = self.male1_in_front_of_f1
+    def move_male_in_front_of_female_and_wait(self, male, female):
+        origin = self.params["bar"]["dxl origin"]
+        position = self.params["bar"]["interaction_origins"][male][female] + origin
         self.dxl.move_and_wait(position)
+
+    def move_male1_in_front_of_female1_and_wait(self):
+        self.move_male_in_front_of_female_and_wait("male1", "female1")
 
     def move_male1_in_front_of_female2_and_wait(self):
-        origin = self.params["bar"]["dxl origin"]
-        position = (
-            self.params["bar"]["interaction_origins"]["male1"]["female2"] + origin
-        )
-
-        self.dxl.move_and_wait(position)
+        self.move_male_in_front_of_female_and_wait("male1", "female2")
 
     def move_male1_in_front_of_female3_and_wait(self):
-        origin = self.params["bar"]["dxl origin"]
-        position = (
-            self.params["bar"]["interaction_origins"]["male1"]["female3"] + origin
-        )
-
-        self.dxl.move_and_wait(position)
+        self.move_male_in_front_of_female_and_wait("male1", "female3")
 
     # def snapshot(self, path):
     # path = path + (self.name,)

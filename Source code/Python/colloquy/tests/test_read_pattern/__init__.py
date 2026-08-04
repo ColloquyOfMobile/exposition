@@ -2,29 +2,40 @@ from colloquy.base_thread import BaseThread
 from datetime import datetime
 from time import time
 
+# Test-only indicator colors (not part of the installation's own palette,
+# see Neopixel.orange/.puce for the drive colors used on the body segments).
+HEAD_COLOR_BY_MALE = {
+    "male1": dict(red=0, green=0, blue=255, white=0),
+    "male2": dict(red=255, green=0, blue=0, white=0),
+}
+
 
 class TestReadPattern(BaseThread):
-    """Moves male1 (and the bar) in front of female1, blinks male1's identity
-    pattern, and checks whether female1's read_pattern decodes it correctly.
+    """Lets a tester pick which male sends his identity pattern and which
+    female receives it, moves the bar so they face each other, blinks the
+    sender and starts the receiver's read_pattern, and gives a visual
+    readout on the receiver's own neopixels - test-only, the installation
+    itself doesn't do this: head blue for male1 / red for male2, body_o lit
+    orange when "O" was decoded and body_p lit puce when "P" was, mirroring
+    how the sending male's own o/p drive level indicators work.
 
-    Exposes male1's drives, blink, and female1's read_pattern as children so
-    a tester can switch the drive state (O/P/both/neither) live from the web
-    UI and watch the decoded match track it - on real hardware or in
-    simulation (the virtual f1 light sensor reacts to male1's ring state).
+    Exposes every male's drives and every body's blink/read_pattern as
+    children so a tester can force a drive state (or fiddle with an
+    unrelated body) from the web UI while a run is going.
     """
 
     def __init__(self, owner, result_folder):
         super().__init__(owner=owner)
 
-        self._male = self.hardware.male1
-        self._female = self.hardware.female1
-        self._blink = self._male.search.blink
-        self._read_pattern = self._female.search.read_pattern
-        self._drives = self._male.drives
+        self._male_name = "male1"
+        self._female_name = "female1"
+        self._males = {male.name: male for male in self.hardware.males}
+        self._females = {female.name: female for female in self.hardware.females}
 
-        self[self._drives.name] = self._drives
-        self[self._blink.name] = self._blink
-        self[self._read_pattern.name] = self._read_pattern
+        for name in self._males:
+            self[f"send from {name}"] = self._make_selector("_male_name", name)
+        for name in self._females:
+            self[f"receive with {name}"] = self._make_selector("_female_name", name)
 
         self._dir_path = result_folder / self.name
         if not self._dir_path.exists():
@@ -39,6 +50,23 @@ class TestReadPattern(BaseThread):
     @property
     def name(self):
         return "test read pattern"
+
+    @property
+    def male(self):
+        return self._males[self._male_name]
+
+    @property
+    def female(self):
+        return self._females[self._female_name]
+
+    def _make_selector(self, attribute, value):
+        def selector(request=None):
+            if self.is_started:
+                self.stop()
+                self.join()
+            setattr(self, attribute, value)
+
+        return selector
 
     def run(self):
         now = datetime.now()
@@ -55,23 +83,26 @@ class TestReadPattern(BaseThread):
         self._match_count = 0
         self._mismatch_count = 0
         self._file.write(
-            "seconds, expected male, expected drive, detected male, detected drive, match\n"
+            "seconds, sender, receiver, expected drive, detected male, detected drive, match\n"
         )
 
-        self.hardware.bar.move_male1_in_front_of_female1_and_wait()
-        self._drives.set_o_and_p_to_100()
-        self._blink.start(started_by=self)
-        self._read_pattern.start(started_by=self)
+        self.hardware.bar.move_male_in_front_of_female_and_wait(
+            self._male_name, self._female_name
+        )
+        self.male.drives.set_o_and_p_to_100()
+        self.male.search.blink.start(started_by=self)
+        self.female.search.read_pattern.start(started_by=self)
 
     def setdown(self):
         self._start_time = None
-        self._blink.stop()
-        self._read_pattern.stop()
-        self._male.ring.off()
+        self.male.search.blink.stop()
+        self.female.search.read_pattern.stop()
+        self.male.ring.off()
+        self._clear_indicator()
         self._file.close()
 
     def loop(self):
-        if not self._blink.is_started:
+        if not self.male.search.blink.is_started:
             self.stop()
             return
 
@@ -80,38 +111,77 @@ class TestReadPattern(BaseThread):
             return
         self._last_log_time = now
 
-        expected_male = self._male.name
-        expected_drive = self._drives.which_is_frustated()
-        match = self._read_pattern.last_match
+        expected_drive = self.male.drives.which_is_frustated()
+        match = self.female.search.read_pattern.last_match
 
         detected_male, detected_drive, is_match = None, None, None
         if match is not None:
             detected_male, detected_drive = match
             is_match = (detected_male, detected_drive) == (
-                expected_male,
+                self._male_name,
                 expected_drive,
             )
             if is_match:
                 self._match_count += 1
             else:
                 self._mismatch_count += 1
+            self._update_indicator(detected_male, detected_drive)
 
         timestamp = now - self._start_time
         self._file.write(
-            f"{timestamp}, {expected_male}, {expected_drive}, "
+            f"{timestamp}, {self._male_name}, {self._female_name}, {expected_drive}, "
             f"{detected_male}, {detected_drive}, {is_match}\n"
         )
+
+    def _update_indicator(self, detected_male, detected_drive):
+        neopixels = self.female.neopixels
+
+        head = neopixels.head
+        head.color = HEAD_COLOR_BY_MALE.get(detected_male, head.color)
+        head.on()
+
+        body_o = neopixels.body_o
+        if "O" in detected_drive:
+            body_o.color = body_o.orange
+            body_o.on()
+        else:
+            body_o.off()
+
+        body_p = neopixels.body_p
+        if "P" in detected_drive:
+            body_p.color = body_p.puce
+            body_p.on()
+        else:
+            body_p.off()
+
+    def _clear_indicator(self):
+        neopixels = self.female.neopixels
+        neopixels.head.off()
+        neopixels.body_o.off()
+        neopixels.body_p.off()
 
     @property
     def snapshot_children(self):
         children = {}
-        children[self._drives.name] = self._drives
-        children[self._blink.name] = self._blink
-        children[self._read_pattern.name] = self._read_pattern
+        for male in self._males.values():
+            children[male.drives.name] = male.drives
+            children[male.search.blink.name] = male.search.blink
+        for female in self._females.values():
+            children[female.search.read_pattern.name] = female.search.read_pattern
         return children
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
+        states["sender"] = {
+            "path": path + ("sender",),
+            "name": "sender",
+            "value": self._male_name,
+        }
+        states["receiver"] = {
+            "path": path + ("receiver",),
+            "name": "receiver",
+            "value": self._female_name,
+        }
         if self._start_time is not None:
             states["matches"] = {
                 "path": path + ("matches",),
