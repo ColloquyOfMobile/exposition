@@ -105,8 +105,34 @@ SVG_ZOOM_SCRIPT = """
 # x/y, drag to pan, double-click to reset, and dragging directly on an
 # axis rescales just that axis (matplotlib-GUI-like).
 UPLOT_INIT_SCRIPT = """
+window.__colloquyCharts = {};
+
 function zoomPlugin() {
   var xMin0, xMax0, yMin0, yMax0;
+
+  function zoomBy(u, factor, axis) {
+    u.batch(function () {
+      if (axis !== "y") {
+        var xMin = u.scales.x.min, xMax = u.scales.x.max;
+        var xMid = (xMin + xMax) / 2;
+        var xHalf = ((xMax - xMin) * factor) / 2;
+        u.setScale("x", { min: xMid - xHalf, max: xMid + xHalf });
+      }
+      if (axis !== "x") {
+        var yMin = u.scales.y.min, yMax = u.scales.y.max;
+        var yMid = (yMin + yMax) / 2;
+        var yHalf = ((yMax - yMin) * factor) / 2;
+        u.setScale("y", { min: yMid - yHalf, max: yMid + yHalf });
+      }
+    });
+  }
+
+  function resetView(u) {
+    u.batch(function () {
+      u.setScale("x", { min: xMin0, max: xMax0 });
+      u.setScale("y", { min: yMin0, max: yMax0 });
+    });
+  }
 
   function axisDrag(u, el, axisKey, isX) {
     var dragging = false, start = 0, startMin = 0, startMax = 0;
@@ -156,19 +182,19 @@ function zoomPlugin() {
             var yVal = u.posToVal(e.clientY - rect.top, "y");
             var factor = e.deltaY < 0 ? 0.85 : 1 / 0.85;
 
-            var doX = true, doY = true;
-            if (e.shiftKey) doY = false;
-            else if (e.altKey) doX = false;
+            var axis;
+            if (e.shiftKey) axis = "x";
+            else if (e.altKey) axis = "y";
 
             u.batch(function () {
-              if (doX) {
+              if (axis !== "y") {
                 var xMin = u.scales.x.min, xMax = u.scales.x.max;
                 u.setScale("x", {
                   min: xVal - (xVal - xMin) * factor,
                   max: xVal + (xMax - xVal) * factor,
                 });
               }
-              if (doY) {
+              if (axis !== "x") {
                 var yMin = u.scales.y.min, yMax = u.scales.y.max;
                 u.setScale("y", {
                   min: yVal - (yVal - yMin) * factor,
@@ -210,15 +236,24 @@ function zoomPlugin() {
         });
 
         over.addEventListener("dblclick", function () {
-          u.batch(function () {
-            u.setScale("x", { min: xMin0, max: xMax0 });
-            u.setScale("y", { min: yMin0, max: yMax0 });
-          });
+          resetView(u);
         });
 
         var axisEls = u.root.querySelectorAll(".u-axis");
         if (axisEls[0]) axisDrag(u, axisEls[0], "x", true);
         if (axisEls[1]) axisDrag(u, axisEls[1], "y", false);
+
+        // Exposed for the zoom-in/zoom-out/reset buttons rendered next to
+        // the chart - one button, one action each, no modifier keys.
+        u.colloquyZoomIn = function () {
+          zoomBy(u, 0.75);
+        };
+        u.colloquyZoomOut = function () {
+          zoomBy(u, 1 / 0.75);
+        };
+        u.colloquyReset = function () {
+          resetView(u);
+        };
       },
     },
   };
@@ -247,11 +282,20 @@ window.colloquyRenderChart = function (containerId, payload) {
   };
 
   var u = new uPlot(opts, payload.data, container);
+  window.__colloquyCharts[containerId] = u;
 
   window.addEventListener("resize", function () {
     var width = container.clientWidth;
     if (width > 0) u.setSize({ width: width, height: 420 });
   });
+};
+
+window.colloquyZoomChart = function (containerId, action) {
+  var u = window.__colloquyCharts[containerId];
+  if (!u) return;
+  if (action === "in") u.colloquyZoomIn();
+  else if (action === "out") u.colloquyZoomOut();
+  else if (action === "reset") u.colloquyReset();
 };
 """
 
@@ -569,6 +613,19 @@ class WSGI2(Base):
                                 "scroll to zoom - shift+scroll x only - alt+scroll y only - "
                                 "drag to pan - drag an axis to rescale it - double-click to reset"
                             )
+                        with tag(
+                            "div", style="display: flex; gap: 1ch; margin: 0.25rem 0;"
+                        ):
+                            for label, action in (
+                                ("zoom in", "in"),
+                                ("zoom out", "out"),
+                                ("reset zoom", "reset"),
+                            ):
+                                onclick = f"colloquyZoomChart({json.dumps(container_id)}, {json.dumps(action)})"
+                                with tag(
+                                    "button", type="button", onclick=onclick
+                                ):
+                                    text(label)
                         with tag(
                             "div",
                             id=container_id,
