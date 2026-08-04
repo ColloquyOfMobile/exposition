@@ -157,10 +157,18 @@ class Bar(BaseThread):
         value = self._dxl_origin.get()
         self.dxl.goal_position.write(value)
 
-    def move_male_in_front_of_female_and_wait(self, male, female):
+    def set_male_in_front_of_female(self, male, female):
+        """Non-blocking: writes the goal position and returns immediately,
+        so a caller that wants to stay responsive (interruptible by
+        stop()/emergency_stop() rather than stuck in wait_for_servo()'s
+        busy-loop) can poll is_moving itself instead."""
         origin = self.params["bar"]["dxl origin"]
         position = self.params["bar"]["interaction_origins"][male][female] + origin
-        self.dxl.move_and_wait(position)
+        self.dxl.goal_position.write(position)
+
+    def move_male_in_front_of_female_and_wait(self, male, female):
+        self.set_male_in_front_of_female(male, female)
+        self.dxl.wait_for_servo()
 
     def move_male1_in_front_of_female1_and_wait(self):
         self.move_male_in_front_of_female_and_wait("male1", "female1")
