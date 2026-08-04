@@ -1,4 +1,4 @@
-from time import sleep
+from time import sleep, time
 from .u2d2 import U2D2
 from .arduino import Arduino
 from colloquy.base_thread import BaseThread
@@ -181,9 +181,16 @@ class Hardware(BaseThread):
     def neopixels(self):
         return self._neopixels
 
-    def wait_until_everything_is_still(self):
+    def wait_until_everything_is_still(self, timeout=30):
+        """Blocking. Bounded the same way DXL.wait_for_servo() bounds a
+        single servo: a jammed/unresponsive body must not hang whatever
+        called this (graceful shutdown) forever."""
+        start = time()
         while any(dxl.is_moving for dxl in self._u2d2.dxl_list):
-            pass
+            if time() - start > timeout:
+                self.log(f"wait_until_everything_is_still timed out after {timeout}s.")
+                return
+            sleep(0.05)
 
     def disable_torque(self):
         for dxl in self._u2d2.dxl_list:

@@ -88,16 +88,18 @@ class U2D2(Base):
         raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     def __enter__(self):
-        if self._context_depth == 0:
-            self._was_open = self.is_open
-            if not self._was_open:
-                self.open()
-        self._context_depth += 1
+        with self.lock:
+            if self._context_depth == 0:
+                self._was_open = self.is_open
+                if not self._was_open:
+                    self.open()
+            self._context_depth += 1
 
     def __exit__(self, *args, **kwargs):
-        self._context_depth -= 1
-        if self._context_depth == 0 and not self._was_open:
-            self.close()
+        with self.lock:
+            self._context_depth -= 1
+            if self._context_depth == 0 and not self._was_open:
+                self.close()
 
     @property
     def packet_handler(self):
