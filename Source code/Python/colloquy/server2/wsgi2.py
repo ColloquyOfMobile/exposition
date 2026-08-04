@@ -342,8 +342,20 @@ class WSGI2(Base):
                     continue
 
                 if key == "value":
+                    # Two shapes reach here under the literal key "value":
+                    # a bare scalar (obj["value"] set directly), or the
+                    # wrapped {"path", "name", "value"} leaf dict used
+                    # everywhere else in this function (and by classes
+                    # like LightSensor, whose _snapshot_if_opened key
+                    # happens to also be "value") - unwrap the latter so
+                    # it doesn't print the dict's own repr.
+                    display_value = (
+                        value["value"]
+                        if isinstance(value, dict) and "value" in value
+                        else value
+                    )
                     with tag("div"):
-                        text(f"value: {value}")
+                        text(f"value: {display_value}")
                     continue
 
                 if not isinstance(value, dict):
