@@ -32,10 +32,16 @@ class TestReadPattern(BaseThread):
         self._males = {male.name: male for male in self.hardware.males}
         self._females = {female.name: female for female in self.hardware.females}
 
-        for name in self._males:
-            self[f"send from {name}"] = self._make_selector("_male_name", name)
-        for name in self._females:
-            self[f"receive with {name}"] = self._make_selector("_female_name", name)
+        self._male_selectors = {
+            f"send from {name}": self._make_selector("_male_name", name)
+            for name in self._males
+        }
+        self._female_selectors = {
+            f"receive with {name}": self._make_selector("_female_name", name)
+            for name in self._females
+        }
+        for key, selector in {**self._male_selectors, **self._female_selectors}.items():
+            self[key] = selector
 
         self._dir_path = result_folder / self.name
         if not self._dir_path.exists():
@@ -167,11 +173,22 @@ class TestReadPattern(BaseThread):
             children[male.drives.name] = male.drives
             children[male.search.blink.name] = male.search.blink
         for female in self._females.values():
-            children[female.search.read_pattern.name] = female.search.read_pattern
+            # ReadPattern.name is the fixed literal "read pattern" on every
+            # body, so keying by it directly here would collide across the
+            # three females and silently drop all but the last one.
+            children[f"read pattern {female.name}"] = female.search.read_pattern
         return children
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
+        # Plain commands, injected directly (not via snapshot_children) the
+        # same way BaseThread injects "start"/"stop": snapshot_children
+        # entries get .snapshot_as_child() called on them when this node is
+        # opened, which only real Base objects support - a bare function
+        # would crash that walk.
+        for key, selector in {**self._male_selectors, **self._female_selectors}.items():
+            states[key] = selector
+
         states["sender"] = {
             "path": path + ("sender",),
             "name": "sender",
