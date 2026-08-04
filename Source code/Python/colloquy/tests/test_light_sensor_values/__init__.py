@@ -104,6 +104,13 @@ class TestLightSensorValues(BaseThread):
             test.stop()
             test.join()
         for test in self._threaded_tests:
+            # _file_path is only set once a sub-test's own run() actually
+            # started (before setup()/loop() even run) - a sub-test still
+            # sitting in the queue when this stops early (e.g. an
+            # emergency stop mid-sequence) never got that far and has no
+            # data to plot.
+            if test._file_path is None:
+                continue
             test.plot()
 
     def loop(self):
