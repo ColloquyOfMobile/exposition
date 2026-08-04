@@ -91,11 +91,23 @@ class DXLOrigin(Base):
         children = {}
         children.update(
             {
-                "value": self.get(),
                 self.setter.name: self.setter,
             }
         )
         return children
+
+    def _snapshot_if_opened(self, path):
+        # "value" was a bare int in snapshot_children, which Base._snapshot_
+        # if_opened's default walk crashes on the instant this node is
+        # opened directly (calls .snapshot_as_child() on it, which an int
+        # doesn't have) - reachable on every body's own "dxl origin" node.
+        states = super()._snapshot_if_opened(path)
+        states["value"] = {
+            "path": path + ("value",),
+            "name": "value",
+            "value": self.get(),
+        }
+        return states
 
     # def snapshot(self, path):
     # _path = path + (self.name, )

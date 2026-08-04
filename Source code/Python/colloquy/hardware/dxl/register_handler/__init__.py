@@ -115,9 +115,22 @@ class RegisterHanlder(Base):
     def snapshot_children(self):
         children = {}
 
-        children["value"] = self.read()
-
         if not self.is_readonly():
             children[self._setter.name] = self._setter
 
         return children
+
+    def _snapshot_if_opened(self, path):
+        # "value" was a bare int in snapshot_children, which Base._snapshot_
+        # if_opened's default walk crashes on the instant this node is
+        # opened directly (calls .snapshot_as_child() on it, which an int
+        # doesn't have). This is the base class for every DXL register
+        # (temperature/position/torque_enabled/goal_position/...) on every
+        # servo, so this was reachable at ~72 distinct nodes app-wide.
+        states = super()._snapshot_if_opened(path)
+        states["value"] = {
+            "path": path + ("value",),
+            "name": "value",
+            "value": self.read(),
+        }
+        return states
