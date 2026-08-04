@@ -1,4 +1,5 @@
 import json
+import re
 from yattag import Doc, indent
 from urllib.parse import unquote
 from pathlib import Path
@@ -13,6 +14,12 @@ from threading import Event
 from wsgiref.simple_server import make_server, WSGIRequestHandler
 
 WSGIRequestHandler.log_message = lambda *args, **kwargs: None
+
+# Vendored locally (not a CDN) - this app is meant to run at the
+# exhibition, possibly offline. MIT licensed, see vendor/uplot/LICENSE.
+_UPLOT_DIR = Path(__file__).parent / "vendor" / "uplot"
+UPLOT_JS = (_UPLOT_DIR / "uPlot.iife.min.js").read_text(encoding="utf-8")
+UPLOT_CSS = (_UPLOT_DIR / "uPlot.min.css").read_text(encoding="utf-8")
 
 # Zero-dependency pan/zoom for embedded matplotlib SVGs (no CDN - this app
 # is meant to run at the exhibition, possibly offline). Manipulates each
@@ -88,6 +95,164 @@ SVG_ZOOM_SCRIPT = """
 
   document.querySelectorAll("[data-svg-zoom]").forEach(initSvgZoom);
 })();
+"""
+
+# uPlot renders from raw data (not a pre-rendered image), so it can redraw
+# proper axis ticks/gridlines for whatever range is currently zoomed to -
+# unlike the SVG viewBox crop above, which just magnifies whatever ticks
+# were baked in at the original full-range view. Interaction: wheel to
+# zoom both axes around the cursor, shift+wheel/alt+wheel to zoom just
+# x/y, drag to pan, double-click to reset, and dragging directly on an
+# axis rescales just that axis (matplotlib-GUI-like).
+UPLOT_INIT_SCRIPT = """
+function zoomPlugin() {
+  var xMin0, xMax0, yMin0, yMax0;
+
+  function axisDrag(u, el, axisKey, isX) {
+    var dragging = false, start = 0, startMin = 0, startMax = 0;
+    el.style.cursor = isX ? "ew-resize" : "ns-resize";
+    el.addEventListener("mousedown", function (e) {
+      dragging = true;
+      start = isX ? e.clientX : e.clientY;
+      startMin = u.scales[axisKey].min;
+      startMax = u.scales[axisKey].max;
+      e.stopPropagation();
+      e.preventDefault();
+    });
+    window.addEventListener("mousemove", function (e) {
+      if (!dragging) return;
+      var cur = isX ? e.clientX : e.clientY;
+      var deltaPx = cur - start;
+      var range = startMax - startMin;
+      var rect = u.over.getBoundingClientRect();
+      var size = isX ? rect.width : rect.height;
+      var factor = Math.exp(((isX ? -deltaPx : deltaPx) / size) * 3);
+      var mid = (startMin + startMax) / 2;
+      var half = (range * factor) / 2;
+      u.setScale(axisKey, { min: mid - half, max: mid + half });
+    });
+    window.addEventListener("mouseup", function () {
+      dragging = false;
+    });
+  }
+
+  return {
+    hooks: {
+      ready: function (u) {
+        xMin0 = u.scales.x.min;
+        xMax0 = u.scales.x.max;
+        yMin0 = u.scales.y.min;
+        yMax0 = u.scales.y.max;
+
+        var over = u.over;
+        over.style.cursor = "grab";
+
+        over.addEventListener(
+          "wheel",
+          function (e) {
+            e.preventDefault();
+            var rect = over.getBoundingClientRect();
+            var xVal = u.posToVal(e.clientX - rect.left, "x");
+            var yVal = u.posToVal(e.clientY - rect.top, "y");
+            var factor = e.deltaY < 0 ? 0.85 : 1 / 0.85;
+
+            var doX = true, doY = true;
+            if (e.shiftKey) doY = false;
+            else if (e.altKey) doX = false;
+
+            u.batch(function () {
+              if (doX) {
+                var xMin = u.scales.x.min, xMax = u.scales.x.max;
+                u.setScale("x", {
+                  min: xVal - (xVal - xMin) * factor,
+                  max: xVal + (xMax - xVal) * factor,
+                });
+              }
+              if (doY) {
+                var yMin = u.scales.y.min, yMax = u.scales.y.max;
+                u.setScale("y", {
+                  min: yVal - (yVal - yMin) * factor,
+                  max: yVal + (yMax - yVal) * factor,
+                });
+              }
+            });
+          },
+          { passive: false }
+        );
+
+        var dragging = false, startX = 0, startY = 0;
+        var startXMin, startXMax, startYMin, startYMax;
+        over.addEventListener("mousedown", function (e) {
+          dragging = true;
+          startX = e.clientX;
+          startY = e.clientY;
+          startXMin = u.scales.x.min;
+          startXMax = u.scales.x.max;
+          startYMin = u.scales.y.min;
+          startYMax = u.scales.y.max;
+          over.style.cursor = "grabbing";
+        });
+        window.addEventListener("mousemove", function (e) {
+          if (!dragging) return;
+          var rect = over.getBoundingClientRect();
+          var xRange = startXMax - startXMin;
+          var yRange = startYMax - startYMin;
+          var dxVal = ((e.clientX - startX) / rect.width) * xRange;
+          var dyVal = ((e.clientY - startY) / rect.height) * yRange;
+          u.batch(function () {
+            u.setScale("x", { min: startXMin - dxVal, max: startXMax - dxVal });
+            u.setScale("y", { min: startYMin + dyVal, max: startYMax + dyVal });
+          });
+        });
+        window.addEventListener("mouseup", function () {
+          dragging = false;
+          over.style.cursor = "grab";
+        });
+
+        over.addEventListener("dblclick", function () {
+          u.batch(function () {
+            u.setScale("x", { min: xMin0, max: xMax0 });
+            u.setScale("y", { min: yMin0, max: yMax0 });
+          });
+        });
+
+        var axisEls = u.root.querySelectorAll(".u-axis");
+        if (axisEls[0]) axisDrag(u, axisEls[0], "x", true);
+        if (axisEls[1]) axisDrag(u, axisEls[1], "y", false);
+      },
+    },
+  };
+}
+
+window.colloquyRenderChart = function (containerId, payload) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+
+  var series = [{}];
+  for (var i = 0; i < payload.labels.length; i++) {
+    series.push({
+      label: payload.labels[i],
+      stroke: payload.colors[i % payload.colors.length],
+      width: 1.5,
+    });
+  }
+
+  var opts = {
+    width: container.clientWidth || 900,
+    height: 420,
+    series: series,
+    scales: { x: { time: false } },
+    axes: [{ label: "seconds" }, { label: "value" }],
+    plugins: [zoomPlugin()],
+  };
+
+  var u = new uPlot(opts, payload.data, container);
+
+  window.addEventListener("resize", function () {
+    var width = container.clientWidth;
+    if (width > 0) u.setSize({ width: width, height: 420 });
+  });
+};
 """
 
 
@@ -179,10 +344,23 @@ class WSGI2(Base):
         doc, tag, text = Doc().tagtext()
         doc.asis("<!DOCTYPE html>")
         with tag("html", style=export_style(css_style)):
+            with tag("head"):
+                with tag("style"):
+                    doc.asis(UPLOT_CSS)
+
             with tag(
                 "body",
                 style="flex:1; display: flex; flex-direction: column; overflow: auto;",
             ):
+                # Must come before _html_recursion()'s output below: it
+                # emits inline <script> calls to colloquyRenderChart() for
+                # each chart, which needs uPlot and colloquyRenderChart
+                # itself to already be defined by the time those run.
+                with tag("script"):
+                    doc.asis(UPLOT_JS)
+                with tag("script"):
+                    doc.asis(UPLOT_INIT_SCRIPT)
+
                 with tag(
                     "div", name="server commands", style="display: flex; gap: 1ch;"
                 ):
@@ -376,6 +554,31 @@ class WSGI2(Base):
                     with tag("div", name=key, style=export_style(style)):
                         with tag("a", href=f"/{path.as_posix()}"):
                             text(f"{key}()")
+                    continue
+
+                if "chart" in value:
+                    container_id = "chart-" + re.sub(
+                        r"[^a-zA-Z0-9_-]+", "-", "-".join(value["path"])
+                    )
+                    with tag("div", name=key):
+                        with tag(
+                            "div",
+                            style="font-size: 0.75rem; opacity: 0.7;",
+                        ):
+                            text(
+                                "scroll to zoom - shift+scroll x only - alt+scroll y only - "
+                                "drag to pan - drag an axis to rescale it - double-click to reset"
+                            )
+                        with tag(
+                            "div",
+                            id=container_id,
+                            style="width: 100%; max-width: 900px;",
+                        ):
+                            pass
+                        with tag("script"):
+                            doc.asis(
+                                f"colloquyRenderChart({json.dumps(container_id)}, {value['chart']});"
+                            )
                     continue
 
                 if "svg" in value:

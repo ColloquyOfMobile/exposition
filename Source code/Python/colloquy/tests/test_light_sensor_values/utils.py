@@ -1,6 +1,7 @@
 from time import time
 from collections import deque
 import csv
+import json
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
@@ -12,6 +13,32 @@ from pathlib import Path
 threshold = 310
 FEMALE_COLUMNS = ("female1", "female2", "female3")
 FEMALE_COLORS = ("tab:blue", "tab:orange", "tab:green")
+# Hex equivalents of the tab:blue/orange/green names above - uPlot wants CSS
+# colors, not matplotlib's named "tab:" palette.
+FEMALE_HEX_COLORS = ("#1f77b4", "#ff7f0e", "#2ca02c")
+
+
+def dataframe_to_chart_json(df, x_column, y_columns, y_labels=None, y_colors=None):
+    """Serialize a dataframe into uPlot's aligned-data shape:
+    [[x...], [y1...], [y2...], ...]. Used for the interactive raw-data
+    chart (server2/wsgi2.py's "chart" snapshot key) - unlike the static
+    matplotlib SVGs, this ships raw data so the browser can redraw proper
+    axis ticks/gridlines for whatever range the user zooms/pans to.
+    """
+    y_labels = list(y_labels) if y_labels is not None else list(y_columns)
+    y_colors = list(y_colors) if y_colors is not None else FEMALE_HEX_COLORS
+
+    data = [df[x_column].astype(float).tolist()]
+    for column in y_columns:
+        data.append(df[column].astype(float).tolist())
+
+    return json.dumps(
+        {
+            "data": data,
+            "labels": y_labels,
+            "colors": y_colors,
+        }
+    )
 
 
 def _decimate_min_max(x, y, max_points=2000):

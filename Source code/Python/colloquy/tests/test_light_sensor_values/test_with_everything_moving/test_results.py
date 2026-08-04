@@ -8,8 +8,8 @@ from colloquy.base import Base
 from ..utils import (
     FEMALE_COLUMNS,
     compute_pulses,
+    dataframe_to_chart_json,
     plot_counts_as_svg,
-    plot_full_measurement_as_svg,
 )
 
 
@@ -37,10 +37,10 @@ class TestResults(Base):
             df[f"{prefix} logic"] = logic
             self._results[column] = {"durations": durations, "counts": counts}
 
-    def full_measurement_as_svg(self):
-        svg = io.StringIO()
-        plot_full_measurement_as_svg(output=svg, df=self._data_frame)
-        return svg.getvalue()
+    def full_measurement_as_chart(self):
+        return dataframe_to_chart_json(
+            self._data_frame, x_column="seconds", y_columns=FEMALE_COLUMNS
+        )
 
     def counts_as_svg(self, column):
         svg = io.StringIO()
@@ -56,7 +56,7 @@ class TestResults(Base):
         states["full measurement"] = {
             "path": path + ("full measurement",),
             "name": "full measurement",
-            "svg": self.full_measurement_as_svg(),
+            "chart": self.full_measurement_as_chart(),
         }
         for column in FEMALE_COLUMNS:
             if len(self._results[column]["counts"]) == 0:
