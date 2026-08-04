@@ -8,7 +8,6 @@ from .feet import Feet
 from .body_o import BodyO
 from .body_p import BodyP
 
-
 class Neopixels(Base):
     def __init__(self, owner):
         super().__init__(owner=owner)
@@ -31,19 +30,6 @@ class Neopixels(Base):
         yield self.body_o
         yield self.body_p
         yield self.feet
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def colloquy(self):

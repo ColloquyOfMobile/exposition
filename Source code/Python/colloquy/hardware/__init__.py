@@ -13,7 +13,6 @@ from .html import HTML
 from .bodies import Bodies
 from .all_neopixels import AllNeopixels
 
-
 class Hardware(BaseThread):
     def __init__(self, owner):
 
@@ -70,19 +69,6 @@ class Hardware(BaseThread):
         for male in self.males:
             self[male.name] = male
             self.drives.extend(male.drives)
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def params(self):

@@ -11,7 +11,6 @@ from ..turn_back_and_forth import TurnBackAndForth
 from .html import HTML
 from collections import deque
 
-
 class Male(BaseThread):
     def __init__(self, owner, id_number):
         self._name = f"male{id_number}"
@@ -51,19 +50,6 @@ class Male(BaseThread):
         )
         for light_sensor in self._light_sensors.values():
             self[light_sensor.name] = light_sensor
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def params(self):

@@ -14,7 +14,6 @@ from .light_sensor_command import LightSensorCommand
 
 START = time()
 
-
 class Arduino(Base):
     _classes = {
         "serial": serial.Serial,
@@ -72,19 +71,6 @@ class Arduino(Base):
         self[self.com_port.name] = self.com_port
         self["open"] = self.open
         self["close"] = self.close
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     def __enter__(self):
         with self.lock:

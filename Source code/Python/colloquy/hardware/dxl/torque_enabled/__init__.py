@@ -13,7 +13,6 @@ from .html import HTML
 from time import time, sleep
 from colloquy.input import Input
 
-
 class TorqueEnabled(RegisterHanlder):
     def __init__(
         self,
@@ -27,19 +26,6 @@ class TorqueEnabled(RegisterHanlder):
             write_func=owner.u2d2.write_1_byte,
             html_class=HTML,
         )
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def input(self):

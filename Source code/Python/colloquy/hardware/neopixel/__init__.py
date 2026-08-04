@@ -9,7 +9,6 @@ from .parameter import Parameter
 from .brightness import Brightness
 from .html import HTML
 
-
 class Neopixel(Base):
     def __init__(self, owner, name):
         self._name = name
@@ -38,19 +37,6 @@ class Neopixel(Base):
         self[self._blue.name] = self._blue
 
         self[self.html.name] = self.html.handle_request
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def puce(self):

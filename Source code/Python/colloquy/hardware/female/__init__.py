@@ -10,7 +10,6 @@ from ..turn_back_and_forth import TurnBackAndForth
 from .html import HTML
 from .test import Test
 
-
 class Female(BaseThread):
     def __init__(
         self,
@@ -49,19 +48,6 @@ class Female(BaseThread):
             self.set_current_position_as_dxl_origin
         )
         self[self.light_sensor.name] = self.light_sensor
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def params(self):

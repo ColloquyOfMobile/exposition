@@ -4,26 +4,12 @@ from .virtual_serial_port import VirtualSerialPort
 from .virtual_port_handler import VirtualPortHandler
 from .virtual_packet_handler import VirtualPacketHandler
 
-
 class VirtualHardware(BaseThread):
     def __init__(self, owner):
         super().__init__(owner)
         self._arduino_serial_port = None
         self._u2d2_port_handler = None
         self._u2d2_packet_handler = None
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def params(self):

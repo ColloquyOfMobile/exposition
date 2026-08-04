@@ -22,7 +22,6 @@ const int color_orange[4] = {80, 255, 25, 16}; //GRBW/orangish
 const int color_puce[4] = {180, 160, 0, 40}; //GRBW//greenish
 """
 
-
 class Test(Base):
     def __init__(self, owner):
         Base.__init__(self, owner=owner)
@@ -31,19 +30,6 @@ class Test(Base):
         self[self.html.name] = self.html.handle_request
         self[self.o_drive.name] = self.o_drive.test
         self[self.p_drive.name] = self.p_drive.test
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def colloquy(self):

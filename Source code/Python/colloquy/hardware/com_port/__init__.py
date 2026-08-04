@@ -12,7 +12,6 @@ from colloquy.base import Base
 from functools import partial
 from .html import HTML
 
-
 class ComPort(Base):
     def __init__(self, owner, value=None):
         super().__init__(owner=owner)
@@ -22,19 +21,6 @@ class ComPort(Base):
 
         self._value = value
         self._ports = []
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def colloquy(self):

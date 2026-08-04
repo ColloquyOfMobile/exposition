@@ -6,7 +6,6 @@ from threading import Lock
 from pathlib import Path
 from .thread_error import ThreadError
 
-
 class ThreadErrors(Base):
     def __init__(self, owner):
         super().__init__(owner=owner)
@@ -14,19 +13,6 @@ class ThreadErrors(Base):
         self._html = HTML(owner=self)
 
         self[self.html.name] = self.html.handle_request
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     def __bool__(self):
         conditions = {bool(child.thread_errors) for child in self.owner.children}

@@ -7,7 +7,6 @@ from .html import HTML
 from .turn_back_and_forth_around_f1 import TurnBackAndForthAroundF1
 from .turn_back_and_forth import TurnBackAndForth
 
-
 class Bar(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
@@ -31,19 +30,6 @@ class Bar(BaseThread):
         self["set current position as dxl origin"] = (
             self.set_current_position_as_dxl_origin
         )
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def params(self):

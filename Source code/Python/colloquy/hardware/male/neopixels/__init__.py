@@ -8,7 +8,6 @@ from .o_drive_level import ODriveLevel
 from .p_drive_level import PDriveLevel
 from .ring import Ring
 
-
 class Neopixels(Base):
     def __init__(self, owner):
         super().__init__(owner=owner)
@@ -31,19 +30,6 @@ class Neopixels(Base):
         yield self.ring
         yield self.o_drive_level
         yield self.p_drive_level
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def male(self):

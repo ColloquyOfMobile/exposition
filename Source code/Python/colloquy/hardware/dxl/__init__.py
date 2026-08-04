@@ -13,7 +13,6 @@ from .torque_enabled import TorqueEnabled
 from .goal_position import GoalPosition
 from time import time, sleep
 
-
 class DXL(Base):
     def __init__(self, owner, dynamixel_id):
         self._name = f"dxl_{dynamixel_id}"
@@ -32,19 +31,6 @@ class DXL(Base):
         self["init hardware"] = self.init_hardware
         self._init_registers()
         # self.init_hardware()
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     # @property
     # def goal_position(self):

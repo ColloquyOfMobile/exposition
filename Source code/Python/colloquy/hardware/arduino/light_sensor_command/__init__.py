@@ -12,7 +12,6 @@ from .html import HTML
 from time import time, sleep
 from colloquy.input import Input
 
-
 class LightSensorCommand(Base):
     def __init__(self, owner, arduino_path):
         self._name = arduino_path
@@ -23,19 +22,6 @@ class LightSensorCommand(Base):
         # if not self.is_readonly():
         self._input = Input(owner=self)
         self[self.input.name] = self.input
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def input(self):

@@ -5,7 +5,6 @@ from .html import HTML
 from threading import Lock
 from pathlib import Path
 
-
 class ThreadError(Base):
     _counter = 0
     _counter_lock = Lock()
@@ -18,19 +17,6 @@ class ThreadError(Base):
         self._html = HTML(owner=self)
 
         self[self.html.name] = self.html.handle_request
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def colloquy(self):

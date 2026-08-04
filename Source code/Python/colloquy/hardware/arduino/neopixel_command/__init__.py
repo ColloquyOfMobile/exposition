@@ -13,7 +13,6 @@ from time import time, sleep
 from colloquy.input import Input
 from .value_setter import ValueSetter
 
-
 class NeopixelCommand(Base):
     def __init__(self, owner, arduino_path):
         self._name = arduino_path.replace("/", "_")
@@ -33,19 +32,6 @@ class NeopixelCommand(Base):
             self[setter.name] = setter
 
         self["send"] = self._send
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def value_setters(self):

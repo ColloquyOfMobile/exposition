@@ -1,9 +1,6 @@
 from colloquy.base import Base
-from pathlib import Path
 
 from colloquy.hardware.value_setter import ValueSetter
-
-
 
 class Parameter(Base):
     def __init__(self, owner, name):
@@ -22,19 +19,6 @@ class Parameter(Base):
         # self[self._increment1.name] = self._increment1
         # self[self._increment10.name] = self._increment10
         # self[self._increment100.name] = self._increment100
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def neopixel(self):

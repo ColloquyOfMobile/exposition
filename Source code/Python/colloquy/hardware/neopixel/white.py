@@ -1,5 +1,4 @@
 from colloquy.base import Base
-from pathlib import Path
 
 
 class White(Base):
@@ -20,18 +19,6 @@ class White(Base):
         for digit in self._digits:
             self[digit.name] = digit
 
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def neopixel(self):

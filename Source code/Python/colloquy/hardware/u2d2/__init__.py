@@ -13,7 +13,6 @@ from .html import HTML
 from .com_port import ComPort
 from colloquy.hardware.dxl import DXL
 
-
 def handle_error(func):
 
     @wraps(func)
@@ -44,7 +43,6 @@ def handle_error(func):
 
     return wrapper
 
-
 class U2D2(Base):
     def __init__(self, owner, **kwargs):
         super().__init__(owner=owner)
@@ -73,19 +71,6 @@ class U2D2(Base):
         self._dxls["male1"] = self._dxl_list[6]
         self._dxls["male2"] = self._dxl_list[7]
         self._dxls["bar"] = self._dxl_list[8]
-
-    def __call__(self, request):
-        request = Path(request)
-        if not request.parts:
-            raise NotImplementedError
-
-        key, *leftover = request.parts
-
-        if key in self:
-            self[key](request="/".join(leftover))
-            return
-
-        raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     def __enter__(self):
         with self.lock:
