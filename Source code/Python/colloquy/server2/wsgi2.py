@@ -672,7 +672,16 @@ class WSGI2(Base):
                         doc.asis(self._html_if_opened(obj=value))
                     continue
 
-                name = value["name"]
+                # Use the dict key rather than value["name"] for display:
+                # a parent can (and does, e.g. TestNeopixels/TestSensors)
+                # register the same kind of child multiple times under
+                # distinct keys precisely because the child's own .name is
+                # a fixed literal shared across every instance of that
+                # type ("light sensor", "head", ...) - showing value["name"]
+                # here made every such sibling display identical link text
+                # even though their hrefs (built from the key) already
+                # correctly pointed at different objects.
+                name = key
 
                 # Plain informational leaves (e.g. _snapshot_if_opened
                 # entries like "sender"/"matches"/"last match") aren't real
