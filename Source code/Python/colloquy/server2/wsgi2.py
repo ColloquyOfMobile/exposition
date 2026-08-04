@@ -243,13 +243,11 @@ function zoomPlugin() {
         if (axisEls[0]) axisDrag(u, axisEls[0], "x", true);
         if (axisEls[1]) axisDrag(u, axisEls[1], "y", false);
 
-        // Exposed for the zoom-in/zoom-out/reset buttons rendered next to
-        // the chart - one button, one action each, no modifier keys.
-        u.colloquyZoomIn = function () {
-          zoomBy(u, 0.75);
-        };
-        u.colloquyZoomOut = function () {
-          zoomBy(u, 1 / 0.75);
+        // Exposed for the zoom in/out/reset buttons rendered next to the
+        // chart - one button, one action each, no modifier keys. axis is
+        // "x", "y", or undefined (both).
+        u.colloquyZoomBy = function (factor, axis) {
+          zoomBy(u, factor, axis);
         };
         u.colloquyReset = function () {
           resetView(u);
@@ -293,9 +291,14 @@ window.colloquyRenderChart = function (containerId, payload) {
 window.colloquyZoomChart = function (containerId, action) {
   var u = window.__colloquyCharts[containerId];
   if (!u) return;
-  if (action === "in") u.colloquyZoomIn();
-  else if (action === "out") u.colloquyZoomOut();
-  else if (action === "reset") u.colloquyReset();
+  if (action === "reset") {
+    u.colloquyReset();
+    return;
+  }
+  var factor = action.indexOf("in") === 0 ? 0.75 : 1 / 0.75;
+  var axis =
+    action.indexOf("-x") !== -1 ? "x" : action.indexOf("-y") !== -1 ? "y" : undefined;
+  u.colloquyZoomBy(factor, axis);
 };
 """
 
@@ -619,6 +622,10 @@ class WSGI2(Base):
                             for label, action in (
                                 ("zoom in", "in"),
                                 ("zoom out", "out"),
+                                ("zoom in x", "in-x"),
+                                ("zoom out x", "out-x"),
+                                ("zoom in y", "in-y"),
+                                ("zoom out y", "out-y"),
                                 ("reset zoom", "reset"),
                             ):
                                 onclick = f"colloquyZoomChart({json.dumps(container_id)}, {json.dumps(action)})"
