@@ -17,7 +17,6 @@ from threading import Thread, Lock
 from time import sleep, time
 from .html import HTML
 
-
 class TestWithOnlyFemaleMoving(BaseThread):
     def __init__(self, owner, result_folder, test_duration):
         super().__init__(owner=owner)
@@ -115,23 +114,6 @@ class TestWithOnlyFemaleMoving(BaseThread):
                 counts=data["counts"],
                 title=f"{column} pulse complementary cumulative histogram for a {timelap_to_string(seconds_elapsed=self._duration)} test.",
             )
-
-    # def snapshot(self, path):
-    # states = super().snapshot(path=path)
-    # _path = states["path"]
-    # if self._start_time is not None:
-    # seconds_elapsed = time() - self._start_time
-    # states["running during"] = {
-    # "path": _path + ("running during", ),
-    # "name": "running during",
-    # "value": timelap_to_string(seconds_elapsed=seconds_elapsed),
-    # }
-    # states["progress"] = {
-    # "path": _path + ("progress", ),
-    # "name": "progress",
-    # "value": f"{round(100*seconds_elapsed/self._duration)}%",
-    # }
-    # return states
 
     def _snapshot_if_opened(self, path):
         states = {}

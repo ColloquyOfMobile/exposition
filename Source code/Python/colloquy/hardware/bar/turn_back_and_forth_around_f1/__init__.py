@@ -2,7 +2,6 @@ from colloquy.base_thread import BaseThread
 from time import time, sleep
 from .html import HTML
 
-
 class TurnBackAndForthAroundF1(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
@@ -33,11 +32,6 @@ class TurnBackAndForthAroundF1(BaseThread):
 
     def setdown(self):
         pass
-
-    # def snapshot(self, path):
-    # states = super().snapshot(path=path)
-    # _path = states["path"]
-    # return states
 
     def toggle_position(self):
         if self._position_memory is None:

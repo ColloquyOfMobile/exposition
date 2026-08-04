@@ -11,7 +11,6 @@ from bisect import bisect_left
 from .html import HTML
 # from colloquy import LIGHT_PATTERNS
 
-
 class ReadPattern(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
@@ -145,18 +144,6 @@ class ReadPattern(BaseThread):
 
         return None
 
-    # def snapshot(self, path):
-    # path = path + (self.name, )
-    # states = {
-    # "path": path,
-    # "name": self.name,
-    # "close": self.close,
-    # "open": self.open,
-    # "opened": self._is_opened,
-    # "start": self.start,
-    # }
-    # return states
-
     @property
     def snapshot_children(self):
         children = {}
@@ -173,7 +160,6 @@ class ReadPattern(BaseThread):
                 "value": f"{male} drive={drive} ({seconds_ago}s ago)",
             }
         return states
-
 
 class DetectPattern:
     """

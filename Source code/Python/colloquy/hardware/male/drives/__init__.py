@@ -23,7 +23,6 @@ const int color_orange[4] = {80, 255, 25, 16}; //GRBW/orangish
 const int color_puce[4] = {180, 160, 0, 40}; //GRBW//greenish
 """
 
-
 class Drives(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
@@ -44,19 +43,6 @@ class Drives(BaseThread):
     def __iter__(self):
         yield self._o_drive
         yield self._p_drive
-
-    # def __call__(self, request):
-    # request = Path(request)
-    # if not request.parts:
-    # raise NotImplementedError
-
-    # key, *leftover = request.parts
-
-    # if key in self:
-    # self[key](request="/".join(leftover))
-    # return
-
-    # raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     def which_is_frustated(self):
         # raise NotImplementedError(f"Update to return a tuple for the states")
@@ -158,24 +144,6 @@ class Drives(BaseThread):
         self._o_drive.value = 100
         self._p_drive.value = 100
         self.update()
-
-    # def snapshot(self, path):
-    # states = super().snapshot(path)
-    # path = states["path"]
-    # states["set O=0 and P=100"] = self.set_o_to_0_p_to_100
-    # states["set O=100 and P=0"] = self.set_p_to_0_o_to_100
-    # states["set O=30 and P=30"] = self.set_o_and_p_to_30
-    # states["set O=100 and P=100"] = self.set_o_and_p_to_100
-    # states[self.o_drive.name] = self.o_drive.snapshot(path)
-    # states[self.p_drive.name] = self.p_drive.snapshot(path)
-    # # states = {
-    # # "path": path + (self.name, ),
-    # # "name": self.name,
-    # # "close": self.close,
-    # # "open": self.open,
-    # # "opened": self._is_opened,
-    # # }
-    # return states
 
     @property
     def snapshot_children(self):

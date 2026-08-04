@@ -95,12 +95,3 @@ class DXLOrigin(Base):
         }
         return states
 
-    # def snapshot(self, path):
-    # _path = path + (self.name, )
-    # states = super().snapshot(path=path)
-
-    # states.update({
-    # "value": self.get(),
-    # self.setter.name: self.setter.snapshot(_path),
-    # })
-    # return states

@@ -189,9 +189,3 @@ class DXL(Base):
             children[register.name] = register
         return children
 
-    # def snapshot(self, path):
-    # states = super().snapshot(path=path)
-    # _path = states["path"]
-    # for register in self._registers:
-    # states[register.name] = register.snapshot(path=_path)
-    # return states

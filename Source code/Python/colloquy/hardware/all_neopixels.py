@@ -1,6 +1,5 @@
 from colloquy.base import Base
 
-
 class AllNeopixels(Base):
     def __init__(self, owner, bodies):
         super().__init__(owner=owner)
@@ -30,8 +29,3 @@ class AllNeopixels(Base):
         children["turn all neopixels off"] = self.turn_all_off
         return children
 
-    # def snapshot(self, path):
-    # states = super().snapshot(path=path)
-    # states["turn all neopixels on"] = self.turn_all_on
-    # states["turn all neopixels off"] = self.turn_all_off
-    # return states

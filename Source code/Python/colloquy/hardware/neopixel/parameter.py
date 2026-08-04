@@ -66,13 +66,6 @@ class Parameter(Base):
 
         return doc.getvalue()
 
-    # def snapshot(self, path):
-    # _path = path + (self.name, )
-    # states = super().snapshot(path=path)
-
-    # states.update()
-    # return states
-
     @property
     def snapshot_children(self):
         children = {}

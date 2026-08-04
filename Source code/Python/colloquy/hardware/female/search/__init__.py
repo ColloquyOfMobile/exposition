@@ -3,7 +3,6 @@ from time import time, sleep
 from .html import HTML
 from .read_pattern import ReadPattern
 
-
 class Search(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
@@ -39,14 +38,6 @@ class Search(BaseThread):
 
     def setdown(self):
         pass
-
-    # def snapshot(self, path):
-    # states = super().snapshot(path=path)
-    # _path = states["path"]
-    # states.update({
-    # self.read_pattern.name: self.read_pattern.snapshot(_path),
-    # })
-    # return states
 
     @property
     def snapshot_children(self):

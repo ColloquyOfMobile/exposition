@@ -66,16 +66,6 @@ class Brightness(Base):
 
         return doc.getvalue()
 
-    # def snapshot(self, path):
-    # _path = path + (self.name, )
-    # states = super().snapshot(path=path)
-
-    # states.update({
-    # "value": self.value,
-    # self.setter.name: self.setter.snapshot(_path),
-    # })
-    # return states
-
     @property
     def snapshot_children(self):
         children = {}

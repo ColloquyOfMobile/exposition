@@ -1,6 +1,5 @@
 from colloquy.base import Base
 
-
 class Bodies(Base):
     def __init__(self, owner, males, females):
         super().__init__(owner=owner)
@@ -25,7 +24,3 @@ class Bodies(Base):
         children["turn all bodies to origin"] = self.turn_all_bodies_origin
         return children
 
-    # def snapshot(self, path):
-    # states = super().snapshot(path=path)
-    # states["turn all bodies to origin"] = self.turn_all_bodies_origin
-    # return states

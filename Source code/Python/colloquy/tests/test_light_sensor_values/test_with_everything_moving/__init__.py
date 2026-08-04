@@ -16,7 +16,6 @@ from ..utils import (
 )
 from .test_results import TestResults
 
-
 class TestWithEveryThingMoving(BaseThread):
     def __init__(self, owner, result_folder, test_duration):
         super().__init__(owner=owner)
@@ -134,31 +133,6 @@ class TestWithEveryThingMoving(BaseThread):
                 counts=data["counts"],
                 title=f"{column} pulse complementary cumulative histogram for a {timelap_to_string(seconds_elapsed=self._duration)} test.",
             )
-
-    # def snapshot(self, path):
-    # states = super().snapshot(path=path)
-    # _path = states["path"]
-    # states["duration"] = {
-    # "path": _path + ("duration", ),
-    # "name": "duration",
-    # "value": timelap_to_string(seconds_elapsed=self._duration),
-    # }
-    # if self._test_results is not None:
-    # states["test results"] = self._test_results.snapshot(path=_path)
-
-    # if self._start_time is not None:
-    # seconds_elapsed = time() - self._start_time
-    # states["running during"] = {
-    # "path": _path + ("running during", ),
-    # "name": "running during",
-    # "value": timelap_to_string(seconds_elapsed=seconds_elapsed),
-    # }
-    # states["progress"] = {
-    # "path": _path + ("progress", ),
-    # "name": "progress",
-    # "value": f"{round(100*seconds_elapsed/self._duration)}%",
-    # }
-    # return states
 
     @property
     def snapshot_children(self):

@@ -4,7 +4,6 @@ from threading import Lock
 from pathlib import Path
 from .html import HTML
 
-
 class LightSensor(BaseThread):
     def __init__(self, name, owner):
         self._name = name
@@ -59,15 +58,6 @@ class LightSensor(BaseThread):
 
         # rint(response)
         return int(response)
-
-    # def snapshot(self, path):
-    # states = super().snapshot(path=path)
-    # _path = states["path"]
-    # states.update({
-    # "read": self.read,
-    # "value": self.read(),
-    # })
-    # return states
 
     @property
     def snapshot_children(self):

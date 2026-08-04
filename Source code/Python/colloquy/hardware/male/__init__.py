@@ -185,18 +185,3 @@ class Male(BaseThread):
             children[light_sensor.name] = light_sensor
         return children
 
-    # def snapshot(self, path):
-    # path = path + (self.name, )
-    # states = {
-    # "path": path,
-    # "name": self.name,
-    # "close": self.close,
-    # "open": self.open,
-    # "opened": self._is_opened,
-    # "dxl origin": self.dxl_origin.snapshot(path=path),
-    # self.dxl.name: self.dxl.snapshot(path=path),
-    # "search": self.search.snapshot(path=path),
-    # "drives": self.drives.snapshot(path=path),
-    # "neopixels": self.neopixels.snapshot(path=path),
-    # }
-    # return states

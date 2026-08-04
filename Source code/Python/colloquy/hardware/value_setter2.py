@@ -1,6 +1,5 @@
 from colloquy.base import Base
 
-
 class ValueSetter2(Base):
     def __init__(
         self,
@@ -131,22 +130,6 @@ class ValueSetter2(Base):
                 children[setter.name] = setter
 
         return children
-
-    # def snapshot(self, path):
-    # states = super().snapshot(path=path)
-    # _path = path + (self.name,)
-
-    # for setter in self._setters:
-    # if callable(setter):
-    # if self._sign == -1:
-    # states["-" + setter.name] = setter
-    # else:
-    # states[setter.name] = setter
-    # else:
-    # states[setter.name] = setter.snapshot(_path)
-
-    # return states
-
 
 class Set(Base):
     def __init__(self, owner, value):

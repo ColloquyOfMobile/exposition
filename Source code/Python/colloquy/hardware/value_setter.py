@@ -1,6 +1,5 @@
 from colloquy.base import Base
 
-
 class ValueSetter(Base):
     def __init__(self, owner, limit, digits=None, prefix=""):
         super().__init__(owner=owner)
@@ -59,19 +58,6 @@ class ValueSetter(Base):
             children[setter.name] = setter
 
         return children
-
-    # def snapshot(self, path):
-    # states = super().snapshot(path=path)
-    # _path = path + (self.name,)
-
-    # for setter in self._setters:
-    # if callable(setter):
-    # states[setter.name] = setter
-    # else:
-    # states[setter.name] = setter.snapshot(_path)
-
-    # return states
-
 
 class Set(Base):
     def __init__(self, owner, value):

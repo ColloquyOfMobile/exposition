@@ -7,7 +7,6 @@ from threading import Thread, Lock
 from time import sleep, time
 from .html import HTML
 
-
 class TestMalePatterns(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
@@ -50,16 +49,6 @@ class TestMalePatterns(BaseThread):
         if any(not blink_handler.is_started for blink_handler in self._blink_handlers):
             self.stop()
         return
-
-    # def snapshot(self, path):
-    # states = super().snapshot(path=path)
-    # _path = states["path"]
-    # for drives in self._drives:
-    # states[drives.name] = drives.snapshot(path=_path)
-
-    # for blink_handler in self._blink_handlers:
-    # states[blink_handler.name] = blink_handler.snapshot(path=_path)
-    # return states
 
     @property
     def snapshot_children(self):

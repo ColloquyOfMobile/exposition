@@ -12,7 +12,6 @@ from colloquy.base import Base
 from threading import Thread, Event, Lock
 from .thread_errors import ThreadErrors
 
-
 class BaseThread(Base):
     _shutdown = Event()
 
@@ -34,19 +33,6 @@ class BaseThread(Base):
         self["start"] = self.start_command
         self["stop"] = self.stop_command
         self[self.thread_errors.name] = self.thread_errors
-
-    # def __call__(self, request):
-    # request = Path(request)
-    # if not request.parts:
-    # raise NotImplementedError
-
-    # key, *leftover = request.parts
-
-    # if key in self:
-    # self[key](request="/".join(leftover))
-    # return
-
-    # raise NotImplementedError(f"{key=}, {leftover=}, in {self=}")
 
     @property
     def thread_errors(self):

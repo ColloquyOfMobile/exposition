@@ -209,11 +209,3 @@ class Hardware(BaseThread):
         children[self.bar.name] = self.bar
         return children
 
-    # def snapshot(self, path):
-    # states = super().snapshot(path=path)
-    # _path = states["path"]
-    # states["bodies"] = self.bodies.snapshot(path=_path)
-    # for body in self.bodies:
-    # states[body.name] = body.snapshot(path=_path)
-    # states[self.bar.name] = self.bar.snapshot(path=_path)
-    # return states

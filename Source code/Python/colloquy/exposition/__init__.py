@@ -5,7 +5,6 @@ from pathlib import Path
 from threading import Thread, Event, Lock
 from .html import HTML
 
-
 class Exposition(BaseThread):
     def __init__(self, owner):
         super().__init__(owner)
@@ -63,16 +62,6 @@ class Exposition(BaseThread):
         if self.thread_errors:
             self.hardware.shutdown()
         self.hardware.stop()
-
-    # def snapshot(self, path):
-    # path = path + (self.name,)
-    # states = {
-    # "path": path,
-    # "name": self.name,
-    # "open": self.open,
-    # "close": self.close,
-    # }
-    # return states
 
     @property
     def snapshot_children(self):

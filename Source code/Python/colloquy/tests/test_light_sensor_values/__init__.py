@@ -13,7 +13,6 @@ from .test_with_female_and_male_moving import TestWithFemaleAndMaleMoving
 from .test_with_female_male_and_bar_moving import TestWithFemaleMaleAndBarMoving
 from .test_with_everything_moving import TestWithEveryThingMoving
 
-
 class TestLightSensorValues(BaseThread):
     def __init__(self, owner, result_folder):
         super().__init__(owner)
@@ -120,30 +119,6 @@ class TestLightSensorValues(BaseThread):
             return
         self._running_test = test = self._queue.pop(0)
         test.start(started_by=self)
-
-    # def snapshot(self, path):
-    # states = super().snapshot(path=path)
-    # _path = states["path"]
-    # if self._start_time is not None:
-    # seconds_elapsed = time() - self._start_time
-    # states["running during"] = {
-    # "path": _path + ("running during", ),
-    # "name": "running during",
-    # "value": timelap_to_string(seconds_elapsed=seconds_elapsed),
-    # }
-    # states["progress"] = {
-    # "path": _path + ("progress", ),
-    # "name": "progress",
-    # "value": f"{round(100*seconds_elapsed/self._duration)}%",
-    # }
-    # states["total duration"] = {
-    # "path": _path + ("total duration", ),
-    # "name": "duration",
-    # "value": timelap_to_string(seconds_elapsed=self._duration),
-    # }
-    # for test in self._threaded_tests:
-    # states[test.name] = test.snapshot(path=_path)
-    # return states
 
     @property
     def snapshot_children(self):

@@ -8,7 +8,6 @@ from threading import Thread, Lock
 from time import sleep, time
 from .html import HTML
 
-
 class TestDriveLightValues(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
@@ -49,20 +48,6 @@ class TestDriveLightValues(BaseThread):
         if all(drive.value == 100 for drive in self.hardware.drives):
             self.stop()
         return
-
-    # def snapshot(self, path):
-    # states = super().snapshot(path=path)
-    # _path = states["path"]
-    # if self._timelap is not None:
-    # states["timelap"] = {
-    # "path": _path + ("timelap", ),
-    # "name": "timelap",
-    # "value": timelap_to_string(seconds_elapsed=self._timelap),
-    # }
-    # for drive in self.hardware.drives:
-    # name = f"{drive.body.name}'s {drive.name} drive"
-    # states[drive.name] = drive.snapshot(path=_path)
-    # return states
 
     @property
     def snapshot_children(self):
