@@ -19,3 +19,15 @@ select = [
 min_confidence = 80
 paths = ["Source code/Python/colloquy"]
 exclude = ["*/#*"]
+
+[tool.pytest.ini_options]
+# pythonpath makes "import colloquy" work without an installed package or
+# a conftest.py sys.path hack, mirroring what main.py does manually.
+pythonpath = ["Source code/Python"]
+testpaths = ["Source code/Python/pytest_tests"]
+
+[tool.coverage.run]
+# "#"-prefixed paths are archived/inert (see [tool.ruff] above) and
+# can't be imported, so they'd never show up in coverage anyway - this
+# just keeps report noise down.
+omit = ["**/#*/**", "**/__pycache__/**"]
