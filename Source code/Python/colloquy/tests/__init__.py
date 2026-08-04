@@ -14,6 +14,8 @@ from .test_light_sensor_values import TestLightSensorValues
 from .test_read_pattern import TestReadPattern
 from .test_movements import TestMovements
 from .test_graph_zoom import TestGraphZoom
+from .test_neopixels import TestNeopixels
+from .test_sensors import TestSensors
 
 
 class Tests(Base):
@@ -39,6 +41,8 @@ class Tests(Base):
         )
         self.test_movements = TestMovements(owner=self, result_folder=result_folder)
         self.test_graph_zoom = TestGraphZoom(owner=self)
+        self.test_neopixels = TestNeopixels(owner=self, result_folder=result_folder)
+        self.test_sensors = TestSensors(owner=self, result_folder=result_folder)
 
         self[self.html.name] = self.html.handle_request
         # self.add(self.test1)
@@ -49,6 +53,8 @@ class Tests(Base):
             self.test_light_sensor_values,
             self.test_read_pattern,
             self.test_movements,
+            self.test_neopixels,
+            self.test_sensors,
         }
 
     # def __call__(self, request):
