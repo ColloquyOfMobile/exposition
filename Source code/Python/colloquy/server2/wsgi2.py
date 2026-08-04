@@ -14,6 +14,82 @@ from wsgiref.simple_server import make_server, WSGIRequestHandler
 
 WSGIRequestHandler.log_message = lambda *args, **kwargs: None
 
+# Zero-dependency pan/zoom for embedded matplotlib SVGs (no CDN - this app
+# is meant to run at the exhibition, possibly offline). Manipulates each
+# svg's own viewBox rather than the page zoom, so the raw-measurement plot
+# can be inspected independently of everything else on the page.
+SVG_ZOOM_SCRIPT = """
+(function () {
+  function initSvgZoom(container) {
+    var svg = container.querySelector("svg");
+    if (!svg) return;
+
+    var viewBox = svg.getAttribute("viewBox");
+    if (!viewBox) {
+      var w = parseFloat(svg.getAttribute("width")) || svg.clientWidth;
+      var h = parseFloat(svg.getAttribute("height")) || svg.clientHeight;
+      viewBox = "0 0 " + w + " " + h;
+      svg.setAttribute("viewBox", viewBox);
+    }
+    var original = viewBox.split(/\\s+/).map(Number);
+    var x = original[0], y = original[1], w = original[2], h = original[3];
+
+    function apply() {
+      svg.setAttribute("viewBox", x + " " + y + " " + w + " " + h);
+    }
+
+    function svgPointAt(evt) {
+      var rect = svg.getBoundingClientRect();
+      var px = (evt.clientX - rect.left) / rect.width;
+      var py = (evt.clientY - rect.top) / rect.height;
+      return { sx: x + px * w, sy: y + py * h };
+    }
+
+    container.addEventListener("wheel", function (evt) {
+      evt.preventDefault();
+      var p = svgPointAt(evt);
+      var factor = evt.deltaY > 0 ? 1.15 : 1 / 1.15;
+      var xOnly = evt.shiftKey;
+      var newW = w * factor;
+      var newH = xOnly ? h : h * factor;
+      x = p.sx - (p.sx - x) * (newW / w);
+      y = xOnly ? y : p.sy - (p.sy - y) * (newH / h);
+      w = newW;
+      h = newH;
+      apply();
+    }, { passive: false });
+
+    var dragging = false, lastX = 0, lastY = 0;
+    container.addEventListener("mousedown", function (evt) {
+      dragging = true;
+      lastX = evt.clientX;
+      lastY = evt.clientY;
+      container.style.cursor = "grabbing";
+    });
+    window.addEventListener("mousemove", function (evt) {
+      if (!dragging) return;
+      var rect = svg.getBoundingClientRect();
+      x -= (evt.clientX - lastX) * (w / rect.width);
+      y -= (evt.clientY - lastY) * (h / rect.height);
+      lastX = evt.clientX;
+      lastY = evt.clientY;
+      apply();
+    });
+    window.addEventListener("mouseup", function () {
+      dragging = false;
+      container.style.cursor = "grab";
+    });
+
+    container.addEventListener("dblclick", function () {
+      x = original[0]; y = original[1]; w = original[2]; h = original[3];
+      apply();
+    });
+  }
+
+  document.querySelectorAll("[data-svg-zoom]").forEach(initSvgZoom);
+})();
+"""
+
 
 class WSGI2(Base):
     def __init__(self, server, environ, start_response, db_path=None):
@@ -71,7 +147,7 @@ class WSGI2(Base):
         if key == self._root.name:
             return self._parse_app(*leftovers)
 
-        content_type = "text/text"
+        content_type = "text/text; charset=utf-8"
         status = "404 Not found"
         headers = [("Content-Type", content_type)]
         return status, headers, b""
@@ -89,7 +165,7 @@ class WSGI2(Base):
         self._base_path = Path(*to_render["path"])
 
         # pprint4(obj=to_render)
-        content_type = "text/html"
+        content_type = "text/html; charset=utf-8"
         status = "200 OK"
         headers = [("Content-Type", content_type)]
 
@@ -145,6 +221,9 @@ class WSGI2(Base):
                         obj=to_render,
                     )
                 )
+
+                with tag("script"):
+                    doc.asis(SVG_ZOOM_SCRIPT)
 
         html = doc.getvalue()
         html = indent(html)
@@ -300,7 +379,24 @@ class WSGI2(Base):
                     continue
 
                 if "svg" in value:
-                    doc.asis(value["svg"])
+                    style = {
+                        "overflow": "hidden",
+                        "border": "1px solid #8888",
+                        "cursor": "grab",
+                        "touch-action": "none",
+                    }
+                    with tag("div", name=key):
+                        with tag(
+                            "div",
+                            style="font-size: 0.75rem; opacity: 0.7;",
+                        ):
+                            text(
+                                "scroll to zoom - shift+scroll to zoom x-axis only - drag to pan - double-click to reset"
+                            )
+                        with tag(
+                            "div", **{"data-svg-zoom": ""}, style=export_style(style)
+                        ):
+                            doc.asis(value["svg"])
                     continue
 
                 # print(f"{value=}")
@@ -385,7 +481,7 @@ class WSGI2(Base):
         """
         self.colloquy.emergency_stop()
 
-        content_type = "text/html"
+        content_type = "text/html; charset=utf-8"
         status = "200 OK"
         headers = [("Content-Type", content_type)]
 
@@ -416,7 +512,7 @@ class WSGI2(Base):
 
         self.shutdown_event.set()
 
-        content_type = "text/plain"
+        content_type = "text/plain; charset=utf-8"
         status = "200 OK"
         headers = [("Content-Type", content_type)]
         lines = [
@@ -433,7 +529,7 @@ class WSGI2(Base):
         self.shutdown_event.set()
         self.restart_event.set()
 
-        content_type = "text/html"
+        content_type = "text/html; charset=utf-8"
         status = "200 OK"
         headers = [("Content-Type", content_type)]
 
