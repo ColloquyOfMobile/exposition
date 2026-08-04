@@ -16,7 +16,7 @@ class TurnBackAndForth(BaseThread):
 
     @property
     def name(self):
-        return "turn back and forth"
+        return f"turn back and forth {self.owner.name}"
 
     def loop(self):
         if not self.owner.is_moving:
