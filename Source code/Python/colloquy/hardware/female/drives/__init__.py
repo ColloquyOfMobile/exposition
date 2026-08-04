@@ -392,13 +392,6 @@ class Drives(BaseThread):
     def compensate_brightness_for_human_eye(self, value):
         return self._map_to_compensate_brightness_to_human_eye[value]
 
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        _path = states["path"]
-        states[self.o_drive.name] = self.o_drive.snapshot(_path)
-        states[self.p_drive.name] = self.p_drive.snapshot(_path)
-        return states
-
     @property
     def snapshot_children(self):
         children = {}

@@ -201,33 +201,11 @@ class Neopixel(Base):
     def set_test_default(self):
         raise NotImplementedError(self)
 
-    def snapshot(self, path):
-        path = path + (self.name,)
-        states = {
-            "path": path,
-            "name": self.name,
-            "close": self.close,
-            "open": self.open,
-            "opened": self._is_opened,
-            "on": self.on,
-            "off": self.off,
-            "toggle": self.toggle,
-            "brightness": self.brightness.snapshot(path=path),
-            "white": self.white.snapshot(path=path),
-            "red": self.red.snapshot(path=path),
-            "green": self.green.snapshot(path=path),
-            "blue": self.blue.snapshot(path=path),
-        }
-        return states
-
     @property
     def snapshot_children(self):
         children = {}
         children.update(
             {
-                "on": self.on,
-                "off": self.off,
-                "toggle": self.toggle,
                 "brightness": self.brightness,
                 "white": self.white,
                 "red": self.red,
@@ -236,3 +214,17 @@ class Neopixel(Base):
             }
         )
         return children
+
+    def _snapshot_if_opened(self, path):
+        # "on"/"off"/"toggle" used to live in snapshot_children, but that
+        # dict is walked with .snapshot_as_child() (see Base._snapshot_if_
+        # opened) whenever this node is itself opened - fine for the real
+        # Base children above, but a bare bound method has no such method
+        # and crashes the instant any neopixel segment is opened directly
+        # (reachable app-wide, e.g. hardware/female1/neopixels/head).
+        # Inject them the same way BaseThread injects "start"/"stop".
+        states = super()._snapshot_if_opened(path)
+        states["on"] = self.on
+        states["off"] = self.off
+        states["toggle"] = self.toggle
+        return states
