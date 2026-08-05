@@ -1,14 +1,6 @@
 # -*- coding: utf-8 -*-
 # Source code/Python/colloquy/hardware/dxl/__init__.py
-from pathlib import Path
-from dynamixel_sdk import (
-    PortHandler,
-    PacketHandler,
-    COMM_SUCCESS,
-)  # Uses Dynamixel SDK library
-
 from colloquy.base import Base
-from time import time, sleep
 from colloquy.input import Input
 from colloquy.hardware.value_setter import ValueSetter
 
@@ -18,7 +10,7 @@ class DXLOrigin(Base):
         super().__init__(owner=owner)
 
         self["get"] = self.get
-        self._setter = ValueSetter(owner=self, limit=101)
+        self._setter = ValueSetter(owner=self, limit=101, get_func=self.get)
 
         # if not self.is_readonly():
         self._input = Input(owner=self)

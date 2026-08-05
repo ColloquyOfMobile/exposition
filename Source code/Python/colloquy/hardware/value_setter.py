@@ -1,13 +1,14 @@
 from colloquy.base import Base
 
 class ValueSetter(Base):
-    def __init__(self, owner, limit, digits=None, prefix=""):
+    def __init__(self, owner, limit, get_func, digits=None, prefix=""):
         super().__init__(owner=owner)
 
         if digits is None:
             digits = len(str(limit - 1))
 
         self._limit = limit
+        self._get_func = get_func
         self._digits = digits
         self._prefix = prefix
         # Built lazily on first snapshot_children access - see the
@@ -39,10 +40,15 @@ class ValueSetter(Base):
                     ValueSetter(
                         owner=self,
                         limit=self._limit,
+                        get_func=self._get_func,
                         digits=self._digits - 1,
                         prefix=new_prefix,
                     )
                 )
+                # One-click shortcut to the round value this digit choice
+                # implies - see the identical addition/comment on
+                # value_setter2.ValueSetter2._build_setters.
+                setters.append(Set(owner=self, value=value))
 
         return setters
 
@@ -54,7 +60,9 @@ class ValueSetter(Base):
 
     @property
     def name(self):
-        return self._prefix + "*" * self._digits
+        low = int(self._prefix + "0" * self._digits)
+        high = min(int(self._prefix + "9" * self._digits), self._limit - 1)
+        return f"{low} to {high}"
 
     @property
     def set(self):
@@ -79,6 +87,12 @@ class ValueSetter(Base):
                 states[k] = v
             else:
                 states[k] = v.snapshot_as_child(path=path + (k,))
+
+        states["current value"] = {
+            "path": path + ("current value",),
+            "name": "current value",
+            "value": self._get_func(),
+        }
         return states
 
 class Set(Base):

@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 # Source code/Python/colloquy/hardware/dxl/__init__.py
-from pathlib import Path
-
 from colloquy.base import Base
-from time import time, sleep
 from colloquy.input import Input
 
 from colloquy.hardware.value_setter2 import ValueSetter2
@@ -27,7 +24,11 @@ class RegisterHanlder(Base):
 
         if write_func is not None:
             self._setter = ValueSetter2(
-                owner=self, min_value=-5000, max_value=5000, set_func=self.write
+                owner=self,
+                min_value=-5000,
+                max_value=5000,
+                set_func=self.write,
+                get_func=self.read,
             )
 
         self["read"] = self.read

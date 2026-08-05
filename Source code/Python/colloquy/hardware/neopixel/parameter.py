@@ -10,7 +10,7 @@ class Parameter(Base):
 
         self._neopixel = owner
 
-        self._setter = ValueSetter(owner=self, limit=256)
+        self._setter = ValueSetter(owner=self, limit=256, get_func=lambda: self.value)
 
         # self._increment1 = Increment(owner=self, multiplier=1)
         # self._increment10 = Increment(owner=self, multiplier=10)
