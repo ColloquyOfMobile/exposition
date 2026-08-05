@@ -5,8 +5,6 @@ from colloquy.base_thread import BaseThread
 from .female import Female
 from .male import Male
 from .bar import Bar
-from pathlib import Path
-from .neopixels import Neopixels
 from .commands import Commands
 from .test import Test
 from .bodies import Bodies
