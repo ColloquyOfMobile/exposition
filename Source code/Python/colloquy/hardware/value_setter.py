@@ -10,31 +10,41 @@ class ValueSetter(Base):
         self._limit = limit
         self._digits = digits
         self._prefix = prefix
-        self._setters = []
+        # Built lazily on first snapshot_children access - see the
+        # identical fix/comment on value_setter2.ValueSetter2.
+        self._setters = None
 
-        if digits == 0:
-            value = int(prefix)
-            self._setters.append(self._make_setter(value))
-            return
+    def _build_setters(self):
+        setters = []
+
+        if self._digits == 0:
+            value = int(self._prefix)
+            setters.append(self._make_setter(value))
+            return setters
 
         for i in range(10):
-            new_prefix = prefix + str(i)
+            new_prefix = self._prefix + str(i)
 
             # valeur minimale possible avec ce prefix
-            value = int(new_prefix + "0" * (digits - 1))
-            if value >= limit:
+            value = int(new_prefix + "0" * (self._digits - 1))
+            if value >= self._limit:
                 break
 
-            if digits == 1:
+            if self._digits == 1:
                 value = int(new_prefix)
-                if value < limit:
-                    self._setters.append(Set(owner=self, value=value))
+                if value < self._limit:
+                    setters.append(Set(owner=self, value=value))
             else:
-                self._setters.append(
+                setters.append(
                     ValueSetter(
-                        owner=self, limit=limit, digits=digits - 1, prefix=new_prefix
+                        owner=self,
+                        limit=self._limit,
+                        digits=self._digits - 1,
+                        prefix=new_prefix,
                     )
                 )
+
+        return setters
 
     def _make_setter(self, value):
         def wrap():
@@ -52,12 +62,24 @@ class ValueSetter(Base):
 
     @property
     def snapshot_children(self):
-        children = {}
+        if self._setters is None:
+            self._setters = self._build_setters()
 
+        children = {}
         for setter in self._setters:
             children[setter.name] = setter
 
         return children
+
+    def _snapshot_if_opened(self, path):
+        # See the identical fix/comment on value_setter2.ValueSetter2.
+        states = {}
+        for k, v in self.snapshot_children.items():
+            if callable(v):
+                states[k] = v
+            else:
+                states[k] = v.snapshot_as_child(path=path + (k,))
+        return states
 
 class Set(Base):
     def __init__(self, owner, value):
@@ -74,3 +96,8 @@ class Set(Base):
     @property
     def name(self):
         return str(self._value) + " set"
+
+    @property
+    def snapshot_children(self):
+        # See the identical fix/comment on value_setter2.Set.
+        return {}
