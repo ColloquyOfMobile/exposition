@@ -6,8 +6,15 @@ from colloquy.hardware.value_setter2 import ValueSetter2
 # to pick a leaf class. bool must be checked before int since bool is an
 # int subclass in Python.
 
-_INT_SETTER_MIN = -20000
-_INT_SETTER_MAX = 20000
+# Wide enough to cover every current int param (bar interaction origins
+# up to ~10400) plus real-world values that don't fit a narrower guess -
+# e.g. arduino.baudrate is 57600, which didn't even fit in an earlier,
+# narrower version of this range. Safe to be generous: ValueSetter2
+# builds its digit tree lazily (one level at a time, on actual
+# navigation), so the range size no longer affects Colloquy() startup
+# time the way it did before that fix.
+_INT_SETTER_MIN = -1_000_000
+_INT_SETTER_MAX = 1_000_000
 
 # Base._snapshot_base_states always sets these on every node (path/name/
 # close/open/opened) and _snapshot_if_opened's default walk merges child
@@ -77,10 +84,14 @@ class ParamsIntLeaf(Base):
             min_value=_INT_SETTER_MIN,
             max_value=_INT_SETTER_MAX,
             set_func=self._set,
+            get_func=self._get,
         )
 
     def _set(self, value):
         self._params_dict[self._key] = value
+
+    def _get(self):
+        return self._params_dict[self._key]
 
     @property
     def name(self):
