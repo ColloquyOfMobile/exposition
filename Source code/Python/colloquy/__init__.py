@@ -12,6 +12,7 @@ from .tests import Tests
 from .hardware import Hardware
 from .exposition import Exposition
 from .params import Params
+from .params_browser import ParamsNode
 from .virtual_hardware import VirtualHardware
 
 
@@ -20,6 +21,7 @@ class Colloquy(BaseThread):
         super().__init__(owner=None)
 
         self._params = Params.load(Path("local/params.json"))
+        self._params_view = ParamsNode(owner=self, key="params", params_dict=self._params)
 
         self._is_opened = False
         self._request = None
@@ -31,6 +33,7 @@ class Colloquy(BaseThread):
         self._exposition = Exposition(owner=self)
 
         self["hardware"] = self._hardware
+        self["params"] = self._params_view
 
         self._events = Events(shutdown=BaseThread._shutdown)
 
@@ -117,6 +120,7 @@ class Colloquy(BaseThread):
             "hardware": self._hardware,
             "exposition": self._exposition,
             "tests": self._tests,
+            "params": self._params_view,
         }
 
     def get_focus(self, *args, obj, path=None):
