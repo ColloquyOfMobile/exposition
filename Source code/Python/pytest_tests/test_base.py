@@ -99,24 +99,63 @@ def test_snapshot_children_not_implemented_by_default():
         assert False, "expected NotImplementedError"
 
 
-def test_snapshot_off_focus_path_still_recurses_through_non_callable_children():
-    # Base.snapshot's non-focus branch (`for k, v in self.snapshot_children:
-    # if not callable(v): states[k] = v.snapshot(...)`) recurses
-    # unconditionally through every non-callable child regardless of
-    # whether focus_path matches - it doesn't stop at a mismatched
-    # focus_path, it just keeps walking snapshot_children all the way
-    # down. What focus_path actually gates is _snapshot_if_opened's EXTRA
-    # per-node content (see the next test) - not whether children show up
-    # at all.
+def test_snapshot_recurses_only_along_the_path_to_focus_not_every_child():
+    # Base.snapshot's non-focus branch only keeps recursing (via
+    # .snapshot(child_path, focus_path)) into a child whose path is a
+    # prefix of focus_path - i.e. a child actually on the way there.
+    # Every other child renders collapsed (snapshot_as_child(), bounded
+    # by _is_opened), exactly like an unopened sibling would.
+    #
+    # This used to recurse unconditionally into EVERY non-callable child
+    # regardless of focus_path, all the way to every leaf - harmless for
+    # small trees, but a real, confirmed production bug: a single wide
+    # ValueSetter2 range (or any large enough subtree) turned loading ANY
+    # unrelated page into an unbounded, multi-million-node walk, since
+    # every sibling subtree got fully unfolded on every single request
+    # regardless of what was actually being viewed.
     grandchild = Leaf(owner=None, name="grandchild")
-    child = Branch(owner=None, name="child", children={"grandchild": grandchild})
-    root = Branch(owner=None, name="root", children={"child": child})
+    on_path_child = Branch(owner=None, name="on_path_child", children={"grandchild": grandchild})
+    off_path_grandchild = Leaf(owner=None, name="off_path_grandchild")
+    off_path_child = Branch(
+        owner=None, name="off_path_child", children={"grandchild": off_path_grandchild}
+    )
+    root = Branch(
+        owner=None,
+        name="root",
+        children={"on_path_child": on_path_child, "off_path_child": off_path_child},
+    )
 
-    states = root.snapshot(path=("root",), focus_path=("elsewhere",))
+    states = root.snapshot(path=("root",), focus_path=("root", "on_path_child", "grandchild"))
 
-    assert states["name"] == "root"
-    assert states["child"]["name"] == "child"
-    assert states["child"]["grandchild"]["name"] == "grandchild"
+    # On the way to the focus: kept expanding.
+    assert states["on_path_child"]["name"] == "on_path_child"
+    assert states["on_path_child"]["grandchild"]["name"] == "grandchild"
+
+    # Not on the way to the focus: collapsed to base states only (not
+    # opened by default), not recursed into at all.
+    assert states["off_path_child"]["name"] == "off_path_child"
+    assert "grandchild" not in states["off_path_child"]
+
+
+def test_snapshot_off_path_child_still_expands_if_already_opened():
+    # An off-path sibling isn't recursed via .snapshot() anymore, but
+    # snapshot_as_child() still honors its own _is_opened flag - a
+    # previously-opened branch stays visibly expanded even while
+    # something else is focused, it just doesn't get freshly force-
+    # expanded by the walk itself.
+    grandchild = Leaf(owner=None, name="grandchild")
+    off_path_child = Branch(owner=None, name="off_path_child", children={"grandchild": grandchild})
+    off_path_child.open()
+    other_child = Leaf(owner=None, name="other_child")
+    root = Branch(
+        owner=None,
+        name="root",
+        children={"off_path_child": off_path_child, "other_child": other_child},
+    )
+
+    states = root.snapshot(path=("root",), focus_path=("root", "other_child"))
+
+    assert states["off_path_child"]["grandchild"]["name"] == "grandchild"
 
 
 def test_snapshot_if_opened_extra_content_only_fires_exactly_at_focus_path():

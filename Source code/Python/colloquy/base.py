@@ -154,7 +154,22 @@ class Base:
 
             for k, v in self.snapshot_children.items():
                 if not callable(v):
-                    states[k] = v.snapshot(path=path + (k,), focus_path=focus_path)
+                    child_path = path + (k,)
+                    if focus_path[: len(child_path)] == child_path:
+                        # child_path is a prefix of (or equal to) focus_path -
+                        # still on the way there, keep walking.
+                        states[k] = v.snapshot(path=child_path, focus_path=focus_path)
+                    else:
+                        # Not on the way to the focus - render collapsed
+                        # (bounded by _is_opened), exactly like any other
+                        # unopened sibling would be. Without this, every
+                        # render unconditionally recursed through EVERY
+                        # sibling subtree IN FULL regardless of relevance -
+                        # harmless for small trees, but turns a single wide
+                        # value-setter range (or any large enough subtree)
+                        # into an unbounded, multi-million-node walk on
+                        # every single page request.
+                        states[k] = v.snapshot_as_child(path=child_path)
                     continue
                 states[k] = v
 
