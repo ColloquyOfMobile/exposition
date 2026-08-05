@@ -7,7 +7,6 @@ class VirtualHardware(BaseThread):
     def __init__(self, owner):
         super().__init__(owner)
         self._arduino_serial_port = None
-        self._u2d2_port_handler = None
         self._u2d2_packet_handler = None
 
     @property
@@ -17,10 +16,6 @@ class VirtualHardware(BaseThread):
     @property
     def colloquy(self):
         return self.owner.colloquy
-
-    @property
-    def html(self):
-        return self._html
 
     @property
     def name(self):

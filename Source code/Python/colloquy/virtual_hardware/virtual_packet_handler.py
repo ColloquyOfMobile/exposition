@@ -17,7 +17,6 @@ class VirtualPacketHandler(Base):
         super().__init__(owner=owner)
         self._path = Path("dxl_network")
         self._name = "virtual dxl packet handler"
-        self._elements = set()
         self._register_map = {
             64: "torque enabled",
             10: "drive mode",
@@ -28,7 +27,6 @@ class VirtualPacketHandler(Base):
             116: "goal position",
             146: "temperature",
         }
-        self._register_reader = {}
         self._dxls = [VirtualDXL(owner=self, dxl_id=i) for i in range(10)]
 
     @property
@@ -40,26 +38,8 @@ class VirtualPacketHandler(Base):
         return self._name
 
     @property
-    def log(self):
-        return self._log
-
-    @property
-    def elements(self):
-        return self._elements
-
-    @property
     def path(self):
         return self._path
-
-    def _write_register(self, dxl_id, value):
-        pass
-
-    def _read_register(self, dxl_id, label):
-        return self.dxls[dxl_id][label]
-
-    def _write_goal_position(self, dxl_id, value):
-        self.log(f"Write goal position {value=} to dxl{dxl_id=}")
-        self.dxls[dxl_id].goal_position = value
 
     def write1ByteTxRx(self, port_handler, dxl_id, register_address, value):
         label = self._register_map[register_address]

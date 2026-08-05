@@ -17,15 +17,10 @@ class VirtualDXL(Base):
             "profile acceleration": 0,
             "torque enabled": 0,
         }
-        # self._owner = owner
         self._dxl_id = dxl_id
         self._thread = None
         self._lock = Lock()
-        self._goal_position = 0
-        self._position = 0
         self._step = 10
-        self._lim_min = None
-        self._lim_max = None
 
     @property
     def name(self):
@@ -70,16 +65,3 @@ class VirtualDXL(Base):
             else:
                 self._dict["position"] -= self._step
             sleep(0.025)
-
-    def _loop(self):
-        lim_min, lim_max = self._lim_min, self._lim_max
-
-        if self._lim_min < self._position < self._lim_max:
-            self.stop_event.set()
-            return
-
-        if self._position < self.goal_position:
-            self._position += self._step
-            return
-
-        self._position -= self._step
