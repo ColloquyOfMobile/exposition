@@ -24,6 +24,15 @@ Rules for every test in this suite:
       )
       Female.turn_to_max_position(fake)
       assert fake._position_memory == "max"
+
+Gotcha: if you construct a REAL Base/BaseThread subclass with a
+stub_factory()-built owner (rather than using the unbound-method
+pattern above), Base.__init__ asserts `owner is not self.owners`,
+which computes `[self.owner] + self.owner.owners` - so the owner you
+pass needs an `.owners` attribute too, or construction raises
+AttributeError. stub_factory() defaults `owners=[]` for exactly this
+reason; only override it if a test specifically needs a non-empty
+ancestor chain.
 """
 import contextlib
 from types import SimpleNamespace
@@ -82,7 +91,10 @@ def fake_arduino():
 
 def make_stub(**attrs):
     """Build a throwaway SimpleNamespace exposing exactly the given
-    attributes - for duck-typed doubles passed to unbound methods."""
+    attributes - for duck-typed doubles passed to unbound methods, or as
+    the `owner` for a real Base/BaseThread subclass under test (see the
+    "Gotcha" note above re: the default `owners=[]`)."""
+    attrs.setdefault("owners", [])
     return SimpleNamespace(**attrs)
 
 
