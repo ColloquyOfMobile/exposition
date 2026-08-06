@@ -1,0 +1,8 @@
+# Drives (male) - container thread for a male's O and P Drive
+# hardware/male/drives/__init__.py - started by Male.setup(). Does no per-tick work of its own; its update() (brightness mapping) is called by its own Drive children whenever their value changes, not from this thread's own loop.
+
+0 setup(): turns on o_drive_level, p_drive_level, and up_ring neopixels, then starts both Drive sub-threads (O and P, started_by=self) - see thread-drive.timeline
+0 loop(): pass - this thread does nothing on its own tick; everything below is driven bottom-up by the two Drive threads calling self.owner.update() from inside their own increment()/commit()/decrease()
+2.4 every time either Drive increments (every 2.4s), update() re-maps: up_ring.brightness = max(o,p); o_drive_level.brightness = o value; p_drive_level.brightness = p value - the male's drive-indicator LEDs visibly track both drives climbing, in near-real-time, without this thread's own loop doing anything
+0 which_is_frustated() is also exposed from here (not called from this thread's loop, but read by Male.get_blink_pattern() and by ReadPattern's matcher) - it derives directly from the two live Drive values, no caching
+0 setdown(): turns off o_drive_level, p_drive_level, and up_ring; stops both Drive sub-threads

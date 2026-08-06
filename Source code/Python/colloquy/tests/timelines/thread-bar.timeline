@@ -1,0 +1,8 @@
+# Bar (one thread, the shared motorized rail)
+# hardware/bar/__init__.py - owns Search, turn_back_and_forth, turn_back_and_forth_around_f1. No drives, no neopixels of its own (bar.drives/bar.arduino are unassigned attributes that raise AttributeError if ever accessed, SCENARIOS.md 4.4). Started by Hardware.setup(), alongside every Male and Female.
+
+0 setup(): dxl.init_hardware() only
+0 loop(): if search is already started, do nothing this tick
+0 loop(): else, for each male in order (male1 then male2), if that male's own search.is_started, start the bar's search (started_by=self) and return - see thread-search-bar.timeline. Whichever male is searching first triggers this; it doesn't matter if the other male starts searching later, the bar's search doesn't restart or retarget
+0 repeats every ~10ms tick, doing nothing once its own search has started
+0 setdown(): no-op - the bar's own search, if running, is still stopped via the children-stop mechanism (it was started with started_by=self), same pattern noted in thread-female.timeline

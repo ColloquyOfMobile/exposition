@@ -1,0 +1,10 @@
+# Drive (one thread per O or P drive, per body)
+# hardware/drive/__init__.py - the most local/leaf thread in the tree: a single counter with no awareness of anything else. Each body's Drives thread starts two of these (its own O and P) - see thread-drives-male.timeline / thread-drives-female.timeline.
+
+0 Drive constructed: initial value read from params["drive start values"][body][o/p] (hardware/drive/__init__.py:32) - if that key is missing from local/params.json, this raises KeyError before any thread starts
+0 .start() called by the owning Drives thread's setup() (started_by=drives)
+2.4 loop() calls increment() (value += 1, clamped at 100) then sleeps 2.4s - this repeats indefinitely, once per tick of this thread's own loop, for as long as it's running
+0 increment() (and commit()/decrease(), when called externally) calls self.owner.update() every time - this is what actually drives the owning Drives thread's brightness/color mapping (see thread-drives-*.timeline); Drive itself has no opinion about what its value means
+0 value crosses 12.5 downward or 75 upward: is_satisfied/is_frustated flip - Drive doesn't act on this itself, it only exposes the two booleans for Male/Female/Drives to read
+0 decrease() (-20, floor 0) is never called by anything in this codebase's own loop code today - only reachable via a manual/UI trigger; there is no modeled "an interaction satisfies this drive" scenario yet (SCENARIOS.md 3.3)
+0 .stop() called by the owning Drives thread's setdown()

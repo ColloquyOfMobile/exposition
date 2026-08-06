@@ -1,0 +1,7 @@
+# Hardware (one thread, the top of the physical-hardware subtree)
+# hardware/__init__.py - owns Arduino, U2D2, every Male/Female/Bar, AllNeopixels, Bodies. Not started by main.py directly - only started via Exposition.setup() (see thread-exposition.timeline), or by manually clicking "start" on /app/hardware in the web UI. Until one of those happens, none of the autonomous behavior in any other thread-*.timeline file runs at all.
+
+0 setup(): starts every Male and every Female (iterating Bodies, started_by=self) - see thread-male.timeline / thread-female.timeline. Then starts the Bar (started_by=self) - see thread-bar.timeline
+0 loop(): pass - Hardware itself does no per-tick work; everything below it runs independently once started
+0 repeats every ~10ms tick, doing nothing - all real activity happens in the male/female/bar threads and everything they in turn start
+0 setdown(): stops every Male and Female (iterating Bodies); doesn't explicitly stop the Bar - the Bar is still stopped via the children-stop mechanism (it was started with started_by=self), same pattern noted in thread-female.timeline and thread-bar.timeline

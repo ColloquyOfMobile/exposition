@@ -1,0 +1,9 @@
+# TurnBackAndForth (shared class - used standalone by male, female, and bar bodies)
+# hardware/turn_back_and_forth/__init__.py - the simplest motion thread in the tree: no drive/search coupling at all, just a min/max sway. Never started automatically by Male.loop()/Female.loop() (they start Search instead) - only reachable today via test_movements or the test_light_sensor_values stages (SCENARIOS.md 2.2).
+
+0 setup()/setdown(): no-op
+0 loop(): if the owning body isn't currently moving, call its own toggle_position() - first call goes to max position
+0 ~ body reaches max position (travel time depends on the body's own motion_range and servo speed - not a modeled constant)
+0 next idle tick after arriving: toggle_position() sends it back toward min
+0 ~ body reaches min position
+0 alternates indefinitely for as long as this thread runs, with no awareness of drives, search, or any other thread

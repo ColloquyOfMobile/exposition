@@ -1,0 +1,8 @@
+# Male (one thread per male body)
+# hardware/male/__init__.py - owns Drives, Search (which owns Blink), turn_back_and_forth, neopixels, 4 light sensors. Started by Hardware.setup() (see thread-hardware.timeline) - never started on its own by anything else.
+
+0 setup(): dxl.init_hardware(), then starts Drives (started_by=self) - see thread-drives-male.timeline. Both O and P drives begin counting from their configured start values
+0 loop(): if search is already started, do nothing this tick
+0 loop(): else if not is_satisfied() (neither drive is freshly satisfied), start search (started_by=self) - see thread-search-male.timeline. This can happen on the very first tick if the male's configured start values are already above the satisfaction limit
+0 repeats every ~10ms tick, doing nothing once search has started (see thread-search-male.timeline for what search itself does)
+0 setdown(): stops Drives, stops Search - this is the only thing that ever stops a running Search (SCENARIOS.md 1.2)

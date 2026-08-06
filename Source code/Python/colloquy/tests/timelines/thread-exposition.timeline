@@ -1,0 +1,8 @@
+# Exposition (one thread, the actual "start the installation" switch)
+# exposition/__init__.py - a thin wrapper whose only job is to start and health-check Hardware. This is the thread a human actually needs to start (via /app/exposition in the web UI, or /app/hardware directly) for anything in the other thread-*.timeline files to happen - nothing in main.py's colloquy1() starts it or Hardware automatically.
+
+0 a human opens /app/exposition in the web UI and clicks "start" - every BaseThread exposes this link automatically once opened and not already running (base_thread's default _snapshot_if_opened)
+0 setup(): starts hardware (started_by=self) - see thread-hardware.timeline. Everything cascades from here: every Male/Female starts its own Drives, which start counting; any male/female already unsatisfied at these start values begins searching immediately
+0 loop(): if hardware is no longer started (e.g. it errored and its own thread halted), stop this thread too - a simple health-check mirroring hardware's own state
+0 repeats every ~10ms tick, doing nothing while hardware keeps running normally
+0 setdown(): if this thread itself accumulated errors, calls hardware.shutdown() (sets the shared BaseThread._shutdown event, which every thread's break condition checks) - otherwise just calls hardware.stop()

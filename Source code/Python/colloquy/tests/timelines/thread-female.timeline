@@ -1,0 +1,8 @@
+# Female (one thread per female body)
+# hardware/female/__init__.py - owns Drives, Search (which owns ReadPattern), turn_back_and_forth, neopixels, one light sensor. Started by Hardware.setup() - never started on its own by anything else. Nearly identical shape to Male, minus blinking.
+
+0 setup(): dxl.init_hardware(), then starts Drives (started_by=self) - see thread-drives-female.timeline
+0 loop(): if search is already started, do nothing this tick
+0 loop(): else if not is_satisfied(), start search (started_by=self) - see thread-search-female.timeline
+0 repeats every ~10ms tick, doing nothing once search has started
+0 setdown() only stops Drives explicitly (hardware/female/__init__.py) - unlike Male.setdown(), it doesn't also call search.stop() directly. Not a gap in practice: Female.stop() (called right after setdown()) stops every thread in self.children, which already includes search (added there when Female.loop() called search.start(started_by=self)) - so a running search still gets stopped, just via that mechanism instead of setdown() doing it explicitly like Male does

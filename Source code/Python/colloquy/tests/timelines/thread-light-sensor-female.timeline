@@ -1,0 +1,5 @@
+# LightSensor (female) - a thread that is never actually run as one
+# hardware/female/light_sensor/__init__.py declares class LightSensor(BaseThread) but overrides none of setup()/loop()/setdown() - those fall through to BaseThread's own defaults, which all raise NotImplementedError. Nothing in this codebase ever calls .start() on a female's light_sensor - it's used purely as a plain object via its own read()/read_as_bool() methods, called synchronously and on-demand by whoever holds a reference (mainly ReadPattern.loop(), see thread-read-pattern.timeline). Its BaseThread-ness is unused.
+
+0 if .start() were ever called on this object (e.g. by mistake, or by future code assuming every hardware node can be started), setup() would immediately raise NotImplementedError and the thread would halt on its very first tick (base_thread's default setup())
+0 male light sensors (hardware/male/light_sensor/__init__.py) are NOT BaseThread at all - plain Base objects with the same read()/read_as_bool() shape - so this asymmetry is female-only and has no behavioral consequence today, only a latent trap for future code that assumes every node in the tree is startable

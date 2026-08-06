@@ -1,12 +1,14 @@
 # Startup
-# The first few minutes after `py main.py` runs (main.py's colloquy1()), assuming every drive begins well below the frustration threshold (75) so nobody starts searching yet. Physical-move timings aren't modeled constants in the code (servo speed isn't fixed anywhere) - lines describing them are estimates.
+# The first few minutes after `py main.py` runs (main.py's colloquy1()), assuming every drive begins well below the frustration threshold (75) so nobody starts searching yet. Physical-move timings aren't modeled constants in the code (servo speed isn't fixed anywhere) - lines describing them are estimates. See thread-colloquy.timeline for the fuller version of this same sequence, cross-referencing every individual thread's own timeline.
 
 0 Colloquy() constructed: Base tree built (colloquy/__init__.py), local/params.json loaded, every Hardware/Male/Female/Bar/Drive object created - no thread started yet
 0 U2D2 (Dynamixel USB adapter) opened on COM4; Arduino serial port opened (main.py's colloquy1())
 0 Every Dynamixel servo initialized (dxl.init_hardware() for each DXL in colloquy.hardware.u2d2.dxl_list)
 0.5 All neopixels forced on, to normalize any LED state the Arduino reboot left random
 0 All neopixels forced off again - the "Arduino reboot leaving LEDs on in a random state" recovery step noted in CLAUDE.md
-0 WSGI server (Server2) starts listening on http://localhost:8087/ - the process now blocks serving requests
-0 Every body's own thread loop begins ticking (~10ms/tick): each Male/Female checks is_satisfied() every tick, each Drive begins counting up from its configured start value
+0 WSGI server (Server2) starts listening on http://localhost:8087/ and blocks in its own request loop (not a BaseThread) - the process is now up, serving the web UI, but nothing moves or lights up on its own yet
+0 Correction to an earlier version of this file: nothing below this line happens automatically. main.py's colloquy1() never starts Hardware (or Colloquy itself, which is never run as a thread at all - see thread-colloquy.timeline) - a human must open /app/exposition (or /app/hardware) in the web UI and click "start" before any body's thread begins ticking
+0 A human starts Exposition (or Hardware directly) from the web UI - see thread-exposition.timeline, thread-hardware.timeline
+0 Hardware.setup() starts every Male, every Female, and the Bar - see thread-hardware.timeline. Every body's own thread loop now begins ticking (~10ms/tick): each Male/Female checks is_satisfied() every tick, each Drive begins counting up from its configured start value
 180 Every O and P drive, on every body, climbs toward the frustration threshold of 75, incrementing by 1 every 2.4s (hardware/drive/__init__.py) - up to ~3 minutes if a drive starts at 0 (actual time depends on that drive's start value in params["drive start values"]). Nobody is searching, swaying, or blinking yet - the installation is visually static apart from the drive-level indicator LEDs slowly brightening as each drive's value rises
 0 The first drive to cross value=75 becomes frustrated - see male_frustrated_to_female_read.timeline for what happens next
