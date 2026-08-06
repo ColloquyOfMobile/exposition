@@ -29,6 +29,81 @@ just "unexercised."
 
 ---
 
+## How to test these reliably
+
+The `colloquy/tests/` scenario modules (§1-6's "Covered by" column) are
+built for a *different* kind of reliability than regression-checking a code
+change: they run for tens of seconds to tens of minutes, drive real or
+simulated hardware, and produce a CSV/SVG for a human to look at. They're
+the right tool for calibrating against actual servos/sensors, not for
+quickly confirming "did my change break this."
+
+For that second kind of check — confirming a specific behavior/fix, fast
+and repeatably — script it directly against the `Base` tree instead of
+going through the web UI or a full `colloquy/tests/` scenario. This is the
+same approach used to verify the `Female.Search` fix above:
+
+```python
+import sys, time
+from pathlib import Path
+sys.path.append(str((Path(r"C:\workspace\workspace2\Colloquy\exposition") / "Source code" / "Python").resolve()))
+from colloquy import Colloquy
+
+colloquy = Colloquy()
+colloquy.hardware.u2d2.com_port.set("COM4")
+colloquy.hardware.u2d2.open()
+colloquy.hardware.arduino.open()
+for dxl in colloquy.hardware.u2d2.dxl_list:
+    dxl.init_hardware()
+
+node = colloquy.hardware.female1.search  # whatever you're checking
+node.start(started_by=None)
+time.sleep(3)  # a few multiples of the node's own tick / sub-thread interval
+
+assert not node.thread_errors, list(node.thread_errors)
+assert node.is_started
+
+node.stop()
+node.join()
+assert not node.is_started
+```
+
+A few things that make this reliable rather than flaky:
+
+- **Run it away from the exhibition laptop.** `Base.is_simulated`
+  (`base.py:104-107`) is `True` on any machine whose hostname isn't
+  `Colloquy-Laptop`, which routes every hardware call through
+  `virtual_hardware/` automatically — no serial port needed, safe to run
+  repeatedly, and fast (no real servo travel time).
+- **One fresh `Colloquy()` per check.** A `BaseThread` that has ever
+  errored can never `start()` again — `thread_errors` sticks for the
+  life of the object (`base_thread/__init__.py:82-83`). Reusing one
+  `Colloquy()` across several scripted checks in the same process means
+  an earlier failure can make a *later* check fail for the wrong reason.
+- **Sleep long enough to cross the relevant tick, not just "a bit."** The
+  loop tick itself is ~10ms, but what you're actually watching for is
+  usually a sub-thread's own interval (e.g. `ReadPattern` needs ≥5s of
+  buffered samples before it can match anything, `Drive` increments only
+  every 2.4s). Sleeping less than that will pass for the wrong reason.
+- **Force slow states instead of waiting for them.** Drive values take up
+  to ~4 minutes to swing from satisfied to frustrated (§3.1). Don't wait —
+  either call the existing forcing setters (`set_o_and_p_to_100()` etc.,
+  `hardware/male/drives/__init__.py:122-151`, used the same way by
+  `test_read_pattern`) or set `drive._value`/`_update_interval` directly
+  before starting the thread.
+- **Always stop/join what you started**, and check for stray processes
+  afterward (`tasklist | grep python` / `Get-Process python`) if a script
+  didn't exit on its own — `BaseThread`s are non-daemon, so anything left
+  running (including a child started via `started_by=`) keeps the process
+  alive.
+- **Assert on the object, not on rendered HTML.** `thread_errors`,
+  `is_started`, `.value`, `.last_match` etc. are all plain attributes on
+  the node — cheaper and less brittle than driving the WSGI app and
+  scraping its output, which is what the web UI is for (manual
+  exploration), not scripted checks.
+
+---
+
 ## 1. Male — search & blink (identity signal)
 
 A male's ring blinks a 10-bit pattern that encodes his identity
@@ -56,10 +131,10 @@ a male's blink via their light sensor.
 
 | # | Scenario | Trigger | Behavior | Covered by | Status |
 |---|---|---|---|---|---|
-| 2.1 | **Any female becomes unsatisfied in the live installation** | `Female.loop()` calls `search.start()` when unsatisfied (`hardware/female/__init__.py:151-158`), exactly like Male | `Search.setup()` unconditionally `raise NotImplementedError("use the turn_back_and_forth thread")` (`hardware/female/search/__init__.py:28-31`). First failure is caught and logged into `Search.thread_errors`. On the *next* loop tick, `Female.loop()` calls `search.start()` again, but now `Search.thread_errors` is non-empty, so `start()` itself raises — this time uncaught by `Search`, propagating into **Female's own** thread, which catches it, halts, and stops. **The female's entire thread crashes within two loop ticks of becoming unsatisfied.** | none | 🐛 **Broken** — this is the single highest-impact gap in the whole survey: it means the live installation cannot let a female run un-babysat once her drives fall below the satisfaction threshold, unless something is patched to start `turn_back_and_forth` instead of `search` |
-| 2.2 | Manual stand-in sway (`turn_back_and_forth`) | Tester starts a female's `turn_back_and_forth` directly | Female sways min/max, no drive/sensor coupling — this is the only working substitute for "female moving while searching" today | `test_movements` (`tests/test_movements/__init__.py:173-179`); used internally by all 4 `test_light_sensor_values` stages (§5) | ✅ Covered (as a stand-in, not the real `search` path) |
-| 2.3 | Female facing a blinking male, reading his pattern correctly | `ReadPattern.loop()` buffers ≥5s of sensor samples, tries 10 sub-step offsets × all 10 circular rotations of every `(male, drive)` reference pattern, accepts first match with ≤1 bit mismatch (`hardware/female/search/read_pattern/__init__.py:80-136`) | Records `last_match = (male, drive)`, logs (throttled to once per 2s) `"Pattern detected: {male} drive={drive}"` | `test_read_pattern` (`tests/test_read_pattern/__init__.py`) — forces bar position + male drive state, starts `blink` + `read_pattern`, logs expected-vs-detected per second | ✅ Covered (but only ever reached through this manual test — see 2.4) |
-| 2.4 | `ReadPattern` running as part of normal `Female` behavior | Nothing in `Female.loop()`/`Search.setup()` ever calls `read_pattern.start()` — it's only reachable via `test_read_pattern` | The real installation never decodes a male's pattern; the female-facing-male "identity read" mechanism exists but is dormant | none | ⚠️ Gap (by design per `CLAUDE.md` — "not currently wired into the live app" — but worth re-flagging since the crash in 2.1 means the *replacement* path (`turn_back_and_forth`) isn't wired in either) |
+| 2.1 | Any female becomes unsatisfied in the live installation | `Female.loop()` calls `search.start()` when unsatisfied (`hardware/female/__init__.py:151-158`), exactly like Male | **Fixed** (was: `Search.setup()`/`loop()` unconditionally raised `NotImplementedError`, crashing the female's whole thread within two loop ticks). Now `search.loop()` sways the female (same toggle-position pattern as Male's search) and `search.setup()` starts `read_pattern` with `started_by=self`, so it starts and stops together with `search` — `hardware/female/search/__init__.py:23-28`. Verified manually: starting `female1.search` no longer raises, `read_pattern.is_started` becomes `True`, and stopping `search` stops `read_pattern` too. | none (manually verified, not yet exercised by an automated scenario — see suggested next steps) | ✅ Fixed |
+| 2.2 | Manual stand-in sway (`turn_back_and_forth`) | Tester starts a female's `turn_back_and_forth` directly | Female sways min/max, no drive/sensor coupling — still useful as an isolated-movement stand-in, though `search` (2.1) is now the real path | `test_movements` (`tests/test_movements/__init__.py:173-179`); used internally by all 4 `test_light_sensor_values` stages (§5) | ✅ Covered |
+| 2.3 | Female facing a blinking male, reading his pattern correctly | `ReadPattern.loop()` buffers ≥5s of sensor samples, tries 10 sub-step offsets × all 10 circular rotations of every `(male, drive)` reference pattern, accepts first match with ≤1 bit mismatch (`hardware/female/search/read_pattern/__init__.py:80-136`) | Records `last_match = (male, drive)`, logs (throttled to once per 2s) `"Pattern detected: {male} drive={drive}"` | `test_read_pattern` (`tests/test_read_pattern/__init__.py`) — forces bar position + male drive state, starts `blink` + `read_pattern`, logs expected-vs-detected per second | ✅ Covered (staged manually; see 2.4 for the now-live autonomous path) |
+| 2.4 | `ReadPattern` running as part of normal `Female` behavior | Now wired: `search.setup()` starts `read_pattern.start(started_by=self)` (2.1) | Once a female becomes unsatisfied, she now both sways *and* attempts to decode any male pattern her sensor sees, autonomously — no test yet drives this end-to-end through `Female.loop()`'s own trigger rather than a manually-started `search` | none | ⚠️ Gap (fix landed, but no automated scenario exercises the full autonomous trigger → sway → decode chain yet) |
 | 2.5 | Female not facing any male / male's ring off while sampling | Sensor reads low/"dark" for that sample window (see §6.1 for the simulated version) | Buffered samples for that window read `0`; if the whole 10-step window is all-dark, `_try_match()` still runs but is unlikely to match any reference pattern (all references start `1,1,...`) | `test_read_pattern` incidentally (whenever bar/male aren't aligned) | ⚠️ Gap (no scenario explicitly tests "no match" as the expected outcome) |
 | 2.6 | Ambiguous match — mismatch count ties or is right at the `max_mismatches=1` boundary | Candidate pattern differs from more than one reference by ≤1 bit | `_try_match()` returns the **first** match found in iteration order, not the closest — order-dependent, not "best" match | none | ⚠️ Gap |
 
@@ -123,12 +198,16 @@ current scenario — each piece is tested in isolation (or not at all) but
 the full chain never runs together as it would in the real installation:
 
 1. **Full autonomous loop**: a male becomes frustrated → blinks his pattern
-   → bar auto-wanders (4.1) → a female becomes unsatisfied and *should*
-   search, read his pattern (2.3/2.4), and have her drive satisfied
-   accordingly. As documented above, this chain breaks immediately at the
-   female-search crash (2.1) — nothing currently demonstrates the intended
-   full loop working, since `test_read_pattern` stages the preconditions
-   manually rather than letting `Female.loop()`/`Male.loop()` drive it.
+   → bar auto-wanders (4.1) → a female becomes unsatisfied and searches,
+   reading his pattern (2.3/2.4), and (once something acts on a match —
+   see below) has her drive satisfied accordingly. The female-search crash
+   (2.1) that used to break this immediately is now fixed, but nothing yet
+   demonstrates the *whole* loop end-to-end through `Female.loop()`/
+   `Male.loop()`'s own triggers — `test_read_pattern` still stages bar
+   position and drive state manually rather than letting the autonomous
+   triggers drive it, and nothing currently reacts to `read_pattern.last_match`
+   by satisfying the matched drive (that link doesn't exist yet — matches
+   are logged/recorded but have no effect on the female's or male's state).
 2. **Two males simultaneously frustrated for the same female** — bar can
    only be in front of one male at a time; no scenario documents or tests
    the resulting contention/ordering.
@@ -138,9 +217,9 @@ the full chain never runs together as it would in the real installation:
 4. **Recovering an errored thread** — since an errored `BaseThread` can
    never be `start()`-ed again (see the background note above), there is
    no documented/tested recovery scenario for *any* body once it errors
-   once (not just the guaranteed female-search error in 2.1). Worth a
-   scenario (and likely a code fix) given 2.1 makes this the normal case,
-   not an edge case.
+   once. This used to be the guaranteed, near-immediate outcome for every
+   female (2.1) — now that's fixed, but the underlying "no recovery path"
+   limitation still applies to any other thread that errors.
 
 ---
 
@@ -148,16 +227,18 @@ the full chain never runs together as it would in the real installation:
 
 Ranked by how much of the above unblocks:
 
-1. Fix or replace `Female.Search` (2.1) — either implement it for real, or
-   have `Female.loop()` start `turn_back_and_forth` instead of `search`,
-   so a running installation doesn't lose every female thread shortly
-   after startup.
-2. Add `"drive start values"` to `params.py`'s `DEFAULTS` (3.5), or
-   document that `local/params.json` must be seeded before first run.
-3. Decide whether 1.2/1.7/4.1 (search/wander never stopping itself) is
-   intended, and if not, add the missing stop condition.
-4. Once 2.1 is fixed, add a scenario test that drives the full loop in §7.1
+1. ~~Fix or replace `Female.Search` (2.1)~~ — **done**: `search.loop()` now
+   sways the female and `search.setup()` starts `read_pattern`.
+2. Add a `colloquy/tests/` scenario that drives the full loop in §7.1
    through the real `Male.loop()`/`Female.loop()` triggers rather than
    staged preconditions, to catch regressions in the autonomous path
    itself (today only the manually-staged `test_read_pattern` exercises
-   `ReadPattern` at all).
+   `ReadPattern` at all) — see "How to test these reliably" below for a
+   pattern to build it on.
+3. Decide what should happen when `read_pattern.last_match` finds a hit —
+   right now a match is only logged/recorded, nothing satisfies the
+   matched drive, so the loop in §7.1 has no closing link yet.
+4. Add `"drive start values"` to `params.py`'s `DEFAULTS` (3.5), or
+   document that `local/params.json` must be seeded before first run.
+5. Decide whether 1.2/1.7/4.1 (search/wander never stopping itself) is
+   intended, and if not, add the missing stop condition.

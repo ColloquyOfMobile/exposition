@@ -21,14 +21,11 @@ class Search(BaseThread):
         return self._read_pattern
 
     def loop(self):
-        raise NotImplementedError("use the turn_back_and_forth thread")
         if not self.owner.is_moving:
             self.owner.toggle_position()
 
     def setup(self):
-        raise NotImplementedError("use the turn_back_and_forth thread")
-        self.owner.read_pattern.start(started_by=self)
-        pass
+        self.read_pattern.start(started_by=self)
 
     def setdown(self):
         pass
