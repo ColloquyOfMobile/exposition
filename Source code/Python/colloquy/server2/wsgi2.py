@@ -441,6 +441,20 @@ class WSGI2(Base):
                             )
                     continue
 
+                if "pre" in value:
+                    style = {
+                        "overflow": "auto",
+                        "max-height": "70vh",
+                        "border": "1px solid #8888",
+                        "padding": "0.5ch 1ch",
+                        "font-size": "0.85rem",
+                        "white-space": "pre-wrap",
+                    }
+                    with tag("div", name=key):
+                        with tag("pre", style=export_style(style)):
+                            text(value["pre"])
+                    continue
+
                 if "svg" in value:
                     style = {
                         "overflow": "hidden",

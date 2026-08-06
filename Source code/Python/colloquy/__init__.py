@@ -14,6 +14,7 @@ from .exposition import Exposition
 from .params import Params
 from .params_browser import ParamsNode
 from .virtual_hardware import VirtualHardware
+from .logs import Logs
 
 
 class Colloquy(BaseThread):
@@ -31,9 +32,11 @@ class Colloquy(BaseThread):
         self._hardware = Hardware(owner=self)
         self._tests = Tests(owner=self)
         self._exposition = Exposition(owner=self)
+        self._logs = Logs(owner=self)
 
         self["hardware"] = self._hardware
         self["params"] = self._params_view
+        self["logs"] = self._logs
 
         self._events = Events(shutdown=BaseThread._shutdown)
 
@@ -88,6 +91,10 @@ class Colloquy(BaseThread):
         return self._exposition
 
     @property
+    def logs(self):
+        return self._logs
+
+    @property
     def is_started(self):
         return not self.events.shutdown.is_set()
 
@@ -121,6 +128,7 @@ class Colloquy(BaseThread):
             "exposition": self._exposition,
             "tests": self._tests,
             "params": self._params_view,
+            "logs": self._logs,
         }
 
     def get_focus(self, *args, obj, path=None):
