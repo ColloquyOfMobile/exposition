@@ -1,7 +1,9 @@
 # Drives (female) - container thread for a female's O and P Drive
-# hardware/female/drives/__init__.py - same shape as the male version, different neopixel mapping (4 segments instead of 3, and no which_is_frustated() - females don't blink an identity pattern).
+# hardware/female/drives/__init__.py - same shape as the male version, different neopixel mapping (4 segments instead of 3, and no which_is_frustated() - females don't blink an identity pattern). Both Drive children are expanded inline below.
 
-0 setup(): turns on head, body_o, body_p, and feet neopixels, then starts both Drive sub-threads (started_by=self) - see thread-drive.timeline
+0 setup(): turns on head, body_o, body_p, and feet neopixels, then starts both Drive sub-threads (started_by=self)
+-> thread-drive : O drive
+-> thread-drive : P drive
 0 loop(): pass - same as male Drives, all dynamic behavior is driven by the two Drive children calling update() from their own loop
 2.4 every Drive increment, update() re-maps: head.brightness = max(o,p) (uncompensated); body_o/body_p.brightness = perceptually gamma-compensated o/p value (a 101-entry lookup table built once at class-definition time); feet.color = orange if o<p else puce - a binary "which drive currently dominates" indicator
 0 setdown(): turns off head, body_o, body_p, feet; stops both Drive sub-threads

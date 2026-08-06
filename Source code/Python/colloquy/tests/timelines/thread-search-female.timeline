@@ -1,7 +1,8 @@
 # Search (female)
-# hardware/female/search/__init__.py - started by Female.loop() when a female becomes unsatisfied. Owns and starts ReadPattern. Fixed this session: setup()/loop() used to unconditionally raise NotImplementedError here, crashing the whole female thread within two loop ticks (SCENARIOS.md 2.1) - this timeline describes the working version.
+# hardware/female/search/__init__.py - started by Female.loop() when a female becomes unsatisfied. Owns and starts ReadPattern - expanded inline below. Fixed this session: setup()/loop() used to unconditionally raise NotImplementedError here, crashing the whole female thread within two loop ticks (SCENARIOS.md 2.1) - this timeline describes the working version.
 
-0 setup(): starts read_pattern (started_by=self) - see thread-read-pattern.timeline
+0 setup(): starts read_pattern (started_by=self)
+-> thread-read-pattern
 0 loop(): if the female isn't currently moving, call toggle_position() - same min/max sway male search uses
 0 ~ female reaches max/min position, then reverses on the next idle tick - repeats indefinitely, sensor sampling continues throughout via read_pattern
 0 setdown(): no-op - read_pattern stops itself once it notices Search is no longer running

@@ -1,7 +1,8 @@
 # Search (male)
-# hardware/male/search/__init__.py - started by Male.loop() when a male becomes unsatisfied. Owns and starts Blink.
+# hardware/male/search/__init__.py - started by Male.loop() when a male becomes unsatisfied. Owns and starts Blink - expanded inline below (its own concurrent clock, starting the instant that line fires).
 
-0 setup(): starts blink (started_by=self) - see thread-blink.timeline
+0 setup(): starts blink (started_by=self)
+-> thread-blink
 0 loop(): if the male isn't currently moving, call toggle_position() - same min/max sway every other body uses
 0 ~ male reaches max/min position, then reverses on the next idle tick - repeats indefinitely
 0 setdown(): logs only - doesn't explicitly stop blink; blink stops itself on its own next tick once it notices Search (its started_by) is no longer running (base_thread's break condition)
