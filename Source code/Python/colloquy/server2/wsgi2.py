@@ -204,7 +204,17 @@ class WSGI2(Base):
                         ".md-content code { background: #8882; padding: 0 0.3ch; border-radius: 3px; } "
                         ".md-content pre { background: #8882; padding: 0.5rem; overflow: auto; } "
                         ".md-content pre code { background: none; padding: 0; } "
-                        ".md-content del { opacity: 0.6; }"
+                        ".md-content del { opacity: 0.6; } "
+                        ".timeline-title { margin: 0.25rem 0; opacity: 0.85; } "
+                        ".timeline { display: flex; flex-direction: column; } "
+                        ".timeline-row { display: flex; gap: 1ch; padding: 0.25rem 0; "
+                        "border-bottom: 1px solid #8883; align-items: baseline; } "
+                        ".timeline-time { flex: 0 0 6ch; opacity: 0.6; font-family: monospace; "
+                        "font-size: 0.8rem; } "
+                        ".timeline-marker { flex: 0 0 5ch; font-family: monospace; font-size: 0.8rem; } "
+                        ".timeline-event .timeline-marker { color: #d08; } "
+                        ".timeline-activity .timeline-marker { color: #08a; } "
+                        ".timeline-desc { flex: 1; }"
                     )
 
             with tag(
