@@ -36,7 +36,7 @@ class Server2(Base):
     def restart_event(self):
         return self._restart_event
 
-    def run(self, port=8000):
+    def run(self, port=8087):
         hostname = "localhost"  # socket.gethostname()
         with make_server("localhost", port, self.wsgi) as httpd:
             WSGIRequestHandler.log_message = lambda *args, **kwargs: None

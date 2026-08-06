@@ -18,7 +18,7 @@ This calls `colloquy1()` in `main.py`, which:
 1. Builds a `Colloquy` object (`Source code/Python/colloquy/__init__.py`)
 2. Opens the U2D2 (Dynamixel USB adapter) on `COM4` and the Arduino serial port, and initializes every Dynamixel servo
 3. Blinks all NeoPixels once (Arduino reboot can leave LEDs on in a random state)
-4. Starts `Server2`, a blocking WSGI server on `http://localhost:8000/`
+4. Starts `Server2`, a blocking WSGI server on `http://localhost:8087/`
 
 There is no separate build step (pure Python, no bundler). `requirements.txt` only lists `yattag` (HTML generation) and `dynamixel_sdk`; `pyserial`, `watchdog`, etc. are used but not currently pinned there — check imports if `pip install -r requirements.txt` isn't enough.
 
@@ -44,7 +44,7 @@ Both `Base.__call__`-style dispatch and the web request router work the same way
 
 ## The web UI / server (`server2`, `wsgi2.py`)
 
-`Server2` (`colloquy/server2/__init__.py`) runs `wsgiref.simple_server` on port 8000 and hands each request to `WSGI2` (`colloquy/server2/wsgi2.py`), which:
+`Server2` (`colloquy/server2/__init__.py`) runs `wsgiref.simple_server` on port 8087 and hands each request to `WSGI2` (`colloquy/server2/wsgi2.py`), which:
 - Parses the URL path into `app/...`, `shutdown`, or `restart`
 - Calls `colloquy.get_states(*args)` (defined in `colloquy/__init__.py`) which walks the `Base` tree via `snapshot_children`/`snapshot`, optionally executing an update (calling a command) if the path resolves to a callable leaf
 - Renders the resulting nested-dict "state" recursively as clickable HTML (`yattag`) — every node is a link that opens/closes it or calls it; this is effectively a generic tree browser/REPL for the whole hardware+behavior graph, not a purpose-built dashboard
