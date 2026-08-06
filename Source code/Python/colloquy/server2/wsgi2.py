@@ -1,7 +1,7 @@
 import json
 import re
 from yattag import Doc, indent
-from urllib.parse import unquote
+from urllib.parse import unquote, parse_qs
 from pathlib import Path
 from colloquy.utils import (
     export_style,
@@ -65,6 +65,10 @@ class WSGI2(Base):
     def _parse(self):
         args = self._parse_path()
         print(f"{args=}")
+
+        if self._environ.get("REQUEST_METHOD") == "POST":
+            return self._parse_post(*args)
+
         if not args:
             return self._parse_app()
 
@@ -112,6 +116,51 @@ class WSGI2(Base):
             ("Cache-Control", "public, max-age=3600"),
         ]
         return "200 OK", headers, file_path.read_bytes()
+
+    def _parse_post(self, *args):
+        """Minimal POST support for text-editing UIs (see the "editor" leaf
+        kind in _html_recursion). The rest of this app is pure GET-link
+        navigation - path segments carry every argument, which works for
+        command names and short values (the "keyboard" UI) but can't carry
+        arbitrary multi-line text. This mirrors the existing GET
+        .../call/<command> convention (same tree walk via snapshot_children,
+        same "call" marker) but takes the command's one string argument
+        from the POST body's "content" field instead of further path
+        segments, and expects the resolved command to already be
+        registered on the node (e.g. self["save"] = self.save) exactly
+        like any other command in this tree.
+        """
+        not_found = lambda: self._parse_not_found(
+            args, NotImplementedError("POST expects app/.../call/<command>")
+        )
+
+        if len(args) < 3 or args[0] != self._root.name:
+            return not_found()
+
+        *node_keys, marker, command = args[1:]
+        if marker != "call":
+            return not_found()
+
+        obj = self.colloquy
+        try:
+            for key in node_keys:
+                obj = obj.snapshot_children[key]
+            handler = obj[command]
+        except KeyError:
+            return not_found()
+
+        content_length = int(self._environ.get("CONTENT_LENGTH") or 0)
+        raw_body = (
+            self._environ["wsgi.input"].read(content_length)
+            if content_length
+            else b""
+        )
+        content = parse_qs(raw_body.decode("utf-8")).get("content", [""])[0]
+
+        handler(content)
+
+        redirect_path = self._root.joinpath(*node_keys)
+        return "303 See Other", [("Location", f"/{redirect_path.as_posix()}")], b""
 
     def _parse_path(self):
         """Parse the path."""
@@ -397,6 +446,34 @@ class WSGI2(Base):
                     with tag("div", name=key, style=export_style(style)):
                         with tag("a", href=f"/{path.as_posix()}"):
                             text(f"{key}()")
+                    continue
+
+                if "editor" in value:
+                    node_path = Path(*value["path"][:-1])
+                    call_path = node_path.relative_to(self._base_path)
+                    save_path = self._root / self._base_path / "call" / call_path / "save"
+
+                    style = {
+                        "width": "100%",
+                        "min-height": "50vh",
+                        "box-sizing": "border-box",
+                        "font-family": "monospace",
+                        "font-size": "0.85rem",
+                    }
+                    with tag("div", name=key):
+                        with tag(
+                            "form",
+                            method="post",
+                            action=f"/{save_path.as_posix()}",
+                            style="display: flex; flex-direction: column; gap: 0.5ch;",
+                        ):
+                            with tag(
+                                "textarea", name="content", style=export_style(style)
+                            ):
+                                text(value["editor"])
+                            with tag("div"):
+                                with tag("button", type="submit"):
+                                    text("save")
                     continue
 
                 if "chart" in value:
