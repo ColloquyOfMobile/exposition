@@ -214,11 +214,8 @@ class WSGI2(Base):
                         ".timeline-marker { flex: 0 0 5ch; font-family: monospace; font-size: 0.8rem; } "
                         ".timeline-event .timeline-marker { color: #d08; } "
                         ".timeline-activity .timeline-marker { color: #08a; } "
-                        ".timeline-branch .timeline-marker { color: #a80; font-weight: bold; } "
-                        ".timeline-branch .timeline-desc { font-style: italic; opacity: 0.9; } "
-                        ".timeline-problem .timeline-desc { color: #d02; font-style: normal; font-weight: bold; } "
-                        ".timeline-nested { margin-left: 2.5ch; padding-left: 1ch; "
-                        "border-left: 2px solid #a806; margin-bottom: 0.25rem; } "
+                        ".timeline-problem .timeline-marker, .timeline-problem .timeline-desc "
+                        "{ color: #d02; font-weight: bold; } "
                         ".timeline-desc { flex: 1; }"
                     )
 

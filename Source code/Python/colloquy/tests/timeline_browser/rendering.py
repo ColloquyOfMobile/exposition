@@ -25,9 +25,12 @@ class TimelineEntry:
     duration_seconds: float
     description: str
     # Populated only for "-> other-timeline" lines: the referenced
-    # timeline's own entries (recursively expanded), rendered nested under
-    # this one instead of a plain event/activity row.
+    # timeline's own entries (recursively expanded) and its optional
+    # ": label" (e.g. "O drive", "male1") - see flatten_entries, which
+    # carries the label into every descendant's description as context
+    # instead of just dropping it.
     children: list = field(default_factory=list)
+    label: str = None
     is_branch: bool = False
     is_problem: bool = False
 
@@ -120,6 +123,7 @@ def parse_entries(content, _folder=None, _visited=frozenset()):
                     duration_seconds=0.0,
                     description=f"-> {display} (starts here, runs concurrently on its own clock)",
                     children=children,
+                    label=label,
                     is_branch=True,
                 )
             )
@@ -142,28 +146,77 @@ def parse_entries(content, _folder=None, _visited=frozenset()):
     return entries
 
 
-def _render_entries(tag, text, entries):
+def flatten_entries(entries, offset=0.0, context=()):
+    """Resolve every "-> other-timeline" branch into one flat, chronologically
+    sorted sequence of what actually happens - a black-box view that doesn't
+    expose which entries came from a child thread being started. A normal
+    include vanishes, replaced in place by its own (recursively flattened)
+    entries, offset to start at the including line's own absolute time; only
+    a genuine problem (missing include / cycle) survives as its own row,
+    since that's a defect in the timeline itself, not an implementation
+    detail worth hiding.
+
+    Dropping a branch entirely would also drop its ": label" (e.g. "O
+    drive" vs "P drive", "male1" vs "male2") - the only thing that told two
+    otherwise-identical included timelines apart. Instead, every labelled
+    branch's label is carried in `context` and stamped as a "[label / ...]"
+    prefix onto each of its descendants' descriptions, so e.g. two Drive
+    threads merged under one Male read as distinguishable events rather
+    than identical-looking duplicates.
+    """
+    flat = []
+    for entry in entries:
+        absolute_start = entry.start_seconds + offset
+        prefix = f"[{' / '.join(context)}] " if context else ""
+
+        if entry.is_branch:
+            if entry.is_problem:
+                flat.append(
+                    TimelineEntry(
+                        start_seconds=absolute_start,
+                        duration_seconds=0.0,
+                        description=prefix + entry.description,
+                        is_problem=True,
+                    )
+                )
+            else:
+                child_context = context + (entry.label,) if entry.label else context
+                flat.extend(
+                    flatten_entries(
+                        entry.children, offset=absolute_start, context=child_context
+                    )
+                )
+            continue
+
+        flat.append(
+            TimelineEntry(
+                start_seconds=absolute_start,
+                duration_seconds=entry.duration_seconds,
+                description=prefix + entry.description,
+            )
+        )
+    return flat
+
+
+def render_html(content):
+    doc, tag, text = Doc().tagtext()
+
+    for line in parse_title(content):
+        with tag("p", klass="timeline-title"):
+            text(line)
+
+    flat = sorted(
+        flatten_entries(parse_entries(content)), key=lambda entry: entry.start_seconds
+    )
+
     with tag("div", klass="timeline"):
-        for entry in entries:
+        for entry in flat:
             start_label = f"t={timelap_to_string(entry.start_seconds)}"
 
-            if entry.is_branch:
-                row_klass = "timeline-row timeline-branch"
-                if entry.is_problem:
-                    row_klass += " timeline-problem"
-                with tag("div", klass=row_klass):
-                    with tag("div", klass="timeline-time"):
-                        text(start_label)
-                    with tag("div", klass="timeline-marker"):
-                        text("start")
-                    with tag("div", klass="timeline-desc"):
-                        text(entry.description)
-                if entry.children:
-                    with tag("div", klass="timeline-nested"):
-                        _render_entries(tag, text, entry.children)
-                continue
-
-            if entry.is_event:
+            if entry.is_problem:
+                marker_label = "!"
+                row_klass = "timeline-row timeline-problem"
+            elif entry.is_event:
                 marker_label = "event"
                 row_klass = "timeline-row timeline-event"
             else:
@@ -177,15 +230,5 @@ def _render_entries(tag, text, entries):
                     text(marker_label)
                 with tag("div", klass="timeline-desc"):
                     text(entry.description)
-
-
-def render_html(content):
-    doc, tag, text = Doc().tagtext()
-
-    for line in parse_title(content):
-        with tag("p", klass="timeline-title"):
-            text(line)
-
-    _render_entries(tag, text, parse_entries(content))
 
     return doc.getvalue()
