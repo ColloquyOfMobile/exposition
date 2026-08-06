@@ -196,6 +196,16 @@ class WSGI2(Base):
                 doc.stag(
                     "link", rel="stylesheet", href="/vendor/uplot/uPlot.min.css"
                 )
+                with tag("style"):
+                    doc.asis(
+                        ".md-content table { border-collapse: collapse; margin: 0.5rem 0; } "
+                        ".md-content th, .md-content td { border: 1px solid #8886; "
+                        "padding: 0.25rem 0.6rem; text-align: left; vertical-align: top; } "
+                        ".md-content code { background: #8882; padding: 0 0.3ch; border-radius: 3px; } "
+                        ".md-content pre { background: #8882; padding: 0.5rem; overflow: auto; } "
+                        ".md-content pre code { background: none; padding: 0; } "
+                        ".md-content del { opacity: 0.6; }"
+                    )
 
             with tag(
                 "body",
@@ -474,6 +484,17 @@ class WSGI2(Base):
                             with tag("div"):
                                 with tag("button", type="submit"):
                                     text("save")
+                    continue
+
+                if "html" in value:
+                    style = {
+                        "overflow": "auto",
+                        "max-height": "75vh",
+                        "border": "1px solid #8888",
+                        "padding": "0.5ch 1.5ch",
+                    }
+                    with tag("div", name=key, klass="md-content", style=export_style(style)):
+                        doc.asis(value["html"])
                     continue
 
                 if "chart" in value:
