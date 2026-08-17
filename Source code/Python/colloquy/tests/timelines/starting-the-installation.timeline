@@ -1,0 +1,14 @@
+# Starting the installation
+# What happens the moment somebody presses start on the control page: all five bodies and
+# the bar wake up together. Everything below runs at the same time, each body keeping its
+# own clock.
+
+0 Start is pressed. All five bodies and the bar come alive within the same instant - there is no sequence, no one-after-another.
+-> male-body : male 1
+-> male-body : male 2
+-> female-body : female 1
+-> female-body : female 2
+-> female-body : female 3
+-> the-bar
+0 Nothing needs a person's attention after this. No one has to press anything again for the artwork to keep running.
+0 Ending it: pressing shutdown on the control page stops every body, brings them back to their rest position, turns every light off and releases the motors. It is the only thing that ends any of the behaviour described here.

@@ -1,0 +1,13 @@
+# Both males calling at once
+# There is only one bar and two males, and in practice both males are calling within the
+# first fifteen seconds of every evening, so this is the normal state of the artwork, not
+# an edge case. Worth reading because the result looks unintentional and is.
+
+0 The first male begins calling: turning, ring blinking his pattern.
+0 The bar sets off wandering.
+3 A few seconds later the second male begins calling too: turning, ring blinking his own, different pattern.
+0 The bar takes no notice. It was already wandering, and it carries on over exactly the same full length at exactly the same speed. It does not start favouring one male, it does not alternate between them, it does not shorten its travel to work one pair at a time.
+0 So both males ride the same bar in fixed positions relative to each other, both blinking, both turning, while it sweeps them past all three females together.
+60 Watch for a minute and you will see the two males pass in front of the females in a fixed order, over and over, at the same rhythm as the bar - the pairings you see are decided entirely by the spacing of the bodies on the bar, not by who wants what.
+0 A female facing the bar as it passes may have either male in front of her, and both are blinking. She reads whichever one her sensor is pointed at.
+0 Neither male ever yields, gives up, or takes a turn: both call continuously until shutdown. Nothing in the artwork resolves the competition between them, because nothing in the artwork is aware there is one.

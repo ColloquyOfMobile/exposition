@@ -1,0 +1,14 @@
+# A female's appetite lights
+# The four lights on a female that show how hungry she is: her head, which follows
+# whichever appetite is the stronger; her orange belly (her O appetite); her greenish
+# belly (her P appetite); and her feet, which show which of the two is currently winning.
+# Watch one female from switch-on and you should see exactly this.
+
+0 Her head, her two belly lights and her feet are switched on, but head and belly are at zero brightness. Only her feet show immediately.
+-> one-appetite-rising : O appetite, orange belly
+-> one-appetite-rising : P appetite, greenish belly
+2.4 Two and a half seconds later head and belly show their first real value: head lit in proportion to her stronger appetite, each belly light in proportion to its own. As with the males this is very dim at first.
+0 Her feet take a colour rather than a brightness, at fixed brightness: orange while her P appetite is ahead, greenish while her O appetite is ahead or the two are equal. Her feet are the one light on her you can read across the room from the first second.
+0 Female 1 starts with P far ahead, so her feet are orange. Female 3 starts with O ahead, so hers are greenish. Female 2 starts with both equal, so hers are greenish too and may flicker as one appetite briefly gets ahead of the other.
+224 Head and belly brighten one small step every 2.4 seconds, continuously, until all three are full.
+0 Because both appetites climb at the same speed, the one that started behind never catches up - until they both hit the ceiling of 100 and become equal. Female 1's feet therefore turn from orange to greenish just under four minutes after switch-on, and from then on all three females have greenish feet for the rest of the evening. An easy thing to check: no female should still have orange feet ten minutes in.

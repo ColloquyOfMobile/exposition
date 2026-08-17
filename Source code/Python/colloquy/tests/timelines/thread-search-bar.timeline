@@ -1,7 +1,0 @@
-# Search (bar)
-# hardware/bar/search/__init__.py - started by Bar.loop() whenever any male's own search is running. The simplest of the three Search classes: no sub-thread of its own.
-
-0 setup()/setdown(): no-op (setdown just prints a debug line)
-0 loop(): if the bar isn't currently moving, call toggle_position() - full 10000-unit range sway, same shape as every other body's search sway
-0 ~ bar reaches max/min position, then reverses on the next idle tick - repeats indefinitely
-0 Bar.loop() re-checks "is any male searching" every tick, but only to decide whether to start this thread - once started, nothing stops it again automatically, and it has no concept of which male or female it's meant to be serving (SCENARIOS.md 4.1, 7.2)

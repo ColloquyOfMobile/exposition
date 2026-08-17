@@ -1,0 +1,14 @@
+# The bar drifting near female 1
+# A second hand-started bar movement, much narrower than its usual wandering: instead of
+# crossing its whole length, it drifts slowly to and fro around the point where male 1
+# faces female 1. Used to test one pair at a time - the male stays roughly in front of
+# her the whole time, drifting in and out of exact alignment rather than sliding away.
+# The artwork never does this on its own.
+
+0 You press start on the bar's "turn back and forth around f1" on the control page.
+0 The bar moves to a point a little past male 1's meeting point with female 1.
+5 It arrives - a short move, a fraction of its full travel.
+0 It sets off back the other way, to the same distance on the other side of that meeting point.
+5 It arrives.
+0 And so on, indefinitely, always within reach of that one meeting point, until you press stop.
+0 This is the movement to use when you want to see whether a female can read a male who stays roughly in front of her. The bar's ordinary wandering never gives her that: it crosses the whole length and takes him away again within seconds.

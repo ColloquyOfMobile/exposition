@@ -1,0 +1,10 @@
+# One male, from switch-on
+# Everything one male does on his own, in order. Both males behave identically; they only
+# differ in their blinking pattern and in the exact second they start.
+
+0 His motor is powered and holds him still, facing wherever he was left. Nothing on him is lit.
+-> male-appetite-lights
+12 For the first twelve seconds or so he stands still and dark, while his two appetites climb out of the satisfied range. Both males wake up hungry enough to start at about the same time.
+-> male-calling
+0 From here on he is always calling: turning back and forth, ring blinking. He has no other state. Whatever a female recognises, whatever the bar does, he behaves exactly the same.
+0 He only stops when the whole installation is shut down: his ring goes out, his level lights go out, and he stops turning.

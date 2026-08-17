@@ -1,0 +1,21 @@
+# Test: can a female read a male's pattern?
+# A test run by hand from the control page, to check the one thing you cannot see from
+# outside - whether a female actually recognises the male in front of her. You choose the
+# male and the female, press start, and watch her own lights, which the test borrows as a
+# readout: head blue for male 1, head red for male 2, orange belly if she read "O",
+# greenish belly if she read "P".
+# Run it with the installation itself stopped - see the warning near the end.
+
+0 You pick the sending male and the receiving female on the control page and press start. The page immediately shows the test as running, before anything has moved.
+6 The bar slides to bring that male directly in front of that female, and the test waits until it has arrived. This takes anywhere from no time at all (male 1 in front of female 1, which is the bar's own zero position) to half a minute for the far pairs. If the bar cannot get there within 30 seconds the test gives up, and it will refuse to start again until the error is cleared on the control page.
+0 Both of the male's appetites are forced to full, so he asks for both at once.
+0 His ring lights up white and starts blinking - one step every half second, a full pattern every 5 seconds, repeating.
+0 The female starts reading the light in front of her.
+0 Nothing turns either body. The bar puts him in front of her, but both keep whatever direction they were last left in, and neither turns during the test. If she is not already facing him, the test can run all night and see nothing. Check this by eye before trusting any result: stand where her sensor points and see whether the blinking ring is in that line.
+5 For the first five seconds she cannot recognise anything - she needs one whole pattern before she can even try.
+1 From then on, once a second, a line is written to the results file and her readout lights are updated.
+0 What her readout means, exactly: it shows the last thing she recognised, at any time in the past - not what she is seeing now. It never goes out again and never goes back to "nothing". A run can therefore light up in the first second with a recognition left over from a previous run, minutes earlier.
+0 The "matches" count on the page has the same problem: it re-counts that same last recognition once a second, so a big number means the test has been running a while, not that it is working. Read the result file, not the counter.
+0 She can also confidently name the wrong male. Two of the eight patterns are the same sequence of flashes started at a different moment, and she is allowed one wrong flash in ten - so the answer she gives is not reliable even when everything else is right.
+0 Warning: if the installation itself is running, this test fights it. The males start calling on their own, and the bar sets off wandering - sliding the male straight out of the alignment this test just made. Stop the installation before running this test.
+0 Pressing stop ends it: the male's ring goes out, her readout lights go out, the bar stays where it is.

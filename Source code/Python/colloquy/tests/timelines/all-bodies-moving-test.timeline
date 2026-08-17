@@ -1,0 +1,14 @@
+# Test: everything moving at once
+# A half-hour recording run by hand from the control page, used to measure how long a
+# female actually has a lit male in view while everything is in motion. It is a
+# measurement, not a behaviour of the artwork: the males' rings are held steady on, so
+# nobody is blinking a pattern and nobody is recognising anybody.
+
+0 You start it from the control page. The bar slides to bring male 1 in front of female 1 and waits until it has arrived.
+0 Both males' rings come on and stay on - steady white, not blinking.
+0 Both males start turning back and forth on the spot.
+0 All three females start turning back and forth too.
+0 The bar starts sliding end to end. Five bodies and the bar are now all moving at once - the fullest movement the installation ever shows.
+1800 It runs like that for half an hour by default, recording what each female's light sensor sees, several times a second, into a result file.
+0 It stops on its own at the end of the half hour, or when you press stop: the rings go out and everything comes to a halt.
+0 What it can tell you: how often, and for how long, a female has a lit male in her view while everything moves. What it cannot tell you: whether she could read his pattern - nothing blinks a pattern during this test.

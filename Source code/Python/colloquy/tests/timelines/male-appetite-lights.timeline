@@ -1,0 +1,13 @@
+# A male's appetite lights
+# The three lights on a male that show how hungry he is: an orange level light (his O
+# appetite), a greenish level light (his P appetite), and the white ring above his head,
+# which follows whichever of the two is the stronger. His blinking head ring is a
+# different thing - see male-calling.
+# Watch one male from switch-on and you should see exactly this.
+
+0 The three lights are switched on, but at zero brightness. You still see nothing on him.
+-> one-appetite-rising : O appetite, orange light
+-> one-appetite-rising : P appetite, greenish light
+2.4 Two and a half seconds later the lights show their first real value: each level light lit in proportion to its own appetite, the white ring above his head in proportion to the stronger of the two. Both males start around a tenth full, so this is very dim - a faint glow, not an obvious light.
+237 They then brighten one small step every 2.4 seconds, continuously, for the next four minutes, until both level lights and the ring are at full brightness.
+0 They never dim again by themselves. A male who has been running for more than four minutes is simply fully lit and stays so. If you see one dim down, somebody reset him from the control page.

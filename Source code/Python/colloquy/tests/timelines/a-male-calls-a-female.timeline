@@ -1,0 +1,15 @@
+# A male calls and a female recognises him
+# One encounter, followed from beginning to end. This is the interaction the artwork is
+# built around, so it is the one worth watching for. It is not staged by anything: it
+# happens when a wandering bar and a turning female happen to line up.
+# Start counting from the moment a male begins calling.
+
+0 A male stops being satisfied and begins to call: his ring lights white and starts blinking his pattern, and he begins turning back and forth.
+0 A few seconds later the bar sets off from wherever it stood and begins its end-to-end wandering.
+20 The bar carries him past female after female. Each pass takes a few seconds; whether he is actually facing her as he passes is a matter of where she happens to have turned.
+0 She, meanwhile, has been turning back and forth and reading the light in front of her since her own appetites climbed - which for all three females is within the first twenty seconds of the evening.
+5 For her to recognise him, three things have to be true at once for five uninterrupted seconds: the bar is holding him at her meeting point, she is turned towards him, and he is turned towards her. Five seconds is one full blinking pattern - anything shorter and she has nothing to read.
+0 She recognises him: she now knows which male it is and which appetite he wants.
+0 And nothing happens. She does not stop, he does not stop, the bar does not stop. No light changes on either of them. The recognition exists only as a line in the log and a value on the control page.
+0 The bar carries him onward and the encounter ends as accidentally as it began. Both of them carry on exactly as before, and his appetite - the thing he was calling about - is not lowered by having been answered.
+0 What to check when you watch this: does the bar actually pause long enough anywhere for five seconds of clear view? In practice it does not stop at all, so most encounters are too brief, and the ones that do succeed succeed because the female happened to face him across two or three passes.

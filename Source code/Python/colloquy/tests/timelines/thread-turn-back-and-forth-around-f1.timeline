@@ -1,9 +1,0 @@
-# TurnBackAndForthAroundF1 (bar only)
-# hardware/bar/turn_back_and_forth_around_f1/__init__.py - a narrower-range sway than the bar's plain TurnBackAndForth: oscillates +/-1500 around male1's interaction origin for female1, instead of the bar's full 10000-unit range. Only started manually (test_movements, or as the "bar drifting near an active pair" stage of test_light_sensor_values).
-
-0 setup()/setdown(): no-op
-0 loop(): if the bar isn't currently moving, call toggle_position() - first call goes to male1_in_front_of_f1 + 1500
-0 ~ bar arrives at origin+1500
-0 next idle tick: toggle_position() sends it to origin-1500
-0 ~ bar arrives at origin-1500
-0 alternates indefinitely, always within male1/female1's interaction origin's immediate vicinity - unlike the plain TurnBackAndForth, this never drifts near any other (male, female) pair

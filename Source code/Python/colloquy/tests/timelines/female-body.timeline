@@ -1,0 +1,10 @@
+# One female, from switch-on
+# Everything one female does on her own, in order. All three females behave identically;
+# they differ only in how hungry they start, and so in when they begin looking.
+
+0 Her motor is powered and holds her still, facing wherever she was left. Only her feet are lit.
+-> female-appetite-lights
+17 For the first seconds she stands still while her appetites climb out of the satisfied range. Female 2 begins after about 2 seconds (she starts hungriest), females 1 and 3 after about 17 seconds.
+-> female-looking
+0 From here on she is always looking: turning back and forth, reading the light in front of her. She has no other state, and nothing on her body shows whether she has recognised anyone.
+0 She only stops when the whole installation is shut down: her head, belly and feet go out and she stops turning.

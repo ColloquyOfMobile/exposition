@@ -1,0 +1,16 @@
+# A male calling
+# What a male does once he is no longer satisfied: he turns slowly back and forth on the
+# spot, and his head ring blinks a repeating on/off pattern - his way of saying who he is
+# and what he wants. Movement times below are estimates: measure them once and correct
+# this file.
+
+0 His head ring lights up bright white and stays on.
+0 He starts to turn, swinging towards one end of his travel - about a quarter of a turn from where he was standing.
+0.5 The ring begins to blink: it changes state every half second, on or off, always at the same tempo.
+4.5 Ten half-second steps make one full pattern, so the blinking repeats every 5 seconds. Stand and watch: the same sequence of flashes should come round again and again.
+1.5 He reaches the end of his turn and immediately starts turning back the other way. One sweep takes roughly 6 seconds, so he reverses about every 6 seconds, without pause, for as long as he is calling.
+0 The pattern itself says two things at once: which male he is (male 1 and male 2 have different patterns) and which appetite he wants satisfied - O, P, or both. Each male has four possible patterns and blinks only one at a time.
+143.5 He carries on exactly like this, turning and repeating the same pattern, for the next two and a half minutes.
+0 Both his appetites now pass the frustrated mark, and he switches to his "both" pattern. He keeps that same pattern for the rest of the evening, because nothing ever lowers an appetite again.
+0 Note the switch is not clean: he changes pattern in the middle of the one he was blinking, so for a few seconds the flashes are neither one pattern nor the other.
+0 He never stops calling. There is no moment in the artwork where a male decides he has been answered and goes quiet - once a male starts, he turns and blinks until the whole installation is shut down.

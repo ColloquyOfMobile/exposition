@@ -1,8 +1,0 @@
-# Blink (male only)
-# hardware/male/search/blink/__init__.py - started by a male's own Search.setup() once he becomes frustrated; stops on its own once Search stops (started_by relationship, base_thread's break condition).
-
-0 setup(): ring set to solid white (r0 g0 b0 w255) and turned on; the 10-bit pattern for the male's which_is_frustated() state was already chosen and converted to a deque back when the Male object was constructed - not re-picked here
-0 whenever this thread is eventually stopped (when Search stops), setdown() forces the ring off - not on any fixed schedule of Blink's own, so it's mentioned here rather than after the repeating cycle below
-5 loop() pops the pattern deque's leftmost bit, re-appends it (rotation), and writes that bit to male.ring.set(bit) every 0.5s - one full 10-bit pattern plays out over these 5 seconds (ring visibly blinking on/off)
-0 the deque has now made one full rotation; the same 10-bit word begins repeating from the start
-5 a second full pattern cycle plays out identically - this repeats indefinitely for as long as Blink runs; nothing re-reads which_is_frustated() while it's running (SCENARIOS.md 1.3), so a drive-state change mid-run has no visible effect until Search restarts and Blink is re-setup

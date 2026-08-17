@@ -1,0 +1,9 @@
+# The bar
+# The motorised rail the males ride along. It carries no lights of its own - the only
+# thing to watch is where it is and whether it is moving.
+
+0 At switch-on the bar is powered but does not move. It stays exactly where it was left.
+12 It waits, motionless, for as long as no male is calling - in practice about twelve seconds after start, until the first male begins.
+0 The moment any male starts calling, the bar sets off. It does not matter which male, and it makes no difference if the second male starts calling later: the bar's behaviour is the same either way.
+-> bar-wandering
+0 Once it has set off, nothing ever stops it again except shutting the installation down. It does not stop when a female recognises someone, and it does not settle in front of any particular pair.

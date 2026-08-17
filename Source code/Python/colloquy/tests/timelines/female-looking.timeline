@@ -1,0 +1,15 @@
+# A female looking
+# What a female does once she is no longer satisfied: she turns slowly back and forth on
+# the spot, sweeping the room with the light sensor in her head, trying to recognise a
+# male's blinking pattern. Unlike a male, she shows nothing while she does it - there is
+# no light on her that says "I am looking" or "I have recognised someone". Movement times
+# are estimates.
+
+0 She starts to turn, swinging towards one end of her travel - about a quarter of a turn, the same sweep the males make.
+1 She reaches the end and turns straight back the other way, roughly every 6 seconds, without pause, for as long as she is looking.
+0 All the while she is reading the light falling on her head, many times a second. A reading counts as "light" only above a fixed threshold, the same threshold for all three females.
+5 She needs 5 seconds of continuous reading - the length of one full male pattern - before she can recognise anything at all. Every attempt before that is blind.
+0 From then on she compares what she has just seen against the eight known patterns (four for each male), several times a second.
+0 If it matches, she notes which male and which appetite - but she does nothing with it. Nothing moves, nothing lights up, nothing changes on her or on him. The only way to see that she recognised something is on the control page, or in the log file.
+0 She keeps looking and re-recognising indefinitely. As with the males, nothing in the artwork ends a female's search: she turns and reads until the installation is shut down.
+0 Two things to know when checking her against reality. She only sees a male when her head is pointed at him and the bar has brought him in front of her - both are matters of chance, nothing coordinates them. And she can be fooled: two of the eight patterns are the same sequence started at a different moment, and she is allowed one wrong flash out of ten, so a female confidently naming the wrong male is expected behaviour today, not a fluke.

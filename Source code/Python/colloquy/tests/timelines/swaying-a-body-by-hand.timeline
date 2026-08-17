@@ -1,0 +1,14 @@
+# Swaying one body by hand
+# A movement you can start from the control page on any single body - a male, a female,
+# or the bar - without the rest of the artwork running. Useful for checking a motor, a
+# travel range, or how long one sweep really takes. The artwork never does this on its
+# own: when a body moves by itself it is because it is calling or looking, not because of
+# this. Times are estimates - this is a good movement to time with a stopwatch.
+
+0 You press start on that body's "turn back and forth" on the control page.
+0 It sets off towards one end of its travel. For a male or a female that is about a quarter turn; for the bar it is its whole length.
+6 It arrives - about 6 seconds for a body, about half a minute for the bar.
+0 Without pausing, it sets off back towards the other end.
+6 It arrives at the other end.
+0 And so on, back and forth at the same speed, indefinitely, until you press stop.
+0 No lights change while this runs, and no appetite is involved. A body swaying like this has nothing to do with whether it is hungry - it is just the motor moving.

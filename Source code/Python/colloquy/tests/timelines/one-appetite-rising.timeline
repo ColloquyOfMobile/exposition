@@ -1,0 +1,14 @@
+# One appetite rising
+# Each body has two appetites, called O and P. They are not visible in themselves - what
+# you see is the light that follows them: the brighter that light, the hungrier the body.
+# This file describes one single appetite, from switch-on onwards. The times below are
+# exact (the artwork counts them itself), unlike the movement times elsewhere, which are
+# estimates. They assume an appetite starting from empty; the bodies are set up starting
+# part-filled, so in practice each one reaches these points a little sooner.
+
+0 The appetite starts at a value between 0 and 100, set in advance for each body. They are deliberately different, so the five bodies do not all wake up at the same moment.
+30 It grows by one point every 2.4 seconds, always at that speed. Below about 12 points the body counts as satisfied for this appetite, so it takes half a minute to leave that state.
+150 It keeps growing at the same steady rate. At 75 points the body counts as frustrated for this appetite - three minutes from empty.
+60 It goes on growing for one more minute and then reaches 100 and stops. Four minutes from empty to full.
+0 Nothing in the artwork ever lowers an appetite again: no encounter, no exchange, no passage of time brings it back down. Only a person, from the control page, can reset it.
+0 So every appetite you watch only ever climbs, and after four minutes every appetite in the room is simply full and stays full for the rest of the evening.
