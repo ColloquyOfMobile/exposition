@@ -82,9 +82,6 @@ class WSGI2(Base):
         if key == "restart":
             return self._parse_restart(*leftovers)
 
-        if key == "virtual-state":
-            return self._parse_virtual_state(*leftovers)
-
         if key == self._root.name:
             return self._parse_app(*leftovers)
 
@@ -301,25 +298,6 @@ class WSGI2(Base):
 
         return status, headers, content
 
-    def _parse_virtual_state(self, *args):
-        """The right-hand panel's contents, on their own.
-
-        Polled by static/virtual_state.js so the panel keeps up with a
-        simulation that changes constantly (a blinking ring changes ten
-        times per pattern) without reloading the page - reloading would
-        re-issue whatever /call/... the address bar happens to hold, and
-        clicking "start" twice by refreshing is not a thing this UI should
-        make possible.
-
-        Read-only by construction: it renders value leaves and skips every
-        callable, so nothing here can drive the installation.
-        """
-        content_type = "text/html; charset=utf-8"
-        headers = [("Content-Type", content_type)]
-        if not self.colloquy.is_simulated:
-            return "404 Not found", headers, b""
-        return "200 OK", headers, self._html_virtual_state().encode()
-
     def _html_virtual_state(self):
         doc, tag, text = Doc().tagtext()
 
@@ -361,8 +339,14 @@ class WSGI2(Base):
         return doc.getvalue()
 
     def _html_virtual_panel(self):
-        """The panel itself: a heading, a placeholder the poller replaces,
-        and the poller."""
+        """The panel itself.
+
+        Rendered fresh with every page, so it shows the simulation as it
+        was when the page was served - the "refresh" link at the top is
+        the way to update it. That link points at the current node's own
+        path, not at whatever /call/... may have led here, so refreshing
+        never re-runs a command.
+        """
         doc, tag, text = Doc().tagtext()
 
         style = {
@@ -376,11 +360,7 @@ class WSGI2(Base):
         with tag("div", name="virtual hardware", style=export_style(style)):
             with tag("div", style="font-weight: bold; margin-bottom: 0.5rem;"):
                 text("VIRTUAL HARDWARE")
-            with tag("div", id="virtual-state"):
-                doc.asis(self._html_virtual_state())
-
-        with tag("script", src="/static/virtual_state.js"):
-            pass
+            doc.asis(self._html_virtual_state())
 
         return doc.getvalue()
 
