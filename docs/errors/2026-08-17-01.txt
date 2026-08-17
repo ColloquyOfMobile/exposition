@@ -1,0 +1,75 @@
+03.95s command={'path': 'f3/bodyO', 'r': 0, 'g': 0, 'b': 0, 'w': 0}
+03.98s command={'path': 'f3/bodyP', 'r': 0, 'g': 0, 'b': 0, 'w': 0}
+04.00s command={'path': 'f3/feet', 'r': 0, 'g': 0, 'b': 0, 'w': 0}
+Accessible at http://localhost:8087/
+args=('app', 'tests', 'test read pattern')
+args=('app', 'tests', 'test read pattern', 'call', 'start')
+08.39s None is starting TestReadPattern(tests/test read pattern).
+args=('app', 'tests', 'test read pattern', 'call', "male2's drives", 'open')
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\base.py", line 152, in snapshot
+    states.update(self._snapshot_if_opened(path))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\tests\test_read_pattern\__init__.py", line 210, in _snapshot_if_opened
+    states = super()._snapshot_if_opened(path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\base_thread\__init__.py", line 176, in _snapshot_if_opened
+    states = super()._snapshot_if_opened(path=path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\base.py", line 145, in _snapshot_if_opened
+    states[k] = v.snapshot_as_child(path=child_path)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\base.py", line 186, in snapshot_as_child
+    states.update(self._snapshot_if_opened(path))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\base_thread\__init__.py", line 176, in _snapshot_if_opened
+    states = super()._snapshot_if_opened(path=path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\base.py", line 145, in _snapshot_if_opened
+    states[k] = v.snapshot_as_child(path=child_path)
+                ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'function' object has no attribute 'snapshot_as_child'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\wsgiref\handlers.py", line 137, in run
+    self.result = application(self.environ, self.start_response)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\server2\__init__.py", line 59, in wsgi
+    return WSGI2(server=self, environ=environ, start_response=start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\server2\wsgi2.py", line 38, in __init__
+    self._status, self._headers, self._content = self._parse()
+                                                 ^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\server2\wsgi2.py", line 86, in _parse
+    return self._parse_app(*leftovers)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\server2\wsgi2.py", line 175, in _parse_app
+    to_render = self.get_states(*args)
+                ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\server2\wsgi2.py", line 62, in get_states
+    states = self.colloquy.get_states(*args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\__init__.py", line 159, in get_states
+    states = self.snapshot(path=tuple(), focus_path=focus["path"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\base_thread\__init__.py", line 185, in snapshot
+    states = super().snapshot(path=path, focus_path=focus_path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\base.py", line 161, in snapshot
+    states[k] = v.snapshot(path=child_path, focus_path=focus_path)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\base.py", line 161, in snapshot
+    states[k] = v.snapshot(path=child_path, focus_path=focus_path)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\base_thread\__init__.py", line 185, in snapshot
+    states = super().snapshot(path=path, focus_path=focus_path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\base.py", line 179, in snapshot
+    raise SnapchotError(f"Error getting snapshot from {self}") from error
+colloquy.base.SnapchotError: Error getting snapshot from TestReadPattern(tests/test read pattern)
+Shutdown event!
+Out from server loop.
+Out from server context.
+Set down self=ReadPattern(hardware/female1/search/read pattern female1)
