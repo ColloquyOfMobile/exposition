@@ -82,6 +82,9 @@ class WSGI2(Base):
         if key == "restart":
             return self._parse_restart(*leftovers)
 
+        if key == "virtual-state":
+            return self._parse_virtual_state(*leftovers)
+
         if key == self._root.name:
             return self._parse_app(*leftovers)
 
@@ -265,11 +268,29 @@ class WSGI2(Base):
                 with tag("div", name="thread count", style="display: flex;"):
                     text(f"thread count: {len(self.all_threads)}")
 
-                doc.asis(
-                    self._html_recursion(
-                        obj=to_render,
-                    )
-                )
+                # Commands on the left, simulated state on the right, side
+                # by side: watching what the installation does while
+                # driving it used to mean alternating between two pages.
+                # min-height/min-width 0 keep the two columns scrolling
+                # inside themselves instead of stretching the page.
+                with tag(
+                    "div",
+                    name="split",
+                    style="flex: 1; display: flex; gap: 1ch; min-height: 0;",
+                ):
+                    with tag(
+                        "div",
+                        name="commands",
+                        style="flex: 1; min-width: 0; overflow: auto; display: flex;",
+                    ):
+                        doc.asis(
+                            self._html_recursion(
+                                obj=to_render,
+                            )
+                        )
+
+                    if self.colloquy.is_simulated:
+                        doc.asis(self._html_virtual_panel())
 
                 with tag("script", src="/static/svg_zoom.js"):
                     pass
@@ -279,6 +300,89 @@ class WSGI2(Base):
         content = html.encode()
 
         return status, headers, content
+
+    def _parse_virtual_state(self, *args):
+        """The right-hand panel's contents, on their own.
+
+        Polled by static/virtual_state.js so the panel keeps up with a
+        simulation that changes constantly (a blinking ring changes ten
+        times per pattern) without reloading the page - reloading would
+        re-issue whatever /call/... the address bar happens to hold, and
+        clicking "start" twice by refreshing is not a thing this UI should
+        make possible.
+
+        Read-only by construction: it renders value leaves and skips every
+        callable, so nothing here can drive the installation.
+        """
+        content_type = "text/html; charset=utf-8"
+        headers = [("Content-Type", content_type)]
+        if not self.colloquy.is_simulated:
+            return "404 Not found", headers, b""
+        return "200 OK", headers, self._html_virtual_state().encode()
+
+    def _html_virtual_state(self):
+        doc, tag, text = Doc().tagtext()
+
+        for name, node in self.colloquy.virtual_hardware.snapshot_children.items():
+            values = {
+                key: value["value"]
+                for key, value in node._snapshot_if_opened(path=()).items()
+                if isinstance(value, dict) and "value" in value
+            }
+            if not values:
+                continue
+
+            with tag("div", style="margin-bottom: 0.6rem;"):
+                with tag("div", style="font-weight: bold; opacity: 0.75;"):
+                    text(name)
+                for key, value in values.items():
+                    with tag(
+                        "div",
+                        style="display: flex; gap: 1ch; padding-left: 1ch;",
+                    ):
+                        # min-width:0 on both halves, or a long label (the
+                        # timing node has "bar full travel (10000 units)")
+                        # refuses to shrink below its text and pushes the
+                        # value off the edge of the panel.
+                        with tag(
+                            "div",
+                            style=(
+                                "flex: 0 0 13ch; min-width: 0; opacity: 0.6; "
+                                "overflow-wrap: anywhere;"
+                            ),
+                        ):
+                            text(key)
+                        with tag(
+                            "div",
+                            style="flex: 1; min-width: 0; overflow-wrap: anywhere;",
+                        ):
+                            text(str(value))
+
+        return doc.getvalue()
+
+    def _html_virtual_panel(self):
+        """The panel itself: a heading, a placeholder the poller replaces,
+        and the poller."""
+        doc, tag, text = Doc().tagtext()
+
+        style = {
+            "flex": "0 0 38ch",
+            "overflow": "auto",
+            "border-left": "1px gray solid",
+            "padding-left": "1ch",
+            "font-family": "monospace",
+            "font-size": "0.8rem",
+        }
+        with tag("div", name="virtual hardware", style=export_style(style)):
+            with tag("div", style="font-weight: bold; margin-bottom: 0.5rem;"):
+                text("VIRTUAL HARDWARE")
+            with tag("div", id="virtual-state"):
+                doc.asis(self._html_virtual_state())
+
+        with tag("script", src="/static/virtual_state.js"):
+            pass
+
+        return doc.getvalue()
 
     def _parse_not_found(self, args, error):
         """A mistyped/stale path segment - NotImplementedError is this
