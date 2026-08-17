@@ -85,11 +85,18 @@ def test_read_4_bytes_rejects_a_1_byte_register(stub_factory):
         handler.read4ByteTxRx(None, dxl_id=3, register_address=TEMPERATURE)
 
 
-def test_write_goal_position_without_torque_raises_not_implemented(stub_factory):
+def test_write_goal_position_without_torque_is_accepted_and_held(stub_factory):
+    # It used to raise NotImplementedError out of the write, killing the
+    # calling thread; a real servo holds the value until torque is on.
     handler = make_handler(stub_factory)
 
-    with pytest.raises(NotImplementedError):
-        handler.write4ByteTxRx(None, dxl_id=4, register_address=GOAL_POSITION, value=500)
+    comm, error = handler.write4ByteTxRx(
+        None, dxl_id=4, register_address=GOAL_POSITION, value=500
+    )
+
+    assert (comm, error) == (COMM_SUCCESS, 0)
+    assert handler.dxls[4].get("goal position") == 500
+    assert handler.dxls[4].get("position") == 0
 
 
 def test_write_goal_position_with_torque_enabled_and_no_move_needed(stub_factory):
@@ -97,7 +104,6 @@ def test_write_goal_position_with_torque_enabled_and_no_move_needed(stub_factory
     handler.write1ByteTxRx(None, dxl_id=5, register_address=TORQUE_ENABLED, value=1)
 
     handler.write4ByteTxRx(None, dxl_id=5, register_address=GOAL_POSITION, value=0)
-    handler.dxls[5]._thread.join(timeout=1)
 
     assert handler.read4ByteTxRx(None, dxl_id=5, register_address=GOAL_POSITION) == (
         0,

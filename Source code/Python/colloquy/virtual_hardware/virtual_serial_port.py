@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 import re
+from time import sleep
 from colloquy.base import Base
 from random import Random
 
@@ -16,12 +17,22 @@ _ARDUINO_SKETCH = (
 )
 
 
+# One command and its reply over the real link: ~70 characters at 57600
+# baud is about 12ms, plus the sketch's own parse and NeoPixel.show().
+# Replying instantly is not neutral - ReadPattern bins its samples by wall
+# clock, so a simulator with no latency feeds it 2-3x more samples per
+# pattern step than the rig ever will, and a decode that works here can
+# fail there for reasons that have nothing to do with the decoding.
+REALISTIC_LATENCY = 0.015
+
+
 class VirtualSerialPort(Base):
     """Stands in for the Arduino's pyserial connection when simulated.
 
     Replies are shaped like the real firmware's, which answers every
     command with `Serial.println(response)`: a decimal number for a light
-    sensor read, an empty string for anything else, both CRLF-terminated.
+    sensor read, an empty string for anything else, both CRLF-terminated -
+    and they take about as long to arrive.
     """
 
     def __init__(self, owner, port=None):
@@ -71,6 +82,7 @@ class VirtualSerialPort(Base):
         # noise is the only randomness in here, and a decode experiment
         # that can't be replayed is hard to argue about.
         self._random = Random(0)
+        self.latency = REALISTIC_LATENCY
         self._states = states = {}
         for i in range(3):
             states[f"female{i + 1}"] = female = {}
@@ -115,6 +127,11 @@ class VirtualSerialPort(Base):
         # next time somebody stood in front of the real installation.
         assert path in self._possible_paths, f"{path=}, {self._possible_paths=}"
         self._to_return = self._path_handlers[path](data)
+        # Charged on the write, which is where the caller is blocked on the
+        # real link: Arduino._send_unsafe() writes and reads back-to-back
+        # while holding the port lock.
+        if self.latency:
+            sleep(self.latency)
 
     @property
     def is_open(self):

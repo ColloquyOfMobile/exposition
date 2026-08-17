@@ -4,7 +4,7 @@ simulated arduino and servos currently hold.
 """
 from types import SimpleNamespace
 
-from colloquy.virtual_hardware.browser import BodyStateNode, ServosNode
+from colloquy.virtual_hardware.browser import BodyStateNode, ServosNode, TimingNode
 
 
 def make_owner(stub_factory, states=None, dxls=None):
@@ -84,3 +84,38 @@ def test_a_servo_on_its_way_says_so_and_by_how_far(stub_factory):
     node = ServosNode(owner=make_owner(stub_factory, dxls=dxls))
 
     assert leaves(node)["bar"] == "position 100, goal 2100, torque on, moving (+2000)"
+
+
+def commands(node, path=()):
+    """The clickable commands an opened node offers."""
+    return {key: value for key, value in node._snapshot_if_opened(path).items() if callable(value)}
+
+
+def make_timing_owner(stub_factory, latency=0.015, speed=313.0):
+    port = SimpleNamespace(latency=latency)
+    dxls = {i: SimpleNamespace(speed=speed) for i in range(10)}
+    return stub_factory(arduino_serial_port=port, dxls=dxls)
+
+
+def test_timing_reports_the_round_trip_and_what_it_implies(stub_factory):
+    node = TimingNode(owner=make_timing_owner(stub_factory))
+
+    shown = leaves(node)
+
+    assert shown["arduino round trip"] == "15ms"
+    assert shown["servo speed"] == "313 units/s"
+    # The two travels this installation actually cares about, in seconds
+    # rather than in servo units.
+    assert shown["body sweep (2000 units)"] == "6.4s"
+    assert shown["bar full travel (10000 units)"] == "31.9s"
+
+
+def test_timing_presets_set_the_latency(stub_factory):
+    owner = make_timing_owner(stub_factory)
+    node = TimingNode(owner=owner)
+
+    commands(node)["instant replies (unrealistic)"]()
+    assert owner.arduino_serial_port.latency == 0
+
+    commands(node)["slow replies (50ms)"]()
+    assert owner.arduino_serial_port.latency == 0.05

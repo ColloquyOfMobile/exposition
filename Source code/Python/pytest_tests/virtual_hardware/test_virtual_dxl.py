@@ -54,30 +54,52 @@ def test_position_property_reflects_dict(stub_factory):
     assert dxl.position == 500
 
 
-def test_set_goal_position_raises_when_torque_disabled(stub_factory):
+def test_a_goal_written_with_torque_off_is_held_not_refused(stub_factory):
+    # A real servo accepts the value and holds still; it used to raise
+    # NotImplementedError from inside the write, killing whichever thread
+    # happened to be writing. DXL.init_hardware() writes registers in
+    # exactly this order - torque off, configure, torque on.
     dxl = make_dxl(stub_factory)
 
-    try:
-        dxl.set("goal position", 500)
-    except NotImplementedError:
-        pass
-    else:
-        assert False, "expected NotImplementedError"
+    dxl.set("goal position", 500)
 
-    # The dict is still updated before the torque check fires.
     assert dxl.get("goal position") == 500
+    assert dxl.get("position") == 0, "torque is off, so nothing moves"
+    assert dxl._thread is None
+
+
+def test_enabling_torque_moves_to_a_goal_written_earlier(stub_factory):
+    dxl = make_dxl(stub_factory)
+    dxl.set("goal position", 200)
+
+    dxl.set("torque enabled", 1)
+    dxl._thread.join(timeout=5)
+
+    assert dxl.get("position") == 200
+
+
+def test_cutting_torque_stops_a_move_in_progress(stub_factory):
+    dxl = make_dxl(stub_factory)
+    dxl.set("torque enabled", 1)
+    dxl.set("goal position", 100000)  # far enough to still be moving
+
+    dxl.set("torque enabled", 0)
+    dxl._thread.join(timeout=5)
+
+    assert not dxl._thread.is_alive()
+    assert dxl.get("position") < 100000
 
 
 def test_set_goal_position_starts_a_thread_when_torque_enabled(stub_factory):
     dxl = make_dxl(stub_factory)
     dxl._dict["torque enabled"] = 1
 
-    dxl.set("goal position", 0)  # goal == current position -> run() returns fast
-    dxl._thread.join(timeout=1)
+    dxl.set("goal position", 40)
+    dxl._thread.join(timeout=5)
 
     assert dxl._thread is not None
     assert not dxl._thread.is_alive()
-    assert dxl.get("position") == 0
+    assert dxl.get("position") == 40
 
 
 def test_set_goal_position_reuses_existing_thread_while_alive(stub_factory, monkeypatch):
@@ -105,31 +127,59 @@ def test_set_goal_position_reuses_existing_thread_while_alive(stub_factory, monk
     assert dxl._thread is first_thread
 
 
-def test_run_steps_position_up_toward_goal(stub_factory):
+def test_run_reaches_the_goal_exactly_going_up(stub_factory):
+    # Exactly, not "within two steps": DXL.is_moving() compares against a
+    # threshold of 20 units, and a fast profile makes a single step bigger
+    # than that - a servo that stopped short would read as moving forever.
     dxl = make_dxl(stub_factory)
+    dxl._dict["torque enabled"] = 1
     dxl._dict["position"] = 0
     dxl._dict["goal position"] = 25
 
     dxl.run()
 
-    assert dxl.get("position") == 10
+    assert dxl.get("position") == 25
 
 
-def test_run_steps_position_down_toward_goal(stub_factory):
+def test_run_reaches_the_goal_exactly_going_down(stub_factory):
     dxl = make_dxl(stub_factory)
+    dxl._dict["torque enabled"] = 1
     dxl._dict["position"] = 50
     dxl._dict["goal position"] = 25
 
     dxl.run()
 
-    assert dxl.get("position") == 40
+    assert dxl.get("position") == 25
 
 
-def test_run_returns_immediately_when_already_within_two_steps_of_goal(stub_factory):
+def test_run_returns_immediately_when_already_there(stub_factory):
     dxl = make_dxl(stub_factory)
+    dxl._dict["torque enabled"] = 1
     dxl._dict["position"] = 25
     dxl._dict["goal position"] = 25
 
     dxl.run()
 
     assert dxl.get("position") == 25
+
+
+def test_speed_follows_the_profile_velocity_register(stub_factory):
+    # 0.229 rev/min per unit, 4096 units per revolution: the value
+    # DXL.init_hardware() writes (20) is ~313 units/s, so a body's
+    # 2000-unit sweep takes ~6.4s and the bar's 10000-unit crossing ~32s.
+    dxl = make_dxl(stub_factory)
+
+    dxl.set("profile velocity", 20)
+    assert 310 < dxl.speed < 315
+
+    dxl.set("profile velocity", 40)
+    assert 620 < dxl.speed < 630
+
+
+def test_profile_velocity_zero_means_as_fast_as_possible(stub_factory):
+    # Not "don't move" - that is what the register means on real hardware.
+    dxl = make_dxl(stub_factory)
+
+    dxl.set("profile velocity", 0)
+
+    assert dxl.speed == dxl._MAX_UNITS_PER_SECOND

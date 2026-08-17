@@ -320,3 +320,35 @@ def test_readings_are_repeatable_across_runs(stub_factory):
         return reading(port)
 
     assert read_once() == read_once()
+
+
+def test_a_round_trip_costs_time_by_default(stub_factory, monkeypatch):
+    # Replying instantly is not neutral: ReadPattern bins its samples by
+    # wall clock, so a latency-free simulator hands it 2-3x more samples
+    # per pattern step than the rig ever will.
+    import colloquy.virtual_hardware.virtual_serial_port as module
+
+    slept = []
+    monkeypatch.setattr(module, "sleep", slept.append)
+    port = make_port(stub_factory)
+    port._is_open = True
+
+    assert port.latency == module.REALISTIC_LATENCY
+
+    port.write(json.dumps({"path": "m1/light sensor/a"}).encode())
+
+    assert slept == [module.REALISTIC_LATENCY]
+
+
+def test_latency_can_be_turned_off(stub_factory, monkeypatch):
+    import colloquy.virtual_hardware.virtual_serial_port as module
+
+    slept = []
+    monkeypatch.setattr(module, "sleep", slept.append)
+    port = make_port(stub_factory)
+    port._is_open = True
+    port.latency = 0
+
+    port.write(json.dumps({"path": "m1/light sensor/a"}).encode())
+
+    assert slept == []

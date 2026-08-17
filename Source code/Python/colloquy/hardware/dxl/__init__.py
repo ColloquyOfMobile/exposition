@@ -98,16 +98,33 @@ class DXL(Base):
         self.goal_position.write(position)
         self.wait_for_servo()
 
-    def wait_for_servo(self):
+    # Long enough for the longest legitimate move. The bar's full travel is
+    # 10000 units, and at the profile velocity init_hardware() writes (20,
+    # i.e. ~313 units/s) that is about 32 seconds - so the previous 30s
+    # bound could not be met by the one body that most often has to cross
+    # its whole range. Simulating the servos at their configured speed is
+    # what made this visible; it applies to the real bar just the same.
+    MOVE_TIMEOUT = 60
+
+    def wait_for_servo(self, timeout=None):
         """Blocking funtion that waits until the body has reached his goal position."""
+        if timeout is None:
+            timeout = self.MOVE_TIMEOUT
         start = time()
-        while True:
-            if not self.is_moving:
-                break
-            assert time() - start < 30, (
-                "Moving male or female shouldn't take more than 30s!"
-            )
-            timelap = time() - start
+        while self.is_moving:
+            if time() - start > timeout:
+                # Raised, not asserted: asserts vanish under python -O, and
+                # this is a real condition (a jammed body, a servo that lost
+                # power) that the thread framework should record and show,
+                # not an internal invariant.
+                raise TimeoutError(
+                    f"{self.name} did not reach its goal position within "
+                    f"{timeout}s (position {self.position.read()}, goal "
+                    f"{self.goal_position.read()})."
+                )
+            # Was a bare busy-loop, re-reading two registers per iteration
+            # as fast as the bus allowed, for the whole length of a move.
+            sleep(0.02)
 
     def init_hardware(self, request=None):
 

@@ -14,6 +14,7 @@ window onto the simulation, not another way to drive it.
 from colloquy.base import Base
 
 from .dxl_ids import BODY_DXL_IDS
+from .virtual_serial_port import REALISTIC_LATENCY
 
 
 def _pixel_description(pixel):
@@ -125,6 +126,62 @@ class FaultsNode(Base):
             ("faults injected", handler.fault_count),
         ):
             states[key] = {"path": path + (key,), "name": key, "value": value}
+        return states
+
+
+class TimingNode(Base):
+    """How fast the simulation pretends to be.
+
+    Both knobs matter for what this codebase actually measures. Servo
+    speed decides how long a body faces another, and so how much of a
+    blink pattern a female can see. Arduino latency decides how many
+    sensor samples she gets per pattern step - ReadPattern bins by wall
+    clock, so replying instantly hands her 2-3x more samples than the rig
+    ever will.
+    """
+
+    _LATENCY_PRESETS = {
+        "instant replies (unrealistic)": 0.0,
+        "realistic replies (15ms)": REALISTIC_LATENCY,
+        "slow replies (50ms)": 0.05,
+    }
+
+    @property
+    def name(self):
+        return "timing"
+
+    @property
+    def snapshot_children(self):
+        return {}
+
+    def _make_preset(self, latency):
+        def preset(request=None):
+            self.owner.arduino_serial_port.latency = latency
+
+        return preset
+
+    def _snapshot_if_opened(self, path):
+        states = super()._snapshot_if_opened(path)
+
+        for label, latency in self._LATENCY_PRESETS.items():
+            states[label] = self._make_preset(latency)
+
+        def leaf(key, value):
+            states[key] = {"path": path + (key,), "name": key, "value": value}
+
+        leaf(
+            "arduino round trip",
+            f"{self.owner.arduino_serial_port.latency * 1000:.0f}ms",
+        )
+
+        # Speed is per servo, but every body is configured identically by
+        # DXL.init_hardware(), so one line plus the travel each body has to
+        # cover says more than nine identical rows.
+        speed = self.owner.dxls[BODY_DXL_IDS["bar"]].speed
+        leaf("servo speed", f"{speed:.0f} units/s")
+        if speed:
+            leaf("body sweep (2000 units)", f"{2000 / speed:.1f}s")
+            leaf("bar full travel (10000 units)", f"{10000 / speed:.1f}s")
         return states
 
 

@@ -234,7 +234,8 @@ class Colloquy(BaseThread):
         Deliberately does not wait/join: once torque is off, a stale
         goal_position no longer converges, so DXL.is_moving can read True
         forever - a thread stuck in wait_for_servo() won't notice torque
-        was cut and will keep busy-spinning until its own 30s timeout. The
+        was cut and will keep polling until its own timeout (60s, long
+        enough for the bar to cross its full travel). The
         request handling this must return immediately regardless, since
         the single-threaded dev server can't serve anything else (including
         another emergency-stop click) while blocked in a request.
