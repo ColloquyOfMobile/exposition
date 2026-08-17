@@ -12,7 +12,8 @@ HEAD_COLOR_BY_MALE = {
 
 class TestReadPattern(BaseThread):
     """Lets a tester pick which male sends his identity pattern and which
-    female receives it, moves the bar so they face each other, blinks the
+    female receives it, brings the pair face to face (bar to their meeting
+    point, both bodies turned to their own origin), blinks the
     sender and starts the receiver's read_pattern, and gives a visual
     readout on the receiver's own neopixels - test-only, the installation
     itself doesn't do this: head blue for male1 / red for male2, body_o lit
@@ -92,12 +93,41 @@ class TestReadPattern(BaseThread):
             "seconds, sender, receiver, expected drive, detected male, detected drive, match\n"
         )
 
-        self.hardware.bar.move_male_in_front_of_female_and_wait(
-            self._male_name, self._female_name
-        )
+        self._move_into_position()
         self.male.drives.set_o_and_p_to_100()
         self.male.search.blink.start(started_by=self)
         self.female.search.read_pattern.start(started_by=self)
+
+    def _move_into_position(self):
+        """Bring the pair face to face before anything is measured: the bar
+        carries the male to his meeting point with this female, and both
+        bodies turn back to their own origin so they actually point at each
+        other. Positioning the bar alone isn't enough - a body left facing
+        elsewhere (by an earlier test, by hand, or by its own search sway)
+        stays that way for the whole run, and the female then reads nothing
+        at all for reasons that have nothing to do with the pattern.
+
+        All three are commanded first and waited on together rather than one
+        after another: they move concurrently anyway, and the wait is scoped
+        to these three servos so it isn't defeated by some other body swaying
+        elsewhere on the bus."""
+        hardware = self.hardware
+        hardware.bar.set_male_in_front_of_female(self._male_name, self._female_name)
+        self.male.turn_to_origin()
+        self.female.turn_to_origin()
+
+        dxls = (hardware.bar.dxl, self.male.dxl, self.female.dxl)
+        if not hardware.wait_until_everything_is_still(dxls=dxls):
+            # Deliberately not raised: an error here would be recorded on
+            # this node and, with no way to clear it, would block every
+            # later run until the process restarts. A run against a body
+            # that never arrived is worth flagging, not worth bricking the
+            # test with.
+            self.log(
+                f"WARNING: {self._male_name}, {self._female_name} and the bar "
+                "were not all in position in time - they may not be facing "
+                "each other, so this run's results are not trustworthy."
+            )
 
     def setdown(self):
         self._start_time = None
