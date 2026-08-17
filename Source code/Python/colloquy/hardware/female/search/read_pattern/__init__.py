@@ -31,8 +31,30 @@ class ReadPattern(BaseThread):
 
         self._last_sample_time = 0.0
         self._last_detection_time = 0.0
-        self.last_match = None
+        self._last_match = None
         self.last_match_time = None
+
+    @property
+    def match_validity(self):
+        """How long a detection stays current. A match describes what the
+        sensor saw over the preceding few seconds, so it goes stale as soon
+        as the female (or the bar) has moved on - two full pattern lengths
+        after the last time it was seen, it stops being an answer."""
+        return self.step_duration * self.steps * 2
+
+    @property
+    def last_match(self):
+        """The (male, drive) currently being seen, or None. Deliberately not
+        a plain attribute holding the last hit forever: a failed attempt
+        leaves the previous value untouched, so without this expiry a single
+        detection stands as "what she sees" indefinitely - long after she has
+        turned away - and anything counting it reads a rising number where
+        nothing is happening."""
+        if self._last_match is None:
+            return None
+        if (time() - self.last_match_time) > self.match_validity:
+            return None
+        return self._last_match
 
     @property
     def light_sensor(self):
@@ -65,14 +87,23 @@ class ReadPattern(BaseThread):
             match = self._try_match()
             if match:
                 male, drive = match
-                self.last_match = match
+                self._last_match = match
                 self.last_match_time = now
                 if (now - self._last_detection_time) > self.detection_cooldown:
                     self.log(f"Pattern detected: {male} drive={drive}")
                     self._last_detection_time = now
 
     def setup(self):
-        pass
+        # This object lives as long as the process, so everything below
+        # outlives a single run. Start each run from nothing: otherwise the
+        # buffer still holds samples from whenever the sensor was last read,
+        # and the first seconds report a detection made during an earlier run
+        # entirely - minutes or hours ago, possibly against a different male.
+        self.sample_buffer.clear()
+        self._last_sample_time = 0.0
+        self._last_detection_time = 0.0
+        self._last_match = None
+        self.last_match_time = None
 
     def setdown(self):
         print(f"Set down {self=}")
@@ -142,12 +173,15 @@ class ReadPattern(BaseThread):
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
-        if self.last_match is not None:
-            male, drive = self.last_match
+        if self._last_match is not None:
+            male, drive = self._last_match
             seconds_ago = round(time() - self.last_match_time, 1)
+            # Shown even once expired, with the difference spelled out: the
+            # age alone doesn't tell a reader where the cut-off is.
+            expired = "" if self.last_match else ", expired - not what she sees now"
             states["last match"] = {
                 "path": path + ("last match",),
                 "name": "last match",
-                "value": f"{male} drive={drive} ({seconds_ago}s ago)",
+                "value": f"{male} drive={drive} ({seconds_ago}s ago{expired})",
             }
         return states

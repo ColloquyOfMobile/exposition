@@ -53,6 +53,8 @@ class TestReadPattern(BaseThread):
         self._last_log_time = 0.0
         self._match_count = 0
         self._mismatch_count = 0
+        self._blank_count = 0
+        self._row_count = 0
 
     @property
     def name(self):
@@ -89,6 +91,8 @@ class TestReadPattern(BaseThread):
         self._last_log_time = 0.0
         self._match_count = 0
         self._mismatch_count = 0
+        self._blank_count = 0
+        self._row_count = 0
         self._file.write(
             "seconds, sender, receiver, expected drive, detected male, detected drive, match\n"
         )
@@ -148,10 +152,19 @@ class TestReadPattern(BaseThread):
         self._last_log_time = now
 
         expected_drive = self.male.drives.which_is_frustated()
+        # Only counts as something she sees now: read_pattern expires a
+        # detection once it stops being refreshed, so a second in which she
+        # saw nothing is recorded as nothing rather than repeating the last
+        # answer. Each row is therefore one second of "what was true then",
+        # and the three counters below add up to the seconds logged.
         match = self.female.search.read_pattern.last_match
 
         detected_male, detected_drive, is_match = None, None, None
-        if match is not None:
+        self._row_count += 1
+        if match is None:
+            self._blank_count += 1
+            self._clear_indicator()
+        else:
             detected_male, detected_drive = match
             is_match = (detected_male, detected_drive) == (
                 self._male_name,
@@ -230,6 +243,9 @@ class TestReadPattern(BaseThread):
             states["matches"] = {
                 "path": path + ("matches",),
                 "name": "matches",
-                "value": f"{self._match_count} correct / {self._mismatch_count} incorrect",
+                "value": (
+                    f"{self._match_count} correct / {self._mismatch_count} wrong / "
+                    f"{self._blank_count} nothing seen, out of {self._row_count} seconds"
+                ),
             }
         return states
