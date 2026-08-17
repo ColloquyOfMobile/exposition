@@ -2,7 +2,7 @@ from time import time
 from pathlib import Path
 from threading import Lock
 from colloquy.base import Base
-from colloquy.hardware.drive import Drive
+from colloquy.hardware.drive import Drive, which_is_frustated
 from colloquy.base_thread import BaseThread
 
 """logic35_systems.ino: line 86
@@ -319,6 +319,11 @@ class Drives(BaseThread):
     def __iter__(self):
         yield self._o_drive
         yield self._p_drive
+
+    def which_is_frustated(self):
+        """Which appetites she is short of - what decides whether a male
+        she has just recognised is worth answering (see Search)."""
+        return which_is_frustated(o_drive=self.o_drive, p_drive=self.p_drive)
 
     @property
     def o_drive(self):

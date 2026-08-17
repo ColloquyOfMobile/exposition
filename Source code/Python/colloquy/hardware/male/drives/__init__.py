@@ -2,7 +2,7 @@ from time import time
 from pathlib import Path
 from threading import Lock
 from colloquy.base import Base
-from colloquy.hardware.drive import Drive
+from colloquy.hardware.drive import Drive, which_is_frustated
 from colloquy.base_thread import BaseThread
 
 """logic35_systems.ino: line 86
@@ -43,26 +43,7 @@ class Drives(BaseThread):
         yield self._p_drive
 
     def which_is_frustated(self):
-        # raise NotImplementedError(f"Update to return a tuple for the states")
-
-        with self.o_drive.lock, self.p_drive.lock:
-            # o_satisfaction_lim = self.o_drive < self._satisfaction_lim
-            # p_satisfaction_lim = self.p_drive < self._satisfaction_lim
-            # o_frustated = self.o_drive > self._frustrated_lim
-            # p_frustated = self.p_drive > self._frustrated_lim
-
-            if self.o_drive.is_satisfied and self.p_drive.is_satisfied:
-                return tuple()
-            if self.o_drive.is_frustated and self.p_drive.is_frustated:
-                return ("O", "P")
-            if self.o_drive.value > self.p_drive.value:
-                return ("O",)
-            if self.p_drive.value > self.o_drive.value:
-                return ("P",)
-            if self.p_drive.value == self.o_drive.value:
-                return ("O", "P")
-
-            raise ValueError(f"Drive Error, {self.o_drive=}, {self.p_drive=}")
+        return which_is_frustated(o_drive=self.o_drive, p_drive=self.p_drive)
 
     @property
     def o_drive(self):

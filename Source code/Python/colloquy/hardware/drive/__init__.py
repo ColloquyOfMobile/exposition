@@ -22,6 +22,37 @@ const int color_puce[4] = {180, 160, 0, 40}; //GRBW//greenish
 """
 
 
+def which_is_frustated(o_drive, p_drive):
+    """Which appetites a body is currently short of: (), ("O",), ("P",) or
+    ("O","P").
+
+    Shared by males and females, exactly as TJ's updateInternalDriveState()
+    (internal.ino) is common to every unit: a male blinks this state, and a
+    female answers only a male asking for something in it (Logic_fem.ino
+    switches on her own state). It used to live on the male's Drives alone,
+    so a female had no drive state at all and nothing to compare a decoded
+    pattern against.
+
+    Same five rules as the original, in a different order - "both
+    satisfied" and "both frustrated" cannot hold at once, since the
+    interested floor is below the desperate floor, so the order between
+    those two is free.
+    """
+    with o_drive.lock, p_drive.lock:
+        if o_drive.is_satisfied and p_drive.is_satisfied:
+            return tuple()
+        if o_drive.is_frustated and p_drive.is_frustated:
+            return ("O", "P")
+        if o_drive.value > p_drive.value:
+            return ("O",)
+        if p_drive.value > o_drive.value:
+            return ("P",)
+        if p_drive.value == o_drive.value:
+            return ("O", "P")
+
+        raise ValueError(f"Drive Error, {o_drive=}, {p_drive=}")
+
+
 class Drive(BaseThread):
     def __init__(self, owner, name):
         assert name in ("O", "P")

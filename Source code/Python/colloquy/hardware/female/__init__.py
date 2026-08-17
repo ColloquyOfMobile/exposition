@@ -6,6 +6,7 @@ from .light_sensor import LightSensor
 from ..dxl_origin import DXLOrigin
 from .dxl_position import DXLPosition
 from .search import Search
+from .reinforcement import Reinforcement
 from ..turn_back_and_forth import TurnBackAndForth
 from .test import Test
 
@@ -31,6 +32,7 @@ class Female(BaseThread):
 
         self._drives = Drives(owner=self)
         self._search = Search(owner=self)
+        self._reinforcement = Reinforcement(owner=self)
         self.turn_back_and_forth = TurnBackAndForth(owner=self)
 
         self._neopixels = Neopixels(owner=self)
@@ -40,6 +42,7 @@ class Female(BaseThread):
         self[self.drives.name] = self.drives
         self[self.test.name] = self.test
         self[self.search.name] = self.search
+        self[self.reinforcement.name] = self.reinforcement
         self[self.dxl_origin.name] = self.dxl_origin
         self[self.position.name] = self.position
         self["set current position as dxl origin"] = (
@@ -66,6 +69,10 @@ class Female(BaseThread):
     @property
     def search(self):
         return self._search
+
+    @property
+    def reinforcement(self):
+        return self._reinforcement
 
     @property
     def drives(self):
@@ -149,13 +156,33 @@ class Female(BaseThread):
         self.dxl.goal_position.write(value)
 
     def loop(self):
-        if self.search.is_started:
+        """Her whole life, one tick at a time: get hungry, look, answer.
+
+        Only ever starts one thing, and only when nothing else is running -
+        the search and the reinforcement that may follow it own the body
+        while they last.
+        """
+        if self.search.is_started or self.reinforcement.is_started:
+            return
+
+        if self.reinforcement.thread_errors:
+            # Reinforcement is a placeholder that fails on its first tick,
+            # and BaseThread refuses to restart a thread that has errored.
+            # Going quiet here is the honest outcome until it is written:
+            # retrying would spin, and would bury the error that says why
+            # she stopped under a new one every tick.
+            return
+
+        partner = self.search.take_partner()
+        if partner is not None:
+            # Her search ended because she recognised a male asking for
+            # something she wants. Hand the pair over.
+            self.reinforcement.partner = partner
+            self.reinforcement.start(started_by=self)
             return
 
         if not self.is_satisfied():
             self.search.start(started_by=self)
-            return
-        pass
 
     def setup(self):
         self.dxl.init_hardware()
@@ -164,6 +191,7 @@ class Female(BaseThread):
     def setdown(self):
         self.drives.stop()
         self.search.stop()
+        self.reinforcement.stop()
 
     @property
     def snapshot_children(self):
@@ -171,6 +199,7 @@ class Female(BaseThread):
         children["dxl origin"] = self.dxl_origin
         children[self.dxl.name] = self.dxl
         children["search"] = self.search
+        children["reinforcement"] = self.reinforcement
         children["drives"] = self.drives
         children["neopixels"] = self.neopixels
         children["light sensor"] = self.light_sensor

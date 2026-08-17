@@ -10,7 +10,9 @@
 0 All the while she is reading the light falling on her head, many times a second. A reading counts as "light" only above a fixed threshold, the same threshold for all three females.
 5 She needs 5 seconds of continuous reading - the length of one full male pattern - before she can recognise anything at all. Every attempt before that is blind.
 0 From then on she compares what she has just seen against the eight known patterns (four for each male), several times a second.
-0 If it matches, she notes which male and which appetite - but she does nothing with it. Nothing moves, nothing lights up, nothing changes on her or on him. The only way to see that she recognised something is on the control page, or in the log file.
-0 She keeps looking and re-recognising indefinitely. As with the males, nothing in the artwork ends a female's search: she turns and reads until the installation is shut down.
+0 If it matches, she checks it against her own hunger: she only answers a male asking for an appetite she is short of herself. A male asking for something she does not want is ignored, and she carries on looking.
+0 If he is asking for something she wants, her search ends there. She stops turning, and remembers which male it was and which of the two appetites they would share.
+0 What should follow is the exchange that actually feeds that appetite - and that part is not built yet. So in practice she stops, and stays stopped: the control page shows the pair she found and an error saying reinforcement is not implemented. Nothing on her body shows any of it.
+0 Until that is written, a female who finds someone is done for the evening. She does not resume looking, and her appetites keep climbing.
 0 Two things to know when checking her against reality. She only sees a male when her head is pointed at him and the bar has brought him in front of her - both are matters of chance, nothing coordinates them.
 0 And she can still be fooled, though less than before. She now compares only the six patterns a male can actually send, so a clean reading is always named correctly. But she is allowed one wrong flash in ten, and the six patterns are close enough that one wrong flash is already halfway to a different answer - so a female naming the wrong male, or the right male wanting the wrong thing, is still expected today whenever her view of him is poor.
