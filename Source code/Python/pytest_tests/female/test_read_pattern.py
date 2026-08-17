@@ -14,7 +14,9 @@ which male + drive state she's facing by:
   2. for each offset, binning samples into `steps` (10) bins by majority
      vote to build a 10-bit "candidate";
   3. comparing the candidate against every (male, drive) entry in
-     `self.colloquy.light_patterns`, and every circular rotation of each
+     `self.colloquy.readable_light_patterns` - the six a male can actually
+     send, deliberately excluding the two "R"/reinforcement entries that
+     `light_patterns` also carries - and every circular rotation of each
      reference sequence (since a female can start sampling at any phase of
      the male's repeating blink), tolerating up to `max_mismatches` (1)
      bit differences;
@@ -57,8 +59,19 @@ def _light_patterns():
     return Colloquy.light_patterns.fget(SimpleNamespace())
 
 
+def _readable_light_patterns():
+    # readable_light_patterns reads self.light_patterns and nothing else,
+    # so the same stand-in trick works one level up.
+    return Colloquy.readable_light_patterns.fget(
+        SimpleNamespace(light_patterns=_light_patterns())
+    )
+
+
 def make_read_pattern(stub_factory):
-    colloquy_double = SimpleNamespace(light_patterns=_light_patterns())
+    colloquy_double = SimpleNamespace(
+        light_patterns=_light_patterns(),
+        readable_light_patterns=_readable_light_patterns(),
+    )
     owner = stub_factory(colloquy=colloquy_double, owners=[])
     return ReadPattern(owner=owner)
 
@@ -124,16 +137,82 @@ def test_rotated_match_returns_correct_male_and_drive(stub_factory):
 
 
 def test_near_match_within_tolerance_still_matches(stub_factory):
+    # male1/O is the one reference that survives a single wrong bit in
+    # *any* position; for the other five, some flips land within tolerance
+    # of a different reference and decode to it instead (measured: only
+    # ~53% of one-bit errors decode correctly overall). That is a real
+    # property of this pattern set at max_mismatches=1, not something this
+    # test should paper over - see test_one_bit_error_can_decode_to_the
+    # _wrong_pattern below, which locks the known-bad case in.
     read_pattern = make_read_pattern(stub_factory)
-    patterns = _light_patterns()
-    ref = list(patterns["male1"][tuple()])
+    patterns = _readable_light_patterns()
+    ref = list(patterns["male1"][("O",)])
     noisy = ref.copy()
-    noisy[2] = 1 - noisy[2]
+    noisy[4] = 1 - noisy[4]
     assert sum(a != b for a, b in zip(noisy, ref)) == read_pattern.max_mismatches
 
     read_pattern.sample_buffer = _bits_to_sample_buffer(noisy)
 
-    assert read_pattern._try_match() == ("male1", tuple())
+    assert read_pattern._try_match() == ("male1", ("O",))
+
+
+def test_reinforcement_patterns_are_never_decoded(stub_factory):
+    """The two `tuple()` entries in light_patterns are TJ's "R"
+    (reinforcement) sequences: never transmitted, and never compared by his
+    receiver either. They must not be answers here.
+
+    They are not merely redundant - male1's R sequence is male2's O sequence
+    rotated by 6, so while both were in the comparison set a perfectly-read
+    "male2 wants O" always decoded as male1, and the R answers absorbed a
+    large share of ambiguous readings because they were tried first.
+    """
+    read_pattern = make_read_pattern(stub_factory)
+    readable = _readable_light_patterns()
+
+    assert all(drive for drives in readable.values() for drive in drives)
+    assert sum(len(drives) for drives in readable.values()) == 6
+
+    for male, drives in _light_patterns().items():
+        read_pattern.sample_buffer = _bits_to_sample_buffer(list(drives[tuple()]))
+        match = read_pattern._try_match()
+        assert match is None or match[1], f"{male}'s R sequence decoded as {match}"
+
+
+def test_every_sendable_pattern_decodes_to_itself(stub_factory):
+    """Read cleanly, at any phase, each of the six must come back as itself.
+
+    This is the regression guard for the collision above: male2/O used to be
+    impossible to report at all, whatever the sensor saw.
+    """
+    read_pattern = make_read_pattern(stub_factory)
+    patterns = _readable_light_patterns()
+
+    for male, drives in patterns.items():
+        for drive, ref in drives.items():
+            for rotation in range(len(ref)):
+                bits = list(ref[-rotation:] + ref[:-rotation]) if rotation else list(ref)
+                read_pattern.sample_buffer = _bits_to_sample_buffer(bits)
+                assert read_pattern._try_match() == (male, drive), (
+                    f"{male}/{drive} rotated by {rotation}"
+                )
+
+
+def test_one_bit_error_can_decode_to_the_wrong_pattern(stub_factory):
+    """Known limitation, locked in so a future fix has a failing test to
+    flip: the six references are only 2 bits apart over rotations, so with
+    max_mismatches=1 a single wrong bit can already be closer to a
+    different reference. Here male2/P with bit 4 flipped comes back as
+    male1 - the scan order decides. Fixing this means tightening the
+    tolerance or oversampling, not changing the pattern table."""
+    read_pattern = make_read_pattern(stub_factory)
+    ref = list(_readable_light_patterns()["male2"][("P",)])
+    noisy = ref.copy()
+    noisy[4] = 1 - noisy[4]
+
+    read_pattern.sample_buffer = _bits_to_sample_buffer(noisy)
+
+    match = read_pattern._try_match()
+    assert match is not None and match != ("male2", ("P",))
 
 
 def _min_mismatches_to_any_pattern(candidate, patterns, steps):
@@ -161,6 +240,9 @@ def test_no_match_returns_none_for_unrelated_pattern(stub_factory):
 
     # Sanity-check the fixture itself is genuinely unrelated: no real
     # pattern, in any rotation, is within tolerance of this candidate.
+    # Checked against the full eight-entry table, which is stricter than
+    # what _try_match() compares - a candidate unrelated to all eight is
+    # necessarily unrelated to the six it actually tries.
     min_mismatches = _min_mismatches_to_any_pattern(
         candidate, patterns, read_pattern.steps
     )

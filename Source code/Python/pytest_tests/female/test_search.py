@@ -1,12 +1,13 @@
 """Unit tests for colloquy.hardware.female.search.Search.
 
-Per CLAUDE.md ("Male blink pattern / female pattern reading"), Search.loop()
-and Search.setup() are documented, deliberate stubs: females currently move
-via Female.turn_back_and_forth instead of Search's own thread, and nothing
-wires up Search's thread automatically, so both methods unconditionally
-`raise NotImplementedError("use the turn_back_and_forth thread")`. These
-tests lock that behaviour down as a regression guard - they are NOT trying
-to "fix" or work around it.
+Search is the female's live search behaviour: setup() starts her
+ReadPattern child, and loop() sways her between her min/max positions
+whenever she isn't already moving - the mirror of the male's own search.
+
+(Both methods used to be deliberate stubs raising NotImplementedError,
+which crashed every female's thread within two ticks; the tests below were
+originally regression guards for *that*. They now lock in the working
+behaviour instead.)
 
 Search.__init__ eagerly builds its ReadPattern child (the `read_pattern`
 property is called once from __init__ to register it as a dict-like
@@ -19,8 +20,6 @@ Note: ReadPattern.name reads `self.owner.owner.name` (owner = the Search
 instance, owner.owner = Search's own owner), so the stub owner passed to
 Search needs a `.name` attribute for construction to succeed.
 """
-import pytest
-
 from colloquy.hardware.female.search import Search
 from colloquy.hardware.female.search.read_pattern import ReadPattern
 
@@ -30,25 +29,45 @@ def make_search(stub_factory):
     return Search(owner=owner)
 
 
-def test_loop_raises_not_implemented(stub_factory):
+def test_setup_starts_read_pattern(stub_factory):
+    # Never call the real .start() in this suite (see conftest) - it would
+    # spawn a thread. Record the call instead.
     search = make_search(stub_factory)
+    starters = []
+    search.read_pattern.start = lambda started_by=None: starters.append(started_by)
 
-    with pytest.raises(NotImplementedError):
-        search.loop()
+    search.setup()
+
+    assert starters == [search], "read_pattern must be started by search itself"
 
 
-def test_setup_raises_not_implemented(stub_factory):
+def test_loop_sways_the_body_when_it_is_still(stub_factory):
     search = make_search(stub_factory)
+    toggled = []
+    search.owner.is_moving = False
+    search.owner.toggle_position = lambda: toggled.append(True)
 
-    with pytest.raises(NotImplementedError):
-        search.setup()
+    search.loop()
+
+    assert toggled == [True]
+
+
+def test_loop_leaves_a_moving_body_alone(stub_factory):
+    search = make_search(stub_factory)
+    toggled = []
+    search.owner.is_moving = True
+    search.owner.toggle_position = lambda: toggled.append(True)
+
+    search.loop()
+
+    assert toggled == []
 
 
 def test_setdown_is_a_noop(stub_factory):
     search = make_search(stub_factory)
 
-    # Unlike loop()/setup(), setdown() is *not* stubbed out - it should
-    # just do nothing (no NotImplementedError, no exception at all).
+    # setdown() does nothing: read_pattern stops itself once it notices
+    # search (its started_by) is no longer running.
     assert search.setdown() is None
 
 
