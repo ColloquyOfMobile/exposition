@@ -2,10 +2,33 @@ import json
 from pathlib import Path
 import re
 from colloquy.base import Base
-from random import randrange
+from random import Random
+
+# Dynamixel ids, from U2D2._dxls (colloquy/hardware/u2d2/__init__.py):
+# dxl_list[i] carries dynamixel_id = i + 1, and the bodies sit at
+# indices 0/2/4 (females), 6/7 (males), 8 (bar).
+FEMALE_DXL_IDS = {"female1": 1, "female2": 3, "female3": 5}
+MALE_DXL_IDS = {"male1": 7, "male2": 8}
+BAR_DXL_ID = 9
+
+# Where the firmware lives, relative to this file rather than to the
+# working directory: colloquy/virtual_hardware/ -> ... -> Source code/.
+_ARDUINO_SKETCH = (
+    Path(__file__).resolve().parents[3]
+    / "Arduino"
+    / "colloquy_of_mobiles"
+    / "colloquy_of_mobiles.ino"
+)
 
 
 class VirtualSerialPort(Base):
+    """Stands in for the Arduino's pyserial connection when simulated.
+
+    Replies are shaped like the real firmware's, which answers every
+    command with `Serial.println(response)`: a decimal number for a light
+    sensor read, an empty string for anything else, both CRLF-terminated.
+    """
+
     def __init__(self, owner, port=None):
         super().__init__(owner=owner)
         assert port is None, f"Port should be none to avoid opening! ({port=})"
@@ -15,17 +38,17 @@ class VirtualSerialPort(Base):
             "f1/bodyO": self._set_female_neopixel,
             "f1/bodyP": self._set_female_neopixel,
             "f1/feet": self._set_female_neopixel,
-            "f1/light sensor": self._read_f1_sensor,
+            "f1/light sensor": self._read_female_sensor,
             "f2/head": self._set_female_neopixel,
             "f2/bodyO": self._set_female_neopixel,
             "f2/bodyP": self._set_female_neopixel,
             "f2/feet": self._set_female_neopixel,
-            "f2/light sensor": self._read_sensor,
+            "f2/light sensor": self._read_female_sensor,
             "f3/head": self._set_female_neopixel,
             "f3/bodyO": self._set_female_neopixel,
             "f3/bodyP": self._set_female_neopixel,
             "f3/feet": self._set_female_neopixel,
-            "f3/light sensor": self._read_sensor,
+            "f3/light sensor": self._read_female_sensor,
             "m1/ring": self._set_male_neopixel,
             "m1/up ring": self._set_male_neopixel,
             "m1/p drive level": self._set_male_neopixel,
@@ -49,11 +72,15 @@ class VirtualSerialPort(Base):
         self._possible_paths = set()
         self._load_possible_paths()
         self._to_return = None
+        # Seeded explicitly so a simulated run can be repeated: sensor
+        # noise is the only randomness in here, and a decode experiment
+        # that can't be replayed is hard to argue about.
+        self._random = Random(0)
         self._states = states = {}
         for i in range(3):
             states[f"female{i + 1}"] = female = {}
             for name in ("head", "bodyO", "bodyP", "feet"):
-                female[name] = dict(r=0, g=0, b=0)
+                female[name] = dict(r=0, g=0, b=0, w=0)
 
             female["light sensor"] = 0
 
@@ -67,12 +94,19 @@ class VirtualSerialPort(Base):
                 sensors[name] = 0
 
     def readline(self):
-        if self._to_return is not None:
-            to_return = self._to_return
-            self._to_return = None
-            return to_return
+        """Always bytes, and always shaped like a real reply.
 
-        return b'{"status": "success"}'
+        This used to hand back a made-up b'{"status": "success"}' for
+        writes and a bare Python int for sensor reads. Neither is anything
+        the firmware can produce (it sends an empty line and a decimal
+        number respectively), so simulated code took a path no rig would
+        ever take - and any caller that decoded or JSON-parsed a reply
+        would have worked here and failed on the hardware.
+        """
+        to_return, self._to_return = self._to_return, None
+        if to_return is None:
+            return self._as_reply("")
+        return to_return
 
     def write(self, data):
         if not self._is_open:
@@ -80,6 +114,10 @@ class VirtualSerialPort(Base):
         data = data.decode()
         data = json.loads(data)
         path = data["path"]
+        # Loud on purpose: an unknown path means the firmware and this
+        # simulator have drifted apart (a renamed pixel group, a new
+        # sensor), and quietly answering it would hide that until the
+        # next time somebody stood in front of the real installation.
         assert path in self._possible_paths, f"{path=}, {self._possible_paths=}"
         self._to_return = self._path_handlers[path](data)
 
@@ -109,8 +147,13 @@ class VirtualSerialPort(Base):
     def open(self):
         assert not self.is_open
         assert self._port is not None
-        self._to_return = b"Hello!"
+        self._to_return = self._as_reply("Hello!")
         self._is_open = True
+
+    @staticmethod
+    def _as_reply(value):
+        """One firmware reply line: Serial.println() terminates with CRLF."""
+        return f"{value}\r\n".encode()
 
     def _set_female_neopixel(self, data):
         states = self._states
@@ -135,23 +178,43 @@ class VirtualSerialPort(Base):
         neopixel["w"] = data["w"]
 
     def _read_sensor(self, data):
-        return 10
+        """The sensors with no model behind them: the males' four each.
 
-    def _read_f1_sensor(self, data):
-        params = self.colloquy.params
-        female_dxl = self.owner.dxls[1]
+        A steady dark reading, expressed relative to the threshold rather
+        than as a bare constant, so that changing the threshold doesn't
+        silently turn "dark" into "lit"."""
+        return self._as_reply(self._dark_value())
 
-        noise = 100 + randrange(10)
-        if not self._is_near_origin(name="female1", dxl=female_dxl):
-            return params["photosensor_threashold"] - noise
+    def _read_female_sensor(self, data):
+        """A female's own sensor: lit only when she is facing a lit male.
 
-        male = self._get_nearest_male(female="female1")
+        Used by all three females - it used to be female1 only, with the
+        other two returning the same constant darkness as an unmodelled
+        male sensor, so no scenario involving female2 or female3 could
+        ever produce a reading to decode.
+        """
+        female = Path(data["path"]).parts[0].replace("f", "female")
+        dxl = self.owner.dxls[FEMALE_DXL_IDS[female]]
+
+        if not self._is_near_origin(name=female, dxl=dxl):
+            return self._as_reply(self._dark_value())
+
+        male = self._get_nearest_male(female=female)
         if male is None:
-            return params["photosensor_threashold"] - noise
+            return self._as_reply(self._dark_value())
 
         if self._states[male]["ring"]["w"] != 0:
-            return params["photosensor_threashold"] + noise
-        return params["photosensor_threashold"] - noise
+            return self._as_reply(self._lit_value())
+        return self._as_reply(self._dark_value())
+
+    def _noise(self):
+        return 100 + self._random.randrange(10)
+
+    def _lit_value(self):
+        return self.colloquy.params["photosensor_threashold"] + self._noise()
+
+    def _dark_value(self):
+        return self.colloquy.params["photosensor_threashold"] - self._noise()
 
     def _is_near_origin(self, name, dxl):
         params = self.colloquy.params
@@ -161,35 +224,38 @@ class VirtualSerialPort(Base):
         return origin - threashold < position < origin + threashold
 
     def _get_nearest_male(self, female):
-        # dxl ids 7/8 are male1/male2 - see U2D2._dxls in
-        # colloquy/hardware/u2d2/__init__.py (dxl_list[i] has
-        # dynamixel_id=i+1, and male1/male2 are dxl_list[6]/dxl_list[7]).
-        males = []
-        for i, dxl_id in enumerate((7, 8)):
-            dxl = self.owner.dxls[dxl_id]
-            name = f"male{i + 1}"
-            if self._is_near_origin(name, dxl):
-                males.append(name)
-                break
-        if not males:
-            return
+        """Which male, if any, is currently in front of this female.
 
+        Both males are considered. This used to `break` out of the loop at
+        the first male facing his own origin, so if male1 happened to be
+        facing forward the answer was always "male1 or nobody" - with the
+        bar parked exactly at male2's meeting point, the female still read
+        darkness.
+        """
         params = self.colloquy.params
-        bar_dxl = self.owner.dxls[9]
         threashold = params["near_origin_threashold"]
-        position = bar_dxl.position
+        bar_origin = params["bar"]["dxl origin"]
+        bar_position = self.owner.dxls[BAR_DXL_ID].position
 
-        for male in males:
-            origin = params["bar"]["interaction_origins"][male][female]
+        for male, dxl_id in MALE_DXL_IDS.items():
+            if not self._is_near_origin(male, self.owner.dxls[dxl_id]):
+                continue
 
-            if origin - threashold < position < origin + threashold:
+            # The same sum Bar.set_male_in_front_of_female() writes as a
+            # goal position. The offset alone was compared here, which
+            # matched only because the bar's own origin happens to be 0
+            # today - calibrating the bar would have quietly moved the
+            # simulated meeting points away from the real ones.
+            origin = bar_origin + params["bar"]["interaction_origins"][male][female]
+            if origin - threashold < bar_position < origin + threashold:
                 return male
-        return
+        return None
 
     def _load_possible_paths(self):
         """Read arduino code to extract the possible paths."""
-        path = Path("Source code/Arduino/colloquy_of_mobiles/colloquy_of_mobiles.ino")
-        text = path.read_text()
+        # Resolved from this file, not the working directory: the app used
+        # to be unimportable from anywhere but the repo root.
+        text = _ARDUINO_SKETCH.read_text()
 
         # Expression régulière pour capturer les valeurs de path == "..."
         paths = re.findall(r'if\s*\(\s*path\s*==\s*"([^"]+)"\s*\)', text)

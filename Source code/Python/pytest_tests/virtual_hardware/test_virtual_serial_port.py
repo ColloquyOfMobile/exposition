@@ -3,15 +3,19 @@ VirtualSerialPort - the simulated stand-in for the Arduino's pyserial
 connection, used by Arduino.send() (colloquy/hardware/arduino/__init__.py)
 when running simulated. It replays the .ino sketch's `path == "..."`
 branches (read from Source code/Arduino/colloquy_of_mobiles/
-colloquy_of_mobiles.ino - these tests must run with the repo root as cwd,
-same requirement as the rest of the suite, e.g. local/params.json), and
-fans a write() out to per-path handlers that mutate an in-memory state
-dict or compute a simulated light-sensor reading.
+colloquy_of_mobiles.ino, located relative to the module rather than to the
+working directory), and fans a write() out to per-path handlers that mutate
+an in-memory state dict or compute a simulated light-sensor reading.
+
+Replies are bytes shaped like the firmware's own `Serial.println(response)`:
+a decimal number for a light sensor, an empty line for everything else.
 """
 import json
 from types import SimpleNamespace
 
 import pytest
+
+CRLF = bytes([13, 10])  # what Serial.println() terminates a reply with
 
 from colloquy.virtual_hardware.virtual_serial_port import VirtualSerialPort
 
@@ -19,16 +23,33 @@ PARAMS = {
     "photosensor_threashold": 300,
     "near_origin_threashold": 400,
     "female1": {"dxl origin": 1000},
+    "female2": {"dxl origin": 1100},
+    "female3": {"dxl origin": 1200},
     "male1": {"dxl origin": 2000},
     "male2": {"dxl origin": 3000},
     "bar": {
-        "dxl origin": 0,
+        # Deliberately non-zero: the bar's own origin is part of every
+        # meeting point, and was once left out of the simulated comparison
+        # while being included in the real goal position. Bigger than
+        # near_origin_threashold, so leaving it out is actually detectable.
+        "dxl origin": 1500,
         "interaction_origins": {
-            "male1": {"female1": 500},
-            "male2": {"female1": 900},
+            "male1": {"female1": 500, "female2": 600, "female3": 700},
+            "male2": {"female1": 900, "female2": 1000, "female3": 1100},
         },
     },
 }
+
+
+def meeting_point(male, female):
+    """Where the bar sits to put `male` in front of `female` - the same sum
+    Bar.set_male_in_front_of_female() writes."""
+    return PARAMS["bar"]["dxl origin"] + PARAMS["bar"]["interaction_origins"][male][female]
+
+
+def reading(port):
+    """A sensor reply, back as the number the firmware sent."""
+    return int(port.readline())
 
 
 def make_port(stub_factory, dxls=None, params=None):
@@ -67,7 +88,7 @@ def test_open_sets_is_open_and_queues_hello(stub_factory):
     port.open()
 
     assert port.is_open is True
-    assert port.readline() == b"Hello!"
+    assert port.readline().strip() == b"Hello!"
 
 
 def test_close_sets_is_open_false(stub_factory):
@@ -80,10 +101,12 @@ def test_close_sets_is_open_false(stub_factory):
     assert port.is_open is False
 
 
-def test_readline_returns_success_status_when_nothing_queued(stub_factory):
+def test_readline_returns_an_empty_line_when_nothing_queued(stub_factory):
+    # What the firmware answers to a write: PixelGroup.fill() returns "",
+    # and Serial.println() adds the CRLF.
     port = make_port(stub_factory)
 
-    assert port.readline() == b'{"status": "success"}'
+    assert port.readline() == CRLF
 
 
 def test_write_set_female_neopixel_updates_state(stub_factory):
@@ -94,8 +117,8 @@ def test_write_set_female_neopixel_updates_state(stub_factory):
 
     assert port._states["female2"]["head"] == {"r": 1, "g": 2, "b": 3, "w": 4}
     # _set_female_neopixel returns None, so the queued reply falls back
-    # to the generic ack rather than staying None.
-    assert port.readline() == b'{"status": "success"}'
+    # to the firmware's own empty acknowledgement rather than staying None.
+    assert port.readline() == CRLF
 
 
 def test_write_set_male_neopixel_updates_state(stub_factory):
@@ -107,13 +130,34 @@ def test_write_set_male_neopixel_updates_state(stub_factory):
     assert port._states["male1"]["ring"] == {"r": 0, "g": 0, "b": 0, "w": 255}
 
 
-def test_write_generic_light_sensor_path_returns_constant(stub_factory):
+def test_unmodelled_sensor_reads_dark_relative_to_the_threshold(stub_factory):
+    # A male's sensors have no model behind them. The reading must still be
+    # below the threshold *whatever the threshold is* - it used to be the
+    # bare constant 10, which silently becomes "lit" if the threshold is
+    # ever tuned below it.
     port = make_port(stub_factory)
     port._is_open = True
 
     port.write(json.dumps({"path": "m1/light sensor/a"}).encode())
 
-    assert port.readline() == 10
+    assert reading(port) < PARAMS["photosensor_threashold"]
+
+
+def test_replies_are_always_bytes(stub_factory):
+    # LightSensor.read() does int(response), which happens to accept a
+    # bare int too - but pyserial hands back bytes, and anything that
+    # decodes or strips a reply must behave the same simulated or not.
+    port = make_port(stub_factory)
+    port._is_open = True
+
+    port.write(json.dumps({"path": "m1/light sensor/a"}).encode())
+    sensor_reply = port.readline()
+
+    port.write(json.dumps({"path": "m1/ring", "r": 0, "g": 0, "b": 0, "w": 1}).encode())
+    write_reply = port.readline()
+
+    assert isinstance(sensor_reply, bytes) and sensor_reply.endswith(CRLF)
+    assert isinstance(write_reply, bytes)
 
 
 def test_read_f1_sensor_below_threashold_when_female_not_near_origin(stub_factory):
@@ -123,7 +167,7 @@ def test_read_f1_sensor_below_threashold_when_female_not_near_origin(stub_factor
 
     port.write(json.dumps({"path": "f1/light sensor"}).encode())
 
-    assert port.readline() < PARAMS["photosensor_threashold"]
+    assert reading(port) < PARAMS["photosensor_threashold"]
 
 
 def test_read_f1_sensor_below_threashold_when_no_male_nearby(stub_factory):
@@ -131,13 +175,14 @@ def test_read_f1_sensor_below_threashold_when_no_male_nearby(stub_factory):
         1: SimpleNamespace(position=PARAMS["female1"]["dxl origin"]),
         7: SimpleNamespace(position=999999),
         8: SimpleNamespace(position=999999),
+        9: SimpleNamespace(position=meeting_point("male1", "female1")),
     }
     port = make_port(stub_factory, dxls=dxls)
     port._is_open = True
 
     port.write(json.dumps({"path": "f1/light sensor"}).encode())
 
-    assert port.readline() < PARAMS["photosensor_threashold"]
+    assert reading(port) < PARAMS["photosensor_threashold"]
 
 
 def test_read_f1_sensor_above_threashold_when_facing_lit_male(stub_factory):
@@ -145,7 +190,7 @@ def test_read_f1_sensor_above_threashold_when_facing_lit_male(stub_factory):
         1: SimpleNamespace(position=PARAMS["female1"]["dxl origin"]),
         7: SimpleNamespace(position=PARAMS["male1"]["dxl origin"]),
         8: SimpleNamespace(position=999999),
-        9: SimpleNamespace(position=PARAMS["bar"]["interaction_origins"]["male1"]["female1"]),
+        9: SimpleNamespace(position=meeting_point("male1", "female1")),
     }
     port = make_port(stub_factory, dxls=dxls)
     port._is_open = True
@@ -153,7 +198,7 @@ def test_read_f1_sensor_above_threashold_when_facing_lit_male(stub_factory):
 
     port.write(json.dumps({"path": "f1/light sensor"}).encode())
 
-    assert port.readline() > PARAMS["photosensor_threashold"]
+    assert reading(port) > PARAMS["photosensor_threashold"]
 
 
 def test_read_f1_sensor_below_threashold_when_facing_unlit_male(stub_factory):
@@ -161,14 +206,14 @@ def test_read_f1_sensor_below_threashold_when_facing_unlit_male(stub_factory):
         1: SimpleNamespace(position=PARAMS["female1"]["dxl origin"]),
         7: SimpleNamespace(position=PARAMS["male1"]["dxl origin"]),
         8: SimpleNamespace(position=999999),
-        9: SimpleNamespace(position=PARAMS["bar"]["interaction_origins"]["male1"]["female1"]),
+        9: SimpleNamespace(position=meeting_point("male1", "female1")),
     }
     port = make_port(stub_factory, dxls=dxls)
     port._is_open = True
 
     port.write(json.dumps({"path": "f1/light sensor"}).encode())
 
-    assert port.readline() < PARAMS["photosensor_threashold"]
+    assert reading(port) < PARAMS["photosensor_threashold"]
 
 
 def test_port_and_name_reflect_the_configured_port(stub_factory):
@@ -203,8 +248,75 @@ def test_get_nearest_male_uses_male_dxl_ids_7_and_8(stub_factory):
     dxls = {
         7: SimpleNamespace(position=PARAMS["male1"]["dxl origin"]),
         8: SimpleNamespace(position=999999),
-        9: SimpleNamespace(position=PARAMS["bar"]["interaction_origins"]["male1"]["female1"]),
+        9: SimpleNamespace(position=meeting_point("male1", "female1")),
     }
     port = make_port(stub_factory, dxls=dxls)
 
     assert port._get_nearest_male(female="female1") == "male1"
+
+
+def _facing(female, male, bar_at=None):
+    """Both bodies facing forward, bar wherever asked (their meeting point
+    by default)."""
+    from colloquy.virtual_hardware.virtual_serial_port import (
+        FEMALE_DXL_IDS,
+        MALE_DXL_IDS,
+    )
+
+    dxls = {
+        FEMALE_DXL_IDS[female]: SimpleNamespace(position=PARAMS[female]["dxl origin"]),
+        MALE_DXL_IDS["male1"]: SimpleNamespace(position=PARAMS["male1"]["dxl origin"]),
+        MALE_DXL_IDS["male2"]: SimpleNamespace(position=PARAMS["male2"]["dxl origin"]),
+        9: SimpleNamespace(
+            position=meeting_point(male, female) if bar_at is None else bar_at
+        ),
+    }
+    return dxls
+
+
+def test_get_nearest_male_finds_male2_even_when_male1_also_faces_forward(stub_factory):
+    # Regression: the loop used to stop at the first male facing his own
+    # origin. With male1 forward too, a bar parked exactly at male2's
+    # meeting point still reported nobody, so male2 could never be seen.
+    port = make_port(stub_factory, dxls=_facing("female1", "male2"))
+
+    assert port._get_nearest_male(female="female1") == "male2"
+
+
+def test_meeting_points_include_the_bars_own_origin(stub_factory):
+    # The bar's goal position is origin + offset; comparing against the
+    # offset alone only agreed while that origin was 0.
+    offset_only = PARAMS["bar"]["interaction_origins"]["male1"]["female1"]
+    port = make_port(stub_factory, dxls=_facing("female1", "male1", bar_at=offset_only))
+
+    assert port._get_nearest_male(female="female1") is None
+
+    port = make_port(stub_factory, dxls=_facing("female1", "male1"))
+
+    assert port._get_nearest_male(female="female1") == "male1"
+
+
+def test_every_female_has_a_sensor_model_not_just_female1(stub_factory):
+    # female2/female3 used to fall through to the unmodelled-sensor
+    # constant, so no scenario involving them could produce a reading.
+    for female in ("female1", "female2", "female3"):
+        port = make_port(stub_factory, dxls=_facing(female, "male2"))
+        port._is_open = True
+        port._states["male2"]["ring"]["w"] = 255
+
+        port.write(json.dumps({"path": f"f{female[-1]}/light sensor"}).encode())
+
+        assert reading(port) > PARAMS["photosensor_threashold"], female
+
+
+def test_readings_are_repeatable_across_runs(stub_factory):
+    # Sensor noise is seeded, so the same simulated situation gives the
+    # same numbers twice - a decode experiment can be replayed.
+    def read_once():
+        port = make_port(stub_factory, dxls=_facing("female1", "male1"))
+        port._is_open = True
+        port._states["male1"]["ring"]["w"] = 255
+        port.write(json.dumps({"path": "f1/light sensor"}).encode())
+        return reading(port)
+
+    assert read_once() == read_once()
