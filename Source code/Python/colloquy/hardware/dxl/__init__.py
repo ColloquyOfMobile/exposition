@@ -131,9 +131,20 @@ class DXL(Base):
             read = self.u2d2.read_1_byte
             write = self.u2d2.write_1_byte
 
+        elif byte_count == 2:
+            # No register uses this today ("elec current" is commented out
+            # below), but leaving the branch out means uncommenting one
+            # fails with an UnboundLocalError several lines later instead
+            # of just working.
+            read = self.u2d2._read_2_bytes_at
+            write = self.u2d2._write_2_bytes_at
+
         elif byte_count == 4:
             read = self.u2d2.read_4_bytes
             write = self.u2d2.write_4_bytes
+
+        else:
+            raise NotImplementedError(f"{byte_count=} for register {name!r}")
 
         if readonly:
             write = None

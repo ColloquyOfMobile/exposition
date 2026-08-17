@@ -12,7 +12,7 @@ trigger, so those cases keep goal == current position to keep the spawned
 thread's run() a no-op).
 """
 import pytest
-from dynamixel_sdk import COMM_SUCCESS
+from dynamixel_sdk import COMM_RX_TIMEOUT, COMM_SUCCESS, ERRNUM_RESULT_FAIL
 
 from colloquy.virtual_hardware.virtual_packet_handler import VirtualPacketHandler
 
@@ -106,11 +106,70 @@ def test_write_goal_position_with_torque_enabled_and_no_move_needed(stub_factory
     )
 
 
-def test_get_tx_rx_result_and_get_rx_packet_error_are_not_implemented(stub_factory):
+def test_error_reporting_uses_the_real_sdk_wording(stub_factory):
+    # These two used to raise NotImplementedError. handle_error() calls
+    # them only once a transaction has already failed, so a simulated bus
+    # could never report a failure without crashing on the way to saying
+    # so - the reporting path was the broken one.
     handler = make_handler(stub_factory)
 
-    with pytest.raises(NotImplementedError):
-        handler.getTxRxResult(0)
+    assert "no status packet" in handler.getTxRxResult(COMM_RX_TIMEOUT)
+    assert "Failed to process" in handler.getRxPacketError(ERRNUM_RESULT_FAIL)
 
-    with pytest.raises(NotImplementedError):
-        handler.getRxPacketError(0)
+
+def test_no_faults_by_default(stub_factory):
+    handler = make_handler(stub_factory)
+
+    results = [handler.read4ByteTxRx(None, 1, POSITION) for _ in range(200)]
+
+    assert all(comm == COMM_SUCCESS and error == 0 for _, comm, error in results)
+    assert handler.fault_count == 0
+
+
+def test_comm_errors_are_injected_at_the_configured_rate(stub_factory):
+    handler = make_handler(stub_factory)
+    handler.set_error_rates(comm=0.5)
+
+    results = [handler.read4ByteTxRx(None, 1, POSITION) for _ in range(400)]
+    failed = [r for r in results if r[1] != COMM_SUCCESS]
+
+    # Seeded, so this is exact rather than flaky - roughly half.
+    assert 150 < len(failed) < 250
+    assert handler.fault_count == len(failed)
+    assert all(value == 0 for value, _, _ in failed), "a failed read has no value"
+
+
+def test_servo_errors_are_reported_as_an_error_bit_not_a_comm_failure(stub_factory):
+    handler = make_handler(stub_factory)
+    handler.set_error_rates(servo=1.0)
+
+    value, comm, error = handler.read4ByteTxRx(None, 1, POSITION)
+
+    assert comm == COMM_SUCCESS
+    assert error == ERRNUM_RESULT_FAIL
+
+
+def test_a_failed_write_does_not_reach_the_servo(stub_factory):
+    # A write that failed must not take effect, or a retry bug would be
+    # hidden rather than exposed.
+    handler = make_handler(stub_factory)
+    handler.write1ByteTxRx(None, 1, TORQUE_ENABLED, 1)
+    handler.write4ByteTxRx(None, 1, GOAL_POSITION, 0)
+    handler.set_error_rates(comm=1.0)
+
+    comm, error = handler.write4ByteTxRx(None, 1, GOAL_POSITION, 4000)
+
+    assert comm != COMM_SUCCESS
+    assert handler.dxls[1].get("goal position") == 0
+
+
+def test_set_error_rates_resets_the_count(stub_factory):
+    handler = make_handler(stub_factory)
+    handler.set_error_rates(comm=1.0)
+    handler.read4ByteTxRx(None, 1, POSITION)
+    assert handler.fault_count == 1
+
+    handler.set_error_rates()
+
+    assert handler.fault_count == 0
+    assert (handler.comm_error_rate, handler.servo_error_rate) == (0.0, 0.0)

@@ -1,5 +1,5 @@
 from time import sleep, time
-from .u2d2 import U2D2
+from .u2d2 import U2D2, U2D2Error
 from .arduino import Arduino
 from colloquy.base_thread import BaseThread
 from .female import Female
@@ -192,8 +192,17 @@ class Hardware(BaseThread):
         return True
 
     def disable_torque(self):
+        """Cut torque on every servo, and keep going if one won't answer.
+
+        This is the "make it safe" step of both shutdown and emergency
+        stop, so it must not stop halfway: now that a servo transaction
+        raises after its retries rather than returning None, one dead
+        servo would otherwise leave the other eight powered."""
         for dxl in self._u2d2.dxl_list:
-            dxl.torque_enabled.write(value=0)
+            try:
+                dxl.torque_enabled.write(value=0)
+            except U2D2Error as error:
+                self.log(f"Could not disable torque on {dxl.name}: {error}")
 
     def open(self):
         self._is_opened = True

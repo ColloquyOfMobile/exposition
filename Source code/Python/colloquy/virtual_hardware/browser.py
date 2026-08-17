@@ -71,6 +71,63 @@ class BodyStateNode(Base):
         return states
 
 
+class FaultsNode(Base):
+    """Make the simulated servo bus fail, on purpose.
+
+    U2D2.handle_error() retries every servo transaction five times and then
+    raises; none of that had ever run, because the simulated bus always
+    succeeded. Turning faults on here exercises the retry loop, the two
+    error-reporting calls that used to raise NotImplementedError, and what
+    a body does when the bus finally gives up - without unplugging
+    anything.
+
+    Rates are per transaction, and there are a lot of transactions: every
+    is_moving check reads two registers. 1 in 100 is already a bus in poor
+    shape; 1 in 2 is for watching a body fail on purpose.
+    """
+
+    _PRESETS = {
+        "no faults": (0.0, 0.0),
+        "1 in 100 comm errors": (0.01, 0.0),
+        "1 in 10 comm errors": (0.1, 0.0),
+        "1 in 2 comm errors": (0.5, 0.0),
+        "1 in 10 servo errors": (0.0, 0.1),
+    }
+
+    @property
+    def name(self):
+        return "faults"
+
+    @property
+    def snapshot_children(self):
+        return {}
+
+    @property
+    def _packet_handler(self):
+        return self.owner.u2d2_packet_handler
+
+    def _make_preset(self, comm, servo):
+        def preset(request=None):
+            self._packet_handler.set_error_rates(comm=comm, servo=servo)
+
+        return preset
+
+    def _snapshot_if_opened(self, path):
+        states = super()._snapshot_if_opened(path)
+        handler = self._packet_handler
+
+        for label, (comm, servo) in self._PRESETS.items():
+            states[label] = self._make_preset(comm, servo)
+
+        for key, value in (
+            ("comm error rate", handler.comm_error_rate),
+            ("servo error rate", handler.servo_error_rate),
+            ("faults injected", handler.fault_count),
+        ):
+            states[key] = {"path": path + (key,), "name": key, "value": value}
+        return states
+
+
 class ServosNode(Base):
     """Every simulated dynamixel, by body name rather than by id."""
 

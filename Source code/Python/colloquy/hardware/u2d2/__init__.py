@@ -12,6 +12,13 @@ from colloquy.base import Base
 from .com_port import ComPort
 from colloquy.hardware.dxl import DXL
 
+ATTEMPTS = 5
+
+
+class U2D2Error(RuntimeError):
+    """A servo transaction that never got through, after every retry."""
+
+
 def handle_error(func):
 
     @wraps(func)
@@ -19,26 +26,42 @@ def handle_error(func):
         self = args[0]
         with self:
             dxl_id = args[1]
-            for i in range(5):
+            last_error = "no attempt completed"
+            for i in range(ATTEMPTS):
                 with self.lock:
                     try:
                         value, dxl_comm_result, dxl_error = func(*args, **kwargs)
                     except IndexError:
-                        continue  # Look like com error produce index error in the DXL SDK.
+                        # Look like com error produce index error in the DXL SDK.
+                        last_error = "IndexError from the DXL SDK"
+                        continue
 
                 # self._busy.clear()
                 if dxl_comm_result != COMM_SUCCESS:
-                    self.log(
-                        f"COM ERR: ({dxl_id=}) {self.packet_handler.getTxRxResult(dxl_comm_result)}"
-                    )
+                    last_error = self.packet_handler.getTxRxResult(dxl_comm_result)
+                    self.log(f"COM ERR: ({dxl_id=}) {last_error}")
                     continue
                 if dxl_error != 0:
-                    self.log(
-                        f"DXL ERR: ({dxl_id=}) {self.packet_handler.getRxPacketError(dxl_error)}"
-                    )
+                    last_error = self.packet_handler.getRxPacketError(dxl_error)
+                    self.log(f"DXL ERR: ({dxl_id=}) {last_error}")
                     continue
 
                 return value
+
+            # Every attempt failed. This used to fall off the end and
+            # return None, which is the worst of both worlds: a read then
+            # hands None to arithmetic somewhere else entirely (is_moving
+            # does abs(None - goal)), and a write is simply dropped, so a
+            # body that never moves looks mechanical rather than
+            # electrical. Say so here, where the id and the register are
+            # still known - the thread framework catches it, records it
+            # against the thread that asked, and shows it in the web UI.
+            message = (
+                f"{func.__name__} gave up on dxl {dxl_id} after {ATTEMPTS} "
+                f"attempts: {last_error}"
+            )
+            self.log(message)
+            raise U2D2Error(message)
 
     return wrapper
 
