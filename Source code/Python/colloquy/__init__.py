@@ -150,13 +150,19 @@ class Colloquy(BaseThread):
 
     @property
     def snapshot_children(self):
-        return {
+        children = {
             "hardware": self._hardware,
             "exposition": self._exposition,
             "tests": self._tests,
             "params": self._params_view,
             "logs": self._logs,
         }
+        if self.is_simulated:
+            # Only when there is a simulation to look at - and only then is
+            # it built at all, since the property below constructs it on
+            # first access.
+            children[self.virtual_hardware.name] = self.virtual_hardware
+        return children
 
     def get_focus(self, *args, obj, path=None):
         if path is None:

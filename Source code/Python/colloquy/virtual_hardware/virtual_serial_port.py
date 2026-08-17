@@ -4,12 +4,7 @@ import re
 from colloquy.base import Base
 from random import Random
 
-# Dynamixel ids, from U2D2._dxls (colloquy/hardware/u2d2/__init__.py):
-# dxl_list[i] carries dynamixel_id = i + 1, and the bodies sit at
-# indices 0/2/4 (females), 6/7 (males), 8 (bar).
-FEMALE_DXL_IDS = {"female1": 1, "female2": 3, "female3": 5}
-MALE_DXL_IDS = {"male1": 7, "male2": 8}
-BAR_DXL_ID = 9
+from .dxl_ids import BAR_DXL_ID, FEMALE_DXL_IDS, MALE_DXL_IDS
 
 # Where the firmware lives, relative to this file rather than to the
 # working directory: colloquy/virtual_hardware/ -> ... -> Source code/.
@@ -183,7 +178,10 @@ class VirtualSerialPort(Base):
         A steady dark reading, expressed relative to the threshold rather
         than as a bare constant, so that changing the threshold doesn't
         silently turn "dark" into "lit"."""
-        return self._as_reply(self._dark_value())
+        male, _, letter = Path(data["path"]).parts
+        return self._as_reply(
+            self._record(self._states[male.replace("m", "male")]["light sensor"], letter)
+        )
 
     def _read_female_sensor(self, data):
         """A female's own sensor: lit only when she is facing a lit male.
@@ -196,16 +194,31 @@ class VirtualSerialPort(Base):
         female = Path(data["path"]).parts[0].replace("f", "female")
         dxl = self.owner.dxls[FEMALE_DXL_IDS[female]]
 
+        return self._as_reply(
+            self._record(self._states[female], "light sensor", self._sensor_value(female, dxl))
+        )
+
+    def _sensor_value(self, female, dxl):
         if not self._is_near_origin(name=female, dxl=dxl):
-            return self._as_reply(self._dark_value())
+            return self._dark_value()
 
         male = self._get_nearest_male(female=female)
         if male is None:
-            return self._as_reply(self._dark_value())
+            return self._dark_value()
 
         if self._states[male]["ring"]["w"] != 0:
-            return self._as_reply(self._lit_value())
-        return self._as_reply(self._dark_value())
+            return self._lit_value()
+        return self._dark_value()
+
+    def _record(self, states, key, value=None):
+        """Keep the last value actually served, so the simulated state the
+        web UI shows is what the app was told - not a fresh roll of the
+        sensor noise taken by the act of looking at it. These slots existed
+        from the start and were never written to."""
+        if value is None:
+            value = self._dark_value()
+        states[key] = value
+        return value
 
     def _noise(self):
         return 100 + self._random.randrange(10)

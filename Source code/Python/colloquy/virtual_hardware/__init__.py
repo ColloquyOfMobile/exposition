@@ -1,13 +1,32 @@
-from colloquy.base_thread import BaseThread
+from colloquy.base import Base
+from .browser import BodyStateNode, ServosNode
+from .dxl_ids import BODY_DXL_IDS
 from .virtual_serial_port import VirtualSerialPort
 from .virtual_port_handler import VirtualPortHandler
 from .virtual_packet_handler import VirtualPacketHandler
 
-class VirtualHardware(BaseThread):
+
+class VirtualHardware(Base):
+    """Root of the simulated hardware: the stand-ins the app talks to when
+    `is_simulated`, plus a read-only view of what they currently hold.
+
+    A plain Base, not a BaseThread. Nothing here runs a loop - it used to
+    extend BaseThread without implementing setup/loop/setdown, so anything
+    that started it (including a "start" link, once this node became
+    visible in the web UI) would have raised NotImplementedError on its
+    first tick.
+    """
+
     def __init__(self, owner):
         super().__init__(owner)
         self._arduino_serial_port = None
         self._u2d2_packet_handler = None
+        self._body_nodes = {
+            body: BodyStateNode(owner=self, body_name=body)
+            for body in BODY_DXL_IDS
+            if body != "bar"
+        }
+        self._servos_node = ServosNode(owner=self)
 
     @property
     def params(self):
@@ -26,6 +45,12 @@ class VirtualHardware(BaseThread):
         return self.u2d2_packet_handler.dxls
 
     @property
+    def states(self):
+        """What the simulated arduino currently holds - see
+        VirtualSerialPort._states."""
+        return self.arduino_serial_port._states
+
+    @property
     def arduino_serial_port(self):
         if self._arduino_serial_port is None:
             self._arduino_serial_port = VirtualSerialPort(owner=self)
@@ -38,4 +63,14 @@ class VirtualHardware(BaseThread):
         return self._u2d2_packet_handler
 
     def u2d2_port_handler(self, port_name):
+        # Deliberately a fresh handler per call, unlike the two memoized
+        # stand-ins above: U2D2.open() asserts the previous one is closed
+        # and then replaces it, mirroring the real PortHandler, which is
+        # also constructed anew each time the port is opened.
         return VirtualPortHandler(port_name)
+
+    @property
+    def snapshot_children(self):
+        children = dict(self._body_nodes)
+        children[self._servos_node.name] = self._servos_node
+        return children
