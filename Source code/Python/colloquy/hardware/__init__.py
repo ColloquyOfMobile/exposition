@@ -158,7 +158,7 @@ class Hardware(BaseThread):
     def neopixels(self):
         return self._neopixels
 
-    def wait_until_everything_is_still(self, timeout=30, dxls=None):
+    def wait_until_everything_is_still(self, timeout=30, dxls=None, should_stop=None):
         """Blocking. Bounded the same way DXL.wait_for_servo() bounds a
         single servo: a jammed/unresponsive body must not hang whatever
         called this (graceful shutdown) forever.
@@ -168,13 +168,23 @@ class Hardware(BaseThread):
         three, and waiting on the whole bus would never settle while any
         other body is swaying.
 
+        `should_stop` is polled while waiting - pass a thread's own
+        `_stop_event.is_set` and pressing stop no longer appears to hang
+        for however long the move takes. The bar crossing its full length
+        is tens of seconds, which is a long time for a stop button to do
+        nothing.
+
         Returns True once everything asked for is still, False if the
-        timeout ran out first - a caller that positioned bodies on
-        purpose needs to know its positioning didn't actually happen."""
+        timeout ran out or the wait was interrupted - either way, a caller
+        that positioned bodies on purpose needs to know its positioning
+        didn't actually happen."""
         if dxls is None:
             dxls = self._u2d2.dxl_list
         start = time()
         while any(dxl.is_moving for dxl in dxls):
+            if should_stop is not None and should_stop():
+                self.log("wait_until_everything_is_still interrupted.")
+                return False
             if time() - start > timeout:
                 self.log(f"wait_until_everything_is_still timed out after {timeout}s.")
                 return False

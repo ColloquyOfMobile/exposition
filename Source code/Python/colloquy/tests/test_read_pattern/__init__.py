@@ -60,6 +60,14 @@ class TestReadPattern(BaseThread):
         self._blank_count = 0
         self._row_count = 0
 
+        # The pair the run is currently set up around: bodies positioned,
+        # blink and read_pattern running. Kept separate from the selected
+        # pair above so loop() can notice the two have drifted apart and
+        # re-stage - and so tearing the old pair down targets the bodies
+        # that were actually started, not the ones just selected.
+        self._staged_male = None
+        self._staged_female = None
+
     @property
     def name(self):
         return "test read pattern"
@@ -73,10 +81,23 @@ class TestReadPattern(BaseThread):
         return self._females[self._female_name]
 
     def _make_selector(self, attribute, value):
+        """Pick a sender or a receiver, before or during a run.
+
+        All this does is record the choice. It used to stop the whole test,
+        which made switching pair mid-run impossible - you had to stop,
+        select, start again, and lost the run. Now the test's own loop()
+        notices that the selection no longer matches what is staged and
+        re-stages: old blink/read_pattern stopped, bodies moved to the new
+        pair, new blink/read_pattern started.
+
+        Deliberately doing nothing here beyond the assignment: this runs in
+        the web server's request thread, and the staging it triggers takes
+        seconds of servo movement. Doing that work here would block the
+        single-threaded server - including the page that reports what is
+        happening - for the whole move.
+        """
+
         def selector(request=None):
-            if self.is_started:
-                self.stop()
-                self.join()
             setattr(self, attribute, value)
 
         return selector
@@ -92,19 +113,65 @@ class TestReadPattern(BaseThread):
 
     def setup(self):
         self._start_time = time()
+        self._file.write(
+            "seconds, sender, receiver, expected drive, detected male, detected drive, match\n"
+        )
+        self._stage_selected_pair()
+
+    def _stage_selected_pair(self):
+        """Set the run up around whichever pair is currently selected: stop
+        whatever the previous pair was doing, move the new one face to face,
+        and start the new sender blinking and the new receiver reading.
+
+        Used both for the initial setup() and for every mid-run switch, so
+        the two can't drift apart.
+        """
+        self._teardown_staged_pair()
+
+        male, female = self.male, self.female
+        self._staged_male, self._staged_female = male, female
+        self.log(f"Staging {male.name} -> {female.name}.")
+
+        if not self._move_into_position():
+            # Stopped while the bodies were still moving: don't light the
+            # sender up on the way out. setdown() clears what was staged.
+            return
+
+        male.drives.set_o_and_p_to_100()
+        male.search.blink.start(started_by=self)
+        female.search.read_pattern.start(started_by=self)
+
+        # Counters describe one pair, so a switch starts a fresh count. The
+        # results file keeps every row, sender and receiver included in each,
+        # so nothing measured before the switch is lost.
         self._last_log_time = 0.0
         self._match_count = 0
         self._mismatch_count = 0
         self._blank_count = 0
         self._row_count = 0
-        self._file.write(
-            "seconds, sender, receiver, expected drive, detected male, detected drive, match\n"
-        )
 
-        self._move_into_position()
-        self.male.drives.set_o_and_p_to_100()
-        self.male.search.blink.start(started_by=self)
-        self.female.search.read_pattern.start(started_by=self)
+    def _teardown_staged_pair(self):
+        """Stop and darken the pair a run was staged around, if any.
+
+        Joins rather than just stopping: blink turns the male's ring off from
+        its own setdown(), so returning before that has run would leave the
+        previous sender lit while the next one starts blinking - two lit
+        males, and a receiver with no way to tell which she is reading.
+        """
+        male, female = self._staged_male, self._staged_female
+        self._staged_male = self._staged_female = None
+        if male is None:
+            return
+
+        blink = male.search.blink
+        read_pattern = female.search.read_pattern
+        blink.stop()
+        read_pattern.stop()
+        blink.join()
+        read_pattern.join()
+
+        male.ring.off()
+        self._clear_indicator(female)
 
     def _move_into_position(self):
         """Bring the pair face to face before anything is measured: the bar
@@ -118,35 +185,55 @@ class TestReadPattern(BaseThread):
         All three are commanded first and waited on together rather than one
         after another: they move concurrently anyway, and the wait is scoped
         to these three servos so it isn't defeated by some other body swaying
-        elsewhere on the bus."""
-        hardware = self.hardware
-        hardware.bar.set_male_in_front_of_female(self._male_name, self._female_name)
-        self.male.turn_to_origin()
-        self.female.turn_to_origin()
+        elsewhere on the bus.
 
-        dxls = (hardware.bar.dxl, self.male.dxl, self.female.dxl)
-        if not hardware.wait_until_everything_is_still(dxls=dxls):
+        Returns False if the run was stopped while the bodies were still
+        moving, so the caller knows not to go on and start anything.
+        """
+        hardware = self.hardware
+        male, female = self.male, self.female
+        hardware.bar.set_male_in_front_of_female(male.name, female.name)
+        male.turn_to_origin()
+        female.turn_to_origin()
+
+        dxls = (hardware.bar.dxl, male.dxl, female.dxl)
+        arrived = hardware.wait_until_everything_is_still(
+            dxls=dxls, should_stop=self._stop_event.is_set
+        )
+        if self._stop_event.is_set():
+            return False
+        if not arrived:
             # Deliberately not raised: an error here would be recorded on
             # this node and, with no way to clear it, would block every
             # later run until the process restarts. A run against a body
             # that never arrived is worth flagging, not worth bricking the
             # test with.
             self.log(
-                f"WARNING: {self._male_name}, {self._female_name} and the bar "
+                f"WARNING: {male.name}, {female.name} and the bar "
                 "were not all in position in time - they may not be facing "
                 "each other, so this run's results are not trustworthy."
             )
+        return True
 
     def setdown(self):
         self._start_time = None
-        self.male.search.blink.stop()
-        self.female.search.read_pattern.stop()
-        self.male.ring.off()
-        self._clear_indicator()
+        self._teardown_staged_pair()
         self._file.close()
 
     def loop(self):
-        if not self.male.search.blink.is_started:
+        male, female = self._staged_male, self._staged_female
+
+        if (male, female) != (self.male, self.female):
+            # Somebody picked a different sender or receiver from the web UI
+            # while the run was going. Move to them and carry on - this is
+            # the point of the selectors, and stopping the run instead is
+            # what they used to do.
+            self._stage_selected_pair()
+            return
+
+        if not male.search.blink.is_started:
+            # The sender's blink died or was stopped by hand: there is
+            # nothing left to read, so the run is over.
             self.stop()
             return
 
@@ -155,39 +242,39 @@ class TestReadPattern(BaseThread):
             return
         self._last_log_time = now
 
-        expected_drive = self.male.drives.which_is_frustated()
+        expected_drive = male.drives.which_is_frustated()
         # Only counts as something she sees now: read_pattern expires a
         # detection once it stops being refreshed, so a second in which she
         # saw nothing is recorded as nothing rather than repeating the last
         # answer. Each row is therefore one second of "what was true then",
         # and the three counters below add up to the seconds logged.
-        match = self.female.search.read_pattern.last_match
+        match = female.search.read_pattern.last_match
 
         detected_male, detected_drive, is_match = None, None, None
         self._row_count += 1
         if match is None:
             self._blank_count += 1
-            self._clear_indicator()
+            self._clear_indicator(female)
         else:
             detected_male, detected_drive = match
             is_match = (detected_male, detected_drive) == (
-                self._male_name,
+                male.name,
                 expected_drive,
             )
             if is_match:
                 self._match_count += 1
             else:
                 self._mismatch_count += 1
-            self._update_indicator(detected_male, detected_drive)
+            self._update_indicator(female, detected_male, detected_drive)
 
         timestamp = now - self._start_time
         self._file.write(
-            f"{timestamp}, {self._male_name}, {self._female_name}, {expected_drive}, "
+            f"{timestamp}, {male.name}, {female.name}, {expected_drive}, "
             f"{detected_male}, {detected_drive}, {is_match}\n"
         )
 
-    def _update_indicator(self, detected_male, detected_drive):
-        neopixels = self.female.neopixels
+    def _update_indicator(self, female, detected_male, detected_drive):
+        neopixels = female.neopixels
 
         head = neopixels.head
         # Brightness has to be set explicitly here. A female's segments start
@@ -217,11 +304,22 @@ class TestReadPattern(BaseThread):
         else:
             body_p.off()
 
-    def _clear_indicator(self):
-        neopixels = self.female.neopixels
+    def _clear_indicator(self, female):
+        neopixels = female.neopixels
         neopixels.head.off()
         neopixels.body_o.off()
         neopixels.body_p.off()
+
+    def _selection_value(self, selected, staged):
+        """What the web UI shows for "sender"/"receiver".
+
+        A selection made mid-run only takes effect on the test's next tick,
+        and the move itself takes seconds, so during that window the page
+        would otherwise claim a body is in use before it has even started
+        moving. Say so instead."""
+        if staged is None or staged.name == selected:
+            return selected
+        return f"{selected} (moving into position, still on {staged.name})"
 
     @property
     def snapshot_children(self):
@@ -246,12 +344,12 @@ class TestReadPattern(BaseThread):
         states["sender"] = {
             "path": path + ("sender",),
             "name": "sender",
-            "value": self._male_name,
+            "value": self._selection_value(self._male_name, self._staged_male),
         }
         states["receiver"] = {
             "path": path + ("receiver",),
             "name": "receiver",
-            "value": self._female_name,
+            "value": self._selection_value(self._female_name, self._staged_female),
         }
         if self._start_time is not None:
             states["matches"] = {
