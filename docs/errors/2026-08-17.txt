@@ -1,0 +1,51 @@
+Accessible at http://localhost:8087/
+args=()
+args=('vendor', 'uplot', 'uPlot.min.css')
+args=('vendor', 'uplot', 'uPlot.iife.min.js')
+args=('static', 'uplot_chart.js')
+args=('static', 'svg_zoom.js')
+args=('favicon.ico',)
+args=('app', 'tests')
+args=('app', 'tests', 'test read pattern')
+args=('app', 'tests', 'test read pattern', 'call', 'start')
+25.79s None is starting TestReadPattern(tests/test read pattern).
+error in self=TestReadPattern(tests/test read pattern)
+args=('app', 'tests', 'test read pattern')
+Traceback (most recent call last):
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\wsgiref\handlers.py", line 137, in run
+    self.result = application(self.environ, self.start_response)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\server2\__init__.py", line 59, in wsgi
+    return WSGI2(server=self, environ=environ, start_response=start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\server2\wsgi2.py", line 38, in __init__
+    self._status, self._headers, self._content = self._parse()
+                                                 ^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\server2\wsgi2.py", line 86, in _parse
+    return self._parse_app(*leftovers)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\server2\wsgi2.py", line 175, in _parse_app
+    to_render = self.get_states(*args)
+                ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\server2\wsgi2.py", line 62, in get_states
+    states = self.colloquy.get_states(*args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\__init__.py", line 154, in get_states
+    focus, leftovers = self.get_focus(*args, obj=self)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\__init__.py", line 146, in get_focus
+    return self.get_focus(*leftovers, obj=obj, path=path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\__init__.py", line 146, in get_focus
+    return self.get_focus(*leftovers, obj=obj, path=path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\__init__.py", line 150, in get_focus
+    return obj.snapshot(path=tuple(path), focus_path=tuple(path)), tuple()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\base_thread\__init__.py", line 189, in snapshot
+    states[self.thread_errors.name] = self.thread_errors.snapshot(path=path)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\base_thread\thread_errors\__init__.py", line 48, in snapshot
+    states = super().snapshot(path=path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: Base.snapshot() missing 1 required positional argument: 'focus_path'
