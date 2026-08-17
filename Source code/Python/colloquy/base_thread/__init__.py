@@ -186,6 +186,9 @@ class BaseThread(Base):
         path = states["path"]
 
         if self.thread_errors:
-            states[self.thread_errors.name] = self.thread_errors.snapshot(path=path)
+            child_path = path + (self.thread_errors.name,)
+            states[self.thread_errors.name] = self.thread_errors.snapshot(
+                path=child_path, focus_path=focus_path
+            )
 
         return states

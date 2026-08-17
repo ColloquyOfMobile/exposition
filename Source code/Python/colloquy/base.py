@@ -141,6 +141,18 @@ class Base:
     def _snapshot_if_opened(self, path):
         states = {}
         for k, v in self.snapshot_children.items():
+            if callable(v):
+                # A plain command (bound method or function) registered as a
+                # child rather than a Base node. Pass it straight through,
+                # exactly as snapshot() below already does - a function has
+                # no snapshot_as_child(), so calling it here crashed the
+                # whole page the moment such a node was opened. Several
+                # nodes register commands this way (a male's or female's
+                # Drives setters); Bar and Neopixel each carry a local
+                # work-around for the same crash, from before this was
+                # handled here.
+                states[k] = v
+                continue
             child_path = path + (k,)
             states[k] = v.snapshot_as_child(path=child_path)
         return states

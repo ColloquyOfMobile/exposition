@@ -231,7 +231,13 @@ the full chain never runs together as it would in the real installation:
 4. **Recovering an errored thread** — since an errored `BaseThread` can
    never be `start()`-ed again (see the background note above), there is
    no documented/tested recovery scenario for *any* body once it errors
-   once. This used to be the guaranteed, near-immediate outcome for every
+   once. The failure is at least *visible* now: rendering a failed thread
+   used to raise `TypeError` out of `ThreadErrors.snapshot()` and take the
+   whole page down, so the one thing that could say what had gone wrong was
+   the thing that broke (observed on real hardware, `docs/errors/
+   2026-08-17.txt`). It now renders every traceback under that node inline,
+   its own first, then any from threads it started. There is still no way
+   to *clear* them from the UI. This used to be the guaranteed, near-immediate outcome for every
    female (2.1) — now that's fixed, but the underlying "no recovery path"
    limitation still applies to any other thread that errors.
 

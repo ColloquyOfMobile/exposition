@@ -9,6 +9,10 @@ HEAD_COLOR_BY_MALE = {
     "male2": dict(red=255, green=0, blue=0, white=0),
 }
 
+# Full brightness: this is a readout to be seen across a room while testing,
+# not a body indicating how hungry it is.
+INDICATOR_BRIGHTNESS = 100
+
 
 class TestReadPattern(BaseThread):
     """Lets a tester pick which male sends his identity pattern and which
@@ -186,11 +190,20 @@ class TestReadPattern(BaseThread):
         neopixels = self.female.neopixels
 
         head = neopixels.head
+        # Brightness has to be set explicitly here. A female's segments start
+        # at brightness 0 and are only ever raised by her own Drives thread,
+        # as it maps her appetites onto them - and this test doesn't run that
+        # thread. Without this the readout still "lights up", but every
+        # channel is scaled by 0, so the arduino is sent plain black and
+        # nothing is visible on the body: exactly what the real-hardware log
+        # showed (f1/head, f1/bodyO, f1/bodyP all r0 g0 b0 w0, once a second).
+        head.brightness.value = INDICATOR_BRIGHTNESS
         head.color = HEAD_COLOR_BY_MALE.get(detected_male, head.color)
         head.on()
 
         body_o = neopixels.body_o
         if "O" in detected_drive:
+            body_o.brightness.value = INDICATOR_BRIGHTNESS
             body_o.color = body_o.orange
             body_o.on()
         else:
@@ -198,6 +211,7 @@ class TestReadPattern(BaseThread):
 
         body_p = neopixels.body_p
         if "P" in detected_drive:
+            body_p.brightness.value = INDICATOR_BRIGHTNESS
             body_p.color = body_p.puce
             body_p.on()
         else:

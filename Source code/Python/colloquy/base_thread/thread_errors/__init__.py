@@ -44,9 +44,31 @@ class ThreadErrors(Base):
         self[thread_error.name] = thread_error
         self._errors.append(thread_error)
 
-    def snapshot(self, path):
-        states = super().snapshot(path=path)
-        _path = states["path"]
-        for error in self._errors:
-            states[error.name] = error.snapshot(path=_path)
-        return states
+    @property
+    def snapshot_children(self):
+        return {}
+
+    def as_html(self):
+        """Every traceback under this node: this thread's own first, then any
+        collected by threads it started - so a parent shows which of its
+        children died, instead of only reporting that something did."""
+        blocks = [error.as_html() for error in self._errors]
+        for child in self.owner.children:
+            block = child.thread_errors.as_html()
+            if block:
+                blocks.append(block)
+        return "".join(blocks)
+
+    def snapshot(self, path, focus_path=None):
+        """One always-expanded HTML leaf, not a node to open.
+
+        BaseThread only asks for this when the thread has actually failed, and
+        an error you have to go looking for is an error nobody reads. Takes
+        focus_path to keep Base.snapshot()'s signature - it is not used, since
+        there is nothing here to navigate into.
+        """
+        return {
+            "path": path,
+            "name": self.name,
+            "html": self.as_html(),
+        }
