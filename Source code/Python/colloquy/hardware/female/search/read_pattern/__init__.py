@@ -146,8 +146,12 @@ class ReadPattern(BaseThread):
             if candidate is None:
                 continue
 
-            # compare candidate to all known patterns and all rotations
-            for male, patterns in self.colloquy.light_patterns.items():
+            # compare candidate to every pattern a male can actually send,
+            # and all rotations (the reference patterns carry no usable start
+            # marker - all eight open on the same 1,1,0,0 - so the phase of
+            # what she sees is unknown, exactly as in TJ's firmware, which
+            # walks one alignment per tick through its whole sample buffer)
+            for male, patterns in self.colloquy.readable_light_patterns.items():
                 for drive, ref in patterns.items():
                     ref_list = list(ref)
                     # test every circular rotation of reference (pattern is periodic)

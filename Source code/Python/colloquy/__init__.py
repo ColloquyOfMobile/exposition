@@ -47,6 +47,14 @@ class Colloquy(BaseThread):
         # - the male identity: 1 or 2
         # - which kind of interation the male is look for (drive state): "O" or "P" or both
         # Extracted from TJ's arduino code "logic35_system.ino, line 87."
+        #
+        # The `tuple()` entry is TJ's com_pattern_I_R / com_pattern_II_R - "R"
+        # for reinforcement, a separate message, not "no drive". His firmware
+        # neither transmits nor decodes it (in the inert state a male sends no
+        # light at all, MALE_setSearchLight()); it is kept here only because
+        # which_is_frustated() can still return an empty tuple if both drives
+        # are satisfied while a male is blinking. Females must not compare
+        # against it - see readable_light_patterns.
         return {
             "male1": {
                 tuple(): (1, 1, 0, 0, 1, 1, 0, 0, 0, 1),
@@ -60,6 +68,25 @@ class Colloquy(BaseThread):
                 ("P",): (1, 1, 0, 0, 1, 0, 0, 0, 1, 1),
                 ("O", "P"): (1, 1, 0, 0, 1, 0, 1, 0, 1, 0),
             },
+        }
+
+    @property
+    def readable_light_patterns(self):
+        """The patterns a female compares her sensor against: the six a male
+        can actually send (each male x O, P, both).
+
+        Deliberately narrower than light_patterns, and matching TJ's own
+        receiver, which only ever tests those six (sense_light_pattern.ino).
+        Including the two "R" entries breaks identity decoding outright:
+        male1's R sequence is male2's O sequence rotated, and since the
+        matcher tries every rotation the two cannot be told apart - male2
+        asking for O then always decodes as male1, whatever the sensor saw.
+        """
+        return {
+            male: {
+                drive: pattern for drive, pattern in patterns.items() if drive
+            }
+            for male, patterns in self.light_patterns.items()
         }
 
     @property
