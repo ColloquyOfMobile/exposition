@@ -31,7 +31,6 @@ class Hardware(BaseThread):
         self._u2d2 = U2D2(owner=self)
         self[self.u2d2.name] = self.u2d2
 
-        self._mirrors = []
         self._drives = []
         self._males = (
             Male(owner=self, id_number=1),
@@ -45,6 +44,8 @@ class Hardware(BaseThread):
             Female(owner=self, id_number=2),
             Female(owner=self, id_number=3),
         )
+        # Declared empty here since long before there was a Mirror class.
+        self._mirrors = [female.mirror for female in self._females]
         self._bodies = Bodies(owner=owner, males=self.males, females=self.females)
         self._neopixels = AllNeopixels(owner=self, bodies=self._bodies)
 

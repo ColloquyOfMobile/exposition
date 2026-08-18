@@ -92,6 +92,12 @@ class U2D2(Base):
         self._dxls["male1"] = self._dxl_list[6]
         self._dxls["male2"] = self._dxl_list[7]
         self._dxls["bar"] = self._dxl_list[8]
+        # The gaps between the females: ids 2, 4 and 6 have always been
+        # built here and mapped to nothing. They are the mirrors, one per
+        # female.
+        self._dxls["mirror1"] = self._dxl_list[1]
+        self._dxls["mirror2"] = self._dxl_list[3]
+        self._dxls["mirror3"] = self._dxl_list[5]
 
     def __enter__(self):
         with self.lock:

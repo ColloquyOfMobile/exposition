@@ -43,6 +43,10 @@ DEFAULTS = {
     },
     "male1": {"dxl origin": 0},
     "male2": {"dxl origin": 0},
+    # One per female, on the servos between them. Nothing drives them yet.
+    "mirror1": {"dxl origin": 0},
+    "mirror2": {"dxl origin": 0},
+    "mirror3": {"dxl origin": 0},
 }
 
 

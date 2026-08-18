@@ -6,6 +6,7 @@ from .light_sensor import LightSensor
 from ..angle import Angle
 from ..angle.conversion import REDUCTIONS
 from ..dxl_origin import DXLOrigin
+from ..mirror import Mirror
 from .search import Search
 from .reinforcement import Reinforcement
 from ..turn_back_and_forth import TurnBackAndForth
@@ -35,6 +36,7 @@ class Female(BaseThread):
         self._dxl = owner.u2d2.dxls[self.name]
         self._arduino = owner.arduino
 
+        self._mirror = Mirror(owner=self, id_number=id_number)
         self._drives = Drives(owner=self)
         self._search = Search(owner=self)
         self._reinforcement = Reinforcement(owner=self)
@@ -54,6 +56,7 @@ class Female(BaseThread):
             self.set_current_position_as_dxl_origin
         )
         self[self.light_sensor.name] = self.light_sensor
+        self[self.mirror.name] = self.mirror
 
     @property
     def params(self):
@@ -110,6 +113,11 @@ class Female(BaseThread):
     @property
     def light_sensor(self):
         return self._light_sensor
+
+    @property
+    def mirror(self):
+        """Hers, on its own servo. Nothing drives it yet - see Mirror."""
+        return self._mirror
 
     @property
     def angle(self):
@@ -215,5 +223,6 @@ class Female(BaseThread):
         children["drives"] = self.drives
         children["neopixels"] = self.neopixels
         children["light sensor"] = self.light_sensor
+        children[self.mirror.name] = self.mirror
         return children
 
