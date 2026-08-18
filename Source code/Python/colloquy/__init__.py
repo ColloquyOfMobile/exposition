@@ -136,7 +136,11 @@ class Colloquy(BaseThread):
         self._is_opened = True
 
     def close(self):
-        raise NotImplementedError
+        # Base's own close, spelled out because this used to raise: the
+        # root carries a "close" in every snapshot (Base._snapshot_base_
+        # states), the page draws it as the "<" link at the top of /app,
+        # and clicking it raised NotImplementedError - which Server2.wsgi
+        # takes for a crash and turns into an emergency stop.
         self._is_opened = False
 
     def run(

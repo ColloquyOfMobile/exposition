@@ -47,11 +47,18 @@ class TestDriveLightValues(BaseThread):
     @property
     def snapshot_children(self):
         children = {}
-        if self._timelap is not None:
-            children["timelap"] = leaves.value(
-                _path, "timelap", timelap_to_string(seconds_elapsed=self._timelap)
-            )
         for drive in self.hardware.drives:
-            name = f"{drive.body.name}'s {drive.name} drive"
             children[drive.name] = drive
         return children
+
+    def _snapshot_if_opened(self, path):
+        # The elapsed time was built in snapshot_children off a name that
+        # does not exist there, so opening this node raised NameError once
+        # the test had run - and a leaf could not have lived there anyway,
+        # since children are walked with snapshot_as_child().
+        states = super()._snapshot_if_opened(path)
+        if self._timelap is not None:
+            states["timelap"] = leaves.value(
+                path, "timelap", timelap_to_string(seconds_elapsed=self._timelap)
+            )
+        return states
