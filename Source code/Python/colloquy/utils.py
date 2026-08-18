@@ -1,13 +1,6 @@
 # -*- coding: utf-8 -*-
 # project2/my_server/utils.py
 
-def export_style(style):
-    lines = []
-    for a, b in style.items():
-        lines.append(f"{a}: {b};")
-    return " ".join(lines)
-
-
 def timelap_to_string(seconds_elapsed):
     seconds_elapsed = round(seconds_elapsed)
     if seconds_elapsed > 60:

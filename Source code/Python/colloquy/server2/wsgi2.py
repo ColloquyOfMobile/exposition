@@ -3,9 +3,6 @@ import re
 from yattag import Doc, indent
 from urllib.parse import unquote, parse_qs
 from pathlib import Path
-from colloquy.utils import (
-    export_style,
-)
 from colloquy.base import Base
 from wsgiref.simple_server import WSGIRequestHandler
 
@@ -148,9 +145,7 @@ class WSGI2(Base):
 
         content_length = int(self._environ.get("CONTENT_LENGTH") or 0)
         raw_body = (
-            self._environ["wsgi.input"].read(content_length)
-            if content_length
-            else b""
+            self._environ["wsgi.input"].read(content_length) if content_length else b""
         )
         content = parse_qs(raw_body.decode("utf-8")).get("content", [""])[0]
 
@@ -179,47 +174,12 @@ class WSGI2(Base):
         status = "200 OK"
         headers = [("Content-Type", content_type)]
 
-        css_style = {
-            "height": "100%",
-            "display": "flex",
-            "flex-direction": "column",
-            "font-size": "1rem",
-        }
-
         doc, tag, text = Doc().tagtext()
         doc.asis("<!DOCTYPE html>")
-        with tag("html", style=export_style(css_style)):
+        with tag("html"):
             with tag("head"):
-                doc.stag(
-                    "link", rel="stylesheet", href="/vendor/uplot/uPlot.min.css"
-                )
-                with tag("style"):
-                    doc.asis(
-                        ".md-content table { border-collapse: collapse; margin: 0.5rem 0; } "
-                        ".md-content th, .md-content td { border: 1px solid #8886; "
-                        "padding: 0.25rem 0.6rem; text-align: left; vertical-align: top; } "
-                        ".md-content code { background: #8882; padding: 0 0.3ch; border-radius: 3px; } "
-                        ".md-content pre { background: #8882; padding: 0.5rem; overflow: auto; } "
-                        ".md-content pre code { background: none; padding: 0; } "
-                        ".md-content del { opacity: 0.6; } "
-                        ".timeline-title { margin: 0.25rem 0; opacity: 0.85; } "
-                        ".timeline { display: flex; flex-direction: column; } "
-                        ".timeline-row { display: flex; gap: 1ch; padding: 0.25rem 0; "
-                        "border-bottom: 1px solid #8883; align-items: baseline; } "
-                        ".timeline-time { flex: 0 0 6ch; opacity: 0.6; font-family: monospace; "
-                        "font-size: 0.8rem; } "
-                        ".timeline-marker { flex: 0 0 5ch; font-family: monospace; font-size: 0.8rem; } "
-                        ".timeline-event .timeline-marker { color: #d08; } "
-                        ".timeline-activity .timeline-marker { color: #08a; } "
-                        ".timeline-problem .timeline-marker, .timeline-problem .timeline-desc "
-                        "{ color: #d02; font-weight: bold; } "
-                        ".timeline-desc { flex: 1; }"
-                    )
-
-            with tag(
-                "body",
-                style="flex:1; display: flex; flex-direction: column; overflow: auto;",
-            ):
+                doc.stag("link", rel="stylesheet", href="/vendor/uplot/uPlot.min.css")
+            with tag("body"):
                 # Must come before _html_recursion()'s output below: it
                 # emits inline <script> calls to colloquyRenderChart() for
                 # each chart, which needs uPlot and colloquyRenderChart
@@ -229,59 +189,37 @@ class WSGI2(Base):
                 with tag("script", src="/static/uplot_chart.js"):
                     pass
 
-                with tag(
-                    "div", name="server commands", style="display: flex; gap: 1ch;"
-                ):
-                    with tag("div", style=""):
-                        with tag(
-                            "a",
-                            href="/emergency-stop",
-                            style="color: white; background: red; font-weight: bold; padding: 0 1ch;",
-                        ):
+                with tag("div", name="server commands"):
+                    with tag("div"):
+                        with tag("a", href="/emergency-stop"):
                             text("EMERGENCY STOP")
 
-                    with tag("div", style=""):
+                    with tag("div"):
                         with tag("a", href="/shutdown"):
                             text("shutdown")
 
-                    with tag("div", style=""):
+                    with tag("div"):
                         with tag("a", href="/restart"):
                             text("restart")
 
-                    with tag("div", style=""):
+                    with tag("div"):
                         path = self._root / self._base_path
                         with tag("a", href=f"/{path.as_posix()}"):
                             text("refresh")
 
-                doc.asis(
-                    self._html_navigation(
-                        to_render=to_render,
-                    )
-                )
+                doc.asis(self._html_navigation(to_render=to_render))
 
-                with tag("div", name="thread count", style="display: flex;"):
+                with tag("div", name="thread count"):
                     text(f"thread count: {len(self.all_threads)}")
 
-                # Commands on the left, simulated state on the right, side
-                # by side: watching what the installation does while
-                # driving it used to mean alternating between two pages.
-                # min-height/min-width 0 keep the two columns scrolling
-                # inside themselves instead of stretching the page.
-                with tag(
-                    "div",
-                    name="split",
-                    style="flex: 1; display: flex; gap: 1ch; min-height: 0;",
-                ):
-                    with tag(
-                        "div",
-                        name="commands",
-                        style="flex: 1; min-width: 0; overflow: auto; display: flex;",
-                    ):
-                        doc.asis(
-                            self._html_recursion(
-                                obj=to_render,
-                            )
-                        )
+                # Commands and simulated state, both on the page:
+                # watching what the installation does while driving it
+                # used to mean alternating between two of them. They sat
+                # side by side until the styling came out; the markup
+                # still names them, so it can again.
+                with tag("div", name="split"):
+                    with tag("div", name="commands"):
+                        doc.asis(self._html_recursion(obj=to_render))
 
                     if self.colloquy.is_simulated:
                         doc.asis(self._html_virtual_panel())
@@ -307,30 +245,14 @@ class WSGI2(Base):
             if not values:
                 continue
 
-            with tag("div", style="margin-bottom: 0.6rem;"):
-                with tag("div", style="font-weight: bold; opacity: 0.75;"):
+            with tag("div"):
+                with tag("div"):
                     text(name)
                 for key, value in values.items():
-                    with tag(
-                        "div",
-                        style="display: flex; gap: 1ch; padding-left: 1ch;",
-                    ):
-                        # min-width:0 on both halves, or a long label (the
-                        # timing node has "bar full travel (10000 units)")
-                        # refuses to shrink below its text and pushes the
-                        # value off the edge of the panel.
-                        with tag(
-                            "div",
-                            style=(
-                                "flex: 0 0 13ch; min-width: 0; opacity: 0.6; "
-                                "overflow-wrap: anywhere;"
-                            ),
-                        ):
+                    with tag("div"):
+                        with tag("div"):
                             text(key)
-                        with tag(
-                            "div",
-                            style="flex: 1; min-width: 0; overflow-wrap: anywhere;",
-                        ):
+                        with tag("div"):
                             text(str(value))
 
         return doc.getvalue()
@@ -346,16 +268,8 @@ class WSGI2(Base):
         """
         doc, tag, text = Doc().tagtext()
 
-        style = {
-            "flex": "0 0 38ch",
-            "overflow": "auto",
-            "border-left": "1px gray solid",
-            "padding-left": "1ch",
-            "font-family": "monospace",
-            "font-size": "0.8rem",
-        }
-        with tag("div", name="virtual hardware", style=export_style(style)):
-            with tag("div", style="font-weight: bold; margin-bottom: 0.5rem;"):
+        with tag("div", name="virtual hardware"):
+            with tag("div"):
                 text("VIRTUAL HARDWARE")
             doc.asis(self._html_virtual_state())
 
@@ -394,12 +308,7 @@ class WSGI2(Base):
 
     def _html_navigation(self, to_render):
         doc, tag, text = Doc().tagtext()
-        css_style = {
-            "display": "flex",
-            "overflow-x": "auto",
-            "text-wrap": "nowrap",
-        }
-        with tag("div", name="navigation", style=export_style(css_style)):
+        with tag("div", name="navigation"):
             with tag("div"):
                 with tag("a", href="/"):
                     text("/home")
@@ -420,13 +329,11 @@ class WSGI2(Base):
         base_path = self._root / self._base_path / "call" / call_path
         keyboard_path = base_path / "keyboard"
 
-        with tag(
-            "div", name="keyboard", style="display: flex; flex-direction: column; "
-        ):
-            with tag("div", style="display: flex; gap: 1ch;"):
+        with tag("div", name="keyboard"):
+            with tag("div"):
                 with tag("div", name="prompt"):
                     text(">>>")
-                with tag("div", name="value", style="flex:1;"):
+                with tag("div", name="value"):
                     if "keyboard" in obj:
                         text(obj["keyboard"]["value"])
                     else:
@@ -450,39 +357,31 @@ class WSGI2(Base):
                         text("call")
 
             all_char = "abcdefghijklmnopqrstuvwxyz"
-            with tag("div", name="line1", style="display: flex;"):
+            with tag("div", name="line1"):
                 for char in all_char[:10]:
                     path = keyboard_path / char
 
-                    with tag(
-                        "div", style="flex:1; display: flex; justify-content: center;"
-                    ):
+                    with tag("div"):
                         with tag("a", href=f"/{path.as_posix()}"):
                             text(char)
 
-            with tag("div", name="line3", style="display: flex;"):
+            with tag("div", name="line3"):
                 for char in all_char[10:21]:
                     path = keyboard_path / char
 
-                    with tag(
-                        "div", style="flex:1; display: flex; justify-content: center;"
-                    ):
+                    with tag("div"):
                         with tag("a", href=f"/{path.as_posix()}"):
                             text(char)
 
-            with tag("div", name="line3", style="display: flex;"):
+            with tag("div", name="line3"):
                 for char in all_char[21:]:
                     path = keyboard_path / char
 
-                    with tag(
-                        "div", style="flex:1; display: flex; justify-content: center;"
-                    ):
+                    with tag("div"):
                         with tag("a", href=f"/{path.as_posix()}"):
                             text(char)
                 path = keyboard_path / "space"
-                with tag(
-                    "div", style="flex:3; display: flex; justify-content: center;"
-                ):
+                with tag("div"):
                     with tag("a", href=f"/{path.as_posix()}"):
                         text("space")
 
@@ -492,19 +391,7 @@ class WSGI2(Base):
     def _html_recursion(self, obj):
         doc, tag, text = Doc().tagtext()
 
-        style = {
-            "margin-left": "1ch",
-            "padding-left": "0.5ch",
-            "border-left": "1px gray dashed",
-            "display": "flex",
-            "flex-direction": "column",
-            "flex": "1",
-            "overflow": "auto",
-            "min-height": "10rem",
-            "justify-content": "space-between",
-        }
-
-        with tag("div", name=obj["name"], style=export_style(style)):
+        with tag("div", name=obj["name"]):
             for key, value in obj.items():
                 # print(f"{key=}")
                 if key in (
@@ -545,8 +432,7 @@ class WSGI2(Base):
                     call_path = func_path.relative_to(self._base_path)
                     path = self._root / self._base_path / "call" / call_path
 
-                    style = {"flex": "1"}
-                    with tag("div", name=key, style=export_style(style)):
+                    with tag("div", name=key):
                         with tag("a", href=f"/{path.as_posix()}"):
                             text(f"{key}()")
                     continue
@@ -554,25 +440,15 @@ class WSGI2(Base):
                 if "editor" in value:
                     node_path = Path(*value["path"][:-1])
                     call_path = node_path.relative_to(self._base_path)
-                    save_path = self._root / self._base_path / "call" / call_path / "save"
+                    save_path = (
+                        self._root / self._base_path / "call" / call_path / "save"
+                    )
 
-                    style = {
-                        "width": "100%",
-                        "min-height": "50vh",
-                        "box-sizing": "border-box",
-                        "font-family": "monospace",
-                        "font-size": "0.85rem",
-                    }
                     with tag("div", name=key):
                         with tag(
-                            "form",
-                            method="post",
-                            action=f"/{save_path.as_posix()}",
-                            style="display: flex; flex-direction: column; gap: 0.5ch;",
+                            "form", method="post", action=f"/{save_path.as_posix()}"
                         ):
-                            with tag(
-                                "textarea", name="content", style=export_style(style)
-                            ):
+                            with tag("textarea", name="content"):
                                 text(value["editor"])
                             with tag("div"):
                                 with tag("button", type="submit"):
@@ -580,13 +456,7 @@ class WSGI2(Base):
                     continue
 
                 if "html" in value:
-                    style = {
-                        "overflow": "auto",
-                        "max-height": "75vh",
-                        "border": "1px solid #8888",
-                        "padding": "0.5ch 1.5ch",
-                    }
-                    with tag("div", name=key, klass="md-content", style=export_style(style)):
+                    with tag("div", name=key, klass="md-content"):
                         doc.asis(value["html"])
                     continue
 
@@ -595,17 +465,12 @@ class WSGI2(Base):
                         r"[^a-zA-Z0-9_-]+", "-", "-".join(value["path"])
                     )
                     with tag("div", name=key):
-                        with tag(
-                            "div",
-                            style="font-size: 0.75rem; opacity: 0.7;",
-                        ):
+                        with tag("div"):
                             text(
                                 "scroll to zoom - shift+scroll x only - alt+scroll y only - "
                                 "drag to pan - drag an axis to rescale it - double-click to reset"
                             )
-                        with tag(
-                            "div", style="display: flex; gap: 1ch; margin: 0.25rem 0;"
-                        ):
+                        with tag("div"):
                             for label, action in (
                                 ("zoom in", "in"),
                                 ("zoom out", "out"),
@@ -616,15 +481,9 @@ class WSGI2(Base):
                                 ("reset zoom", "reset"),
                             ):
                                 onclick = f"colloquyZoomChart({json.dumps(container_id)}, {json.dumps(action)})"
-                                with tag(
-                                    "button", type="button", onclick=onclick
-                                ):
+                                with tag("button", type="button", onclick=onclick):
                                     text(label)
-                        with tag(
-                            "div",
-                            id=container_id,
-                            style="width: 100%; max-width: 900px;",
-                        ):
+                        with tag("div", id=container_id):
                             pass
                         with tag("script"):
                             doc.asis(
@@ -633,37 +492,18 @@ class WSGI2(Base):
                     continue
 
                 if "pre" in value:
-                    style = {
-                        "overflow": "auto",
-                        "max-height": "70vh",
-                        "border": "1px solid #8888",
-                        "padding": "0.5ch 1ch",
-                        "font-size": "0.85rem",
-                        "white-space": "pre-wrap",
-                    }
                     with tag("div", name=key):
-                        with tag("pre", style=export_style(style)):
+                        with tag("pre"):
                             text(value["pre"])
                     continue
 
                 if "svg" in value:
-                    style = {
-                        "overflow": "hidden",
-                        "border": "1px solid #8888",
-                        "cursor": "grab",
-                        "touch-action": "none",
-                    }
                     with tag("div", name=key):
-                        with tag(
-                            "div",
-                            style="font-size: 0.75rem; opacity: 0.7;",
-                        ):
+                        with tag("div"):
                             text(
                                 "scroll to zoom - shift+scroll to zoom x-axis only - drag to pan - double-click to reset"
                             )
-                        with tag(
-                            "div", **{"data-svg-zoom": ""}, style=export_style(style)
-                        ):
+                        with tag("div", **{"data-svg-zoom": ""}):
                             doc.asis(value["svg"])
                     continue
 
@@ -695,9 +535,7 @@ class WSGI2(Base):
 
                 value_path = Path(*value["path"])
 
-                style = {"display": "flex", "gap": "1ch", "flex": "1"}
-
-                with tag("div", name="title", style=export_style(style)):
+                with tag("div", name="title"):
                     with tag("div", name="open"):
                         call_path = value_path.relative_to(self._base_path)
                         path = (
@@ -720,17 +558,8 @@ class WSGI2(Base):
         doc, tag, text = Doc().tagtext()
         name = obj["name"]
 
-        style = {
-            "margin-bottom": "0.5rem",
-            "flex": "1",
-            "overflow": "auto",
-            "min-height": "10rem",
-        }
-
-        with tag("div", name="opened", style=export_style(style)):
-            style = {"display": "flex", "gap": "1ch", "margin-bottom": "0.5rem"}
-
-            with tag("div", name="title", style=export_style(style)):
+        with tag("div", name="opened"):
+            with tag("div", name="title"):
                 with tag("div", name="close"):
                     call_path = Path(*obj["path"]).relative_to(self._base_path)
                     path = self._root / self._base_path / "call" / call_path / "close"
