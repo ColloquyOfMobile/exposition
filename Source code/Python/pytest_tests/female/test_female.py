@@ -30,7 +30,7 @@ SWEEP = 58.594
 
 def make_movable_female(stub_factory, origin_value, sweep=SWEEP, position_memory=None):
     """Build a fake exposing exactly what turn_to_max_position/
-    turn_to_min_position/turn_to_origin/toggle_position touch: ._sweep,
+    turn_to_min_position/turn_to_origin/toggle_position touch: .sweep,
     .angle (a real Angle over a fake dxl and a fake origin), and
     ._position_memory. Records every written goal position in `written`,
     in servo units, so tests can assert on the exact computed value.
@@ -48,7 +48,7 @@ def make_movable_female(stub_factory, origin_value, sweep=SWEEP, position_memory
         ),
     )
     fake = SimpleNamespace(
-        _sweep=sweep,
+        sweep=sweep,
         angle=Angle(owner=body, reduction=REDUCTIONS["female"]),
         _position_memory=position_memory,
     )
@@ -153,6 +153,22 @@ def test_toggle_position_full_cycle_from_fresh_fake(stub_factory):
 
     assert fake._position_memory == "max"
     assert fake.written == [2000, 0, 2000]
+
+
+def test_the_sweep_is_read_from_params_so_the_page_can_change_it():
+    # A property, not a value held at construction: a range edited on the
+    # params page takes effect on the next sway rather than at the next
+    # restart.
+    fake = SimpleNamespace(
+        name="female1",
+        params={"female1": {"motion range": 40}},
+    )
+
+    assert Female.sweep.fget(fake) == 40
+
+    fake.params["female1"]["motion range"] = 20
+
+    assert Female.sweep.fget(fake) == 20
 
 
 def make_satisfaction_female(o_satisfied, p_satisfied):

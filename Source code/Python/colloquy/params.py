@@ -23,17 +23,30 @@ DEFAULTS = {
     # "dxl origin" is in servo units: it is the raw reading a body gives
     # when it is pointing where it should. Everything else here is in
     # degrees of the thing that moves.
+    #
+    # "motion range" is how far a body travels end to end. A female, a
+    # male and a mirror sway half of it either side of their origin; the
+    # bar runs from its origin to the far end, which is why its number is
+    # so much bigger. They are per body rather than per kind so that one
+    # that fouls something in the room can be reined in on its own.
     "female1": {
         "dxl origin": 0,
+        "motion range": 58.594,
     },
     "female2": {
         "dxl origin": 0,
+        "motion range": 58.594,
     },
     "female3": {
         "dxl origin": 0,
+        "motion range": 58.594,
     },
     "bar": {
         "dxl origin": 0,
+        "motion range": 292.969,
+        # The narrower sweep it makes when it stays near one pair
+        # (TurnBackAndForthAroundF1), rather than crossing the whole rail.
+        "motion range around female1": 87.891,
         # How far the bar turns from its origin to bring each male in
         # front of each female, in degrees of the bar.
         "interaction_origins": {
@@ -41,12 +54,15 @@ DEFAULTS = {
             "male2": {"female1": 181.641, "female2": 246.094, "female3": 304.688},
         },
     },
-    "male1": {"dxl origin": 0},
-    "male2": {"dxl origin": 0},
-    # One per female, on the servos between them. Nothing drives them yet.
-    "mirror1": {"dxl origin": 0},
-    "mirror2": {"dxl origin": 0},
-    "mirror3": {"dxl origin": 0},
+    "male1": {"dxl origin": 0, "motion range": 175.781},
+    "male2": {"dxl origin": 0, "motion range": 175.781},
+    # One per female, on the servos between them. Nothing drives them yet,
+    # and nobody has measured how far one can turn before it fouls - hence
+    # a range of zero, which means "stays where it is" rather than "turns
+    # freely". Measure it at the rig and type it in here.
+    "mirror1": {"dxl origin": 0, "motion range": 0.0},
+    "mirror2": {"dxl origin": 0, "motion range": 0.0},
+    "mirror3": {"dxl origin": 0, "motion range": 0.0},
 }
 
 

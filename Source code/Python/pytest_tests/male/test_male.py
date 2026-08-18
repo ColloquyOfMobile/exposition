@@ -130,7 +130,7 @@ def test_set_current_position_as_dxl_origin_reads_position_and_sets_origin():
 
 def make_movable_male(stub_factory, origin_value, sweep=SWEEP, position_memory=None):
     """Build a fake exposing exactly what turn_to_max_position/
-    turn_to_min_position/turn_to_origin/toggle_position touch: ._sweep,
+    turn_to_min_position/turn_to_origin/toggle_position touch: .sweep,
     .angle (a real Angle over a fake dxl and a fake origin, so the
     assertions below cover the whole path from degrees to what reaches
     the register), and ._position_memory. Records every written goal
@@ -149,7 +149,7 @@ def make_movable_male(stub_factory, origin_value, sweep=SWEEP, position_memory=N
         ),
     )
     fake = SimpleNamespace(
-        _sweep=sweep,
+        sweep=sweep,
         angle=Angle(owner=body, reduction=REDUCTIONS["male"]),
         _position_memory=position_memory,
     )
@@ -254,6 +254,22 @@ def test_toggle_position_full_cycle_from_fresh_fake(stub_factory):
 
     assert fake._position_memory == "max"
     assert fake.written == [2000, 0, 2000]
+
+
+def test_the_sweep_is_read_from_params_so_the_page_can_change_it():
+    # A property, not a value held at construction: a range edited on the
+    # params page takes effect on the next sway rather than at the next
+    # restart.
+    fake = SimpleNamespace(
+        name="male1",
+        params={"male1": {"motion range": 40}},
+    )
+
+    assert Male.sweep.fget(fake) == 40
+
+    fake.params["male1"]["motion range"] = 20
+
+    assert Male.sweep.fget(fake) == 20
 
 
 # --- is_satisfied() -------------------------------------------------------

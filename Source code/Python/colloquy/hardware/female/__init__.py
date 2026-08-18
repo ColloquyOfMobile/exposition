@@ -24,11 +24,6 @@ class Female(BaseThread):
         super().__init__(owner=owner)
         self._position_memory = None
 
-        # Her whole sway, in degrees of her body. The number is what the
-        # 2000 servo units she used to be given work out to through her
-        # 1:3 reduction - a third of the male's sweep for the same figure
-        # written to the servo, which is worth a look at the rig some day.
-        self._sweep = 58.594
         self._dxl_origin = DXLOrigin(owner=self)
         self._angle = Angle(owner=self, reduction=REDUCTIONS["female"])
 
@@ -126,8 +121,15 @@ class Female(BaseThread):
 
     @property
     def sweep(self):
-        """How far she swings, end to end, in degrees."""
-        return self._sweep
+        """How far she swings, end to end, in degrees.
+
+        Read from params on every use rather than held, so a range edited
+        on the page takes effect on her next sway instead of at the next
+        restart. Her 58.594 degrees is what the 2000 servo units she used
+        to be given work out to through her 1:3 reduction - a third of a
+        male's sweep for the same figure written to the servo, which is
+        worth a look at the rig some day."""
+        return self.params[self.name]["motion range"]
 
     @property
     def goal_position(self):
@@ -151,11 +153,11 @@ class Female(BaseThread):
         self.angle.turn_to(degrees)
 
     def turn_to_max_position(self):
-        self.angle.turn_to(self._sweep / 2)
+        self.angle.turn_to(self.sweep / 2)
         self._position_memory = "max"
 
     def turn_to_min_position(self):
-        self.angle.turn_to(-self._sweep / 2)
+        self.angle.turn_to(-self.sweep / 2)
         self._position_memory = "min"
 
     def toggle_position(self):

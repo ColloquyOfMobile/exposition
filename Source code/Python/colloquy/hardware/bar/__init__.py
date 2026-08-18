@@ -13,12 +13,6 @@ class Bar(BaseThread):
         super().__init__(owner=owner)
         self._position_memory = None
 
-        # How far it turns from one end of its travel to the other, in
-        # degrees of the bar: the 10000 servo units it had before this
-        # layer existed, through its 1:3 reduction. Its origin is one end
-        # rather than the middle, so the travel runs 0 to +293 and never
-        # goes negative.
-        self._travel = 292.969
         self._dxl_origin = DXLOrigin(owner=self)
         self._angle = Angle(owner=self, reduction=REDUCTIONS["bar"])
         self.turn_back_and_forth_around_f1 = TurnBackAndForthAroundF1(owner=self)
@@ -79,8 +73,14 @@ class Bar(BaseThread):
 
     @property
     def travel(self):
-        """End to end, in degrees."""
-        return self._travel
+        """End to end, in degrees of the bar.
+
+        Read from params on every use, so a range edited on the page takes
+        effect on its next crossing. Unlike a body, its origin is one end
+        of the travel rather than the middle, so this runs 0 to +293 and
+        never goes negative. 292.969 is the 10000 servo units it had
+        before this layer existed, through its 1:3 reduction."""
+        return self.params["bar"]["motion range"]
 
     @property
     def goal_position(self):
@@ -101,7 +101,7 @@ class Bar(BaseThread):
         self.angle.turn_to(degrees)
 
     def turn_to_max_position(self):
-        self.angle.turn_to(self._travel)
+        self.angle.turn_to(self.travel)
         self._position_memory = "max"
 
     def turn_to_min_position(self):

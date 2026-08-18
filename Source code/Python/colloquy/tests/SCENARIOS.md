@@ -411,7 +411,7 @@ landmine closed.
 
 | # | Subject | Before | Now |
 |---|---|---|---|
-| 10.1 | What a caller says | `origin + motion_range // 2`, per body, three copies | `angle.turn_to(degrees)`; the sweeps are declared in degrees (`Female._sweep` 58.594, `Male._sweep` 175.781, `Bar._travel` 292.969, around-f1 87.891) — all exactly what the old servo figures worked out to |
+| 10.1 | What a caller says | `origin + motion_range // 2`, per body, three copies | `angle.turn_to(degrees)`; how far each body travels is a `"motion range"` in params, in degrees (58.594 per female, 175.781 per male, 292.969 for the bar, 87.891 for its sweep around female1, 0 for an unmeasured mirror) — all exactly what the old servo figures worked out to, and editable per body from the params page |
 | 10.2 | The bar's meeting points | `interaction_origins` in servo units (0, 2200, 4300, 6200, 8400, 10400) | the same points in degrees of the bar (0, 64.453, 125.977, 181.641, 246.094, 304.688), via `Bar.meeting_angle()` |
 | 10.3 | Positions below the servo's zero | **Broken.** Every servo is in extended position mode, where that is normal, and the SDK reads a position back as an unsigned dword. `female1` (origin 100, half-sweep 1000) writes -900 to reach her minimum and read it back as 4294966396, so `is_moving` never saw her arrive and `wait_for_servo` raised after 60s | Position and goal-position registers read signed. Verified on the virtual hardware, which now wraps 4-byte reads to unsigned exactly as the SDK does, so the conversion is exercised here and not only on the rig |
 | 10.4 | The mirrors | Three servos built by `U2D2` and mapped to nothing (ids 2, 4, 6) | `Mirror` nodes under each female, angle and calibration only — nothing drives them, nothing initialises them (§9.6 is what will) |
@@ -420,8 +420,8 @@ landmine closed.
 
 - **A female's sweep is a third of a male's** — 58.6° against 175.8°, from
   the identical 2000 servo units. Nobody chose that; it is what the
-  numbers have always meant. Changing it is now one figure in
-  `Female.__init__`.
+  numbers have always meant. Changing it is now one field on the params
+  page, per female.
 - **The simulated "facing forward" window** was one figure of servo units
   for every body, which is ±11.7° for a female or the bar but **±35.2°
   for a male** — a 70° window in which a male counts as facing his origin,
@@ -475,4 +475,8 @@ Ranked by how much of the above unblocks:
    simulated "facing forward" window should be for a male (±35.2°), and
    whether `DXL.moving_threshold` should be an angle rather than 20 servo
    units, which means something different on a geared body than on a
-   direct one. All three are one number each now.
+   direct one. The first two are fields on the params page; the third is
+   one number in `DXL`.
+9. Measure how far a mirror can turn before it fouls, and put it in its
+   `"motion range"` — it is 0 today, which is why the two "turn to one
+   end" commands on a mirror both mean its origin.

@@ -27,11 +27,6 @@ class Male(BaseThread):
             for state, bits in self.colloquy.light_patterns[self.name].items()
         }
 
-        # His whole sway, in degrees of his body: the 2000 servo units he
-        # was given before this layer existed, which he turns one for one
-        # (no reduction). The same figure gives a female a third as much -
-        # see her own sweep.
-        self._sweep = 175.781
         self._dxl_origin = DXLOrigin(owner=self)
         self._angle = Angle(owner=self, reduction=REDUCTIONS["male"])
 
@@ -117,8 +112,13 @@ class Male(BaseThread):
 
     @property
     def sweep(self):
-        """How far he swings, end to end, in degrees."""
-        return self._sweep
+        """How far he swings, end to end, in degrees.
+
+        Read from params on every use, so a range edited on the page takes
+        effect on his next sway. His 175.781 degrees is the 2000 servo
+        units he was given before this layer existed, turned one for one -
+        the same figure gives a female a third as much, see her sweep."""
+        return self.params[self.name]["motion range"]
 
     @property
     def goal_position(self):
@@ -145,11 +145,11 @@ class Male(BaseThread):
         self.angle.turn_to(degrees)
 
     def turn_to_max_position(self):
-        self.angle.turn_to(self._sweep / 2)
+        self.angle.turn_to(self.sweep / 2)
         self._position_memory = "max"
 
     def turn_to_min_position(self):
-        self.angle.turn_to(-self._sweep / 2)
+        self.angle.turn_to(-self.sweep / 2)
         self._position_memory = "min"
 
     def toggle_position(self):
