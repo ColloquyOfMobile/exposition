@@ -5,6 +5,7 @@ from colloquy.base import Base
 from colloquy.hardware.value_setter2 import ValueSetter2
 
 from .conversion import degrees_to_ticks, ticks_to_degrees
+from colloquy.ui import leaves
 
 
 class Angle(Base):
@@ -132,8 +133,7 @@ class Angle(Base):
         for degrees in self.JOGS:
             states[f"turn {degrees:+d}"] = self._make_jog(degrees)
 
-        def leaf(key, value):
-            states[key] = {"path": path + (key,), "name": key, "value": value}
+        leaf = leaves.into(states, path)
 
         leaf("angle", f"{self.get():.1f}\N{DEGREE SIGN}")
         leaf("goal", f"{self.goal:.1f}\N{DEGREE SIGN}")

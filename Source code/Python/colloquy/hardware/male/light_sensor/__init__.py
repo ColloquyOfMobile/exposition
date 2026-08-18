@@ -1,5 +1,6 @@
 from colloquy.base import Base
 from pathlib import Path
+from colloquy.ui import leaves
 
 
 class LightSensor(Base):
@@ -61,9 +62,5 @@ class LightSensor(Base):
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
         states["read"] = self.read
-        states["value"] = {
-            "path": path + ("value",),
-            "name": "value",
-            "value": self.read(),
-        }
+        states["value"] = leaves.value(path, "value", self.read())
         return states

@@ -15,6 +15,7 @@ from colloquy.base import Base
 
 from .dxl_ids import BODY_DXL_IDS
 from .virtual_serial_port import REALISTIC_LATENCY
+from colloquy.ui import leaves
 
 
 def _pixel_description(pixel):
@@ -64,11 +65,7 @@ class BodyStateNode(Base):
                 description = ", ".join(f"{k}: {v}" for k, v in value.items())
             else:
                 description = value
-            states[key] = {
-                "path": path + (key,),
-                "name": key,
-                "value": description,
-            }
+            states[key] = leaves.value(path, key, description)
         return states
 
 
@@ -125,7 +122,7 @@ class FaultsNode(Base):
             ("servo error rate", handler.servo_error_rate),
             ("faults injected", handler.fault_count),
         ):
-            states[key] = {"path": path + (key,), "name": key, "value": value}
+            states[key] = leaves.value(path, key, value)
         return states
 
 
@@ -166,8 +163,7 @@ class TimingNode(Base):
         for label, latency in self._LATENCY_PRESETS.items():
             states[label] = self._make_preset(latency)
 
-        def leaf(key, value):
-            states[key] = {"path": path + (key,), "name": key, "value": value}
+        leaf = leaves.into(states, path)
 
         leaf(
             "arduino round trip",
@@ -205,9 +201,9 @@ class ServosNode(Base):
             goal = dxl.get("goal position")
             torque = "on" if dxl.get("torque enabled") else "off"
             moving = "" if position == goal else f", moving ({goal - position:+})"
-            states[body] = {
-                "path": path + (body,),
-                "name": body,
-                "value": f"position {position}, goal {goal}, torque {torque}{moving}",
-            }
+            states[body] = leaves.value(
+                path,
+                body,
+                f"position {position}, goal {goal}, torque {torque}{moving}",
+            )
         return states

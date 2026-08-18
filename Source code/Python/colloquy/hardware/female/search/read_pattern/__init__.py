@@ -7,6 +7,7 @@ from threading import Lock
 from collections import deque
 from time import time
 from bisect import bisect_left
+from colloquy.ui import leaves
 
 
 class ReadPattern(BaseThread):
@@ -197,9 +198,9 @@ class ReadPattern(BaseThread):
             # Shown even once expired, with the difference spelled out: the
             # age alone doesn't tell a reader where the cut-off is.
             expired = "" if self.last_match else ", expired - not what she sees now"
-            states["last match"] = {
-                "path": path + ("last match",),
-                "name": "last match",
-                "value": f"{male} drive={drive} ({seconds_ago}s ago{expired})",
-            }
+            states["last match"] = leaves.value(
+                path,
+                "last match",
+                f"{male} drive={drive} ({seconds_ago}s ago{expired})",
+            )
         return states

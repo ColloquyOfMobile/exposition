@@ -1,5 +1,6 @@
 from pathlib import Path
 from colloquy.base import Base
+from colloquy.ui import leaves
 
 
 class LogFile(Base):
@@ -26,11 +27,7 @@ class LogFile(Base):
             content = "(log file no longer exists)"
 
         return {
-            "content": {
-                "path": path + ("content",),
-                "name": "content",
-                "pre": content,
-            }
+            "content": leaves.pre(path, "content", content)
         }
 
 

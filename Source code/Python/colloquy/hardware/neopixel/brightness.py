@@ -1,6 +1,7 @@
 from colloquy.base import Base
 
 from colloquy.hardware.value_setter import ValueSetter
+from colloquy.ui import leaves
 
 class Brightness(Base):
     def __init__(self, owner, name):
@@ -67,9 +68,5 @@ class Brightness(Base):
         # opened directly (calls .snapshot_as_child() on it, which an int
         # doesn't have). Inject it as a proper display leaf instead.
         states = super()._snapshot_if_opened(path)
-        states["value"] = {
-            "path": path + ("value",),
-            "name": "value",
-            "value": self.value,
-        }
+        states["value"] = leaves.value(path, "value", self.value)
         return states

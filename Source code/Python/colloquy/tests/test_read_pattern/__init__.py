@@ -1,6 +1,7 @@
 from colloquy.base_thread import BaseThread
 from datetime import datetime
 from time import time
+from colloquy.ui import leaves
 
 # Test-only indicator colors (not part of the installation's own palette,
 # see Neopixel.orange/.puce for the drive colors used on the body segments).
@@ -341,23 +342,21 @@ class TestReadPattern(BaseThread):
         for key, selector in {**self._male_selectors, **self._female_selectors}.items():
             states[key] = selector
 
-        states["sender"] = {
-            "path": path + ("sender",),
-            "name": "sender",
-            "value": self._selection_value(self._male_name, self._staged_male),
-        }
-        states["receiver"] = {
-            "path": path + ("receiver",),
-            "name": "receiver",
-            "value": self._selection_value(self._female_name, self._staged_female),
-        }
+        states["sender"] = leaves.value(
+            path,
+            "sender",
+            self._selection_value(self._male_name, self._staged_male),
+        )
+        states["receiver"] = leaves.value(
+            path,
+            "receiver",
+            self._selection_value(self._female_name, self._staged_female),
+        )
         if self._start_time is not None:
-            states["matches"] = {
-                "path": path + ("matches",),
-                "name": "matches",
-                "value": (
-                    f"{self._match_count} correct / {self._mismatch_count} wrong / "
-                    f"{self._blank_count} nothing seen, out of {self._row_count} seconds"
-                ),
-            }
+            states["matches"] = leaves.value(
+                path,
+                "matches",
+                f"{self._match_count} correct / {self._mismatch_count} wrong / "
+                    f"{self._blank_count} nothing seen, out of {self._row_count} seconds",
+            )
         return states

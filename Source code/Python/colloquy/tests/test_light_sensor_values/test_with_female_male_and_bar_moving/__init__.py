@@ -14,6 +14,7 @@ from ..utils import (
     plot_duration_histogram_as_svg,
     plot_counts_as_svg,
 )
+from colloquy.ui import leaves
 
 
 class TestWithFemaleMaleAndBarMoving(BaseThread):
@@ -113,16 +114,16 @@ class TestWithFemaleMaleAndBarMoving(BaseThread):
         states = {}
         if self._start_time is not None:
             seconds_elapsed = time() - self._start_time
-            states["running during"] = {
-                "path": path + ("running during",),
-                "name": "running during",
-                "value": timelap_to_string(seconds_elapsed=seconds_elapsed),
-            }
-            states["progress"] = {
-                "path": path + ("progress",),
-                "name": "progress",
-                "value": f"{round(100 * seconds_elapsed / self._duration)}%",
-            }
+            states["running during"] = leaves.value(
+                path,
+                "running during",
+                timelap_to_string(seconds_elapsed=seconds_elapsed),
+            )
+            states["progress"] = leaves.value(
+                path,
+                "progress",
+                f"{round(100 * seconds_elapsed / self._duration)}%",
+            )
         return states
 
     @property

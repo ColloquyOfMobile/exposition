@@ -1,4 +1,5 @@
 from colloquy.base_thread import BaseThread
+from colloquy.ui import leaves
 
 
 class Reinforcement(BaseThread):
@@ -61,9 +62,9 @@ class Reinforcement(BaseThread):
         states = super()._snapshot_if_opened(path)
         if self.partner is not None:
             male, drive = self.partner
-            states["partner"] = {
-                "path": path + ("partner",),
-                "name": "partner",
-                "value": f"{male}, sharing the {drive} drive",
-            }
+            states["partner"] = leaves.value(
+                path,
+                "partner",
+                f"{male}, sharing the {drive} drive",
+            )
         return states

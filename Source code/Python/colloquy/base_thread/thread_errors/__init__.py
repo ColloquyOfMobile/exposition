@@ -67,6 +67,9 @@ class ThreadErrors(Base):
         focus_path to keep Base.snapshot()'s signature - it is not used, since
         there is nothing here to navigate into.
         """
+        # Its own path and name rather than a key under a parent, so it
+        # cannot use colloquy.ui.leaves' constructors - but it is the same
+        # "html" kind they build, and the renderer draws it the same way.
         return {
             "path": path,
             "name": self.name,

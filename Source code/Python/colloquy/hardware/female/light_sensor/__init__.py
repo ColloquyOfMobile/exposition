@@ -2,6 +2,7 @@ from colloquy.base_thread import BaseThread
 from time import sleep
 from threading import Lock
 from pathlib import Path
+from colloquy.ui import leaves
 
 
 class LightSensor(BaseThread):
@@ -60,9 +61,5 @@ class LightSensor(BaseThread):
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
         states["read"] = self.read
-        states["value"] = {
-            "path": path + ("value",),
-            "name": "value",
-            "value": self.read(),
-        }
+        states["value"] = leaves.value(path, "value", self.read())
         return states

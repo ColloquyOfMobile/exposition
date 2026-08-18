@@ -13,6 +13,7 @@ from .test_with_female_and_male_moving import TestWithFemaleAndMaleMoving
 from .test_with_female_male_and_bar_moving import TestWithFemaleMaleAndBarMoving
 from .test_with_everything_moving import TestWithEveryThingMoving
 from .test_for_false_positives import TestForFalsePositives
+from colloquy.ui import leaves
 
 class TestLightSensorValues(BaseThread):
     def __init__(self, owner, result_folder):
@@ -140,20 +141,20 @@ class TestLightSensorValues(BaseThread):
         states = super()._snapshot_if_opened(path)
         if self._start_time is not None:
             seconds_elapsed = time() - self._start_time
-            states["running during"] = {
-                "path": path + ("running during",),
-                "name": "running during",
-                "value": timelap_to_string(seconds_elapsed=seconds_elapsed),
-            }
-            states["progress"] = {
-                "path": path + ("progress",),
-                "name": "progress",
-                "value": f"{round(100 * seconds_elapsed / self._duration)}%",
-            }
-            states["total duration"] = {
-                "path": path + ("total duration",),
-                "name": "duration",
-                "value": timelap_to_string(seconds_elapsed=self._duration),
-            }
+            states["running during"] = leaves.value(
+                path,
+                "running during",
+                timelap_to_string(seconds_elapsed=seconds_elapsed),
+            )
+            states["progress"] = leaves.value(
+                path,
+                "progress",
+                f"{round(100 * seconds_elapsed / self._duration)}%",
+            )
+            states["total duration"] = leaves.value(
+                path,
+                "total duration",
+                timelap_to_string(seconds_elapsed=self._duration),
+            )
         super()._snapshot_if_opened(path)
         return states

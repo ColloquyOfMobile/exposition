@@ -3,6 +3,7 @@ from pathlib import Path
 from colloquy.base import Base
 
 from .rendering import render_html
+from colloquy.ui import leaves
 
 
 class Timeline(Base):
@@ -48,20 +49,12 @@ class Timeline(Base):
         if self._mode == "edit":
             return {
                 "cancel": self.cancel,
-                "editor": {
-                    "path": path + ("editor",),
-                    "name": "editor",
-                    "editor": self.read(),
-                },
+                "editor": leaves.editor(path, "editor", self.read()),
             }
 
         return {
             "edit": self.enter_edit,
-            "rendered": {
-                "path": path + ("rendered",),
-                "name": "rendered",
-                "html": render_html(self.read()),
-            },
+            "rendered": leaves.html(path, "rendered", render_html(self.read())),
         }
 
 

@@ -5,6 +5,7 @@ from markdown.extensions import Extension
 from markdown.inlinepatterns import SimpleTagInlineProcessor
 
 from colloquy.base import Base
+from colloquy.ui import leaves
 
 # python-markdown has no built-in strikethrough (it's a GFM extension, not
 # core markdown), but SCENARIOS.md uses ~~text~~ - register it the same way
@@ -69,18 +70,10 @@ class Scenarios(Base):
         if self._mode == "edit":
             return {
                 "cancel": self.cancel,
-                "editor": {
-                    "path": path + ("editor",),
-                    "name": "editor",
-                    "editor": self.read(),
-                },
+                "editor": leaves.editor(path, "editor", self.read()),
             }
 
         return {
             "edit": self.enter_edit,
-            "rendered": {
-                "path": path + ("rendered",),
-                "name": "rendered",
-                "html": self.render_html(),
-            },
+            "rendered": leaves.html(path, "rendered", self.render_html()),
         }

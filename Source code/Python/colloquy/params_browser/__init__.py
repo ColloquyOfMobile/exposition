@@ -1,5 +1,6 @@
 from colloquy.base import Base
 from colloquy.hardware.value_setter2 import ValueSetter2
+from colloquy.ui import leaves
 
 # Params values are dict/int/float/bool/str in the current schema (see
 # colloquy/params.py's DEFAULTS and local/params.json) - dispatch on type
@@ -126,11 +127,7 @@ class ParamsIntLeaf(Base):
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
-        states["value"] = {
-            "path": path + ("value",),
-            "name": "value",
-            "value": self._params_dict[self._key],
-        }
+        states["value"] = leaves.value(path, "value", self._params_dict[self._key])
         return states
 
 
@@ -195,11 +192,7 @@ class ParamsFloatLeaf(Base):
         states = super()._snapshot_if_opened(path)
         for step in self.JOGS:
             states[f"{step:+g}"] = self._jog(step)
-        states["value"] = {
-            "path": path + ("value",),
-            "name": "value",
-            "value": self._get(),
-        }
+        states["value"] = leaves.value(path, "value", self._get())
         return states
 
 
@@ -225,11 +218,7 @@ class ParamsBoolLeaf(Base):
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
         states["toggle"] = self.toggle
-        states["value"] = {
-            "path": path + ("value",),
-            "name": "value",
-            "value": self._params_dict[self._key],
-        }
+        states["value"] = leaves.value(path, "value", self._params_dict[self._key])
         return states
 
 
@@ -252,9 +241,5 @@ class ParamsReadOnlyLeaf(Base):
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
-        states["value"] = {
-            "path": path + ("value",),
-            "name": "value",
-            "value": self._params_dict[self._key],
-        }
+        states["value"] = leaves.value(path, "value", self._params_dict[self._key])
         return states

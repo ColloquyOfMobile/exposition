@@ -7,6 +7,7 @@ from colloquy.base_thread import BaseThread
 from colloquy.utils import timelap_to_string
 
 from ..utils import plot_sensor_by_angle_as_svg
+from colloquy.ui import leaves
 
 
 class TestForFalsePositives(BaseThread):
@@ -197,8 +198,7 @@ class TestForFalsePositives(BaseThread):
         for key, command in self._commands.items():
             states[key] = command
 
-        def leaf(key, value):
-            states[key] = {"path": path + (key,), "name": key, "value": value}
+        leaf = leaves.into(states, path)
 
         leaf("duration", timelap_to_string(seconds_elapsed=self._duration))
         if self._start_time is not None:

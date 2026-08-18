@@ -15,6 +15,7 @@ from ..utils import (
     plot_counts_as_svg,
 )
 from .test_results import TestResults
+from colloquy.ui import leaves
 
 
 class TestWithEveryThingMoving(BaseThread):
@@ -140,22 +141,22 @@ class TestWithEveryThingMoving(BaseThread):
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
-        states["duration"] = {
-            "path": path + ("duration",),
-            "name": "duration",
-            "value": timelap_to_string(seconds_elapsed=self._duration),
-        }
+        states["duration"] = leaves.value(
+            path,
+            "duration",
+            timelap_to_string(seconds_elapsed=self._duration),
+        )
 
         if self._start_time is not None:
             seconds_elapsed = time() - self._start_time
-            states["running during"] = {
-                "path": path + ("running during",),
-                "name": "running during",
-                "value": timelap_to_string(seconds_elapsed=seconds_elapsed),
-            }
-            states["progress"] = {
-                "path": path + ("progress",),
-                "name": "progress",
-                "value": f"{round(100 * seconds_elapsed / self._duration)}%",
-            }
+            states["running during"] = leaves.value(
+                path,
+                "running during",
+                timelap_to_string(seconds_elapsed=seconds_elapsed),
+            )
+            states["progress"] = leaves.value(
+                path,
+                "progress",
+                f"{round(100 * seconds_elapsed / self._duration)}%",
+            )
         return states

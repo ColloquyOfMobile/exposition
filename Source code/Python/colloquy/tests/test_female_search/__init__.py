@@ -2,6 +2,7 @@ from datetime import datetime
 from time import time
 
 from colloquy.base_thread import BaseThread
+from colloquy.ui import leaves
 
 # Drive values that produce each drive state, via which_is_frustated()
 # (hardware/drive/__init__.py): both below the satisfied floor means she is
@@ -276,8 +277,7 @@ class TestFemaleSearch(BaseThread):
         for key, command in self._commands.items():
             states[key] = command
 
-        def leaf(key, value):
-            states[key] = {"path": path + (key,), "name": key, "value": value}
+        leaf = leaves.into(states, path)
 
         leaf("sender", self._male_name)
         leaf("receiver", self._female_name)

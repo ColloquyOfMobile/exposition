@@ -1,4 +1,5 @@
 from colloquy.base import Base
+from colloquy.ui import leaves
 
 class ValueSetter(Base):
     def __init__(self, owner, limit, get_func, digits=None, prefix=""):
@@ -88,11 +89,7 @@ class ValueSetter(Base):
             else:
                 states[k] = v.snapshot_as_child(path=path + (k,))
 
-        states["current value"] = {
-            "path": path + ("current value",),
-            "name": "current value",
-            "value": self._get_func(),
-        }
+        states["current value"] = leaves.value(path, "current value", self._get_func())
         return states
 
 class Set(Base):

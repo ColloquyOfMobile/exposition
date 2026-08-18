@@ -6,6 +6,7 @@ from colloquy.light_pattern_timing import (
     CYCLE_DURATION,
 )
 from time import time
+from colloquy.ui import leaves
 
 
 class Blink(BaseThread):
@@ -107,8 +108,7 @@ class Blink(BaseThread):
         if not self.is_started:
             return states
 
-        def leaf(key, value):
-            states[key] = {"path": path + (key,), "name": key, "value": value}
+        leaf = leaves.into(states, path)
 
         # Worth spelling out at the rig: a ring that sits dark for 2.35s
         # of every 4.35s is the pattern working, not a light that failed.

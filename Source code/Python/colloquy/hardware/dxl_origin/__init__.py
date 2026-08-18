@@ -3,6 +3,7 @@
 from colloquy.base import Base
 from colloquy.input import Input
 from colloquy.hardware.value_setter2 import ValueSetter2
+from colloquy.ui import leaves
 
 
 class DXLOrigin(Base):
@@ -86,10 +87,6 @@ class DXLOrigin(Base):
         # opened directly (calls .snapshot_as_child() on it, which an int
         # doesn't have) - reachable on every body's own "dxl origin" node.
         states = super()._snapshot_if_opened(path)
-        states["value"] = {
-            "path": path + ("value",),
-            "name": "value",
-            "value": self.get(),
-        }
+        states["value"] = leaves.value(path, "value", self.get())
         return states
 

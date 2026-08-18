@@ -1,6 +1,7 @@
 from colloquy.base_thread import BaseThread
 from datetime import datetime
 from time import time
+from colloquy.ui import leaves
 
 COLORS = (
     ("red", dict(red=255, green=0, blue=0, white=0)),
@@ -116,9 +117,9 @@ class TestNeopixels(BaseThread):
         states = super()._snapshot_if_opened(path)
         if self._current is not None:
             label, _, color_name, _ = self._current
-            states["current"] = {
-                "path": path + ("current",),
-                "name": "current",
-                "value": f"{label}: {color_name} ({len(self._sequence)} left)",
-            }
+            states["current"] = leaves.value(
+                path,
+                "current",
+                f"{label}: {color_name} ({len(self._sequence)} left)",
+            )
         return states

@@ -15,6 +15,7 @@ from threading import Event
 import traceback
 from threading import Thread, Lock
 from time import sleep, time
+from colloquy.ui import leaves
 
 """
 move male1 in front of the female1
@@ -114,16 +115,16 @@ class TestWithFemaleAndMaleMoving(BaseThread):
         states = {}
         if self._start_time is not None:
             seconds_elapsed = time() - self._start_time
-            states["running during"] = {
-                "path": path + ("running during",),
-                "name": "running during",
-                "value": timelap_to_string(seconds_elapsed=seconds_elapsed),
-            }
-            states["progress"] = {
-                "path": path + ("progress",),
-                "name": "progress",
-                "value": f"{round(100 * seconds_elapsed / self._duration)}%",
-            }
+            states["running during"] = leaves.value(
+                path,
+                "running during",
+                timelap_to_string(seconds_elapsed=seconds_elapsed),
+            )
+            states["progress"] = leaves.value(
+                path,
+                "progress",
+                f"{round(100 * seconds_elapsed / self._duration)}%",
+            )
         return states
 
     @property

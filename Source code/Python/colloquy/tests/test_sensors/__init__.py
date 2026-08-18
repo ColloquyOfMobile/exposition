@@ -1,6 +1,7 @@
 from colloquy.base_thread import BaseThread
 from datetime import datetime
 from time import time
+from colloquy.ui import leaves
 
 
 class TestSensors(BaseThread):
@@ -79,9 +80,5 @@ class TestSensors(BaseThread):
         states = super()._snapshot_if_opened(path)
         for label, value in self._latest_values.items():
             key = f"live: {label}"
-            states[key] = {
-                "path": path + (key,),
-                "name": key,
-                "value": value,
-            }
+            states[key] = leaves.value(path, key, value)
         return states

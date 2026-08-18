@@ -3,6 +3,7 @@ import pandas as pd
 
 from colloquy.base import Base
 from ..test_light_sensor_values.utils import FEMALE_COLUMNS, dataframe_to_chart_json
+from colloquy.ui import leaves
 
 
 class TestGraphZoom(Base):
@@ -39,11 +40,7 @@ class TestGraphZoom(Base):
 
     def _snapshot_if_opened(self, path):
         states = {}
-        states["dummy graph"] = {
-            "path": path + ("dummy graph",),
-            "name": "dummy graph",
-            "chart": self._dummy_chart(),
-        }
+        states["dummy graph"] = leaves.chart(path, "dummy graph", self._dummy_chart())
         return states
 
     @property

@@ -2,6 +2,7 @@ from colloquy.base_thread import BaseThread
 from datetime import datetime
 from functools import partial
 from time import time
+from colloquy.ui import leaves
 
 
 class TestMovements(BaseThread):
@@ -194,9 +195,9 @@ class TestMovements(BaseThread):
                 body.name for body, _ in bodies if body.is_moving
             )
             status = f"moving: {still_moving}" if still_moving else "settled"
-            states["current step"] = {
-                "path": path + ("current step",),
-                "name": "current step",
-                "value": f"{label} ({status}, {len(self._sequence)} left)",
-            }
+            states["current step"] = leaves.value(
+                path,
+                "current step",
+                f"{label} ({status}, {len(self._sequence)} left)",
+            )
         return states

@@ -5,6 +5,7 @@ from colloquy.input import Input
 
 from colloquy.hardware.angle.conversion import as_signed
 from colloquy.hardware.value_setter2 import ValueSetter2
+from colloquy.ui import leaves
 
 
 class RegisterHanlder(Base):
@@ -105,9 +106,5 @@ class RegisterHanlder(Base):
         # (temperature/position/torque_enabled/goal_position/...) on every
         # servo, so this was reachable at ~72 distinct nodes app-wide.
         states = super()._snapshot_if_opened(path)
-        states["value"] = {
-            "path": path + ("value",),
-            "name": "value",
-            "value": self.read(),
-        }
+        states["value"] = leaves.value(path, "value", self.read())
         return states

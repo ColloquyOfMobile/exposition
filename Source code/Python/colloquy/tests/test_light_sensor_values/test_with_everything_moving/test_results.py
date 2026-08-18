@@ -11,6 +11,7 @@ from ..utils import (
     dataframe_to_chart_json,
     plot_counts_as_svg,
 )
+from colloquy.ui import leaves
 
 
 class TestResults(Base):
@@ -53,20 +54,16 @@ class TestResults(Base):
 
     def _snapshot_if_opened(self, path):
         states = {}
-        states["full measurement"] = {
-            "path": path + ("full measurement",),
-            "name": "full measurement",
-            "chart": self.full_measurement_as_chart(),
-        }
+        states["full measurement"] = leaves.chart(
+            path,
+            "full measurement",
+            self.full_measurement_as_chart(),
+        )
         for column in FEMALE_COLUMNS:
             if len(self._results[column]["counts"]) == 0:
                 continue
             key = f"{column} pulse durations"
-            states[key] = {
-                "path": path + (key,),
-                "name": key,
-                "svg": self.counts_as_svg(column),
-            }
+            states[key] = leaves.svg(path, key, self.counts_as_svg(column))
         return states
 
     @property

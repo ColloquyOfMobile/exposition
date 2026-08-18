@@ -1,6 +1,7 @@
 from colloquy.base_thread import BaseThread
 from time import time, sleep
 from .read_pattern import ReadPattern
+from colloquy.ui import leaves
 
 
 class Search(BaseThread):
@@ -122,9 +123,9 @@ class Search(BaseThread):
         states = super()._snapshot_if_opened(path)
         if self._partner is not None:
             male, drive = self._partner
-            states["found"] = {
-                "path": path + ("found",),
-                "name": "found",
-                "value": f"{male}, sharing the {drive} drive",
-            }
+            states["found"] = leaves.value(
+                path,
+                "found",
+                f"{male}, sharing the {drive} drive",
+            )
         return states

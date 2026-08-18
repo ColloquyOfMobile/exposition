@@ -6,6 +6,7 @@ from threading import Event
 import traceback
 from threading import Thread, Lock
 from time import sleep, time
+from colloquy.ui import leaves
 
 
 class TestDriveLightValues(BaseThread):
@@ -47,11 +48,9 @@ class TestDriveLightValues(BaseThread):
     def snapshot_children(self):
         children = {}
         if self._timelap is not None:
-            children["timelap"] = {
-                "path": _path + ("timelap",),
-                "name": "timelap",
-                "value": timelap_to_string(seconds_elapsed=self._timelap),
-            }
+            children["timelap"] = leaves.value(
+                _path, "timelap", timelap_to_string(seconds_elapsed=self._timelap)
+            )
         for drive in self.hardware.drives:
             name = f"{drive.body.name}'s {drive.name} drive"
             children[drive.name] = drive
