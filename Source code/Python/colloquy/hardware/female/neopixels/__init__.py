@@ -1,6 +1,5 @@
 from colloquy.base import Base
 
-from pathlib import Path
 
 from .head import Head
 from .feet import Feet

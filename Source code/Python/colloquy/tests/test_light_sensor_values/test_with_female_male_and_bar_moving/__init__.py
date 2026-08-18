@@ -1,12 +1,8 @@
-from pathlib import Path
 from colloquy.base_thread import BaseThread
 from datetime import datetime
 from colloquy.utils import timelap_to_string
 
-from threading import Event
-import traceback
-from threading import Thread, Lock
-from time import sleep, time
+from time import time
 from ..utils import (
     read_and_store,
     post_process,

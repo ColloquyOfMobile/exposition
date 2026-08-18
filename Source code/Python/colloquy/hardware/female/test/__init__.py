@@ -1,4 +1,3 @@
-from pathlib import Path
 from colloquy.base import Base
 
 

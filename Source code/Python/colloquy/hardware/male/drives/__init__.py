@@ -1,7 +1,4 @@
-from time import time
-from pathlib import Path
 from threading import Lock
-from colloquy.base import Base
 from colloquy.hardware.drive import Drive, which_is_frustated
 from colloquy.base_thread import BaseThread
 

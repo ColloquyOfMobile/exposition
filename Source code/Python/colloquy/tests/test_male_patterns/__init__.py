@@ -1,10 +1,6 @@
-from pathlib import Path
 from colloquy.base_thread import BaseThread
 
-from threading import Event
-import traceback
-from threading import Thread, Lock
-from time import sleep, time
+from time import time
 
 
 class TestMalePatterns(BaseThread):

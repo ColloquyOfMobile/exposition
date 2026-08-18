@@ -1,9 +1,6 @@
 # from colloquy.wsgi.root.html_item import HtmlItem
-from pathlib import Path
 from colloquy.base import Base
 
-from threading import Event
-import traceback
 from .toggle_on_off import ToggleOnOff
 from .parameter import Parameter
 from .brightness import Brightness

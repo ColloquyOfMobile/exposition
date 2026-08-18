@@ -1,7 +1,6 @@
-from time import time, sleep
+from time import sleep
 from threading import Lock
 from colloquy.base_thread import BaseThread
-from threading import Thread, Event
 from colloquy.input import Input
 
 """logic35_systems.ino: line 86

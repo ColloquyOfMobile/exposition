@@ -1,9 +1,4 @@
 import sys, os
-import json
-from yattag import Doc, indent
-from urllib.parse import unquote
-from pathlib import Path
-from colloquy.utils import remove_folder_and_subfolders
 from colloquy.base import Base
 from threading import Event
 from wsgiref.simple_server import make_server, WSGIRequestHandler

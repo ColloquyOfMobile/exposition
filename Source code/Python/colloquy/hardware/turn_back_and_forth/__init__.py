@@ -1,5 +1,4 @@
 from colloquy.base_thread import BaseThread
-from time import time, sleep
 
 
 class TurnBackAndForth(BaseThread):

@@ -1,6 +1,5 @@
 from colloquy.base import Base
 
-from pathlib import Path
 
 from .up_ring import UpRing
 from .o_drive_level import ODriveLevel

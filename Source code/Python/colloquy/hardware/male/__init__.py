@@ -1,6 +1,5 @@
 from .neopixels import Neopixels  # Head, BodyO, BodyP, Feet
 from .drives import Drives
-from pathlib import Path
 from colloquy.base_thread import BaseThread
 
 from .light_sensor import LightSensor

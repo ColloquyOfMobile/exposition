@@ -5,9 +5,6 @@ from dynamixel_sdk import (
 )  # Uses Dynamixel SDK library
 from functools import wraps
 from threading import Lock
-from time import sleep
-from pathlib import Path
-import serial.tools.list_ports
 from colloquy.base import Base
 from .com_port import ComPort
 from colloquy.hardware.dxl import DXL

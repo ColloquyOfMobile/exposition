@@ -85,7 +85,7 @@ class TestForFalsePositives(BaseThread):
     def _make_duration_setter(self, seconds):
         def setter(request=None):
             if self.is_started:
-                self.log(f"Ignoring the new duration: stop the run first.")
+                self.log("Ignoring the new duration: stop the run first.")
                 return
             self._duration = seconds
 

@@ -1,4 +1,3 @@
-from pathlib import Path
 from colloquy.base_thread import BaseThread
 from ..angle import Angle
 from ..angle.conversion import REDUCTIONS

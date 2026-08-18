@@ -1,9 +1,8 @@
 import serial
 import serial.tools.list_ports
-from pathlib import Path
 
 import json
-from time import sleep, time
+from time import time
 from threading import Lock
 from colloquy.base import Base
 from .com_port import ComPort

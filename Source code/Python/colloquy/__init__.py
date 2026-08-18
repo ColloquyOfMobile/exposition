@@ -1,12 +1,8 @@
 from pathlib import Path
-import urllib
-import os
-import sys
 
 #
 from colloquy.base_thread import BaseThread
 from .events import Events
-from .base import Base
 from .tests import Tests
 
 from .hardware import Hardware

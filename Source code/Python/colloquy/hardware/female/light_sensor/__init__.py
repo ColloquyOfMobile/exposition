@@ -1,5 +1,4 @@
 from colloquy.base_thread import BaseThread
-from time import sleep
 from threading import Lock
 from pathlib import Path
 from colloquy.ui import leaves

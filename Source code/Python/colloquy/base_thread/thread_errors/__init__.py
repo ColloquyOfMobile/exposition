@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 # colloquy/base_thread/thread_error/__init__.py
 from colloquy.base import Base
-from threading import Lock
-from pathlib import Path
 from .thread_error import ThreadError
 
 

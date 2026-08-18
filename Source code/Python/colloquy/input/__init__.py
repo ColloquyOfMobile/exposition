@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 # project2/my_server/solution1/input/__init__.py
 
-import textwrap
-import ast
 import string
 from colloquy.base import Base
 

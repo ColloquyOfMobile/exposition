@@ -5,7 +5,6 @@ from html import escape
 
 from colloquy.base import Base
 from threading import Lock
-from pathlib import Path
 
 
 class ThreadError(Base):

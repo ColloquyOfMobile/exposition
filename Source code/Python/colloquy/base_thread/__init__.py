@@ -3,11 +3,6 @@
 import traceback
 from time import time, sleep
 
-import inspect
-from pathlib import Path
-from urllib.parse import unquote
-import urllib.parse
-import socket
 from colloquy.base import Base
 from threading import Thread, Event, Lock
 from .thread_errors import ThreadErrors

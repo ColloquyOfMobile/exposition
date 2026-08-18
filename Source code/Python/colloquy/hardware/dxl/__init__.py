@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
 # Source code/Python/colloquy/hardware/dxl/__init__.py
-from pathlib import Path
-from dynamixel_sdk import (
-    PortHandler,
-    PacketHandler,
-    COMM_SUCCESS,
-)  # Uses Dynamixel SDK library
 from colloquy.base import Base
 from .register_handler import RegisterHanlder
 from .torque_enabled import TorqueEnabled

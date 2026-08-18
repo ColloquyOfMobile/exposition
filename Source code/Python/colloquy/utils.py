@@ -1,20 +1,11 @@
 # -*- coding: utf-8 -*-
 # project2/my_server/utils.py
 
-import shutil
-
-
 def export_style(style):
     lines = []
     for a, b in style.items():
         lines.append(f"{a}: {b};")
     return " ".join(lines)
-
-
-def remove_folder_and_subfolders(path):
-    assert not path.is_file()
-    if path.is_dir():
-        shutil.rmtree(path)
 
 
 def timelap_to_string(seconds_elapsed):

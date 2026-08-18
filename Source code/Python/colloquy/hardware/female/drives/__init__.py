@@ -1,7 +1,3 @@
-from time import time
-from pathlib import Path
-from threading import Lock
-from colloquy.base import Base
 from colloquy.hardware.drive import Drive, which_is_frustated
 from colloquy.base_thread import BaseThread
 
@@ -283,7 +279,6 @@ def build_map_to_compensate_brightness_to_human_eye():
     )
 
     old_size = len(map_from_tj)
-    old_max = max(map_from_tj)
 
     new_max = 100
     new_size = 101

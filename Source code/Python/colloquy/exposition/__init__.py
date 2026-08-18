@@ -1,8 +1,4 @@
-from time import time, sleep
-import traceback
 from colloquy.base_thread import BaseThread
-from pathlib import Path
-from threading import Thread, Event, Lock
 
 
 class Exposition(BaseThread):

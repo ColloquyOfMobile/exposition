@@ -1,5 +1,4 @@
 # from colloquy.wsgi.root.body.action_item import ActionItem
-import traceback
 from colloquy.base import Base
 from pathlib import Path
 

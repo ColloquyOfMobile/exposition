@@ -1,5 +1,4 @@
 from colloquy.base_thread import BaseThread
-from time import time, sleep
 from .read_pattern import ReadPattern
 from colloquy.ui import leaves
 
