@@ -2,7 +2,7 @@
 # Source code/Python/colloquy/hardware/dxl/__init__.py
 from colloquy.base import Base
 from colloquy.input import Input
-from colloquy.hardware.value_setter import ValueSetter
+from colloquy.hardware.value_setter2 import ValueSetter2
 
 
 class DXLOrigin(Base):
@@ -10,7 +10,20 @@ class DXLOrigin(Base):
         super().__init__(owner=owner)
 
         self["get"] = self.get
-        self._setter = ValueSetter(owner=self, limit=101, get_func=self.get)
+        # An origin is a raw servo reading: negative on a body whose zero
+        # sits below the servo's, and up to five figures on the bar. The
+        # setter it had could only reach 0 to 100, on a quantity that runs
+        # past 10000 - so the page could not express most of the values
+        # this node exists to hold. (Calibration is normally "set current
+        # position as dxl origin" on the body itself; this is for typing a
+        # number in by hand.)
+        self._setter = ValueSetter2(
+            owner=self,
+            min_value=-20000,
+            max_value=20001,
+            set_func=self.set,
+            get_func=self.get,
+        )
 
         # if not self.is_readonly():
         self._input = Input(owner=self)
