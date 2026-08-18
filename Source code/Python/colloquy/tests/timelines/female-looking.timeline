@@ -5,7 +5,8 @@
 # no light on her that says "I am looking" or "I have recognised someone". Movement times
 # are estimates.
 
-0 She starts to turn, swinging towards one end of her travel - about a quarter of a turn, the same sweep the males make.
+0 She starts to turn, swinging towards one end of her travel - 29 degrees, and the same again to the other side.
+0 Worth knowing, and worth deciding about: that is a third of the sweep a male makes. Both were given the same number of servo steps, but she is geared down three to one and he is not, so the same instruction moves her a third as far. Nobody chose that; it is what the numbers have always meant.
 1 She reaches the end and turns straight back the other way, roughly every 6 seconds, without pause, for as long as she is looking.
 0 All the while she is reading the light falling on her head, many times a second. A reading counts as "light" only above a fixed threshold, the same threshold for all three females.
 2 She needs two seconds of continuous reading - the length of one whole burst from a male - before she can recognise anything at all. Every attempt before that is blind.

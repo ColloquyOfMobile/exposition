@@ -22,6 +22,8 @@ class VirtualDXL(Base):
     # a revolution is 4096 position units - so velocity 20, which
     # DXL.init_hardware() writes, is about 313 units/s. A body's 2000-unit
     # sweep therefore takes ~6.4s and the bar's 10000-unit crossing ~32s.
+    # In degrees of the bodies themselves (hardware/angle/conversion.py):
+    # 27.5 deg/s for a male or a mirror, 9.2 deg/s for a female or the bar.
     _UNITS_PER_SECOND_PER_VELOCITY = 0.229 * 4096 / 60
 
     # Profile velocity 0 means "as fast as the servo will go", not "don't

@@ -99,11 +99,12 @@ class DXL(Base):
         self.wait_for_servo()
 
     # Long enough for the longest legitimate move. The bar's full travel is
-    # 10000 units, and at the profile velocity init_hardware() writes (20,
-    # i.e. ~313 units/s) that is about 32 seconds - so the previous 30s
-    # bound could not be met by the one body that most often has to cross
-    # its whole range. Simulating the servos at their configured speed is
-    # what made this visible; it applies to the real bar just the same.
+    # 292.969 degrees (10000 servo units through its 1:3 reduction), and at
+    # the profile velocity init_hardware() writes (20, i.e. ~313 units/s)
+    # that is about 32 seconds - so the previous 30s bound could not be met
+    # by the one body that most often has to cross its whole range.
+    # Simulating the servos at their configured speed is what made this
+    # visible; it applies to the real bar just the same.
     MOVE_TIMEOUT = 60
 
     def wait_for_servo(self, timeout=None):

@@ -176,9 +176,9 @@ selection (male only) and neopixel brightness/color mapping on top.
 
 | # | Scenario | Trigger | Behavior | Covered by | Status |
 |---|---|---|---|---|---|
-| 4.1 | Any male starts searching → bar auto-wanders | `Bar.loop()`: if not already searching, and *any* male's `search.is_started`, start the bar's own `search` (plain toggle over its full 10000-unit range) — `hardware/bar/__init__.py:111-118` | Bar sways full-range regardless of which male/female pair is actually relevant, and — like male search (1.2) — nothing stops it again automatically | none | ⚠️ Gap (and compounds 2.1: since female search crashes almost immediately, in practice the bar may end up wandering with no female able to read anything) |
+| 4.1 | Any male starts searching → bar auto-wanders | `Bar.loop()`: if not already searching, and *any* male's `search.is_started`, start the bar's own `search` (plain toggle over its full 292.969° travel) — `hardware/bar/__init__.py` | Bar sways full-range regardless of which male/female pair is actually relevant, and — like male search (1.2) — nothing stops it again automatically | none | ⚠️ Gap (and compounds 2.1: since female search crashes almost immediately, in practice the bar may end up wandering with no female able to read anything) |
 | 4.2 | Positioning a specific male in front of a specific female | `set_male_in_front_of_female`/`move_male_in_front_of_female_and_wait` using fixed offsets from `params["bar"]["interaction_origins"]` (`hardware/bar/__init__.py:140-151`, `params.py:21-26`) | Bar moves (blocking or non-blocking) to the exact offset for that pair | `test_movements` (jogs every pair), `test_read_pattern`, `test_light_sensor_values` (all use `move_male1_in_front_of_female1_and_wait`) | ✅ Covered |
-| 4.3 | Bar's two "linger" sub-behaviors | `turn_back_and_forth` (full 10000-range) vs. `turn_back_and_forth_around_f1` (±1500 around male1-facing-female1) — `hardware/bar/turn_back_and_forth/__init__.py`, `hardware/bar/turn_back_and_forth_around_f1/__init__.py` | Two different sway scopes; the latter is used by `test_light_sensor_values`'s 3rd stage to simulate "bar drifting near an active pair" without leaving that pair's vicinity | `test_movements` (both, manual); `test_light_sensor_values/test_with_female_male_and_bar_moving` (around-f1 variant, as part of a sequence) | ✅ Covered |
+| 4.3 | Bar's two "linger" sub-behaviors | `turn_back_and_forth` (the full 292.969° travel) vs. `turn_back_and_forth_around_f1` (±43.9° around male1-facing-female1) — `hardware/bar/turn_back_and_forth/__init__.py`, `hardware/bar/turn_back_and_forth_around_f1/__init__.py` | Two different sway scopes; the latter is used by `test_light_sensor_values`'s 3rd stage to simulate "bar drifting near an active pair" without leaving that pair's vicinity | `test_movements` (both, manual); `test_light_sensor_values/test_with_female_male_and_bar_moving` (around-f1 variant, as part of a sequence) | ✅ Covered |
 | 4.4 | Accessing `Bar.drives` or `Bar.arduino` | Either property is read (`hardware/bar/__init__.py:53-59`) | `AttributeError` — `self._drives`/`self._arduino` are never assigned in `__init__` (the bar has no drives/arduino segments of its own) | none | 🐛 Broken / dead code — landmine for future scenario code that assumes every hardware node has these |
 
 ---
@@ -389,6 +389,50 @@ what makes it safe to run on the installation.
 
 ---
 
+## 10. Angles, servo units and the reductions
+
+Everything that moves is a Dynamixel commanded in position units, and two
+of the four kinds of axis are geared: **a female and the bar turn three
+times slower than their servo; a male and a mirror turn with theirs**. The
+same 2000 units written to a male and to a female are therefore two
+different movements, which is the thing that kept being got wrong.
+
+`hardware/angle/` is the layer that ends it. Each moving thing owns an
+`Angle` node measured in **degrees of the body itself**, zero at its
+calibrated origin, signed — `female1.angle`, `male1.angle`, `bar.angle`,
+`female1.mirror1.angle`. `angle/conversion.py` holds the arithmetic and
+the reduction table; nothing outside it and `hardware/dxl/` should compute
+a servo position.
+
+`params.json` follows: `"dxl origin"` stays a raw servo reading (it is
+one), everything else is degrees, and the file is versioned with a
+migration that also fills in keys an older file predates — which is 3.5's
+landmine closed.
+
+| # | Subject | Before | Now |
+|---|---|---|---|
+| 10.1 | What a caller says | `origin + motion_range // 2`, per body, three copies | `angle.turn_to(degrees)`; the sweeps are declared in degrees (`Female._sweep` 58.594, `Male._sweep` 175.781, `Bar._travel` 292.969, around-f1 87.891) — all exactly what the old servo figures worked out to |
+| 10.2 | The bar's meeting points | `interaction_origins` in servo units (0, 2200, 4300, 6200, 8400, 10400) | the same points in degrees of the bar (0, 64.453, 125.977, 181.641, 246.094, 304.688), via `Bar.meeting_angle()` |
+| 10.3 | Positions below the servo's zero | **Broken.** Every servo is in extended position mode, where that is normal, and the SDK reads a position back as an unsigned dword. `female1` (origin 100, half-sweep 1000) writes -900 to reach her minimum and read it back as 4294966396, so `is_moving` never saw her arrive and `wait_for_servo` raised after 60s | Position and goal-position registers read signed. Verified on the virtual hardware, which now wraps 4-byte reads to unsigned exactly as the SDK does, so the conversion is exercised here and not only on the rig |
+| 10.4 | The mirrors | Three servos built by `U2D2` and mapped to nothing (ids 2, 4, 6) | `Mirror` nodes under each female, angle and calibration only — nothing drives them, nothing initialises them (§9.6 is what will) |
+
+**Three things this made visible, none of them fixed:**
+
+- **A female's sweep is a third of a male's** — 58.6° against 175.8°, from
+  the identical 2000 servo units. Nobody chose that; it is what the
+  numbers have always meant. Changing it is now one figure in
+  `Female.__init__`.
+- **The simulated "facing forward" window** was one figure of servo units
+  for every body, which is ±11.7° for a female or the bar but **±35.2°
+  for a male** — a 70° window in which a male counts as facing his origin,
+  and so as visible to a female. Migrated exactly as it was, per kind, so
+  the difference is at least written down.
+- **"Arrived" means within 20 servo units** (`DXL.moving_threshold`),
+  which is 0.59° for a female or the bar but **1.76° for a male or a
+  mirror**. It is why a body asked for +20° reports 19.6° when it stops.
+
+---
+
 ## Suggested next steps
 
 Ranked by how much of the above unblocks:
@@ -426,3 +470,9 @@ Ranked by how much of the above unblocks:
    document that `local/params.json` must be seeded before first run.
 7. Decide whether 1.2/1.7/4.1 (search/wander never stopping itself) is
    intended, and if not, add the missing stop condition.
+8. Decide the three figures §10 surfaced: how far a female should
+   actually sweep against a male (58.6° vs 175.8° today), how wide the
+   simulated "facing forward" window should be for a male (±35.2°), and
+   whether `DXL.moving_threshold` should be an angle rather than 20 servo
+   units, which means something different on a geared body than on a
+   direct one. All three are one number each now.
