@@ -20,6 +20,10 @@ class GoalPosition(RegisterHanlder):
         )
 
     @property
+    def input(self):
+        return self._input
+
+    @property
     def dxl(self):
         return self.owner
 

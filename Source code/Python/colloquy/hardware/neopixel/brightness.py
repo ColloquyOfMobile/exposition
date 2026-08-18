@@ -1,6 +1,6 @@
 from colloquy.base import Base
 
-from colloquy.hardware.value_setter2 import ValueSetter2
+from colloquy.hardware.value_setter import ValueSetter
 from colloquy.ui import leaves
 
 class Brightness(Base):
@@ -11,14 +11,7 @@ class Brightness(Base):
 
         self._neopixel = owner
 
-        self["commit"] = self.commit
-        self._setter = ValueSetter2(
-            owner=self,
-            min_value=0,
-            max_value=101,
-            set_func=self.set,
-            get_func=lambda: self.value,
-        )
+        self._setter = ValueSetter(owner=self, limit=101, get_func=lambda: self.value)
 
         # self._increment1 = Increment(owner=self, multiplier=1)
         # self._increment10 = Increment(owner=self, multiplier=10)
@@ -52,12 +45,6 @@ class Brightness(Base):
     def set(self, value):
         self.value = value
 
-    def commit(self, value):
-        """A percentage. Out-of-range values are pulled back into it by
-        set_without_updating below, but a non-number raises - which the
-        request layer turns into a message rather than a change."""
-        self.set(int(value))
-
     def set_without_updating(self, value):
         if value > 100:
             value = 100
@@ -81,7 +68,5 @@ class Brightness(Base):
         # opened directly (calls .snapshot_as_child() on it, which an int
         # doesn't have). Inject it as a proper display leaf instead.
         states = super()._snapshot_if_opened(path)
-        states["value"] = leaves.editable(
-            path, "value", self.value, hint="0 to 100"
-        )
+        states["value"] = leaves.value(path, "value", self.value)
         return states

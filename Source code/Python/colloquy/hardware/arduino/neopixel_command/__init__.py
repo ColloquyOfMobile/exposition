@@ -9,6 +9,7 @@ from dynamixel_sdk import (
 
 from colloquy.base import Base
 from time import time, sleep
+from colloquy.input import Input
 from .value_setter import ValueSetter
 
 
@@ -33,6 +34,10 @@ class NeopixelCommand(Base):
     @property
     def value_setters(self):
         return self._value_setters
+
+    @property
+    def input(self):
+        return self._input
 
     @property
     def arduino(self):

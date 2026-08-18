@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Source code/Python/colloquy/hardware/dxl/__init__.py
 from colloquy.base import Base
+from colloquy.input import Input
 from colloquy.hardware.value_setter2 import ValueSetter2
 from colloquy.ui import leaves
 
@@ -10,7 +11,6 @@ class DXLOrigin(Base):
         super().__init__(owner=owner)
 
         self["get"] = self.get
-        self["commit"] = self.commit
         # An origin is a raw servo reading: negative on a body whose zero
         # sits below the servo's, and up to five figures on the bar. The
         # setter it had could only reach 0 to 100, on a quantity that runs
@@ -25,6 +25,14 @@ class DXLOrigin(Base):
             set_func=self.set,
             get_func=self.get,
         )
+
+        # if not self.is_readonly():
+        self._input = Input(owner=self)
+        self[self.input.name] = self.input
+
+    @property
+    def input(self):
+        return self._input
 
     @property
     def colloquy(self):
@@ -79,8 +87,6 @@ class DXLOrigin(Base):
         # opened directly (calls .snapshot_as_child() on it, which an int
         # doesn't have) - reachable on every body's own "dxl origin" node.
         states = super()._snapshot_if_opened(path)
-        states["value"] = leaves.editable(
-            path, "value", self.get(), hint="servo units"
-        )
+        states["value"] = leaves.value(path, "value", self.get())
         return states
 

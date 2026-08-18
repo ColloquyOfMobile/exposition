@@ -9,6 +9,7 @@ from dynamixel_sdk import (
 
 from colloquy.base import Base
 from time import time, sleep
+from colloquy.input import Input
 
 
 class ValueSetter(Base):
@@ -18,7 +19,13 @@ class ValueSetter(Base):
 
         self._value = 255
 
-        self["commit"] = self.commit
+        # if not self.is_readonly():
+        self._input = Input(owner=self)
+        self[self.input.name] = self.input
+
+    @property
+    def input(self):
+        return self._input
 
     @property
     def dxl(self):

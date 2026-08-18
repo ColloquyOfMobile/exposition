@@ -2,7 +2,7 @@ from time import time, sleep
 from threading import Lock
 from colloquy.base_thread import BaseThread
 from threading import Thread, Event
-from colloquy.ui import leaves
+from colloquy.input import Input
 
 """logic35_systems.ino: line 86
 //act_drive
@@ -76,7 +76,9 @@ class Drive(BaseThread):
         seconds_in_3min = 60 * 3
         self._frustrated_lim = seconds_in_3min / self._update_interval
 
-        self["commit"] = self.commit
+        self._input = Input(owner=self)
+
+        self[self.input.name] = self.input
 
     @property
     def lock(self):
@@ -107,6 +109,10 @@ class Drive(BaseThread):
         self._value = value
 
     @property
+    def input(self):
+        return self._input
+
+    @property
     def is_satisfied(self):
         return self.value < self._satisfaction_lim
 
@@ -115,8 +121,6 @@ class Drive(BaseThread):
         return self.value > self._frustrated_lim
 
     def commit(self, value):
-        """Force this appetite to a value - what the box on its page posts
-        to, and what the scenarios use to stage a drive state."""
         self._value = int(value)
         if self._value > self._max:
             self._value = self._max
@@ -158,7 +162,9 @@ class Drive(BaseThread):
     def snapshot_as_child(self, path):
         states = self._snapshot_base_states(path)
         if self._is_opened:
-            states["value"] = leaves.editable(
-                path, "value", self.value, hint=f"0 to {self._max}"
+            states.update(
+                {
+                    "value": self.value,
+                }
             )
         return states
