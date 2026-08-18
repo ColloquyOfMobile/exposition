@@ -46,6 +46,8 @@ class Angle(Base):
 
         self["get"] = self.get
         self["turn to origin"] = self.turn_to_origin
+        # What the box on the page posts to (colloquy/ui/leaves.editable).
+        self["commit"] = self.commit
 
     @property
     def name(self):
@@ -115,6 +117,9 @@ class Angle(Base):
         return ticks_to_degrees(ticks - self.origin, self._reduction)
 
     def commit(self, value):
+        """Turn to a typed angle. Raises on anything that isn't a number,
+        which the request layer turns into a message rather than a
+        change."""
         self.turn_to(float(value))
 
     def _make_jog(self, degrees):
@@ -136,7 +141,10 @@ class Angle(Base):
         leaf = leaves.into(states, path)
 
         leaf("angle", f"{self.get():.1f}\N{DEGREE SIGN}")
-        leaf("goal", f"{self.goal:.1f}\N{DEGREE SIGN}")
+        # The one you can change: where it is going, not where it is.
+        states["goal"] = leaves.editable(
+            path, "goal", round(self.goal, 1), hint="degrees from the origin"
+        )
         # The two numbers this node exists to keep out of everyone's way,
         # kept visible for calibration: what the servo actually reads, and
         # what it reads when this body is at zero.

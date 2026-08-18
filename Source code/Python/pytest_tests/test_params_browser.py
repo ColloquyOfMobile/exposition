@@ -6,6 +6,8 @@ pytest_tests/test_params.py) is enough.
 """
 import json
 
+import pytest
+
 from colloquy.params import Params
 from colloquy.params_browser import (
     ParamsNode,
@@ -77,16 +79,23 @@ def test_nested_dicts_recurse_into_params_node(tmp_path):
     assert isinstance(female2, ParamsIntLeaf)
 
 
+def shown_value(leaf, path):
+    """What the page shows for a leaf - through the editable payload, since
+    an editable leaf carries its reading inside the box it draws."""
+    states = leaf.snapshot(path=path, focus_path=path)
+    return states["value"]["editable"]["value"]
+
+
 def test_int_leaf_value_reflects_live_current_value(tmp_path):
     root, params = make_tree(tmp_path)
     leaf = root.snapshot_children["threashold"]
+    path = ("params", "threashold")
 
-    states = leaf.snapshot(path=("params", "threashold"), focus_path=("params", "threashold"))
-    assert states["value"]["value"] == 300
+    assert shown_value(leaf, path) == 300
 
     params["threashold"] = 301
-    states = leaf.snapshot(path=("params", "threashold"), focus_path=("params", "threashold"))
-    assert states["value"]["value"] == 301
+
+    assert shown_value(leaf, path) == 301
 
 
 def test_int_leaf_setter_writes_through_and_persists(tmp_path):
@@ -208,13 +217,46 @@ def test_a_float_param_is_editable_not_read_only(tmp_path):
 
 
 def test_float_leaf_shows_the_whole_value_not_the_rounded_one(tmp_path):
+    # The box holds 64.453 even though its digit tree works in whole
+    # degrees - the tree is for jumping, the box is for saying exactly.
     root, _params = make_angle_tree(tmp_path)
     leaf = meeting_point_leaf(root)
     path = ("params", "bar", "interaction_origins", "male1", "female2")
 
-    states = leaf.snapshot(path=path, focus_path=path)
+    assert shown_value(leaf, path) == 64.453
 
-    assert states["value"]["value"] == 64.453
+
+def test_typing_a_value_into_a_float_param_writes_it(tmp_path):
+    root, params = make_angle_tree(tmp_path)
+    leaf = meeting_point_leaf(root)
+
+    leaf.commit("125.977")
+
+    assert params["bar"]["interaction_origins"]["male1"]["female2"] == 125.977
+
+
+def test_typing_something_that_is_not_a_number_is_refused(tmp_path):
+    # It has to raise: the request layer turns that into a message, where
+    # a silent pass would look like a change that did not happen.
+    root, params = make_angle_tree(tmp_path)
+    leaf = meeting_point_leaf(root)
+
+    with pytest.raises(ValueError):
+        leaf.commit("64,453")
+
+    assert params["bar"]["interaction_origins"]["male1"]["female2"] == 64.453
+
+
+def test_typing_a_fraction_into_an_int_param_is_refused(tmp_path):
+    # The value in the file is a whole number and the tree picked this
+    # leaf because of that; writing 1.5 would change its type underneath.
+    root, params = make_tree(tmp_path)
+    leaf = root.snapshot_children["threashold"]
+
+    with pytest.raises(ValueError):
+        leaf.commit("300.5")
+
+    assert params["threashold"] == 300
 
 
 def test_jogging_a_float_writes_through_and_persists(tmp_path):

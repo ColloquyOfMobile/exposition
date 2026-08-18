@@ -103,6 +103,7 @@ class ParamsIntLeaf(Base):
         self._key = key
         self._params_dict = params_dict
         super().__init__(owner=owner)
+        self["commit"] = self.commit
         self._setter = ValueSetter2(
             owner=self,
             min_value=_INT_SETTER_MIN,
@@ -117,6 +118,12 @@ class ParamsIntLeaf(Base):
     def _get(self):
         return self._params_dict[self._key]
 
+    def commit(self, value):
+        """Whole numbers only - this leaf exists because the value in the
+        file is one, and writing 1.5 here would change its type under the
+        tree that chose this leaf for it."""
+        self._set(int(value))
+
     @property
     def name(self):
         return self._key
@@ -127,7 +134,9 @@ class ParamsIntLeaf(Base):
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
-        states["value"] = leaves.value(path, "value", self._params_dict[self._key])
+        states["value"] = leaves.editable(
+            path, "value", self._params_dict[self._key]
+        )
         return states
 
 
@@ -155,6 +164,7 @@ class ParamsFloatLeaf(Base):
         self._key = key
         self._params_dict = params_dict
         super().__init__(owner=owner)
+        self["commit"] = self.commit
         self._setter = ValueSetter2(
             owner=self,
             min_value=_INT_SETTER_MIN,
@@ -171,6 +181,9 @@ class ParamsFloatLeaf(Base):
 
     def _get_whole(self):
         return round(self._get())
+
+    def commit(self, value):
+        self._set(float(value))
 
     def _jog(self, step):
         def command(request=None):
@@ -192,7 +205,7 @@ class ParamsFloatLeaf(Base):
         states = super()._snapshot_if_opened(path)
         for step in self.JOGS:
             states[f"{step:+g}"] = self._jog(step)
-        states["value"] = leaves.value(path, "value", self._get())
+        states["value"] = leaves.editable(path, "value", self._get())
         return states
 
 

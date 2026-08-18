@@ -9,7 +9,6 @@ from dynamixel_sdk import (
 
 from colloquy.base import Base
 from time import time, sleep
-from colloquy.input import Input
 
 
 class LightSensorCommand(Base):
@@ -17,13 +16,7 @@ class LightSensorCommand(Base):
         self._name = arduino_path
         super().__init__(owner=owner)
 
-        # if not self.is_readonly():
-        self._input = Input(owner=self)
-        self[self.input.name] = self.input
-
-    @property
-    def input(self):
-        return self._input
+        self["commit"] = self.commit
 
     @property
     def dxl(self):

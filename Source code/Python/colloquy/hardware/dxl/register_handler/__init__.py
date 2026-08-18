@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Source code/Python/colloquy/hardware/dxl/__init__.py
 from colloquy.base import Base
-from colloquy.input import Input
 
 from colloquy.hardware.angle.conversion import as_signed
 from colloquy.hardware.value_setter2 import ValueSetter2
@@ -36,14 +35,8 @@ class RegisterHanlder(Base):
             )
 
         self["read"] = self.read
-
-        # if not self.is_readonly():
-        self._input = Input(owner=self)
-        self[self.input.name] = self.input
-
-    @property
-    def input(self):
-        return self._input
+        if write_func is not None:
+            self["commit"] = self.commit
 
     @property
     def dxl(self):
@@ -106,5 +99,12 @@ class RegisterHanlder(Base):
         # (temperature/position/torque_enabled/goal_position/...) on every
         # servo, so this was reachable at ~72 distinct nodes app-wide.
         states = super()._snapshot_if_opened(path)
-        states["value"] = leaves.value(path, "value", self.read())
+        # Read-only registers (position, temperature) get a reading;
+        # the rest get a box, since commit() is a write.
+        if self.is_readonly():
+            states["value"] = leaves.value(path, "value", self.read())
+        else:
+            states["value"] = leaves.editable(
+                path, "value", self.read(), hint="servo units"
+            )
         return states

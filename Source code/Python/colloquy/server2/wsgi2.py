@@ -121,8 +121,8 @@ class WSGI2(Base):
         """Minimal POST support for text-editing UIs (see the "editor" leaf
         kind in _html_recursion). The rest of this app is pure GET-link
         navigation - path segments carry every argument, which works for
-        command names and short values (the "keyboard" UI) but can't carry
-        arbitrary multi-line text. This mirrors the existing GET
+        command names and short values but can't carry arbitrary text -
+        a value someone typed, or a whole document. This mirrors the existing GET
         .../call/<command> convention (same tree walk via snapshot_children,
         same "call" marker) but takes the command's one string argument
         from the POST body's "content" field instead of further path
@@ -157,7 +157,17 @@ class WSGI2(Base):
         )
         content = parse_qs(raw_body.decode("utf-8")).get("content", [""])[0]
 
-        handler(content)
+        try:
+            handler(content)
+        except Exception as error:
+            # Whatever was typed, this must not escape: Server2.wsgi()
+            # treats any unhandled exception in a request as an emergency
+            # stop, so a typo in a value box would otherwise halt the
+            # installation and take the UI down with it. The value stays
+            # as it was and the refusal goes to the log.
+            self.colloquy.log(
+                f"Refused {content!r} for {'/'.join(node_keys)}/{command}: {error}"
+            )
 
         redirect_path = self._root.joinpath(*node_keys)
         return "303 See Other", [("Location", f"/{redirect_path.as_posix()}")], b""
@@ -416,82 +426,6 @@ class WSGI2(Base):
         html = doc.getvalue()
         return indent(html)
 
-    def _html_keyboard(self, obj):
-        doc, tag, text = Doc().tagtext()
-
-        call_path = Path(*obj["path"]).relative_to(self._base_path)
-        base_path = self._root / self._base_path / "call" / call_path
-        keyboard_path = base_path / "keyboard"
-
-        with tag(
-            "div", name="keyboard", style="display: flex; flex-direction: column; "
-        ):
-            with tag("div", style="display: flex; gap: 1ch;"):
-                with tag("div", name="prompt"):
-                    text(">>>")
-                with tag("div", name="value", style="flex:1;"):
-                    if "keyboard" in obj:
-                        text(obj["keyboard"]["value"])
-                    else:
-                        text("")
-
-                path = keyboard_path / "pop"
-                with tag("div", name="pop"):
-                    with tag("a", href=f"/{path.as_posix()}"):
-                        text("pop")
-
-                path = keyboard_path / "clear"
-                with tag("div", name="clear"):
-                    with tag("a", href=f"/{path.as_posix()}"):
-                        text("clear")
-
-                path = base_path
-                if "keyboard" in obj:
-                    path = base_path / obj["keyboard"]["value"]
-                with tag("div", name="commit"):
-                    with tag("a", href=f"/{path.as_posix()}"):
-                        text("call")
-
-            all_char = "abcdefghijklmnopqrstuvwxyz"
-            with tag("div", name="line1", style="display: flex;"):
-                for char in all_char[:10]:
-                    path = keyboard_path / char
-
-                    with tag(
-                        "div", style="flex:1; display: flex; justify-content: center;"
-                    ):
-                        with tag("a", href=f"/{path.as_posix()}"):
-                            text(char)
-
-            with tag("div", name="line3", style="display: flex;"):
-                for char in all_char[10:21]:
-                    path = keyboard_path / char
-
-                    with tag(
-                        "div", style="flex:1; display: flex; justify-content: center;"
-                    ):
-                        with tag("a", href=f"/{path.as_posix()}"):
-                            text(char)
-
-            with tag("div", name="line3", style="display: flex;"):
-                for char in all_char[21:]:
-                    path = keyboard_path / char
-
-                    with tag(
-                        "div", style="flex:1; display: flex; justify-content: center;"
-                    ):
-                        with tag("a", href=f"/{path.as_posix()}"):
-                            text(char)
-                path = keyboard_path / "space"
-                with tag(
-                    "div", style="flex:3; display: flex; justify-content: center;"
-                ):
-                    with tag("a", href=f"/{path.as_posix()}"):
-                        text("space")
-
-        html = doc.getvalue()
-        return indent(html)
-
     def _html_recursion(self, obj):
         doc, tag, text = Doc().tagtext()
 
@@ -519,28 +453,22 @@ class WSGI2(Base):
                     "func",
                     "ref",
                     "checked",
-                    "keyboard",
                     "close",
                     "open",
                     "opened",
                 ):
                     continue
 
-                if key == "value":
-                    # Two shapes reach here under the literal key "value":
-                    # a bare scalar (obj["value"] set directly), or the
-                    # wrapped {"path", "name", "value"} leaf dict used
-                    # everywhere else in this function (and by classes
-                    # like LightSensor, whose _snapshot_if_opened key
-                    # happens to also be "value") - unwrap the latter so
-                    # it doesn't print the dict's own repr.
-                    display_value = (
-                        value["value"]
-                        if isinstance(value, dict) and "value" in value
-                        else value
-                    )
+                if key == "value" and not isinstance(value, dict):
+                    # A bare scalar put straight into the snapshot under
+                    # the literal key "value" (obj["value"] = 3). A leaf
+                    # dict filed under that same key falls through to the
+                    # kind dispatch below like any other leaf - it used to
+                    # be intercepted here, which meant a node whose leaf
+                    # happened to be called "value" could never be
+                    # anything but a plain reading.
                     with tag("div"):
-                        text(f"value: {display_value}")
+                        text(f"value: {value}")
                     continue
 
                 if not isinstance(value, dict):
@@ -580,6 +508,46 @@ class WSGI2(Base):
                             with tag("div"):
                                 with tag("button", type="submit"):
                                     text("save")
+                    continue
+
+                if "editable" in value:
+                    payload = value["editable"]
+                    node_path = Path(*value["path"][:-1])
+                    call_path = node_path.relative_to(self._base_path)
+                    post_path = (
+                        self._root
+                        / self._base_path
+                        / "call"
+                        / call_path
+                        / payload["command"]
+                    )
+
+                    style = {
+                        "display": "flex",
+                        "gap": "1ch",
+                        "align-items": "baseline",
+                        "flex-wrap": "wrap",
+                    }
+                    with tag("div", name=key, style=export_style(style)):
+                        text(f"{key}: {payload['value']}")
+                        with tag(
+                            "form",
+                            method="post",
+                            action=f"/{post_path.as_posix()}",
+                            style="display: flex; gap: 1ch; align-items: baseline;",
+                        ):
+                            doc.stag(
+                                "input",
+                                type="text",
+                                name="content",
+                                value=str(payload["value"]),
+                                size="10",
+                            )
+                            if payload["hint"]:
+                                with tag("span", style="opacity: 0.7;"):
+                                    text(payload["hint"])
+                            with tag("button", type="submit"):
+                                text("set")
                     continue
 
                 if "html" in value:

@@ -133,15 +133,44 @@ def test_an_editor_is_a_textarea_posting_to_the_nodes_save():
     assert "/app/hardware/call/female1/angle/save" in html
 
 
+# One sample per kind. A new kind has to be added here, which is the
+# point: the test below then makes sure the renderer grew a branch for it.
+SAMPLES = {
+    "value": lambda: leaves.value(PATH, "some key", "payload"),
+    "editable": lambda: leaves.editable(PATH, "some key", "payload"),
+    "editor": lambda: leaves.editor(PATH, "some key", "payload"),
+    "html": lambda: leaves.html(PATH, "some key", "<p>payload</p>"),
+    "chart": lambda: leaves.chart(PATH, "some key", "{}"),
+    "pre": lambda: leaves.pre(PATH, "some key", "payload"),
+    "svg": lambda: leaves.svg(PATH, "some key", "<svg/>"),
+}
+
+
 @pytest.mark.parametrize("kind", leaves.KINDS)
 def test_the_renderer_draws_every_kind_the_vocabulary_offers(kind):
-    # The contract, in one line: a kind nobody can draw has no business
-    # being a kind. Anything unhandled falls through to the node branch,
-    # which reads value["path"] and draws an open-arrow for something
-    # that cannot be opened.
-    payload = "{}" if kind == "chart" else "payload"
-    html = render({"some key": leaves.leaf(PATH, "some key", kind, payload)})
+    # The contract, in one test: a kind nobody can draw has no business
+    # being a kind. An unhandled kind falls through to the node branch,
+    # which draws an open-arrow for something that cannot be opened.
+    assert kind in SAMPLES, f"{kind} needs a sample here"
+
+    html = render({"some key": SAMPLES[kind]()})
 
     assert "some key" in html or "payload" in html
     # The give-away of the fall-through: an open link for a leaf.
     assert "/open" not in html
+
+
+def test_an_editable_leaf_draws_a_box_posting_to_the_nodes_command():
+    html = render({"angle": leaves.editable(PATH, "angle", 29.3, hint="degrees")})
+
+    assert "angle: 29.3" in html
+    assert 'value="29.3"' in html
+    assert "degrees" in html
+    # The node this leaf belongs to, and the command it registered.
+    assert 'action="/app/hardware/call/female1/angle/commit"' in html
+
+
+def test_an_editable_leaf_can_name_another_command():
+    html = render({"x": leaves.editable(PATH, "x", 1, command="set_it")})
+
+    assert "/call/female1/angle/set_it" in html

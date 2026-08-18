@@ -17,6 +17,9 @@ Not leaves, and so not here:
   (`states["turn to origin"] = self.turn_to_origin`). The page draws them
   as links that call them through the "call" path segment.
 
+`editable()` is the one that changes something: it draws a box and posts
+what is typed to a command on the node. Everything else here is read-only.
+
 `into()` is for the common case of a node with several readings to show:
 
     leaf = leaves.into(states, path)
@@ -31,7 +34,7 @@ and the constructors are for one-offs:
 # Every payload key the renderer knows how to draw, in the order it tries
 # them. A kind not in here is a leaf nothing can render - the page shows
 # the dict's own repr, which is how missing kinds have shown up before.
-KINDS = ("value", "editor", "html", "chart", "pre", "svg")
+KINDS = ("value", "editable", "editor", "html", "chart", "pre", "svg")
 
 
 def leaf(path, key, kind, payload):
@@ -47,6 +50,29 @@ def value(path, key, value):
     sign, a percentage, seconds - so this takes what it is given.
     """
     return leaf(path, key, "value", value)
+
+
+def editable(path, key, value, command="commit", hint=None):
+    """A reading with a box to type a new one into.
+
+    The page draws the value, an input holding it, and a button that posts
+    what you typed to `command` on the node this leaf belongs to - so a
+    node offering this must register that command (`self["commit"] =
+    self.commit`) and its commit must take the string the browser sends.
+
+    `hint` is drawn next to the box: the unit, or what the number means.
+
+    Every commit is a string from someone typing, so it must refuse a bad
+    one by raising - the request layer turns that into a message rather
+    than a change (an unhandled exception in a request is an emergency
+    stop, see Server2.wsgi).
+    """
+    return leaf(
+        path,
+        key,
+        "editable",
+        {"value": value, "command": command, "hint": hint},
+    )
 
 
 def html(path, key, markup):
