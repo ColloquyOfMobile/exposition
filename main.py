@@ -17,10 +17,6 @@ sys.path.append(str(source_code.resolve()))
 from colloquy import Colloquy
 from colloquy.server2 import Server2
 
-# from server import server
-# from wsgi import make_wsgi
-from threading import Event
-
 
 def main(*args):
     memory = {
@@ -50,41 +46,6 @@ def colloquy1(*args):
     colloquy.hardware.neopixels.turn_all_off()
 
     Server2(colloquy=colloquy)
-
-
-def as_text(memory):
-    lines = as_lines(memory)
-    return "\n".join("".join(tokens) for tokens in lines)
-
-
-def as_lines(memory):
-    if not isinstance(memory, dict):
-        raise NotImplementedError(memory)
-
-    lines = []
-    for key, value in memory.items():
-        tokens = []
-
-        if not isinstance(value, dict):
-            lines.append([f"{key}()"])
-            continue
-
-        if "opened" in value:
-            lines.append([f"{value['name']}:"])
-            lines += as_lines(value)
-            continue
-
-        if "value" in value:
-            lines.append([f"{value['name']}: {value['value']}"])
-            continue
-
-        lines.append([f"{value['name']}"])
-
-    return add_indent(lines)
-
-
-def add_indent(lines):
-    return [["|", *tokens] for tokens in lines]
 
 
 if __name__ == "__main__":
