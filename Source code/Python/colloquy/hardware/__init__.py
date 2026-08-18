@@ -19,11 +19,6 @@ class Hardware(BaseThread):
         if self.is_simulated:
             self.log("Warning: The hardware is simulated.")
 
-        self.dxl_ids = {
-            "female1": 1,
-            "female2": 3,
-            "female3": 5,
-        }
         self._is_opened = False
         self._commands = Commands(owner=self)
 
@@ -36,8 +31,9 @@ class Hardware(BaseThread):
             Male(owner=self, id_number=1),
             Male(owner=self, id_number=2),
         )
+        # Where the speakers will go - see SCENARIOS section 9, and the
+        # wiring that is already in the box for them.
         self._speakers = []
-        self._moving_elements = []
 
         self._females = (
             Female(owner=self, id_number=1),
@@ -150,10 +146,6 @@ class Hardware(BaseThread):
     @property
     def female3(self):
         return self._females[2]
-
-    @property
-    def moving_elements(self):
-        return self._moving_elements
 
     @property
     def neopixels(self):

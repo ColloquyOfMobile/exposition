@@ -1,4 +1,3 @@
-import inspect
 from pathlib import Path
 import socket
 from .logger import Logger
@@ -10,18 +9,6 @@ class SnapchotError(Exception):
 
 class Base:
     _all_threads = set()
-
-    @staticmethod
-    def retrieve_call_origin():
-        """Used for debug."""
-        stack = inspect.stack()
-        if len(stack) > 2:
-            caller_frame = stack[2]
-            caller_filename = caller_frame.filename  # File where the call happened
-            caller_lineno = caller_frame.lineno  # Line number of the call
-            return f"{caller_filename}:{caller_lineno}"
-        else:
-            return "unknown origin"
 
     def __init__(self, owner):
         self._dict = {}

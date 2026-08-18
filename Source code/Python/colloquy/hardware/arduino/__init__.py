@@ -10,7 +10,6 @@ from .com_port import ComPort
 from .neopixel_command import NeopixelCommand
 from .light_sensor_command import LightSensorCommand
 
-START = time()
 
 class Arduino(Base):
     _classes = {
@@ -193,5 +192,3 @@ class Arduino(Base):
             if time() - start > 2:
                 raise RuntimeError("Arduino was to long to reboot !")
 
-    def _get_com_ports(self):
-        return [port.device for port in serial.tools.list_ports.comports()]

@@ -22,8 +22,6 @@ class Colloquy(BaseThread):
         self._params_view = ParamsNode(owner=self, key="params", params_dict=self._params)
 
         self._is_opened = False
-        self._request = None
-        self._args = None
         self._virtual_hardware = None
 
         self._hardware = Hardware(owner=self)
@@ -143,11 +141,6 @@ class Colloquy(BaseThread):
         self,
     ):
         return self.server()
-
-    def _call_root(self):
-        print("Available command:")
-        for name in self:
-            print(f"- {name}")
 
     @property
     def snapshot_children(self):
