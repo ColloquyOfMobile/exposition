@@ -223,14 +223,18 @@ the full chain never runs together as it would in the real installation:
    triggers drive it, and nothing currently reacts to `read_pattern.last_match`
    by satisfying the matched drive (that link doesn't exist yet — matches
    are logged/recorded but have no effect on the female's or male's state).
+   Half of that missing link is a whole channel rather than a line of code:
+   in the original the female answers over sound and the exchange runs from
+   there — see §9.
 2. **Two males simultaneously frustrated for the same female** — bar can
    only be in front of one male at a time; no scenario documents or tests
    the resulting contention/ordering.
 3. **A female mid-`turn_back_and_forth` when a male's drive state (and
-   therefore blink pattern) changes** — not tested; per 1.3 the pattern
-   switches live and garbles at the boundary, which is exactly the sort of
-   reading 2.6 mis-decodes, so this is the most likely source of confident
-   wrong answers in the live installation.
+   therefore blink pattern) changes** — not tested. The garbled boundary
+   this used to produce is gone (1.3: the pattern is now picked once per
+   burst), so what is left to check is the ordinary case — she is part-way
+   through reading when the message she is reading changes to a different
+   one between bursts.
 4. **Recovering an errored thread** — since an errored `BaseThread` can
    never be `start()`-ed again (see the background note above), there is
    no documented/tested recovery scenario for *any* body once it errors
@@ -268,8 +272,120 @@ trying every rotation at once is the same idea, not a shortcut).
 | 8.3 | Transmission shape | one-shot burst: 40 samples from index 0, then the light goes **off** and the male listens; next burst 87 ticks (4.35s) later | **Ported** (`colloquy/light_pattern_timing.py`): same shape, same 4.35s cycle, minus the listening — there is no sound channel to listen on (8.6), so the male is simply dark for the 2.35s gap | — resolved. Measured on the virtual hardware, male1 facing female1: sending `("O","P")`, 177 of 181 decodes came back `male1/("O","P")`; sending `("P",)`, 173 of 182 came back `male1/("P",)`. Before the gap, a male sending both was read as `P` outright |
 | 8.4 | Timing | 50ms per sample, 4 samples per logical bit → 200ms/bit, 2s per full pattern; receive buffer is exactly one pattern long | **Ported**: 200ms/bit, 2s per burst, receive buffer one burst plus a bit. She still samples as fast as the Arduino answers (~30ms on the simulator, 6-7 votes a bit) rather than on TJ's 50ms tick, because the binning is by wall clock and more votes per bin is only ever better | — resolved. A female now needs 2s of clear view instead of 5, which is what makes a decode plausible at all while the bar is sliding past |
 | 8.5 | Error budget | ≥34 of 40 samples must agree (6 wrong, 15%); closest pair over all rotations is 8 samples apart, so ≥4 bad samples are needed before a reading sits between two patterns | 1 wrong bin of 10 (10%); closest pair is 2 apart, so **one** bad bin is already halfway to another answer | Same ratio, very different margin: oversampling is what buys TJ's robustness, not the percentage |
-| 8.6 | Reply channel | the female answers a light match by transmitting **the same pattern back as sound** (`act_transmit_I_O_sound()`), and the male spends his 2.35s gap listening for it before stopping and entering reinforcement | no sound channel at all | This is the missing closing link of §7.1 — in the original the loop closes over sound, not light |
+| 8.6 | Reply channel | the female answers a light match by transmitting **the same pattern back as sound** (`act_transmit_I_O_sound()`), and the male spends his 2.35s gap listening for it before stopping and entering reinforcement | no sound channel at all | This is the missing closing link of §7.1 — in the original the loop closes over sound, not light. Broken out in full in §9 |
 | 8.7 | Who she answers | she filters by her own drive state: looking for O, she accepts only `I_O`, `I_OP`, `II_O`, `II_OP` and ignores a male asking for P (`Logic_fem.ino:110-225`) | **Ported** (2.8): `Search.loop()` applies the same filter, and `which_is_frustated()` moved to `hardware/drive/` so both sexes share one state machine - the female's `Drives` had none at all before, exactly the gap this exposed | — resolved |
+
+---
+
+## 9. The sound channel (designed and wired, not built)
+
+Sound is the half of the interaction this port has never had, and §8.6 is
+only the one-line version of it. This section is the detail, for building
+it.
+
+It carries less than you would expect. Who a body is, what it wants, and
+whether an exchange is working all travel as **light**. Sound carries
+exactly two messages: the female's *answer* — the only message a female
+ever sends — and the male's *keep going*
+while an exchange is running. Everything below is read off
+`local/Code/Code/Units/logic35_systems/`: `act_sound.ino` (send),
+`sense_sound.ino` (hear), `sense_sound_pattern.ino` (decode),
+`Logic_fem.ino` / `Logic_male.ino` (when and why), constants in
+`logic35_systems.ino`, per-body values in `UNIT.ino`.
+
+`timelines/an-answer-in-sound.timeline` walks the same exchange in plain
+language, end to end, with `timelines/the-satisfaction-moment.timeline`
+for what closes it.
+
+**Where it stands in this installation.** The wiring exists and nothing
+above it does:
+
+- **Wired.** The electronics box carries, per body, a `<body>/audio` line
+  into a SparkFun TPA2005D1 mono amp, `<body>/speaker +/out` and
+  `-/out` to the speaker, and `<body>/microphone/1|2` back in — all five
+  bodies, on the Mega 2560 shield (`CAD/KiCad/electronic box/electronic
+  box.kicad_sch`; the amp itself is `CAD/Eagle/Mono Audio Amp (TPA2005D1)
+  v10/`). The net labels are in the schematic text but the net-to-pin
+  mapping is geometry: open the sheet to read which Mega pin each one
+  lands on rather than trusting a guess.
+- **Not in the firmware.** `Source code/Arduino/colloquy_of_mobiles/
+  colloquy_of_mobiles.ino` handles NeoPixel groups and analog light
+  sensors and nothing else — no `tone()`, no microphone read, no amp
+  enable line.
+- **Not in the tree.** `Hardware._speakers` and `Hardware._mirrors` are
+  empty lists (`hardware/__init__.py`), nothing constructs a speaker or
+  microphone node, and `Female.Reinforcement` raises on its first tick
+  (2.9).
+
+**The message layer is already here.** This is the part worth knowing
+before designing anything: in TJ's firmware *a sound message is the same
+message as a light message*. Same ten-bit tables, same 50ms tick, four
+ticks a bit, 40 samples end to end — `com_pattern_I_O` is the pattern
+whether it is sent as flashes or as tone, and `sense_sound_pattern()` is
+`sense_light_pattern()` with the word "light" swapped out. So
+`Colloquy.light_patterns`, `colloquy/light_pattern_timing.py` and
+`ReadPattern`'s decoder already describe the sound channel too; what is
+missing is a way to make a sound and a way to hear one.
+
+Two differences in *which* patterns each channel uses, both deliberate:
+
+- Sound never carries "both". A female answers with one appetite named
+  (`act_transmit_I_O_sound` / `_I_P_sound` and the male-II pair), never
+  the OP pattern, which is why `Search._shared_drive()` already resolves
+  to a single drive.
+- Sound is the only channel that carries the two **R** patterns
+  (`com_pattern_I_R`, `com_pattern_II_R`) — the male's "keep going".
+  Those are the two entries `readable_light_patterns` deliberately
+  excludes (2.7): they are not light messages at all, they are sound
+  messages that happen to share the table.
+
+| # | Function | TJ's firmware | What it needs here |
+|---|---|---|---|
+| 9.1 | A female answers a male she recognised | `Logic_fem.ino` switches on her own drive state; on a light match she calls `act_transmit_*_sound()`, `FEMALE_begin_reinforcement()` — which stops her body and starts her mirror wiggling — and sets `internal_reinforcing` | The decision is already ported: `Search.loop()` ends her search with `(male, shared drive)` in `partner` (2.8). What is missing starts one line later — `Reinforcement` has to sing that pair back instead of raising |
+| 9.2 | What she sings | **His** pattern, not one of her own: the identity she decoded plus the single appetite they share. 40 samples, 200ms a bit, 2s in all | A `Sing` thread on the female mirroring `hardware/male/search/blink/Blink` — same table, same clock, a tone where `Blink` writes a ring |
+| 9.3 | The male's listening window | He listens from `timer_search > com_pattern_count - threshold` (33 ticks, 1.65s into his own 2s burst) until the next burst is due at 87 ticks: about 2.7s, covering the whole gap. `sense_sound_active` is false while he transmits anything | The 2.35s gap this port now sends (8.3) is exactly the room her 2s answer has to fit in. Whatever listens has to be running during the gap and not during the burst |
+| 9.4 | Who he accepts | Only his own identity, and only naming an appetite he is still short of (`internal_receptive_to_O/P/OP`, `update_receptiveToDrive()`). A reply meant for the other male, or naming what he no longer wants, is ignored | Mirrors `Search._shared_drive()` on the female side; `which_is_frustated()` already provides the receptivity test for both sexes (8.7) |
+| 9.5 | What accepting does | `act_body_stop()`, stop blinking, `act_energy_on()` (ring to steady full white), `internal_reinforcing = true`, stop listening, start counting light on the sensors above and below the ring | A male-side `Reinforcement` to match the female's. Note the male has no such node at all today — only the female's placeholder exists |
+| 9.6 | The exchange itself is light, not sound | Every 80 ticks (4s) he tests how many of those ticks his sensors saw light above the room level (`sense_light_reinforce_sum > sense_light_reinforce_TRIGGER`, 20 of 80); her wiggling mirror is what returns his own lamp light to him | The mirror is the physical medium and this port has no mirror driver either (`Hardware._mirrors` is empty). Sound alone does not close the loop — it only agrees to start and keeps confirming |
+| 9.7 | The male's "keep going" | On enough collected light he sings `act_transmit_I_R_sound()` / `_II_R_sound()` — the R pattern, 2s — and subtracts `sense_light_reinforce_sum * 10` from the shared drive. Not enough light and he ends the exchange on the spot | The R patterns are already in `Colloquy.light_patterns` under the `tuple()` key, kept precisely for this (see its comment). Scale: his 4800-unit appetite is this port's 0-100, so `sum * 10` is at most ~17 points a round |
+| 9.8 | The female's side of the loop | Hearing either R pattern, she subtracts a fixed `FEMALE_reinforcement_decrement` (1200, 600, 1200 for females 1-3) and resets her timer. Ten and a quarter seconds (205 ticks) without hearing it and she gives up and goes back to searching | On the 0-100 scale those are 25, 12.5 and 25 points a round. Don't copy the raw numbers - `Drive` here is 0-100 with the interested floor at 12.5 and the desperate floor at 75 |
+| 9.9 | Satisfaction | When the shared drive falls below the interested floor it is **zeroed** and a 6s (120-tick) moment begins, during which neither drive climbs. The male plays a 15-note melody (`act_satisfaction_vals`, note lengths per male in `act_satisfaction_Durations_I/II`, both summing to exactly 120 ticks); the female plays the same rhythm as a brightness ramp in the shared appetite's colour | The only sound in the piece that is not a message. Also the only place anything is ever satisfied - 3.3's missing "interaction satisfies the drive" is this |
+| 9.10 | Pitch per body | `act_tone_index = 5 - UNIT_ID` over `act_tone_vals[5] = {1760, 1976, 2093, 2349, 2637}`: female1 2637 Hz, female2 2349, female3 2093, male1 1976, male2 1760. One tone, switched on and off - the pattern is in the on/off, not in the pitch | Gives each body an audible identity on top of the decodable one. Worth keeping: it is also how you tell by ear which body is talking while testing |
+| 9.11 | Hearing | A 7-band MSGEQ7 analyser (strobe/reset/signal on pins 2/A5/A4), read 16 times a tick for sensitivity, looking only at band 4 (~2.5kHz, where the tones sit); a sample counts as a tone when that band exceeds a fixed `sense_sound_thresh = 200` | The box has a bare microphone pair per body, no analyser chip. Either band-pass in hardware, or do it in the sketch, or choose tones and thresholds a plain envelope can separate. See 8.2: a fixed absolute threshold is already the weakest part of the light side, and a microphone in a gallery is worse |
+| 9.12 | Half duplex, per body | Transmitting anything - light or sound - sets `sense_sound_active = false`; `act_transmit_sound_end()` sets it back. Nobody listens to their own voice | Cheap to keep, and the reason a male never decodes his own R pattern as an answer |
+| 9.13 | Sound and NeoPixels fight | `act_showlights()` is wrapped in `act_blockSound()`/`act_unblockSound()`, muting the amp for the duration of every pixel write, because `NeoPixel.show()` disables interrupts and the tone tears | This port writes pixels far more often than TJ did (every ring bit is a serial command). Whatever generates the tone has to survive that, or be muted around it the same way |
+| 9.14 | Rejection | `com_pattern_rejection` and `act_transmit_rejection_sound()` exist, and the one call site is commented out with `//need a timer for this?` | A female never audibly refuses anyone. Unbuilt in the original too - if it is wanted here, it is a new decision, not a port |
+
+**Three things to settle before writing any of it.**
+
+1. **Where the bit clock lives.** The light channel puts it in Python:
+   `Blink` writes one ring command per bit over a ~15ms serial round trip,
+   which is comfortable at 200ms a bit. Sound cannot work that way on the
+   receive side — TJ samples every 50ms and reads his analyser 16 times
+   per sample, which is not something a JSON-line request per sample can
+   do. Either the sketch grows the pattern layer (Python says "sing male1
+   O" and asks "what have you heard?") or the sampling has to be coarse
+   enough to survive the serial link. This is the one decision that
+   shapes everything else, and it breaks the symmetry with the light
+   channel either way.
+2. **One tone at a time.** TJ had an Arduino per body. This port has one
+   Mega for all five, and AVR `tone()` owns a single timer and a single
+   pin at a time. Within one pair the sound is already strictly
+   alternating (she sings, then he does), but two pairs reinforcing at
+   once is normal in this piece — three females and two males. So either
+   the tone generation is multiplexed deliberately, or it moves off
+   `tone()` onto per-body hardware.
+3. **Hearing in a gallery.** 9.11. The original solved the "is there a
+   tone" question in hardware with a band-pass and still needed a fixed
+   threshold; whatever replaces the MSGEQ7 here inherits the problem, and
+   the room is full of visitors.
+
+When there is something to run, it should look like the two scenarios that
+already exist for the light side: `test_read_pattern` stages one pair and
+logs what was decoded per second, `test_female_search` runs one whole
+search and says how it ended. A `test_sound_answer` staging one pair, one
+sung reply and one decoded answer is the same shape, and the same shape is
+what makes it safe to run on the installation.
 
 ---
 
@@ -295,10 +411,11 @@ Ranked by how much of the above unblocks:
    and receives the pair, so what remains is the exchange itself:
    subtract from the shared drive while the partner keeps answering,
    zero it below the interested floor, and hold a satisfaction moment
-   with both drives frozen (8.6). TJ closes this over the sound
-   channel, which this port has no equivalent of - decide whether to
-   port sound or to close the loop over light instead. The male side
-   (receptivity, his own reinforcement) is untouched so far.
+   with both drives frozen. TJ closes this over the sound channel, now
+   broken out function by function in §9, together with what is already
+   wired for it and the three decisions that have to be made first. The
+   male side (receptivity, his own reinforcement, the mirror that
+   actually carries the exchange) is untouched so far.
 5. Finish adopting TJ's sampling model (8.5). Burst-then-silence and his
    200ms bit are in (8.3/8.4), and the phase ambiguity went with them;
    what is left is the error margin — comparing 40 samples with a

@@ -1,0 +1,13 @@
+# The satisfaction moment
+# Not built here either. Six seconds, in TJ's firmware, that begin the instant a shared
+# appetite falls below the interested floor and is zeroed. It is the only place in the
+# piece where a body stops wanting something, and the only place a male sings anything
+# that is not a message. Both bodies stand still throughout; neither appetite climbs.
+# (logic35_systems: Logic_male.ino, Logic_fem.ino, act_sound.ino.)
+
+0 The appetite they shared is set to zero outright - not lowered, zeroed - and both of them enter the moment together.
+1.5 The male sings. Fifteen notes: a low knocking to open with, 80 and 160 and 551 and 926 Hz, then a bright alternation between 2300 and 3700 Hz for the rest.
+4.5 The two males sing the same notes at different lengths. Male 1 taps them out evenly and holds the last three - half a second, one second, one and a half. Male 2 swings them, long-short-long-short, and holds only the last. Both melodies come to exactly six seconds, the length of the moment.
+0 The female sings nothing. She plays the same rhythm as light instead: each note of her partner's melody is a slow brightening from dark to full, in the colour of the appetite they shared - orange for O, greenish for P - across her whole body.
+0 So the two of them are in step without either following the other: she uses his note lengths, and which male it was decides the rhythm both of them keep.
+0 At the end the lights go out, the sound stops, and both go back to what they were doing - he to calling, she to looking. Nothing marks that it happened afterwards, except the appetite that is now at zero and has to climb again from there.
