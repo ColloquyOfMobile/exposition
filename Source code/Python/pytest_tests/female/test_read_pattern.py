@@ -2,9 +2,11 @@
 colloquy.hardware.female.search.read_pattern.ReadPattern.
 
 Background (see CLAUDE.md's "Male blink pattern / female pattern reading"
-section): each male continuously blinks his ring in a repeating 10-step,
-0.5s-per-step on/off sequence encoding his identity (male1/male2) and his
-requested drive state (neither, "O", "P", or both). ReadPattern samples a
+section): each male sends his ring a 10-bit on/off pattern encoding his
+identity (male1/male2) and his requested drive state (neither, "O", "P",
+or both), one bit every `BIT_DURATION` (0.2s, TJ's clock - see
+colloquy/light_pattern_timing.py), then holds the ring dark until the next
+burst is due. ReadPattern samples a
 female's light sensor as a boolean over time into `self.sample_buffer` (a
 deque of (timestamp, 0_or_1) tuples) and `_try_match()` tries to decode
 which male + drive state she's facing by:
@@ -29,13 +31,17 @@ BaseThread), so constructing the real ReadPattern against a stub owner
 whose `.colloquy` attribute exposes the real `light_patterns` dict is
 sufficient to exercise `_try_match()` with zero hardware.
 
+These tests feed `_try_match()` a buffer holding one clean burst and
+nothing else - what she has just after a burst ends, which is the only
+moment a match is possible now that the male goes dark in between.
+
 Test sample buffers are built by `_bits_to_sample_buffer()` below: for
 each intended bit, it emits several samples spread across the *middle* of
-that bit's 0.5s window (leaving an `edge_margin` gap at each edge), so
+that bit's window (leaving an `edge_margin` gap at each edge), so
 majority-vote binning reconstructs the intended bit even after the small
 sub-step shift `_try_match()`'s own offset-search introduces internally.
-The exact timings/parameters used here (6 samples/step, 0.05s edge
-margin) were cross-checked by hand-tracing `_try_match()`'s bisect/binning
+The exact parameters used here (6 samples/step, an edge margin of a tenth
+of a bit) were cross-checked by hand-tracing `_try_match()`'s bisect/binning
 logic (see the method's docstring/body) against a full offline replica of
 the algorithm before being written into these tests, including confirming
 that the "no match" fixture below genuinely produces no match at *any* of
@@ -50,6 +56,7 @@ from types import SimpleNamespace
 
 from colloquy import Colloquy
 from colloquy.hardware.female.search.read_pattern import ReadPattern
+from colloquy.light_pattern_timing import BIT_DURATION
 
 
 def _light_patterns():
@@ -77,7 +84,11 @@ def make_read_pattern(stub_factory):
 
 
 def _bits_to_sample_buffer(
-    bits, step_duration=0.5, samples_per_step=6, edge_margin=0.05, epsilon=0.001
+    bits,
+    step_duration=BIT_DURATION,
+    samples_per_step=6,
+    edge_margin=BIT_DURATION / 10,
+    epsilon=0.001,
 ):
     """Build a (timestamp, bit) sample_buffer reproducing `bits` (a 10-bit
     sequence) under ReadPattern._try_match()'s majority-vote binning.

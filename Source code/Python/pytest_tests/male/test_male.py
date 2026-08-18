@@ -12,7 +12,6 @@ these tests call the target methods **unbound** against small hand-built
 doubles that expose only the attributes each method body actually
 touches.
 """
-from collections import deque
 from types import SimpleNamespace
 
 from colloquy import Colloquy
@@ -29,68 +28,78 @@ def _light_patterns():
 # --- get_blink_pattern() -------------------------------------------------
 
 
-def _deques_for(male_name):
-    """Mirrors Male.__init__'s exact construction of _light_pattern_deques
-    (lines 20-23 of hardware/male/__init__.py):
+def _patterns_for(male_name):
+    """Mirrors Male.__init__'s exact construction of _light_patterns
+    (hardware/male/__init__.py):
 
-        for k, v in self.colloquy.light_patterns[self.name].items():
-            self._light_pattern_deques[k] = deque(v, maxlen=len(v))
+        self._light_patterns = {
+            state: tuple(bits)
+            for state, bits in self.colloquy.light_patterns[self.name].items()
+        }
     """
     patterns = _light_patterns()[male_name]
-    return {k: deque(v, maxlen=len(v)) for k, v in patterns.items()}
+    return {state: tuple(bits) for state, bits in patterns.items()}
 
 
-def test_light_pattern_deque_construction_matches_init_logic():
-    # Cross-check: confirms Male.__init__ would build exactly 4 deques per
+def test_light_pattern_construction_matches_init_logic():
+    # Cross-check: confirms Male.__init__ would build exactly 4 patterns per
     # male, keyed by the same 4 tuples which_is_frustated() can return.
-    deques = _deques_for("male1")
+    built = _patterns_for("male1")
 
-    assert set(deques.keys()) == {tuple(), ("O",), ("P",), ("O", "P")}
+    assert set(built.keys()) == {tuple(), ("O",), ("P",), ("O", "P")}
     patterns = _light_patterns()["male1"]
-    for k, v in patterns.items():
-        assert list(deques[k]) == list(v)
-        assert deques[k].maxlen == len(v) == 10
+    for state, bits in patterns.items():
+        assert built[state] == tuple(bits)
+        assert len(built[state]) == 10
+
+
+def test_patterns_are_immutable_sequences():
+    # They used to be deques rotated in place by Blink, one step per bit.
+    # Blink now sends each burst from its first bit (light_pattern_timing.py),
+    # so nothing may quietly change what the next burst starts on.
+    for state, bits in _patterns_for("male2").items():
+        assert isinstance(bits, tuple), state
 
 
 def make_blinking_male(male_name, which_is_frustated_return):
-    deques = _deques_for(male_name)
+    patterns = _patterns_for(male_name)
     fake = SimpleNamespace(
-        _light_pattern_deques=deques,
+        _light_patterns=patterns,
         drives=SimpleNamespace(
             which_is_frustated=lambda: which_is_frustated_return
         ),
     )
-    return fake, deques
+    return fake, patterns
 
 
 def test_get_blink_pattern_returns_neither_pattern_when_which_is_frustated_empty():
-    fake, deques = make_blinking_male("male1", tuple())
+    fake, patterns = make_blinking_male("male1", tuple())
 
-    assert Male.get_blink_pattern(fake) is deques[tuple()]
+    assert Male.get_blink_pattern(fake) is patterns[tuple()]
 
 
 def test_get_blink_pattern_returns_o_pattern():
-    fake, deques = make_blinking_male("male1", ("O",))
+    fake, patterns = make_blinking_male("male1", ("O",))
 
-    assert Male.get_blink_pattern(fake) is deques[("O",)]
+    assert Male.get_blink_pattern(fake) is patterns[("O",)]
 
 
 def test_get_blink_pattern_returns_p_pattern():
-    fake, deques = make_blinking_male("male1", ("P",))
+    fake, patterns = make_blinking_male("male1", ("P",))
 
-    assert Male.get_blink_pattern(fake) is deques[("P",)]
+    assert Male.get_blink_pattern(fake) is patterns[("P",)]
 
 
 def test_get_blink_pattern_returns_both_pattern():
-    fake, deques = make_blinking_male("male1", ("O", "P"))
+    fake, patterns = make_blinking_male("male1", ("O", "P"))
 
-    assert Male.get_blink_pattern(fake) is deques[("O", "P")]
+    assert Male.get_blink_pattern(fake) is patterns[("O", "P")]
 
 
 def test_get_blink_pattern_works_for_male2_too():
-    fake, deques = make_blinking_male("male2", ("O",))
+    fake, patterns = make_blinking_male("male2", ("O",))
 
-    assert Male.get_blink_pattern(fake) is deques[("O",)]
+    assert Male.get_blink_pattern(fake) is patterns[("O",)]
 
 
 # --- set_current_position_as_dxl_origin() --------------------------------

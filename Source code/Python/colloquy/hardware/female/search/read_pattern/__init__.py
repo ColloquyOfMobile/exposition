@@ -2,6 +2,7 @@
 # ../workspace2/Colloquy/exposition/Source code/Python/colloquy/hardware/female/light_sensor/emulate_read_pattern/__init__.py
 
 from colloquy.base_thread import BaseThread
+from colloquy.light_pattern_timing import BIT_DURATION, BITS, CYCLE_DURATION
 from threading import Lock
 from collections import deque
 from time import time
@@ -14,8 +15,13 @@ class ReadPattern(BaseThread):
         self._lock = Lock()
 
         self.sample_rate = 0.01  # nominal seconds between internal samples
-        self.step_duration = 0.5  # duration of one pattern step (your blink step)
-        self.steps = 10  # number of steps in pattern (10 in LIGHT_PATTERNS)
+        # One bit of the pattern, and how many of them there are - the
+        # male's clock, not a number of her own (light_pattern_timing.py).
+        # She samples as fast as the Arduino will answer rather than at
+        # TJ's 50ms: the binning below is by wall clock, so more samples
+        # per bit is only ever a better vote.
+        self.step_duration = BIT_DURATION
+        self.steps = BITS
         self.max_mismatches = 1  # how many bit-differences we tolerate
         self.detection_cooldown = 2.0  # seconds before reporting same pattern again
         self.offset_substeps = 10  # how many start-time offsets to try per step
@@ -38,9 +44,14 @@ class ReadPattern(BaseThread):
     def match_validity(self):
         """How long a detection stays current. A match describes what the
         sensor saw over the preceding few seconds, so it goes stale as soon
-        as the female (or the bar) has moved on - two full pattern lengths
-        after the last time it was seen, it stops being an answer."""
-        return self.step_duration * self.steps * 2
+        as the female (or the bar) has moved on.
+
+        Two burst cycles, not two pattern lengths: a male sends for 2s and
+        is then dark for 2.35s, so a match can only be refreshed once every
+        4.35s. Expiring sooner than that would blank her answer for most of
+        every gap and report "nothing seen" at a male who is transmitting
+        perfectly well."""
+        return CYCLE_DURATION * 2
 
     @property
     def last_match(self):
@@ -147,10 +158,13 @@ class ReadPattern(BaseThread):
                 continue
 
             # compare candidate to every pattern a male can actually send,
-            # and all rotations (the reference patterns carry no usable start
-            # marker - all eight open on the same 1,1,0,0 - so the phase of
-            # what she sees is unknown, exactly as in TJ's firmware, which
-            # walks one alignment per tick through its whole sample buffer)
+            # and all rotations. The gap between bursts is what really
+            # settles the phase - a window that straddles the silence reads
+            # dark where the pattern says lit and fails - but she can still
+            # start sampling mid-burst, and the patterns carry no start
+            # marker of their own (all eight open on the same 1,1,0,0), so
+            # every rotation is still worth testing. TJ covers the same
+            # ground one alignment per tick through his circular buffer.
             for male, patterns in self.colloquy.readable_light_patterns.items():
                 for drive, ref in patterns.items():
                     ref_list = list(ref)

@@ -8,7 +8,6 @@ from ..dxl_origin import DXLOrigin
 from .dxl_position import DXLPosition
 from .search import Search
 from ..turn_back_and_forth import TurnBackAndForth
-from collections import deque
 
 
 class Male(BaseThread):
@@ -17,10 +16,15 @@ class Male(BaseThread):
         self._id_number = id_number
         super().__init__(owner=owner)
         self._position_memory = None
-        self._light_pattern_deques = {}
-        for k, v in self.colloquy.light_patterns[self.name].items():
-            # The deque with max_len will act as circular list
-            self._light_pattern_deques[k] = deque(v, maxlen=len(v))
+        # Plain tuples, not the circular deques this used to hold: Blink
+        # now sends each pattern once from its first bit and then goes
+        # dark (light_pattern_timing.py), so nothing rotates them any
+        # more, and a sequence that starts wherever the last burst left
+        # off is exactly what the gap exists to prevent.
+        self._light_patterns = {
+            state: tuple(bits)
+            for state, bits in self.colloquy.light_patterns[self.name].items()
+        }
 
         self._motion_range = 2000
         self._dxl_origin = DXLOrigin(owner=self)
@@ -115,7 +119,7 @@ class Male(BaseThread):
 
     def get_blink_pattern(self):
         # print(f"{self.drives.which_is_frustated()=}")
-        return self._light_pattern_deques[self.drives.which_is_frustated()]
+        return self._light_patterns[self.drives.which_is_frustated()]
 
     def set_current_position_as_dxl_origin(self, request=None):
         self.dxl_origin.set(self.dxl.position.read())
