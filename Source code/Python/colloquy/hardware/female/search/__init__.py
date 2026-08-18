@@ -48,8 +48,17 @@ class Search(BaseThread):
         partner, self._partner = self._partner, None
         return partner
 
-    def setup(self):
+    def start(self, started_by=None):
+        # Forget the previous find here rather than in setup(): setup()
+        # runs on the new thread, a tick or more after start() returns, and
+        # anything looking at `partner` in between would read the answer
+        # from the *previous* search. That window is long enough to matter
+        # - whoever starts a search usually has bodies to move first - and
+        # it read as an instant find the moment a second run began.
         self._partner = None
+        super().start(started_by=started_by)
+
+    def setup(self):
         self.read_pattern.start(started_by=self)
 
     def loop(self):

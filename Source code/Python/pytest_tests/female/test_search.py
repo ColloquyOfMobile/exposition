@@ -22,6 +22,7 @@ Search needs a `.name` attribute for construction to succeed.
 """
 from types import SimpleNamespace
 
+from colloquy.base_thread import BaseThread
 from colloquy.hardware.female.search import Search
 from colloquy.hardware.female.search.read_pattern import ReadPattern
 
@@ -201,3 +202,24 @@ def test_she_keeps_swaying_while_she_looks(stub_factory):
     search.loop()
 
     assert swayed == [True]
+
+
+def test_starting_a_search_forgets_the_previous_find(stub_factory, monkeypatch):
+    # Cleared in start(), synchronously, not in setup() on the new thread:
+    # a caller that starts a search and then moves bodies around before
+    # looking would otherwise read the previous run's answer for as long
+    # as that takes - which read as an instant find the moment a second
+    # run began.
+    search = make_search_with_drives(stub_factory, wants=("O",),
+                                     last_match=("male1", ("O",)))
+    search.stop = lambda: None
+    search.loop()
+    assert search.partner == ("male1", "O")
+
+    # Stop at Search.start()'s own work; spawning a thread is BaseThread's
+    # business and this suite never does it.
+    monkeypatch.setattr(BaseThread, "start", lambda self, started_by=None: None)
+
+    search.start()
+
+    assert search.partner is None
