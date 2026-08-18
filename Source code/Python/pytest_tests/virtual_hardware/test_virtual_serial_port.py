@@ -17,34 +17,42 @@ import pytest
 
 CRLF = bytes([13, 10])  # what Serial.println() terminates a reply with
 
+from colloquy.hardware.angle.conversion import REDUCTIONS, degrees_to_ticks
 from colloquy.virtual_hardware.virtual_serial_port import VirtualSerialPort
 
 PARAMS = {
     "photosensor_threashold": 300,
-    "near_origin_threashold": 400,
+    # Degrees of the body, per kind, since the reductions differ (see
+    # colloquy/params.py). Deliberately not the real values: what matters
+    # here is that each kind uses its own.
+    "near origin threshold": {"female": 10, "male": 30, "bar": 10},
     "female1": {"dxl origin": 1000},
     "female2": {"dxl origin": 1100},
     "female3": {"dxl origin": 1200},
     "male1": {"dxl origin": 2000},
     "male2": {"dxl origin": 3000},
     "bar": {
-        # Deliberately non-zero: the bar's own origin is part of every
-        # meeting point, and was once left out of the simulated comparison
-        # while being included in the real goal position. Bigger than
-        # near_origin_threashold, so leaving it out is actually detectable.
+        # Deliberately non-zero: the bar's own origin is where its angles
+        # are measured from, and was once left out of the simulated
+        # comparison while being included in the real goal position. Far
+        # enough out to be detectable if it is dropped again.
         "dxl origin": 1500,
+        # Degrees of the bar, as in the real params file.
         "interaction_origins": {
-            "male1": {"female1": 500, "female2": 600, "female3": 700},
-            "male2": {"female1": 900, "female2": 1000, "female3": 1100},
+            "male1": {"female1": 15, "female2": 20, "female3": 25},
+            "male2": {"female1": 30, "female2": 35, "female3": 40},
         },
     },
 }
 
 
 def meeting_point(male, female):
-    """Where the bar sits to put `male` in front of `female` - the same sum
-    Bar.set_male_in_front_of_female() writes."""
-    return PARAMS["bar"]["dxl origin"] + PARAMS["bar"]["interaction_origins"][male][female]
+    """Where the bar's servo sits to put `male` in front of `female` - what
+    Bar.set_male_in_front_of_female() ends up writing, its own origin plus
+    the meeting angle through the bar's 1:3 reduction."""
+    return PARAMS["bar"]["dxl origin"] + degrees_to_ticks(
+        PARAMS["bar"]["interaction_origins"][male][female], REDUCTIONS["bar"]
+    )
 
 
 def reading(port):
@@ -283,10 +291,13 @@ def test_get_nearest_male_finds_male2_even_when_male1_also_faces_forward(stub_fa
     assert port._get_nearest_male(female="female1") == "male2"
 
 
-def test_meeting_points_include_the_bars_own_origin(stub_factory):
-    # The bar's goal position is origin + offset; comparing against the
-    # offset alone only agreed while that origin was 0.
-    offset_only = PARAMS["bar"]["interaction_origins"]["male1"]["female1"]
+def test_meeting_points_are_measured_from_the_bars_own_origin(stub_factory):
+    # The bar's angle is measured from its origin; a servo position equal
+    # to the meeting angle's units alone only agreed while that origin
+    # was 0.
+    offset_only = degrees_to_ticks(
+        PARAMS["bar"]["interaction_origins"]["male1"]["female1"], REDUCTIONS["bar"]
+    )
     port = make_port(stub_factory, dxls=_facing("female1", "male1", bar_at=offset_only))
 
     assert port._get_nearest_male(female="female1") is None

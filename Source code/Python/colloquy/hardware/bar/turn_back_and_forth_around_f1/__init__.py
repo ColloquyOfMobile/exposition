@@ -7,7 +7,9 @@ class TurnBackAndForthAroundF1(BaseThread):
         super().__init__(owner=owner)
 
         self._position_memory = None
-        self._motion_range = 3000
+        # In degrees of the bar: the 3000 servo units this used to swing
+        # through the bar's 1:3 reduction.
+        self._sweep = 87.891
 
     @property
     def name(self):
@@ -15,7 +17,8 @@ class TurnBackAndForthAroundF1(BaseThread):
 
     @property
     def origin(self):
-        return self.owner.male1_in_front_of_f1
+        """The angle it swings around: where male1 faces female1."""
+        return self.owner.meeting_angle("male1", "female1")
 
     def loop(self):
         if not self.owner.is_moving:
@@ -41,13 +44,11 @@ class TurnBackAndForthAroundF1(BaseThread):
             return
 
     def turn_to_max_position(self):
-        value = self.origin + self._motion_range // 2
-        self.owner.dxl.goal_position.write(value)
+        self.owner.turn_to(self.origin + self._sweep / 2)
         self._position_memory = "max"
 
     def turn_to_min_position(self):
-        value = self.origin - self._motion_range // 2
-        self.owner.dxl.goal_position.write(value)
+        self.owner.turn_to(self.origin - self._sweep / 2)
         self._position_memory = "min"
 
     @property

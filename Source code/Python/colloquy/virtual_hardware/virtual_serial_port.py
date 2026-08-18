@@ -3,6 +3,7 @@ from pathlib import Path
 import re
 from time import sleep
 from colloquy.base import Base
+from colloquy.hardware.angle.conversion import REDUCTIONS, ticks_to_degrees
 from random import Random
 
 from .dxl_ids import BAR_DXL_ID, FEMALE_DXL_IDS, MALE_DXL_IDS
@@ -24,6 +25,12 @@ _ARDUINO_SKETCH = (
 # pattern step than the rig ever will, and a decode that works here can
 # fail there for reasons that have nothing to do with the decoding.
 REALISTIC_LATENCY = 0.015
+
+
+def _kind_of(name):
+    """"female2" -> "female", "bar" -> "bar" - which reduction and which
+    threshold this body uses."""
+    return name.rstrip("123")
 
 
 class VirtualSerialPort(Base):
@@ -246,12 +253,18 @@ class VirtualSerialPort(Base):
     def _dark_value(self):
         return self.colloquy.params["photosensor_threashold"] - self._noise()
 
+    def _angle_of(self, name, dxl):
+        """How far this body has turned from its own origin, in degrees of
+        the body - through its own reduction, which is why a male and a
+        female at the same servo position are not at the same angle."""
+        origin = self.colloquy.params[name]["dxl origin"]
+        return ticks_to_degrees(dxl.position - origin, REDUCTIONS[_kind_of(name)])
+
+    def _near_origin_threshold(self, name):
+        return self.colloquy.params["near origin threshold"][_kind_of(name)]
+
     def _is_near_origin(self, name, dxl):
-        params = self.colloquy.params
-        threashold = params["near_origin_threashold"]
-        origin = params[name]["dxl origin"]
-        position = dxl.position
-        return origin - threashold < position < origin + threashold
+        return abs(self._angle_of(name, dxl)) < self._near_origin_threshold(name)
 
     def _get_nearest_male(self, female):
         """Which male, if any, is currently in front of this female.
@@ -263,21 +276,19 @@ class VirtualSerialPort(Base):
         darkness.
         """
         params = self.colloquy.params
-        threashold = params["near_origin_threashold"]
-        bar_origin = params["bar"]["dxl origin"]
-        bar_position = self.owner.dxls[BAR_DXL_ID].position
+        threashold = self._near_origin_threshold("bar")
+        bar_angle = self._angle_of("bar", self.owner.dxls[BAR_DXL_ID])
 
         for male, dxl_id in MALE_DXL_IDS.items():
             if not self._is_near_origin(male, self.owner.dxls[dxl_id]):
                 continue
 
-            # The same sum Bar.set_male_in_front_of_female() writes as a
-            # goal position. The offset alone was compared here, which
-            # matched only because the bar's own origin happens to be 0
-            # today - calibrating the bar would have quietly moved the
-            # simulated meeting points away from the real ones.
-            origin = bar_origin + params["bar"]["interaction_origins"][male][female]
-            if origin - threashold < bar_position < origin + threashold:
+            # The same angle Bar.set_male_in_front_of_female() turns to.
+            # Both sides are measured from the bar's own origin, which is
+            # what keeps the simulated meeting points on top of the real
+            # ones once the bar is calibrated.
+            meeting = params["bar"]["interaction_origins"][male][female]
+            if abs(bar_angle - meeting) < threashold:
                 return male
         return None
 

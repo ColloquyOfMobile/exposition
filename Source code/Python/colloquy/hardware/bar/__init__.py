@@ -1,7 +1,8 @@
 from pathlib import Path
 from colloquy.base_thread import BaseThread
+from ..angle import Angle
+from ..angle.conversion import REDUCTIONS
 from ..dxl_origin import DXLOrigin
-from .dxl_position import DXLPosition
 from .search import Search
 from .turn_back_and_forth_around_f1 import TurnBackAndForthAroundF1
 from .turn_back_and_forth import TurnBackAndForth
@@ -12,9 +13,14 @@ class Bar(BaseThread):
         super().__init__(owner=owner)
         self._position_memory = None
 
-        self._motion_range = 10000
+        # How far it turns from one end of its travel to the other, in
+        # degrees of the bar: the 10000 servo units it had before this
+        # layer existed, through its 1:3 reduction. Its origin is one end
+        # rather than the middle, so the travel runs 0 to +293 and never
+        # goes negative.
+        self._travel = 292.969
         self._dxl_origin = DXLOrigin(owner=self)
-        self._position = DXLPosition(owner=self)
+        self._angle = Angle(owner=self, reduction=REDUCTIONS["bar"])
         self.turn_back_and_forth_around_f1 = TurnBackAndForthAroundF1(owner=self)
         self.turn_back_and_forth = TurnBackAndForth(owner=self)
 
@@ -24,7 +30,7 @@ class Bar(BaseThread):
 
         self[self.search.name] = self.search
         self[self.dxl_origin.name] = self.dxl_origin
-        self[self.position.name] = self.position
+        self[self.angle.name] = self.angle
         self["set current position as dxl origin"] = (
             self.set_current_position_as_dxl_origin
         )
@@ -37,10 +43,10 @@ class Bar(BaseThread):
     def dxl_origin(self):
         return self._dxl_origin
 
-    @property
-    def male1_in_front_of_f1(self):
-        origin = self.params["bar"]["dxl origin"]
-        return self.params["bar"]["interaction_origins"]["male1"]["female1"] + origin
+    def meeting_angle(self, male, female):
+        """How far the bar has to turn from its origin to bring this male
+        in front of this female, in degrees of the bar."""
+        return self.params["bar"]["interaction_origins"][male][female]
 
     @property
     def dxl(self):
@@ -67,8 +73,14 @@ class Bar(BaseThread):
         return self.dxl.is_moving
 
     @property
-    def position(self):
-        return self._position
+    def angle(self):
+        """How far it has turned from its origin, in degrees of the bar."""
+        return self._angle
+
+    @property
+    def travel(self):
+        """End to end, in degrees."""
+        return self._travel
 
     @property
     def goal_position(self):
@@ -85,14 +97,15 @@ class Bar(BaseThread):
     def set_current_position_as_dxl_origin(self, request=None):
         self.dxl_origin.set(self.dxl.position.read())
 
+    def turn_to(self, degrees):
+        self.angle.turn_to(degrees)
+
     def turn_to_max_position(self):
-        value = self._dxl_origin.get() + self._motion_range
-        self.dxl.goal_position.write(value)
+        self.angle.turn_to(self._travel)
         self._position_memory = "max"
 
     def turn_to_min_position(self):
-        value = self._dxl_origin.get()
-        self.dxl.goal_position.write(value)
+        self.angle.turn_to(0)
         self._position_memory = "min"
 
     def toggle_position(self):
@@ -134,17 +147,14 @@ class Bar(BaseThread):
         return states
 
     def turn_to_origin(self):
-        value = self._dxl_origin.get()
-        self.dxl.goal_position.write(value)
+        self.angle.turn_to_origin()
 
     def set_male_in_front_of_female(self, male, female):
         """Non-blocking: writes the goal position and returns immediately,
         so a caller that wants to stay responsive (interruptible by
         stop()/emergency_stop() rather than stuck in wait_for_servo()'s
         busy-loop) can poll is_moving itself instead."""
-        origin = self.params["bar"]["dxl origin"]
-        position = self.params["bar"]["interaction_origins"][male][female] + origin
-        self.dxl.goal_position.write(position)
+        self.angle.turn_to(self.meeting_angle(male, female))
 
     def move_male_in_front_of_female_and_wait(self, male, female):
         self.set_male_in_front_of_female(male, female)
@@ -164,6 +174,7 @@ class Bar(BaseThread):
         children = {}
         children.update(
             {
+                "angle": self.angle,
                 "dxl origin": self.dxl_origin,
                 self.dxl.name: self.dxl,
                 "search": self.search,
