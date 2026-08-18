@@ -13,6 +13,7 @@ from .hardware import Hardware
 from .exposition import Exposition
 from .params import Params
 from .params_browser import ParamsNode
+from .ui import tree
 from .virtual_hardware import VirtualHardware
 from .logs import Logs
 
@@ -164,50 +165,15 @@ class Colloquy(BaseThread):
             children[self.virtual_hardware.name] = self.virtual_hardware
         return children
 
-    def get_focus(self, *args, obj, path=None):
-        if path is None:
-            path = list()
-
-        # self.snapshot(path=path, focus_path=focus_path)
-        if args:
-            key, *leftovers = args
-            if key != "call":
-                path.append(key)
-                if key not in obj.snapshot_children:
-                    raise NotImplementedError(f"{obj.snapshot_children=}, {obj=}")
-                obj = obj.snapshot_children[key]
-                return self.get_focus(*leftovers, obj=obj, path=path)
-
-            return obj.snapshot(path=tuple(path), focus_path=tuple(path)), leftovers
-
-        return obj.snapshot(path=tuple(path), focus_path=tuple(path)), tuple()
-
     def get_states(self, *args):
-        states = self.snapshot(path=tuple(), focus_path=tuple())
-        focus, leftovers = self.get_focus(*args, obj=self)
+        """What the page is looking at, having first done what it clicked.
 
-        if leftovers:
-            self.update(*leftovers, focus=focus)
-
-            states = self.snapshot(path=tuple(), focus_path=focus["path"])
-            focus, leftovers = self.get_focus(*args, obj=self)
-
-        states = self.snapshot(path=tuple(), focus_path=focus["path"])
-        focus, leftovers = self.get_focus(*args, obj=self)
-        return focus
-
-    def update(self, *args, focus):
-        if not isinstance(focus, dict):
-            return focus(*args)
-        if args:
-            key, *leftovers = args
-            if key not in focus:
-                raise NotImplementedError(
-                    key,
-                    focus["name"],
-                )
-            return self.update(*leftovers, focus=focus[key])
-        return focus
+        The walk itself is `colloquy/ui/tree.py` and knows nothing about
+        this class: it asks nodes for snapshot_children and snapshot().
+        Kept as a method here because that is what the server calls, and
+        because a root is a perfectly good thing to ask.
+        """
+        return tree.get_states(self, *args)
 
     def shutdown_neopixels(self):
         neopixels = self._hardware.neopixels

@@ -58,13 +58,10 @@ class WSGI2(Base):
         return "wsgi"
 
     def get_states(self, *args):
-        db_path = self._db_path or Path("testspace/version6.json")
-        states = self.colloquy.get_states(*args)
-        return states
+        return self.colloquy.get_states(*args)
 
     def _parse(self):
         args = self._parse_path()
-        print(f"{args=}")
 
         if self._environ.get("REQUEST_METHOD") == "POST":
             return self._parse_post(*args)

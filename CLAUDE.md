@@ -52,6 +52,8 @@ Both `Base.__call__`-style dispatch and the web request router work the same way
 
 There is no templating framework beyond `yattag`; new UI is added by adding `snapshot_children` / registering new command names on the relevant `Base` node, not by writing new routes.
 
+**Working on the UI**: `py mock_ui.py` serves the same server and renderer against `colloquy/ui/mock.py` — a handful of nodes covering every kind of leaf and link, with no servos, Arduino, threads or params behind them. It listens on **8088**, not the installation's 8087, so it can run alongside `main.py`. `colloquy.ui.mock.request(path)` drives the same thing from a test with no socket at all (see `pytest_tests/ui/test_mock_app.py`), and `colloquy/ui/tree.py` is the path-walk both roots share — `Colloquy.get_states()` is a one-line delegation to it.
+
 The snapshot dict is the **whole contract** between the tree and the page, and `colloquy/ui/leaves.py` is where its vocabulary is defined — one constructor per kind of thing the page can draw (`value`, `html`, `chart`, `svg`, `pre`, `editor`), plus `into(states, path)` for a node with several readings to show. Build leaves with those rather than hand-writing `{"path": ..., "name": ..., "value": ...}`; a kind that isn't in `leaves.KINDS` is one the renderer will not draw. Two things in a snapshot are *not* leaves: child nodes (from `snapshot_children`) and commands (bare callables, rendered as links that call them through the `call` path segment).
 
 ## Hardware domain model (`colloquy/hardware/`)

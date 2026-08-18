@@ -15,14 +15,19 @@ WSGIRequestHandler.log_message = lambda *args, **kwargs: None
 
 
 class Server2(Base):
-    def __init__(self, colloquy):
+    # The installation's own port. Anything else pointed at this server -
+    # the mock UI - must pick another, or two servers end up bound to the
+    # same one and requests are answered by whichever the OS picks.
+    DEFAULT_PORT = 8087
+
+    def __init__(self, colloquy, port=None):
         super().__init__(
             owner=None,
         )
         self._shutdown_event = Event()
         self._restart_event = Event()
         self._colloquy = colloquy
-        self.run()
+        self.run(port=self.DEFAULT_PORT if port is None else port)
 
     @property
     def colloquy(self):
@@ -36,7 +41,7 @@ class Server2(Base):
     def restart_event(self):
         return self._restart_event
 
-    def run(self, port=8087):
+    def run(self, port=DEFAULT_PORT):
         hostname = "localhost"  # socket.gethostname()
         with make_server("localhost", port, self.wsgi) as httpd:
             WSGIRequestHandler.log_message = lambda *args, **kwargs: None
