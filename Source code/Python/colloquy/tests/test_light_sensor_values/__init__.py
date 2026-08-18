@@ -12,6 +12,7 @@ from .test_with_only_female_moving import TestWithOnlyFemaleMoving
 from .test_with_female_and_male_moving import TestWithFemaleAndMaleMoving
 from .test_with_female_male_and_bar_moving import TestWithFemaleMaleAndBarMoving
 from .test_with_everything_moving import TestWithEveryThingMoving
+from .test_for_false_positives import TestForFalsePositives
 
 class TestLightSensorValues(BaseThread):
     def __init__(self, owner, result_folder):
@@ -49,6 +50,13 @@ class TestLightSensorValues(BaseThread):
             result_folder=result_folder,
             test_duration=30 * 60,
         )
+        self.test_for_false_positives = TestForFalsePositives(
+            owner=self,
+            result_folder=result_folder,
+            # Its own duration is chosen on the page; this is where it
+            # starts, and what the sequence below budgets for it.
+            test_duration=5 * 60,
+        )
         self._hardware = self.owner.hardware
 
         # self[self.html.name] = self.html.handle_request
@@ -59,6 +67,7 @@ class TestLightSensorValues(BaseThread):
             self.test_with_female_and_male_moving,
             self.test_with_female_male_and_bar_moving,
             self.test_with_everything_moving,
+            self.test_for_false_positives,
         ]
 
         self._duration = sum(test.duration for test in self._threaded_tests)

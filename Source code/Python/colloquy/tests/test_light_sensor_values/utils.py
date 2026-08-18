@@ -312,3 +312,83 @@ if __name__ == "__main__":
     plot(
         path=r"C:\workspace\workspace2\Colloquy\exposition\docs\test_results\week26\2026_07_02_12h_08min_04s.csv"
     )
+
+
+def bin_by_angle(df, body, bin_width):
+    """Every sample of one body, gathered into angle bins.
+
+    A body sweeping back and forth passes the same angle many times, from
+    both directions, over a whole run - so each bin ends up holding a
+    spread of readings taken at the same aim, which is exactly what says
+    whether the sensor is steady there. Returns (angles, means, spreads,
+    counts), spread being max - min within the bin.
+    """
+    rows = df[df["body"] == body]
+    if rows.empty:
+        return None
+
+    bins = (rows["angle"] / bin_width).round() * bin_width
+    grouped = rows.groupby(bins)["value"]
+
+    angles = np.asarray(grouped.mean().index, dtype=float)
+    means = grouped.mean().to_numpy()
+    spreads = (grouped.max() - grouped.min()).to_numpy()
+    counts = grouped.count().to_numpy()
+    return angles, means, spreads, counts
+
+
+def plot_sensor_by_angle_as_svg(output, df, body, threshold, bin_width=1.0):
+    """One body's sensor value against where it was pointing.
+
+    Two lines, both in sensor units so they share an axis: the average
+    reading per angle, and the spread (max - min) at that angle. A flat
+    average well under the threshold with a small spread is a sensor that
+    can be trusted in the dark; a bump in the average says something in
+    the room is brighter from that direction, and a tall spread says the
+    reading at that aim is not repeatable - either of which is a false
+    positive waiting to happen once the threshold is anywhere near.
+    """
+    binned = bin_by_angle(df, body, bin_width)
+    if binned is None:
+        return None
+    angles, means, spreads, counts = binned
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    ax.plot(angles, means, label="average reading", linewidth=2, color="tab:blue")
+    ax.plot(
+        angles,
+        spreads,
+        label="spread at this angle (max - min)",
+        linewidth=2,
+        color="tab:red",
+    )
+    ax.axhline(
+        y=threshold,
+        label=f"threshold ({threshold})",
+        linewidth=2,
+        color="black",
+        linestyle="--",
+    )
+
+    ax.set_xlabel("Angle from the body's origin (degrees)")
+    ax.set_ylabel("Sensor value")
+    ax.grid(True, alpha=0.3)
+    ax.legend(fontsize="small")
+
+    rows = df[df["body"] == body]
+    above = int((rows["value"] > threshold).sum())
+    # How many readings the thinnest bin rests on: the ends of a sweep are
+    # crossed less often than the middle, and a spread computed from two
+    # readings says less than one computed from thirty.
+    ax.set_title(
+        f"{body} in the dark: {len(rows)} readings over {len(angles)} angles "
+        f"({counts.min()} to {counts.max()} per angle), "
+        f"{above} above the threshold"
+    )
+
+    fig.tight_layout()
+    fig.savefig(output, format="svg")
+    plt.close(fig)
+
+    return output
