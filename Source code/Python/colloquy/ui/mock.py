@@ -224,8 +224,9 @@ class MockApp(Base):
 
     Everything the server and the renderer ask of `Colloquy` and nothing
     else: children to walk, a tree walk, and the handful of lifecycle
-    calls the shutdown and emergency-stop routes make - recorded here
-    rather than done, since there is nothing to stop.
+    calls the shutdown route makes - recorded here rather than done,
+    since there is nothing to stop. No emergency stop: that one belongs
+    to an application with servos to cut torque on.
     """
 
     def __init__(self):
@@ -247,6 +248,13 @@ class MockApp(Base):
         return False
 
     @property
+    def has_hardware(self):
+        # Nor any real hardware: no servos to cut torque on, no threads
+        # to signal. The page leaves its emergency stop out entirely, and
+        # the route refuses - see wsgi2._parse_emergency_stop.
+        return False
+
+    @property
     def snapshot_children(self):
         return {
             self._readings.name: self._readings,
@@ -261,9 +269,6 @@ class MockApp(Base):
 
     def _record(self, name):
         self.called.append(name)
-
-    def emergency_stop(self):
-        self._record("emergency_stop")
 
     def shutdown(self):
         self._record("shutdown")

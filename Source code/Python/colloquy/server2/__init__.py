@@ -63,8 +63,10 @@ class Server2(Base):
             # so any hardware thread that's running (bar/body oscillation,
             # blink, search, ...) would otherwise keep moving completely
             # unsupervised with no UI left to stop it. Treat any crash as an
-            # emergency stop.
-            self.colloquy.emergency_stop()
+            # emergency stop - where there is hardware to stop, which the
+            # mock UI has none of.
+            if self.colloquy.has_hardware:
+                self.colloquy.emergency_stop()
             self.shutdown_event.set()
             raise
 

@@ -190,9 +190,14 @@ class WSGI2(Base):
                     pass
 
                 with tag("div", name="server commands"):
-                    with tag("div"):
-                        with tag("a", href="/emergency-stop"):
-                            text("EMERGENCY STOP")
+                    # Only where there is hardware to stop: an emergency
+                    # stop cuts torque on nine servos and signals every
+                    # thread to give up. On an application that drives
+                    # nothing - the mock UI - it is a button that lies.
+                    if self.colloquy.has_hardware:
+                        with tag("div"):
+                            with tag("a", href="/emergency-stop"):
+                                text("EMERGENCY STOP")
 
                     with tag("div"):
                         with tag("a", href="/shutdown"):
@@ -585,6 +590,14 @@ class WSGI2(Base):
         inert until a real process restart, since BaseThread._shutdown is
         never cleared once set.
         """
+        if not self.colloquy.has_hardware:
+            # Reachable by a stale link or a typed URL even where the page
+            # does not offer it.
+            return self._parse_not_found(
+                ("emergency-stop",),
+                NotImplementedError("this application drives no hardware"),
+            )
+
         self.colloquy.emergency_stop()
 
         content_type = "text/html; charset=utf-8"

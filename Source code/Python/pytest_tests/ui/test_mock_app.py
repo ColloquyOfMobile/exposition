@@ -148,11 +148,22 @@ def test_restart_stops_the_application_and_asks_for_a_restart(app):
     assert server.restart_event.is_set()
 
 
-def test_an_emergency_stop_leaves_the_page_reachable(app):
+def test_the_mock_offers_no_emergency_stop(app):
+    # It belongs to an application with servos to cut torque on. Here it
+    # would be a button that lies, so the page leaves it out.
+    _status, html = request("/app", app=app)
+
+    assert "EMERGENCY STOP" not in html
+    assert "/emergency-stop" not in html
+
+
+def test_the_emergency_stop_route_refuses_where_there_is_no_hardware(app):
+    # Reachable by a stale link or a typed URL even when the page does
+    # not offer it.
     server = OfflineServer(app=app)
 
-    request("/emergency-stop", server=server)
+    status, _html = request("/emergency-stop", server=server)
 
-    assert "emergency_stop" in app.called
-    # Unlike /shutdown: the server stays up so the page can still be used.
+    assert status.startswith("404")
+    assert app.called == []
     assert not server.shutdown_event.is_set()
