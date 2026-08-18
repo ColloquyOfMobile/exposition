@@ -3,6 +3,7 @@
 from colloquy.base import Base
 from colloquy.input import Input
 
+from colloquy.hardware.angle.conversion import as_signed
 from colloquy.hardware.value_setter2 import ValueSetter2
 
 
@@ -14,6 +15,7 @@ class RegisterHanlder(Base):
         register,
         read_func,
         write_func=None,
+        signed=False,
     ):
 
         self._name = name
@@ -21,6 +23,7 @@ class RegisterHanlder(Base):
         self._read_func = read_func
         self._write_func = write_func
         self._register = register
+        self._signed = signed
 
         if write_func is not None:
             self._setter = ValueSetter2(
@@ -69,7 +72,16 @@ class RegisterHanlder(Base):
         return self.write(value=value)
 
     def read(self, request=None):
-        return self._read_func(self.dxl_id, self._register)
+        value = self._read_func(self.dxl_id, self._register)
+        if not self._signed:
+            return value
+        # Position registers only. Extended position mode (operating mode
+        # 4, which init_hardware() sets) makes positions either side of
+        # zero normal, the SDK writes them as two's complement and reads
+        # them back as a plain unsigned dword. Without this, a body sent
+        # to -900 reads back 4294966396, and is_moving() - which subtracts
+        # a position from a goal - never sees it arrive.
+        return as_signed(value)
 
     def write(self, value):
         if self._write_func is None:

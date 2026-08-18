@@ -14,6 +14,9 @@ class GoalPosition(RegisterHanlder):
             register=116,
             read_func=owner.u2d2.read_4_bytes,
             write_func=owner.u2d2.write_4_bytes,
+            # Same as the position register: a goal below the servo's zero
+            # is written as two's complement and read back unsigned.
+            signed=True,
         )
 
     @property
@@ -46,9 +49,3 @@ class GoalPosition(RegisterHanlder):
     def commit(self, value):
         value = int(value)
         return self.write(value=value)
-
-    def read(self, request=None):
-        return self._read_func(self.dxl_id, self._register)
-
-    def write(self, value):
-        return self._write_func(self.dxl_id, self._register, value)

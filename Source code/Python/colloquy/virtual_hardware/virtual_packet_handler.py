@@ -8,6 +8,7 @@ from dynamixel_sdk import (  # Uses Dynamixel SDK library
 )
 from pathlib import Path
 from colloquy.base import Base
+from colloquy.hardware.angle.conversion import as_unsigned
 from .virtual_dxl import VirtualDXL
 
 _1_BYTE_REGISTERS = {"drive mode", "temperature", "torque enabled", "operating mode"}
@@ -131,7 +132,16 @@ class VirtualPacketHandler(Base):
         return self._write(dxl_id, register_address, value, _4_BYTE_REGISTERS)
 
     def read4ByteTxRx(self, port_handler, dxl_id, register_address):
-        return self._read(dxl_id, register_address, _4_BYTE_REGISTERS)
+        value, comm_result, error = self._read(
+            dxl_id, register_address, _4_BYTE_REGISTERS
+        )
+        # The real SDK builds this out of four bytes and hands it over
+        # unsigned (DXL_MAKEDWORD, protocol2_packet_handler), so a
+        # position below zero comes back as a huge number and something
+        # upstream has to convert it. Answering with a tidy Python int
+        # here would mean the conversion is only ever exercised on the
+        # rig - which is where it was missing.
+        return as_unsigned(value), comm_result, error
 
     def getTxRxResult(self, result):
         # These two used to raise NotImplementedError. handle_error() calls

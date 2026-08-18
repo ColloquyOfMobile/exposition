@@ -142,7 +142,7 @@ class DXL(Base):
         # Enable torque.
         self.torque_enabled.write(value=1)
 
-    def _add_register(self, name, adress, readonly, byte_count):
+    def _add_register(self, name, adress, readonly, byte_count, signed=False):
 
         if byte_count == 1:
             read = self.u2d2.read_1_byte
@@ -172,6 +172,7 @@ class DXL(Base):
             register=adress,
             read_func=read,
             write_func=write,
+            signed=signed,
         )
 
         self[register.name] = register
@@ -179,20 +180,27 @@ class DXL(Base):
 
     def _init_registers(self):
         params = [
-            # name,                     adress, readonly,   bytes_count
-            ("temperature", 146, True, 1),
-            # ("elec current",            126     True        2),
-            ("drive mode", 10, False, 1),
-            ("position", 132, True, 4),
-            ("operating mode", 11, False, 1),
-            ("profile velocity", 112, False, 4),
-            ("profile acceleration", 108, False, 4),
-            # ("torque enabled",  64,     False,      1),
+            # name,                     adress, readonly,   bytes_count, signed
+            ("temperature", 146, True, 1, False),
+            # ("elec current",            126     True        2       False),
+            ("drive mode", 10, False, 1, False),
+            # Signed: in extended position mode a position is a signed
+            # 32-bit count of units from the servo's zero, and half of
+            # every body's sweep sits below its origin.
+            ("position", 132, True, 4, True),
+            ("operating mode", 11, False, 1, False),
+            ("profile velocity", 112, False, 4, False),
+            ("profile acceleration", 108, False, 4, False),
+            # ("torque enabled",  64,     False,      1,      False),
         ]
 
-        for name, adress, readonly, byte_count in params:
+        for name, adress, readonly, byte_count, signed in params:
             self._add_register(
-                name=name, adress=adress, readonly=readonly, byte_count=byte_count
+                name=name,
+                adress=adress,
+                readonly=readonly,
+                byte_count=byte_count,
+                signed=signed,
             )
 
         torque_enabled = TorqueEnabled(owner=self)

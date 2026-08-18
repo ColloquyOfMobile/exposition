@@ -179,3 +179,26 @@ def test_set_error_rates_resets_the_count(stub_factory):
 
     assert handler.fault_count == 0
     assert (handler.comm_error_rate, handler.servo_error_rate) == (0.0, 0.0)
+
+
+def test_a_negative_position_reads_back_unsigned_like_the_real_bus(stub_factory):
+    # The real SDK assembles a 4-byte read with DXL_MAKEDWORD and hands it
+    # over unsigned, so a body below its servo's zero - half of every
+    # sweep - comes back as a huge number for something upstream to
+    # convert (RegisterHanlder's signed reads). Answering with a tidy
+    # Python int here would leave that conversion exercised only on the
+    # rig, which is where it was missing.
+    handler = make_handler(stub_factory)
+    handler.dxls[1].set("position", -900)
+
+    value, comm, error = handler.read4ByteTxRx(None, 1, POSITION)
+
+    assert (comm, error) == (COMM_SUCCESS, 0)
+    assert value == 4294966396
+
+
+def test_a_positive_position_is_unchanged_by_that(stub_factory):
+    handler = make_handler(stub_factory)
+    handler.dxls[1].set("position", 2000)
+
+    assert handler.read4ByteTxRx(None, 1, POSITION)[0] == 2000
