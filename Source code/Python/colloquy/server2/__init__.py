@@ -69,8 +69,13 @@ class Server2(Base):
             raise
 
     def restart_process(self):
-        # raise NotImplementedError
+        """Start this process again, exactly as it was started.
+
+        It used to re-exec `main.py colloquy1` whatever had actually been
+        run, so pressing restart on the mock UI - served by mock_ui.py on
+        8088 - came back as the installation on 8087. sys.argv is what
+        was typed, and the working directory survives an exec, so each
+        entry point restarts as itself and rebinds its own port.
+        """
         python = sys.executable
-        args = ["main.py", "colloquy1"]
-        # args.append()
-        os.execl(python, python, *args)
+        os.execl(python, python, *sys.argv)

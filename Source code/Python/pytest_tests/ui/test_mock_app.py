@@ -134,6 +134,20 @@ def test_shutdown_asks_the_application_to_stop(app):
     assert server.shutdown_event.is_set()
 
 
+def test_restart_stops_the_application_and_asks_for_a_restart(app):
+    # What comes back is decided by Server2.restart_process(), which
+    # re-execs sys.argv - so mock_ui.py comes back as mock_ui.py. It used
+    # to re-exec "main.py colloquy1" whatever had been run, so restarting
+    # the mock handed you the installation on another port.
+    server = OfflineServer(app=app)
+
+    request("/restart", server=server)
+
+    assert app.called == ["shutdown", "join_all"]
+    assert server.shutdown_event.is_set()
+    assert server.restart_event.is_set()
+
+
 def test_an_emergency_stop_leaves_the_page_reachable(app):
     server = OfflineServer(app=app)
 
