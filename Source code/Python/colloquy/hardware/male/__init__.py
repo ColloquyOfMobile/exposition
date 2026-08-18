@@ -4,8 +4,9 @@ from pathlib import Path
 from colloquy.base_thread import BaseThread
 
 from .light_sensor import LightSensor
+from ..angle import Angle
+from ..angle.conversion import REDUCTIONS
 from ..dxl_origin import DXLOrigin
-from .dxl_position import DXLPosition
 from .search import Search
 from ..turn_back_and_forth import TurnBackAndForth
 
@@ -26,9 +27,13 @@ class Male(BaseThread):
             for state, bits in self.colloquy.light_patterns[self.name].items()
         }
 
-        self._motion_range = 2000
+        # His whole sway, in degrees of his body: the 2000 servo units he
+        # was given before this layer existed, which he turns one for one
+        # (no reduction). The same figure gives a female a third as much -
+        # see her own sweep.
+        self._sweep = 175.781
         self._dxl_origin = DXLOrigin(owner=self)
-        self._position = DXLPosition(owner=self)
+        self._angle = Angle(owner=self, reduction=REDUCTIONS["male"])
 
         self._light_sensors = {
             letter: LightSensor(owner=self, letter=letter) for letter in "abcd"
@@ -46,7 +51,7 @@ class Male(BaseThread):
         self[self.drives.name] = self.drives
         self[self.search.name] = self.search
         self[self.dxl_origin.name] = self.dxl_origin
-        self[self.position.name] = self.position
+        self[self.angle.name] = self.angle
         self["set current position as dxl origin"] = (
             self.set_current_position_as_dxl_origin
         )
@@ -106,8 +111,14 @@ class Male(BaseThread):
         return self.dxl.is_moving
 
     @property
-    def position(self):
-        return self._position
+    def angle(self):
+        """Where he is pointing, in degrees from his origin."""
+        return self._angle
+
+    @property
+    def sweep(self):
+        """How far he swings, end to end, in degrees."""
+        return self._sweep
 
     @property
     def goal_position(self):
@@ -128,17 +139,17 @@ class Male(BaseThread):
         return self.drives.o_drive.is_satisfied or self.drives.p_drive.is_satisfied
 
     def turn_to_origin(self):
-        value = self._dxl_origin.get()
-        self.dxl.goal_position.write(value)
+        self.angle.turn_to_origin()
+
+    def turn_to(self, degrees):
+        self.angle.turn_to(degrees)
 
     def turn_to_max_position(self):
-        value = self._dxl_origin.get() + self._motion_range // 2
-        self.dxl.goal_position.write(value)
+        self.angle.turn_to(self._sweep / 2)
         self._position_memory = "max"
 
     def turn_to_min_position(self):
-        value = self._dxl_origin.get() - self._motion_range // 2
-        self.dxl.goal_position.write(value)
+        self.angle.turn_to(-self._sweep / 2)
         self._position_memory = "min"
 
     def toggle_position(self):
@@ -174,6 +185,7 @@ class Male(BaseThread):
     @property
     def snapshot_children(self):
         children = {}
+        children["angle"] = self.angle
         children["dxl origin"] = self.dxl_origin
         children[self.dxl.name] = self.dxl
         children["search"] = self.search

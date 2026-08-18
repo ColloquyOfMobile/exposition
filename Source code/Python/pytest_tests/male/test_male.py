@@ -15,7 +15,14 @@ touches.
 from types import SimpleNamespace
 
 from colloquy import Colloquy
+from colloquy.hardware.angle import Angle
+from colloquy.hardware.angle.conversion import REDUCTIONS
 from colloquy.hardware.male import Male
+
+# What Male.__init__ gives him: 175.781 degrees end to end, which is the
+# 2000 servo units he was given before this layer existed - he turns one
+# for one, so that figure is three times a female's sweep.
+SWEEP = 175.781
 
 
 def _light_patterns():
@@ -121,12 +128,13 @@ def test_set_current_position_as_dxl_origin_reads_position_and_sets_origin():
 # toggle_position ---------------------------------------------------------
 
 
-def make_movable_male(origin_value, motion_range=2000, position_memory=None):
+def make_movable_male(stub_factory, origin_value, sweep=SWEEP, position_memory=None):
     """Build a fake exposing exactly what turn_to_max_position/
-    turn_to_min_position/turn_to_origin/toggle_position touch:
-    ._dxl_origin.get(), ._motion_range, .dxl.goal_position.write(value),
-    ._position_memory. Records every written goal position in
-    `written` so tests can assert on the exact computed value.
+    turn_to_min_position/turn_to_origin/toggle_position touch: ._sweep,
+    .angle (a real Angle over a fake dxl and a fake origin, so the
+    assertions below cover the whole path from degrees to what reaches
+    the register), and ._position_memory. Records every written goal
+    position, in servo units, in `written`.
 
     toggle_position()'s body calls self.turn_to_max_position()/
     self.turn_to_min_position() (not the module-level functions), so the
@@ -134,12 +142,15 @@ def make_movable_male(origin_value, motion_range=2000, position_memory=None):
     are wired to invoke the real unbound Male methods against this same
     fake, keeping a single source of truth for the arithmetic."""
     written = []
-    fake = SimpleNamespace(
-        _dxl_origin=SimpleNamespace(get=lambda: origin_value),
-        _motion_range=motion_range,
+    body = stub_factory(
+        dxl_origin=SimpleNamespace(get=lambda: origin_value),
         dxl=SimpleNamespace(
             goal_position=SimpleNamespace(write=lambda v: written.append(v))
         ),
+    )
+    fake = SimpleNamespace(
+        _sweep=sweep,
+        angle=Angle(owner=body, reduction=REDUCTIONS["male"]),
         _position_memory=position_memory,
     )
     fake.written = written
@@ -148,44 +159,57 @@ def make_movable_male(origin_value, motion_range=2000, position_memory=None):
     return fake
 
 
-def test_turn_to_max_position_writes_origin_plus_half_motion_range():
-    fake = make_movable_male(origin_value=1000, motion_range=2000)
+def test_turn_to_max_position_writes_half_a_sweep_past_the_origin(stub_factory):
+    fake = make_movable_male(stub_factory, origin_value=1000)
 
     Male.turn_to_max_position(fake)
 
-    assert fake.written == [1000 + 2000 // 2]
+    # Half of 175.781 degrees, turned one for one, is the same 1000 servo
+    # units he was given before this layer existed. The identical figure
+    # gives a female a third as much - which is the whole point of saying
+    # degrees rather than units.
+    assert fake.written == [2000]
     assert fake._position_memory == "max"
 
 
-def test_turn_to_min_position_writes_origin_minus_half_motion_range():
-    fake = make_movable_male(origin_value=1000, motion_range=2000)
+def test_turn_to_min_position_writes_half_a_sweep_the_other_way(stub_factory):
+    fake = make_movable_male(stub_factory, origin_value=1000)
 
     Male.turn_to_min_position(fake)
 
-    assert fake.written == [1000 - 2000 // 2]
+    assert fake.written == [0]
     assert fake._position_memory == "min"
 
 
-def test_turn_to_max_position_uses_current_dxl_origin_and_motion_range():
-    fake = make_movable_male(origin_value=500, motion_range=300)
+def test_the_same_angle_moves_him_three_times_as_far_as_a_female(stub_factory):
+    # 20 degrees is 228 units on him and 683 on her: no reduction against
+    # her 1:3.
+    fake = make_movable_male(stub_factory, origin_value=0, sweep=40)
 
     Male.turn_to_max_position(fake)
 
-    assert fake.written == [500 + 300 // 2]
-    assert fake._position_memory == "max"
+    assert fake.written == [228]
 
 
-def test_turn_to_min_position_uses_current_dxl_origin_and_motion_range():
-    fake = make_movable_male(origin_value=500, motion_range=300)
+def test_the_sweep_is_measured_from_wherever_the_origin_is(stub_factory):
+    fake = make_movable_male(stub_factory, origin_value=500, sweep=20)
 
+    Male.turn_to_max_position(fake)
     Male.turn_to_min_position(fake)
 
-    assert fake.written == [500 - 300 // 2]
-    assert fake._position_memory == "min"
+    assert fake.written == [614, 386]
 
 
-def test_turn_to_origin_writes_raw_origin_value_and_leaves_memory_untouched():
-    fake = make_movable_male(origin_value=1234, position_memory="max")
+def test_turn_to_takes_an_angle_in_degrees(stub_factory):
+    fake = make_movable_male(stub_factory, origin_value=1000)
+
+    Male.turn_to(fake, 20)
+
+    assert fake.written == [1228]
+
+
+def test_turn_to_origin_writes_the_origin_and_leaves_memory_untouched(stub_factory):
+    fake = make_movable_male(stub_factory, origin_value=1234, position_memory="max")
 
     Male.turn_to_origin(fake)
 
@@ -194,46 +218,42 @@ def test_turn_to_origin_writes_raw_origin_value_and_leaves_memory_untouched():
     assert fake._position_memory == "max"
 
 
-def test_toggle_position_from_none_goes_to_max():
-    fake = make_movable_male(origin_value=1000, motion_range=2000, position_memory=None)
+def test_toggle_position_from_none_goes_to_max(stub_factory):
+    fake = make_movable_male(stub_factory, origin_value=1000, position_memory=None)
 
     Male.toggle_position(fake)
 
     assert fake._position_memory == "max"
-    assert fake.written == [1000 + 2000 // 2]
+    assert fake.written == [2000]
 
 
-def test_toggle_position_from_max_goes_to_min():
-    fake = make_movable_male(origin_value=1000, motion_range=2000, position_memory="max")
+def test_toggle_position_from_max_goes_to_min(stub_factory):
+    fake = make_movable_male(stub_factory, origin_value=1000, position_memory="max")
 
     Male.toggle_position(fake)
 
     assert fake._position_memory == "min"
-    assert fake.written == [1000 - 2000 // 2]
+    assert fake.written == [0]
 
 
-def test_toggle_position_from_min_goes_to_max():
-    fake = make_movable_male(origin_value=1000, motion_range=2000, position_memory="min")
+def test_toggle_position_from_min_goes_to_max(stub_factory):
+    fake = make_movable_male(stub_factory, origin_value=1000, position_memory="min")
 
     Male.toggle_position(fake)
 
     assert fake._position_memory == "max"
-    assert fake.written == [1000 + 2000 // 2]
+    assert fake.written == [2000]
 
 
-def test_toggle_position_full_cycle_from_fresh_fake():
-    fake = make_movable_male(origin_value=1000, motion_range=2000, position_memory=None)
+def test_toggle_position_full_cycle_from_fresh_fake(stub_factory):
+    fake = make_movable_male(stub_factory, origin_value=1000, position_memory=None)
 
     Male.toggle_position(fake)  # None -> max
     Male.toggle_position(fake)  # max -> min
     Male.toggle_position(fake)  # min -> max
 
     assert fake._position_memory == "max"
-    assert fake.written == [
-        1000 + 2000 // 2,
-        1000 - 2000 // 2,
-        1000 + 2000 // 2,
-    ]
+    assert fake.written == [2000, 0, 2000]
 
 
 # --- is_satisfied() -------------------------------------------------------

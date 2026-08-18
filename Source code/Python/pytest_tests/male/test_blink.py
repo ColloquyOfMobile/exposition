@@ -11,11 +11,14 @@ setdown() are invoked directly as plain methods, per the suite's rules.
 
 What Blink does (colloquy/light_pattern_timing.py has the provenance):
 he sends his ten bits once, 0.2s each, and then holds the ring dark for
-the rest of a 4.35s cycle. Time is not slept through here - each test
-places `_cycle_start` in the past by the exact amount that puts the burst
-where it wants it, which is the same clock loop() reads.
+the rest of a 4.35s cycle. Time is not slept through here and not read
+from the wall either: the `clock` fixture replaces the module's own
+`time` with one the test advances by hand. Reading the real clock made
+these tests fail whenever the machine stalled for longer than the
+distance to the next bit boundary - rare, but a suite that is run after
+every change cannot afford a test that fails for no reason.
 """
-from time import time
+import pytest
 
 from colloquy.hardware.male.search.blink import Blink
 from colloquy.light_pattern_timing import (
@@ -24,6 +27,26 @@ from colloquy.light_pattern_timing import (
     BURST_DURATION,
     CYCLE_DURATION,
 )
+
+
+class FakeClock:
+    """A stand-in for time(): reads the same until a test moves it."""
+
+    def __init__(self, now=1_000_000.0):
+        self.now = now
+
+    def __call__(self):
+        return self.now
+
+    def advance(self, seconds):
+        self.now += seconds
+
+
+@pytest.fixture
+def clock(monkeypatch):
+    fake = FakeClock()
+    monkeypatch.setattr("colloquy.hardware.male.search.blink.time", fake)
+    return fake
 
 
 class FakeRing:
@@ -64,9 +87,9 @@ def make_blink(stub_factory, pattern=None, male_name="male1"):
     return blink, ring, reads
 
 
-def at(blink, seconds_into_cycle):
-    """Put the current burst `seconds_into_cycle` seconds in the past."""
-    blink._cycle_start = time() - seconds_into_cycle
+def at(blink, clock, seconds_into_cycle):
+    """Move the clock to `seconds_into_cycle` after this burst started."""
+    clock.now = blink._cycle_start + seconds_into_cycle
 
 
 def test_name_is_derived_from_owner_male_name(stub_factory):
@@ -116,20 +139,19 @@ def test_setdown_turns_ring_off(stub_factory):
     assert ring.on_calls == 0
 
 
-def test_first_loop_after_setup_starts_a_burst_on_the_first_bit(stub_factory):
+def test_first_loop_after_setup_starts_a_burst_on_the_first_bit(stub_factory, clock):
     pattern = (1, 0, 0, 1, 1, 0, 1, 0, 0, 1)
     blink, ring, reads = make_blink(stub_factory, pattern=pattern)
     blink.setup()
 
-    before = time()
     blink.loop()
 
     assert ring.set_calls == [pattern[0]]
     assert len(reads) == 1
-    assert before <= blink._cycle_start <= time()
+    assert blink._cycle_start == clock.now
 
 
-def test_each_bit_is_shown_in_order_at_its_own_moment(stub_factory):
+def test_each_bit_is_shown_in_order_at_its_own_moment(stub_factory, clock):
     pattern = (1, 0, 0, 1, 1, 0, 1, 0, 0, 1)
     blink, ring, _reads = make_blink(stub_factory, pattern=pattern)
     blink.setup()
@@ -139,7 +161,7 @@ def test_each_bit_is_shown_in_order_at_its_own_moment(stub_factory):
     # test says which bit is meant to be lit, not how float division
     # rounds on the boundary.
     for index in range(1, BITS):
-        at(blink, (index + 0.5) * BIT_DURATION)
+        at(blink, clock, (index + 0.5) * BIT_DURATION)
         blink.loop()
 
     # set() is only called on a change, so what the ring receives is the
@@ -148,7 +170,7 @@ def test_each_bit_is_shown_in_order_at_its_own_moment(stub_factory):
     assert ring.set_calls == expected
 
 
-def test_nothing_is_sent_while_a_bit_is_still_the_same(stub_factory):
+def test_nothing_is_sent_while_a_bit_is_still_the_same(stub_factory, clock):
     blink, ring, _reads = make_blink(stub_factory, pattern=(1,) * BITS)
     blink.setup()
     blink.loop()
@@ -161,14 +183,14 @@ def test_nothing_is_sent_while_a_bit_is_still_the_same(stub_factory):
     assert ring.set_calls == [1]
 
 
-def test_the_ring_goes_dark_for_the_gap_after_the_last_bit(stub_factory):
+def test_the_ring_goes_dark_for_the_gap_after_the_last_bit(stub_factory, clock):
     blink, ring, _reads = make_blink(stub_factory, pattern=(1,) * BITS)
     blink.setup()
     blink.loop()
 
-    at(blink, BURST_DURATION + 0.01)
+    at(blink, clock, BURST_DURATION + 0.01)
     blink.loop()
-    at(blink, CYCLE_DURATION - 0.01)
+    at(blink, clock, CYCLE_DURATION - 0.01)
     blink.loop()
 
     # Dark once, and still dark just before the next burst is due: the
@@ -177,27 +199,29 @@ def test_the_ring_goes_dark_for_the_gap_after_the_last_bit(stub_factory):
 
 
 def test_a_new_burst_starts_after_a_whole_cycle_and_re_reads_the_pattern(
-    stub_factory,
+    stub_factory, clock
 ):
     blink, ring, reads = make_blink(stub_factory, pattern=(1,) * BITS)
     blink.setup()
     blink.loop()
-    at(blink, BURST_DURATION + 0.01)
+    at(blink, clock, BURST_DURATION + 0.01)
     blink.loop()
 
-    at(blink, CYCLE_DURATION)
-    before = time()
+    # Just past the boundary rather than exactly on it: "a whole cycle has
+    # elapsed" is the condition under test, and floating point makes
+    # landing precisely on the line a coin toss.
+    at(blink, clock, CYCLE_DURATION + 0.01)
     blink.loop()
 
     assert ring.set_calls == [1, 0, 1]
     # Re-read at the boundary and only there, so a drive state that changes
     # mid-burst can't splice two patterns into one unreadable message.
     assert len(reads) == 2
-    assert before <= blink._cycle_start <= time()
+    assert blink._cycle_start == clock.now
 
 
 def test_a_drive_state_changing_mid_burst_is_not_picked_up_until_the_next_one(
-    stub_factory,
+    stub_factory, clock
 ):
     ring = FakeRing()
     wanted = [(1, 1, 1, 1, 1, 1, 1, 1, 1, 1)]
@@ -209,26 +233,26 @@ def test_a_drive_state_changing_mid_burst_is_not_picked_up_until_the_next_one(
     blink.loop()
 
     wanted[0] = (0,) * BITS  # he changes his mind halfway through
-    at(blink, BURST_DURATION / 2)
+    at(blink, clock, BURST_DURATION / 2)
     blink.loop()
 
     assert ring.set_calls == [1]
     assert blink.pattern == (1,) * BITS
 
-    at(blink, CYCLE_DURATION)
+    at(blink, clock, CYCLE_DURATION + 0.01)
     blink.loop()
 
     assert blink.pattern == (0,) * BITS
 
 
-def test_the_pattern_is_never_mutated(stub_factory):
+def test_the_pattern_is_never_mutated(stub_factory, clock):
     pattern = (1, 0, 0, 1, 1, 0, 1, 0, 0, 1)
     blink, _ring, _reads = make_blink(stub_factory, pattern=pattern)
     blink.setup()
     blink.loop()
 
     for index in range(1, BITS):
-        at(blink, (index + 0.5) * BIT_DURATION)
+        at(blink, clock, (index + 0.5) * BIT_DURATION)
         blink.loop()
 
     # It used to be a deque rotated one step per bit, which is why the
@@ -238,7 +262,7 @@ def test_the_pattern_is_never_mutated(stub_factory):
 
 
 def test_is_transmitting_is_true_during_the_burst_and_false_in_the_gap(
-    stub_factory,
+    stub_factory, clock
 ):
     blink, _ring, _reads = make_blink(stub_factory)
     blink.setup()
@@ -246,6 +270,6 @@ def test_is_transmitting_is_true_during_the_burst_and_false_in_the_gap(
 
     assert blink.is_transmitting is True
 
-    at(blink, BURST_DURATION + 0.01)
+    at(blink, clock, BURST_DURATION + 0.01)
 
     assert blink.is_transmitting is False
