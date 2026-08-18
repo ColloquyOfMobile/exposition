@@ -1,7 +1,7 @@
 from colloquy.base import Base
 from colloquy.hardware.value_setter2 import ValueSetter2
 
-# Params values are always dict/int/bool/str in the current schema (see
+# Params values are dict/int/float/bool/str in the current schema (see
 # colloquy/params.py's DEFAULTS and local/params.json) - dispatch on type
 # to pick a leaf class. bool must be checked before int since bool is an
 # int subclass in Python.
@@ -31,9 +31,8 @@ _RESERVED_KEYS = {"path", "name", "close", "open", "opened"}
 class ParamsNode(Base):
     """A branch mirroring one dict level of Params - one instance per
     nesting level, including the root registered as the "params" tab
-    itself on Colloquy. Children are built once at construction: nested
-    dicts recurse into another ParamsNode, scalars become the matching
-    leaf type below."""
+    itself on Colloquy. Nested dicts recurse into another ParamsNode,
+    scalars become the matching leaf type below."""
 
     def __init__(self, owner, key, params_dict):
         self._key = key
@@ -41,23 +40,46 @@ class ParamsNode(Base):
         super().__init__(owner=owner)
 
         self._children = {}
-        for k, v in params_dict.items():
-            if k in _RESERVED_KEYS:
-                continue
-            if isinstance(v, dict):
-                self._children[k] = ParamsNode(owner=self, key=k, params_dict=v)
-            elif isinstance(v, bool):
-                self._children[k] = ParamsBoolLeaf(
-                    owner=self, key=k, params_dict=params_dict
-                )
-            elif isinstance(v, int):
-                self._children[k] = ParamsIntLeaf(
-                    owner=self, key=k, params_dict=params_dict
-                )
-            else:
-                self._children[k] = ParamsReadOnlyLeaf(
-                    owner=self, key=k, params_dict=params_dict
-                )
+        self._sync_children()
+
+    def _leaf_class_for(self, value):
+        if isinstance(value, dict):
+            return ParamsNode
+        # bool first: it is an int subclass.
+        if isinstance(value, bool):
+            return ParamsBoolLeaf
+        if isinstance(value, (int, float)):
+            return ParamsIntLeaf if isinstance(value, int) else ParamsFloatLeaf
+        return ParamsReadOnlyLeaf
+
+    def _make_child(self, key):
+        value = self._params_dict[key]
+        leaf_class = self._leaf_class_for(value)
+        if leaf_class is ParamsNode:
+            return ParamsNode(owner=self, key=key, params_dict=value)
+        return leaf_class(owner=self, key=key, params_dict=self._params_dict)
+
+    def _sync_children(self):
+        """Bring this level's children in line with the dict.
+
+        Children used to be built once, at construction, which is a moment
+        that happens exactly as Colloquy() starts. A key added to params
+        after that - or one whose type changed, which is what the move to
+        degrees did to the bar's meeting points - never reached the page,
+        and the page said nothing about it either. Existing children are
+        kept as they are, so anything the reader has opened stays open.
+        """
+        wanted = {k for k in self._params_dict if k not in _RESERVED_KEYS}
+
+        for key in wanted:
+            child = self._children.get(key)
+            if child is None or not isinstance(
+                child, self._leaf_class_for(self._params_dict[key])
+            ):
+                self._children[key] = self._make_child(key)
+
+        for key in set(self._children) - wanted:
+            del self._children[key]
 
     @property
     def name(self):
@@ -65,6 +87,7 @@ class ParamsNode(Base):
 
     @property
     def snapshot_children(self):
+        self._sync_children()
         return self._children
 
 
@@ -107,6 +130,75 @@ class ParamsIntLeaf(Base):
             "path": path + ("value",),
             "name": "value",
             "value": self._params_dict[self._key],
+        }
+        return states
+
+
+class ParamsFloatLeaf(Base):
+    """An editable float param.
+
+    Every float in this file is an angle in degrees - the bar's meeting
+    points, the simulated facing-forward windows - and they became floats
+    when params.json went from servo units to degrees. Before this leaf
+    existed they fell through to the read-only leaf, so the values most
+    likely to be adjusted at the rig were the ones the page would not let
+    you touch.
+
+    ValueSetter2 is a digit tree over whole numbers, so it sets the whole
+    degree; the jog commands cover the fraction. A tenth of a degree is
+    3.4 servo units on the bar and 1.1 on a direct body - finer than
+    anything anybody sets by hand here, and calibrating against the room
+    is done by moving the body and reading its angle anyway.
+    """
+
+    # Coarse then fine, both ways, like the angle node's own jogs.
+    JOGS = (-1, -0.1, 0.1, 1)
+
+    def __init__(self, owner, key, params_dict):
+        self._key = key
+        self._params_dict = params_dict
+        super().__init__(owner=owner)
+        self._setter = ValueSetter2(
+            owner=self,
+            min_value=_INT_SETTER_MIN,
+            max_value=_INT_SETTER_MAX,
+            set_func=self._set,
+            get_func=self._get_whole,
+        )
+
+    def _set(self, value):
+        self._params_dict[self._key] = float(value)
+
+    def _get(self):
+        return self._params_dict[self._key]
+
+    def _get_whole(self):
+        return round(self._get())
+
+    def _jog(self, step):
+        def command(request=None):
+            # Rounded: 64.453 + 0.1 is 64.55299999999999 in binary floats,
+            # and this value is written straight to a file a human reads.
+            self._params_dict[self._key] = round(self._get() + step, 3)
+
+        return command
+
+    @property
+    def name(self):
+        return self._key
+
+    @property
+    def snapshot_children(self):
+        return {self._setter.name: self._setter}
+
+    def _snapshot_if_opened(self, path):
+        states = super()._snapshot_if_opened(path)
+        for step in self.JOGS:
+            states[f"{step:+g}"] = self._jog(step)
+        states["value"] = {
+            "path": path + ("value",),
+            "name": "value",
+            "value": self._get(),
         }
         return states
 

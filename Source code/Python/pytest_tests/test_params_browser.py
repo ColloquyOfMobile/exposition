@@ -4,9 +4,12 @@ No hardware/threads involved: ParamsNode just mirrors a plain dict
 structure, so a tmp_path-backed real Params object (same pattern as
 pytest_tests/test_params.py) is enough.
 """
+import json
+
 from colloquy.params import Params
 from colloquy.params_browser import (
     ParamsNode,
+    ParamsFloatLeaf,
     ParamsIntLeaf,
     ParamsBoolLeaf,
     ParamsReadOnlyLeaf,
@@ -160,3 +163,150 @@ def test_read_only_leaf_has_no_children_and_shows_value(tmp_path):
         focus_path=("params", "communication port"),
     )
     assert states["value"]["value"] == "COM4"
+
+
+# --- floats --------------------------------------------------------------
+# Every float in params.json is an angle in degrees. They only became
+# floats when the file moved from servo units to degrees, and until this
+# leaf existed they fell through to the read-only one - so the six bar
+# meeting points, the values most likely to be adjusted at the rig, were
+# exactly the ones the page would not let you touch.
+
+
+def make_angle_tree(tmp_path):
+    path = tmp_path / "params.json"
+    params = Params(
+        path,
+        {
+            "near origin threshold": {"female": 11.719, "male": 35.156},
+            "bar": {
+                "dxl origin": 0,
+                "interaction_origins": {"male1": {"female2": 64.453}},
+            },
+        },
+    )
+    return ParamsNode(owner=None, key="params", params_dict=params), params
+
+
+def meeting_point_leaf(root):
+    return (
+        root.snapshot_children["bar"]
+        .snapshot_children["interaction_origins"]
+        .snapshot_children["male1"]
+        .snapshot_children["female2"]
+    )
+
+
+def test_a_float_param_is_editable_not_read_only(tmp_path):
+    root, _params = make_angle_tree(tmp_path)
+
+    assert isinstance(meeting_point_leaf(root), ParamsFloatLeaf)
+    assert isinstance(
+        root.snapshot_children["near origin threshold"].snapshot_children["male"],
+        ParamsFloatLeaf,
+    )
+
+
+def test_float_leaf_shows_the_whole_value_not_the_rounded_one(tmp_path):
+    root, _params = make_angle_tree(tmp_path)
+    leaf = meeting_point_leaf(root)
+    path = ("params", "bar", "interaction_origins", "male1", "female2")
+
+    states = leaf.snapshot(path=path, focus_path=path)
+
+    assert states["value"]["value"] == 64.453
+
+
+def test_jogging_a_float_writes_through_and_persists(tmp_path):
+    root, params = make_angle_tree(tmp_path)
+    leaf = meeting_point_leaf(root)
+    path = ("params", "bar", "interaction_origins", "male1", "female2")
+
+    states = leaf.snapshot(path=path, focus_path=path)
+    states["+0.1"]()
+
+    assert params["bar"]["interaction_origins"]["male1"]["female2"] == 64.553
+    # Read back off disk rather than through Params.load(), which would
+    # migrate this fixture (it carries no version key) and convert the
+    # degrees it just wrote as though they were servo units.
+    on_disk = json.loads((tmp_path / "params.json").read_text(encoding="utf-8"))
+    assert on_disk["bar"]["interaction_origins"]["male1"]["female2"] == 64.553
+
+
+def test_jogging_rounds_rather_than_writing_binary_float_noise(tmp_path):
+    # 64.453 + 0.1 is 64.55299999999999, and this value is written
+    # straight to a file a human reads.
+    root, params = make_angle_tree(tmp_path)
+    leaf = meeting_point_leaf(root)
+    path = ("params", "bar", "interaction_origins", "male1", "female2")
+    states = leaf.snapshot(path=path, focus_path=path)
+
+    states["+0.1"]()
+    states["-1"]()
+
+    assert params["bar"]["interaction_origins"]["male1"]["female2"] == 63.553
+
+
+def test_the_digit_setter_jumps_to_a_whole_degree(tmp_path):
+    root, params = make_angle_tree(tmp_path)
+    leaf = meeting_point_leaf(root)
+
+    leaf._set(200)
+
+    assert params["bar"]["interaction_origins"]["male1"]["female2"] == 200.0
+    assert isinstance(params["bar"]["interaction_origins"]["male1"]["female2"], float)
+
+
+def test_the_digit_setter_starts_from_the_whole_part_of_the_current_value(tmp_path):
+    root, _params = make_angle_tree(tmp_path)
+    leaf = meeting_point_leaf(root)
+
+    assert leaf._get_whole() == 64
+
+
+# --- keeping up with the dict --------------------------------------------
+
+
+def test_a_key_added_after_construction_shows_up(tmp_path):
+    # Children used to be built once, at the moment Colloquy() starts, so
+    # anything added to params later was invisible on the page and the
+    # page said nothing about it either.
+    root, params = make_angle_tree(tmp_path)
+
+    params["mirror1"] = {"dxl origin": 0}
+
+    assert isinstance(root.snapshot_children["mirror1"], ParamsNode)
+
+
+def test_a_key_removed_from_params_disappears(tmp_path):
+    root, params = make_angle_tree(tmp_path)
+    assert "bar" in root.snapshot_children
+
+    del params["bar"]
+
+    assert "bar" not in root.snapshot_children
+
+
+def test_a_value_that_changes_type_gets_the_right_leaf(tmp_path):
+    # Which is what the move to degrees did to the meeting points: ints
+    # became floats under a tree that had already decided they were ints.
+    root, params = make_angle_tree(tmp_path)
+    assert isinstance(root.snapshot_children["bar"].snapshot_children["dxl origin"], ParamsIntLeaf)
+
+    params["bar"]["dxl origin"] = 12.5
+
+    assert isinstance(
+        root.snapshot_children["bar"].snapshot_children["dxl origin"], ParamsFloatLeaf
+    )
+
+
+def test_children_that_are_still_right_are_left_alone(tmp_path):
+    # Rebuilding them all would drop whatever the reader has opened.
+    root, params = make_angle_tree(tmp_path)
+    bar = root.snapshot_children["bar"]
+    bar.open()
+
+    params["mirror1"] = {"dxl origin": 0}
+
+    assert root.snapshot_children["bar"] is bar
+    assert bar._is_opened is True
