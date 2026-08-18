@@ -3,23 +3,37 @@ movement methods and simple state/logic helpers.
 
 Female.__init__ is NOT inert: it reaches into `owner.u2d2.dxls[self.name]`
 and `owner.arduino` at construction time (and builds a real DXLOrigin,
-Drives, Search, TurnBackAndForth, Neopixels, Test child tree), so
+Angle, Drives, Search, TurnBackAndForth, Neopixels, Test child tree), so
 constructing a real Female with a stub owner is expensive/impossible to
 fake cleanly. Instead, per conftest.py's documented pattern, these tests
 call the target methods **unbound** against small hand-built doubles
 that expose only the attributes each method body actually touches.
+
+Her movement methods now say degrees and the Angle node turns those into
+servo units, so the double carries a **real** Angle (it is inert to
+construct - a ValueSetter2 that builds its children lazily, and two
+property lookups) over a fake dxl. That is deliberate: the assertions
+below are in servo units, so they pin the whole path from "half a sweep"
+to what is written to the register, reduction included.
 """
 from types import SimpleNamespace
 
+from colloquy.hardware.angle import Angle
+from colloquy.hardware.angle.conversion import REDUCTIONS
 from colloquy.hardware.female import Female
 
+# What Female.__init__ gives her: 58.594 degrees end to end, which is the
+# 2000 servo units she was given before this layer existed, through her
+# 1:3 reduction.
+SWEEP = 58.594
 
-def make_movable_female(origin_value, motion_range=2000, position_memory=None):
+
+def make_movable_female(stub_factory, origin_value, sweep=SWEEP, position_memory=None):
     """Build a fake exposing exactly what turn_to_max_position/
-    turn_to_min_position/turn_to_origin/toggle_position touch:
-    ._dxl_origin.get(), ._motion_range, .dxl.goal_position.write(value),
-    ._position_memory. Records every written goal position in
-    `written` so tests can assert on the exact computed value.
+    turn_to_min_position/turn_to_origin/toggle_position touch: ._sweep,
+    .angle (a real Angle over a fake dxl and a fake origin), and
+    ._position_memory. Records every written goal position in `written`,
+    in servo units, so tests can assert on the exact computed value.
 
     toggle_position()'s body calls self.turn_to_max_position()/
     self.turn_to_min_position() (not the module-level functions), so the
@@ -27,12 +41,15 @@ def make_movable_female(origin_value, motion_range=2000, position_memory=None):
     are wired to invoke the real unbound Female methods against this same
     fake, keeping a single source of truth for the arithmetic."""
     written = []
-    fake = SimpleNamespace(
-        _dxl_origin=SimpleNamespace(get=lambda: origin_value),
-        _motion_range=motion_range,
+    body = stub_factory(
+        dxl_origin=SimpleNamespace(get=lambda: origin_value),
         dxl=SimpleNamespace(
             goal_position=SimpleNamespace(write=lambda v: written.append(v))
         ),
+    )
+    fake = SimpleNamespace(
+        _sweep=sweep,
+        angle=Angle(owner=body, reduction=REDUCTIONS["female"]),
         _position_memory=position_memory,
     )
     fake.written = written
@@ -41,44 +58,57 @@ def make_movable_female(origin_value, motion_range=2000, position_memory=None):
     return fake
 
 
-def test_turn_to_max_position_writes_origin_plus_half_motion_range():
-    fake = make_movable_female(origin_value=1000, motion_range=2000)
+def test_turn_to_max_position_writes_half_a_sweep_past_the_origin(stub_factory):
+    fake = make_movable_female(stub_factory, origin_value=1000)
 
     Female.turn_to_max_position(fake)
 
-    assert fake.written == [1000 + 2000 // 2]
+    # Half of 58.594 degrees, through the 1:3 reduction, is the same 1000
+    # servo units she was given before - the conversion is faithful, not a
+    # re-tuning.
+    assert fake.written == [2000]
     assert fake._position_memory == "max"
 
 
-def test_turn_to_min_position_writes_origin_minus_half_motion_range():
-    fake = make_movable_female(origin_value=1000, motion_range=2000)
+def test_turn_to_min_position_writes_half_a_sweep_the_other_way(stub_factory):
+    fake = make_movable_female(stub_factory, origin_value=1000)
 
     Female.turn_to_min_position(fake)
 
-    assert fake.written == [1000 - 2000 // 2]
+    assert fake.written == [0]
     assert fake._position_memory == "min"
 
 
-def test_turn_to_max_position_uses_current_dxl_origin_and_motion_range():
-    fake = make_movable_female(origin_value=500, motion_range=300)
+def test_the_sweep_is_measured_from_wherever_the_origin_is(stub_factory):
+    fake = make_movable_female(stub_factory, origin_value=500, sweep=20)
 
     Female.turn_to_max_position(fake)
+    Female.turn_to_min_position(fake)
 
-    assert fake.written == [500 + 300 // 2]
-    assert fake._position_memory == "max"
+    # 10 degrees either side: 341 units through the reduction.
+    assert fake.written == [841, 159]
 
 
-def test_turn_to_min_position_uses_current_dxl_origin_and_motion_range():
-    fake = make_movable_female(origin_value=500, motion_range=300)
+def test_a_negative_result_is_written_as_a_negative_number(stub_factory):
+    # Extended position mode, and her origin is 100 on the rig today: the
+    # bottom of her sweep is genuinely below the servo's zero.
+    fake = make_movable_female(stub_factory, origin_value=100)
 
     Female.turn_to_min_position(fake)
 
-    assert fake.written == [500 - 300 // 2]
-    assert fake._position_memory == "min"
+    assert fake.written == [-900]
 
 
-def test_turn_to_origin_writes_raw_origin_value_and_leaves_memory_untouched():
-    fake = make_movable_female(origin_value=1234, position_memory="max")
+def test_turn_to_takes_an_angle_in_degrees(stub_factory):
+    fake = make_movable_female(stub_factory, origin_value=1000)
+
+    Female.turn_to(fake, 20)
+
+    assert fake.written == [1683]
+
+
+def test_turn_to_origin_writes_the_origin_and_leaves_memory_untouched(stub_factory):
+    fake = make_movable_female(stub_factory, origin_value=1234, position_memory="max")
 
     Female.turn_to_origin(fake)
 
@@ -87,46 +117,42 @@ def test_turn_to_origin_writes_raw_origin_value_and_leaves_memory_untouched():
     assert fake._position_memory == "max"
 
 
-def test_toggle_position_from_none_goes_to_max():
-    fake = make_movable_female(origin_value=1000, motion_range=2000, position_memory=None)
+def test_toggle_position_from_none_goes_to_max(stub_factory):
+    fake = make_movable_female(stub_factory, origin_value=1000, position_memory=None)
 
     Female.toggle_position(fake)
 
     assert fake._position_memory == "max"
-    assert fake.written == [1000 + 2000 // 2]
+    assert fake.written == [2000]
 
 
-def test_toggle_position_from_max_goes_to_min():
-    fake = make_movable_female(origin_value=1000, motion_range=2000, position_memory="max")
+def test_toggle_position_from_max_goes_to_min(stub_factory):
+    fake = make_movable_female(stub_factory, origin_value=1000, position_memory="max")
 
     Female.toggle_position(fake)
 
     assert fake._position_memory == "min"
-    assert fake.written == [1000 - 2000 // 2]
+    assert fake.written == [0]
 
 
-def test_toggle_position_from_min_goes_to_max():
-    fake = make_movable_female(origin_value=1000, motion_range=2000, position_memory="min")
+def test_toggle_position_from_min_goes_to_max(stub_factory):
+    fake = make_movable_female(stub_factory, origin_value=1000, position_memory="min")
 
     Female.toggle_position(fake)
 
     assert fake._position_memory == "max"
-    assert fake.written == [1000 + 2000 // 2]
+    assert fake.written == [2000]
 
 
-def test_toggle_position_full_cycle_from_fresh_fake():
-    fake = make_movable_female(origin_value=1000, motion_range=2000, position_memory=None)
+def test_toggle_position_full_cycle_from_fresh_fake(stub_factory):
+    fake = make_movable_female(stub_factory, origin_value=1000, position_memory=None)
 
     Female.toggle_position(fake)  # None -> max
     Female.toggle_position(fake)  # max -> min
     Female.toggle_position(fake)  # min -> max
 
     assert fake._position_memory == "max"
-    assert fake.written == [
-        1000 + 2000 // 2,
-        1000 - 2000 // 2,
-        1000 + 2000 // 2,
-    ]
+    assert fake.written == [2000, 0, 2000]
 
 
 def make_satisfaction_female(o_satisfied, p_satisfied):

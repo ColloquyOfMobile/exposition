@@ -3,8 +3,9 @@ from .drives import Drives
 from pathlib import Path
 from colloquy.base_thread import BaseThread
 from .light_sensor import LightSensor
+from ..angle import Angle
+from ..angle.conversion import REDUCTIONS
 from ..dxl_origin import DXLOrigin
-from .dxl_position import DXLPosition
 from .search import Search
 from .reinforcement import Reinforcement
 from ..turn_back_and_forth import TurnBackAndForth
@@ -22,9 +23,13 @@ class Female(BaseThread):
         super().__init__(owner=owner)
         self._position_memory = None
 
-        self._motion_range = 2000
+        # Her whole sway, in degrees of her body. The number is what the
+        # 2000 servo units she used to be given work out to through her
+        # 1:3 reduction - a third of the male's sweep for the same figure
+        # written to the servo, which is worth a look at the rig some day.
+        self._sweep = 58.594
         self._dxl_origin = DXLOrigin(owner=self)
-        self._position = DXLPosition(owner=self)
+        self._angle = Angle(owner=self, reduction=REDUCTIONS["female"])
 
         self._light_sensor = LightSensor(owner=self, name="light sensor")
         self._dxl = owner.u2d2.dxls[self.name]
@@ -44,7 +49,7 @@ class Female(BaseThread):
         self[self.search.name] = self.search
         self[self.reinforcement.name] = self.reinforcement
         self[self.dxl_origin.name] = self.dxl_origin
-        self[self.position.name] = self.position
+        self[self.angle.name] = self.angle
         self["set current position as dxl origin"] = (
             self.set_current_position_as_dxl_origin
         )
@@ -107,8 +112,14 @@ class Female(BaseThread):
         return self._light_sensor
 
     @property
-    def position(self):
-        return self._position
+    def angle(self):
+        """Where she is pointing, in degrees from her origin."""
+        return self._angle
+
+    @property
+    def sweep(self):
+        """How far she swings, end to end, in degrees."""
+        return self._sweep
 
     @property
     def goal_position(self):
@@ -128,14 +139,15 @@ class Female(BaseThread):
     def is_satisfied(self):
         return self.drives.o_drive.is_satisfied or self.drives.p_drive.is_satisfied
 
+    def turn_to(self, degrees):
+        self.angle.turn_to(degrees)
+
     def turn_to_max_position(self):
-        value = self._dxl_origin.get() + self._motion_range // 2
-        self.dxl.goal_position.write(value)
+        self.angle.turn_to(self._sweep / 2)
         self._position_memory = "max"
 
     def turn_to_min_position(self):
-        value = self._dxl_origin.get() - self._motion_range // 2
-        self.dxl.goal_position.write(value)
+        self.angle.turn_to(-self._sweep / 2)
         self._position_memory = "min"
 
     def toggle_position(self):
@@ -152,8 +164,7 @@ class Female(BaseThread):
             return
 
     def turn_to_origin(self):
-        value = self._dxl_origin.get()
-        self.dxl.goal_position.write(value)
+        self.angle.turn_to_origin()
 
     def loop(self):
         """Her whole life, one tick at a time: get hungry, look, answer.
@@ -196,6 +207,7 @@ class Female(BaseThread):
     @property
     def snapshot_children(self):
         children = {}
+        children["angle"] = self.angle
         children["dxl origin"] = self.dxl_origin
         children[self.dxl.name] = self.dxl
         children["search"] = self.search
