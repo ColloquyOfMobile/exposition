@@ -8,6 +8,7 @@ from .test_drive_light_values import TestDriveLightValues
 from .test_male_patterns import TestMalePatterns
 from .test_light_sensor_values import TestLightSensorValues
 from .test_read_pattern import TestReadPattern
+from .test_female_search import TestFemaleSearch
 from .test_movements import TestMovements
 from .test_graph_zoom import TestGraphZoom
 from .test_neopixels import TestNeopixels
@@ -36,6 +37,9 @@ class Tests(Base):
         self.test_read_pattern = TestReadPattern(
             owner=self, result_folder=result_folder
         )
+        self.test_female_search = TestFemaleSearch(
+            owner=self, result_folder=result_folder
+        )
         self.test_movements = TestMovements(owner=self, result_folder=result_folder)
         self.test_graph_zoom = TestGraphZoom(owner=self)
         self.test_neopixels = TestNeopixels(owner=self, result_folder=result_folder)
@@ -50,6 +54,7 @@ class Tests(Base):
             self.test_male_patterns,
             self.test_light_sensor_values,
             self.test_read_pattern,
+            self.test_female_search,
             self.test_movements,
             self.test_neopixels,
             self.test_sensors,
