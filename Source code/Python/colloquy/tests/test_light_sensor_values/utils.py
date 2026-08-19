@@ -314,7 +314,7 @@ if __name__ == "__main__":
     )
 
 
-def bin_by_angle(df, body, bin_width):
+def bin_by_angle(df, body, bin_width, column="angle"):
     """Every sample of one body, gathered into angle bins.
 
     A body sweeping back and forth passes the same angle many times, from
@@ -322,12 +322,15 @@ def bin_by_angle(df, body, bin_width):
     spread of readings taken at the same aim, which is exactly what says
     whether the sensor is steady there. Returns (angles, means, spreads,
     counts), spread being max - min within the bin.
+
+    `column` is which angle to bin by: her own aim by default, or the
+    bar's offset from her when it is the bar that is sweeping.
     """
     rows = df[df["body"] == body]
     if rows.empty:
         return None
 
-    bins = (rows["angle"] / bin_width).round() * bin_width
+    bins = (rows[column] / bin_width).round() * bin_width
     grouped = rows.groupby(bins)["value"]
 
     angles = np.asarray(grouped.mean().index, dtype=float)
@@ -385,6 +388,77 @@ def plot_sensor_by_angle_as_svg(output, df, body, threshold, bin_width=1.0):
         f"{body} in the dark: {len(rows)} readings over {len(angles)} angles "
         f"({counts.min()} to {counts.max()} per angle), "
         f"{above} above the threshold"
+    )
+
+    fig.tight_layout()
+    fig.savefig(output, format="svg")
+    plt.close(fig)
+
+    return output
+
+
+def plot_sensor_by_bar_offset_as_svg(
+    output, df, body, threshold, meeting_angle, bin_width=1.0
+):
+    """One female's sensor value against how far the bar is from her.
+
+    x is the bar's angle minus her own, so one point on it is one relative
+    placing of the two: the bar somewhere along its travel, she aimed
+    somewhere within her sway. Male1 sits still at his origin with his
+    ring lit for the whole run, so the only thing moving the light past
+    her is the bar - and the reading should climb as it brings him round
+    to her and fall again as it carries him away.
+
+    The dashed vertical marks where params says the bar has male1 in front
+    of her (`interaction_origins`), which is where that hump is expected.
+    It is at 0 for female1, whose meeting angle is the bar's own origin,
+    and further out for the other two - so a hump that sits away from the
+    marker is the interaction origin needing a nudge, not a sensor that
+    cannot see.
+    """
+    binned = bin_by_angle(df, body, bin_width, column="bar offset")
+    if binned is None:
+        return None
+    offsets, means, spreads, counts = binned
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    ax.plot(offsets, means, label="average reading", linewidth=2, color="tab:blue")
+    ax.plot(
+        offsets,
+        spreads,
+        label="spread at this offset (max - min)",
+        linewidth=2,
+        color="tab:red",
+    )
+    ax.axhline(
+        y=threshold,
+        label=f"threshold ({threshold})",
+        linewidth=2,
+        color="black",
+        linestyle="--",
+    )
+    ax.axvline(
+        x=meeting_angle,
+        label=f"male1 in front of her ({meeting_angle:g} deg)",
+        linewidth=2,
+        color="tab:green",
+        linestyle=":",
+    )
+
+    ax.set_xlabel("Bar angle minus her own (degrees)")
+    ax.set_ylabel("Sensor value")
+    ax.grid(True, alpha=0.3)
+    ax.legend(fontsize="small")
+
+    rows = df[df["body"] == body]
+    above = int((rows["value"] > threshold).sum())
+    peak = float(means.max())
+    peak_at = float(offsets[means.argmax()])
+    ax.set_title(
+        f"{body} watching a lit male1: {len(rows)} readings over {len(offsets)} "
+        f"offsets ({counts.min()} to {counts.max()} each), "
+        f"{above} above the threshold, brightest {peak:.0f} at {peak_at:g} deg"
     )
 
     fig.tight_layout()

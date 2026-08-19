@@ -10,7 +10,9 @@ from .test_with_female_and_male_moving import TestWithFemaleAndMaleMoving
 from .test_with_female_male_and_bar_moving import TestWithFemaleMaleAndBarMoving
 from .test_with_everything_moving import TestWithEveryThingMoving
 from .test_for_false_positives import TestForFalsePositives
+from .test_seeing_male1_as_the_bar_turns import TestSeeingMale1AsTheBarTurns
 from colloquy.ui import leaves
+
 
 class TestLightSensorValues(BaseThread):
     def __init__(self, owner, result_folder):
@@ -55,6 +57,13 @@ class TestLightSensorValues(BaseThread):
             # starts, and what the sequence below budgets for it.
             test_duration=5 * 60,
         )
+        self.test_seeing_male1_as_the_bar_turns = TestSeeingMale1AsTheBarTurns(
+            owner=self,
+            result_folder=result_folder,
+            # As its sibling: where its duration starts, and what the
+            # sequence below budgets for it.
+            test_duration=5 * 60,
+        )
         self._hardware = self.owner.hardware
 
         # self[self.html.name] = self.html.handle_request
@@ -66,6 +75,7 @@ class TestLightSensorValues(BaseThread):
             self.test_with_female_male_and_bar_moving,
             self.test_with_everything_moving,
             self.test_for_false_positives,
+            self.test_seeing_male1_as_the_bar_turns,
         ]
 
         self._duration = sum(test.duration for test in self._threaded_tests)

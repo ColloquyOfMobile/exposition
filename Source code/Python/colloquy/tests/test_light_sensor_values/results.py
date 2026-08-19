@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# colloquy/tests/test_light_sensor_values/test_for_false_positives/results.py
+# colloquy/tests/test_light_sensor_values/results.py
 
 """The graphs this test draws, reachable from the page.
 
@@ -13,6 +13,9 @@ are read as they were written rather than redrawn, so what the page shows
 is the run's own record; `plot again` redraws them from the CSV, which is
 what a run wants after the threshold in params has moved, or if its plot
 never happened.
+
+Shared by every test here that plots per female: it asks its owner for
+`females` and for a `plot(file_path=...)`, and nothing else.
 """
 
 from colloquy.base import Base

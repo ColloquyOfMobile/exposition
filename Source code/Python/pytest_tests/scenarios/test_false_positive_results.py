@@ -1,7 +1,7 @@
-"""Tests for the results browser on "test for false positives in the dark".
+"""Tests for the results browser these light-sensor tests share.
 
-The test itself has always written one SVG per female next to the run's
-CSV and left them there; these cover the node that puts them on the page.
+They have always written one SVG per female next to the run's CSV and
+left them there; these cover the node that puts them on the page.
 
 This is the one place in this suite that touches a filesystem, because
 what is under test is a folder scan - pytest's tmp_path, never the real
@@ -10,11 +10,7 @@ local/test results/.
 
 import pytest
 
-from colloquy.tests.test_light_sensor_values.test_for_false_positives.results import (
-    Results,
-    Run,
-    _inline,
-)
+from colloquy.tests.test_light_sensor_values.results import Results, Run, _inline
 
 BODIES = ("female1", "female2", "female3")
 PATH = ("tests", "test for false positives in the dark", "results")
