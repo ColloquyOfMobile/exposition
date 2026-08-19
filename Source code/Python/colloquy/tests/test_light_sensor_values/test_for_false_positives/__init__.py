@@ -7,6 +7,7 @@ from colloquy.base_thread import BaseThread
 from colloquy.utils import timelap_to_string
 
 from ..utils import plot_sensor_by_angle_as_svg
+from .results import Results
 from colloquy.ui import leaves
 
 
@@ -34,6 +35,10 @@ class TestForFalsePositives(BaseThread):
     average is something bright from that direction; a tall spread is an
     aim where the reading is not repeatable.
 
+    The graphs are written next to the run's CSV under local/test
+    results/, and every run is on the page under "results" - which is the
+    only way to see them without opening that folder by hand.
+
     Run it with the installation stopped - it refuses otherwise, since
     every body running turns its own lights on and moves on its own, which
     is the opposite of what this measures.
@@ -60,6 +65,7 @@ class TestForFalsePositives(BaseThread):
 
         self._file_path = None
         self._file = None
+        self._results = Results(owner=self, dir_path=self._dir_path)
 
         self._commands = {}
         for seconds in self.DURATIONS:
@@ -159,21 +165,26 @@ class TestForFalsePositives(BaseThread):
             self.log(f"Outcome: {self._outcome}")
         self._file.close()
 
-    def plot(self):
-        """One graph per female, next to the CSV."""
-        if self._file_path is None:
+    def plot(self, file_path=None):
+        """One graph per female, next to the CSV.
+
+        Defaults to the run that just finished; `results` passes an older
+        run's CSV to redraw it - after the threshold in params has moved,
+        say, since the threshold is drawn into the picture.
+        """
+        if file_path is None:
+            file_path = self._file_path
+        if file_path is None:
             return
 
-        df = pd.read_csv(self._file_path, skipinitialspace=True)
+        df = pd.read_csv(file_path, skipinitialspace=True)
         if df.empty:
             self.log("Nothing recorded, so nothing to plot.")
             return
 
         threshold = self.colloquy.params["photosensor_threashold"]
         for female in self.females:
-            output = self._file_path.with_name(
-                f"{female.name} {self._file_path.stem}.svg"
-            )
+            output = file_path.with_name(f"{female.name} {file_path.stem}.svg")
             plotted = plot_sensor_by_angle_as_svg(
                 output=output,
                 df=df,
@@ -187,8 +198,12 @@ class TestForFalsePositives(BaseThread):
             self.log(f"{female.name}: {above} readings above the threshold.")
 
     @property
+    def results(self):
+        return self._results
+
+    @property
     def snapshot_children(self):
-        children = {}
+        children = {self._results.name: self._results}
         for female in self.females:
             children[female.turn_back_and_forth.name] = female.turn_back_and_forth
         return children
