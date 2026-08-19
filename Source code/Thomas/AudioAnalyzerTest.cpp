@@ -2,7 +2,7 @@
  *
  * AudioAnalyzerTest.cpp
  * 
- * Project: Gordon Pask, Colloquy of mobiles
+ * Project: Gordon Pask, Colloquy of Mobiles
  * Board: Mega 2560
  * 
  * Test routine for the audio subsystem used in G. Pask, 'Colloquy of Mobiles'.

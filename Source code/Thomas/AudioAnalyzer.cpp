@@ -2,7 +2,7 @@
  *
  * AudioAnalyzer.cpp
  * 
- * Project: Gordon Pask, Colloquy of mobiles
+ * Project: Gordon Pask, Colloquy of Mobiles
  * 
  * Library for AudioAnalyzer Test routine
  * Based on the library for audio spectrum analyzer from DFROBOT, Rev 1.3, 

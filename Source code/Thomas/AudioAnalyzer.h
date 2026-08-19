@@ -2,7 +2,7 @@
  *
  * AudioAnalyzer.h
  * 
- * Project: Gordon Pask, Colloquy of mobiles
+ * Project: Gordon Pask, Colloquy of Mobiles
  * Board: Mega 2560
  * 
  * Include file for AudioAnalyzer Test routine
