@@ -49,11 +49,19 @@ class Run(Base):
     def snapshot_children(self):
         return {}
 
-    def graph_path(self, body):
-        return self._csv_path.with_name(f"{body} {self._csv_path.stem}.svg")
+    def graph_paths(self, body):
+        """Every SVG this run wrote for one body, in name order.
+
+        Matched rather than named, so a test that draws her more than one
+        picture needs nothing here: "female1 <run>.svg" and "female1 map
+        <run>.svg" both belong to female1 and both turn up.
+        """
+        stem = self._csv_path.stem
+        folder = self._csv_path.parent
+        return sorted(folder.glob(f"{body}*{stem}.svg"))
 
     def plot_again(self, request=None):
-        """Redraw all three graphs from this run's CSV."""
+        """Redraw this run's graphs from its CSV."""
         self.owner.test.plot(file_path=self._csv_path)
 
     def _snapshot_if_opened(self, path):
@@ -62,13 +70,16 @@ class Run(Base):
         leaf("recorded in", self._csv_path.name)
 
         for body in self._bodies:
-            graph = self.graph_path(body)
-            if not graph.is_file():
+            graphs = self.graph_paths(body)
+            if not graphs:
                 leaf(body, "no graph yet - plot again")
                 continue
-            states[body] = leaves.svg(
-                path, body, _inline(graph.read_text(encoding="utf-8"))
-            )
+            for graph in graphs:
+                # "female1 map 2026_08_19....svg" -> "female1 map"
+                key = graph.stem[: -len(self._csv_path.stem)].strip()
+                states[key] = leaves.svg(
+                    path, key, _inline(graph.read_text(encoding="utf-8"))
+                )
         return states
 
 

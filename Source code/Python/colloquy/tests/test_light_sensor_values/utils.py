@@ -397,26 +397,48 @@ def plot_sensor_by_angle_as_svg(output, df, body, threshold, bin_width=1.0):
     return output
 
 
-def plot_sensor_by_bar_offset_as_svg(
+def add_offsets(df, meeting_angle):
+    """The two angles a sweep-past-a-lit-male run is read against.
+
+    "bar offset" is how far the bar is from putting the male at her
+    station: its angle minus the `interaction_origins` entry for the pair.
+    Zero means he is there. Measuring from her own meeting angle rather
+    than from the bar's origin is what lets all three females be read on
+    the same axis - the bar's origin happens to be female1's meeting
+    angle, so a raw bar angle puts her peak at 0 and the other two at 64.5
+    and 126.
+
+    "alignment offset" takes her own aim off it as well, so zero means he
+    is at her station *and* she is looking at it. That subtraction assumes
+    her sway and the bar's travel are measured in the same rotational
+    sense and add up - which is a fact about how she is mounted, not
+    something either the params or this code knows. `plot_sensor_map_as_
+    svg` is the check: draw the two angles against each other and see
+    whether what she can see runs along a diagonal (they add, and the
+    subtraction is right) or fills a rectangle (they are two independent
+    windows, and the subtraction is smearing the graph).
+    """
+    df = df.copy()
+    df["bar offset"] = df["bar angle"] - meeting_angle
+    df["alignment offset"] = df["bar offset"] - df["angle"]
+    return df
+
+
+def plot_sensor_by_alignment_offset_as_svg(
     output, df, body, threshold, meeting_angle, bin_width=1.0
 ):
-    """One female's sensor value against how far the bar is from her.
+    """One female's sensor value against how far she is from facing him.
 
-    x is the bar's angle minus her own, so one point on it is one relative
-    placing of the two: the bar somewhere along its travel, she aimed
-    somewhere within her sway. Male1 sits still at his origin with his
-    ring lit for the whole run, so the only thing moving the light past
-    her is the bar - and the reading should climb as it brings him round
-    to her and fall again as it carries him away.
+    x is "alignment offset" (see add_offsets): the bar's angle, measured
+    from where it puts the male at her station, less her own aim. Both she
+    and the bar sweep for the whole run, so one point on this axis pools
+    every combination of the two that comes to the same difference - which
+    is the point, if the difference is what decides whether she sees him.
 
-    The dashed vertical marks where params says the bar has male1 in front
-    of her (`interaction_origins`), which is where that hump is expected.
-    It is at 0 for female1, whose meeting angle is the bar's own origin,
-    and further out for the other two - so a hump that sits away from the
-    marker is the interaction origin needing a nudge, not a sensor that
-    cannot see.
+    Zero is the two of them lined up, and the reading should climb towards
+    it and fall away either side.
     """
-    binned = bin_by_angle(df, body, bin_width, column="bar offset")
+    binned = bin_by_angle(df, body, bin_width, column="alignment offset")
     if binned is None:
         return None
     offsets, means, spreads, counts = binned
@@ -439,27 +461,90 @@ def plot_sensor_by_bar_offset_as_svg(
         linestyle="--",
     )
     ax.axvline(
-        x=meeting_angle,
-        label=f"male1 in front of her ({meeting_angle:g} deg)",
+        x=0,
+        label=f"facing each other (bar at {meeting_angle:g} deg, she at 0)",
         linewidth=2,
         color="tab:green",
         linestyle=":",
     )
 
-    ax.set_xlabel("Bar angle minus her own (degrees)")
+    ax.set_xlabel("Bar angle from her meeting angle, less her own aim (degrees)")
     ax.set_ylabel("Sensor value")
     ax.grid(True, alpha=0.3)
     ax.legend(fontsize="small")
 
     rows = df[df["body"] == body]
     above = int((rows["value"] > threshold).sum())
-    peak = float(means.max())
     peak_at = float(offsets[means.argmax()])
+    # Rounding a small negative offset into the zero bin leaves -0.0,
+    # which formats as "-0" in the title.
+    if peak_at == 0:
+        peak_at = 0.0
     ax.set_title(
-        f"{body} watching a lit male1: {len(rows)} readings over {len(offsets)} "
+        f"{body} watching a lit male: {len(rows)} readings over {len(offsets)} "
         f"offsets ({counts.min()} to {counts.max()} each), "
-        f"{above} above the threshold, brightest {peak:.0f} at {peak_at:g} deg"
+        f"{above} above the threshold, brightest {means.max():.0f} at {peak_at:g} deg"
     )
+
+    fig.tight_layout()
+    fig.savefig(output, format="svg")
+    plt.close(fig)
+
+    return output
+
+
+def plot_sensor_map_as_svg(output, df, body, threshold, bin_width=2.0):
+    """Whether the two angles add up, drawn rather than assumed.
+
+    The bar's offset across, her own aim up, the average reading in each
+    cell. If what she can see is decided by the difference between the
+    two, the bright cells lie along a diagonal, and the difference is the
+    right thing to plot her against. If instead they are two independent
+    windows - the bar near her station AND her aim near her origin, either
+    failing on its own - the bright cells fill a rectangle, and any graph
+    against the difference is smeared by the width of both.
+
+    A diagonal running the other way says the two are measured in opposite
+    senses, and the alignment offset wants a plus where it has a minus.
+    """
+    rows = df[df["body"] == body]
+    if rows.empty:
+        return None
+
+    x_bins = (rows["bar offset"] / bin_width).round() * bin_width
+    y_bins = (rows["angle"] / bin_width).round() * bin_width
+    grid = rows.groupby([y_bins, x_bins])["value"].mean().unstack()
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    mesh = ax.pcolormesh(
+        np.asarray(grid.columns, dtype=float),
+        np.asarray(grid.index, dtype=float),
+        np.ma.masked_invalid(grid.to_numpy()),
+        shading="nearest",
+        cmap="viridis",
+    )
+    fig.colorbar(mesh, ax=ax, label="Average sensor value")
+
+    # The line the alignment offset assumes everything bright sits on.
+    limit = float(np.abs(grid.columns).max())
+    ax.plot(
+        [-limit, limit],
+        [-limit, limit],
+        linewidth=1.5,
+        color="white",
+        linestyle="--",
+        label="where the two angles cancel",
+    )
+    ax.set_xlim(float(grid.columns.min()), float(grid.columns.max()))
+    ax.set_ylim(float(grid.index.min()), float(grid.index.max()))
+
+    ax.set_xlabel("Bar angle from her meeting angle (degrees)")
+    ax.set_ylabel("Her own aim from her origin (degrees)")
+    ax.legend(fontsize="small", loc="upper left")
+
+    lit = rows[rows["value"] > threshold]
+    seen = f"{len(lit)} of {len(rows)} readings above the threshold"
+    ax.set_title(f"{body}: what she can see, by both angles at once - {seen}")
 
     fig.tight_layout()
     fig.savefig(output, format="svg")

@@ -7,7 +7,11 @@ from colloquy.base_thread import BaseThread
 from colloquy.utils import timelap_to_string
 
 from ..results import Results
-from ..utils import plot_sensor_by_bar_offset_as_svg
+from ..utils import (
+    add_offsets,
+    plot_sensor_by_alignment_offset_as_svg,
+    plot_sensor_map_as_svg,
+)
 from colloquy.ui import leaves
 
 
@@ -20,25 +24,34 @@ class TestSeeingMale1AsTheBarTurns(BaseThread):
     light where there *is* some - and at what relative placing of the two
     bodies she starts to.
 
-    So: every light off except male1's ring, male1 held at his origin, all
-    three females held at theirs, and the bar sweeping its whole travel
-    back and forth. Nothing moves but the bar, which means the only thing
-    changing what a female can see is how far round the bar has carried
-    male1 towards her.
+    So: every light off except male1's ring, male1 alone held still at his
+    origin, the bar sweeping its whole travel back and forth, and all
+    three females swaying theirs throughout. He is the fixed thing; the
+    two angles that decide whether she can see him both move, so a run
+    covers their combinations rather than one slice of them.
 
-    Each female gets her own graph: the bar's angle minus her own across,
-    sensor value up, the average reading at that offset and the spread
-    there, with the threshold drawn across it. Somewhere on it there
-    should be a hump - the offsets at which she can see him - rising
-    through the threshold and falling away again.
+    Each female gets two graphs.
 
-    Where that hump sits is the second thing this measures. The graph
-    marks where params says the bar puts male1 in front of her, which is 0
-    for female1 (her meeting angle *is* the bar's origin) and 64.5 and 126
-    degrees for female2 and female3. A hump centred away from that marker
-    is an interaction origin that wants correcting; a graph with no hump
-    at all is a female who never sees him, which is a sensor, an aim or a
-    threshold to look at.
+    The first is her reading against the **alignment offset**: how far the
+    bar is from putting him at her station, less her own aim (see
+    `add_offsets`). Zero is the two of them lined up, for all three of
+    them - the offset is measured from her own meeting angle, not from the
+    bar's origin, which happens to be female1's and would otherwise put
+    the other two humps at 64.5 and 126 degrees. The reading should climb
+    towards zero and fall away either side. A hump off centre is an
+    interaction origin that wants correcting; no hump at all is a sensor,
+    an aim or a threshold to look at.
+
+    The second is the map, and it is there because that subtraction is an
+    assumption: that her sway and the bar's travel are measured in the
+    same rotational sense and add up, which is a fact about how she is
+    mounted rather than anything params or this code knows. It draws the
+    two angles against each other with the reading as colour. Bright cells
+    along a diagonal say they do add up and the first graph is the right
+    way to read her; a bright rectangle says they are two independent
+    windows and the first graph is smeared by the width of both; a
+    diagonal the other way says the offset wants a plus where it has a
+    minus.
 
     Run it with the installation stopped - it refuses otherwise, since
     every body running turns its own lights on and moves on its own, which
@@ -48,6 +61,11 @@ class TestSeeingMale1AsTheBarTurns(BaseThread):
     # One degree per bin, as the sibling uses. The bar travels 293
     # degrees, so about three hundred bins across a run.
     ANGLE_BIN = 1.0
+
+    # The map has two axes to fill instead of one, so its cells are wider
+    # - a run that gives thirty readings to a degree of offset gives far
+    # fewer to a degree of offset at a degree of aim.
+    MAP_BIN = 2.0
 
     DURATIONS = (60, 5 * 60, 15 * 60, 30 * 60)
 
@@ -128,7 +146,15 @@ class TestSeeingMale1AsTheBarTurns(BaseThread):
         super().run(run_with=run_with)
 
         if self._started_by is None:
-            self.plot()
+            try:
+                self.plot()
+            except Exception as error:
+                # Outside BaseThread.run()'s own try/except, which has
+                # already returned by now - so without this a failed plot
+                # kills the thread with nothing on the page to say so, and
+                # the run's data looks like it was never recorded.
+                self.log(f"Plotting failed: {error!r}")
+                self.thread_errors.append(error)
 
     def setup(self):
         self._start_time = time()
@@ -151,22 +177,23 @@ class TestSeeingMale1AsTheBarTurns(BaseThread):
         # including male2's ring, so nothing else can be what she sees.
         self.hardware.neopixels.turn_all_off()
 
-        # Everything that is not the bar is placed and left there, so a
-        # reading can be attributed to the bar's angle alone. Waited for:
-        # a sample taken while a body is still swinging into place is
-        # filed under an aim it does not have yet.
+        # He is the one thing held still: at his origin, lit, facing
+        # out. Waited for, since a sample taken while he is still
+        # swinging into place is filed under an aim he does not have yet.
         self.male.turn_to_origin()
-        for female in self.females:
-            female.turn_to_origin()
         self.bar.turn_to_origin()
-
         self.male.dxl.wait_for_servo()
-        for female in self.females:
-            female.dxl.wait_for_servo()
         self.bar.dxl.wait_for_servo()
 
         self.male.neopixels.ring.on()
+
+        # Both of the angles the graphs are read against sweep, so a run
+        # covers their combinations rather than one slice of them: the
+        # bar carries him round and round, and each female sways her own
+        # travel throughout.
         self.bar.turn_back_and_forth.start(started_by=self)
+        for female in self.females:
+            female.turn_back_and_forth.start(started_by=self)
 
     def loop(self):
         elapsed = time() - self._start_time
@@ -190,6 +217,8 @@ class TestSeeingMale1AsTheBarTurns(BaseThread):
 
     def setdown(self):
         self.bar.turn_back_and_forth.stop()
+        for female in self.females:
+            female.turn_back_and_forth.stop()
         self.male.neopixels.ring.off()
         self._start_time = None
         if self._outcome:
@@ -214,34 +243,44 @@ class TestSeeingMale1AsTheBarTurns(BaseThread):
             self.log("Nothing recorded, so nothing to plot.")
             return
 
-        # What the graph is against: where the bar is, relative to where
-        # she is aimed. Computed here rather than recorded, so a run
-        # already on disk re-plots the same way.
-        df["bar offset"] = df["bar angle"] - df["angle"]
-
         threshold = self.colloquy.params["photosensor_threashold"]
         for female in self.females:
-            output = file_path.with_name(f"{female.name} {file_path.stem}.svg")
-            plotted = plot_sensor_by_bar_offset_as_svg(
-                output=output,
-                df=df,
+            # Per female, since the offsets are measured from her own
+            # meeting angle - the bar's origin is female1's, not theirs.
+            # Computed here rather than recorded, so a run already on disk
+            # re-plots the same way.
+            meeting = self.bar.meeting_angle(self.LIT_MALE, female.name)
+            rows = add_offsets(df[df["body"] == female.name], meeting_angle=meeting)
+            if rows.empty:
+                continue
+
+            plot_sensor_by_alignment_offset_as_svg(
+                output=file_path.with_name(f"{female.name} {file_path.stem}.svg"),
+                df=rows,
                 body=female.name,
                 threshold=threshold,
-                meeting_angle=self.bar.meeting_angle(self.LIT_MALE, female.name),
+                meeting_angle=meeting,
                 bin_width=self.ANGLE_BIN,
             )
-            if plotted is None:
-                continue
-            rows = df[df["body"] == female.name]
+            plot_sensor_map_as_svg(
+                output=file_path.with_name(f"{female.name} map {file_path.stem}.svg"),
+                df=rows,
+                body=female.name,
+                threshold=threshold,
+                bin_width=self.MAP_BIN,
+            )
             above = int(rows["value"].gt(threshold).sum())
             self.log(f"{female.name}: {above} readings above the threshold.")
 
     @property
     def snapshot_children(self):
-        return {
+        children = {
             self._results.name: self._results,
             self.bar.turn_back_and_forth.name: self.bar.turn_back_and_forth,
         }
+        for female in self.females:
+            children[female.turn_back_and_forth.name] = female.turn_back_and_forth
+        return children
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

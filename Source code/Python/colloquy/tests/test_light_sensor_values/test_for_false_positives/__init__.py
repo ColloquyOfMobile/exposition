@@ -100,7 +100,12 @@ class TestForFalsePositives(BaseThread):
     def _busy_bodies(self):
         """Anything already driving the bodies or their lights."""
         busy = []
-        for node in (self.hardware, self.hardware.bar, *self.hardware.males, *self.females):
+        for node in (
+            self.hardware,
+            self.hardware.bar,
+            *self.hardware.males,
+            *self.females,
+        ):
             if node.is_started:
                 busy.append(node.name)
         return busy
@@ -115,7 +120,15 @@ class TestForFalsePositives(BaseThread):
         super().run(run_with=run_with)
 
         if self._started_by is None:
-            self.plot()
+            try:
+                self.plot()
+            except Exception as error:
+                # Outside BaseThread.run()'s own try/except, which has
+                # already returned by now - so without this a failed plot
+                # kills the thread with nothing on the page to say so, and
+                # the run's data looks like it was never recorded.
+                self.log(f"Plotting failed: {error!r}")
+                self.thread_errors.append(error)
 
     def setup(self):
         self._start_time = time()

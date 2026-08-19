@@ -2,7 +2,7 @@
 
 The scenario itself needs a bar, a lit male and three sensors, so what is
 covered here is the part that does not: what it writes per sample, when
-it refuses to run, and the graph it draws out of a finished CSV.
+it refuses to run, and the two graphs it draws out of a finished CSV.
 """
 
 import io
@@ -15,9 +15,13 @@ from colloquy.tests.test_light_sensor_values.test_seeing_male1_as_the_bar_turns 
     TestSeeingMale1AsTheBarTurns as Scenario,
 )
 from colloquy.tests.test_light_sensor_values.utils import (
+    add_offsets,
     bin_by_angle,
-    plot_sensor_by_bar_offset_as_svg,
+    plot_sensor_by_alignment_offset_as_svg,
+    plot_sensor_map_as_svg,
 )
+
+MEETING = 64.453
 
 
 def female(name, angle, value):
@@ -42,6 +46,12 @@ def running_scenario(bar_angle=0.0, females=(), duration=600):
     )
 
 
+def frame(rows):
+    return pd.DataFrame(
+        rows, columns=["seconds", "body", "bar angle", "angle", "value"]
+    )
+
+
 # --- what a sample records ----------------------------------------------
 
 
@@ -63,7 +73,8 @@ def test_a_sample_files_the_bar_and_her_own_angle_beside_the_reading():
 def test_the_bar_is_read_once_for_the_whole_row_of_females():
     # Three reads of a moving bar would file three different angles for
     # one instant of one sweep, and the offsets would disagree by however
-    # long the sensor reads took.
+    # long the sensor reads took. It matters more now that she sweeps too:
+    # both angles are moving while the row is taken.
     from time import time
 
     reads = []
@@ -95,7 +106,6 @@ def test_anything_already_driving_the_bodies_is_named():
         bar=busy,
         females=(idle,),
     )
-    scenario.hardware.males = (idle,)
 
     assert Scenario._busy_bodies(scenario) == ["bar"]
 
@@ -111,87 +121,146 @@ def test_nothing_running_is_nothing_to_report():
     assert Scenario._busy_bodies(scenario) == []
 
 
+# --- the two angles the graphs are read against --------------------------
+
+
+def test_the_bar_offset_is_measured_from_her_own_meeting_angle():
+    # Not from the bar's origin, which is female1's meeting angle - that
+    # is what would leave female2's and female3's humps out at 64.5 and
+    # 126 instead of at zero where they can be compared.
+    offsets = add_offsets(frame([(0, "female2", 64.453, 0.0, 400)]), MEETING)
+
+    assert offsets["bar offset"][0] == pytest.approx(0.0)
+
+
+def test_the_alignment_offset_takes_her_own_aim_off_as_well():
+    # The bar ten degrees past her station and her turned ten degrees
+    # after it is the two of them lined up - if the angles add up, which
+    # is what the map is there to check.
+    offsets = add_offsets(frame([(0, "female2", 74.453, 10.0, 400)]), MEETING)
+
+    assert offsets["bar offset"][0] == pytest.approx(10.0)
+    assert offsets["alignment offset"][0] == pytest.approx(0.0)
+
+
+def test_add_offsets_leaves_the_frame_it_was_given_alone():
+    # plot() slices one female out of the run's frame and adds her own
+    # offsets to it; the next female must not inherit them.
+    df = frame([(0, "female2", 64.453, 0.0, 400)])
+
+    add_offsets(df, MEETING)
+
+    assert "bar offset" not in df.columns
+
+
 # --- the graph -----------------------------------------------------------
 
 
 @pytest.fixture
 def recorded():
-    """A sweep past one female: dark everywhere, lit around 64 degrees."""
+    """A sweep past female2, who is swaying while the bar carries him.
+
+    Brightest exactly where the two angles cancel and falling away either
+    side of it - the model the alignment offset assumes - so a graph built
+    from this should peak at zero.
+    """
+    # Both angles vary independently, as they do in a run where the bar
+    # and her sway cross each other over and over.
     rows = []
-    for bar_angle in range(0, 130):
-        value = 400 if 54 <= bar_angle <= 75 else 195
-        rows.append((bar_angle, "female2", float(bar_angle), 0.0, value))
-    df = pd.DataFrame(rows, columns=["seconds", "body", "bar angle", "angle", "value"])
-    df["bar offset"] = df["bar angle"] - df["angle"]
-    return df
+    for step, bar_angle in enumerate(range(0, 130)):
+        for aim in range(-10, 11):
+            offset = bar_angle - MEETING - aim
+            value = round(195 + 205 * max(0.0, 1.0 - abs(offset) / 20.0))
+            rows.append((step, "female2", float(bar_angle), float(aim), value))
+    return add_offsets(frame(rows), MEETING)
 
 
-def test_the_offset_is_the_bar_minus_her_own_aim(recorded):
-    # Her own angle is what makes it an offset rather than just the bar's
-    # position - two runs with her parked differently should line up.
-    turned = recorded.copy()
-    turned["angle"] = 10.0
-    turned["bar offset"] = turned["bar angle"] - turned["angle"]
-
-    _x, means, _spreads, _counts = bin_by_angle(turned, "female2", 1.0, "bar offset")
-    x, straight_means, _spreads, _counts = bin_by_angle(
-        recorded, "female2", 1.0, "bar offset"
+def test_a_run_lit_where_the_angles_cancel_peaks_at_zero(recorded):
+    # The whole reason the offset subtracts her aim: pooled over every
+    # combination of the two, the brightest offset is where they cancel.
+    x, means, _spreads, _counts = bin_by_angle(
+        recorded, "female2", 1.0, "alignment offset"
     )
 
-    assert list(means) == list(straight_means)
-    assert x.min() == 0.0
+    assert abs(float(x[means.argmax()])) <= 1.0
 
 
 def test_binning_by_her_own_angle_is_still_the_default(recorded):
-    # The sibling test calls it with no column at all.
+    # The sibling test calls it with no column at all, and gets her aim.
     x, _means, _spreads, _counts = bin_by_angle(recorded, "female2", 1.0)
 
-    assert list(x) == [0.0]
+    assert x.min() == -10.0
+    assert x.max() == 10.0
 
 
-def test_the_graph_marks_where_the_bar_puts_male1_in_front_of_her(recorded):
+def test_the_graph_marks_the_two_of_them_lined_up(recorded):
     svg = io.StringIO()
 
-    plot_sensor_by_bar_offset_as_svg(
+    plot_sensor_by_alignment_offset_as_svg(
         output=svg,
         df=recorded,
         body="female2",
         threshold=300,
-        meeting_angle=64.453,
+        meeting_angle=MEETING,
         bin_width=1.0,
     )
     drawn = svg.getvalue()
 
-    assert "male1 in front of her (64.453 deg)" in drawn
+    assert "facing each other (bar at 64.453 deg, she at 0)" in drawn
     assert "threshold (300)" in drawn
-    assert "Bar angle minus her own (degrees)" in drawn
+    assert "less her own aim" in drawn
 
 
 def test_the_title_says_where_the_brightest_offset_was(recorded):
     # The answer the run is for, without having to read the curve.
     svg = io.StringIO()
 
-    plot_sensor_by_bar_offset_as_svg(
+    plot_sensor_by_alignment_offset_as_svg(
         output=svg,
         df=recorded,
         body="female2",
         threshold=300,
-        meeting_angle=64.453,
+        meeting_angle=MEETING,
         bin_width=1.0,
     )
 
-    assert "brightest 400 at 54 deg" in svg.getvalue()
+    assert "at 0 deg" in svg.getvalue()
 
 
 def test_a_female_with_no_readings_draws_nothing(recorded):
     assert (
-        plot_sensor_by_bar_offset_as_svg(
+        plot_sensor_by_alignment_offset_as_svg(
             output=io.StringIO(),
             df=recorded,
             body="female3",
             threshold=300,
             meeting_angle=125.977,
             bin_width=1.0,
+        )
+        is None
+    )
+
+
+# --- the map that checks the subtraction ---------------------------------
+
+
+def test_the_map_draws_both_angles_and_the_line_they_cancel_on(recorded):
+    svg = io.StringIO()
+
+    plot_sensor_map_as_svg(
+        output=svg, df=recorded, body="female2", threshold=300, bin_width=2.0
+    )
+    drawn = svg.getvalue()
+
+    assert "Bar angle from her meeting angle (degrees)" in drawn
+    assert "Her own aim from her origin (degrees)" in drawn
+    assert "where the two angles cancel" in drawn
+
+
+def test_the_map_has_nothing_to_draw_for_a_female_who_was_not_there(recorded):
+    assert (
+        plot_sensor_map_as_svg(
+            output=io.StringIO(), df=recorded, body="female3", threshold=300
         )
         is None
     )
