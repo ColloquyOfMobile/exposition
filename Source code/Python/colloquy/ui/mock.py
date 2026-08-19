@@ -85,7 +85,7 @@ class Buttons(Base):
 
         Worth having somewhere safe to press: against the installation,
         an exception escaping a request is taken for a crash and stops
-        everything (Server2.wsgi). Here it stops nothing.
+        everything (MockServer.wsgi). Here it stops nothing.
         """
         raise RuntimeError("this command always fails")
 
@@ -226,7 +226,8 @@ class MockApp(Base):
     else: children to walk, a tree walk, and the handful of lifecycle
     calls the shutdown route makes - recorded here rather than done,
     since there is nothing to stop. No emergency stop: that one belongs
-    to an application with servos to cut torque on.
+    to an application with servos to cut torque on, and the mock's
+    renderer neither offers it nor answers its route.
     """
 
     def __init__(self):
@@ -245,13 +246,6 @@ class MockApp(Base):
     @property
     def is_simulated(self):
         # There is no simulated hardware behind this, so no panel for it.
-        return False
-
-    @property
-    def has_hardware(self):
-        # Nor any real hardware: no servos to cut torque on, no threads
-        # to signal. The page leaves its emergency stop out entirely, and
-        # the route refuses - see wsgi2._parse_emergency_stop.
         return False
 
     @property
@@ -287,7 +281,7 @@ class MockApp(Base):
 
 
 class OfflineServer:
-    """What WSGI2 asks of a server, minus the socket."""
+    """What MockWSGI asks of a server, minus the socket."""
 
     def __init__(self, app=None):
         self.colloquy = app if app is not None else MockApp()
@@ -303,10 +297,9 @@ def request(path, app=None, server=None, content=None):
     `content` makes it a POST carrying that string as the form's content
     field - what an editor's save posts.
     """
-    # Imported here rather than at module scope: the server package pulls
-    # in yattag and the whole renderer, which a caller that only wants
-    # MockApp has no use for.
-    from colloquy.server2.wsgi2 import WSGI2
+    # Imported here rather than at module scope: the renderer pulls in
+    # yattag, which a caller that only wants MockApp has no use for.
+    from colloquy.ui.wsgi import MockWSGI
 
     if server is None:
         server = OfflineServer(app=app)
@@ -321,7 +314,7 @@ def request(path, app=None, server=None, content=None):
     }
 
     captured = []
-    wsgi = WSGI2(
+    wsgi = MockWSGI(
         server=server,
         environ=environ,
         start_response=lambda status, headers: captured.append((status, headers)),
@@ -330,18 +323,15 @@ def request(path, app=None, server=None, content=None):
     return captured[0][0], html
 
 
-# Deliberately not the installation's 8087: on Windows a second server
-# binds that port quite happily rather than refusing, and then requests
-# are answered by whichever socket the OS picks - so a page meant for the
-# mock can arrive at the running installation instead.
-MOCK_PORT = 8088
+def serve(port=None):
+    """Serve the mock at http://localhost:8088/app.
 
+    Its own server and its own renderer, not the installation's - see
+    ui/wsgi.py for why the two are forked while the page is rebuilt.
+    """
+    from colloquy.ui.server import MockServer
 
-def serve(port=MOCK_PORT):
-    """Serve the mock at http://localhost:<port>/app."""
-    from colloquy.server2 import Server2
-
-    Server2(colloquy=MockApp(), port=port)
+    MockServer(colloquy=MockApp(), port=port)
 
 
 if __name__ == "__main__":

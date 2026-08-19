@@ -10,9 +10,6 @@ WSGIRequestHandler.log_message = lambda *args, **kwargs: None
 
 
 class Server2(Base):
-    # The installation's own port. Anything else pointed at this server -
-    # the mock UI - must pick another, or two servers end up bound to the
-    # same one and requests are answered by whichever the OS picks.
     DEFAULT_PORT = 8087
 
     def __init__(self, colloquy, port=None):
@@ -63,21 +60,17 @@ class Server2(Base):
             # so any hardware thread that's running (bar/body oscillation,
             # blink, search, ...) would otherwise keep moving completely
             # unsupervised with no UI left to stop it. Treat any crash as an
-            # emergency stop - where there is hardware to stop, which the
-            # mock UI has none of.
-            if self.colloquy.has_hardware:
-                self.colloquy.emergency_stop()
+            # emergency stop.
+            self.colloquy.emergency_stop()
             self.shutdown_event.set()
             raise
 
     def restart_process(self):
         """Start this process again, exactly as it was started.
 
-        It used to re-exec `main.py colloquy1` whatever had actually been
-        run, so pressing restart on the mock UI - served by mock_ui.py on
-        8088 - came back as the installation on 8087. sys.argv is what
-        was typed, and the working directory survives an exec, so each
-        entry point restarts as itself and rebinds its own port.
+        It used to re-exec a hardcoded `main.py colloquy1` whatever had
+        actually been run. sys.argv is what was typed, and the working
+        directory survives an exec, so this process restarts as itself.
         """
         python = sys.executable
         os.execl(python, python, *sys.argv)

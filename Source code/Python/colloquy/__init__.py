@@ -121,12 +121,6 @@ class Colloquy(BaseThread):
         return not self.events.shutdown.is_set()
 
     @property
-    def has_hardware(self):
-        """This application drives bodies, so the page offers the controls
-        that make them safe. See colloquy/ui/mock.py, which does not."""
-        return True
-
-    @property
     def virtual_hardware(self):
         if self._virtual_hardware is None:
             self._virtual_hardware = VirtualHardware(owner=self)

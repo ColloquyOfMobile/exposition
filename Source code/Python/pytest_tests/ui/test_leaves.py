@@ -7,30 +7,42 @@ Two halves, and the second is the point of the module existing:
 2. every kind they can build is a kind the renderer actually draws.
 
 That second half is the first test in this suite to render HTML. It
-builds a snapshot dict by hand and hands it to WSGI2._html_recursion with
-no Colloquy object, no hardware and no request - which is possible because
+builds a snapshot dict by hand and hands it to _html_recursion with no
+Colloquy object, no hardware and no request - which is possible because
 the renderer only ever reads dicts. It is constructed through __new__ on
-purpose: WSGI2.__init__ parses a whole request, and none of that is
-needed to draw a leaf. If that ever stops working, the renderer has grown
-a dependency on the tree that this suite is meant to keep out of it.
+purpose: __init__ parses a whole request, and none of that is needed to
+draw a leaf. If that ever stops working, the renderer has grown a
+dependency on the tree that this suite is meant to keep out of it.
+
+There are two renderers while the page is being rebuilt - the
+installation's (server2/wsgi2.py) and the mock's (ui/wsgi.py) - and every
+test below runs against both. They are free to diverge in how a page
+looks; what they may not do is stop drawing a kind the vocabulary offers.
 """
 from pathlib import Path
 
 import pytest
 
 from colloquy.server2.wsgi2 import WSGI2
+from colloquy.ui.wsgi import MockWSGI
 from colloquy.ui import leaves
 
 PATH = ("hardware", "female1", "angle")
 
 
-def render(states):
-    """The HTML the page would draw for one opened node's snapshot."""
-    renderer = WSGI2.__new__(WSGI2)
-    renderer._base_path = Path("hardware")
-    renderer._root = Path("app")
-    obj = {"path": PATH, "name": "angle", "opened": True, **states}
-    return renderer._html_recursion(obj)
+@pytest.fixture(params=(WSGI2, MockWSGI), ids=("installation", "mock"))
+def render(request):
+    """The HTML one of the two pages would draw for an opened node."""
+    renderer_class = request.param
+
+    def render_with(states):
+        renderer = renderer_class.__new__(renderer_class)
+        renderer._base_path = Path("hardware")
+        renderer._root = Path("app")
+        obj = {"path": PATH, "name": "angle", "opened": True, **states}
+        return renderer._html_recursion(obj)
+
+    return render_with
 
 
 # --- the constructors ----------------------------------------------------
@@ -91,40 +103,40 @@ def test_into_returns_the_leaf_it_filed():
 # --- the renderer draws every kind ---------------------------------------
 
 
-def test_a_value_is_drawn_as_key_and_reading():
+def test_a_value_is_drawn_as_key_and_reading(render):
     html = render({"angle": leaves.value(PATH, "angle", "29.3 deg")})
 
     assert "angle: 29.3 deg" in html
 
 
-def test_html_is_dropped_in_as_it_is():
+def test_html_is_dropped_in_as_it_is(render):
     html = render({"rendered": leaves.html(PATH, "rendered", "<p>a table</p>")})
 
     assert "<p>a table</p>" in html
 
 
-def test_pre_keeps_its_text():
+def test_pre_keeps_its_text(render):
     html = render({"content": leaves.pre(PATH, "content", "line one\nline two")})
 
     assert "<pre" in html
     assert "line one" in html
 
 
-def test_svg_is_inlined_with_its_pan_and_zoom_handle():
+def test_svg_is_inlined_with_its_pan_and_zoom_handle(render):
     html = render({"picture": leaves.svg(PATH, "picture", "<svg id='x'/>")})
 
     assert "<svg id='x'/>" in html
     assert "data-svg-zoom" in html
 
 
-def test_a_chart_ships_its_data_to_the_browser():
+def test_a_chart_ships_its_data_to_the_browser(render):
     html = render({"graph": leaves.chart(PATH, "graph", '{"data": [[1], [2]]}')})
 
     assert "colloquyRenderChart" in html
     assert '{"data": [[1], [2]]}' in html
 
 
-def test_an_editor_is_a_textarea_posting_to_the_nodes_save():
+def test_an_editor_is_a_textarea_posting_to_the_nodes_save(render):
     html = render({"editor": leaves.editor(PATH, "editor", "some text")})
 
     assert "<textarea" in html
@@ -134,7 +146,7 @@ def test_an_editor_is_a_textarea_posting_to_the_nodes_save():
 
 
 @pytest.mark.parametrize("kind", leaves.KINDS)
-def test_the_renderer_draws_every_kind_the_vocabulary_offers(kind):
+def test_the_renderer_draws_every_kind_the_vocabulary_offers(kind, render):
     # The contract, in one line: a kind nobody can draw has no business
     # being a kind. Anything unhandled falls through to the node branch,
     # which reads value["path"] and draws an open-arrow for something
