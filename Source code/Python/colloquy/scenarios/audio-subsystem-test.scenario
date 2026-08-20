@@ -6,6 +6,7 @@
 # It asks one thing, twenty-five times over: does each of the five tones reach each of the
 # five analyser modules? Bring a pen: write down which module is which body.
 
+0 Before any of this: the bench has to be wired. "hardware setup", beside this scenario on the test's own page, is how - the boards, the pinout, and the one disagreement between Thomas's drawings and his firmware that has to be settled before anybody solders anything.
 0 You pick the board's port on the page. It is not the installation's Arduino - that is a different Mega on a different lead, and choosing it is the usual first mistake. The test knows the difference and says so rather than sitting there.
 0 Press start. Opening the port resets the board, and it answers with its welcome banner. If that banner does not come back within eight seconds the test refuses and says what it got instead.
 0 Everything goes quiet: all five timers off. The room should be silent - if anything is still sounding at this point, that is a timer the firmware does not think is on, and worth stopping for.

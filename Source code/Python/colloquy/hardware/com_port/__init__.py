@@ -29,7 +29,7 @@ class ComPort(Base):
             self._dict.pop(name)
 
         if self.is_simulated:
-            # Thomas'''s audio tester is a third board on a third lead,
+            # Thomas's audio tester is a third board on a third lead,
             # so the simulated list has to offer a third port or the
             # bench test cannot be pointed at anything.
             self._ports = [

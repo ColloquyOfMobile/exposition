@@ -6,16 +6,16 @@ documents are the same machinery with a different file and a different
 name - which is the point of the base class, and worth a test each so
 that a document cannot lose its file by being moved.
 
-The one thing they do *not* share is where they are offered:
-`CODE_DOCUMENTATION.md` is for reading the source and is hidden on the
-installation's own machine; `HARDWARE_SETUP.md` is for standing at the
-rig with something in your hand, and is offered everywhere. That split is
-pinned in test_simulated_switch.py, where the gate lives.
+The one thing they do *not* share is where they hang. The code
+documentation is on the root and hidden on the installation's own machine,
+since reading source is not what that machine is for. The hardware setup
+hangs off the audio bench test and is not gated at all: it is about that
+one bench, and a bench is exactly where it is wanted.
 """
 import pytest
 
 from colloquy.code_documentation import CodeDocumentation
-from colloquy.hardware_setup import HardwareSetup
+from colloquy.tests.test_audio_subsystem.setup_document import HardwareSetup
 from colloquy.markdown_document import MarkdownDocument
 
 DOCUMENTS = (CodeDocumentation, HardwareSetup)
@@ -39,12 +39,17 @@ def local(document, tmp_path, monkeypatch):
 # --- where each document lives -------------------------------------------
 
 
-def test_each_document_is_beside_the_package_it_describes(document):
+def test_each_document_sits_beside_what_it_describes(document):
     # Computed from __file__, so this is what a move gets wrong - and a
     # broken path renders an empty page rather than raising, so nothing
-    # else would notice.
-    assert document.file_path.parent.name == "colloquy"
+    # else would notice. They live in different folders on purpose: one
+    # describes the package, the other describes one test's bench.
     assert document.file_path.suffix == ".md"
+    expected = {
+        "CODE_DOCUMENTATION.md": "colloquy",
+        "HARDWARE_SETUP.md": "test_audio_subsystem",
+    }
+    assert document.file_path.parent.name == expected[document.file_name]
 
 
 def test_each_document_is_actually_there(document):

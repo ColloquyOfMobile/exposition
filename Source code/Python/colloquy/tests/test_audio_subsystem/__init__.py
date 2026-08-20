@@ -12,6 +12,7 @@ from colloquy.hardware.com_port import ComPort
 from colloquy.ui import leaves
 
 from . import protocol
+from .setup_document import HardwareSetup
 
 
 class AudioComPort(ComPort):
@@ -31,7 +32,7 @@ class AudioComPort(ComPort):
     def snapshot_children(self):
         """The ports to choose from, as one command each.
 
-        The base ComPort does not answer this at all - the installation'''s
+        The base ComPort does not answer this at all - the installation's
         Arduino and U2D2 are reached through path dispatch and never drawn
         as nodes, so nobody had needed it. This test is meant to be used
         from the page by somebody at a bench, and picking the right one of
@@ -104,6 +105,12 @@ class TestAudioSubsystem(BaseThread):
         self._port_handler = None
         self._com_port = AudioComPort(owner=self)
         self[self._com_port.name] = self._com_port
+
+        # How to wire the thing this test measures. It sits here rather
+        # than on the root because it is about this bench and nothing
+        # else - and beside the scenario, which says what the run will
+        # do once the wiring is right.
+        self._hardware_setup = HardwareSetup(owner=self)
 
         # For finding out which link of the chain is broken once the sweep
         # has said that one is. Each holds a tone on until something else
@@ -401,7 +408,10 @@ class TestAudioSubsystem(BaseThread):
 
     @property
     def snapshot_children(self):
-        children = {self._com_port.name: self._com_port}
+        children = {
+            self._com_port.name: self._com_port,
+            self._hardware_setup.name: self._hardware_setup,
+        }
         children.update(self._manual)
         return self._with_scenarios(children)
 

@@ -62,7 +62,7 @@ class VirtualHardware(Base):
 
     @property
     def audio_serial_port(self):
-        """Thomas'''s audio subsystem tester, when there is no board.
+        """Thomas's audio subsystem tester, when there is no board.
 
         Built on first use like the one above, so a machine that never
         opens the bench test never builds it.

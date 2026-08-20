@@ -13,6 +13,10 @@ virtual-hardware panel means the servos are not being driven; a stray
 documentation link means nothing at all. They share the test because they
 share the question ("is this the installation?"), not because they are
 equally serious.
+
+The audio subsystem's hardware setup document is *not* gated, and is not
+on the root either: it hangs off the test it describes the bench for.
+See pytest_tests/test_documents.py.
 """
 from types import SimpleNamespace
 
@@ -67,7 +71,6 @@ def _tabs(is_simulated):
         _params_view="params",
         _logs="logs",
         _code_documentation=SimpleNamespace(name="code documentation"),
-        _hardware_setup=SimpleNamespace(name="hardware setup"),
         is_simulated=is_simulated,
         virtual_hardware=virtual,
     )
@@ -93,17 +96,6 @@ def test_the_installation_is_not_offered_the_code_documentation():
     # Nothing breaks if it is drawn there; it is simply not what that
     # machine is for, and the page in the gallery is better without it.
     assert "code documentation" not in _tabs(is_simulated=False)
-
-
-def test_the_hardware_setup_is_offered_on_every_machine():
-    # The other half of the same decision, and the opposite way round.
-    # The installation'''s own machine is the one wired to the thing being
-    # wired, so it is the last place to hide the wiring document - while
-    # the code documentation beside it is no use there at all.
-    assert "hardware setup" in _tabs(is_simulated=True)
-    assert "hardware setup" in _tabs(is_simulated=False)
-
-
 def test_nothing_builds_the_simulation_when_not_simulated():
     # The tab is what first touches Colloquy.virtual_hardware, and that
     # property constructs the whole simulated stack on access.
@@ -123,7 +115,6 @@ def test_nothing_builds_the_simulation_when_not_simulated():
         _params_view="params",
         _logs="logs",
         _code_documentation=SimpleNamespace(name="code documentation"),
-        _hardware_setup=SimpleNamespace(name="hardware setup"),
         is_simulated=False,
     )
 

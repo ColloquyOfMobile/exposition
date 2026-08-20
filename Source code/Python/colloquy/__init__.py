@@ -7,7 +7,6 @@ from .events import Events
 from .tests import Tests
 
 from .hardware import Hardware
-from .hardware_setup import HardwareSetup
 from .exposition import Exposition
 from .params import Params
 from .params_browser import ParamsNode
@@ -45,7 +44,6 @@ class Colloquy(BaseThread):
         self._exposition = Exposition(owner=self)
         self._logs = Logs(owner=self)
         self._code_documentation = CodeDocumentation(owner=self)
-        self._hardware_setup = HardwareSetup(owner=self)
 
         self["hardware"] = self._hardware
         self["params"] = self._params_view
@@ -168,11 +166,6 @@ class Colloquy(BaseThread):
             "tests": self._tests,
             "params": self._params_view,
             "logs": self._logs,
-            # Not behind is_simulated, unlike the code documentation
-            # below. This is the one document the installation's own
-            # machine wants: it says what has to be plugged in before any
-            # of the rest of this page means anything.
-            self._hardware_setup.name: self._hardware_setup,
         }
         if self.is_simulated:
             # Only when there is a simulation to look at - and only then is
