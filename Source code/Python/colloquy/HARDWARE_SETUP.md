@@ -14,6 +14,216 @@ the machine that is wired to the thing you are wiring.
 
 ---
 
+## The whole rig, in one drawing
+
+Band **A** is the installation as it runs today. Bands **B** and **C**
+are the audio subsystem, which nothing in the software drives yet — the
+boards in them are Thomas's photographs, standing where they sit.
+
+<div style="overflow-x: auto; margin: 1rem 0;">
+<svg viewBox="0 0 1240 1010" role="img" aria-label="Schematic of the whole rig. One control laptop drives three USB leads: a U2D2 carrying the Dynamixel bus to nine servos, an Arduino Mega carrying NeoPixel groups and light sensors, and Thomas's audio Mega. The audio Mega's five timer pins feed a five-channel low-pass filter board, then dividers, then one GF1002 amplifier per body, then the speakers. On the way back, one MAX9814 microphone per body feeds the five-module analyser array, whose outputs reach A0 to A4 while strobe and reset are commoned to D4 and D3.">
+  <defs>
+    <marker id="rig-arrow" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="9" markerHeight="7" orient="auto">
+      <polygon points="0,0 10,4 0,8" fill="currentColor"></polygon>
+    </marker>
+    <marker id="rig-arrow-b" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="8" markerHeight="6" orient="auto">
+      <polygon points="0,0 10,4 0,8" fill="currentColor"></polygon>
+    </marker>
+  </defs>
+
+  <!-- ============ band A: the three leads ============ -->
+  <text x="20" y="26" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="600" letter-spacing="1.6" fill="currentColor" opacity="0.55">A &#183; THE THREE LEADS</text>
+
+  <g fill="none" stroke="currentColor" stroke-width="1.6">
+    <rect x="20" y="44" width="150" height="256" rx="4"></rect>
+  </g>
+  <text x="95" y="80" font-family="Chivo, sans-serif" font-size="15" font-weight="600" fill="currentColor" text-anchor="middle">Control</text>
+  <text x="95" y="99" font-family="Chivo, sans-serif" font-size="15" font-weight="600" fill="currentColor" text-anchor="middle">laptop</text>
+  <text x="95" y="120" font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" opacity="0.6" text-anchor="middle">port 8087</text>
+
+  <g font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" opacity="0.75" text-anchor="end">
+    <text x="162" y="153">USB 1</text>
+    <text x="162" y="216">USB 2</text>
+    <text x="162" y="279">USB 3</text>
+  </g>
+
+  <g stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#rig-arrow)">
+    <line x1="170" y1="150" x2="248" y2="150"></line>
+    <line x1="170" y1="213" x2="248" y2="213"></line>
+    <line x1="170" y1="276" x2="248" y2="276"></line>
+  </g>
+
+  <g fill="none" stroke="currentColor" stroke-width="1.6">
+    <rect x="252" y="126" width="176" height="48" rx="3"></rect>
+    <rect x="252" y="189" width="176" height="48" rx="3"></rect>
+    <rect x="252" y="252" width="176" height="48" rx="3"></rect>
+  </g>
+  <g font-family="Chivo, sans-serif" font-size="14" font-weight="600" fill="currentColor" text-anchor="middle">
+    <text x="340" y="148">U2D2</text>
+    <text x="340" y="211">Arduino Mega</text>
+    <text x="340" y="274">Audio Mega</text>
+  </g>
+  <g font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.6" text-anchor="middle">
+    <text x="340" y="163">Dynamixel protocol</text>
+    <text x="340" y="226">JSON &#183; 57600 baud</text>
+    <text x="340" y="289">text menu &#183; 9600 baud</text>
+  </g>
+
+  <g stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#rig-arrow)">
+    <line x1="428" y1="150" x2="520" y2="150"></line>
+    <line x1="428" y1="213" x2="520" y2="213"></line>
+    <path d="M 428 276 L 496 276 L 496 318"></path>
+  </g>
+  <text x="506" y="281" font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" opacity="0.75">the audio subsystem &#8212; bands B and C below</text>
+  <g font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.6" text-anchor="middle">
+    <text x="474" y="143">TTL bus</text>
+    <text x="474" y="206">1 wire</text>
+  </g>
+
+  <g fill="none" stroke="currentColor" stroke-width="1.4">
+    <rect x="524" y="118" width="250" height="64" rx="3"></rect>
+    <rect x="524" y="189" width="250" height="48" rx="3"></rect>
+    <rect x="798" y="189" width="200" height="48" rx="3"></rect>
+  </g>
+  <text x="649" y="140" font-family="Chivo, sans-serif" font-size="14" font-weight="600" fill="currentColor" text-anchor="middle">9 Dynamixel servos</text>
+  <text x="649" y="157" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">female1-3 &#183; male1-2 &#183; bar</text>
+  <text x="649" y="171" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">mirror1-3 (ids 2, 4, 6 &#8212; may be unwired)</text>
+  <text x="649" y="211" font-family="Chivo, sans-serif" font-size="13.5" font-weight="600" fill="currentColor" text-anchor="middle">20 NeoPixel groups</text>
+  <text x="649" y="227" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">head &#183; bodyO &#183; bodyP &#183; feet &#183; rings</text>
+  <text x="898" y="211" font-family="Chivo, sans-serif" font-size="13.5" font-weight="600" fill="currentColor" text-anchor="middle">11 light sensors</text>
+  <text x="898" y="227" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">1 per female, 4 per male</text>
+  <line x1="774" y1="213" x2="792" y2="213" stroke="currentColor" stroke-width="1.4" marker-end="url(#rig-arrow-b)" fill="none"></line>
+
+  <line x1="20" y1="330" x2="1220" y2="330" stroke="currentColor" stroke-width="1" opacity="0.28"></line>
+
+  <!-- ============ band B: speaking ============ -->
+  <text x="20" y="366" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="600" letter-spacing="1.6" fill="currentColor" opacity="0.55">B &#183; SPEAKING &#8212; five channels, one per body</text>
+
+  <g fill="none" stroke="currentColor" stroke-width="1.6">
+    <rect x="20" y="392" width="132" height="188" rx="3"></rect>
+  </g>
+  <text x="86" y="418" font-family="Chivo, sans-serif" font-size="13.5" font-weight="600" fill="currentColor" text-anchor="middle">Timer pins</text>
+  <g font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor">
+    <text x="36" y="443">D11</text><text x="150" y="443" text-anchor="end" opacity="0.7">160 Hz</text>
+    <text x="36" y="466">D5</text><text x="150" y="466" text-anchor="end" opacity="0.7">400 Hz</text>
+    <text x="36" y="489">D6</text><text x="150" y="489" text-anchor="end" opacity="0.7">1 kHz</text>
+    <text x="36" y="512">D46</text><text x="150" y="512" text-anchor="end" opacity="0.7">2.5 kHz</text>
+    <text x="36" y="535">D10</text><text x="150" y="535" text-anchor="end" opacity="0.7">6.25 kHz</text>
+  </g>
+  <text x="86" y="562" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.6" text-anchor="middle">CTC, free-running</text>
+
+  <g stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#rig-arrow)">
+    <line x1="152" y1="486" x2="228" y2="486"></line>
+  </g>
+  <text x="190" y="474" font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" text-anchor="middle">5 Vpp</text>
+  <text x="190" y="502" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.6" text-anchor="middle">square</text>
+
+  <image href="/static/hardware/low-pass-filter-board.jpg" x="232" y="396" width="220" height="175" preserveAspectRatio="xMidYMid meet"></image>
+  <rect x="232" y="396" width="220" height="175" rx="2" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"></rect>
+  <text x="342" y="592" font-family="Chivo, sans-serif" font-size="13" font-weight="600" fill="currentColor" text-anchor="middle">Low-pass filter board</text>
+  <text x="342" y="608" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">2nd order &#183; R1=R2, C1=C2</text>
+  <text x="342" y="622" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">IN: 160 400 1K 2K5 6K25</text>
+
+  <g stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#rig-arrow)">
+    <line x1="452" y1="486" x2="528" y2="486"></line>
+  </g>
+  <text x="490" y="474" font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" text-anchor="middle">2 Vpp</text>
+  <text x="490" y="502" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.6" text-anchor="middle">&#8722;20 dB</text>
+
+  <rect x="532" y="452" width="104" height="68" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"></rect>
+  <text x="584" y="480" font-family="Chivo, sans-serif" font-size="13" font-weight="600" fill="currentColor" text-anchor="middle">Divider</text>
+  <text x="584" y="498" font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" opacity="0.7" text-anchor="middle">22K / 3K3</text>
+
+  <g stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#rig-arrow)">
+    <line x1="636" y1="486" x2="712" y2="486"></line>
+  </g>
+  <text x="674" y="474" font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" text-anchor="middle">330 mVpp</text>
+  <text x="674" y="502" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.6" text-anchor="middle">below ceiling</text>
+
+  <image href="/static/hardware/amplifier-module.jpg" x="716" y="410" width="200" height="152" preserveAspectRatio="xMidYMid meet"></image>
+  <rect x="716" y="410" width="200" height="152" rx="2" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"></rect>
+  <text x="816" y="592" font-family="Chivo, sans-serif" font-size="13" font-weight="600" fill="currentColor" text-anchor="middle">GF1002 amplifier</text>
+  <text x="816" y="608" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">class D &#183; volume pot on board</text>
+  <text x="816" y="622" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">one per body</text>
+
+  <g stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#rig-arrow)">
+    <line x1="916" y1="486" x2="1000" y2="486"></line>
+  </g>
+  <text x="958" y="474" font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" text-anchor="middle">PWM</text>
+  <text x="958" y="502" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.6" text-anchor="middle">~250 kHz</text>
+
+  <rect x="1004" y="440" width="140" height="92" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"></rect>
+  <text x="1074" y="470" font-family="Chivo, sans-serif" font-size="13.5" font-weight="600" fill="currentColor" text-anchor="middle">Loudspeaker</text>
+  <text x="1074" y="488" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">open frame</text>
+  <text x="1074" y="503" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">160 Hz &#8211; 6.25 kHz</text>
+  <text x="1074" y="518" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">untested</text>
+
+  <text x="958" y="556" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">keep this lead short</text>
+
+  <line x1="20" y1="652" x2="1220" y2="652" stroke="currentColor" stroke-width="1" opacity="0.28"></line>
+
+  <!-- ============ band C: hearing ============ -->
+  <text x="20" y="688" font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="600" letter-spacing="1.6" fill="currentColor" opacity="0.55">C &#183; HEARING &#8212; five microphones, five analysers, one strobe</text>
+
+  <rect x="20" y="740" width="132" height="92" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"></rect>
+  <text x="86" y="776" font-family="Chivo, sans-serif" font-size="13.5" font-weight="600" fill="currentColor" text-anchor="middle">The room</text>
+  <text x="86" y="794" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">air, distance,</text>
+  <text x="86" y="809" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">and everyone in it</text>
+
+  <g stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#rig-arrow)">
+    <line x1="152" y1="786" x2="228" y2="786"></line>
+  </g>
+
+  <image href="/static/hardware/microphone-module.jpg" x="232" y="706" width="140" height="161" preserveAspectRatio="xMidYMid meet"></image>
+  <rect x="232" y="706" width="140" height="161" rx="2" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"></rect>
+  <text x="302" y="888" font-family="Chivo, sans-serif" font-size="13" font-weight="600" fill="currentColor" text-anchor="middle">MAX9814 microphone</text>
+  <text x="302" y="904" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">AGC &#183; gain 40 dB, A/R 1:500</text>
+  <text x="302" y="918" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">one per body</text>
+
+  <g stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#rig-arrow)">
+    <line x1="372" y1="786" x2="452" y2="786"></line>
+  </g>
+  <text x="412" y="774" font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" text-anchor="middle">1.6 Vpp</text>
+
+  <image href="/static/hardware/audio-analyzer-array.jpg" x="456" y="700" width="230" height="173" preserveAspectRatio="xMidYMid meet"></image>
+  <rect x="456" y="700" width="230" height="173" rx="2" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"></rect>
+  <text x="571" y="888" font-family="Chivo, sans-serif" font-size="13" font-weight="600" fill="currentColor" text-anchor="middle">Audio analyser array</text>
+  <text x="571" y="904" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">5 &#215; MSGEQ7, 7 bands each</text>
+  <text x="571" y="918" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">strobe &amp; reset commoned on the carrier</text>
+
+  <g stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#rig-arrow)">
+    <line x1="686" y1="786" x2="782" y2="786"></line>
+  </g>
+  <text x="734" y="774" font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" text-anchor="middle">5 analog</text>
+
+  <rect x="786" y="716" width="200" height="140" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"></rect>
+  <text x="886" y="748" font-family="Chivo, sans-serif" font-size="14" font-weight="600" fill="currentColor" text-anchor="middle">Audio Mega</text>
+  <text x="886" y="766" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">sensor / actor hub</text>
+  <g font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" text-anchor="middle">
+    <text x="886" y="792">A0  A1  A2  A3  A4</text>
+    <text x="886" y="814">D4 STROBE</text>
+    <text x="886" y="832">D3 RESET</text>
+  </g>
+
+  <g stroke="currentColor" stroke-width="1.8" stroke-dasharray="6 4" fill="none">
+    <path d="M 886 716 L 886 674 L 571 674 L 571 700"></path>
+  </g>
+  <circle cx="571" cy="700" r="3.5" fill="currentColor"></circle>
+  <text x="600" y="666" font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" opacity="0.75">one strobe, one reset &#8212; all five modules</text>
+
+  <text x="1010" y="750" font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" opacity="0.62">Reads all five at once:</text>
+  <text x="1010" y="766" font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" opacity="0.62">one cycle through the</text>
+  <text x="1010" y="782" font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" opacity="0.62">seven bands.</text>
+  <text x="1010" y="812" font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" opacity="0.62">Nothing above this</text>
+  <text x="1010" y="828" font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" opacity="0.62">is built yet.</text>
+
+  <line x1="20" y1="960" x2="1220" y2="960" stroke="currentColor" stroke-width="1" opacity="0.28"></line>
+  <text x="20" y="984" font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" opacity="0.62">Boards photographed by Thomas Erforth. Band A is the installation as it runs today; bands B and C are the audio subsystem, which nothing in the software drives yet.</text>
+</svg>
+</div>
+
+---
+
 ## 0. The three boards, and which lead is which
 
 There are up to three USB leads, and picking the wrong one is the most
