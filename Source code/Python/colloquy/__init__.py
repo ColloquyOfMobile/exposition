@@ -2,6 +2,7 @@ from pathlib import Path
 
 #
 from colloquy.base_thread import BaseThread
+from .code_documentation import CodeDocumentation
 from .events import Events
 from .tests import Tests
 
@@ -28,6 +29,7 @@ class Colloquy(BaseThread):
         self._tests = Tests(owner=self)
         self._exposition = Exposition(owner=self)
         self._logs = Logs(owner=self)
+        self._code_documentation = CodeDocumentation(owner=self)
 
         self["hardware"] = self._hardware
         self["params"] = self._params_view
@@ -156,6 +158,14 @@ class Colloquy(BaseThread):
             # it built at all, since the property below constructs it on
             # first access.
             children[self.virtual_hardware.name] = self.virtual_hardware
+
+            # Same test, a different reason: this is the source's own
+            # documentation, and the machine that runs the exhibition is
+            # the one place nobody reads it. Off that machine it is the
+            # first thing on the page, which is where it was asked for -
+            # it used to be three clicks deep under "tests", filed by
+            # where it happened to be written rather than by what it is.
+            children[self._code_documentation.name] = self._code_documentation
         return children
 
     def get_states(self, *args):

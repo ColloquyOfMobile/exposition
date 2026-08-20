@@ -31,8 +31,8 @@ class Hardware(BaseThread):
             Male(owner=self, id_number=1),
             Male(owner=self, id_number=2),
         )
-        # Where the speakers will go - see SCENARIOS section 9, and the
-        # wiring that is already in the box for them.
+        # Where the speakers will go - see CODE_DOCUMENTATION section 9,
+        # and the wiring that is already in the box for them.
         self._speakers = []
 
         self._females = (

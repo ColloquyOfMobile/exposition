@@ -6,6 +6,13 @@ view is the one that decides whether servos and LEDs are real. If it ever
 reads wrong on the installation computer, the view appearing is not a
 cosmetic slip - it is the visible symptom of an app that is not driving
 anything.
+
+The switch gates a second thing now - the code documentation on the front
+page - and the two want opposite things from a wrong reading. A stray
+virtual-hardware panel means the servos are not being driven; a stray
+documentation link means nothing at all. They share the test because they
+share the question ("is this the installation?"), not because they are
+equally serious.
 """
 from types import SimpleNamespace
 
@@ -55,6 +62,7 @@ def _tabs(is_simulated):
         _tests="tests",
         _params_view="params",
         _logs="logs",
+        _code_documentation=SimpleNamespace(name="code documentation"),
         is_simulated=is_simulated,
         virtual_hardware=virtual,
     )
@@ -67,6 +75,19 @@ def test_the_virtual_hardware_tab_is_absent_on_the_installation():
 
 def test_the_virtual_hardware_tab_is_present_when_simulated():
     assert "virtual hardware" in _tabs(is_simulated=True)
+
+
+def test_the_code_documentation_is_on_the_front_page_off_the_installation():
+    # It used to be three clicks deep under "tests". It is the source's
+    # own documentation, so the front page is where it is wanted - on the
+    # machines where the source is being worked on.
+    assert "code documentation" in _tabs(is_simulated=True)
+
+
+def test_the_installation_is_not_offered_the_code_documentation():
+    # Nothing breaks if it is drawn there; it is simply not what that
+    # machine is for, and the page in the gallery is better without it.
+    assert "code documentation" not in _tabs(is_simulated=False)
 
 
 def test_nothing_builds_the_simulation_when_not_simulated():
@@ -86,6 +107,7 @@ def test_nothing_builds_the_simulation_when_not_simulated():
         _tests="tests",
         _params_view="params",
         _logs="logs",
+        _code_documentation=SimpleNamespace(name="code documentation"),
         is_simulated=False,
     )
 

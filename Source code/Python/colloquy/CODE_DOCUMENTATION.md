@@ -1,14 +1,26 @@
-# Colloquy of Mobiles — Interaction Scenarios
+# Colloquy of Mobiles — Code Documentation
 
-A catalog of the interaction/behavior scenarios this installation can be in,
-organized by sub-behavior. For each scenario: the trigger, the resulting
-behavior, which `colloquy/tests/` scenario (if any) exercises it, and its
-status.
+What this software actually does, read off the source and organized by
+sub-behavior. For each behavior: the trigger, what follows from it, which
+`colloquy/tests/` scenario (if any) exercises it, and its status.
 
 This is a reference document, not runnable code — it describes what the
 code in `colloquy/hardware/` actually does (and doesn't do), to make gaps
 and existing coverage visible in one place. File:line references point at
 `Source code/Python/colloquy/`.
+
+It is a map of the repository, and it is checked by reading source. The
+`.timeline` files under `colloquy/tests/timelines/` are the other half of
+the same installation: described along the clock, in what is visible in
+the room, and checked by standing in front of it with a stopwatch. Neither
+is derivable from the other — an angle quoted in both went stale in the
+timeline and not here.
+
+It was called SCENARIOS.md and lived under `colloquy/tests/`, which said
+where it was written rather than what it is. The word "scenario" below
+still means one of two things and both are meant: a situation the
+installation can be in, and a module under `colloquy/tests/` that drives
+one. The title no longer claims it is only the first.
 
 ## Legend
 

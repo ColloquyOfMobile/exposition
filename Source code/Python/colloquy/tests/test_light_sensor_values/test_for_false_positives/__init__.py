@@ -17,10 +17,10 @@ class TestForFalsePositives(BaseThread):
 
     The question is whether a female ever reads "light" when there is
     none. Her decoder calls a sample lit whenever it clears one fixed
-    threshold (SCENARIOS 8.2), so anything in the room that is brighter
-    from one direction - a window, a doorway, a monitor, the ceiling -
-    can put a false bit into a pattern she is reading, and no amount of
-    pattern logic recovers from that.
+    threshold (CODE_DOCUMENTATION 8.2), so anything in the room that is
+    brighter from one direction - a window, a doorway, a monitor, the
+    ceiling - can put a false bit into a pattern she is reading, and no
+    amount of pattern logic recovers from that.
 
     So: every light in the installation off, all three females sweeping
     their own travel, and the sensor read as fast as the Arduino will

@@ -8,9 +8,9 @@ being pinned is that a mirror turns one for one with its servo (unlike
 the female it belongs to, at 1:3) and reads its origin from its own
 params entry.
 
-Nothing drives a mirror yet - see the class docstring and SCENARIOS
-section 9 - so these are about it being findable, calibratable, and safe
-to leave alone on servos that may not be wired.
+Nothing drives a mirror yet - see the class docstring and
+CODE_DOCUMENTATION section 9 - so these are about it being findable,
+calibratable, and safe to leave alone on servos that may not be wired.
 """
 from types import SimpleNamespace
 

@@ -15,9 +15,10 @@ class Mirror(Base):
     Nothing drives it yet. In TJ's firmware the mirror wiggles for the
     whole of a reinforcement exchange (`act_reflect_VERTICAL_wiggle()`,
     act_mirror.ino) and what it returns is what the male measures to
-    decide whether the exchange is working - see SCENARIOS section 9. This
-    node exists so the servo can be found, calibrated and jogged by hand
-    in the meantime, in the same degrees as everything else.
+    decide whether the exchange is working - see CODE_DOCUMENTATION
+    section 9. This node exists so the servo can be found, calibrated and
+    jogged by hand in the meantime, in the same degrees as everything
+    else.
 
     Deliberately a plain node and not a thread, and deliberately not
     touched by `Female.setup()`: the three mirror servos (ids 2, 4 and 6,

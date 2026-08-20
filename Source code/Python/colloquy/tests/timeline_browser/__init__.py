@@ -2,6 +2,7 @@ from pathlib import Path
 
 from colloquy.base import Base
 
+from colloquy.code_documentation import write_text
 from .rendering import render_html
 from colloquy.ui import leaves
 
@@ -41,7 +42,7 @@ class Timeline(Base):
         self._mode = "view"
 
     def save(self, content):
-        self._file_path.write_text(content, encoding="utf-8")
+        write_text(self._file_path, content)
         self._mode = "view"
         self.open()
 

@@ -11,7 +11,7 @@ class Reinforcement(BaseThread):
     currently comes of a match.
 
     For reference, what it has to do (TJ's Logic_fem.ino /
-    logic35_systems, see SCENARIOS.md section 8):
+    logic35_systems, see CODE_DOCUMENTATION.md section 8):
       - hold the body still, and answer the male by transmitting the
         pattern she decoded back to him as *sound*;
       - while she keeps hearing his reinforcement pattern in reply,
