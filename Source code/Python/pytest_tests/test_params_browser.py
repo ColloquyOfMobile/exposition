@@ -178,7 +178,7 @@ def make_angle_tree(tmp_path):
     params = Params(
         path,
         {
-            "near origin threshold": {"female": 11.719, "male": 35.156},
+            "near origin threshold": {"female": 11.719, "male": 11.719},
             "bar": {
                 "dxl origin": 0,
                 "interaction_origins": {"male1": {"female2": 64.453}},

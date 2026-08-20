@@ -255,8 +255,9 @@ class VirtualSerialPort(Base):
 
     def _angle_of(self, name, dxl):
         """How far this body has turned from its own origin, in degrees of
-        the body - through its own reduction, which is why a male and a
-        female at the same servo position are not at the same angle."""
+        the body - through its own reduction, so that the window the
+        sensor geometry below allows is an angle in the room and not a
+        count of servo units."""
         origin = self.colloquy.params[name]["dxl origin"]
         return ticks_to_degrees(dxl.position - origin, REDUCTIONS[_kind_of(name)])
 

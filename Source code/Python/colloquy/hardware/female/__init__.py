@@ -125,9 +125,8 @@ class Female(BaseThread):
         Read from params on every use rather than held, so a range edited
         on the page takes effect on her next sway instead of at the next
         restart. Her 58.594 degrees is what the 2000 servo units she used
-        to be given work out to through her 1:3 reduction - a third of a
-        male's sweep for the same figure written to the servo, which is
-        worth a look at the rig some day."""
+        to be given work out to through her 1:3 reduction - the same
+        reduction, and so the same sway, as a male."""
         return self.params[self.name]["motion range"]
 
     @property

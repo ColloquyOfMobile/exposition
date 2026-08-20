@@ -392,11 +392,12 @@ what makes it safe to run on the installation.
 
 ## 10. Angles, servo units and the reductions
 
-Everything that moves is a Dynamixel commanded in position units, and two
-of the four kinds of axis are geared: **a female and the bar turn three
-times slower than their servo; a male and a mirror turn with theirs**. The
-same 2000 units written to a male and to a female are therefore two
-different movements, which is the thing that kept being got wrong.
+Everything that moves is a Dynamixel commanded in position units, and
+three of the four kinds of axis are geared: **a female, a male and the bar
+all turn three times slower than their servo; only a mirror turns with
+its own**. Which axis is geared is the thing that kept being got wrong —
+including here: this section was first written with the male direct, and
+everything below that says otherwise has been corrected against the rig.
 
 `hardware/angle/` is the layer that ends it. Each moving thing owns an
 `Angle` node measured in **degrees of the body itself**, zero at its
@@ -412,25 +413,26 @@ landmine closed.
 
 | # | Subject | Before | Now |
 |---|---|---|---|
-| 10.1 | What a caller says | `origin + motion_range // 2`, per body, three copies | `angle.turn_to(degrees)`; how far each body travels is a `"motion range"` in params, in degrees (58.594 per female, 175.781 per male, 292.969 for the bar, 87.891 for its sweep around female1, 0 for an unmeasured mirror) — all exactly what the old servo figures worked out to, and editable per body from the params page |
+| 10.1 | What a caller says | `origin + motion_range // 2`, per body, three copies | `angle.turn_to(degrees)`; how far each body travels is a `"motion range"` in params, in degrees (58.594 per female, 58.594 per male, 292.969 for the bar, 87.891 for its sweep around female1, 0 for an unmeasured mirror) — all exactly what the old servo figures worked out to, and editable per body from the params page |
 | 10.2 | The bar's meeting points | `interaction_origins` in servo units (0, 2200, 4300, 6200, 8400, 10400) | the same points in degrees of the bar (0, 64.453, 125.977, 181.641, 246.094, 304.688), via `Bar.meeting_angle()` |
 | 10.3 | Positions below the servo's zero | **Broken.** Every servo is in extended position mode, where that is normal, and the SDK reads a position back as an unsigned dword. `female1` (origin 100, half-sweep 1000) writes -900 to reach her minimum and read it back as 4294966396, so `is_moving` never saw her arrive and `wait_for_servo` raised after 60s | Position and goal-position registers read signed. Verified on the virtual hardware, which now wraps 4-byte reads to unsigned exactly as the SDK does, so the conversion is exercised here and not only on the rig |
 | 10.4 | The mirrors | Three servos built by `U2D2` and mapped to nothing (ids 2, 4, 6) | `Mirror` nodes under each female, angle and calibration only — nothing drives them, nothing initialises them (§9.6 is what will) |
 
-**Three things this made visible, none of them fixed:**
+**Three things this made visible. The first two turned out to be the same
+mistake, and are fixed; the third stands:**
 
-- **A female's sweep is a third of a male's** — 58.6° against 175.8°, from
-  the identical 2000 servo units. Nobody chose that; it is what the
-  numbers have always meant. Changing it is now one field on the params
-  page, per female.
-- **The simulated "facing forward" window** was one figure of servo units
-  for every body, which is ±11.7° for a female or the bar but **±35.2°
-  for a male** — a 70° window in which a male counts as facing his origin,
-  and so as visible to a female. Migrated exactly as it was, per kind, so
-  the difference is at least written down.
+- ~~**A female's sweep is a third of a male's**~~ — it is not. That
+  reading came from this layer carrying the male as direct-drive when he
+  is geared 1:3 like everyone else: the identical 2000 servo units are
+  58.6° for both of them. Params version 3 divides a stored male angle by
+  three on load, so a calibrated installation keeps the sway it had.
+- ~~**The simulated "facing forward" window** is ±35.2° for a male
+  against ±11.7° for a female~~ — the same error, in the same direction.
+  400 servo units is ±11.7° for every body. The threshold stays written
+  per kind so one of them can still be narrowed alone.
 - **"Arrived" means within 20 servo units** (`DXL.moving_threshold`),
-  which is 0.59° for a female or the bar but **1.76° for a male or a
-  mirror**. It is why a body asked for +20° reports 19.6° when it stops.
+  which is 0.59° for any of the bodies but **1.76° for a mirror**. It is
+  why a body asked for +20° reports 19.6° when it stops.
 
 ---
 

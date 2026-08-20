@@ -114,9 +114,10 @@ class Male(BaseThread):
         """How far he swings, end to end, in degrees.
 
         Read from params on every use, so a range edited on the page takes
-        effect on his next sway. His 175.781 degrees is the 2000 servo
-        units he was given before this layer existed, turned one for one -
-        the same figure gives a female a third as much, see her sweep."""
+        effect on his next sway. His 58.594 degrees is the 2000 servo
+        units he was given before this layer existed, through his 1:3
+        reduction - the same sway a female makes, which is what the rig
+        says and what this file said the other way round for a while."""
         return self.params[self.name]["motion range"]
 
     @property

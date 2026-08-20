@@ -3,18 +3,18 @@ from pathlib import Path
 
 # Bumped whenever the shape or the units of this file change, so an older
 # file can be recognised and converted rather than misread. See migrate().
-PARAMS_VERSION = 2
+PARAMS_VERSION = 3
 
 DEFAULTS = {
     "params version": PARAMS_VERSION,
     "photosensor_threashold": 300,
     # How far off its own origin a body can be and still count as facing
     # forward, in degrees of the body. Only the simulated sensor geometry
-    # uses it (virtual_hardware/virtual_serial_port.py), and it is per
-    # kind because it used to be one number of servo units for everyone -
-    # which through the reductions meant a much wider window for a male
-    # than for a female. These are those windows, unchanged.
-    "near origin threshold": {"female": 11.719, "male": 35.156, "bar": 11.719},
+    # uses it (virtual_hardware/virtual_serial_port.py). It began as one
+    # number of servo units for everyone, and it is written per kind so
+    # that one of them can be narrowed on its own; now that every body
+    # runs at 1:3 the three come out at the same angle again.
+    "near origin threshold": {"female": 11.719, "male": 11.719, "bar": 11.719},
     "emulate light sensor": False,
     "arduino": {
         "baudrate": 57600,
@@ -54,8 +54,8 @@ DEFAULTS = {
             "male2": {"female1": 181.641, "female2": 246.094, "female3": 304.688},
         },
     },
-    "male1": {"dxl origin": 0, "motion range": 175.781},
-    "male2": {"dxl origin": 0, "motion range": 175.781},
+    "male1": {"dxl origin": 0, "motion range": 58.594},
+    "male2": {"dxl origin": 0, "motion range": 58.594},
     # One per female, on the servos between them. Nothing drives them yet,
     # and nobody has measured how far one can turn before it fouls - hence
     # a range of zero, which means "stays where it is" rather than "turns
@@ -102,6 +102,39 @@ def _to_v2(data):
     return data
 
 
+# What a v2 file's male degrees meant when they were written: a male was
+# believed to turn with his servo, so his angles were three times the
+# angle he actually turned through. Every other kind was right.
+_V2_MALE_ERROR = 3
+
+
+def _to_v3(data):
+    """v2 believed a male turned one for one with his servo; he is geared
+    1:3 like a female and the bar.
+
+    Nothing about the file's units changes - it still says degrees of the
+    body - but every number that was a male angle described three times
+    the motion it was meant to, and would now be *obeyed* as three times
+    the motion: 175.781 degrees of sway used to reach the servo as 2000
+    units and does not any more. Divided back, so a migrated installation
+    moves exactly as it did before the reduction was corrected.
+
+    A male's "dxl origin" is untouched, being raw servo units, and so are
+    the bar's interaction origins, which are degrees of the bar.
+    """
+    for male in ("male1", "male2"):
+        body = data.get(male)
+        if body and "motion range" in body:
+            body["motion range"] = round(body["motion range"] / _V2_MALE_ERROR, 3)
+
+    threshold = data.get("near origin threshold")
+    if threshold and "male" in threshold:
+        threshold["male"] = round(threshold["male"] / _V2_MALE_ERROR, 3)
+
+    data["params version"] = 3
+    return data
+
+
 def _fill_missing(data, defaults):
     """Add any key the defaults have and this file doesn't.
 
@@ -123,6 +156,8 @@ def migrate(data):
     """Bring a file read off disk up to the current shape."""
     if data.get("params version", 1) < 2:
         data = _to_v2(data)
+    if data["params version"] < 3:
+        data = _to_v3(data)
     return _fill_missing(data, DEFAULTS)
 
 

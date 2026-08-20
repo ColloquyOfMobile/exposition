@@ -19,10 +19,10 @@ from colloquy.hardware.angle import Angle
 from colloquy.hardware.angle.conversion import REDUCTIONS
 from colloquy.hardware.male import Male
 
-# What Male.__init__ gives him: 175.781 degrees end to end, which is the
-# 2000 servo units he was given before this layer existed - he turns one
-# for one, so that figure is three times a female's sweep.
-SWEEP = 175.781
+# What Male.__init__ gives him: 58.594 degrees end to end, which is the
+# 2000 servo units he was given before this layer existed, through his
+# 1:3 reduction - the same sway a female makes.
+SWEEP = 58.594
 
 
 def _light_patterns():
@@ -164,10 +164,10 @@ def test_turn_to_max_position_writes_half_a_sweep_past_the_origin(stub_factory):
 
     Male.turn_to_max_position(fake)
 
-    # Half of 175.781 degrees, turned one for one, is the same 1000 servo
-    # units he was given before this layer existed. The identical figure
-    # gives a female a third as much - which is the whole point of saying
-    # degrees rather than units.
+    # Half of 58.594 degrees, through the 1:3 reduction, is the same 1000
+    # servo units he was given before this layer existed - unchanged by
+    # the reduction being corrected, because the params number moved with
+    # it.
     assert fake.written == [2000]
     assert fake._position_memory == "max"
 
@@ -181,14 +181,16 @@ def test_turn_to_min_position_writes_half_a_sweep_the_other_way(stub_factory):
     assert fake._position_memory == "min"
 
 
-def test_the_same_angle_moves_him_three_times_as_far_as_a_female(stub_factory):
-    # 20 degrees is 228 units on him and 683 on her: no reduction against
-    # her 1:3.
+def test_the_same_angle_moves_him_exactly_as_far_as_a_female(stub_factory):
+    # 20 degrees is 683 units on him as it is on her - both geared 1:3.
+    # This test asserted 228 while he was believed to turn one for one,
+    # and it is kept, inverted, because that belief is the mistake worth
+    # having a test stand against.
     fake = make_movable_male(stub_factory, origin_value=0, sweep=40)
 
     Male.turn_to_max_position(fake)
 
-    assert fake.written == [228]
+    assert fake.written == [683]
 
 
 def test_the_sweep_is_measured_from_wherever_the_origin_is(stub_factory):
@@ -197,7 +199,7 @@ def test_the_sweep_is_measured_from_wherever_the_origin_is(stub_factory):
     Male.turn_to_max_position(fake)
     Male.turn_to_min_position(fake)
 
-    assert fake.written == [614, 386]
+    assert fake.written == [841, 159]
 
 
 def test_turn_to_takes_an_angle_in_degrees(stub_factory):
@@ -205,7 +207,7 @@ def test_turn_to_takes_an_angle_in_degrees(stub_factory):
 
     Male.turn_to(fake, 20)
 
-    assert fake.written == [1228]
+    assert fake.written == [1683]
 
 
 def test_turn_to_origin_writes_the_origin_and_leaves_memory_untouched(stub_factory):

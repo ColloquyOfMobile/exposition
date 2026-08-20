@@ -4,12 +4,13 @@ Pure arithmetic, no objects at all: the module is functions and constants
 only, so these are called directly.
 
 The numbers being pinned are the two facts everything else in the angle
-layer rests on - 4096 servo units to a turn, and a 1:3 reduction on a
-female and on the bar against 1:1 on a male and a mirror. One degree of
-body is therefore 11.378 units direct and 34.133 units through the
-reduction, and the same 2000-unit sweep is 175.8 degrees of male but only
-58.6 degrees of female. Getting that backwards is the whole reason the
-module exists, so it is asserted from both directions.
+layer rests on - 4096 servo units to a turn, and a 1:3 reduction on every
+body that moves in the room against 1:1 on a mirror. One degree of body
+is therefore 11.378 units direct and 34.133 units through the reduction,
+and the same 2000-unit sweep is 58.6 degrees of a body but 175.8 of a
+mirror. Getting that backwards is the whole reason the module exists, so
+it is asserted from both directions - and it *was* got backwards for the
+male, who was carried here as direct until the rig said otherwise.
 """
 import pytest
 
@@ -35,8 +36,8 @@ def test_a_turn_is_4096_units():
     assert DEGREES_PER_TURN == 360
 
 
-def test_reductions_are_three_for_the_geared_pair_and_one_for_the_rest():
-    assert REDUCTIONS == {"female": 3, "male": 1, "bar": 3, "mirror": 1}
+def test_reductions_are_three_for_every_body_and_one_for_a_mirror():
+    assert REDUCTIONS == {"female": 3, "male": 3, "bar": 3, "mirror": 1}
 
 
 def test_ticks_per_degree():
@@ -55,16 +56,16 @@ def test_a_full_servo_turn_is_360_degrees_direct_and_120_geared():
 
 
 def test_todays_sweeps_in_degrees():
-    # The same 2000 units both bodies are given today, which is the
-    # asymmetry this layer makes visible: a male sweeps three times as far
-    # as a female for the same number written to the servo.
-    assert ticks_to_degrees(2000, REDUCTIONS["male"]) == pytest.approx(175.781, abs=0.001)
+    # The same 2000 units both bodies are given today. They sway equally
+    # far, because they are geared alike - the reading this file used to
+    # give was 175.781 for the male, three times what he really turns.
+    assert ticks_to_degrees(2000, REDUCTIONS["male"]) == pytest.approx(58.594, abs=0.001)
     assert ticks_to_degrees(2000, REDUCTIONS["female"]) == pytest.approx(58.594, abs=0.001)
     # The bar's full travel, and the window the simulator calls "facing
-    # forward" (400 units, which is a much wider angle for a male).
+    # forward" (400 units, the same angle now for every body).
     assert ticks_to_degrees(10000, REDUCTIONS["bar"]) == pytest.approx(292.969, abs=0.001)
     assert ticks_to_degrees(400, REDUCTIONS["female"]) == pytest.approx(11.719, abs=0.001)
-    assert ticks_to_degrees(400, REDUCTIONS["male"]) == pytest.approx(35.156, abs=0.001)
+    assert ticks_to_degrees(400, REDUCTIONS["male"]) == pytest.approx(11.719, abs=0.001)
 
 
 def test_negative_ticks_are_negative_degrees():

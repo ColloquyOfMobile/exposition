@@ -25,8 +25,8 @@ class Mirror(Base):
     nothing should try to enable torque on them until somebody asks. "init
     hardware" on the dxl node is that asking.
 
-    They turn one for one with their servo, like the males and unlike the
-    female they belong to.
+    They turn one for one with their servo - the one axis in the
+    installation that does, every body being geared 1:3.
     """
 
     def __init__(self, owner, id_number):

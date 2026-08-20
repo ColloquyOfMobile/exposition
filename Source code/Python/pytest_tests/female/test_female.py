@@ -63,7 +63,7 @@ def test_turn_to_max_position_writes_half_a_sweep_past_the_origin(stub_factory):
 
     Female.turn_to_max_position(fake)
 
-    # Half of 58.594 degrees, through the 1:3 reduction, is the same 1000
+    # Half of 58.594 degrees, through her 1:3 reduction, is the same 1000
     # servo units she was given before - the conversion is faithful, not a
     # re-tuning.
     assert fake.written == [2000]

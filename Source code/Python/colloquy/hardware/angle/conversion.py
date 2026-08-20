@@ -11,11 +11,12 @@ the two numbers, and both live here.
 **The servo's own resolution.** These are X-series servos, 4096 units to
 a turn, so one servo degree is 11.378 units.
 
-**The reduction.** A female and the bar turn three times slower than
-their servo; a male and a mirror turn with theirs. So the same 2000 ticks
-is 175.8 degrees of male and 58.6 degrees of female - which is exactly
-the confusion this module exists to end. Every conversion here is in
-degrees of the thing that actually moves, never of the servo.
+**The reduction.** A female, a male and the bar all turn three times
+slower than their servo; only a mirror turns with its own. So the same
+2000 ticks is 58.6 degrees of any of the bodies and 175.8 of a mirror -
+which is exactly the confusion this module exists to end. Every
+conversion here is in degrees of the thing that actually moves, never of
+the servo.
 
 Sign, too: `init_hardware()` puts every servo in extended position mode
 (operating mode 4), where positions on either side of zero are normal and
@@ -29,11 +30,14 @@ TICKS_PER_TURN = 4096
 DEGREES_PER_TURN = 360
 
 # How many times slower the body turns than its servo. Measured on the
-# rig, not derived: a female and the bar have a 1:3 reduction after the
-# servo output, a male and a mirror are direct.
+# rig, not derived: a female, a male and the bar all have a 1:3 reduction
+# after the servo output; a mirror is direct. The male's stood at 1 here
+# for a while, which is a fact about the rig this file had wrong - every
+# male angle it produced was three times the truth, and the params
+# migration to v3 is that error being taken back out of the calibration.
 REDUCTIONS = {
     "female": 3,
-    "male": 1,
+    "male": 3,
     "bar": 3,
     "mirror": 1,
 }

@@ -13,15 +13,16 @@ class Angle(Base):
 
     Zero is the body's own origin - the position `dxl origin` records as
     "facing forward" - and the sign says which way it turned from there.
-    So a female swaying reads -29 to +29, a male -88 to +88, and the bar
+    So a female swaying reads -29 to +29, a male the same, and the bar
     runs from 0 up to +293 as it carries the males along.
 
     Two things are hidden here so that nobody outside has to hold them in
     their head: the servo's units, and the reduction between the servo and
-    the body (see conversion.py - a female and the bar turn three times
-    slower than their servo, a male and a mirror turn with theirs). The
-    same 2000 servo units used to mean 175.8 degrees on a male and 58.6 on
-    a female, written identically at both call sites.
+    the body (see conversion.py - a female, a male and the bar all turn
+    three times slower than their servo; a mirror turns with its own).
+    Which is which is exactly what a call site should not have to know: it
+    was got wrong for the male here for a while, and every angle he
+    reported was three times the angle he had turned.
 
     The raw registers stay reachable under the body's own `dxl` node, for
     when what is wrong is the servo rather than the aim.
