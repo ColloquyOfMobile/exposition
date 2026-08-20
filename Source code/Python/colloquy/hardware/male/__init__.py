@@ -11,6 +11,10 @@ from ..turn_back_and_forth import TurnBackAndForth
 
 
 class Male(BaseThread):
+    # One male from switch-on. Both males read the same one; they differ
+    # only in their blinking pattern and in the second they start.
+    scenario_names = ("male-body",)
+
     def __init__(self, owner, id_number):
         self._name = f"male{id_number}"
         self._id_number = id_number
@@ -193,5 +197,5 @@ class Male(BaseThread):
         children["neopixels"] = self.neopixels
         for light_sensor in self._light_sensors.values():
             children[light_sensor.name] = light_sensor
-        return children
+        return self._with_scenarios(children)
 

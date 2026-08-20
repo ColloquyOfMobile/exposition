@@ -57,6 +57,10 @@ def _tabs(is_simulated):
     filesystem I/O at construction (see conftest)."""
     virtual = SimpleNamespace(name="virtual hardware")
     double = SimpleNamespace(
+        # Colloquy's snapshot_children ends by handing its children to
+        # BaseThread._with_scenarios; the double stands in for it, since
+        # what is under test here is the is_simulated gate.
+        _with_scenarios=lambda children: children,
         _hardware="hardware",
         _exposition="exposition",
         _tests="tests",
@@ -102,6 +106,7 @@ def test_nothing_builds_the_simulation_when_not_simulated():
             return SimpleNamespace(name="virtual hardware")
 
     double = Double(
+        _with_scenarios=lambda children: children,
         _hardware="hardware",
         _exposition="exposition",
         _tests="tests",

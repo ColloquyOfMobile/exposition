@@ -6,31 +6,12 @@ from markdown.inlinepatterns import SimpleTagInlineProcessor
 
 from colloquy.base import Base
 from colloquy.ui import leaves
+from colloquy.utils import write_text
 
 # python-markdown has no built-in strikethrough (it's a GFM extension, not
 # core markdown), but CODE_DOCUMENTATION.md uses ~~text~~ - register it the
 # same way python-markdown registers its own **bold**/*italic* patterns.
 _STRIKETHROUGH_RE = r"(~~)(.+?)(~~)"
-
-
-def write_text(file_path, content):
-    """Write what a textarea posted back, without gaining a carriage
-    return per line every time.
-
-    A browser posts a textarea's line breaks as CRLF. `write_text` opens
-    in text mode, where Python translates "\n" to os.linesep - which on
-    Windows turns each posted "\r\n" into "\r\r\n". Saving this
-    document unchanged from the page grew it by 497 bytes and put a stray
-    CR on every line; saving again would do it again. Found by saving the
-    code documentation back byte-for-byte and diffing.
-
-    So: line endings are normalised to "\n" here and written through
-    untranslated. Git stores LF either way, and the working copy is
-    whatever autocrlf makes of it - what matters is that a save is
-    idempotent.
-    """
-    normalised = content.replace("\r\n", "\n").replace("\r", "\n")
-    file_path.write_text(normalised, encoding="utf-8", newline="\n")
 
 
 class _StrikethroughExtension(Extension):

@@ -4,6 +4,11 @@ from colloquy.ui import leaves
 
 
 class Search(BaseThread):
+    # Her sway and her reading, together - the pattern-reading she
+    # starts is described inside it rather than in its own file, since
+    # nothing about it is visible in the room on its own.
+    scenario_names = ("female-looking",)
+
     """A female looking for a male worth answering.
 
     Two things at once: she sways between her min and max position, and
@@ -116,7 +121,7 @@ class Search(BaseThread):
                 self.read_pattern.name: self.read_pattern,
             }
         )
-        return children
+        return self._with_scenarios(children)
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

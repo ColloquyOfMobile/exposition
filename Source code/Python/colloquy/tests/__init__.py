@@ -12,7 +12,6 @@ from .test_movements import TestMovements
 from .test_graph_zoom import TestGraphZoom
 from .test_neopixels import TestNeopixels
 from .test_sensors import TestSensors
-from .timeline_browser import Timelines
 
 
 class Tests(Base):
@@ -42,7 +41,6 @@ class Tests(Base):
         self.test_graph_zoom = TestGraphZoom(owner=self)
         self.test_neopixels = TestNeopixels(owner=self, result_folder=result_folder)
         self.test_sensors = TestSensors(owner=self, result_folder=result_folder)
-        self.timelines = Timelines(owner=self)
 
         # self.add(self.test1)
 
@@ -87,6 +85,5 @@ class Tests(Base):
         for test in self._threaded_tests:
             children[test.name] = test
         children[self.test_graph_zoom.name] = self.test_graph_zoom
-        children[self.timelines.name] = self.timelines
         return children
 

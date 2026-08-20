@@ -1,7 +1,7 @@
 """Tests for "test seeing male1 as the bar turns".
 
-The scenario itself needs a bar, a lit male and three sensors, so what is
-covered here is the part that does not: what it writes per sample, when
+The hardware test itself needs a bar, a lit male and three sensors, so
+what is covered here is the part that does not: what it writes per sample, when
 it refuses to run, and the two graphs it draws out of a finished CSV.
 """
 
@@ -12,7 +12,7 @@ import pandas as pd
 import pytest
 
 from colloquy.tests.test_light_sensor_values.test_seeing_male1_as_the_bar_turns import (
-    TestSeeingMale1AsTheBarTurns as Scenario,
+    TestSeeingMale1AsTheBarTurns as HardwareTest,
 )
 from colloquy.tests.test_light_sensor_values.utils import (
     add_offsets,
@@ -32,8 +32,8 @@ def female(name, angle, value):
     )
 
 
-def running_scenario(bar_angle=0.0, females=(), duration=600):
-    """Enough of the scenario for loop() to run against."""
+def running_test(bar_angle=0.0, females=(), duration=600):
+    """Enough of the hardware test for loop() to run against."""
     return SimpleNamespace(
         _start_time=None,
         _sample_count=0,
@@ -58,15 +58,15 @@ def frame(rows):
 def test_a_sample_files_the_bar_and_her_own_angle_beside_the_reading():
     from time import time
 
-    scenario = running_scenario(
+    run = running_test(
         bar_angle=64.5,
         females=(female("female2", angle=1.5, value=402),),
     )
-    scenario._start_time = time()
+    run._start_time = time()
 
-    Scenario.loop(scenario)
+    HardwareTest.loop(run)
 
-    row = scenario._file.getvalue().strip().split(", ")
+    row = run._file.getvalue().strip().split(", ")
     assert row[1:] == ["female2", "64.5", "1.5", "402"]
 
 
@@ -83,16 +83,16 @@ def test_the_bar_is_read_once_for_the_whole_row_of_females():
         reads.append(len(reads))
         return 10.0
 
-    scenario = running_scenario(
+    run = running_test(
         females=tuple(female(f"female{n}", angle=0.0, value=200) for n in (1, 2, 3)),
     )
-    scenario.bar = SimpleNamespace(angle=SimpleNamespace(get=bar_angle))
-    scenario._start_time = time()
+    run.bar = SimpleNamespace(angle=SimpleNamespace(get=bar_angle))
+    run._start_time = time()
 
-    Scenario.loop(scenario)
+    HardwareTest.loop(run)
 
     assert len(reads) == 1
-    assert scenario._sample_count == 3
+    assert run._sample_count == 3
 
 
 # --- refusing to run on top of the installation --------------------------
@@ -101,24 +101,24 @@ def test_the_bar_is_read_once_for_the_whole_row_of_females():
 def test_anything_already_driving_the_bodies_is_named():
     idle = SimpleNamespace(name="idle", is_started=False)
     busy = SimpleNamespace(name="bar", is_started=True)
-    scenario = SimpleNamespace(
+    run = SimpleNamespace(
         hardware=SimpleNamespace(name="hardware", is_started=False, males=(idle,)),
         bar=busy,
         females=(idle,),
     )
 
-    assert Scenario._busy_bodies(scenario) == ["bar"]
+    assert HardwareTest._busy_bodies(run) == ["bar"]
 
 
 def test_nothing_running_is_nothing_to_report():
     idle = SimpleNamespace(name="idle", is_started=False)
-    scenario = SimpleNamespace(
+    run = SimpleNamespace(
         hardware=SimpleNamespace(name="hardware", is_started=False, males=(idle,)),
         bar=idle,
         females=(idle,),
     )
 
-    assert Scenario._busy_bodies(scenario) == []
+    assert HardwareTest._busy_bodies(run) == []
 
 
 # --- the two angles the graphs are read against --------------------------

@@ -21,8 +21,8 @@ or drive it from a test with no socket at all:
 
 What it is *not* is a fake of the installation: no bodies, no hardware,
 no threads. If a change to the UI needs one of those to be exercised, it
-belongs in `pytest_tests` against the real classes, or in a scenario
-under `colloquy/tests/`.
+belongs in `pytest_tests` against the real classes, or in a hardware
+test under `colloquy/tests/`.
 """
 import io
 import json
@@ -148,7 +148,7 @@ class Documents(Base):
         states["rendered"] = leaves.html(
             path,
             "rendered",
-            "<h3>A rendered document</h3><p>Markdown and timelines arrive "
+            "<h3>A rendered document</h3><p>Markdown and scenarios arrive "
             "here already turned into HTML.</p>",
         )
         states["a log"] = leaves.pre(

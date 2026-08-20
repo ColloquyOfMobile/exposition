@@ -53,6 +53,10 @@ def which_is_frustated(o_drive, p_drive):
 
 
 class Drive(BaseThread):
+    # One appetite climbing, in the only terms it can be watched in:
+    # how fast, and what changes colour on the way.
+    scenario_names = ("one-appetite-rising",)
+
     def __init__(self, owner, name):
         assert name in ("O", "P")
         self._name = f"{owner.owner.name}'s {name} drive"  # name
@@ -156,7 +160,7 @@ class Drive(BaseThread):
 
     @property
     def snapshot_children(self):
-        return {}
+        return self._with_scenarios({})
 
     def snapshot_as_child(self, path):
         states = self._snapshot_base_states(path)

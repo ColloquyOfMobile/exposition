@@ -8,7 +8,7 @@ against 16-86KB and a second of servo reads for the real tree.
 
 If something in here needs a body, a servo or a thread to be exercised,
 it does not belong in this file - it belongs against the real classes, or
-in a scenario under colloquy/tests/.
+in a hardware test under colloquy/tests/.
 """
 import pytest
 

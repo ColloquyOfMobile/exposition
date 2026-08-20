@@ -309,7 +309,7 @@ def test_meeting_points_are_measured_from_the_bars_own_origin(stub_factory):
 
 def test_every_female_has_a_sensor_model_not_just_female1(stub_factory):
     # female2/female3 used to fall through to the unmodelled-sensor
-    # constant, so no scenario involving them could produce a reading.
+    # constant, so nothing involving them could produce a reading.
     for female in ("female1", "female2", "female3"):
         port = make_port(stub_factory, dxls=_facing(female, "male2"))
         port._is_open = True

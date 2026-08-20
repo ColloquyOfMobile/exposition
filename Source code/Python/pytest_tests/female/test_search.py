@@ -96,9 +96,12 @@ def test_read_pattern_is_memoized(stub_factory):
 def test_snapshot_children_exposes_read_pattern(stub_factory):
     search = make_search(stub_factory)
 
-    assert search.snapshot_children == {
-        search.read_pattern.name: search.read_pattern
-    }
+    children = search.snapshot_children
+
+    assert children[search.read_pattern.name] is search.read_pattern
+    # And what she looks like doing it, beside the start that begins it.
+    assert children["scenarios"].names == ("female-looking",)
+    assert set(children) == {search.read_pattern.name, "scenarios"}
 
 
 def make_search_with_drives(stub_factory, wants, last_match=None, moving=True):

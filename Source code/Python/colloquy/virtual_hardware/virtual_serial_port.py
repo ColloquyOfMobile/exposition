@@ -212,7 +212,7 @@ class VirtualSerialPort(Base):
 
         Used by all three females - it used to be female1 only, with the
         other two returning the same constant darkness as an unmodelled
-        male sensor, so no scenario involving female2 or female3 could
+        male sensor, so nothing involving female2 or female3 could
         ever produce a reading to decode.
         """
         female = Path(data["path"]).parts[0].replace("f", "female")

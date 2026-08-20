@@ -86,7 +86,7 @@ class Run(Base):
 class Results(Base):
     """Every run this test has recorded, newest first.
 
-    Rescanned on every request, like the timeline browser: a run that
+    Rescanned on every request, like the scenario browser: a run that
     finishes while the page is open shows up without a restart, and so
     does one copied in from the installation's machine.
     """

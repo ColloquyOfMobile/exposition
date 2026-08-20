@@ -2,6 +2,9 @@ from colloquy.base_thread import BaseThread
 
 
 class Search(BaseThread):
+    # End-to-end travel, and the one pair it never brings together.
+    scenario_names = ("bar-wandering",)
+
     def __init__(self, owner):
         super().__init__(owner=owner)
 
@@ -22,5 +25,4 @@ class Search(BaseThread):
 
     @property
     def snapshot_children(self):
-        children = {}
-        return children
+        return self._with_scenarios({})

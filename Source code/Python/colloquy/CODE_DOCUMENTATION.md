@@ -2,29 +2,30 @@
 
 What this software actually does, read off the source and organized by
 sub-behavior. For each behavior: the trigger, what follows from it, which
-`colloquy/tests/` scenario (if any) exercises it, and its status.
+`colloquy/tests/` hardware test (if any) exercises it, and its status.
 
 This is a reference document, not runnable code — it describes what the
 code in `colloquy/hardware/` actually does (and doesn't do), to make gaps
 and existing coverage visible in one place. File:line references point at
 `Source code/Python/colloquy/`.
 
-It is a map of the repository, and it is checked by reading source. The
-`.timeline` files under `colloquy/tests/timelines/` are the other half of
-the same installation: described along the clock, in what is visible in
-the room, and checked by standing in front of it with a stopwatch. Neither
-is derivable from the other — an angle quoted in both went stale in the
-timeline and not here.
+It is a map of the repository, and it is checked by reading source.
+**Scenarios** are the other half of the same installation: the artwork's
+behaviour described along the clock, in what is visible in the room, and
+checked by standing in front of it with a stopwatch. They live in
+`colloquy/scenarios/` as `*.scenario` files and hang off the thing that
+starts them — wherever the page offers a start(), it also says what will
+happen. Neither document is derivable from the other; an angle quoted in
+both went stale in the scenario and not here.
 
-It was called SCENARIOS.md and lived under `colloquy/tests/`, which said
-where it was written rather than what it is. The word "scenario" below
-still means one of two things and both are meant: a situation the
-installation can be in, and a module under `colloquy/tests/` that drives
-one. The title no longer claims it is only the first.
+"Scenario" means that and nothing else. The modules under
+`colloquy/tests/` were called scenarios for a while and are called
+**hardware tests** below: they drive real or simulated bodies over time
+and leave a CSV or an SVG for somebody to look at.
 
 ## Legend
 
-- ✅ **Covered** — an existing `colloquy/tests/` scenario exercises this.
+- ✅ **Covered** — an existing `colloquy/tests/` hardware test exercises this.
 - ⚠️ **Gap** — a real scenario the autonomous installation can reach, with
   no test (and in some cases no working code path) exercising it.
 - 🐛 **Broken** — a code path that will crash or misbehave if reached, found
@@ -43,7 +44,7 @@ just "unexercised."
 
 ## How to test these reliably
 
-The `colloquy/tests/` scenario modules (§1-6's "Covered by" column) are
+The `colloquy/tests/` hardware tests (§1-6's "Covered by" column) are
 built for a *different* kind of reliability than regression-checking a code
 change: they run for tens of seconds to tens of minutes, drive real or
 simulated hardware, and produce a CSV/SVG for a human to look at. They're
@@ -52,7 +53,7 @@ quickly confirming "did my change break this."
 
 For that second kind of check — confirming a specific behavior/fix, fast
 and repeatably — script it directly against the `Base` tree instead of
-going through the web UI or a full `colloquy/tests/` scenario. This is the
+going through the web UI or a full hardware test. This is the
 same approach used to verify the `Female.Search` fix above:
 
 ```python
@@ -155,13 +156,13 @@ a male's blink via their light sensor.
 
 | # | Scenario | Trigger | Behavior | Covered by | Status |
 |---|---|---|---|---|---|
-| 2.1 | Any female becomes unsatisfied in the live installation | `Female.loop()` calls `search.start()` when unsatisfied (`hardware/female/__init__.py:151-158`), exactly like Male | **Fixed** (was: `Search.setup()`/`loop()` unconditionally raised `NotImplementedError`, crashing the female's whole thread within two loop ticks). Now `search.loop()` sways the female (same toggle-position pattern as Male's search) and `search.setup()` starts `read_pattern` with `started_by=self`, so it starts and stops together with `search` — `hardware/female/search/__init__.py:23-28`. Verified manually: starting `female1.search` no longer raises, `read_pattern.is_started` becomes `True`, and stopping `search` stops `read_pattern` too. | none (manually verified, not yet exercised by an automated scenario — see suggested next steps) | ✅ Fixed |
+| 2.1 | Any female becomes unsatisfied in the live installation | `Female.loop()` calls `search.start()` when unsatisfied (`hardware/female/__init__.py:151-158`), exactly like Male | **Fixed** (was: `Search.setup()`/`loop()` unconditionally raised `NotImplementedError`, crashing the female's whole thread within two loop ticks). Now `search.loop()` sways the female (same toggle-position pattern as Male's search) and `search.setup()` starts `read_pattern` with `started_by=self`, so it starts and stops together with `search` — `hardware/female/search/__init__.py:23-28`. Verified manually: starting `female1.search` no longer raises, `read_pattern.is_started` becomes `True`, and stopping `search` stops `read_pattern` too. | none (manually verified, not yet exercised by an automated test — see suggested next steps) | ✅ Fixed |
 | 2.2 | Manual stand-in sway (`turn_back_and_forth`) | Tester starts a female's `turn_back_and_forth` directly | Female sways min/max, no drive/sensor coupling — still useful as an isolated-movement stand-in, though `search` (2.1) is now the real path | `test_movements` (`tests/test_movements/__init__.py:173-179`); used internally by all 4 `test_light_sensor_values` stages (§5) | ✅ Covered |
 | 2.3 | Female facing a blinking male, reading his pattern correctly | `ReadPattern.loop()` buffers one burst (2s) of sensor samples, tries 10 sub-step offsets × all 10 circular rotations of the **six** `readable_light_patterns`, accepts first match with ≤1 bit mismatch (`hardware/female/search/read_pattern/__init__.py`) | Records `last_match = (male, drive)` — which expires after two burst cycles (8.7s) if nothing refreshes it, a male being able to refresh it only once every 4.35s — and logs (throttled to once per 2s) `"Pattern detected: {male} drive={drive}"` | `test_read_pattern` (`tests/test_read_pattern/__init__.py`) — forces bar position + both bodies' facing + male drive state, starts `blink` + `read_pattern`, logs expected-vs-detected per second | ✅ Covered (staged manually; see 2.4 for the now-live autonomous path) |
 | 2.8 | A female's search ends when she finds a partner | `Search.loop()` compares each decoded match against her own `drives.which_is_frustated()` and stops the search on the first male asking for a drive she is short of, leaving `(male, shared drive)` in `search.partner` (`hardware/female/search/__init__.py`) | **New.** Search used to run forever and a match had no consequence anywhere. She now ignores a male asking for something she doesn't want (as TJ's `Logic_fem.ino` does, switching on her own drive state), and when both want both the shared drive differs per male - `male1` gives O, `male2` gives P, TJ's "pick one" tiebreak | `pytest_tests/female/test_search.py`; `test_female_search` (`tests/test_female_search/__init__.py`) - stages one pairing on the bodies (drive states forced, bar and both bodies moved into position), starts the search and reports how it ended | ✅ Covered |
 | 2.9 | What happens after she finds one | `Female.loop()` takes the pair from the search and starts `Reinforcement` (`hardware/female/reinforcement/__init__.py`) | The reinforcement thread raises `NotImplementedError` on its first tick, on purpose: this is the half that would draw the shared drive down (8.6). She then goes quiet rather than spinning - `Female.loop()` refuses to restart a thread that has already errored, so the error stays readable instead of being replaced every tick | `pytest_tests/female/test_female_loop.py` | ⚠️ Placeholder (deliberate) |
-| 2.4 | `ReadPattern` running as part of normal `Female` behavior | Now wired: `search.setup()` starts `read_pattern.start(started_by=self)` (2.1) | Once a female becomes unsatisfied, she now both sways *and* attempts to decode any male pattern her sensor sees, autonomously — no test yet drives this end-to-end through `Female.loop()`'s own trigger rather than a manually-started `search` | `test_female_search` covers sway → decode → end for a search started by hand | ⚠️ Gap (narrowed: what is still unexercised is `Female.loop()` starting the search itself, off her own drive state, rather than a scenario starting it) |
-| 2.5 | Female not facing any male / male's ring off while sampling | Sensor reads low/"dark" for that sample window (see §6.1 for the simulated version) | Buffered samples for that window read `0`; if the whole 10-step window is all-dark, `_try_match()` still runs but is unlikely to match any reference pattern (all references start `1,1,...`) | `test_read_pattern` incidentally (whenever bar/male aren't aligned) | ⚠️ Gap (no scenario explicitly tests "no match" as the expected outcome) |
+| 2.4 | `ReadPattern` running as part of normal `Female` behavior | Now wired: `search.setup()` starts `read_pattern.start(started_by=self)` (2.1) | Once a female becomes unsatisfied, she now both sways *and* attempts to decode any male pattern her sensor sees, autonomously — no test yet drives this end-to-end through `Female.loop()`'s own trigger rather than a manually-started `search` | `test_female_search` covers sway → decode → end for a search started by hand | ⚠️ Gap (narrowed: what is still unexercised is `Female.loop()` starting the search itself, off her own drive state, rather than a test starting it) |
+| 2.5 | Female not facing any male / male's ring off while sampling | Sensor reads low/"dark" for that sample window (see §6.1 for the simulated version) | Buffered samples for that window read `0`; if the whole 10-step window is all-dark, `_try_match()` still runs but is unlikely to match any reference pattern (all references start `1,1,...`) | `test_read_pattern` incidentally (whenever bar/male aren't aligned) | ⚠️ Gap (nothing explicitly tests "no match" as the expected outcome) |
 | 2.6 | Ambiguous match — the reading is within `max_mismatches=1` of more than one reference | Because every rotation is tried, the closest pair among the six references is only **2 bits apart**, so a single mis-read flash already puts a reading halfway between two answers | `_try_match()` returns the **first** match in iteration order, not the closest — order-dependent, so ambiguity resolves towards `male1` and towards `O` before `P` before `O+P`. Measured over all 1024 possible 10-bit readings: 350 (34%) are accepted as some male; with one flash wrong, only 53% still decode to the pattern actually sent (male1/O 100%, male2/P 20%) | none | ⚠️ Gap (much reduced — before the six-pattern fix a perfectly-read `male2/O` was **impossible** to report, see 2.7) |
 | 2.7 | The two "R" patterns are excluded from comparison | `_try_match()` iterates `colloquy.readable_light_patterns` (six entries), not `light_patterns` (eight) — matching TJ's receiver, which only ever tests the same six | **Fixed.** With all eight in the set, `male1`'s R sequence is `male2`'s O sequence rotated, and since every rotation is tried the two are indistinguishable in principle: a perfectly-received `male2/O` decoded as `male1/<no drive>` every time, and the two never-sendable "R" answers absorbed ~15% of the reading space. Now all six decode correctly when read cleanly | none automated (verified exhaustively offline over all 1024 readings) | ✅ Fixed |
 
@@ -191,7 +192,7 @@ selection (male only) and neopixel brightness/color mapping on top.
 | 4.1 | Any male starts searching → bar auto-wanders | `Bar.loop()`: if not already searching, and *any* male's `search.is_started`, start the bar's own `search` (plain toggle over its full 292.969° travel) — `hardware/bar/__init__.py` | Bar sways full-range regardless of which male/female pair is actually relevant, and — like male search (1.2) — nothing stops it again automatically | none | ⚠️ Gap (and compounds 2.1: since female search crashes almost immediately, in practice the bar may end up wandering with no female able to read anything) |
 | 4.2 | Positioning a specific male in front of a specific female | `set_male_in_front_of_female`/`move_male_in_front_of_female_and_wait` using fixed offsets from `params["bar"]["interaction_origins"]` (`hardware/bar/__init__.py:140-151`, `params.py:21-26`) | Bar moves (blocking or non-blocking) to the exact offset for that pair | `test_movements` (jogs every pair), `test_read_pattern`, `test_light_sensor_values` (all use `move_male1_in_front_of_female1_and_wait`) | ✅ Covered |
 | 4.3 | Bar's two "linger" sub-behaviors | `turn_back_and_forth` (the full 292.969° travel) vs. `turn_back_and_forth_around_f1` (±43.9° around male1-facing-female1) — `hardware/bar/turn_back_and_forth/__init__.py`, `hardware/bar/turn_back_and_forth_around_f1/__init__.py` | Two different sway scopes; the latter is used by `test_light_sensor_values`'s 3rd stage to simulate "bar drifting near an active pair" without leaving that pair's vicinity | `test_movements` (both, manual); `test_light_sensor_values/test_with_female_male_and_bar_moving` (around-f1 variant, as part of a sequence) | ✅ Covered |
-| 4.4 | Accessing `Bar.drives` or `Bar.arduino` | Either property is read (`hardware/bar/__init__.py:53-59`) | `AttributeError` — `self._drives`/`self._arduino` are never assigned in `__init__` (the bar has no drives/arduino segments of its own) | none | 🐛 Broken / dead code — landmine for future scenario code that assumes every hardware node has these |
+| 4.4 | Accessing `Bar.drives` or `Bar.arduino` | Either property is read (`hardware/bar/__init__.py:53-59`) | `AttributeError` — `self._drives`/`self._arduino` are never assigned in `__init__` (the bar has no drives/arduino segments of its own) | none | 🐛 Broken / dead code — landmine for future test code that assumes every hardware node has these |
 
 ---
 
@@ -201,7 +202,7 @@ selection (male only) and neopixel brightness/color mapping on top.
 |---|---|---|---|---|---|
 | 5.1 | Simulated female1 sensor, aligned and lit | (virtual hardware only) female1 near her own origin, bar positioned at the interaction offset for some male in front of female1, and that male's ring is currently in an "on" blink phase (`virtual_hardware/virtual_serial_port.py:140-154`) | Reading ≈ `threashold(300) + noise(100-109)` → `read_as_bool()` is `True` | `test_read_pattern`, `test_light_sensor_values` (indirectly, all stages) | ✅ Covered |
 | 5.2 | Simulated female1 sensor, any misalignment (not near origin, no male positioned there, or that male's ring off) | Same code path, else branch | Reading ≈ `threashold(300) - noise(100-109)` → `False` | same as 5.1 (the "off" side is exercised any time the "on" alignment isn't met) | ✅ Covered |
-| 5.3 | Simulated male sensors | Always | Flat darkness regardless of any real state — no interaction modelling exists for a male's own sensors in simulation. All three females *are* modelled (they were not always: female2/female3 used to return the same flat value, so no scenario involving them could produce a reading to decode) | `test_sensors` (reads the flat value, doesn't validate it against expected state) | ⚠️ Gap — the male sensors have no simulated scenario capable of exercising threshold-crossing behaviour |
+| 5.3 | Simulated male sensors | Always | Flat darkness regardless of any real state — no interaction modelling exists for a male's own sensors in simulation. All three females *are* modelled (they were not always: female2/female3 used to return the same flat value, so nothing involving them could produce a reading to decode) | `test_sensors` (reads the flat value, doesn't validate it against expected state) | ⚠️ Gap — the male sensors have no simulated behaviour capable of exercising a threshold crossing |
 | 5.4 | Real hardware sensor polling / manual cover-uncover | Tester starts `test_sensors`, physically covers/uncovers a sensor | Live per-sensor readout in the UI, logged to CSV every 0.5s | `test_sensors` (`tests/test_sensors/__init__.py`) | ✅ Covered (real hardware only — this is not meaningful on simulated hosts beyond 5.1-5.3) |
 | 5.5 | Sensor value behavior across a full "everything moving" stress run | 30 males+females+bar all swaying simultaneously for up to 30 min | Per-tick sensor CSV logged for all 3 females | `test_light_sensor_values/test_with_everything_moving` — per `CLAUDE.md`, male rings are held **constant on** here, not blinking a real pattern, so this measures "how long is female facing a lit male," not pattern-decode accuracy | ✅ Covered (with that caveat) |
 | 5.6 | **False positives: does a female read light where there is none?** | Tester starts `test_light_sensor_values/test_for_false_positives`, having stopped the installation (it refuses otherwise) | Every light in the installation off, all three females sweeping their own travel, sensor and angle recorded together as fast as the Arduino answers (~9 readings a second each). One graph per female: angle across, sensor value up, with the average reading at each angle and the spread (max − min) there, and the threshold drawn across both. A bump in the average is something bright from that direction; a tall spread is an aim whose reading is not repeatable — either is a false positive waiting to happen. Duration is chosen on the page | `test_light_sensor_values/test_for_false_positives` | ✅ Covered (the answer is a rig measurement — the simulator's "dark" is uniform noise, so it can only prove the plumbing) |
@@ -215,14 +216,14 @@ selection (male only) and neopixel brightness/color mapping on top.
 | 6.1 | Every segment cycled through red/green/blue/white | Tester starts `test_neopixels` | All 20 segments (3×female's 4 + 2×male's 4) step through colors, 0.8s each, for wiring/visual confirmation | `test_neopixels` (`tests/test_neopixels/__init__.py`) | ✅ Covered |
 | 6.2 | Drive-driven brightness/color (male & female) | Drive value changes | See §3.6 | `test_drive_light_values` | ✅ Covered |
 | 6.3 | Ring blink during search | See §1.1 | Ring toggles white on/off per pattern bit | `test_male_patterns` (blink only) | ✅ Covered (blink only — not combined with real search-triggered sway, per 1.1) |
-| 6.4 | Arduino reboot leaving LEDs on in a random state | App startup (`main.py`'s `colloquy1()`) | All neopixels forced on then off once, to normalize state | none (this is a startup routine, not a `colloquy/tests/` scenario) | ⚠️ Gap — no scenario verifies this recovery step actually clears a stuck-on LED |
+| 6.4 | Arduino reboot leaving LEDs on in a random state | App startup (`main.py`'s `colloquy1()`) | All neopixels forced on then off once, to normalize state | none (this is a startup routine, not a hardware test) | ⚠️ Gap — nothing verifies this recovery step actually clears a stuck-on LED |
 
 ---
 
 ## 7. Cross-body integration scenarios (not exercised by any single test)
 
 These span multiple sub-behaviors and aren't covered end-to-end by any
-current scenario — each piece is tested in isolation (or not at all) but
+current hardware test — each piece is tested in isolation (or not at all) but
 the full chain never runs together as it would in the real installation:
 
 1. **Full autonomous loop**: a male becomes frustrated → blinks his pattern
@@ -240,7 +241,7 @@ the full chain never runs together as it would in the real installation:
    in the original the female answers over sound and the exchange runs from
    there — see §9.
 2. **Two males simultaneously frustrated for the same female** — bar can
-   only be in front of one male at a time; no scenario documents or tests
+   only be in front of one male at a time; nothing documents or tests
    the resulting contention/ordering.
 3. **A female mid-`turn_back_and_forth` when a male's drive state (and
    therefore blink pattern) changes** — not tested. The garbled boundary
@@ -393,8 +394,8 @@ Two differences in *which* patterns each channel uses, both deliberate:
    threshold; whatever replaces the MSGEQ7 here inherits the problem, and
    the room is full of visitors.
 
-When there is something to run, it should look like the two scenarios that
-already exist for the light side: `test_read_pattern` stages one pair and
+When there is something to run, it should look like the two hardware
+tests that already exist for the light side: `test_read_pattern` stages one pair and
 logs what was decoded per second, `test_female_search` runs one whole
 search and says how it ended. A `test_sound_answer` staging one pair, one
 sung reply and one decoded answer is the same shape, and the same shape is
@@ -454,7 +455,7 @@ Ranked by how much of the above unblocks:
 
 1. ~~Fix or replace `Female.Search` (2.1)~~ — **done**: `search.loop()` now
    sways the female and `search.setup()` starts `read_pattern`.
-2. Add a `colloquy/tests/` scenario that drives the full loop in §7.1
+2. Add a `colloquy/tests/` hardware test that drives the full loop in §7.1
    through the real `Male.loop()`/`Female.loop()` triggers rather than
    staged preconditions, to catch regressions in the autonomous path
    itself. Half of this now exists: `test_female_search` runs a whole

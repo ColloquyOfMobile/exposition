@@ -113,6 +113,14 @@ def test_snapshot_children_keys_and_values(stub_factory):
 
     children = drives.snapshot_children
 
-    assert set(children.keys()) == {drives.o_drive.name, drives.p_drive.name}
+    # Her two appetites, and what they look like from the room: every
+    # thread that declares scenarios carries them here, which is the dict
+    # the page walks.
+    assert set(children.keys()) == {
+        drives.o_drive.name,
+        drives.p_drive.name,
+        "scenarios",
+    }
     assert children[drives.o_drive.name] is drives.o_drive
     assert children[drives.p_drive.name] is drives.p_drive
+    assert children["scenarios"].names == ("female-appetite-lights",)

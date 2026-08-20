@@ -2,6 +2,11 @@ from colloquy.base_thread import BaseThread
 
 
 class TurnBackAndForth(BaseThread):
+    # Started by hand from the page rather than by any appetite, which
+    # is the whole point of it: it is how a body is watched moving with
+    # nothing else going on.
+    scenario_names = ("swaying-a-body-by-hand",)
+
     def __init__(self, owner):
         super().__init__(owner=owner)
 
@@ -21,5 +26,4 @@ class TurnBackAndForth(BaseThread):
 
     @property
     def snapshot_children(self):
-        children = {}
-        return children
+        return self._with_scenarios({})

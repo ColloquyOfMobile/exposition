@@ -16,6 +16,20 @@ from .logs import Logs
 
 
 class Colloquy(BaseThread):
+    # The whole evening, and the encounters inside it. These four sit
+    # here and not on a body because no single thing starts them: they
+    # happen when a wandering bar and a turning female line up, so the
+    # only thing whose start() brings them about is the piece itself.
+    # One of them, an answer in sound, is a scenario for behaviour that
+    # is designed and wired and not built - see CODE_DOCUMENTATION 9.
+    scenario_names = (
+        "switching-on",
+        "a-male-calls-a-female",
+        "two-males-call-at-once",
+        "the-satisfaction-moment",
+        "an-answer-in-sound",
+    )
+
     def __init__(self):
         super().__init__(owner=None)
 
@@ -166,7 +180,7 @@ class Colloquy(BaseThread):
             # it used to be three clicks deep under "tests", filed by
             # where it happened to be written rather than by what it is.
             children[self._code_documentation.name] = self._code_documentation
-        return children
+        return self._with_scenarios(children)
 
     def get_states(self, *args):
         """What the page is looking at, having first done what it clicked.

@@ -12,20 +12,20 @@ from colloquy.utils import timelap_to_string
 # a leading title/description block) are ignored.
 _ENTRY_RE = re.compile(r"^(\d+(?:\.\d+)?)\s+(\S.*)$")
 
-# "-> <other-timeline>" or "-> <other-timeline> : <label>" starts a child
-# thread's own timeline concurrently at this point - see parse_entries.
+# "-> <other-scenario>" or "-> <other-scenario> : <label>" starts a child
+# thread's own scenario concurrently at this point - see parse_entries.
 _INCLUDE_RE = re.compile(r"^->\s*(\S+?)(?:\s*:\s*(.+))?$")
 
-_TIMELINES_FOLDER = Path(__file__).resolve().parent.parent / "timelines"
+_SCENARIOS_FOLDER = Path(__file__).resolve().parent.parent / "scenarios"
 
 
 @dataclass
-class TimelineEntry:
+class ScenarioEntry:
     start_seconds: float
     duration_seconds: float
     description: str
-    # Populated only for "-> other-timeline" lines: the referenced
-    # timeline's own entries (recursively expanded) and its optional
+    # Populated only for "-> other-scenario" lines: the referenced
+    # scenario's own entries (recursively expanded) and its optional
     # ": label" (e.g. "O drive", "male1") - see flatten_entries, which
     # carries the label into every descendant's description as context
     # instead of just dropping it.
@@ -41,7 +41,7 @@ class TimelineEntry:
 
 def parse_title(content):
     """Leading run of "#" comment lines, stripped of their leading '#'s -
-    the timeline's own title/description, shown above its rendered rows."""
+    the scenario's own title/description, shown above its rendered rows."""
     lines = []
     for raw_line in content.splitlines():
         line = raw_line.strip()
@@ -61,16 +61,16 @@ def parse_entries(content, _folder=None, _visited=frozenset()):
     share the same start time - that's how "several things happen at
     once" is expressed in this format.
 
-    "-> other-timeline[: label]" lines are a different kind of entry: they
+    "-> other-scenario[: label]" lines are a different kind of entry: they
     don't take any time themselves (a thread starting a child thread is
-    instantaneous), and the child's own timeline is parsed recursively and
+    instantaneous), and the child's own scenario is parsed recursively and
     attached as .children, to be rendered as a nested, concurrently-running
-    sub-timeline - see render_html. _visited guards against include cycles
+    sub-scenario - see render_html. _visited guards against include cycles
     (A includes B includes A): the first repeat along a given branch is
     reported instead of recursing forever.
     """
     if _folder is None:
-        _folder = _TIMELINES_FOLDER
+        _folder = _SCENARIOS_FOLDER
 
     entries = []
     elapsed = 0.0
@@ -90,7 +90,7 @@ def parse_entries(content, _folder=None, _visited=frozenset()):
                     "stopped here to avoid an include cycle"
                 )
                 entries.append(
-                    TimelineEntry(
+                    ScenarioEntry(
                         start_seconds=elapsed,
                         duration_seconds=0.0,
                         description=description,
@@ -100,10 +100,10 @@ def parse_entries(content, _folder=None, _visited=frozenset()):
                 )
                 continue
 
-            child_path = (_folder / name).with_suffix(".timeline")
+            child_path = (_folder / name).with_suffix(".scenario")
             if not child_path.is_file():
                 entries.append(
-                    TimelineEntry(
+                    ScenarioEntry(
                         start_seconds=elapsed,
                         duration_seconds=0.0,
                         description=f"-> {display} - missing file, nothing to expand",
@@ -118,7 +118,7 @@ def parse_entries(content, _folder=None, _visited=frozenset()):
                 child_content, _folder=_folder, _visited=_visited | {name}
             )
             entries.append(
-                TimelineEntry(
+                ScenarioEntry(
                     start_seconds=elapsed,
                     duration_seconds=0.0,
                     description=f"-> {display} (starts here, runs concurrently on its own clock)",
@@ -135,7 +135,7 @@ def parse_entries(content, _folder=None, _visited=frozenset()):
         duration = float(match.group(1))
         description = match.group(2)
         entries.append(
-            TimelineEntry(
+            ScenarioEntry(
                 start_seconds=elapsed,
                 duration_seconds=duration,
                 description=description,
@@ -147,18 +147,18 @@ def parse_entries(content, _folder=None, _visited=frozenset()):
 
 
 def flatten_entries(entries, offset=0.0, context=()):
-    """Resolve every "-> other-timeline" branch into one flat, chronologically
+    """Resolve every "-> other-scenario" branch into one flat, chronologically
     sorted sequence of what actually happens - a black-box view that doesn't
     expose which entries came from a child thread being started. A normal
     include vanishes, replaced in place by its own (recursively flattened)
     entries, offset to start at the including line's own absolute time; only
     a genuine problem (missing include / cycle) survives as its own row,
-    since that's a defect in the timeline itself, not an implementation
+    since that's a defect in the scenario itself, not an implementation
     detail worth hiding.
 
     Dropping a branch entirely would also drop its ": label" (e.g. "O
     drive" vs "P drive", "male1" vs "male2") - the only thing that told two
-    otherwise-identical included timelines apart. Instead, every labelled
+    otherwise-identical included scenarios apart. Instead, every labelled
     branch's label is carried in `context` and stamped as a "[label / ...]"
     prefix onto each of its descendants' descriptions, so e.g. two Drive
     threads merged under one Male read as distinguishable events rather
@@ -172,7 +172,7 @@ def flatten_entries(entries, offset=0.0, context=()):
         if entry.is_branch:
             if entry.is_problem:
                 flat.append(
-                    TimelineEntry(
+                    ScenarioEntry(
                         start_seconds=absolute_start,
                         duration_seconds=0.0,
                         description=prefix + entry.description,
@@ -189,7 +189,7 @@ def flatten_entries(entries, offset=0.0, context=()):
             continue
 
         flat.append(
-            TimelineEntry(
+            ScenarioEntry(
                 start_seconds=absolute_start,
                 duration_seconds=entry.duration_seconds,
                 description=prefix + entry.description,
@@ -202,33 +202,33 @@ def render_html(content):
     doc, tag, text = Doc().tagtext()
 
     for line in parse_title(content):
-        with tag("p", klass="timeline-title"):
+        with tag("p", klass="scenario-title"):
             text(line)
 
     flat = sorted(
         flatten_entries(parse_entries(content)), key=lambda entry: entry.start_seconds
     )
 
-    with tag("div", klass="timeline"):
+    with tag("div", klass="scenario"):
         for entry in flat:
             start_label = f"t={timelap_to_string(entry.start_seconds)}"
 
             if entry.is_problem:
                 marker_label = "!"
-                row_klass = "timeline-row timeline-problem"
+                row_klass = "scenario-row scenario-problem"
             elif entry.is_event:
                 marker_label = "event"
-                row_klass = "timeline-row timeline-event"
+                row_klass = "scenario-row scenario-event"
             else:
                 marker_label = f"+{timelap_to_string(entry.duration_seconds)}"
-                row_klass = "timeline-row timeline-activity"
+                row_klass = "scenario-row scenario-activity"
 
             with tag("div", klass=row_klass):
-                with tag("div", klass="timeline-time"):
+                with tag("div", klass="scenario-time"):
                     text(start_label)
-                with tag("div", klass="timeline-marker"):
+                with tag("div", klass="scenario-marker"):
                     text(marker_label)
-                with tag("div", klass="timeline-desc"):
+                with tag("div", klass="scenario-desc"):
                     text(entry.description)
 
     return doc.getvalue()

@@ -298,6 +298,9 @@ def build_map_to_compensate_brightness_to_human_eye():
 
 
 class Drives(BaseThread):
+    # What her two appetites do to what is lit on her.
+    scenario_names = ("female-appetite-lights",)
+
     def __init__(self, owner):
         super().__init__(owner=owner)
 
@@ -389,4 +392,4 @@ class Drives(BaseThread):
         children = {}
         children[self.o_drive.name] = self.o_drive
         children[self.p_drive.name] = self.p_drive
-        return children
+        return self._with_scenarios(children)

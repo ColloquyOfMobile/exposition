@@ -12,6 +12,10 @@ from .all_neopixels import AllNeopixels
 
 
 class Hardware(BaseThread):
+    # Bringing the room to life: what is powered, in what order, and
+    # what is lit while it happens.
+    scenario_names = ("starting-the-installation",)
+
     def __init__(self, owner):
 
         super().__init__(owner)
@@ -222,5 +226,5 @@ class Hardware(BaseThread):
         for body in self.bodies:
             children[body.name] = body
         children[self.bar.name] = self.bar
-        return children
+        return self._with_scenarios(children)
 

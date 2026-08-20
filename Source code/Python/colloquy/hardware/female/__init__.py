@@ -13,6 +13,11 @@ from .test import Test
 
 
 class Female(BaseThread):
+    # One female from switch-on, everything she does on her own. All
+    # three of them read the same one - they differ in where they stand
+    # and in when their appetites start climbing, not in behaviour.
+    scenario_names = ("female-body",)
+
     def __init__(
         self,
         owner,
@@ -224,5 +229,5 @@ class Female(BaseThread):
         children["neopixels"] = self.neopixels
         children["light sensor"] = self.light_sensor
         children[self.mirror.name] = self.mirror
-        return children
+        return self._with_scenarios(children)
 

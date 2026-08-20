@@ -13,8 +13,8 @@ So expect the two to diverge, and expect a fix in one to need making
 twice until they are put back together. What is here is that same
 renderer minus its styling: structure, plus the hooks to hang CSS on -
 `name="..."` on every div (server commands, navigation, split, commands,
-title, open, name) and the classes the markdown and timeline renderers
-emit (md-content, timeline-row, timeline-time, ...). The one stylesheet
+title, open, name) and the classes the markdown and scenario renderers
+emit (md-content, scenario-row, scenario-time, ...). The one stylesheet
 linked is uPlot's, which its charts need to draw at all.
 
 It serves its own copies of static/ and vendor/, next to this file, so

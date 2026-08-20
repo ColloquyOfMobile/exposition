@@ -16,6 +16,10 @@ INDICATOR_BRIGHTNESS = 100
 
 
 class TestReadPattern(BaseThread):
+    # What this test does to the room once it is started, so that what
+    # the bodies are seen doing can be told from what has gone wrong.
+    scenario_names = ("pattern-reading-test",)
+
     """Lets a tester pick which male sends his identity pattern and which
     female receives it, brings the pair face to face (bar to their meeting
     point, both bodies turned to their own origin), blinks the
@@ -330,7 +334,7 @@ class TestReadPattern(BaseThread):
             children[male.search.blink.name] = male.search.blink
         for female in self._females.values():
             children[female.search.read_pattern.name] = female.search.read_pattern
-        return children
+        return self._with_scenarios(children)
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

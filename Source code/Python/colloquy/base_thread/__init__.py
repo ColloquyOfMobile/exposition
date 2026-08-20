@@ -4,11 +4,25 @@ import traceback
 from time import time, sleep
 
 from colloquy.base import Base
+from colloquy.scenario_browser import Scenarios
 from threading import Thread, Event, Lock
 from .thread_errors import ThreadErrors
 
 class BaseThread(Base):
     _shutdown = Event()
+
+    # The scenarios that describe what this thread does, by file name
+    # under colloquy/scenarios/. The rule they are filed by: wherever the
+    # page offers to start something, it also says what that thing will
+    # do. Names are of behaviours rather than of nodes, so the three
+    # females share one - and a thread may name several, since one action
+    # is not one scenario.
+    #
+    # An empty tuple means nobody has written one yet, which is a real
+    # state and a visible one: pytest_tests/test_scenarios.py holds the
+    # list of threads still in it, so a new thread cannot join them by
+    # accident.
+    scenario_names = ()
 
     def __init__(self, owner, run_with=None):
         super().__init__(owner=owner)
@@ -29,9 +43,30 @@ class BaseThread(Base):
         self["stop"] = self.stop_command
         self[self.thread_errors.name] = self.thread_errors
 
+        self._scenarios = Scenarios(owner=self, names=self.scenario_names)
+
     @property
     def thread_errors(self):
         return self._thread_errors
+
+    @property
+    def scenarios(self):
+        return self._scenarios
+
+    def _with_scenarios(self, children):
+        """The children a thread lists, plus its scenarios.
+
+        Called from each subclass's own snapshot_children rather than
+        being folded in here, because snapshot_children is the tree's
+        whole routing contract (colloquy/ui/tree.py walks it): a child
+        added to the rendered states but not to this dict draws as a link
+        that 404s. That is exactly what happened when this hung off
+        _snapshot_if_opened instead, and pytest_tests/test_scenarios.py
+        now checks every declaring thread for it.
+        """
+        if self.scenario_names:
+            children[self._scenarios.name] = self._scenarios
+        return children
 
     @property
     def children(self):

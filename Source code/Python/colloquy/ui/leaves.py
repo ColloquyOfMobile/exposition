@@ -51,7 +51,7 @@ def value(path, key, value):
 
 def html(path, key, markup):
     """A block of ready-made HTML, dropped into the page as it is - a
-    rendered markdown document, a rendered timeline, a traceback."""
+    rendered markdown document, a rendered scenario, a traceback."""
     return leaf(path, key, "html", markup)
 
 

@@ -21,6 +21,9 @@ const int color_puce[4] = {180, 160, 0, 40}; //GRBW//greenish
 
 
 class Drives(BaseThread):
+    # What his two appetites do to what is lit on him.
+    scenario_names = ("male-appetite-lights",)
+
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._name = f"{owner.name}'s drives"
@@ -126,4 +129,4 @@ class Drives(BaseThread):
         children["set O=100 and P=100"] = self.set_o_and_p_to_100
         children[self.o_drive.name] = self.o_drive
         children[self.p_drive.name] = self.p_drive
-        return children
+        return self._with_scenarios(children)

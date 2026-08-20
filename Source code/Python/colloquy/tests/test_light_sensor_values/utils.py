@@ -265,7 +265,7 @@ def plot_full_measurement_as_svg(output, df, max_points=2000):
 
 
 def plot_as_svg(path, max_points=2000):
-    """Disk-file entry point used by the test scenarios' `.plot()`: reads a
+    """Disk-file entry point used by the hardware tests' `.plot()`: reads a
     post-processed CSV (see `post_process`) and writes the full-measurement
     SVG next to it."""
     if isinstance(path, str):

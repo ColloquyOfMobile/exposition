@@ -3,6 +3,10 @@ from .blink import Blink
 
 
 class Search(BaseThread):
+    # His sway and his blinking, together, for the same reason: the
+    # blink thread has no separate appearance.
+    scenario_names = ("male-calling",)
+
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._blink = Blink(owner=self)
@@ -35,5 +39,4 @@ class Search(BaseThread):
 
     @property
     def snapshot_children(self):
-        children = {}
-        return children
+        return self._with_scenarios({})

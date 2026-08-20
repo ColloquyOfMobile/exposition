@@ -80,9 +80,11 @@ def test_snapshot_children_keys_and_values(stub_factory):
         "set O=100 and P=100",
         drives.o_drive.name,
         drives.p_drive.name,
+        "scenarios",
     }
     assert children[drives.o_drive.name] is drives.o_drive
     assert children[drives.p_drive.name] is drives.p_drive
+    assert children["scenarios"].names == ("male-appetite-lights",)
     assert children["set O=0 and P=100"] == drives.set_o_to_0_p_to_100
     assert children["set O=100 and P=0"] == drives.set_p_to_0_o_to_100
     assert children["set O=30 and P=30"] == drives.set_o_and_p_to_30

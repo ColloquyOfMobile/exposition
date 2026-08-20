@@ -8,6 +8,10 @@ from .turn_back_and_forth import TurnBackAndForth
 
 
 class Bar(BaseThread):
+    # What the rail does, and what it is for: it is the only thing that
+    # brings a male and a female into each other's view.
+    scenario_names = ("the-bar",)
+
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._position_memory = None
@@ -179,7 +183,7 @@ class Bar(BaseThread):
                 "search": self.search,
             }
         )
-        return children
+        return self._with_scenarios(children)
 
     def _snapshot_if_opened(self, path):
         # The move-and-wait commands used to live in snapshot_children,

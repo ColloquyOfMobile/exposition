@@ -14,6 +14,10 @@ from colloquy.ui import leaves
 
 
 class TestWithEveryThingMoving(BaseThread):
+    # Same: everything in the room moves at once during this one, and
+    # that is worth being able to read as intended rather than as fault.
+    scenario_names = ("all-bodies-moving-test",)
+
     def __init__(self, owner, result_folder, test_duration):
         super().__init__(owner=owner)
         self._default_duration = 5 * 60
@@ -132,7 +136,7 @@ class TestWithEveryThingMoving(BaseThread):
         children = {}
         if self._test_results is not None:
             children[self._test_results.name] = self._test_results
-        return children
+        return self._with_scenarios(children)
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

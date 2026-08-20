@@ -2,6 +2,10 @@ from colloquy.base_thread import BaseThread
 
 
 class TurnBackAndForthAroundF1(BaseThread):
+    # The narrow sweep that keeps one pair in front of each other,
+    # instead of crossing the whole rail.
+    scenario_names = ("bar-drifting-near-female1",)
+
     def __init__(self, owner):
         super().__init__(owner=owner)
 
@@ -57,5 +61,4 @@ class TurnBackAndForthAroundF1(BaseThread):
 
     @property
     def snapshot_children(self):
-        children = {}
-        return children
+        return self._with_scenarios({})
