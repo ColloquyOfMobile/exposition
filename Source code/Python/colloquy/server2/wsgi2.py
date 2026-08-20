@@ -22,6 +22,13 @@ _STATIC_ROOTS = {
 _STATIC_CONTENT_TYPES = {
     ".js": "application/javascript; charset=utf-8",
     ".css": "text/css; charset=utf-8",
+    # The hardware setup document is photographs of boards: without a type
+    # the browser is handed application/octet-stream and offers to save
+    # them instead of showing them.
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".png": "image/png",
+    ".svg": "image/svg+xml",
 }
 
 
@@ -202,6 +209,13 @@ class WSGI2(Base):
                         ".md-content pre { background: #8882; padding: 0.5rem; overflow: auto; } "
                         ".md-content pre code { background: none; padding: 0; } "
                         ".md-content del { opacity: 0.6; } "
+                        # The hardware setup document carries photographs
+                        # of boards, some of them wider than the column.
+                        ".md-content img { max-width: 100%; height: auto; "
+                        "display: block; margin: 0.5rem 0; "
+                        "border: 1px solid #8886; } "
+                        ".md-content blockquote { border-left: 3px solid #d02; "
+                        "margin: 0.5rem 0; padding: 0.1rem 0 0.1rem 1ch; } "
                         ".scenario-title { margin: 0.25rem 0; opacity: 0.85; } "
                         ".scenario { display: flex; flex-direction: column; } "
                         ".scenario-row { display: flex; gap: 1ch; padding: 0.25rem 0; "

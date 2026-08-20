@@ -67,6 +67,7 @@ def _tabs(is_simulated):
         _params_view="params",
         _logs="logs",
         _code_documentation=SimpleNamespace(name="code documentation"),
+        _hardware_setup=SimpleNamespace(name="hardware setup"),
         is_simulated=is_simulated,
         virtual_hardware=virtual,
     )
@@ -94,6 +95,15 @@ def test_the_installation_is_not_offered_the_code_documentation():
     assert "code documentation" not in _tabs(is_simulated=False)
 
 
+def test_the_hardware_setup_is_offered_on_every_machine():
+    # The other half of the same decision, and the opposite way round.
+    # The installation'''s own machine is the one wired to the thing being
+    # wired, so it is the last place to hide the wiring document - while
+    # the code documentation beside it is no use there at all.
+    assert "hardware setup" in _tabs(is_simulated=True)
+    assert "hardware setup" in _tabs(is_simulated=False)
+
+
 def test_nothing_builds_the_simulation_when_not_simulated():
     # The tab is what first touches Colloquy.virtual_hardware, and that
     # property constructs the whole simulated stack on access.
@@ -113,6 +123,7 @@ def test_nothing_builds_the_simulation_when_not_simulated():
         _params_view="params",
         _logs="logs",
         _code_documentation=SimpleNamespace(name="code documentation"),
+        _hardware_setup=SimpleNamespace(name="hardware setup"),
         is_simulated=False,
     )
 

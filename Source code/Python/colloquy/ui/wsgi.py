@@ -43,6 +43,13 @@ _STATIC_ROOTS = {
 _STATIC_CONTENT_TYPES = {
     ".js": "application/javascript; charset=utf-8",
     ".css": "text/css; charset=utf-8",
+    # The hardware setup document is photographs of boards: without a type
+    # the browser is handed application/octet-stream and offers to save
+    # them instead of showing them.
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".png": "image/png",
+    ".svg": "image/svg+xml",
 }
 
 
