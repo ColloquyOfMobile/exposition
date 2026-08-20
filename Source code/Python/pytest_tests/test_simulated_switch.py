@@ -27,7 +27,7 @@ INSTALLATION_HOSTNAME = "Colloquy-Laptop"
 
 
 def set_hostname(monkeypatch, name):
-    monkeypatch.setattr("colloquy.base.socket.gethostname", lambda: name)
+    monkeypatch.setattr("colloquy.machines.socket.gethostname", lambda: name)
 
 
 def test_only_the_installation_computer_runs_real_hardware(monkeypatch, stub_factory):
@@ -121,3 +121,63 @@ def test_nothing_builds_the_simulation_when_not_simulated():
     Colloquy.snapshot_children.fget(double)
 
     assert touched == []
+
+
+# --- the bench is a machine of its own ------------------------------------
+
+BENCH_HOSTNAME = "DESKTOP-MRSLS88"
+
+
+def test_the_bench_has_no_piece_on_it_but_a_real_audio_board(monkeypatch):
+    """The case the single is_simulated boolean could not express.
+
+    Thomas's boards are on an office desk. That machine has no servos and
+    no Arduino - so the piece is simulated on it - and it has the audio
+    subsystem physically attached, so the audio board is not. Reading
+    those as one question is what sent the bench test at a stand-in while
+    the real board sat on the desk beside it.
+    """
+    node = Base.__new__(Base)
+
+    set_hostname(monkeypatch, BENCH_HOSTNAME)
+
+    assert node.is_simulated is True
+    assert node.is_bench is True
+
+
+def test_the_installation_has_the_piece_and_no_bench(monkeypatch):
+    node = Base.__new__(Base)
+
+    set_hostname(monkeypatch, INSTALLATION_HOSTNAME)
+
+    assert node.is_simulated is False
+    assert node.is_bench is False
+
+
+def test_any_other_machine_has_neither(monkeypatch):
+    node = Base.__new__(Base)
+
+    set_hostname(monkeypatch, "some-laptop")
+
+    assert node.is_simulated is True
+    assert node.is_bench is False
+
+
+def test_the_bench_match_is_exact_too(monkeypatch):
+    # Same warning as above, and the same cost: a near miss means the test
+    # quietly runs against the stand-in, which passes all twenty-five.
+    node = Base.__new__(Base)
+
+    for close_but_not_equal in (
+        BENCH_HOSTNAME.lower(),
+        BENCH_HOSTNAME + ".local",
+        " " + BENCH_HOSTNAME,
+    ):
+        set_hostname(monkeypatch, close_but_not_equal)
+        assert node.is_bench is False, close_but_not_equal
+
+
+def test_the_two_machines_are_not_the_same_machine():
+    from colloquy import machines
+
+    assert machines.INSTALLATION != machines.BENCH

@@ -2,6 +2,7 @@
 # Source code/Python/colloquy/tests/test_audio_subsystem/__init__.py
 
 import serial
+import serial.tools.list_ports as list_ports
 
 from datetime import datetime
 from functools import partial
@@ -27,6 +28,30 @@ class AudioComPort(ComPort):
         self.owner.port_handler.port = com_port
         self.owner.params["audio subsystem"]["communication port"] = com_port
         self._value = com_port
+
+    @property
+    def ports(self):
+        """What this machine really has, which is not what the others do.
+
+        The base ComPort answers with the *piece's* simulated ports, and
+        that is the wrong question here: the bench has real serial ports
+        and no installation, so on it this lists the actual leads. Off the
+        bench there is one stand-in and nothing else - offering the U2D2's
+        and the Arduino's port names on this picker only ever invited
+        somebody to choose one.
+        """
+        for name in self._ports:
+            self._dict.pop(name)
+
+        if self.is_bench:
+            self._ports = [port.device for port in list_ports.comports()]
+        else:
+            self._ports = ["simulated audio port"]
+
+        for name in self._ports:
+            self[name] = partial(self.set, com_port=name)
+
+        return self._ports
 
     @property
     def snapshot_children(self):
@@ -161,9 +186,19 @@ class TestAudioSubsystem(BaseThread):
         return self.params["audio subsystem"]["baudrate"]
 
     @property
+    def board_is_real(self):
+        """Shown on the page, because a wrong answer here is otherwise
+        silent: a run against the stand-in passes all twenty-five and
+        looks exactly like a run against a working bench."""
+        return self.is_bench
+
+    @property
     def port_handler(self):
         if self._port_handler is None:
-            if not self.is_simulated:
+            # is_bench, not is_simulated. The bench is simulated as far as
+            # the piece goes - it has no servos and no Arduino - and its
+            # audio board is as real as hardware gets.
+            if self.is_bench:
                 self._port_handler = serial.Serial(
                     baudrate=self.baudrate, timeout=0.05
                 )
@@ -271,8 +306,22 @@ class TestAudioSubsystem(BaseThread):
             + "\n"
         )
 
-        if self.params["audio subsystem"]["communication port"] is None:
+        chosen = self.params["audio subsystem"]["communication port"]
+        if chosen is None:
             self._refuse("no port chosen - pick Thomas's board under 'com port'")
+            return
+
+        # The chosen port is remembered in params, and it outlives the
+        # machine that chose it: a laptop that ran this simulated leaves
+        # "simulated audio port" behind, and on the bench that opens
+        # nothing and fails with a pyserial error about a port nobody
+        # recognises. Say what is stored and what is actually there.
+        available = self.com_port.ports
+        if chosen not in available:
+            self._refuse(
+                f"{chosen!r} is not a port on this machine - "
+                f"available: {', '.join(available) or 'none, is the board plugged in?'}"
+            )
             return
 
         self.port_handler.open()
@@ -419,6 +468,10 @@ class TestAudioSubsystem(BaseThread):
         states = super()._snapshot_if_opened(path)
         into = leaves.into(states, path)
 
+        into(
+            "board",
+            "real, on this machine" if self.board_is_real else "simulated stand-in",
+        )
         into("port", self.params["audio subsystem"]["communication port"])
         if self._outcome is not None:
             into("outcome", self._outcome)

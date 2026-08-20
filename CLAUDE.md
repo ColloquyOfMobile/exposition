@@ -30,7 +30,15 @@ There is no separate build step (pure Python, no bundler). `requirements.txt` on
 
 ## Simulated vs. real hardware
 
-`Base.is_simulated` (`Source code/Python/colloquy/base.py`) checks `socket.gethostname() == 'Colloquy-Laptop'`. On that exact machine the code drives real Dynamixel servos and a real Arduino over serial; on every other machine (including CI, dev laptops) it transparently runs against `Source code/Python/colloquy/virtual_hardware/` — virtual serial port, virtual packet/port handlers, virtual Dynamixels. This means the whole app (including the web UI) can be exercised without hardware attached. When adding hardware-facing code, keep the real/virtual split intact rather than special-casing simulation inline.
+**Two machines have hardware, and they have different hardware**, so "is this simulated?" is two questions. Both are exact hostname matches, named in one place — `colloquy/machines.py`:
+
+- **The installation** (`Colloquy-Laptop`) has the piece: nine Dynamixel servos through a U2D2, and the Arduino carrying every NeoPixel and light sensor. `Base.is_simulated` is False only here.
+- **The bench** (`DESKTOP-MRSLS88`, an office desk) has Thomas's audio subsystem: his Mega 2560, the filter board, the amplifiers, the microphones and the analyser array. `Base.is_bench` is True only here. It has none of the piece, so it is `is_simulated` **and** has real hardware — which is the whole reason the second question exists.
+- **Anything else** (the other dev machine, CI) has neither and runs entirely against `Source code/Python/colloquy/virtual_hardware/` — virtual serial port, virtual packet/port handlers, virtual Dynamixels, and a virtual stand-in for Thomas's board.
+
+So the whole app (including the web UI) can be exercised without hardware attached. When adding hardware-facing code, keep the real/virtual split intact rather than special-casing simulation inline — and pick the *right* question: a device belongs to one machine, and `is_simulated` is not a synonym for "no hardware here". The audio bench test asks `is_bench`; getting that wrong sent it at the stand-in while the real Mega sat on the desk beside it, and a stand-in run passes every check.
+
+**`colloquy/tests/test_audio_subsystem`** follows from that: it is offered only when `is_simulated` (so never in the gallery — the installation will never have Thomas's boards), its port picker lists real serial leads on the bench and one stand-in everywhere else, its page says which of the two it is talking to, and it refuses a port remembered from a different machine rather than opening it.
 
 ## Architecture: the `Base` object tree
 

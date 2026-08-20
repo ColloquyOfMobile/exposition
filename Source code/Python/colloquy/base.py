@@ -1,5 +1,5 @@
 from pathlib import Path
-import socket
+from . import machines
 from .logger import Logger
 
 
@@ -89,9 +89,21 @@ class Base:
 
     @property
     def is_simulated(self):
-        if socket.gethostname() == "Colloquy-Laptop":
-            return False
-        return True
+        """Is the *piece* simulated here? True everywhere but the
+        installation. Says nothing about the audio bench - that is its own
+        machine with its own hardware, see is_bench."""
+        return not machines.is_installation()
+
+    @property
+    def is_bench(self):
+        """Is Thomas's audio subsystem really attached here?
+
+        The bench is an office desk, not the gallery: it has his Mega and
+        his boards on it and none of the piece. So a machine can perfectly
+        well be simulated by the property above and still have real audio
+        hardware to talk to, which is exactly the case this exists for.
+        """
+        return machines.is_bench()
 
     @property
     def opened(self):

@@ -29,7 +29,7 @@ def test_is_simulated_true_when_super_is_simulated(stub_factory, monkeypatch):
     # BaseThread doesn't override it) is True whenever
     # socket.gethostname() != "Colloquy-Laptop" - force that branch and
     # confirm it short-circuits regardless of params.
-    monkeypatch.setattr("colloquy.base.socket.gethostname", lambda: "some-other-machine")
+    monkeypatch.setattr("colloquy.machines.socket.gethostname", lambda: "some-other-machine")
     owner = stub_factory(id_number=1, params={"emulate light sensor": False})
     light_sensor = LightSensor(name="light sensor", owner=owner)
 
@@ -41,7 +41,7 @@ def test_is_simulated_falls_back_to_params_when_super_is_not_simulated(
 ):
     # Force super().is_simulated to False (hostname == "Colloquy-Laptop")
     # so the property must fall through to params["emulate light sensor"].
-    monkeypatch.setattr("colloquy.base.socket.gethostname", lambda: "Colloquy-Laptop")
+    monkeypatch.setattr("colloquy.machines.socket.gethostname", lambda: "Colloquy-Laptop")
     owner = stub_factory(id_number=1, params={"emulate light sensor": True})
     light_sensor = LightSensor(name="light sensor", owner=owner)
 
@@ -51,7 +51,7 @@ def test_is_simulated_falls_back_to_params_when_super_is_not_simulated(
 def test_is_simulated_false_when_super_is_not_simulated_and_not_emulating(
     stub_factory, monkeypatch
 ):
-    monkeypatch.setattr("colloquy.base.socket.gethostname", lambda: "Colloquy-Laptop")
+    monkeypatch.setattr("colloquy.machines.socket.gethostname", lambda: "Colloquy-Laptop")
     owner = stub_factory(id_number=1, params={"emulate light sensor": False})
     light_sensor = LightSensor(name="light sensor", owner=owner)
 

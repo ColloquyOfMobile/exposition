@@ -88,6 +88,11 @@ class Tests(Base):
     def snapshot_children(self):
         children = {}
         for test in self._threaded_tests:
+            if test is self.test_audio_subsystem and not self.is_simulated:
+                # Thomas's boards are on a desk in an office and the
+                # installation will never have them. Offering a bench test
+                # in the gallery is offering a run that can only refuse.
+                continue
             children[test.name] = test
         children[self.test_graph_zoom.name] = self.test_graph_zoom
         return children

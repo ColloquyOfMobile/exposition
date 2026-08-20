@@ -158,8 +158,24 @@ banner and refuses rather than sitting there failing silently, so if it
 says *"no audio tester on that port"*, the lead is right there in the
 message.
 
-Off the installation laptop everything is simulated and the port list
-offers `simulated audio port`.
+**The bench is a machine of its own.** This test asks whether it is
+running on it (`colloquy/machines.py`, by hostname) and not whether the
+*piece* is simulated — the office desk has Thomas's boards and none of
+the installation, so it is simulated in every other sense and its audio
+hardware is as real as hardware gets. On the bench the port picker lists
+the actual serial leads; anywhere else it offers one stand-in and the
+page says `board: simulated stand-in`.
+
+Two things follow, and both are on the page rather than in a log:
+
+- **It is not offered on the installation's own machine at all.** That
+  computer will never have these boards.
+- **A port remembered from another machine is refused, not opened.** The
+  chosen port lives in `params.json`, which outlives the laptop that
+  chose it — a machine that ran this simulated leaves
+  `simulated audio port` behind, and on the bench that would fail with a
+  pyserial error naming a port nobody recognises. It says what is stored
+  and what is actually there instead.
 
 ---
 
@@ -355,7 +371,8 @@ Thomas's figure 2 suggests `A0` is the 6.25 kHz body down to `A4` at
 160 Hz — but that is the same diagram as the disagreement above. Confirm
 it; don't assume it.
 
-**In simulation it passes every time, all twenty-five.** The stand-in
-board answers the same menu but has no room in it — no air, no distance,
-no microphone that can be deaf. A green run on a laptop says the test
-drives the menu correctly and nothing whatever about anybody's wiring.
+**Against the stand-in it passes every time, all twenty-five.** It
+answers the same menu but has no room in it — no air, no distance, no
+microphone that can be deaf. A green run there says the test drives the
+menu correctly and nothing whatever about anybody's wiring, which is why
+the page says which board it is talking to before it says anything else.

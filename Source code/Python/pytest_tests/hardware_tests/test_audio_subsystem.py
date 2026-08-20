@@ -11,11 +11,16 @@ the real one is read with. That is deliberate: if the two ever disagree
 about what a dump looks like, a simulated run goes green while the bench
 sits silent.
 """
+import io
 from types import SimpleNamespace
 
 import pytest
 
 from colloquy.tests.test_audio_subsystem import protocol
+# Aliased: pytest tries to collect any imported name starting "Test".
+from colloquy.tests.test_audio_subsystem import (
+    TestAudioSubsystem as AudioSubsystemTest,
+)
 from colloquy.virtual_hardware.virtual_audio_serial_port import (
     NOISE_FLOOR,
     TONE_LEVEL,
@@ -299,3 +304,132 @@ def test_the_board_talks_no_faster_than_its_baud_rate(board):
     board._sent_at = board._sent_at + 0.05  # as if 50ms had not yet passed
 
     assert board.read(4096) == b""
+
+
+# --- which machine the board is on ---------------------------------------
+
+
+def set_hostname(monkeypatch, name):
+    monkeypatch.setattr("colloquy.machines.socket.gethostname", lambda: name)
+
+
+def audio_test_double(is_bench):
+    """TestAudioSubsystem's port_handler against a double - the real thing
+    does filesystem I/O at construction (see conftest)."""
+    virtual = SimpleNamespace(port=None, name="the stand-in")
+    return SimpleNamespace(
+        _port_handler=None,
+        is_bench=is_bench,
+        is_simulated=True,
+        baudrate=9600,
+        params={"audio subsystem": {"communication port": "COM7", "baudrate": 9600}},
+        colloquy=SimpleNamespace(
+            virtual_hardware=SimpleNamespace(audio_serial_port=virtual)
+        ),
+    ), virtual
+
+
+def test_the_bench_talks_to_a_real_serial_port(monkeypatch):
+    """The bug this pins.
+
+    The board is on an office desk, and that machine is `is_simulated` -
+    it has none of the piece on it. Choosing the port handler on
+    is_simulated therefore sent the test at the stand-in while the real
+    Mega sat on the desk beside it, and a stand-in run passes all
+    twenty-five. It asks is_bench.
+    """
+    opened = []
+    monkeypatch.setattr(
+        "colloquy.tests.test_audio_subsystem.serial.Serial",
+        lambda **kwargs: SimpleNamespace(port=None, opened=opened.append(kwargs)),
+    )
+    double, virtual = audio_test_double(is_bench=True)
+
+    handler = AudioSubsystemTest.port_handler.fget(double)
+
+    assert handler is not virtual
+
+
+def test_everywhere_else_talks_to_the_stand_in():
+    double, virtual = audio_test_double(is_bench=False)
+
+    assert AudioSubsystemTest.port_handler.fget(double) is virtual
+
+
+def test_the_page_says_which_of_the_two_it_is():
+    on_bench, _ = audio_test_double(is_bench=True)
+    off_bench, _ = audio_test_double(is_bench=False)
+
+    assert AudioSubsystemTest.board_is_real.fget(on_bench) is True
+    assert AudioSubsystemTest.board_is_real.fget(off_bench) is False
+
+
+def test_the_installation_is_not_offered_a_bench_test():
+    """It will never have Thomas's boards - they are in an office.
+
+    Checked on the source of Tests.snapshot_children rather than by
+    building it: the real thing needs the whole hardware graph (see
+    conftest).
+    """
+    import inspect
+
+    from colloquy.tests import Tests
+
+    source = inspect.getsource(Tests.snapshot_children.fget)
+
+    assert "test_audio_subsystem" in source
+    assert "is_simulated" in source
+
+
+def test_the_audio_port_picker_offers_the_stand_in_off_the_bench(monkeypatch, stub_factory):
+    from colloquy.tests.test_audio_subsystem import AudioComPort
+
+    set_hostname(monkeypatch, "some-laptop")
+    picker = AudioComPort(owner=stub_factory())
+
+    assert picker.ports == ["simulated audio port"]
+
+
+def test_the_audio_port_picker_offers_real_leads_on_the_bench(monkeypatch, stub_factory):
+    # And only real ones: the U2D2's and the Arduino's simulated names
+    # used to be on this picker, which only ever invited somebody to pick
+    # one of them by mistake.
+    from colloquy.tests.test_audio_subsystem import AudioComPort
+
+    set_hostname(monkeypatch, "DESKTOP-MRSLS88")
+    monkeypatch.setattr(
+        "colloquy.tests.test_audio_subsystem.list_ports.comports",
+        lambda: [SimpleNamespace(device="COM3"), SimpleNamespace(device="COM7")],
+    )
+    picker = AudioComPort(owner=stub_factory())
+
+    assert picker.ports == ["COM3", "COM7"]
+
+
+def test_a_port_remembered_from_another_machine_is_refused(monkeypatch):
+    """params outlives the machine that wrote it.
+
+    A laptop that ran this simulated leaves "simulated audio port" in
+    params.json. Carried to the bench, that opens nothing and fails with
+    a pyserial error naming a port nobody recognises. Found exactly that
+    way, on the bench, with the value still in the file.
+    """
+    refused = []
+    double = SimpleNamespace(
+        params={"audio subsystem": {"communication port": "simulated audio port"}},
+        com_port=SimpleNamespace(ports=["COM3", "COM7"]),
+        _refuse=refused.append,
+        _start_time=None,
+        _verdicts={},
+        _silence=None,
+        _outcome=None,
+        _manual_reply=None,
+        _buffer="",
+        _file=io.StringIO(),
+    )
+
+    AudioSubsystemTest.setup(double)
+
+    assert refused, "a stale port should be refused, not opened"
+    assert "simulated audio port" in refused[0]
+    assert "COM3" in refused[0]
