@@ -3,6 +3,8 @@ from datetime import datetime
 from time import time
 from colloquy.ui import leaves
 
+from . import readings
+
 # Test-only indicator colors (not part of the installation's own palette,
 # see Neopixel.orange/.puce for the drive colors used on the body segments).
 HEAD_COLOR_BY_MALE = {
@@ -13,6 +15,12 @@ HEAD_COLOR_BY_MALE = {
 # Full brightness: this is a readout to be seen across a room while testing,
 # not a body indicating how hungry it is.
 INDICATOR_BRIGHTNESS = 100
+
+# How many of the most recent readings the page shows. A glitch is worth
+# nothing on its own - what tells you whether it was a stray bit or a bad
+# view is the run of readings either side of it - so this is long enough
+# to hold about a minute of them.
+READING_HISTORY = 60
 
 
 class TestReadPattern(BaseThread):
@@ -58,6 +66,7 @@ class TestReadPattern(BaseThread):
             self._dir_path.mkdir()
 
         self._file = None
+        self._readings = []
         self._start_time = None
         self._last_log_time = 0.0
         self._match_count = 0
@@ -119,8 +128,10 @@ class TestReadPattern(BaseThread):
     def setup(self):
         self._start_time = time()
         self._file.write(
-            "seconds, sender, receiver, expected drive, detected male, detected drive, match\n"
+            "seconds, sender, receiver, expected drive, detected male, "
+            "detected drive, match, reading\n"
         )
+        self._readings = []
         self._stage_selected_pair()
 
     def _stage_selected_pair(self):
@@ -272,10 +283,27 @@ class TestReadPattern(BaseThread):
                 self._mismatch_count += 1
             self._update_indicator(female, detected_male, detected_drive)
 
+        # The same second, said in words. The tuples above answer "how
+        # many were wrong"; this answers "wrong how", which is the
+        # question somebody watching a glitch is actually asking.
+        reading = readings.describe(
+            male.name, expected_drive, detected_male, detected_drive
+        )
+        self._readings.append((now - self._start_time, reading))
+        del self._readings[:-READING_HISTORY]
+
+        # The drive columns are written as their label and not as the
+        # tuple. A tuple has a comma in it - ('O', 'P') - so every row
+        # where a body wanted both appetites split into two extra
+        # columns and shifted everything after it, silently, in a file
+        # whose whole job is to be read afterwards. Found by trying to
+        # read one.
         timestamp = now - self._start_time
         self._file.write(
-            f"{timestamp}, {male.name}, {female.name}, {expected_drive}, "
-            f"{detected_male}, {detected_drive}, {is_match}\n"
+            f"{timestamp}, {male.name}, {female.name}, "
+            f"{readings.drive_label(expected_drive)}, "
+            f"{detected_male}, {readings.drive_label(detected_drive)}, "
+            f"{is_match}, {reading}\n"
         )
 
     def _update_indicator(self, female, detected_male, detected_drive):
@@ -362,5 +390,30 @@ class TestReadPattern(BaseThread):
                 "matches",
                 f"{self._match_count} correct / {self._mismatch_count} wrong / "
                     f"{self._blank_count} nothing seen, out of {self._row_count} seconds",
+            )
+
+            # The wrong ones, by what they said. One reading with a high
+            # count is a systematic mis-decode - a pattern being read as
+            # its neighbour every time. A scatter of ones is a poor view
+            # of him, and no amount of pattern logic fixes that.
+            lines = readings.tally_lines(
+                reading for _seconds, reading in self._readings
+            )
+            states["what went wrong"] = leaves.pre(
+                path,
+                "what went wrong",
+                "\n".join(lines) if lines else "nothing wrong yet",
+            )
+
+            # And the readings themselves, newest first, so a glitch can
+            # be watched rather than counted afterwards.
+            states["last readings"] = leaves.pre(
+                path,
+                "last readings",
+                "\n".join(
+                    f"{seconds:6.1f}s  {reading}"
+                    for seconds, reading in reversed(self._readings)
+                )
+                or "nothing read yet",
             )
         return states
