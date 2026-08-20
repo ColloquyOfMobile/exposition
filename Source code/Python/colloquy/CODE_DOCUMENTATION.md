@@ -307,9 +307,10 @@ while an exchange is running. Everything below is read off
 `Logic_fem.ino` / `Logic_male.ino` (when and why), constants in
 `logic35_systems.ino`, per-body values in `UNIT.ino`.
 
-`timelines/an-answer-in-sound.timeline` walks the same exchange in plain
-language, end to end, with `timelines/the-satisfaction-moment.timeline`
-for what closes it.
+The `an-answer-in-sound` scenario walks the same exchange in plain
+language, end to end, with `the-satisfaction-moment` for what closes it.
+Both hang off `Colloquy` on the front page, no single thread having a
+start() that brings an encounter about.
 
 **Where it stands in this installation.** The wiring exists and nothing
 above it does:
