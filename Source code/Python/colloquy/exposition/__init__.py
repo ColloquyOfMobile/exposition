@@ -15,10 +15,6 @@ class Exposition(BaseThread):
         return self._thread.is_alive()
 
     @property
-    def child_errors(self):
-        return self._child_errors
-
-    @property
     def name(self):
         return "exposition"
 

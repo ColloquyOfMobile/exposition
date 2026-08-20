@@ -90,12 +90,6 @@ class BaseThread(Base):
             return False
         return self._thread.is_alive()
 
-    def append_error(self, value):
-        raise NotImplementedError
-
-    def leave_some_time_to_other_threads(self):
-        sleep(0.01)
-
     def start_command(self, request=None):
         self.start(started_by=None)
 

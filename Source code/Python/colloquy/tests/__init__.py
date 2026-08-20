@@ -2,7 +2,6 @@
 from colloquy.base import Base
 from pathlib import Path
 
-# from .test1 import Test1
 from .test_drive_light_values import TestDriveLightValues
 from .test_male_patterns import TestMalePatterns
 from .test_light_sensor_values import TestLightSensorValues
@@ -46,7 +45,6 @@ class Tests(Base):
             owner=self, result_folder=result_folder
         )
 
-        # self.add(self.test1)
 
         self._threaded_tests = {
             self.test_drive_light_values,

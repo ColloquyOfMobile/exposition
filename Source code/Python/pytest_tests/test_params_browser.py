@@ -310,3 +310,32 @@ def test_children_that_are_still_right_are_left_alone(tmp_path):
 
     assert root.snapshot_children["bar"] is bar
     assert bar._is_opened is True
+
+
+def test_the_page_lists_params_in_the_files_own_order(tmp_path):
+    """Not in a set's order, which is not an order.
+
+    Children were inserted by iterating a set of keys, and Python
+    randomises string hashes per process - so this page listed itself
+    differently after every restart, and the key that was third last time
+    was somewhere else today. Caught by rendering the same page twice
+    across two runs and diffing.
+    """
+    path = tmp_path / "params.json"
+    keys = ["zebra", "apple", "mango", "banana", "cherry", "damson"]
+    params = Params(path, {key: index for index, key in enumerate(keys)})
+
+    root = ParamsNode(owner=None, key="params", params_dict=params)
+
+    assert list(root.snapshot_children) == keys
+
+
+def test_a_key_added_later_lands_at_the_end_not_in_the_middle(tmp_path):
+    path = tmp_path / "params.json"
+    params = Params(path, {"first": 1, "second": 2})
+    root = ParamsNode(owner=None, key="params", params_dict=params)
+    root.snapshot_children
+
+    params["third"] = 3
+
+    assert list(root.snapshot_children) == ["first", "second", "third"]

@@ -70,7 +70,13 @@ class ParamsNode(Base):
         and the page said nothing about it either. Existing children are
         kept as they are, so anything the reader has opened stays open.
         """
-        wanted = {k for k in self._params_dict if k not in _RESERVED_KEYS}
+        # In the file's own order, not a set's. Iterating a set of keys
+        # inserted the children in hash order, and Python randomises
+        # string hashes per process - so the params page listed itself
+        # differently after every restart, and a reader looking for the
+        # key that was third last time had to hunt for it. A dict keeps
+        # insertion order, which here is the order of params.json.
+        wanted = [k for k in self._params_dict if k not in _RESERVED_KEYS]
 
         for key in wanted:
             child = self._children.get(key)
@@ -79,7 +85,7 @@ class ParamsNode(Base):
             ):
                 self._children[key] = self._make_child(key)
 
-        for key in set(self._children) - wanted:
+        for key in set(self._children) - set(wanted):
             del self._children[key]
 
     @property

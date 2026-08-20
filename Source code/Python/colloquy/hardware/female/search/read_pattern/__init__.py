@@ -77,9 +77,17 @@ class ReadPattern(BaseThread):
         return f"read pattern {self.owner.owner.name}"
 
     def loop(self):
-        """
-        Called frequently by the thread framework (~20ms in your setup).
-        We only sample when sample_rate elapsed.
+        """Sample the sensor, no faster than sample_rate asks.
+
+        BaseThread ticks every 10ms, and sample_rate is 10ms too - so
+        this asks for a reading on every single tick. It does not get
+        one: each sensor read is a round trip on the one Arduino line,
+        about 15ms of it, and with all three females looking at once the
+        measured gap between her samples is ~60ms rather than 10. The
+        decoder is built for that (it bins by wall clock and tries every
+        sub-step offset), which is why this loop asks for more than it
+        can have rather than pacing itself - but the margin is thin: 60ms
+        is 3.3 samples per 200ms bit where the decoder wants 4.
         """
         now = time()
         if (now - self._last_sample_time) < self.sample_rate:
