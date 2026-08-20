@@ -1,0 +1,25 @@
+# Test: is Thomas's audio hardware working?
+# A bench test, not an installation one. It wants Thomas's Mega 2560 on a USB lead with his
+# AudioAnalyzerTest firmware on it, the five speakers and the five microphone modules
+# connected, and you sitting in front of it. Nothing the piece is made of moves or lights
+# up during it - no servo, no NeoPixel, no bar.
+# It asks one thing, twenty-five times over: does each of the five tones reach each of the
+# five analyser modules? Bring a pen: write down which module is which body.
+
+0 You pick the board's port on the page. It is not the installation's Arduino - that is a different Mega on a different lead, and choosing it is the usual first mistake. The test knows the difference and says so rather than sitting there.
+0 Press start. Opening the port resets the board, and it answers with its welcome banner. If that banner does not come back within eight seconds the test refuses and says what it got instead.
+0 Everything goes quiet: all five timers off. The room should be silent - if anything is still sounding at this point, that is a timer the firmware does not think is on, and worth stopping for.
+0.7 It reads all five analyser modules for three seconds with nothing playing. This is the floor every later reading is measured against, so it is worth being quiet in the room while it happens.
+3 Then the first tone: 160 Hz, on pin D11. A low hum. It stays on for three seconds while every module is read again.
+0 Listen. One tone, from one speaker if the amps are wired one per body - or from all of them, which tells you something too. Walk along the bench during these three seconds; there is time.
+3.7 Then 400 Hz on D5, then 1 kHz on D6, then 2.5 kHz on D46, then 6.25 kHz on D10 - lowest to highest, three seconds each, silence between. The whole sweep climbs, so you can hear your place in it without watching the page.
+0 Each tone sits in a different one of the analyser's seven bands, which is the point of those five frequencies: five bodies, five voices, no two competing for one band. The 63 Hz and 16 kHz bands are left unused.
+15 As each tone ends, the page fills in one line per module: "1000 Hz -> module 2: heard", and so on. Twenty-five lines by the end.
+0 "heard" means that module's 1 kHz band rose well above its own silence, and rose more than any other band did. That is a whole chain working at once: timer, pin, amp, speaker, air, microphone, MSGEQ7, ADC.
+0 "silent" means nothing rose. Either the tone is not being made - timer, pin, amp - or that module is not hearing it. Which of the two it is, is what the manual commands on the page are for.
+0 "wrong band" means something rose but in the wrong place. That is a tone at a frequency other than the one the firmware claims, or a module wired to the wrong analog input. Rarer, and more interesting.
+0 The run ends itself after the fifth tone with a one-line summary: either all twenty-five pairs heard, or a list of the ones that were not.
+0 It always leaves the board silent, including when you stop it half way or when it fails. Five tones left sounding is not a thing to walk away from.
+0 To chase a failure, use the commands beside the test rather than running it again: "hold 160 Hz on" leaves that one tone sounding for as long as you like, so you can put an ear or a scope on each speaker in turn. "all five at once" is the chord - every band should light on every module. "silence" turns everything off and lets go of the board.
+0 What this cannot tell you: which body each module number belongs to. That is wiring, not firmware, and nothing on the board knows it. Cover one microphone with your hand while a tone is held and see which module number drops - then write it down.
+0 Run in simulation it will pass, every time, for all twenty-five. The stand-in board answers the same menu but has no room in it - no air, no distance, no microphone that can be deaf. A green run on a laptop means the test drives the menu correctly and nothing whatever about anybody's wiring.

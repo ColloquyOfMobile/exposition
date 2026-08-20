@@ -29,7 +29,14 @@ class ComPort(Base):
             self._dict.pop(name)
 
         if self.is_simulated:
-            self._ports = ["simulated u2d2 port", "simulated arduino port"]
+            # Thomas'''s audio tester is a third board on a third lead,
+            # so the simulated list has to offer a third port or the
+            # bench test cannot be pointed at anything.
+            self._ports = [
+                "simulated u2d2 port",
+                "simulated arduino port",
+                "simulated audio port",
+            ]
         else:
             self._ports = [port.device for port in serial.tools.list_ports.comports()]
 

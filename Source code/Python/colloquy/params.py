@@ -20,6 +20,15 @@ DEFAULTS = {
         "baudrate": 57600,
         "communication port": None,
     },
+    # Thomas's audio subsystem tester: a second Mega 2560, on its own USB
+    # lead, running Source code/Thomas/AudioAnalyzerTest.cpp. Nothing in
+    # the installation talks to it - only the bench test under
+    # colloquy/tests/test_audio_subsystem does. 9600 is the baud rate its
+    # firmware sets (AudioAnalyzer.h: BAUDRATE) and is not ours to pick.
+    "audio subsystem": {
+        "baudrate": 9600,
+        "communication port": None,
+    },
     # "dxl origin" is in servo units: it is the raw reading a body gives
     # when it is pointing where it should. Everything else here is in
     # degrees of the thing that moves.

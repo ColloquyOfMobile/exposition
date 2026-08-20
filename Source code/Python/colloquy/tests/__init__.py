@@ -12,6 +12,7 @@ from .test_movements import TestMovements
 from .test_graph_zoom import TestGraphZoom
 from .test_neopixels import TestNeopixels
 from .test_sensors import TestSensors
+from .test_audio_subsystem import TestAudioSubsystem
 
 
 class Tests(Base):
@@ -41,6 +42,9 @@ class Tests(Base):
         self.test_graph_zoom = TestGraphZoom(owner=self)
         self.test_neopixels = TestNeopixels(owner=self, result_folder=result_folder)
         self.test_sensors = TestSensors(owner=self, result_folder=result_folder)
+        self.test_audio_subsystem = TestAudioSubsystem(
+            owner=self, result_folder=result_folder
+        )
 
         # self.add(self.test1)
 
@@ -53,6 +57,7 @@ class Tests(Base):
             self.test_movements,
             self.test_neopixels,
             self.test_sensors,
+            self.test_audio_subsystem,
         }
 
     @property

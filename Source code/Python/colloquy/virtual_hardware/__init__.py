@@ -1,6 +1,7 @@
 from colloquy.base import Base
 from .browser import BodyStateNode, FaultsNode, ServosNode, TimingNode
 from .dxl_ids import BODY_DXL_IDS
+from .virtual_audio_serial_port import VirtualAudioSerialPort
 from .virtual_serial_port import VirtualSerialPort
 from .virtual_port_handler import VirtualPortHandler
 from .virtual_packet_handler import VirtualPacketHandler
@@ -20,6 +21,7 @@ class VirtualHardware(Base):
     def __init__(self, owner):
         super().__init__(owner)
         self._arduino_serial_port = None
+        self._audio_serial_port = None
         self._u2d2_packet_handler = None
         self._body_nodes = {
             body: BodyStateNode(owner=self, body_name=body)
@@ -57,6 +59,17 @@ class VirtualHardware(Base):
         if self._arduino_serial_port is None:
             self._arduino_serial_port = VirtualSerialPort(owner=self)
         return self._arduino_serial_port
+
+    @property
+    def audio_serial_port(self):
+        """Thomas'''s audio subsystem tester, when there is no board.
+
+        Built on first use like the one above, so a machine that never
+        opens the bench test never builds it.
+        """
+        if self._audio_serial_port is None:
+            self._audio_serial_port = VirtualAudioSerialPort(owner=self)
+        return self._audio_serial_port
 
     @property
     def u2d2_packet_handler(self):

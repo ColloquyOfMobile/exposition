@@ -312,6 +312,29 @@ language, end to end, with `the-satisfaction-moment` for what closes it.
 Both hang off `Colloquy` on the front page, no single thread having a
 start() that brings an encounter about.
 
+**Thomas's audio subsystem answers 9.11, and rewrites 9.10.** ZKM has
+built the hearing half, and it changes two of the rows above before
+anything is written against them: `Source code/Thomas/` is a Mega 2560 of
+its own carrying **five** MSGEQ7 analyser modules — one per body, on
+A0–A4, sharing strobe and reset on D4/D3 — and **five** hardware-timer
+tone outputs: 160 Hz on D11, 400 Hz on D5, 1 kHz on D6, 2.5 kHz on D46,
+6.25 kHz on D10.
+
+Each of those five tones lands in a *different* one of the analyser's
+seven bands. TJ's five pitches (1760–2637 Hz, 9.10) all sat inside band
+4, so which body was speaking had to come out of the decoded pattern;
+here it can come out of which band rose. That is a design change and not
+a port, and 9.10's pitch table does not survive it. 9.11's "the box has a
+bare microphone pair per body, no analyser chip" is answered outright.
+
+`colloquy/tests/test_audio_subsystem` is the bench test for that board.
+It drives Thomas's own tester firmware over its serial menu and reports,
+for each of the five tones against each of the five modules, whether the
+right band rose — `heard`, `wrong band` or `silent`. It is the only thing
+in this repo that talks to audio hardware at all, and it claims nothing
+about the rows above: it says whether the hardware a sound channel would
+be built on is working, not that any of it is built.
+
 **Where it stands in this installation.** The wiring exists and nothing
 above it does:
 
