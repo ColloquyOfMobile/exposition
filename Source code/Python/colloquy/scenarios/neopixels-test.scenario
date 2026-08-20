@@ -1,0 +1,17 @@
+# Test: every light in the room, one at a time
+# Started by hand from the control page. It walks every addressable light on every body -
+# twenty of them - through red, then green, then blue, then white, lighting exactly one at
+# a time and nothing else. It is how you find out that the strip you think is female 2's
+# belly really is female 2's belly, and that all four colours reach it.
+# It ends by itself when it runs out of lights.
+
+0 Every light is off. One lights up: female 1's head, red.
+0.8 It goes out and the same segment lights green, then blue, then white - four fifths of a second each. Watch that one place in the room: four colours, a little over three seconds, then it goes dark for good.
+2.4 The next segment takes over: female 1's belly O, the same four colours. Then belly P, then her feet.
+12.8 Female 2, the same four segments in the same order. Then female 3.
+25.6 Then the males, four lights each: the head ring, the ring above it, and the two appetite level strips.
+25.6 Male 1's four, then male 2's four. The rings are the brightest thing in the room and the appetite strips the dimmest, so a male's turn looks uneven next to a female's - that is the hardware, not the test.
+0 In total: twenty segments, four colours each, four fifths of a second apiece - a minute and four seconds from start to finish, if nothing is missing.
+0 The page names the one that is lit right now and counts down what is left, so a segment that does not light can be identified without counting along in your head.
+0 The last one goes out and the test stops itself. Every light is off again, which is also what pressing stop early does.
+0 What to look for: a segment that stays dark is either an unplugged strip or a wrong pin in the firmware; a segment that lights in the wrong place is a wiring order to correct; a colour that comes out wrong on one strip and right on the others is that strip's own channel order.

@@ -43,10 +43,19 @@ def thread_classes():
 
 
 # Threads with nothing written about them yet. Shrinking this list is the
-# work; growing it is a decision. Two of them are deliberate and will stay
-# empty: read_pattern and blink have no appearance of their own in the
-# room - what they do is described inside their parent's scenario, since
-# a female reading and a female swaying are one thing to watch.
+# work; growing it is a decision.
+#
+# Every hardware test under colloquy/tests/ is off it: they are startable
+# from the page like anything else, and what one of them does to the room
+# for the next forty minutes is exactly the kind of thing somebody
+# standing in front of the installation needs told.
+#
+# Of the six left, two are deliberate and will stay: read_pattern and
+# blink have no appearance of their own in the room - what they do is
+# described inside their parent's scenario, since a female reading and a
+# female swaying are one thing to watch. The other four are a real
+# backlog: the exposition thread, a female's light sensor and her
+# reinforcement, and the bar's own plain back-and-forth.
 #
 # A male's light sensors are absent from this list because they are plain
 # Base nodes, not threads - only a female's reads on a loop - and
@@ -59,23 +68,6 @@ WITHOUT_SCENARIOS = {
     "colloquy.hardware.female.search.read_pattern.ReadPattern",
     "colloquy.hardware.male.search.blink.Blink",
     "colloquy.hardware.bar.turn_back_and_forth.TurnBackAndForth",
-    "colloquy.tests.test_drive_light_values.TestDriveLightValues",
-    "colloquy.tests.test_female_search.TestFemaleSearch",
-    "colloquy.tests.test_light_sensor_values.TestLightSensorValues",
-    "colloquy.tests.test_light_sensor_values.test_for_false_positives."
-    "TestForFalsePositives",
-    "colloquy.tests.test_light_sensor_values.test_seeing_male1_as_the_bar_turns."
-    "TestSeeingMale1AsTheBarTurns",
-    "colloquy.tests.test_light_sensor_values.test_with_female_and_male_moving."
-    "TestWithFemaleAndMaleMoving",
-    "colloquy.tests.test_light_sensor_values.test_with_female_male_and_bar_moving."
-    "TestWithFemaleMaleAndBarMoving",
-    "colloquy.tests.test_light_sensor_values.test_with_only_female_moving."
-    "TestWithOnlyFemaleMoving",
-    "colloquy.tests.test_male_patterns.TestMalePatterns",
-    "colloquy.tests.test_movements.TestMovements",
-    "colloquy.tests.test_neopixels.TestNeopixels",
-    "colloquy.tests.test_sensors.TestSensors",
 }
 
 

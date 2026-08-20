@@ -5,6 +5,9 @@ from colloquy.ui import leaves
 
 
 class TestSensors(BaseThread):
+    # Nothing moves and nothing lights up during this one, which is
+    # worth saying out loud somewhere a reader will find it.
+    scenario_names = ("sensors-test",)
     """Continuously polls every light sensor on the rig (each female's
     single sensor, each male's 4 sensors - a/b/c/d) and logs their values,
     so a human can cover/uncover a specific sensor and watch it react
@@ -74,7 +77,7 @@ class TestSensors(BaseThread):
 
     @property
     def snapshot_children(self):
-        return dict(self._sensors)
+        return self._with_scenarios(dict(self._sensors))
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

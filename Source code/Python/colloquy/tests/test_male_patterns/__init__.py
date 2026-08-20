@@ -4,6 +4,9 @@ from time import time
 
 
 class TestMalePatterns(BaseThread):
+    # Two rings blinking side by side, out of step with each other,
+    # and how to read that as expected rather than as a fault.
+    scenario_names = ("male-patterns-test",)
     def __init__(self, owner):
         super().__init__(owner=owner)
 
@@ -48,4 +51,4 @@ class TestMalePatterns(BaseThread):
 
         for blink_handler in self._blink_handlers:
             children[blink_handler.name] = blink_handler
-        return children
+        return self._with_scenarios(children)

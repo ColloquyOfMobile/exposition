@@ -22,6 +22,7 @@ after 30s stop
 
 
 class TestWithFemaleAndMaleMoving(BaseThread):
+    scenario_names = ("female-and-male-moving-test",)
     def __init__(self, owner, result_folder, test_duration):
         super().__init__(owner=owner)
 
@@ -125,4 +126,4 @@ class TestWithFemaleAndMaleMoving(BaseThread):
 
     @property
     def snapshot_children(self):
-        return {}
+        return self._with_scenarios({})

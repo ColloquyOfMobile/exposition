@@ -1,0 +1,14 @@
+# Test: one female sweeping past a still, lit male
+# The first of the light-sensor runs, and the simplest. Male 1 is parked facing out with
+# his ring on, the bar puts him in front of female 1, and she is the only thing that moves.
+# It asks how long her sensor sees him for as she sways past.
+# Thirty seconds.
+
+0 Male 1 turns to his resting direction and the test waits for him to get there.
+0 The bar slides until he is at his meeting point with female 1, and waits for that too. If he was already there this is instant; from the far end it takes most of half a minute.
+0 His ring comes on and stays on - a steady light, not a pattern. Nothing in this run blinks.
+0 Female 1 starts swaying, twenty-nine degrees either side of her resting direction, about six seconds from one end to the other.
+0 Nothing else in the room moves for the rest of the run: not male 1, not the bar, not the other two females.
+30 Her sensor, and both the others', are read as fast as the loop runs - hundreds of times a second - and every reading is written down. Female 2 and female 3 are recorded too, though nothing is in front of them; they are the comparison.
+0 What you are watching for by eye: her head passing across him. What the file is for: how many of those readings crossed the threshold, and for how long at a stretch.
+0 The run ends itself after thirty seconds. Her sway stops, his ring goes out, the bar stays where it is.

@@ -12,6 +12,9 @@ from colloquy.ui import leaves
 
 
 class TestForFalsePositives(BaseThread):
+    # What the room looks like during it - which is nothing at all, in
+    # the dark, for five minutes.
+    scenario_names = ("false-positives-test",)
     """Every female sweeps in the dark, and every reading is filed under
     the angle she was pointing at when it was taken.
 
@@ -219,7 +222,7 @@ class TestForFalsePositives(BaseThread):
         children = {self._results.name: self._results}
         for female in self.females:
             children[female.turn_back_and_forth.name] = female.turn_back_and_forth
-        return children
+        return self._with_scenarios(children)
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

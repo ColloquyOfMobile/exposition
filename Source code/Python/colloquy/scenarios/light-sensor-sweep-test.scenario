@@ -1,0 +1,24 @@
+# Test: the whole light-sensor sequence, end to end
+# One press of start runs all six light-sensor runs in order, each one after the last has
+# finished, without anybody having to come back and start the next. It is the long one -
+# a little over forty minutes - and it is how a whole evening's worth of sensor data is
+# collected in one go.
+# Run it with the installation stopped. Every one of the six refuses to run alongside it.
+
+0 It starts the first of the six and then does nothing but wait. It has no behaviour of its own: everything you see in the room is whichever run is going.
+-> only-female-moving-test
+30 First, one female sweeping past a still lit male. Half a minute.
+-> female-and-male-moving-test
+30 Then both of them swaying. Half a minute.
+-> female-male-and-bar-moving-test
+30 Then both of them swaying with the bar drifting. Half a minute.
+-> all-bodies-moving-test
+1800 Then everything moving at once, for half an hour. This is the bulk of the run - the three short ones before it are done inside two minutes, and then the room looks busy for a long time.
+-> false-positives-test
+300 Then the room goes completely dark for five minutes while the females sweep. If somebody walks in during this part they will think it has crashed.
+-> seeing-male1-test
+300 Then one lit male, held still, while the bar carries him past three sweeping females. Five minutes.
+0 The page names which of the six is running and how far into the sequence it is, so a run left going overnight can be picked up mid-way without guessing.
+0 As each one finishes it writes its own file and its own graphs, so a sequence stopped half way still leaves everything the finished runs produced.
+0 When the last one ends the sequence stops itself, and male 1's ring is turned off - the one light any of the six might have left on.
+0 Pressing stop ends whichever run is going and the sequence with it. It does not skip to the next one.

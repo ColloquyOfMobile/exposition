@@ -1,0 +1,18 @@
+# Test: does she stop for the right male?
+# Started by hand from the control page, after choosing a sending male, a receiving female,
+# what he asks for and what she is short of. It is the one test that checks a decision
+# rather than a measurement: she should end her search for a male asking for something she
+# wants, and ignore one asking for anything else.
+# Run it with the installation stopped - it refuses to start otherwise.
+
+0 You pick the pair and the two appetites on the control page and press start.
+0 If the installation itself is running, or the bar, or either of the chosen bodies, the test refuses and says which one. Nothing moves. Stop those first.
+6 Otherwise three things move together: the bar slides to bring that male to his meeting point with that female, and both of them turn back to their own resting direction, so they end up facing each other.
+0 Both bodies' appetites are forced to the values you chose, so what he asks for and what she is short of are exactly what you set, not whatever they had climbed to.
+0 His ring lights and starts sending. She begins to sway and read.
+0 From here the only thing moving is her own sway. The bar stays where it is and he stays where he is, for the whole run.
+1 Once a second a line is written, saying whether she is still searching, what she has decoded, and whether she has ended.
+0 If the pair is one she should accept, expect her to stop searching within ten or twenty seconds - she needs to catch one whole burst cleanly, and she is swaying past him rather than staring at him. The page says "found" and names him.
+0 If the pair is one she should ignore, expect nothing to happen at all, for the whole run. That is the test passing. A "found" here is the failure.
+180 The time limit runs out and the test ends itself. It also ends early on a find, or on an error in anything it started.
+0 It puts back what it changed: both bodies' appetites go back to what they were, the ring goes out, her search is stopped. The bar is left where it stands.

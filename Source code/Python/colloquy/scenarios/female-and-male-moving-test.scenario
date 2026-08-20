@@ -1,0 +1,14 @@
+# Test: both of them swaying, one lit
+# The second light-sensor run. As the first, except that male 1 sways too - so the light
+# she is trying to see is itself moving away from her and back. Two independent sways, and
+# the question is what is left of the window where they face each other.
+# Thirty seconds.
+
+0 His ring comes on, steady, before anything moves.
+0 The bar slides until he is at his meeting point with female 1, and the test waits for it.
+0 Both of them start swaying at once, each twenty-nine degrees either side of their own resting direction, each about six seconds end to end.
+0 They are not in step. Neither one waits for the other, so over half a minute they pass through every relative position: facing each other, facing the same way, facing apart.
+30 Every reading from all three females' sensors is written down throughout.
+0 By eye this is the run where you see how rarely the two of them actually line up. Expect her sensor to catch him in brief passes rather than for a sustained stretch.
+0 Set against the first run, this is the cost of him moving: the same lit ring, seen for a fraction of the time.
+0 The run ends itself after thirty seconds. Both sways stop, his ring goes out.

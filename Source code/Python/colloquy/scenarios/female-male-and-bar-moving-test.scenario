@@ -1,0 +1,14 @@
+# Test: both of them swaying while the bar drifts
+# The third light-sensor run. As the second, and now the bar moves too - not its whole
+# travel, but the narrow sweep that keeps the pair roughly in front of each other. Three
+# things moving, all the movement a real encounter has.
+# Thirty seconds.
+
+0 The bar slides until male 1 is at his meeting point with female 1, and the test waits for it.
+0 His ring comes on, steady.
+0 Three things start together: her sway, his sway, and the bar drifting back and forth around that meeting point rather than crossing the rail.
+0 The bar's drift is the slowest of the three, so it reads as the pair sliding gently past each other while both of them turn.
+30 Every reading from all three females is written down throughout.
+0 This is the closest of the first three runs to what the installation actually does, minus the blinking. If her sensor catches him for long enough here, it can catch a whole pattern in the real thing.
+0 It is also the run where female 2 and female 3 stop being pure comparison: the bar's drift can bring him within sight of a neighbour. A reading on one of them is not necessarily noise.
+0 The run ends itself after thirty seconds. All three movements stop, his ring goes out, the bar stays where it stands.

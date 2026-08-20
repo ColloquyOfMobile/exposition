@@ -1,0 +1,17 @@
+# Test: can the room itself look like a male?
+# Every light in the installation off - including both males' rings, which the other runs
+# leave on - and all three females sweeping their own travel while their sensors are read.
+# If a female reads "light" during this, something that is not a male is bright enough to
+# put a false flash into a pattern she is trying to read.
+# Run it with the installation stopped, and ideally with the room as it will be for visitors.
+
+0 Everything goes dark: every light on every body is turned off, not just dimmed. The room is lit only by whatever is in it - windows, doorways, monitors, the ceiling.
+0 All three females start swaying at once, twenty-nine degrees either side of their own resting direction.
+0 The bar does not move. The males do not move. Nothing else in the room changes for the whole run.
+300 Each female's angle is read first and then her sensor, as fast as the loop runs, so each reading is filed under the direction she was actually pointing when it was taken.
+0 There is nothing to watch. The point of the run is the graph it draws at the end: for each female, her reading against the direction she was facing.
+0 A flat line below the threshold is the answer you want - the room is dark from every direction she can look.
+0 A hump anywhere on it is a direction that is too bright, and its position tells you where in the room to look. Stand where she is and turn to that angle.
+0 By default it runs five minutes; the duration is chosen on the page before starting. Longer is better here, since it is the rare stray reading that matters.
+0 It ends itself, stops the sways, and writes one graph per female next to the file. They can be opened from the results node on the page rather than by finding the folder.
+0 It refuses to start if the installation or any body is already running - that would light the very lights this run needs off.

@@ -1,0 +1,13 @@
+# Test: the appetite lights, from empty to full
+# Started by hand from the control page. It turns on every light on every body and starts
+# every appetite climbing at once, then waits until all ten of them are full. Nothing
+# turns and nothing blinks: this is only about what colour things are and when they change.
+# It ends by itself when every appetite reaches the top.
+
+0 Every light on every body comes on at once - heads, bellies, feet, rings, appetite strips. The whole room lights up in one step, which does not happen at any other time.
+0 All ten appetites start climbing from wherever they were left. They are not at zero: each body starts from its own configured value, so they do not all arrive together.
+2.4 Every two and a half seconds, each one goes up by one and its level strip follows. The change per step is small - watch a strip for half a minute, not for one step.
+0 The bodies with the lowest starting values take longest. From the lowest of them it is a little under four minutes to full.
+0 Female 1's feet turn from orange to greenish once both of her appetites reach the top. That colour change is the thing this test exists to make watchable: it happens once, near the end, and it is easy to miss in a live run.
+225 All ten are full. The test stops itself, every light goes out, and the appetites stay where they are - full - rather than being put back.
+0 That last part matters if you run something else afterwards: every body is now fully frustrated, which is not the state a fresh start would be in. Restart the installation to clear it.

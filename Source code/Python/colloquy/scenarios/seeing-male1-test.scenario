@@ -1,0 +1,18 @@
+# Test: at what placing can she see him at all?
+# The complement of the false-positives run. One light in the room - male 1's ring, held
+# still at his resting direction - and both of the angles that decide whether a female can
+# see him sweeping: the bar over its whole travel, and each female over her own sway. It
+# asks where, in the geometry, she starts reading him.
+# Run it with the installation stopped.
+
+0 Everything goes dark first, including male 2's ring, so nothing but male 1 can be what a sensor sees.
+0 Male 1 and the bar both turn to their resting direction and the test waits for both. A reading taken while he is still swinging into place would be filed under an aim he does not have yet.
+0 His ring comes on, steady. He does not move again for the whole run - he is the one thing held still.
+0 The bar sets off across its whole travel, end to end and back, carrying him past all three females again and again.
+0 All three females start swaying at the same time, each over her own travel.
+300 Every reading is taken with both angles beside it: where the bar is, and where she is pointing. The bar is read once per row rather than once per female, so one instant of its travel is not filed under three different positions.
+0 What you see in the room is him sliding back and forth, lit, while three heads turn independently. What comes out is two graphs per female.
+0 The first is her reading against how far the two of them are from lined up, measured from her own meeting point - so zero means lined up, for all three of them and not just for female 1.
+0 The second is a map of the two angles against each other, with her reading as the colour, and it is there to check the first. A bright diagonal says the two angles add up and the first graph can be trusted. A bright rectangle says they are two independent windows and the first graph is smeared by the width of both. A diagonal the other way says the subtraction has a sign wrong.
+0 Worth knowing before reading a simulated run: the simulator cannot answer that question. It models the two windows as a conjunction, so a simulated run always draws the rectangle. Only the real bodies can settle it.
+0 Five minutes by default, chosen on the page. It ends itself, stops everything it started, and puts both graphs per female where the results node can find them.

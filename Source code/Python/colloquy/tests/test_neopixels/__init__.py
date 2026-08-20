@@ -12,6 +12,9 @@ COLORS = (
 
 
 class TestNeopixels(BaseThread):
+    # Twenty segments, four colours each, one at a time - what the room
+    # looks like while it walks them, and what a dark one means.
+    scenario_names = ("neopixels-test",)
     """Cycles every neopixel segment on every body (each female's head/
     bodyO/bodyP/feet, each male's ring/up ring/o drive level/p drive
     level - 20 segments total) through red/green/blue/white, one segment
@@ -111,7 +114,7 @@ class TestNeopixels(BaseThread):
 
     @property
     def snapshot_children(self):
-        return dict(self._segments)
+        return self._with_scenarios(dict(self._segments))
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

@@ -6,6 +6,9 @@ from colloquy.ui import leaves
 
 
 class TestDriveLightValues(BaseThread):
+    # Every light on at once and every appetite climbing - including
+    # that it leaves all ten of them full when it ends.
+    scenario_names = ("appetite-lights-test",)
     def __init__(self, owner):
         super().__init__(owner=owner)
 
@@ -45,7 +48,7 @@ class TestDriveLightValues(BaseThread):
         children = {}
         for drive in self.hardware.drives:
             children[drive.name] = drive
-        return children
+        return self._with_scenarios(children)
 
     def _snapshot_if_opened(self, path):
         # The elapsed time was built in snapshot_children off a name that

@@ -1,0 +1,14 @@
+# Test: watching the light sensors react
+# Started by hand from the control page and left running for as long as you want. Nothing
+# moves and nothing lights up: it only reads every light sensor on the rig twice a second
+# and writes down what they say. It is the test you run with your hand, covering one
+# sensor at a time and watching the number fall.
+# It never ends on its own - press stop when you are done.
+
+0 Nothing in the room changes. No body turns, no light comes on, no light goes off. Whatever was lit stays lit.
+0.5 Twice a second, all eleven sensors are read at once - one on each female, four on each male - and one line is written.
+0 The page shows the current reading of each of them beside its name, so the sensor you are covering can be found by watching which number moves.
+0 Cover one with your hand: its number should drop within half a second and come back when you take your hand away. A sensor that does not move is either unwired or reading the wrong pin.
+0 The room's own light sets the resting level, so the numbers will not be the same from one evening to the next, or the same as each other. What matters is which way they move and by how much, not the value.
+0 A male's four sensors read almost the same as each other unless something is close to one of them - they face nearly the same way. Three that move together and one that does not is that one sensor.
+0 Nothing is put back when you stop, because nothing was changed. The file keeps every reading taken since start.

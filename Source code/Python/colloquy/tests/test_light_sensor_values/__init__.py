@@ -15,6 +15,10 @@ from colloquy.ui import leaves
 
 
 class TestLightSensorValues(BaseThread):
+    # The sequence has no behaviour of its own: its scenario is the six
+    # it runs, pulled in as sub-scenarios on one clock, which is what
+    # the -> lines in it are for.
+    scenario_names = ("light-sensor-sweep-test",)
     def __init__(self, owner, result_folder):
         super().__init__(owner)
         # self.opened = None
@@ -142,7 +146,7 @@ class TestLightSensorValues(BaseThread):
         children = {}
         for test in self._threaded_tests:
             children[test.name] = test
-        return children
+        return self._with_scenarios(children)
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

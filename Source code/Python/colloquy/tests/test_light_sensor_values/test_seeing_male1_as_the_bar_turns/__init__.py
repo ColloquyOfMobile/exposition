@@ -16,6 +16,9 @@ from colloquy.ui import leaves
 
 
 class TestSeeingMale1AsTheBarTurns(BaseThread):
+    # Including what the second graph is for and why a simulated run
+    # cannot answer the question it asks.
+    scenario_names = ("seeing-male1-test",)
     """Male1 stands still with his ring lit, and the bar carries him past
     every female while each one's sensor is read.
 
@@ -280,7 +283,7 @@ class TestSeeingMale1AsTheBarTurns(BaseThread):
         }
         for female in self.females:
             children[female.turn_back_and_forth.name] = female.turn_back_and_forth
-        return children
+        return self._with_scenarios(children)
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

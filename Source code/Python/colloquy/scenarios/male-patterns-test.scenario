@@ -1,0 +1,15 @@
+# Test: both males sending at once
+# Started by hand from the control page. It starts nothing but the two rings: both males
+# blink their patterns, side by side, with no bodies turning and no females reading. It is
+# how the two patterns are told apart by eye, and how a ring that is blinking the wrong
+# thing is caught.
+# It ends when either male stops blinking.
+
+0 Neither male moves. Nothing else in the room changes.
+0 Both head rings start sending. Ten flashes, a fifth of a second each - two seconds of blinking - then dark for a little over two seconds, then the same again.
+0 They are not in step with each other. The two males started at slightly different moments and each keeps his own clock, so the two rings drift in and out of phase over a run. That is expected.
+0 Each male's pattern says which male he is and which appetite he is short of. What he asks for is whatever his appetites happen to be at when the test starts, so both rings may well be sending the same request - what differs between them is the male half of the pattern.
+0 Expect each ring to be dark about half the time. The gap is part of the message, not a fault: it is what marks where a pattern begins.
+0 The page shows each male's current appetite values beside his ring, so a pattern that changes mid-run can be matched to the appetite that crossed the line and caused it.
+0 The pattern is chosen once at the start of each burst, so a change waits for the next burst rather than cutting the current one in half. Watching a burst that is half one pattern and half another means something is wrong.
+0 Pressing stop ends both. The rings go out. Nothing else was touched, so nothing is put back.

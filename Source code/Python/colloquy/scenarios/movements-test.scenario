@@ -1,0 +1,19 @@
+# Test: every movement the rig can make, in order
+# Started by hand from the control page. It drives one axis at a time through its whole
+# range and back, in a fixed sequence, pausing at each stop so you can see where it landed.
+# It is how the bar's meeting points are checked, which is the one thing that cannot be
+# judged by eye without something to compare against.
+# Nothing lights up during it. Watch the movement, not the lights.
+
+0 Everything goes home first: the bar and all five bodies turn to their own resting direction at once. Nothing else starts until they are all there.
+1 The bar runs to one end of its travel, stops, and sits still for a second so it is obvious where it stopped.
+1 Then to the other end - its whole length, which takes the longest of any single step here, around twenty-five seconds. Then back to its resting direction.
+1 Now the six meeting points, one after another: the bar carries male 1 to female 1, then to female 2, then female 3, then male 2 to each of the three in turn. It pauses a second at each.
+0 This is the part worth standing in the room for. At each pause, one male should be squarely in front of one female. If he is off to one side, that pair's meeting point in the parameters is wrong, and this is where you see by how much.
+1 The bar returns to its resting direction.
+1 Then each body in turn, five of them - male 1, male 2, then the three females: to one end of its own sway, to the other, back to the middle. A second at each stop.
+0 They all sway the same distance, twenty-nine degrees either side. A body that visibly swings further or shorter than its neighbours is a reduction or a range to check, not an illusion.
+1 Everything goes home once more, and the test stops itself.
+0 If a body has not arrived within forty seconds, the test gives up waiting on that step and moves to the next one rather than hanging. The log says which step it was. That is what a stuck body or a fouled range looks like from here.
+0 Stop takes effect within a tick, in the middle of a move if need be - it does not finish the bar crossing first.
+0 The page also carries a set of one-click jogs for the same positions, so any one of them can be revisited without running the whole sequence again.

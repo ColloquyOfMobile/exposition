@@ -6,6 +6,9 @@ from colloquy.ui import leaves
 
 
 class TestMovements(BaseThread):
+    # Twenty-seven steps in a fixed order, and which of them is the one
+    # to stand in the room for (the six meeting points).
+    scenario_names = ("movements-test",)
     """Exercises every movement primitive in the rig - the bar's full
     travel range plus its per-female interaction positions for each male,
     and each male's/female's local sway range - one axis at a time, in a
@@ -177,7 +180,7 @@ class TestMovements(BaseThread):
         )
         for body in self._males + self._females:
             children[body.turn_back_and_forth.name] = body.turn_back_and_forth
-        return children
+        return self._with_scenarios(children)
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
