@@ -339,3 +339,13 @@ def test_a_key_added_later_lands_at_the_end_not_in_the_middle(tmp_path):
     params["third"] = 3
 
     assert list(root.snapshot_children) == ["first", "second", "third"]
+
+
+def test_the_int_setter_can_reach_the_largest_value_params_holds():
+    # ValueSetter2's bound is exclusive, so a bound of exactly the
+    # baudrate would show it on the page and never set it back once
+    # somebody had changed it.
+    from colloquy.params_browser import _INT_SETTER_MAX
+    from colloquy.params import DEFAULTS
+
+    assert DEFAULTS["arduino"]["baudrate"] < _INT_SETTER_MAX

@@ -9,13 +9,19 @@ from colloquy.ui import leaves
 
 # Wide enough to cover every current int param (bar interaction origins
 # up to ~10400) plus real-world values that don't fit a narrower guess -
-# e.g. arduino.baudrate is 57600, which didn't even fit in an earlier,
-# narrower version of this range. Safe to be generous: ValueSetter2
-# builds its digit tree lazily (one level at a time, on actual
-# navigation), so the range size no longer affects Colloquy() startup
-# time the way it did before that fix.
-_INT_SETTER_MIN = -1_000_000
-_INT_SETTER_MAX = 1_000_000
+# e.g. arduino.baudrate, which didn't even fit in an earlier, narrower
+# version of this range and is now 1000000.
+#
+# ValueSetter2's bound is *exclusive* (it breaks at `magnitude >= max`),
+# so a bound of exactly 1_000_000 could show the baudrate and never set it
+# back once somebody had changed it. Eight digits, so the largest value
+# the page holds is one the page can also reach.
+#
+# Safe to be generous: ValueSetter2 builds its digit tree lazily (one
+# level at a time, on actual navigation), so the range size no longer
+# affects Colloquy() startup time the way it did before that fix.
+_INT_SETTER_MIN = -10_000_000
+_INT_SETTER_MAX = 10_000_000
 
 # Base._snapshot_base_states always sets these on every node (path/name/
 # close/open/opened) and _snapshot_if_opened's default walk merges child
