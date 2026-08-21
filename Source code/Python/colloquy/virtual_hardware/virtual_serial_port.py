@@ -4,27 +4,35 @@ import re
 from time import sleep
 from colloquy.base import Base
 from colloquy.hardware.angle.conversion import REDUCTIONS, ticks_to_degrees
+from colloquy.hardware.arduino import firmware
 from random import Random
 
 from .dxl_ids import BAR_DXL_ID, FEMALE_DXL_IDS, MALE_DXL_IDS
 
-# Where the firmware lives, relative to this file rather than to the
-# working directory: colloquy/virtual_hardware/ -> ... -> Source code/.
-_ARDUINO_SKETCH = (
-    Path(__file__).resolve().parents[3]
-    / "Arduino"
-    / "colloquy_of_mobiles"
-    / "colloquy_of_mobiles.ino"
-)
+# Where the firmware lives. Named once, in the driver that has to agree
+# with it - this reads it for the list of paths, firmware.py reads it for
+# the baud rate and the protocol version.
+_ARDUINO_SKETCH = firmware.SKETCH_PATH
 
 
-# One command and its reply over the real link: ~70 characters at 57600
-# baud is about 12ms, plus the sketch's own parse and NeoPixel.show().
-# Replying instantly is not neutral - ReadPattern bins its samples by wall
-# clock, so a simulator with no latency feeds it 2-3x more samples per
-# pattern step than the rig ever will, and a decode that works here can
-# fail there for reasons that have nothing to do with the decoding.
-REALISTIC_LATENCY = 0.015
+# One command and its reply over the real link. Replying instantly is not
+# neutral - ReadPattern bins its samples by wall clock, so a simulator
+# with no latency feeds it 2-3x more samples per pattern step than the rig
+# ever will, and a decode that works here can fail there for reasons that
+# have nothing to do with the decoding.
+#
+# At 1 Mbaud the wire is no longer what costs: ~75 characters each way is
+# under a millisecond, and what is left is the sketch's own work - about
+# 0.2ms to parse the JSON, then either 2ms of NeoPixel.show() for a pixel
+# group or 0.1ms of analogRead() for a sensor. One number covers both, and
+# it is the slower one, which errs towards handing a female fewer samples
+# than the rig will rather than more.
+#
+# It was 15ms while the link ran at 57600, where the wire *was* the cost:
+# ~70 characters at 57600 is about 12ms on its own. TimingNode still
+# offers that as a preset, so a decode can be compared across the change.
+REALISTIC_LATENCY = 0.003
+OLD_57600_LATENCY = 0.015
 
 
 def _kind_of(name):
@@ -78,6 +86,7 @@ class VirtualSerialPort(Base):
             "m2/light sensor/b": self._read_sensor,
             "m2/light sensor/c": self._read_sensor,
             "m2/light sensor/d": self._read_sensor,
+            "version": self._greet,
         }
 
         self._port = port
@@ -166,8 +175,23 @@ class VirtualSerialPort(Base):
     def open(self):
         assert not self.is_open
         assert self._port is not None
-        self._to_return = self._as_reply("Hello!")
+        self._to_return = self._greeting_line()
         self._is_open = True
+
+    def _greeting_line(self):
+        """What the sketch would say on reboot, taken from the sketch.
+
+        Read out of the .ino rather than written here, so that a simulated
+        board announces the same firmware and the same baud rate a flashed
+        one does. Copied by hand it would be right until the first time
+        either number changed - which is exactly the drift the greeting
+        exists to catch.
+        """
+        return self._as_reply(json.dumps(firmware.sketch_greeting()))
+
+    def _greet(self, data):
+        """The "version" path: the same line, on demand."""
+        return self._greeting_line()
 
     @staticmethod
     def _as_reply(value):

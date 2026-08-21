@@ -1,6 +1,45 @@
 #include <Adafruit_NeoPixel.h>
 #include <ArduinoJson.h>
 
+// ##########################################################
+// The link, and what the driver on the other end has to agree with.
+//
+// Both numbers below are read straight out of this file by the Python
+// side (colloquy/hardware/arduino/firmware.py), the same way it already
+// reads the paths further down, so this is the one place either of them
+// is written. They are also sent on the wire in the greeting, so a board
+// running something else says so rather than being mistaken for this one.
+
+// Bumped whenever the serial protocol changes in a way that would make an
+// older driver misread this board: a renamed path, a reply of a different
+// shape. Nothing about such a mismatch is loud on its own - an unknown
+// path is answered with an empty line - so the only symptom is a female
+// who never sees a pattern, which is why the driver refuses a version it
+// was not written for.
+//
+// 1: the original. Greeted with a bare "Hello!" and ran at 57600.
+// 2: greets with JSON saying this version and this baud rate, answers
+//    "version" with the same, and runs the link at 1 Mbaud.
+#define FIRMWARE_VERSION 2
+
+// As fast as this link will honestly go. The Mega's USART divides its
+// 16 MHz exactly at 1 Mbaud (U2X, UBRR = 1), so there is no framing error
+// to accumulate, and the 16U2 bridge carries it. 2 Mbaud divides exactly
+// too, and is also the rate at which this pair is known to start dropping
+// bytes - and a dropped byte here is a light sensor reading that never
+// comes back.
+//
+// It was 57600 until the pattern reading needed the samples: a female
+// decodes her sensor by binning readings against a wall clock, and at
+// 57600 one round trip cost about 12ms of a 200ms bit. See
+// colloquy/light_pattern_timing.py for where the 200ms comes from.
+#define SERIAL_BAUDRATE 1000000UL
+
+// One command line, with room to spare: the longest this sketch is sent
+// is a four-channel pixel fill, about seventy characters. It is read into
+// a fixed buffer rather than a String - see loop().
+#define COMMAND_BUFFER_SIZE 128
+
 // PINs
 #define FEMALE1_NEOPIXEL_PIN 6
 #define FEMALE2_NEOPIXEL_PIN 7
@@ -268,27 +307,59 @@ Adafruit_NeoPixel strips[] = {
 };
 // ##########################################################
 
+// Who this board is, in one line the driver can parse. Sent once on
+// reboot, and again whenever it is asked for ("version"), so the check
+// can be repeated without power-cycling the installation.
+String greeting() {
+  return String("{\"hello\":\"colloquy of mobiles\",\"firmware\":")
+         + FIRMWARE_VERSION
+         + ",\"baudrate\":"
+         + SERIAL_BAUDRATE
+         + "}";
+}
+
 void setup() {
   for (auto& strip : strips) {
     strip.begin();
     strip.show();
   }
 
-  Serial.begin(57600);
-  // Each time the serial port is opened the Arduino is rebooted.
-  // The arduino will be ready when client can read "Hello!" on the serial.
-  Serial.println("Hello!");
+  Serial.begin(SERIAL_BAUDRATE);
+  // Each time the serial port is opened the Arduino is rebooted, so this
+  // line is how the driver knows the board is ready. Since it says which
+  // firmware and which baud rate, it is also how the driver knows this is
+  // the board it was written for.
+  Serial.println(greeting());
 }
 
+// The line being collected right now. At 1 Mbaud a whole command lands in
+// under a millisecond and the core's receive buffer holds 64 bytes, so
+// there is no time to spare while it arrives: readStringUntil() used to
+// build the line one String concatenation at a time - a fresh allocation
+// per character - which is slower than the bytes come in and would
+// silently lose the tail of a command. A fixed buffer never allocates.
+char commandBuffer[COMMAND_BUFFER_SIZE];
+uint8_t commandLength = 0;
+
 void loop() {
-  if (Serial.available()) {
-    String input = Serial.readStringUntil('\n');
-    String response = processCommand(input);
-    Serial.println(response);
+  while (Serial.available()) {
+    char character = Serial.read();
+    if (character == '\r') continue;
+    if (character == '\n') {
+      commandBuffer[commandLength] = '\0';
+      Serial.println(processCommand(commandBuffer));
+      commandLength = 0;
+      continue;
+    }
+    // Anything past the end is dropped rather than allowed to run off the
+    // buffer. The line is then junk, and deserializeJson() says so.
+    if (commandLength < COMMAND_BUFFER_SIZE - 1) {
+      commandBuffer[commandLength++] = character;
+    }
   }
 }
 
-String processCommand(const String& input) {
+String processCommand(const char* input) {
   // Analyse du JSON
   StaticJsonDocument<256> jsonDoc;
   DeserializationError error = deserializeJson(jsonDoc, input);
@@ -296,9 +367,18 @@ String processCommand(const String& input) {
     return "Error while deserializeJson!";
   }
 
-  if (!jsonDoc.containsKey("path")) return ;
+  // Returning nothing at all from a function declared to return a String
+  // is undefined behaviour, and this used to do exactly that.
+  if (!jsonDoc.containsKey("path")) return "No path in command!";
 
   String path = jsonDoc["path"];
+
+  // Asked for by the driver, and offered on the page. It sits in the same
+  // if-chain as everything else on purpose: the simulator learns which
+  // paths exist by reading them out of this file.
+  if (path == "version") {
+    return greeting();
+  }
 
   if (path == "f1/head") {
     return female1.head.fill(jsonDoc);

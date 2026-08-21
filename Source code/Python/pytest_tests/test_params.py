@@ -243,3 +243,56 @@ def test_load_of_an_up_to_date_file_writes_no_backup(tmp_path):
     Params.load(path)
 
     assert not list(tmp_path.glob("params.json.v*.bak"))
+
+
+# A params file as it stood while the Arduino's link ran at 57600, which
+# is what every installation's file says until it is migrated.
+V3 = {
+    "params version": 3,
+    "arduino": {"baudrate": 57600, "communication port": "COM3"},
+    "female1": {"dxl origin": 100, "motion range": 58.594},
+}
+
+
+def test_migrate_moves_the_arduino_baudrate_with_the_firmware():
+    # Not a calibration: it is a copy of a number that lives in the
+    # sketch, kept here only so the port can be opened before the board
+    # has said anything. So it moves when the sketch moves.
+    migrated = migrate(json.loads(json.dumps(V3)))
+
+    assert migrated["arduino"]["baudrate"] == DEFAULTS["arduino"]["baudrate"]
+    assert migrated["arduino"]["baudrate"] != 57600
+
+
+def test_migrate_leaves_the_com_port_alone():
+    # That one *is* a fact about this machine.
+    migrated = migrate(json.loads(json.dumps(V3)))
+
+    assert migrated["arduino"]["communication port"] == "COM3"
+
+
+def test_migrate_does_not_overrule_a_baudrate_somebody_typed():
+    # Anything other than the old default was set by hand for a reason.
+    # Arduino.open() will say so if the reason has expired, rather than
+    # this quietly deciding for them.
+    hand_set = json.loads(json.dumps(V3))
+    hand_set["arduino"]["baudrate"] = 115200
+
+    assert migrate(hand_set)["arduino"]["baudrate"] == 115200
+
+
+def test_migrate_from_v1_arrives_at_the_current_baudrate():
+    # Every step in the chain, not just the last one.
+    migrated = migrate(json.loads(json.dumps(V1)))
+
+    assert migrated["params version"] == PARAMS_VERSION
+    assert migrated["arduino"]["baudrate"] == DEFAULTS["arduino"]["baudrate"]
+
+
+def test_the_default_baudrate_is_the_one_the_sketch_sets():
+    # The whole reason for the version bump. If these two ever part, the
+    # port is opened at a rate the board is not talking at, and every
+    # reply is rubbish that still looks like data.
+    from colloquy.hardware.arduino import firmware
+
+    assert DEFAULTS["arduino"]["baudrate"] == firmware.sketch_baudrate()

@@ -5,6 +5,10 @@ import json
 from time import time
 from threading import Lock
 from colloquy.base import Base
+from colloquy.ui import leaves
+from . import boards
+from . import firmware
+from .boards import Boards
 from .com_port import ComPort
 
 from .neopixel_command import NeopixelCommand
@@ -15,6 +19,11 @@ class Arduino(Base):
     _classes = {
         "serial": serial.Serial,
     }
+
+    # How long the board is given to announce itself after the port is
+    # opened. It reboots when the port opens, and a Mega spends most of a
+    # second in its bootloader before the sketch runs at all.
+    GREETING_TIMEOUT = 2.0
 
     def __init__(self, owner, **kwargs):
         """
@@ -64,6 +73,17 @@ class Arduino(Base):
 
         self._com_port = ComPort(owner=self)
         self[self.com_port.name] = self.com_port
+
+        # What is on the USB bus, whether or not any of it is ours. Every
+        # other diagnosis in here needs a working link first; this one
+        # does not need the link at all.
+        self._boards = Boards(owner=self)
+        self[self._boards.name] = self._boards
+
+        # What the board said about itself the last time the port was
+        # opened - None until it has been asked. See firmware.py.
+        self._greeting = None
+
         self["open"] = self.open
         self["close"] = self.close
 
@@ -92,6 +112,29 @@ class Arduino(Base):
     @property
     def com_port(self):
         return self._com_port
+
+    @property
+    def boards(self):
+        return self._boards
+
+    @property
+    def greeting(self):
+        """What the board said about itself when the port was last
+        opened, or None if it has not been asked yet."""
+        return self._greeting
+
+    @property
+    def problems(self):
+        """Everything currently wrong with this link, in words.
+
+        Empty when params.json, the sketch in this repo and the board on
+        the other end all say the same thing. Read on the page rather
+        than raised: a request that raises is taken for a crash serious
+        enough to emergency-stop the installation (Server2.wsgi), and a
+        baud rate typed wrong on the params page is not that. It becomes
+        fatal at open(), which is where it stops anything from working.
+        """
+        return firmware.problems(self.baudrate, self._greeting)
 
     @property
     def is_open(self):
@@ -176,19 +219,204 @@ class Arduino(Base):
         self.port_handler.close()
 
     def open(self, request=None):
+        """Open the link, and make sure it is one.
+
+        Three things have to agree before a single command means anything:
+        what params.json is about to open the port at, what the sketch in
+        this repo sets, and what is actually flashed on the board. They
+        are checked in that order, which is the order they cost in - the
+        first needs no hardware at all, and it is the mismatch that
+        happens by itself, since the two numbers live in two files edited
+        on two different occasions.
+
+        All three failures are raised rather than logged. Every one of
+        them means nothing that follows will work, and the way they show
+        up otherwise is a female who reads no pattern for forty minutes.
         """
-        Ouvre le port série.
-        """
+        self._greeting = None
+
+        problems = firmware.baudrate_problems(self.baudrate)
+        if problems:
+            raise RuntimeError(f"Arduino: {' '.join(problems)}")
+
+        # The handler was built with whatever params said at the time, and
+        # params can be edited from the page between two opens.
+        self.port_handler.baudrate = self.baudrate
         self.port_handler.open()
         self.wait_for_reboot()
 
     def wait_for_reboot(self):
-        start = time()
-        while True:
-            self.log("Waiting for Arduino to reboot.")
-            data = self.port_handler.readline().strip()
-            if data == b"Hello!":
-                break
-            if time() - start > 2:
-                raise RuntimeError("Arduino was to long to reboot !")
+        """Wait for the board to say who it is, and check the answer.
 
+        Opening the port reboots the board, and it greets. Since firmware
+        2 the greeting is a line of JSON naming the protocol version and
+        the baud rate it is running at, which is what makes this a check
+        and not just a wait: a board flashed with something older, or
+        talking at some other rate, says so here instead of half-working
+        for the rest of the run.
+        """
+        greeting = self._read_greeting()
+        if greeting is None:
+            raise RuntimeError(self._diagnose_silence())
+
+        self._greeting = greeting
+        self.log(f"Arduino on {self.port_name}: {firmware.describe(greeting)}")
+
+        problems = firmware.greeting_problems(greeting, self.baudrate)
+        if problems:
+            raise RuntimeError(f"Arduino on {self.port_name}: {' '.join(problems)}")
+
+    def _read_greeting(self, timeout=None):
+        """The board's own line about itself, or None if none arrived.
+
+        Anything unparseable is logged and skipped rather than believed:
+        at the wrong baud rate the board answers with rubbish, and rubbish
+        occasionally contains a newline.
+        """
+        if timeout is None:
+            timeout = self.GREETING_TIMEOUT
+        start = time()
+        while time() - start < timeout:
+            self.log("Waiting for Arduino to reboot.")
+            line = self.port_handler.readline().strip()
+            if not line:
+                continue
+            greeting = firmware.parse_greeting(line)
+            if greeting is not None:
+                return greeting
+            self.log(f"Not a greeting: {line!r}")
+        return None
+
+    def _diagnose_silence(self):
+        """Nothing legible came back. Say what is actually on the lead.
+
+        A wrong baud rate is the quietest failure this link has: the board
+        is there, it is answering, and every byte of it is rubbish. So
+        before giving up, the port is reopened at each rate the sketch has
+        ever run at - reopening toggles DTR, which reboots the Mega, which
+        makes it greet again - and if one of them produces a greeting then
+        that is the whole diagnosis in one sentence.
+
+        Failing that, the USB bus itself is worth reporting: a board that
+        has never been flashed still enumerates, so "a Mega is plugged in
+        and it is not talking" is a different thing from "there is nothing
+        there", and only one of them means fetch a cable. See boards.py.
+
+        Not on a simulated port, which ignores baud rates entirely - it
+        would "find" the board at the first rate tried and say something
+        confidently wrong.
+        """
+        where = f"Arduino on {self.port_name}"
+        if self.is_simulated:
+            return f"{where} did not greet within {self.GREETING_TIMEOUT}s."
+
+        for baudrate in firmware.PROBE_BAUDRATES:
+            if baudrate == self.baudrate:
+                continue
+            greeting = self._greet_at(baudrate)
+            if greeting is None:
+                continue
+            return (
+                f"{where} is talking at {baudrate} baud, not the "
+                f"{self.baudrate} this port was opened at: it is running "
+                f"{firmware.describe(greeting)}. Flash "
+                f"{firmware.SKETCH_PATH.name} onto it."
+            )
+
+        plugged_in = boards.detect()
+        if not plugged_in:
+            return (
+                f"{where} did not answer, and this machine has no serial "
+                f"ports at all. Is the USB lead in?"
+            )
+        return (
+            f"{where} did not answer at any rate this sketch has ever "
+            f"used. What is plugged in: "
+            f"{'; '.join(board.label for board in plugged_in)}. A board "
+            f"that has never been flashed looks exactly like this - it "
+            f"appears on the bus and says nothing."
+        )
+
+    def _greet_at(self, baudrate):
+        """Reopen the port at one other rate and listen for a greeting.
+
+        The port is left as it was found, open at its own baud rate,
+        whatever the answer - the caller is about to raise, and a port
+        left closed behind a raised exception is one more thing wrong
+        than there needs to be.
+        """
+        handler = self.port_handler
+        self.log(f"Listening for the Arduino at {baudrate} baud.")
+        try:
+            handler.close()
+            handler.baudrate = baudrate
+            handler.open()
+            return self._read_greeting()
+        finally:
+            handler.close()
+            handler.baudrate = self.baudrate
+            handler.open()
+
+
+    # --- the page ---------------------------------------------------------
+
+    def _open_node(self):
+        """Expand this node on the page.
+
+        Not self.open(): that one opens the serial port. Base.open/close
+        are what the page's open/close link calls on every node, and this
+        class happens to have overridden both of those names with the
+        link's own. Drawn as it stood, clicking the Arduino to look inside
+        it would have opened the port instead of the node.
+        """
+        self._is_opened = True
+
+    def _close_node(self):
+        self._is_opened = False
+
+    def _snapshot_base_states(self, path):
+        states = super()._snapshot_base_states(path)
+        states["open"] = self._open_node
+        states["close"] = self._close_node
+        return states
+
+    @property
+    def snapshot_children(self):
+        """Which lead, and what is on the bus.
+
+        Not the thirty-odd pixel groups and sensors: those are reached
+        from the bodies that own them, and a flat list of them here would
+        bury the two things this node is for.
+        """
+        return {
+            self.com_port.name: self.com_port,
+            self._boards.name: self._boards,
+        }
+
+    def _snapshot_if_opened(self, path):
+        states = super()._snapshot_if_opened(path)
+        leaf = leaves.into(states, path)
+
+        leaf("port", self.params["arduino"]["communication port"] or "not set")
+        leaf("baudrate", f"{self.baudrate} baud")
+        leaf("link", "open" if self.is_open else "closed")
+        # The two ends, side by side, which is the whole point of showing
+        # any of this: one line for what this repo would flash, one for
+        # what the board last said it was running.
+        leaf(
+            "sketch in this repo",
+            f"firmware {firmware.sketch_firmware_version()} "
+            f"at {firmware.sketch_baudrate()} baud",
+        )
+        leaf("board says", firmware.describe(self._greeting))
+
+        problems = self.problems
+        leaf("in sync", "yes" if not problems else "NO")
+        for number, problem in enumerate(problems, start=1):
+            leaf(f"problem {number}", problem)
+
+        # Named for what they do, since "open" and "close" on this node
+        # now mean the node - see _open_node above.
+        states["open port"] = self.open
+        states["close port"] = self.close
+        return states

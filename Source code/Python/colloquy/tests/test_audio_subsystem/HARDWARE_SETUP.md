@@ -151,12 +151,22 @@ each of the five modules — twenty-five answers.
 - **Power** for the amplifiers, separate from the Mega's USB.
 
 **Telling the boards apart without unplugging anything:** open the port
-and see what it says. The installation's Arduino answers `Hello!` and
-then only replies to JSON. Thomas's board clears the screen and prints
+and see what it says. The installation's Arduino greets with a line of
+JSON naming its firmware version and its baud rate
+(`{"hello": "colloquy of mobiles", ...}`) and then only replies to JSON.
+Thomas's board clears the screen and prints
 `---- Audio subsystem tester for ----`. The test checks for exactly that
 banner and refuses rather than sitting there failing silently, so if it
 says *"no audio tester on that port"*, the lead is right there in the
 message.
+
+**Or without opening anything at all:** every board on the bus is named
+by the chip bridging it to USB, which enumerates from power alone -
+`colloquy/hardware/arduino/boards.py` reads the VID and PID and says
+"Arduino Mega 2560 (R3)" or "FTDI - the U2D2 is an FTDI device". That
+works on a board with nothing flashed on it, which opening the port does
+not. What it *cannot* say is whether the right sketch is on it; the
+greeting above is for that, and the two are meant to be read together.
 
 **The bench is a machine of its own.** This test asks whether it is
 running on it (`colloquy/machines.py`, by hostname) and not whether the

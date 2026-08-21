@@ -14,7 +14,7 @@ window onto the simulation, not another way to drive it.
 from colloquy.base import Base
 
 from .dxl_ids import BODY_DXL_IDS
-from .virtual_serial_port import REALISTIC_LATENCY
+from .virtual_serial_port import OLD_57600_LATENCY, REALISTIC_LATENCY
 from colloquy.ui import leaves
 
 
@@ -139,7 +139,11 @@ class TimingNode(Base):
 
     _LATENCY_PRESETS = {
         "instant replies (unrealistic)": 0.0,
-        "realistic replies (15ms)": REALISTIC_LATENCY,
+        "realistic replies (3ms)": REALISTIC_LATENCY,
+        # What the link cost while it ran at 57600. Kept so that a decode
+        # can be compared either side of the change to 1 Mbaud without
+        # reflashing anything.
+        "the old 57600 link (15ms)": OLD_57600_LATENCY,
         "slow replies (50ms)": 0.05,
     }
 

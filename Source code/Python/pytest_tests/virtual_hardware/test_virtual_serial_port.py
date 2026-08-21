@@ -18,6 +18,7 @@ import pytest
 CRLF = bytes([13, 10])  # what Serial.println() terminates a reply with
 
 from colloquy.hardware.angle.conversion import REDUCTIONS, degrees_to_ticks
+from colloquy.hardware.arduino import firmware
 from colloquy.virtual_hardware.virtual_serial_port import VirtualSerialPort
 
 PARAMS = {
@@ -89,14 +90,34 @@ def test_write_unknown_path_raises(stub_factory):
         port.write(json.dumps({"path": "does/not-exist"}).encode())
 
 
-def test_open_sets_is_open_and_queues_hello(stub_factory):
+def test_open_sets_is_open_and_queues_the_greeting(stub_factory):
+    # Opening the port reboots a real board and it announces itself. Since
+    # firmware 2 that announcement says which firmware and which baud
+    # rate, and the driver refuses the link if either is wrong - so the
+    # stand-in has to send one too, or nothing simulated could be opened.
     port = make_port(stub_factory)
     port._port = "COM4"
 
     port.open()
 
     assert port.is_open is True
-    assert port.readline().strip() == b"Hello!"
+    assert json.loads(port.readline()) == firmware.sketch_greeting()
+
+
+def test_the_greeting_is_the_sketchs_own(stub_factory):
+    # Read out of the .ino rather than written here: copied by hand it
+    # would be right until the first time either number changed, which is
+    # the exact drift the greeting exists to catch.
+    port = make_port(stub_factory)
+    port._port = "COM4"
+    port.open()
+    port.readline()
+
+    port.write(json.dumps({"path": "version"}).encode())
+
+    greeting = json.loads(port.readline())
+    assert greeting["firmware"] == firmware.sketch_firmware_version()
+    assert greeting["baudrate"] == firmware.sketch_baudrate()
 
 
 def test_close_sets_is_open_false(stub_factory):

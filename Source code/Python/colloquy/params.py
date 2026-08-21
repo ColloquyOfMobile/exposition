@@ -3,7 +3,7 @@ from pathlib import Path
 
 # Bumped whenever the shape or the units of this file change, so an older
 # file can be recognised and converted rather than misread. See migrate().
-PARAMS_VERSION = 3
+PARAMS_VERSION = 4
 
 DEFAULTS = {
     "params version": PARAMS_VERSION,
@@ -16,8 +16,14 @@ DEFAULTS = {
     # runs at 1:3 the three come out at the same angle again.
     "near origin threshold": {"female": 11.719, "male": 11.719, "bar": 11.719},
     "emulate light sensor": False,
+    # The installation's own Arduino. The baud rate is not a
+    # calibration and never was - it is a copy of a number that lives in
+    # the sketch (SERIAL_BAUDRATE in colloquy_of_mobiles.ino), kept here
+    # only so the port can be opened before the board has said anything.
+    # Arduino.open() refuses to open a link where the two disagree; see
+    # hardware/arduino/firmware.py, which reads the sketch's own number.
     "arduino": {
-        "baudrate": 57600,
+        "baudrate": 1000000,
         "communication port": None,
     },
     # Thomas's audio subsystem tester: a second Mega 2560, on its own USB
@@ -144,6 +150,30 @@ def _to_v3(data):
     return data
 
 
+# What v3 files say the Arduino's link runs at: the rate the sketch used
+# from the first version of this repo until the pattern reading needed the
+# samples.
+_V3_ARDUINO_BAUDRATE = 57600
+
+
+def _to_v4(data):
+    """v3 opened the Arduino at 57600; the sketch now runs at 1 Mbaud.
+
+    This number is not a calibration - it is a copy of what the firmware
+    sets, kept here only so the port can be opened before the board has
+    said anything - so it moves when the firmware moves. Left alone
+    otherwise: a file saying something other than the old 57600 was typed
+    that way for a reason, and Arduino.open() will say so if the reason
+    has expired rather than quietly overruling it.
+    """
+    arduino = data.get("arduino")
+    if arduino and arduino.get("baudrate") == _V3_ARDUINO_BAUDRATE:
+        arduino["baudrate"] = DEFAULTS["arduino"]["baudrate"]
+
+    data["params version"] = 4
+    return data
+
+
 def _fill_missing(data, defaults):
     """Add any key the defaults have and this file doesn't.
 
@@ -167,6 +197,8 @@ def migrate(data):
         data = _to_v2(data)
     if data["params version"] < 3:
         data = _to_v3(data)
+    if data["params version"] < 4:
+        data = _to_v4(data)
     return _fill_missing(data, DEFAULTS)
 
 

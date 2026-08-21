@@ -222,6 +222,11 @@ class Hardware(BaseThread):
     @property
     def snapshot_children(self):
         children = {}
+        # The link itself, and what is on the USB bus behind it. Reachable
+        # by path dispatch since long before this, but never drawn - so
+        # the one question you actually ask at a rig ("is the board there,
+        # and is it the right one") had no answer on the page.
+        children[self.arduino.name] = self.arduino
         children["bodies"] = self.bodies
         for body in self.bodies:
             children[body.name] = body
