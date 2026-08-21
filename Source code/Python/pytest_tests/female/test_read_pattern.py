@@ -1,5 +1,5 @@
 """Unit tests for ReadPattern._try_match(), the pure-logic core of
-colloquy.hardware.female.search.read_pattern.ReadPattern.
+colloquy.drivers.female.search.read_pattern.ReadPattern.
 
 Background (see CLAUDE.md's "Male blink pattern / female pattern reading"
 section): each male sends his ring a 10-bit on/off pattern encoding his
@@ -55,7 +55,7 @@ from types import SimpleNamespace
 
 
 from colloquy import Colloquy
-from colloquy.hardware.female.search.read_pattern import ReadPattern
+from colloquy.drivers.female.search.read_pattern import ReadPattern
 from colloquy.light_pattern_timing import BIT_DURATION
 
 

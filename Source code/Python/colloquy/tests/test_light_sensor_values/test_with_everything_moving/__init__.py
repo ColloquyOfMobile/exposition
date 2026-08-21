@@ -38,7 +38,7 @@ class TestWithEveryThingMoving(BaseThread):
         self._duration = self.params["duration"]
 
         self._sensors_read = tuple(
-            female.light_sensor.read for female in self.hardware.females
+            female.light_sensor.read for female in self.drivers.females
         )
 
         self._dir_path = result_folder / self.name
@@ -77,24 +77,24 @@ class TestWithEveryThingMoving(BaseThread):
         self._start_time = time()
         self._result_rows = []
 
-        self.hardware.bar.move_male1_in_front_of_female1_and_wait()
+        self.drivers.bar.move_male1_in_front_of_female1_and_wait()
 
-        for male in self.hardware.males:
+        for male in self.drivers.males:
             male.neopixels.ring.on()
             male.turn_back_and_forth.start(started_by=self)
 
-        for female in self.hardware.females:
+        for female in self.drivers.females:
             female.turn_back_and_forth.start(started_by=self)
 
-        self.hardware.bar.turn_back_and_forth.start(started_by=self)
+        self.drivers.bar.turn_back_and_forth.start(started_by=self)
 
     def setdown(self):
         self._start_time = None
-        self.hardware.female1.turn_back_and_forth.stop()
-        self.hardware.male1.turn_back_and_forth.stop()
-        self.hardware.male1.neopixels.ring.off()
-        self.hardware.male2.neopixels.ring.off()
-        self.hardware.bar.turn_back_and_forth_around_f1.stop()
+        self.drivers.female1.turn_back_and_forth.stop()
+        self.drivers.male1.turn_back_and_forth.stop()
+        self.drivers.male1.neopixels.ring.off()
+        self.drivers.male2.neopixels.ring.off()
+        self.drivers.bar.turn_back_and_forth_around_f1.stop()
         self._test_results = TestResults(owner=self, result_rows=self._result_rows)
 
     def loop(self):

@@ -37,9 +37,9 @@ class TestMovements(BaseThread):
     def __init__(self, owner, result_folder):
         super().__init__(owner=owner)
 
-        self._bar = self.hardware.bar
-        self._males = list(self.hardware.males)
-        self._females = list(self.hardware.females)
+        self._bar = self.drivers.bar
+        self._males = list(self.drivers.males)
+        self._females = list(self.drivers.females)
         all_bodies = [self._bar] + self._males + self._females
 
         self._jog_commands = {}

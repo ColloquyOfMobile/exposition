@@ -89,7 +89,7 @@ class TestForFalsePositives(BaseThread):
 
     @property
     def females(self):
-        return self.hardware.females
+        return self.drivers.females
 
     def _make_duration_setter(self, seconds):
         def setter(request=None):
@@ -104,9 +104,9 @@ class TestForFalsePositives(BaseThread):
         """Anything already driving the bodies or their lights."""
         busy = []
         for node in (
-            self.hardware,
-            self.hardware.bar,
-            *self.hardware.males,
+            self.drivers,
+            self.drivers.bar,
+            *self.drivers.males,
             *self.females,
         ):
             if node.is_started:
@@ -152,7 +152,7 @@ class TestForFalsePositives(BaseThread):
 
         # The whole point of the run: nothing lit anywhere, including the
         # males' rings, which the sibling tests leave on.
-        self.hardware.neopixels.turn_all_off()
+        self.drivers.neopixels.turn_all_off()
 
         for female in self.females:
             female.turn_back_and_forth.start(started_by=self)

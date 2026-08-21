@@ -12,7 +12,7 @@ class TestDriveLightValues(BaseThread):
     def __init__(self, owner):
         super().__init__(owner=owner)
 
-        for drive in self.hardware.drives:
+        for drive in self.drivers.drives:
             self[drive.name] = drive
 
         self._start_time = None
@@ -25,28 +25,28 @@ class TestDriveLightValues(BaseThread):
     def setup(self):
         self._start_time = time()
 
-        for drive in self.hardware.drives:
+        for drive in self.drivers.drives:
             drive.start(started_by=self)
 
-        for neopixel in self.hardware.neopixels:
+        for neopixel in self.drivers.neopixels:
             neopixel.on()
 
     def setdown(self):
-        for drive in self.hardware.drives:
+        for drive in self.drivers.drives:
             drive.stop()
-        for neopixel in self.hardware.neopixels:
+        for neopixel in self.drivers.neopixels:
             neopixel.off()
 
     def loop(self):
         self._timelap = time() - self._start_time
-        if all(drive.value == 100 for drive in self.hardware.drives):
+        if all(drive.value == 100 for drive in self.drivers.drives):
             self.stop()
         return
 
     @property
     def snapshot_children(self):
         children = {}
-        for drive in self.hardware.drives:
+        for drive in self.drivers.drives:
             children[drive.name] = drive
         return self._with_scenarios(children)
 

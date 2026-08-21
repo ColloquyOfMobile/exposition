@@ -68,7 +68,7 @@ class TestLightSensorValues(BaseThread):
             # sequence below budgets for it.
             test_duration=5 * 60,
         )
-        self._hardware = self.owner.hardware
+        self._drivers = self.owner.drivers
 
         # self[self.html.name] = self.html.handle_request
         # self.add(self.test1)
@@ -105,8 +105,8 @@ class TestLightSensorValues(BaseThread):
         return self
 
     @property
-    def hardware(self):
-        return self._hardware
+    def drivers(self):
+        return self._drivers
 
     def setup(self):
         self._start_time = time()
@@ -118,7 +118,7 @@ class TestLightSensorValues(BaseThread):
         self._start_time = None
         self._queue = None
         self._running_test = None
-        self.hardware.male1.neopixels.ring.off()
+        self.drivers.male1.neopixels.ring.off()
         for test in self._threaded_tests:
             test.stop()
             test.join()

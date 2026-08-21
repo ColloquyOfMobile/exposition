@@ -1,4 +1,4 @@
-"""Unit tests for colloquy.hardware.male.search.blink.Blink.
+"""Unit tests for colloquy.drivers.male.search.blink.Blink.
 
 Blink.__init__ only builds `self._name` from `owner.male.name` and calls
 BaseThread.__init__, which is inert (no serial/filesystem/thread access -
@@ -20,7 +20,7 @@ every change cannot afford a test that fails for no reason.
 """
 import pytest
 
-from colloquy.hardware.male.search.blink import Blink
+from colloquy.drivers.male.search.blink import Blink
 from colloquy.light_pattern_timing import (
     BIT_DURATION,
     BITS,
@@ -45,7 +45,7 @@ class FakeClock:
 @pytest.fixture
 def clock(monkeypatch):
     fake = FakeClock()
-    monkeypatch.setattr("colloquy.hardware.male.search.blink.time", fake)
+    monkeypatch.setattr("colloquy.drivers.male.search.blink.time", fake)
     return fake
 
 

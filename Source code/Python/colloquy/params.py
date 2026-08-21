@@ -10,7 +10,7 @@ DEFAULTS = {
     "photosensor_threashold": 300,
     # How far off its own origin a body can be and still count as facing
     # forward, in degrees of the body. Only the simulated sensor geometry
-    # uses it (virtual_hardware/virtual_serial_port.py). It began as one
+    # uses it (virtual_drivers/virtual_serial_port.py). It began as one
     # number of servo units for everyone, and it is written per kind so
     # that one of them can be narrowed on its own; now that every body
     # runs at 1:3 the three come out at the same angle again.
@@ -21,7 +21,7 @@ DEFAULTS = {
     # the sketch (SERIAL_BAUDRATE in colloquy_of_mobiles.ino), kept here
     # only so the port can be opened before the board has said anything.
     # Arduino.open() refuses to open a link where the two disagree; see
-    # hardware/arduino/firmware.py, which reads the sketch's own number.
+    # drivers/arduino/firmware.py, which reads the sketch's own number.
     "arduino": {
         "baudrate": 1000000,
         "communication port": None,
@@ -82,7 +82,7 @@ DEFAULTS = {
 
 
 # Frozen on purpose: what a v1 file's servo units meant when it was
-# written. The live conversion lives in hardware/angle/conversion.py and
+# written. The live conversion lives in drivers/angle/conversion.py and
 # may be corrected some day - this one may not, or old files stop
 # converting to the same angles they used to describe.
 _V1_TICKS_PER_TURN = 4096

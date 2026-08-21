@@ -25,9 +25,9 @@ class TestSensors(BaseThread):
         super().__init__(owner=owner)
 
         self._sensors = {}
-        for female in self.hardware.females:
+        for female in self.drivers.females:
             self._sensors[f"{female.name} light sensor"] = female.light_sensor
-        for male in self.hardware.males:
+        for male in self.drivers.males:
             for letter, sensor in male.light_sensors.items():
                 self._sensors[f"{male.name} light sensor {letter}"] = sensor
 

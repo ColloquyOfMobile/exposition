@@ -108,15 +108,15 @@ class TestSeeingMale1AsTheBarTurns(BaseThread):
 
     @property
     def females(self):
-        return self.hardware.females
+        return self.drivers.females
 
     @property
     def male(self):
-        return getattr(self.hardware, self.LIT_MALE)
+        return getattr(self.drivers, self.LIT_MALE)
 
     @property
     def bar(self):
-        return self.hardware.bar
+        return self.drivers.bar
 
     @property
     def results(self):
@@ -134,7 +134,7 @@ class TestSeeingMale1AsTheBarTurns(BaseThread):
     def _busy_bodies(self):
         """Anything already driving the bodies or their lights."""
         busy = []
-        for node in (self.hardware, self.bar, *self.hardware.males, *self.females):
+        for node in (self.drivers, self.bar, *self.drivers.males, *self.females):
             if node.is_started:
                 busy.append(node.name)
         return busy
@@ -178,7 +178,7 @@ class TestSeeingMale1AsTheBarTurns(BaseThread):
 
         # One light in the room, and it is his. Everything off first,
         # including male2's ring, so nothing else can be what she sees.
-        self.hardware.neopixels.turn_all_off()
+        self.drivers.neopixels.turn_all_off()
 
         # He is the one thing held still: at his origin, lit, facing
         # out. Waited for, since a sample taken while he is still

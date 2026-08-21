@@ -31,7 +31,7 @@ class TestWithFemaleAndMaleMoving(BaseThread):
         self._duration = test_duration  # test running 'self._duration' seconds
 
         self._sensors_read = tuple(
-            female.light_sensor.read for female in self.hardware.females
+            female.light_sensor.read for female in self.drivers.females
         )
 
         self._dir_path = result_folder / self.name
@@ -65,18 +65,18 @@ class TestWithFemaleAndMaleMoving(BaseThread):
     def setup(self):
         self._file.write("seconds, female1, female2, female3" + "\n")
         self._start_time = time()
-        self.hardware.male1.neopixels.ring.on()
+        self.drivers.male1.neopixels.ring.on()
 
-        self.hardware.bar.move_male1_in_front_of_female1_and_wait()
+        self.drivers.bar.move_male1_in_front_of_female1_and_wait()
 
-        self.hardware.female1.turn_back_and_forth.start(started_by=self)
-        self.hardware.male1.turn_back_and_forth.start(started_by=self)
+        self.drivers.female1.turn_back_and_forth.start(started_by=self)
+        self.drivers.male1.turn_back_and_forth.start(started_by=self)
 
     def setdown(self):
         self._start_time = None
-        self.hardware.female1.turn_back_and_forth.stop()
-        self.hardware.male1.turn_back_and_forth.stop()
-        self.hardware.male1.neopixels.ring.off()
+        self.drivers.female1.turn_back_and_forth.stop()
+        self.drivers.male1.turn_back_and_forth.stop()
+        self.drivers.male1.neopixels.ring.off()
 
     def loop(self):
         return read_and_store(

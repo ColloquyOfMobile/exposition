@@ -1,4 +1,4 @@
-"""Unit tests for colloquy.hardware.female.light_sensor.LightSensor.
+"""Unit tests for colloquy.drivers.female.light_sensor.LightSensor.
 
 LightSensor.__init__ only sets `self._name` and calls
 `BaseThread.__init__`, which is inert (no serial/filesystem access) - see
@@ -8,7 +8,7 @@ used throughout instead of the unbound-double pattern.
 """
 from pathlib import Path
 
-from colloquy.hardware.female.light_sensor import LightSensor
+from colloquy.drivers.female.light_sensor import LightSensor
 
 
 def make_light_sensor(stub_factory, **owner_attrs):

@@ -63,11 +63,11 @@ def thread_classes():
 # commented-out line in tests/__init__.py).
 WITHOUT_SCENARIOS = {
     "colloquy.exposition.Exposition",
-    "colloquy.hardware.female.light_sensor.LightSensor",
-    "colloquy.hardware.female.reinforcement.Reinforcement",
-    "colloquy.hardware.female.search.read_pattern.ReadPattern",
-    "colloquy.hardware.male.search.blink.Blink",
-    "colloquy.hardware.bar.turn_back_and_forth.TurnBackAndForth",
+    "colloquy.drivers.female.light_sensor.LightSensor",
+    "colloquy.drivers.female.reinforcement.Reinforcement",
+    "colloquy.drivers.female.search.read_pattern.ReadPattern",
+    "colloquy.drivers.male.search.blink.Blink",
+    "colloquy.drivers.bar.turn_back_and_forth.TurnBackAndForth",
 }
 
 
@@ -129,7 +129,7 @@ def test_the_whole_piece_owns_the_encounters_no_single_thread_starts():
 def test_the_three_females_share_one_scenario():
     # Named for a behaviour, not for a node - which is what stops three
     # near-identical files from drifting apart.
-    from colloquy.hardware.female.search import Search
+    from colloquy.drivers.female.search import Search
 
     assert Search.scenario_names == ("female-looking",)
 

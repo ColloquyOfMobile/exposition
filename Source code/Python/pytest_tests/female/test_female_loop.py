@@ -6,7 +6,7 @@ into u2d2/arduino at construction.
 """
 from types import SimpleNamespace
 
-from colloquy.hardware.female import Female
+from colloquy.drivers.female import Female
 
 
 def make_female(satisfied=False, partner=None, searching=False,

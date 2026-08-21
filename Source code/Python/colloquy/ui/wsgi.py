@@ -265,7 +265,7 @@ class MockWSGI(Base):
     def _html_virtual_state(self):
         doc, tag, text = Doc().tagtext()
 
-        for name, node in self.colloquy.virtual_hardware.snapshot_children.items():
+        for name, node in self.colloquy.virtual_drivers.snapshot_children.items():
             values = {
                 key: value["value"]
                 for key, value in node._snapshot_if_opened(path=()).items()
@@ -297,9 +297,9 @@ class MockWSGI(Base):
         """
         doc, tag, text = Doc().tagtext()
 
-        with tag("div", name="virtual hardware"):
+        with tag("div", name="virtual drivers"):
             with tag("div"):
-                text("VIRTUAL HARDWARE")
+                text("VIRTUAL DRIVERS")
             doc.asis(self._html_virtual_state())
 
         return doc.getvalue()

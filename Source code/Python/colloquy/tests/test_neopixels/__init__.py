@@ -37,11 +37,11 @@ class TestNeopixels(BaseThread):
         # by it directly here would collide across bodies (same class of
         # bug as ReadPattern.name/TurnBackAndForth.name fixed earlier).
         self._segments = {}
-        for female in self.hardware.females:
+        for female in self.drivers.females:
             for attr in ("head", "body_o", "body_p", "feet"):
                 segment = getattr(female.neopixels, attr)
                 self._segments[f"{female.name} {segment.name}"] = segment
-        for male in self.hardware.males:
+        for male in self.drivers.males:
             for attr in ("ring", "up_ring", "o_drive_level", "p_drive_level"):
                 segment = getattr(male.neopixels, attr)
                 self._segments[f"{male.name} {segment.name}"] = segment

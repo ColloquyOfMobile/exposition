@@ -1,4 +1,4 @@
-"""Unit tests for colloquy.hardware.female.Female's pure-arithmetic
+"""Unit tests for colloquy.drivers.female.Female's pure-arithmetic
 movement methods and simple state/logic helpers.
 
 Female.__init__ is NOT inert: it reaches into `owner.u2d2.dxls[self.name]`
@@ -18,9 +18,9 @@ to what is written to the register, reduction included.
 """
 from types import SimpleNamespace
 
-from colloquy.hardware.angle import Angle
-from colloquy.hardware.angle.conversion import REDUCTIONS
-from colloquy.hardware.female import Female
+from colloquy.drivers.angle import Angle
+from colloquy.drivers.angle.conversion import REDUCTIONS
+from colloquy.drivers.female import Female
 
 # What Female.__init__ gives her: 58.594 degrees end to end, which is the
 # 2000 servo units she was given before this layer existed, through her

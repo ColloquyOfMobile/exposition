@@ -1,4 +1,4 @@
-"""Unit tests for colloquy.hardware.value_setter2.ValueSetter2 - this app's
+"""Unit tests for colloquy.drivers.value_setter2.ValueSetter2 - this app's
 only "enter a value" mechanism (a digit-drilldown link tree), shared by
 RegisterHanlder's DXL register setters and params_browser's ParamsIntLeaf.
 
@@ -9,7 +9,7 @@ character, then got multiplied by sign=-1 again) - e.g. drilling into
 what looked like "-3300" actually produced Set(value=3300). Fixed by
 keeping prefix pure-digit always and applying sign in exactly one place.
 """
-from colloquy.hardware.value_setter2 import ValueSetter2
+from colloquy.drivers.value_setter2 import ValueSetter2
 
 
 def make_setter(min_value, max_value):

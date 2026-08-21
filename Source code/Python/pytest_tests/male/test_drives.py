@@ -1,4 +1,4 @@
-"""Unit tests for colloquy.hardware.male.drives.Drives.
+"""Unit tests for colloquy.drivers.male.drives.Drives.
 
 `Drives` is a `BaseThread` that owns two `Drive` children (O and P). Its
 __init__ constructs those `Drive` objects directly (no thread start, no
@@ -19,7 +19,7 @@ machine over `self.o_drive`/`self.p_drive` (each only needing
 p_drive=...)` double - simpler than fighting the real `Drive` class's
 time-based `_satisfaction_lim`/`_frustrated_lim` derivation.
 """
-from colloquy.hardware.male.drives import Drives
+from colloquy.drivers.male.drives import Drives
 
 
 def make_drives(stub_factory, name="male1", o_start=12, p_start=34):

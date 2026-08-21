@@ -1,4 +1,4 @@
-"""Unit tests for colloquy.hardware.male.Male's pure-arithmetic movement
+"""Unit tests for colloquy.drivers.male.Male's pure-arithmetic movement
 methods, simple state/logic helpers, and blink-pattern dispatch.
 
 Male.__init__ is NOT inert: it reaches into `owner.u2d2.dxls[self.name]`,
@@ -15,9 +15,9 @@ touches.
 from types import SimpleNamespace
 
 from colloquy import Colloquy
-from colloquy.hardware.angle import Angle
-from colloquy.hardware.angle.conversion import REDUCTIONS
-from colloquy.hardware.male import Male
+from colloquy.drivers.angle import Angle
+from colloquy.drivers.angle.conversion import REDUCTIONS
+from colloquy.drivers.male import Male
 
 # What Male.__init__ gives him: 58.594 degrees end to end, which is the
 # 2000 servo units he was given before this layer existed, through his
@@ -37,7 +37,7 @@ def _light_patterns():
 
 def _patterns_for(male_name):
     """Mirrors Male.__init__'s exact construction of _light_patterns
-    (hardware/male/__init__.py):
+    (drivers/male/__init__.py):
 
         self._light_patterns = {
             state: tuple(bits)

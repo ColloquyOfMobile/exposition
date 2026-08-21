@@ -293,6 +293,6 @@ def test_the_default_baudrate_is_the_one_the_sketch_sets():
     # The whole reason for the version bump. If these two ever part, the
     # port is opened at a rate the board is not talking at, and every
     # reply is rubbish that still looks like data.
-    from colloquy.hardware.arduino import firmware
+    from colloquy.drivers.arduino import firmware
 
     assert DEFAULTS["arduino"]["baudrate"] == firmware.sketch_baudrate()

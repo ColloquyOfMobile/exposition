@@ -12,7 +12,7 @@ class TestMalePatterns(BaseThread):
 
         self._blink_handlers = []
         self._drives = []
-        for male in self.hardware.males:
+        for male in self.drivers.males:
             blink_handler = male.search.blink
             self[blink_handler.name] = blink_handler
             self._blink_handlers.append(blink_handler)

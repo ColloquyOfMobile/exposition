@@ -14,7 +14,7 @@ hardware attached, so "is this simulated?" was never really one question:
   his Mega 2560, the filter board, the amplifiers, the microphones and
   the analyser array. It has none of the piece.
 - **Anything else** - the other dev machine, CI - has neither, and runs
-  entirely against `colloquy/virtual_hardware/`.
+  entirely against `colloquy/virtual_drivers/`.
 
 So a body is simulated everywhere except the installation, and the audio
 board is simulated everywhere except the bench, and those are two

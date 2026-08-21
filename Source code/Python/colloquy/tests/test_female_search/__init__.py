@@ -5,7 +5,7 @@ from colloquy.base_thread import BaseThread
 from colloquy.ui import leaves
 
 # Drive values that produce each drive state, via which_is_frustated()
-# (hardware/drive/__init__.py): both below the satisfied floor means she is
+# (drivers/drive/__init__.py): both below the satisfied floor means she is
 # short of nothing; both above the frustrated floor means both; otherwise
 # the larger one wins.
 DRIVE_VALUES = {
@@ -30,7 +30,7 @@ class TestFemaleSearch(BaseThread):
     """Watch one female run a whole search on the real bodies, and see
     whether it ends the way it should.
 
-    The behaviour under test is Search.loop()'s decision (hardware/female/
+    The behaviour under test is Search.loop()'s decision (drivers/female/
     search): she ends her search on the first male asking for a drive she
     is short of, and ignores one asking for anything else. Set what he
     asks for and what she wants from the control page, press start, and
@@ -65,8 +65,8 @@ class TestFemaleSearch(BaseThread):
         self._she_wants = ("O", "P")
         self._duration = 180
 
-        self._males = {male.name: male for male in self.hardware.males}
-        self._females = {female.name: female for female in self.hardware.females}
+        self._males = {male.name: male for male in self.drivers.males}
+        self._females = {female.name: female for female in self.drivers.females}
 
         self._commands = {}
         for name in self._males:
@@ -165,7 +165,7 @@ class TestFemaleSearch(BaseThread):
     def _busy_bodies(self):
         """Anything already driving the bodies this test needs."""
         busy = []
-        for node in (self.hardware, self.male, self.female, self.hardware.bar):
+        for node in (self.drivers, self.male, self.female, self.drivers.bar):
             if node.is_started:
                 busy.append(node.name)
         return busy
@@ -192,13 +192,13 @@ class TestFemaleSearch(BaseThread):
     def _move_into_position(self):
         """Bar to their meeting point, both bodies facing forward. Returns
         False if the run was stopped while they were still moving."""
-        hardware = self.hardware
-        hardware.bar.set_male_in_front_of_female(self._male_name, self._female_name)
+        drivers = self.drivers
+        drivers.bar.set_male_in_front_of_female(self._male_name, self._female_name)
         self.male.turn_to_origin()
         self.female.turn_to_origin()
 
-        dxls = (hardware.bar.dxl, self.male.dxl, self.female.dxl)
-        arrived = hardware.wait_until_everything_is_still(
+        dxls = (drivers.bar.dxl, self.male.dxl, self.female.dxl)
+        arrived = drivers.wait_until_everything_is_still(
             dxls=dxls, should_stop=self._stop_event.is_set
         )
         if self._stop_event.is_set():

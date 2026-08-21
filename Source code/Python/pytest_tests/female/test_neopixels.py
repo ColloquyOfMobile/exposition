@@ -1,4 +1,4 @@
-"""Unit tests for colloquy.hardware.female.neopixels.Neopixels.
+"""Unit tests for colloquy.drivers.female.neopixels.Neopixels.
 
 Neopixels is a thin Base wrapper that owns four Neopixel segments (head,
 body_o, body_p, feet). Its __init__ only reads `owner.arduino` and the
@@ -9,11 +9,11 @@ is a no-op until the segment has been turned on/off at least once
 construction. That makes constructing the real Neopixels object (with a
 stub owner) safe and simpler than the unbound-double pattern here.
 """
-from colloquy.hardware.female.neopixels import Neopixels
-from colloquy.hardware.female.neopixels.head import Head
-from colloquy.hardware.female.neopixels.body_o import BodyO
-from colloquy.hardware.female.neopixels.body_p import BodyP
-from colloquy.hardware.female.neopixels.feet import Feet
+from colloquy.drivers.female.neopixels import Neopixels
+from colloquy.drivers.female.neopixels.head import Head
+from colloquy.drivers.female.neopixels.body_o import BodyO
+from colloquy.drivers.female.neopixels.body_p import BodyP
+from colloquy.drivers.female.neopixels.feet import Feet
 
 
 def make_neopixels(stub_factory, fake_arduino):

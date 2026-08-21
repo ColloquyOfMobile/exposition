@@ -27,7 +27,7 @@ from colloquy.server2.wsgi2 import WSGI2
 from colloquy.ui.wsgi import MockWSGI
 from colloquy.ui import leaves
 
-PATH = ("hardware", "female1", "angle")
+PATH = ("drivers", "female1", "angle")
 
 
 @pytest.fixture(params=(WSGI2, MockWSGI), ids=("installation", "mock"))
@@ -37,7 +37,7 @@ def render(request):
 
     def render_with(states):
         renderer = renderer_class.__new__(renderer_class)
-        renderer._base_path = Path("hardware")
+        renderer._base_path = Path("drivers")
         renderer._root = Path("app")
         obj = {"path": PATH, "name": "angle", "opened": True, **states}
         return renderer._html_recursion(obj)
@@ -142,7 +142,7 @@ def test_an_editor_is_a_textarea_posting_to_the_nodes_save(render):
     assert "<textarea" in html
     assert "some text" in html
     # Posts to the node's own save command - the node has to register one.
-    assert "/app/hardware/call/female1/angle/save" in html
+    assert "/app/drivers/call/female1/angle/save" in html
 
 
 @pytest.mark.parametrize("kind", leaves.KINDS)

@@ -61,7 +61,7 @@ def test_getitem_missing_key_raises_keyerror():
 
 def test_path_is_slash_joined_from_owner_chain():
     # The owner-less root contributes an empty path segment (mirrors
-    # Colloquy itself: owner=None, so "/app/hardware/..." never has a
+    # Colloquy itself: owner=None, so "/app/drivers/..." never has a
     # leading "colloquy/" segment) - only descendants' names show up.
     root = Leaf(owner=None, name="root")
     child = Leaf(owner=root, name="child")

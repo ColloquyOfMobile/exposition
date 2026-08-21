@@ -34,16 +34,16 @@ def main(*args):
 
 def colloquy1(*args):
     colloquy = Colloquy()
-    colloquy.hardware.u2d2.com_port.set("COM4")
-    colloquy.hardware.u2d2.open()
-    colloquy.hardware.arduino.open()
-    for dxl in colloquy.hardware.u2d2.dxl_list:
+    colloquy.drivers.u2d2.com_port.set("COM4")
+    colloquy.drivers.u2d2.open()
+    colloquy.drivers.arduino.open()
+    for dxl in colloquy.drivers.u2d2.dxl_list:
         dxl.init_hardware()
 
     # Arduino reboot can turn LEDs on at random. Turn them all on and off again.
-    colloquy.hardware.neopixels.turn_all_on()
+    colloquy.drivers.neopixels.turn_all_on()
     sleep(0.5)
-    colloquy.hardware.neopixels.turn_all_off()
+    colloquy.drivers.neopixels.turn_all_off()
 
     Server2(colloquy=colloquy)
 

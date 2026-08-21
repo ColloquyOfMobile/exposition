@@ -17,7 +17,7 @@ from .test_audio_subsystem import TestAudioSubsystem
 class Tests(Base):
     def __init__(self, owner):
         super().__init__(owner)
-        self._hardware = self.owner.hardware
+        self._drivers = self.owner.drivers
         if self.name not in self.owner.params:
             self._params = self.owner.params[self.name] = {}
         else:
@@ -75,8 +75,8 @@ class Tests(Base):
         return self
 
     @property
-    def hardware(self):
-        return self._hardware
+    def drivers(self):
+        return self._drivers
 
     def stop(self):
         for test in self._threaded_tests:

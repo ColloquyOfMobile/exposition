@@ -21,7 +21,7 @@ from colloquy.tests.test_audio_subsystem import protocol
 from colloquy.tests.test_audio_subsystem import (
     TestAudioSubsystem as AudioSubsystemTest,
 )
-from colloquy.virtual_hardware.virtual_audio_serial_port import (
+from colloquy.virtual_drivers.virtual_audio_serial_port import (
     NOISE_FLOOR,
     TONE_LEVEL,
     VirtualAudioSerialPort,
@@ -324,7 +324,7 @@ def audio_test_double(is_bench):
         baudrate=9600,
         params={"audio subsystem": {"communication port": "COM7", "baudrate": 9600}},
         colloquy=SimpleNamespace(
-            virtual_hardware=SimpleNamespace(audio_serial_port=virtual)
+            virtual_drivers=SimpleNamespace(audio_serial_port=virtual)
         ),
     ), virtual
 

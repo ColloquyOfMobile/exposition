@@ -1,5 +1,5 @@
 from colloquy.base import Base
-from colloquy.hardware.value_setter2 import ValueSetter2
+from colloquy.drivers.value_setter2 import ValueSetter2
 from colloquy.ui import leaves
 
 # Params values are dict/int/float/bool/str in the current schema (see

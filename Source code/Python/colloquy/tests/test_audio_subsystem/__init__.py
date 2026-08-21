@@ -9,7 +9,7 @@ from functools import partial
 from time import time
 
 from colloquy.base_thread import BaseThread
-from colloquy.hardware.com_port import ComPort
+from colloquy.drivers.com_port import ComPort
 from colloquy.ui import leaves
 
 from . import protocol
@@ -203,7 +203,7 @@ class TestAudioSubsystem(BaseThread):
                     baudrate=self.baudrate, timeout=0.05
                 )
             else:
-                self._port_handler = self.colloquy.virtual_hardware.audio_serial_port
+                self._port_handler = self.colloquy.virtual_drivers.audio_serial_port
             self._port_handler.port = self.params["audio subsystem"][
                 "communication port"
             ]

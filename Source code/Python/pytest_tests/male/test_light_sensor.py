@@ -1,4 +1,4 @@
-"""Unit tests for colloquy.hardware.male.light_sensor.LightSensor.
+"""Unit tests for colloquy.drivers.male.light_sensor.LightSensor.
 
 LightSensor.__init__ only asserts `letter in "abcd"`, sets `self._letter`
 and calls Base.__init__, which is inert (no serial/filesystem access -
@@ -9,7 +9,7 @@ instead of the unbound-double pattern.
 import pytest
 from pathlib import Path
 
-from colloquy.hardware.male.light_sensor import LightSensor
+from colloquy.drivers.male.light_sensor import LightSensor
 
 
 def make_light_sensor(stub_factory, letter="a", **owner_attrs):

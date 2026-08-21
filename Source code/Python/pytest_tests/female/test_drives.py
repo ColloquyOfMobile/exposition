@@ -1,4 +1,4 @@
-"""Unit tests for colloquy.hardware.female.drives.
+"""Unit tests for colloquy.drivers.female.drives.
 
 `Drives` is a `BaseThread` that owns two `Drive` children (O and P). Its
 __init__ constructs those `Drive` objects directly (no thread start, no
@@ -13,7 +13,7 @@ against a `stub_factory`-built female stub (exposing `.name` and
 `build_map_to_compensate_brightness_to_human_eye()` is a pure module-level
 function (no I/O at all) and is tested directly.
 """
-from colloquy.hardware.female.drives import (
+from colloquy.drivers.female.drives import (
     Drives,
     build_map_to_compensate_brightness_to_human_eye,
 )

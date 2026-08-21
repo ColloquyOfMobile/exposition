@@ -4,7 +4,7 @@ from colloquy.base_thread import BaseThread
 class Exposition(BaseThread):
     def __init__(self, owner):
         super().__init__(owner)
-        self._hardware = self.owner.hardware
+        self._drivers = self.owner.drivers
 
         self._thread = None
 
@@ -23,8 +23,8 @@ class Exposition(BaseThread):
         return self.colloquy.server.wsgi.root.body.workspace
 
     @property
-    def hardware(self):
-        return self._hardware
+    def drivers(self):
+        return self._drivers
 
     @property
     def colloquy(self):
@@ -37,16 +37,16 @@ class Exposition(BaseThread):
         self._is_opened = False
 
     def setup(self):
-        self.hardware.start(started_by=self)
+        self.drivers.start(started_by=self)
 
     def loop(self):
-        if not self.hardware.is_started:
+        if not self.drivers.is_started:
             self.stop()
 
     def setdown(self):
         if self.thread_errors:
-            self.hardware.shutdown()
-        self.hardware.stop()
+            self.drivers.shutdown()
+        self.drivers.stop()
 
     @property
     def snapshot_children(self):

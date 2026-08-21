@@ -1,4 +1,4 @@
-"""Unit tests for colloquy.hardware.female.search.Search.
+"""Unit tests for colloquy.drivers.female.search.Search.
 
 Search is the female's live search behaviour: setup() starts her
 ReadPattern child, and loop() sways her between her min/max positions
@@ -23,8 +23,8 @@ Search needs a `.name` attribute for construction to succeed.
 from types import SimpleNamespace
 
 from colloquy.base_thread import BaseThread
-from colloquy.hardware.female.search import Search
-from colloquy.hardware.female.search.read_pattern import ReadPattern
+from colloquy.drivers.female.search import Search
+from colloquy.drivers.female.search.read_pattern import ReadPattern
 
 
 def make_search(stub_factory):

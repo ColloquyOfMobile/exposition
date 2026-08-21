@@ -47,8 +47,8 @@ class TestReadPattern(BaseThread):
 
         self._male_name = "male1"
         self._female_name = "female1"
-        self._males = {male.name: male for male in self.hardware.males}
-        self._females = {female.name: female for female in self.hardware.females}
+        self._males = {male.name: male for male in self.drivers.males}
+        self._females = {female.name: female for female in self.drivers.females}
 
         self._male_selectors = {
             f"send from {name}": self._make_selector("_male_name", name)
@@ -206,14 +206,14 @@ class TestReadPattern(BaseThread):
         Returns False if the run was stopped while the bodies were still
         moving, so the caller knows not to go on and start anything.
         """
-        hardware = self.hardware
+        drivers = self.drivers
         male, female = self.male, self.female
-        hardware.bar.set_male_in_front_of_female(male.name, female.name)
+        drivers.bar.set_male_in_front_of_female(male.name, female.name)
         male.turn_to_origin()
         female.turn_to_origin()
 
-        dxls = (hardware.bar.dxl, male.dxl, female.dxl)
-        arrived = hardware.wait_until_everything_is_still(
+        dxls = (drivers.bar.dxl, male.dxl, female.dxl)
+        arrived = drivers.wait_until_everything_is_still(
             dxls=dxls, should_stop=self._stop_event.is_set
         )
         if self._stop_event.is_set():

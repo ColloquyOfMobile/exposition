@@ -102,7 +102,7 @@ def test_anything_already_driving_the_bodies_is_named():
     idle = SimpleNamespace(name="idle", is_started=False)
     busy = SimpleNamespace(name="bar", is_started=True)
     run = SimpleNamespace(
-        hardware=SimpleNamespace(name="hardware", is_started=False, males=(idle,)),
+        drivers=SimpleNamespace(name="drivers", is_started=False, males=(idle,)),
         bar=busy,
         females=(idle,),
     )
@@ -113,7 +113,7 @@ def test_anything_already_driving_the_bodies_is_named():
 def test_nothing_running_is_nothing_to_report():
     idle = SimpleNamespace(name="idle", is_started=False)
     run = SimpleNamespace(
-        hardware=SimpleNamespace(name="hardware", is_started=False, males=(idle,)),
+        drivers=SimpleNamespace(name="drivers", is_started=False, males=(idle,)),
         bar=idle,
         females=(idle,),
     )

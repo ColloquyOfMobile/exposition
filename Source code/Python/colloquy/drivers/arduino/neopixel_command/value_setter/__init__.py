@@ -1,0 +1,49 @@
+# -*- coding: utf-8 -*-
+# Source code/Python/colloquy/drivers/dxl/__init__.py
+
+from colloquy.base import Base
+from colloquy.input import Input
+
+
+class ValueSetter(Base):
+    def __init__(self, owner, name):
+        self._name = name
+        super().__init__(owner=owner)
+
+        self._value = 255
+
+        # if not self.is_readonly():
+        self._input = Input(owner=self)
+        self[self.input.name] = self.input
+
+    @property
+    def input(self):
+        return self._input
+
+    @property
+    def dxl(self):
+        return self.owner
+
+    @property
+    def u2d2(self):
+        return self.owner.u2d2
+
+    @property
+    def colloquy(self):
+        return self.owner.colloquy
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def dxl_id(self):
+        return self.owner.dxl_id
+
+    @property
+    def value(self):
+        return self._value
+
+    def commit(self, value):
+        self._value = int(value)
+        # return self.write(value=value)

@@ -27,7 +27,7 @@ class BaseThread(Base):
     def __init__(self, owner, run_with=None):
         super().__init__(owner=owner)
         self._colloquy = None
-        self._hardware = None
+        self._drivers = None
         self._started_at = None
         self._started_by = None
         self._thread_errors = ThreadErrors(owner=self)
@@ -79,10 +79,10 @@ class BaseThread(Base):
         return self._colloquy
 
     @property
-    def hardware(self):
-        if self._hardware is None:
-            self._hardware = self.colloquy.hardware
-        return self._hardware
+    def drivers(self):
+        if self._drivers is None:
+            self._drivers = self.colloquy.drivers
+        return self._drivers
 
     @property
     def is_started(self):

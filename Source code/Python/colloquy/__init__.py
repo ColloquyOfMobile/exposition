@@ -6,12 +6,12 @@ from .code_documentation import CodeDocumentation
 from .events import Events
 from .tests import Tests
 
-from .hardware import Hardware
+from .drivers import Drivers
 from .exposition import Exposition
 from .params import Params
 from .params_browser import ParamsNode
 from .ui import tree
-from .virtual_hardware import VirtualHardware
+from .virtual_drivers import VirtualDrivers
 from .logs import Logs
 
 
@@ -37,15 +37,15 @@ class Colloquy(BaseThread):
         self._params_view = ParamsNode(owner=self, key="params", params_dict=self._params)
 
         self._is_opened = False
-        self._virtual_hardware = None
+        self._virtual_drivers = None
 
-        self._hardware = Hardware(owner=self)
+        self._drivers = Drivers(owner=self)
         self._tests = Tests(owner=self)
         self._exposition = Exposition(owner=self)
         self._logs = Logs(owner=self)
         self._code_documentation = CodeDocumentation(owner=self)
 
-        self["hardware"] = self._hardware
+        self["drivers"] = self._drivers
         self["params"] = self._params_view
         self["logs"] = self._logs
 
@@ -113,8 +113,8 @@ class Colloquy(BaseThread):
         return "colloquy"
 
     @property
-    def hardware(self):
-        return self._hardware
+    def drivers(self):
+        return self._drivers
 
     @property
     def events(self):
@@ -137,10 +137,10 @@ class Colloquy(BaseThread):
         return not self.events.shutdown.is_set()
 
     @property
-    def virtual_hardware(self):
-        if self._virtual_hardware is None:
-            self._virtual_hardware = VirtualHardware(owner=self)
-        return self._virtual_hardware
+    def virtual_drivers(self):
+        if self._virtual_drivers is None:
+            self._virtual_drivers = VirtualDrivers(owner=self)
+        return self._virtual_drivers
 
     def open(self):
         self._is_opened = True
@@ -161,7 +161,7 @@ class Colloquy(BaseThread):
     @property
     def snapshot_children(self):
         children = {
-            "hardware": self._hardware,
+            "drivers": self._drivers,
             "exposition": self._exposition,
             "tests": self._tests,
             "params": self._params_view,
@@ -171,7 +171,7 @@ class Colloquy(BaseThread):
             # Only when there is a simulation to look at - and only then is
             # it built at all, since the property below constructs it on
             # first access.
-            children[self.virtual_hardware.name] = self.virtual_hardware
+            children[self.virtual_drivers.name] = self.virtual_drivers
 
             # Same test, a different reason: this is the source's own
             # documentation, and the machine that runs the exhibition is
@@ -193,19 +193,19 @@ class Colloquy(BaseThread):
         return tree.get_states(self, *args)
 
     def shutdown_neopixels(self):
-        neopixels = self._hardware.neopixels
+        neopixels = self._drivers.neopixels
         assert neopixels
         for neopixel in neopixels:
             neopixel.off()
         # raise NotImplementedError
 
     def move_to_origin(self):
-        self._hardware.bodies.turn_all_bodies_origin()
-        self._hardware.bar.turn_to_origin()
-        self._hardware.wait_until_everything_is_still()
+        self._drivers.bodies.turn_all_bodies_origin()
+        self._drivers.bar.turn_to_origin()
+        self._drivers.wait_until_everything_is_still()
 
     def disable_torque(self):
-        self._hardware.disable_torque()
+        self._drivers.disable_torque()
 
     def emergency_stop(self):
         """Immediately halt all motion: no homing, no coordinated move
@@ -223,5 +223,5 @@ class Colloquy(BaseThread):
         the single-threaded dev server can't serve anything else (including
         another emergency-stop click) while blocked in a request.
         """
-        self._hardware.disable_torque()
+        self._drivers.disable_torque()
         self.shutdown()

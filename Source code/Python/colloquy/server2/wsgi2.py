@@ -312,7 +312,7 @@ class WSGI2(Base):
     def _html_virtual_state(self):
         doc, tag, text = Doc().tagtext()
 
-        for name, node in self.colloquy.virtual_hardware.snapshot_children.items():
+        for name, node in self.colloquy.virtual_drivers.snapshot_children.items():
             values = {
                 key: value["value"]
                 for key, value in node._snapshot_if_opened(path=()).items()
@@ -368,9 +368,9 @@ class WSGI2(Base):
             "font-family": "monospace",
             "font-size": "0.8rem",
         }
-        with tag("div", name="virtual hardware", style=export_style(style)):
+        with tag("div", name="virtual drivers", style=export_style(style)):
             with tag("div", style="font-weight: bold; margin-bottom: 0.5rem;"):
-                text("VIRTUAL HARDWARE")
+                text("VIRTUAL DRIVERS")
             doc.asis(self._html_virtual_state())
 
         return doc.getvalue()
