@@ -2,8 +2,8 @@
 
 Rules for every test in this suite:
 - Never call .start()/.start_command()/.stop_command() on a BaseThread.
-- Never construct real U2D2/Arduino/VirtualHardware/DXL objects, and never
-  construct the real Colloquy/Hardware/Female/Male object graph:
+- Never construct real U2D2/Arduino/VirtualDrivers/DXL objects, and never
+  construct the real Colloquy/Drivers/Female/Male object graph:
   Colloquy() does filesystem I/O at construction (Params.load() reads
   local/params.json), and Female/Male/Drives construction requires a
   working params["drive start values"][<body name>] entry - real
@@ -37,11 +37,22 @@ ancestor chain.
 import contextlib
 from types import SimpleNamespace
 
+import matplotlib
 import pytest
+
+# Before anything imports pyplot. Several of these tests call the plotting
+# helpers under colloquy/tests/test_light_sensor_values/, and matplotlib
+# picks a backend on the first figure - TkAgg if tkinter merely imports,
+# which then fails at figure creation on a machine whose tk is not fully
+# installed. Which test hits it first depends on collection order, so it
+# arrives as a mystery failure somewhere else entirely. main.py sets the
+# same thing for the neighbouring reason: the plots there are built in
+# background threads, and the GUI backends are not thread-safe.
+matplotlib.use("Agg")
 
 
 class FakeDrive:
-    """Duck-typed stand-in for colloquy.hardware.drive.Drive - exposes only
+    """Duck-typed stand-in for colloquy.drivers.drive.Drive - exposes only
     what Drives.which_is_frustated() touches (.value/.is_satisfied/
     .is_frustated/.lock)."""
 
