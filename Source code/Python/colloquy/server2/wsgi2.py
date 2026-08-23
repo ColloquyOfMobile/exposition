@@ -719,11 +719,17 @@ class WSGI2(Base):
         return status, headers, content
 
     def _parse_shutdown(self):
-        self.colloquy.shutdown()
-        self.colloquy.join_all()
-        self.colloquy.shutdown_neopixels()
-        self.colloquy.move_to_origin()
-        self.colloquy.disable_torque()
+        # Under the command lock: the server answers several requests at
+        # once now, so without it this could home every body and cut
+        # torque while a command from another tab was still driving one
+        # of them somewhere. Bounded, and it goes ahead regardless when
+        # the wait runs out - see Colloquy.hold_commands.
+        with self.colloquy.hold_commands() as held:
+            self.colloquy.shutdown()
+            self.colloquy.join_all()
+            self.colloquy.shutdown_neopixels()
+            self.colloquy.move_to_origin()
+            self.colloquy.disable_torque()
 
         self.shutdown_event.set()
 
@@ -732,8 +738,13 @@ class WSGI2(Base):
         headers = [("Content-Type", content_type)]
         lines = [
             f"thread count: {len(self.all_threads)}",
-            "Goodbye!",
         ]
+        if not held:
+            lines.append(
+                "Note: a command was still running and did not finish in time; "
+                "shut down anyway."
+            )
+        lines.append("Goodbye!")
         content = "\n".join(lines).encode()
 
         return status, headers, content

@@ -222,6 +222,73 @@ def test_pull_fast_forwards_and_asks_for_a_restart():
     assert repository.needs_restart is True
 
 
+class StartedRepository(Repository):
+    """A repository whose watch is running, without running one.
+
+    conftest forbids .start() in this suite, and the branch under test is
+    the one that asks "is there a loop to hand this to?".
+    """
+
+    @property
+    def is_started(self):
+        return True
+
+
+def test_pull_hands_the_network_half_to_the_loop():
+    """A pull is a network round trip that can sit on a dead connection
+    for a minute, and Colloquy.get_states holds one lock for the whole
+    application - so a minute inside a request is a minute in which no
+    page in the tree answers. It must not happen there."""
+    git = FakeGit(status=status(behind=3))
+    owner = SimpleNamespace(owners=[], path=REPO_FOLDER, name="colloquy")
+    repository = StartedRepository(owner=owner, git=git)
+    repository.check()
+
+    report = repository.pull()
+    assert "refresh in a moment" in report
+    assert git.pulled == 0
+
+    # ...and the loop is what actually does it.
+    repository.loop()
+    assert git.pulled == 1
+    assert repository.needs_restart is True
+
+
+def test_a_refusal_still_answers_immediately():
+    """Only the network half is handed off. The refusals read the last
+    status and touch nothing, so they stay instant - the reader gets told
+    straight away why nothing is going to happen."""
+    git = FakeGit(status=status(behind=3, dirty=2))
+    owner = SimpleNamespace(owners=[], path=REPO_FOLDER, name="colloquy")
+    repository = StartedRepository(owner=owner, git=git)
+    repository.check()
+
+    assert "not committed" in repository.pull()
+    # Nothing was queued for the loop either.
+    repository.loop()
+    assert git.pulled == 0
+
+
+def test_a_handed_off_pull_re_checks_before_it_runs():
+    """Asked for on one thread and done on another, so the answer can
+    change in between - the tree can be edited while the click is in the
+    air. Pulling over somebody's uncommitted work is the one outcome this
+    whole node exists to prevent."""
+    git = FakeGit(status=status(behind=3))
+    owner = SimpleNamespace(owners=[], path=REPO_FOLDER, name="colloquy")
+    repository = StartedRepository(owner=owner, git=git)
+    repository.check()
+    repository.pull()
+
+    # Somebody starts editing before the loop gets to it.
+    git._status = status(behind=3, dirty=1)
+    repository.check()
+    repository.loop()
+
+    assert git.pulled == 0
+    assert "not committed" in repository._pull_report
+
+
 def test_a_failed_pull_is_reported_not_raised():
     git = FakeGit(status=status(behind=3))
     repository = make_repository(git)

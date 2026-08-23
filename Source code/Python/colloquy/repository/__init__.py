@@ -67,6 +67,7 @@ class Repository(BaseThread):
         self._checked_at = None
         self._pull_report = None
         self._needs_restart = False
+        self._pull_asked = False
 
         # A fetch from the loop and a pull from a page request are two
         # threads reaching for the same working copy. git would sort it
@@ -141,6 +142,13 @@ class Repository(BaseThread):
         self._due_at = 0.0
 
     def loop(self):
+        # A pull that has been asked for goes first: somebody is watching
+        # the page waiting for it, and a check would only delay it.
+        if self._pull_asked:
+            self._pull_asked = False
+            self._pull_now()
+            return
+
         if time() < self._due_at:
             return
         self.check()
@@ -155,7 +163,33 @@ class Repository(BaseThread):
     def pull(self, request=None):
         """Fast-forward onto origin, if that is a thing that can be done.
 
-        The two refusals below are things git would also refuse, and
+        Refuse here, but do the work over there. The refusals are instant
+        - they only read the last status, no git and no network - so the
+        reader gets told straight away why nothing is going to happen.
+        The pull itself is a network round trip that can sit on a dead
+        connection for a minute, and it must not do that inside a request:
+        `Colloquy.get_states` holds one lock for the whole application, so
+        a minute in here is a minute in which no page in the tree answers.
+        Hand it to the loop, exactly as `check_now` does.
+        """
+        refusal = self._why_not_pull()
+        if refusal is not None:
+            self._pull_report = refusal
+            return refusal
+
+        if self.is_started:
+            self._pull_asked = True
+            self._pull_report = "pulling - refresh in a moment"
+            return self._pull_report
+
+        # Nobody to hand it to. Somebody who stopped the watch and then
+        # clicked pull is willing to wait for it.
+        return self._pull_now()
+
+    def _why_not_pull(self):
+        """Why a pull would be a bad idea, or None if it would not.
+
+        The three refusals are things git would also refuse, and
         deliberately not left to it: `pull --ff-only` onto a tree with
         edits in it fails with a wall of git's own prose about local
         changes being overwritten, and the reader on the page wants one
@@ -163,38 +197,49 @@ class Repository(BaseThread):
         """
         status = self._status
         if status is None:
-            self._pull_report = "nothing checked yet - check now first"
-            return self._pull_report
+            return "nothing checked yet - check now first"
 
         if status.dirty:
-            self._pull_report = (
+            return (
                 f"{_files(status.dirty)} changed here and not committed - "
                 "commit or stash them first, they may be the other computer's work"
             )
-            return self._pull_report
 
         if not status.is_behind:
-            self._pull_report = f"nothing to pull: {status.upstream} has nothing new"
-            return self._pull_report
+            return f"nothing to pull: {status.upstream} has nothing new"
 
         if not status.can_fast_forward:
-            self._pull_report = (
+            return (
                 f"{_commits(status.behind)} on {status.upstream} and "
                 f"{_commits(status.ahead)} here that it has not got - "
                 "that is a merge, and it wants doing by hand"
             )
-            return self._pull_report
 
+        return None
+
+    def _pull_now(self):
+        """The network half. Runs on the loop thread, or on whoever asked
+        when there is no loop running."""
+        # Asked for on one thread and done on another, so the answer may
+        # have changed in between - a check could have run, or the tree
+        # been edited. Cheap to ask again, and the alternative is pulling
+        # over somebody's uncommitted work.
+        refusal = self._why_not_pull()
+        if refusal is not None:
+            self._pull_report = refusal
+            return refusal
+
+        behind = self._status.behind
         with self._git_lock:
             try:
                 answer = self._git.pull()
                 self._needs_restart = True
-                self._pull_report = answer or f"pulled {_commits(status.behind)}"
+                self._pull_report = answer or f"pulled {_commits(behind)}"
             except GitError as error:
                 self._pull_report = f"pull failed: {error}"
                 return self._pull_report
 
-        # Straight away, so the page redraws showing where we now stand
+        # Straight away, so the next render shows where we now stand
         # rather than the state that made the link appear.
         self.check()
         return self._pull_report

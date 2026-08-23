@@ -1,4 +1,6 @@
+from contextlib import contextmanager
 from pathlib import Path
+from threading import Lock
 
 #
 from colloquy.base_thread import BaseThread
@@ -14,6 +16,10 @@ from .repository import Repository
 from .ui import tree
 from .virtual_drivers import VirtualDrivers
 from .logs import Logs
+
+# How long /shutdown waits for a command already in flight before homing
+# the piece anyway. See Colloquy.hold_commands.
+COMMAND_WAIT = 10.0
 
 
 class Colloquy(BaseThread):
@@ -39,6 +45,11 @@ class Colloquy(BaseThread):
 
         self._is_opened = False
         self._virtual_drivers = None
+
+        # One command at a time, now that the server runs several
+        # requests at once. See get_states() for why this has to exist
+        # and why it deliberately does not cover the whole request.
+        self._command_lock = Lock()
 
         self._drivers = Drivers(owner=self)
         self._tests = Tests(owner=self)
@@ -202,8 +213,56 @@ class Colloquy(BaseThread):
         this class: it asks nodes for snapshot_children and snapshot().
         Kept as a method here because that is what the server calls, and
         because a root is a perfectly good thing to ask.
+
+        One at a time, and that lock is load-bearing. Until the server
+        grew threads it served strictly serially, which meant nothing
+        here could ever run twice at once - an accidental lock around the
+        whole application that plenty of this tree quietly relies on. A
+        walk both renders and *calls* (tree.get_states runs the command
+        the path names, between two snapshots), so two overlapping page
+        requests would mean two commands interleaving: bodies driven to
+        two different goals, a snapshot read halfway through the command
+        changing it. The bus locks under `u2d2` and `arduino` keep single
+        transactions safe; they say nothing about a command as a whole.
+
+        So threading buys concurrency exactly where it was wanted and
+        nowhere else. Everything that does not go through the tree -
+        /emergency-stop, /shutdown, /restart, and every static asset (see
+        wsgi2._parse) - is answered without ever reaching this lock, and
+        that is the whole point of the exercise: the emergency stop stays
+        clickable while a command is busy.
         """
-        return tree.get_states(self, *args)
+        with self._command_lock:
+            return tree.get_states(self, *args)
+
+    @contextmanager
+    def hold_commands(self, timeout=COMMAND_WAIT):
+        """Wait for the command in flight to finish, then keep the tree to
+        yourself for the duration of the block.
+
+        For /shutdown, which homes every body and cuts torque. That used
+        to be safe by accident: the server answered one request at a
+        time, so a command and the shutdown sequence could not overlap.
+        Threaded they can, and the two of them are the worst possible
+        pair to interleave - one driving a body somewhere while the other
+        drives all of them home and powers them down.
+
+        Bounded, and it proceeds anyway when the wait runs out. A command
+        can legitimately sit for a minute (`wait_for_servo`'s own timeout
+        is 60s, long enough for the bar to cross its full travel), and a
+        shutdown that could be held off indefinitely by a stuck command
+        would be worse than one that overlaps it. `held` says which
+        happened, so the caller can tell the reader.
+
+        Not used by /emergency-stop, deliberately: that one waits for
+        nothing at all, which is the entire difference between the two.
+        """
+        held = self._command_lock.acquire(timeout=timeout)
+        try:
+            yield held
+        finally:
+            if held:
+                self._command_lock.release()
 
     def shutdown_neopixels(self):
         neopixels = self._drivers.neopixels

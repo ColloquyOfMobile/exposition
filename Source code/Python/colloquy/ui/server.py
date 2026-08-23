@@ -10,12 +10,31 @@ nothing done for the mock should reach the installation. This one binds
 
 import os
 import sys
+from socketserver import ThreadingMixIn
 from threading import Event
-from wsgiref.simple_server import make_server, WSGIRequestHandler
+from wsgiref.simple_server import make_server, WSGIRequestHandler, WSGIServer
 
 from colloquy.ui.wsgi import MockWSGI
 
 WSGIRequestHandler.log_message = lambda *args, **kwargs: None
+
+ACCEPT_TIMEOUT = 0.5
+
+
+class ThreadingWSGIServer(ThreadingMixIn, WSGIServer):
+    """One thread per connection - a copy of the installation's, and
+    deliberately a copy rather than a shared import.
+
+    The fork is the point (see the module docstring): nothing done here
+    should be able to reach the exhibition. The reason the mock wants it
+    is the smaller half of the installation's - wsgiref speaks HTTP/1.0
+    one request at a time, so the four static assets every page pulls
+    queue behind each other, and page work is done against this server.
+
+    There is no command lock beside it, because there is no command to
+    serialise: `Colloquy.get_states` holds one and `ui/mock.py` has no
+    hardware, no threads and no params behind it.
+    """
 
 
 class MockServer:
@@ -47,8 +66,14 @@ class MockServer:
 
     def run(self, port=DEFAULT_PORT):
         hostname = "localhost"
-        with make_server(hostname, port, self.wsgi) as httpd:
+        with make_server(
+            hostname, port, self.wsgi, server_class=ThreadingWSGIServer
+        ) as httpd:
             print(f"Accessible at http://{hostname}:{port}/app")
+
+            # Otherwise this sits in accept() and never notices that a
+            # worker thread set the event - see the installation's.
+            httpd.timeout = ACCEPT_TIMEOUT
 
             while True:
                 httpd.handle_request()

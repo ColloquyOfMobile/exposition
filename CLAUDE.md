@@ -60,6 +60,20 @@ Both `Base.__call__`-style dispatch and the web request router work the same way
 
 There is no templating framework beyond `yattag`; new UI is added by adding `snapshot_children` / registering new command names on the relevant `Base` node, not by writing new routes.
 
+**The server runs a thread per connection, and the tree runs one command at a time.** These are two halves of one arrangement, and changing either alone breaks it:
+
+- `ThreadingWSGIServer` (`server2/__init__.py`) is `ThreadingMixIn` over wsgiref's `WSGIServer`. Plain `wsgiref.simple_server` serves strictly serially, which made the red EMERGENCY STOP unreachable for as long as *any* request was busy — including the requests most likely to be busy, since a command that drives a servo runs inside one. `Colloquy.emergency_stop`'s docstring was written around that constraint. Measured: a request that used to queue 1.22s behind a slow one now answers in 0.01s.
+- `Colloquy.get_states` holds `_command_lock` around the whole walk. Serving serially *was* an accidental lock around the application, and plenty of the tree quietly relied on it — `tree.get_states` both renders and **calls**, so overlapping requests would mean overlapping commands. The bus locks under `u2d2`/`arduino` make single transactions safe; they say nothing about a command as a whole.
+
+So concurrency lands exactly where it was wanted: everything that does **not** go through the tree — `/emergency-stop`, `/shutdown`, `/restart`, `/static/…`, `/vendor/…` (see `wsgi2._parse`) — is answered without ever touching that lock. Verified on the real server: `/emergency-stop` answers in 0.02s while a command holds the tree.
+
+Two consequences worth knowing before editing any of it:
+
+- **`httpd.timeout` is load-bearing.** `handle_request()` otherwise blocks in `accept()` forever; `/shutdown` is now set by a worker thread while the accept loop is already back in `accept()`, so without a wakeup the process would sit there until somebody happened to load one more page. The inherited `daemon_threads=False` / `block_on_close=True` are equally deliberate — `server_close()` joins in-flight workers so the goodbye finishes being written. `pytest_tests/test_command_lock.py` pins all of it.
+- **`/shutdown` takes the lock via `Colloquy.hold_commands`**, so it cannot home every body and cut torque while another tab's command is still driving one. Bounded (`COMMAND_WAIT`, 10s) and it proceeds anyway on timeout, saying so — a shutdown blockable indefinitely by a stuck command would be worse than one that overlaps it. `/emergency-stop` deliberately waits for nothing at all; that is the whole difference between the two.
+
+A long-running command still belongs off the request thread regardless — see `Repository.pull` for the pattern.
+
 The root application declares what the page may offer it: `is_simulated` gates the `virtual drivers` panel, and the same test gates the **code documentation** node — `colloquy/CODE_DOCUMENTATION.md`, rendered and editable straight from the front page, but only off the installation's own machine. `colloquy/ui/mock.py` answers False, so neither is drawn there.
 
 Markdown documents on the page share one node, `colloquy/markdown_document.py`: a rendered read view, `edit` for a textarea, `save` to write it back. There are two, and where each **hangs** is the whole of what separates them. `CodeDocumentation` is on the root and gated as above. `HardwareSetup` (`colloquy/tests/test_audio_subsystem/HARDWARE_SETUP.md`) hangs off the audio bench test and is **not** gated — it says how to wire the one thing that test measures, and a bench is exactly where it is wanted. Its photographs and its schematic are served from `server2/static/hardware/`; both UIs know image content types, and `pytest_tests/test_documents.py` walks every image link in it to check the file is there and that the server will serve rather than download it.
@@ -130,7 +144,7 @@ The user works on this repo from two different computers. Uncommitted or unpushe
 The split between what it does by itself and what it asks for is the whole design:
 
 - **Only `fetch` is automatic.** It writes nothing but `.git/refs/remotes`, so it cannot disturb a running exhibition.
-- **`pull` is a link, and it appears only when origin actually has something** — that appearing *is* the proposal. It is `--ff-only` (`git.py`), and it refuses for itself over a dirty working tree (which may be the other computer's uncommitted work) or a diverged branch, with one line of prose instead of git's wall of it.
+- **`pull` is a link, and it appears only when origin actually has something** — that appearing *is* the proposal. It is `--ff-only` (`git.py`), and it refuses for itself over a dirty working tree (which may be the other computer's uncommitted work) or a diverged branch, with one line of prose instead of git's wall of it. The **refusals are instant** (they only read the last status) and answer in the request; the **network half is handed to the loop thread**, exactly as `check_now` does, because `Colloquy.get_states` holds one lock for the whole application and a minute spent on a dead connection inside a request is a minute in which no page in the tree answers. `_pull_now` re-checks before it runs, since the ask and the doing are on different threads and the tree can be edited while the click is in the air.
 - **Nothing raises out of the loop.** A gallery laptop is off the network as often as not; every failure comes back as a `GitError` shown as a reading, and a failed check keeps the previous status rather than blanking it. `git.py` also forces `GIT_TERMINAL_PROMPT=0` and empty askpass vars, because git otherwise blocks *forever* on a credential prompt nobody is at the keyboard to answer.
 - **A pull does not change the code that is running** — Python read the modules at startup. After a pull that moved, the node says so and points at the page's existing `restart`.
 

@@ -30,12 +30,22 @@ from colloquy.scenario_browser import (
 
 
 def thread_classes():
-    """Every BaseThread subclass the package defines, by qualified name."""
+    """Every BaseThread subclass the package defines, by qualified name.
+
+    "the package defines" is now enforced rather than assumed.
+    `__subclasses__()` sees every subclass that has been *imported*, and
+    a test elsewhere in this suite may perfectly well subclass a thread
+    to fake one property of it (test_repository does). Those would
+    otherwise land in the ratchet below as threads nobody has written a
+    scenario for, and only when that test module happened to be
+    collected first - which is the worst kind of failure to be handed.
+    """
     found = {}
 
     def walk(cls):
         for sub in cls.__subclasses__():
-            found[f"{sub.__module__}.{sub.__name__}"] = sub
+            if sub.__module__.split(".")[0] == "colloquy":
+                found[f"{sub.__module__}.{sub.__name__}"] = sub
             walk(sub)
 
     walk(BaseThread)
