@@ -50,12 +50,13 @@ def thread_classes():
 # for the next forty minutes is exactly the kind of thing somebody
 # standing in front of the installation needs told.
 #
-# Of the six left, two are deliberate and will stay: read_pattern and
+# Of the seven left, three are deliberate and will stay: read_pattern and
 # blink have no appearance of their own in the room - what they do is
 # described inside their parent's scenario, since a female reading and a
-# female swaying are one thing to watch. The other four are a real
-# backlog: the exposition thread, a female's light sensor and her
-# reinforcement, and the bar's own plain back-and-forth.
+# female swaying are one thing to watch - and the repository watch does
+# nothing in the room at all, being a git fetch every five minutes. The
+# other four are a real backlog: the exposition thread, a female's light
+# sensor and her reinforcement, and the bar's own plain back-and-forth.
 #
 # A male's light sensors are absent from this list because they are plain
 # Base nodes, not threads - only a female's reads on a loop - and
@@ -68,6 +69,7 @@ WITHOUT_SCENARIOS = {
     "colloquy.drivers.female.search.read_pattern.ReadPattern",
     "colloquy.drivers.male.search.blink.Blink",
     "colloquy.drivers.bar.turn_back_and_forth.TurnBackAndForth",
+    "colloquy.repository.Repository",
 }
 
 

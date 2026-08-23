@@ -45,6 +45,12 @@ def colloquy1(*args):
     sleep(0.5)
     colloquy.drivers.neopixels.turn_all_off()
 
+    # Watch origin for commits the other computer has pushed. Started
+    # here rather than waiting for somebody to click it, because the
+    # whole point is that nobody remembers to look. It only ever fetches;
+    # pulling stays a link on the page.
+    colloquy.repository.start()
+
     Server2(colloquy=colloquy)
 
 

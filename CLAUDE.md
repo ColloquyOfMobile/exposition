@@ -125,6 +125,17 @@ The user works on this repo from two different computers. Uncommitted or unpushe
 - **Push after committing** so the other computer can pick up the change, unless the user says otherwise.
 - If `git status` shows unexpected local changes at the start of a session (likely from the other computer's uncommitted work, e.g. synced via a shared drive), do not discard them — stash or commit them first, and flag it to the user.
 
+**The running program watches origin for you** (`colloquy/repository/`). `Repository` is a `BaseThread` on the root node — `/app/repository`, started by `main.py` rather than by a click, since a watch nobody switches on reports nothing. Every 5 minutes (`CHECK_INTERVAL`) it runs `git fetch` and re-reads where the checkout stands, and the page says so: `summary` ("3 commits to pull from origin/Refactor"), branch, behind/ahead, working tree, origin's newest commit subject, when it last looked. Deliberately **not** gated by `is_simulated` — the machine most likely to be sitting on a fortnight-old checkout is the installation's own laptop.
+
+The split between what it does by itself and what it asks for is the whole design:
+
+- **Only `fetch` is automatic.** It writes nothing but `.git/refs/remotes`, so it cannot disturb a running exhibition.
+- **`pull` is a link, and it appears only when origin actually has something** — that appearing *is* the proposal. It is `--ff-only` (`git.py`), and it refuses for itself over a dirty working tree (which may be the other computer's uncommitted work) or a diverged branch, with one line of prose instead of git's wall of it.
+- **Nothing raises out of the loop.** A gallery laptop is off the network as often as not; every failure comes back as a `GitError` shown as a reading, and a failed check keeps the previous status rather than blanking it. `git.py` also forces `GIT_TERMINAL_PROMPT=0` and empty askpass vars, because git otherwise blocks *forever* on a credential prompt nobody is at the keyboard to answer.
+- **A pull does not change the code that is running** — Python read the modules at startup. After a pull that moved, the node says so and points at the page's existing `restart`.
+
+`Repository` is on `WITHOUT_SCENARIOS` in `pytest_tests/test_scenarios.py` on purpose, alongside `read_pattern` and `blink`: a scenario describes what the piece does in the room, and a git fetch does nothing in the room at all.
+
 ## Testing
 
 There are two separate things called tests here, and they do not overlap.

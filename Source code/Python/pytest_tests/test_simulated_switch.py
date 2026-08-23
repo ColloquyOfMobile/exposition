@@ -70,6 +70,7 @@ def _tabs(is_simulated):
         _tests="tests",
         _params_view="params",
         _logs="logs",
+        _repository="repository",
         _code_documentation=SimpleNamespace(name="code documentation"),
         is_simulated=is_simulated,
         virtual_drivers=virtual,
@@ -96,6 +97,15 @@ def test_the_installation_is_not_offered_the_code_documentation():
     # Nothing breaks if it is drawn there; it is simply not what that
     # machine is for, and the page in the gallery is better without it.
     assert "code documentation" not in _tabs(is_simulated=False)
+
+
+def test_the_repository_watch_is_on_both_machines():
+    # Deliberately not gated, unlike the code documentation beside it.
+    # The repo is worked on from two computers, and the one that most
+    # needs telling that origin has moved is the installation's own
+    # laptop, sitting in a gallery on a checkout from a fortnight ago.
+    assert "repository" in _tabs(is_simulated=False)
+    assert "repository" in _tabs(is_simulated=True)
 def test_nothing_builds_the_simulation_when_not_simulated():
     # The tab is what first touches Colloquy.virtual_drivers, and that
     # property constructs the whole simulated stack on access.
@@ -114,6 +124,7 @@ def test_nothing_builds_the_simulation_when_not_simulated():
         _tests="tests",
         _params_view="params",
         _logs="logs",
+        _repository="repository",
         _code_documentation=SimpleNamespace(name="code documentation"),
         is_simulated=False,
     )
