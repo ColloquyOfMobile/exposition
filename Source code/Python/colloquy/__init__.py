@@ -21,6 +21,12 @@ from .logs import Logs
 # the piece anyway. See Colloquy.hold_commands.
 COMMAND_WAIT = 10.0
 
+# How long the orderly shutdown waits for everything to reach its origin.
+# A full bar crossing is about 32s at the profile velocity every servo is
+# initialised with, so 30 - the previous default - was under the worst
+# case rather than over it. See Colloquy.move_to_origin.
+HOMING_TIMEOUT = 90.0
+
 
 class Colloquy(BaseThread):
     # The whole evening, and the encounters inside it. These four sit
@@ -45,6 +51,12 @@ class Colloquy(BaseThread):
 
         self._is_opened = False
         self._virtual_drivers = None
+
+        # Set by Server2 when it starts serving this tree. A command deep
+        # in the tree cannot otherwise ask the process to stop: the HTTP
+        # server owns that event, and until now only its own /shutdown
+        # route could reach it.
+        self._server = None
 
         # One command at a time, now that the server runs several
         # requests at once. See get_states() for why this has to exist
@@ -171,10 +183,23 @@ class Colloquy(BaseThread):
         # takes for a crash and turns into an emergency stop.
         self._is_opened = False
 
-    def run(
-        self,
-    ):
-        return self.server()
+    def attach_server(self, server):
+        """Told by Server2 which server is serving this tree, so that a
+        command on a node can ask the process to stop.
+
+        Nothing here reaches back into the server for anything else, and
+        it stays None under `mock_ui.py` and in tests - `request_stop`
+        below is written to cope with that rather than assume it.
+        """
+        self._server = server
+
+    def request_stop(self):
+        """Ask the server to come out of its accept loop after this
+        request. Returns False when there is no server to ask."""
+        if self._server is None:
+            return False
+        self._server.shutdown_event.set()
+        return True
 
     @property
     def snapshot_children(self):
@@ -272,9 +297,52 @@ class Colloquy(BaseThread):
         # raise NotImplementedError
 
     def move_to_origin(self):
+        """Send every body and the bar home, and say whether they got there.
+
+        This is what protects the calibration across a power cut. Every
+        servo runs in extended position mode, where the turn count lives
+        in volatile memory: the bar's travel is 293 degrees of bar, which
+        is 2.4 turns of its servo, so a bar powered down at the far end
+        comes back believing it is somewhere else entirely. Homing first
+        leaves it within one turn of its own zero, where a power cycle
+        costs nothing.
+
+        The wait used to be the default 30s and its answer was thrown
+        away. At `profile_velocity` 20 - 4.58 rev/min at the servo,
+        a third of that at the bar - a full crossing takes about 32
+        seconds, so the one case where homing matters most (the bar at
+        the far end) was also the case most likely to time out, and
+        torque was then cut mid-travel without a word. Hence a timeout
+        with room in it, and a returned answer that the caller is
+        expected to pass on.
+        """
         self._drivers.bodies.turn_all_bodies_origin()
         self._drivers.bar.turn_to_origin()
-        self._drivers.wait_until_everything_is_still()
+        return self._drivers.wait_until_everything_is_still(timeout=HOMING_TIMEOUT)
+
+    def power_down(self):
+        """The orderly stop, in the order that keeps the calibration.
+
+        Threads first (nothing else should be commanding a body), then
+        the lights, then home, and only then torque off - cutting torque
+        before the move would leave every body wherever it happened to
+        be. Returns whether everything actually got home.
+
+        Shared by /shutdown and by "unmount the main PCB", which is the
+        same sequence with a note written first.
+        """
+        self.shutdown()
+        self.join_all()
+        self.shutdown_neopixels()
+        arrived = self.move_to_origin()
+        self.disable_torque()
+        if not arrived:
+            self.log(
+                "WARNING: not everything reached its origin before torque was "
+                "cut. A servo powered down away from its origin loses its turn "
+                "count - check the bar's position before trusting it."
+            )
+        return arrived
 
     def disable_torque(self):
         self._drivers.disable_torque()

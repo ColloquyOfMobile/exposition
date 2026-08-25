@@ -16,6 +16,16 @@ DEFAULTS = {
     # runs at 1:3 the three come out at the same angle again.
     "near origin threshold": {"female": 11.719, "male": 11.719, "bar": 11.719},
     "emulate light sensor": False,
+    # Is the board carrying the Arduino and the U2D2 actually in the
+    # installation? Written by the "unmount the main PCB" command
+    # (drivers/main_pcb/) so that the next start knows not to reach for
+    # two serial ports that have been physically taken out, instead of
+    # failing to open them and saying something about COM4.
+    #
+    # Nothing sets this back on its own: a board that is out stays out
+    # until somebody says it is back, because the alternative is an
+    # installation that quietly decides it has hardware when it has not.
+    "main pcb": {"mounted": True, "unmounted at": ""},
     # The installation's own Arduino. The baud rate is not a
     # calibration and never was - it is a copy of a number that lives in
     # the sketch (SERIAL_BAUDRATE in colloquy_of_mobiles.ino), kept here

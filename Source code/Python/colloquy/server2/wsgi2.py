@@ -725,11 +725,12 @@ class WSGI2(Base):
         # of them somewhere. Bounded, and it goes ahead regardless when
         # the wait runs out - see Colloquy.hold_commands.
         with self.colloquy.hold_commands() as held:
-            self.colloquy.shutdown()
-            self.colloquy.join_all()
-            self.colloquy.shutdown_neopixels()
-            self.colloquy.move_to_origin()
-            self.colloquy.disable_torque()
+            # Threads down, lights off, everything home, then torque off -
+            # see Colloquy.power_down. Homing before the power can go is
+            # what keeps the calibration: a servo in extended position
+            # mode holds its turn count in volatile memory, and the bar's
+            # travel is 2.4 turns of its servo.
+            arrived = self.colloquy.power_down()
 
         self.shutdown_event.set()
 
@@ -743,6 +744,14 @@ class WSGI2(Base):
             lines.append(
                 "Note: a command was still running and did not finish in time; "
                 "shut down anyway."
+            )
+        if arrived:
+            lines.append("Everything reached its origin; torque is off.")
+        else:
+            lines.append(
+                "WARNING: not everything reached its origin before torque was "
+                "cut. A servo powered down away from its origin loses its turn "
+                "count - check the bar before trusting its calibration."
             )
         lines.append("Goodbye!")
         content = "\n".join(lines).encode()

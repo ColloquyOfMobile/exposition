@@ -8,6 +8,7 @@ from .bar import Bar
 from .commands import Commands
 from .test import Test
 from .bodies import Bodies
+from .main_pcb import MainPCB
 from .all_neopixels import AllNeopixels
 
 
@@ -52,7 +53,9 @@ class Drivers(BaseThread):
         self._bar = Bar(owner=self)
 
         self._test = Test(owner=self)
+        self._main_pcb = MainPCB(owner=self)
 
+        self[self._main_pcb.name] = self._main_pcb
         self[self.arduino.name] = self.arduino
         self.add(self.test)
 
@@ -81,6 +84,10 @@ class Drivers(BaseThread):
     @property
     def opened(self):
         return self._opened
+
+    @property
+    def main_pcb(self):
+        return self._main_pcb
 
     @property
     def bodies(self):
@@ -227,6 +234,10 @@ class Drivers(BaseThread):
         # the one question you actually ask at a rig ("is the board there,
         # and is it the right one") had no answer on the page.
         children[self.arduino.name] = self.arduino
+        # Beside the two serial links it carries: taking it out
+        # disconnects both at once, and doing that safely is what this
+        # node is for.
+        children[self._main_pcb.name] = self._main_pcb
         children["bodies"] = self.bodies
         for body in self.bodies:
             children[body.name] = body

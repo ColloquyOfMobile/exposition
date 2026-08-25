@@ -32,8 +32,12 @@ def main(*args):
         colloquy1()
 
 
-def colloquy1(*args):
-    colloquy = Colloquy()
+def open_the_hardware(colloquy):
+    """Open both serial links and wake every servo.
+
+    Split out of colloquy1() so that the "main PCB unmounted" case can
+    skip the whole of it rather than each line being guarded.
+    """
     colloquy.drivers.u2d2.com_port.set("COM4")
     colloquy.drivers.u2d2.open()
     colloquy.drivers.arduino.open()
@@ -44,6 +48,28 @@ def colloquy1(*args):
     colloquy.drivers.neopixels.turn_all_on()
     sleep(0.5)
     colloquy.drivers.neopixels.turn_all_off()
+
+
+def colloquy1(*args):
+    colloquy = Colloquy()
+
+    if colloquy.drivers.main_pcb.is_mounted:
+        open_the_hardware(colloquy)
+    else:
+        # The board carrying the Arduino and the U2D2 has been taken out
+        # (drivers/main_pcb/). Opening either port would fail somewhere
+        # down in pyserial, saying something about COM4, which is a poor
+        # way to be told a board is missing. Say it here instead and come
+        # up anyway: the page still works, and it carries the command to
+        # say the board is back.
+        since = colloquy.drivers.main_pcb.unmounted_at or "unknown"
+        print(
+            f"The main PCB is noted as UNMOUNTED (since {since}).\n"
+            "The Arduino and the U2D2 have not been opened, so nothing can "
+            "move or light up.\n"
+            "When the board is back: /app/drivers/main pcb -> "
+            "'the main PCB is back', then restart."
+        )
 
     # Watch origin for commits the other computer has pushed. Started
     # here rather than waiting for somebody to click it, because the
