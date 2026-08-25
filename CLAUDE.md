@@ -150,6 +150,20 @@ The split between what it does by itself and what it asks for is the whole desig
 
 `Repository` is on `WITHOUT_SCENARIOS` in `pytest_tests/test_scenarios.py` on purpose, alongside `read_pattern` and `blink`: a scenario describes what the piece does in the room, and a git fetch does nothing in the room at all.
 
+## Type annotations: scoped on purpose
+
+The repo is almost entirely unannotated (~1300 parameters, a handful of annotations) and that is **not** a backlog to burn down. The rule is: **annotate where a type is a fact worth stating, and check what you annotate.**
+
+- **`py -m mypy`** runs it. Config is `[tool.mypy]` in `pyproject.toml`; mypy is a dev tool, not a runtime dependency, so it is not in `requirements.txt` — `pip install mypy`.
+- **`files` is a deliberate list, and adding to it is the decision.** Only the pure-logic edges are on it: `drivers/angle/`, `repository/`, `drivers/arduino/boards.py`, `scenario_browser/rendering.py`. These take ordinary values and return ordinary values, and their confusions are real ones — degrees vs servo units, counts vs prose, a VID that may not exist.
+- **The `Base` tree is deliberately off it.** `self["name"] = child_or_callable`, `__getitem__` routing, `snapshot()` returning dicts whose payload *key* is the type — a checker has little true to say there, and turning it loose repo-wide produced **202 errors across 58 files** on a first run. Same reasoning as `[tool.ruff]`, which is narrow for the same reason.
+- **`follow_imports = "silent"` is load-bearing.** Without it `files` only scopes what mypy *leads* with; it still walks every import and reports what it finds out in the tree.
+- **`disallow_untyped_defs` is deliberately NOT set.** An unannotated helper beside an annotated one is not an error. Partial annotation is the intended end state, not a waypoint.
+
+The point is that an annotation nothing checks is a comment that can lie, and this repo had one: `ScenarioEntry.label: str = None` said "always a string" while defaulting to `None`. That is what prompted the config. Annotating more of the tree is fine; putting it under the checker is what needs a reason.
+
+Modules that are **all constants** (`light_pattern_timing.py`) are left alone on purpose — `SAMPLE_INTERVAL: float = 0.05` documents nothing the literal doesn't, and the `_SAMPLES`/`_DURATION`/`_INTERVAL` naming already carries the units.
+
 ## Testing
 
 There are two separate things called tests here, and they do not overlap.

@@ -32,8 +32,8 @@ that authentication is what failed.
 import os
 import subprocess
 import sys
-from collections import namedtuple
 from pathlib import Path
+from typing import NamedTuple
 
 # .../exposition/Source code/Python/colloquy/repository/git.py
 #      [4]         [3]         [2]     [1]      [0]
@@ -43,10 +43,15 @@ FETCH_TIMEOUT = 60
 COMMAND_TIMEOUT = 15
 
 # Don't flash a console window every few minutes if this is ever run
-# under pythonw. No-op anywhere but Windows.
-_NO_WINDOW = {}
-if sys.platform == "win32":
-    _NO_WINDOW["creationflags"] = subprocess.CREATE_NO_WINDOW
+# under pythonw. Zero is "no special flags" and is what every other
+# platform wants: Popen rejects a *non-zero* creationflags off Windows,
+# so this passes on all of them.
+#
+# Written as a value rather than as a **kwargs dict because a splatted
+# dict cannot be matched against subprocess.run's overloads - the checker
+# has to give up on the whole call, which is the one call in this module
+# worth checking.
+_CREATION_FLAGS = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
 
 
 class GitError(Exception):
@@ -55,7 +60,7 @@ class GitError(Exception):
     thread over."""
 
 
-class Status(namedtuple("Status", "branch upstream behind ahead dirty newest")):
+class Status(NamedTuple):
     """Where this checkout stands against origin, as of the last fetch.
 
     `behind` is how many commits origin has that we do not - the whole
@@ -66,17 +71,26 @@ class Status(namedtuple("Status", "branch upstream behind ahead dirty newest")):
     files touched, staged or not.
     """
 
+    branch: str
+    upstream: str
+    # Counts, all three - the page turns them into prose, nothing here
+    # ever holds the sentence.
+    behind: int
+    ahead: int
+    dirty: int
+    newest: str
+
     @property
-    def is_behind(self):
+    def is_behind(self) -> bool:
         return self.behind > 0
 
     @property
-    def can_fast_forward(self):
+    def can_fast_forward(self) -> bool:
         """Would `pull --ff-only` do anything, and would it succeed?"""
         return self.behind > 0 and self.ahead == 0
 
 
-def environment():
+def environment() -> dict[str, str]:
     env = dict(os.environ)
     env["GIT_TERMINAL_PROMPT"] = "0"
     # An unset GIT_ASKPASS falls back to SSH_ASKPASS and then to whatever
@@ -90,17 +104,17 @@ def environment():
 class Git:
     """git in one folder. Holds no state - every method shells out."""
 
-    def __init__(self, folder=REPO_FOLDER):
+    def __init__(self, folder: Path | str = REPO_FOLDER):
         self._folder = Path(folder)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Git({self._folder.as_posix()})"
 
     @property
-    def folder(self):
+    def folder(self) -> Path:
         return self._folder
 
-    def run(self, *args, timeout=COMMAND_TIMEOUT):
+    def run(self, *args: str, timeout: float = COMMAND_TIMEOUT) -> str:
         """One git command, its stdout stripped. Raises GitError for every
         way it can fail, so no caller has to know about subprocess."""
         try:
@@ -111,7 +125,7 @@ class Git:
                 text=True,
                 timeout=timeout,
                 env=environment(),
-                **_NO_WINDOW,
+                creationflags=_CREATION_FLAGS,
             )
         except FileNotFoundError as error:
             raise GitError(
@@ -130,14 +144,14 @@ class Git:
 
     # --- the questions -------------------------------------------------
 
-    def branch(self):
+    def branch(self) -> str | None:
         """The branch checked out, or None when the head is detached."""
         name = self.run("rev-parse", "--abbrev-ref", "HEAD")
         if name == "HEAD":
             return None
         return name
 
-    def upstream(self, branch):
+    def upstream(self, branch: str) -> str:
         """What this branch is tracked against on origin.
 
         `@{upstream}` is the honest answer and the one git itself uses,
@@ -160,30 +174,30 @@ class Git:
             raise GitError(f"{branch} is not tracking anything on origin")
         return candidate
 
-    def counts(self, upstream):
+    def counts(self, upstream: str) -> tuple[int, int]:
         """(behind, ahead) - commits on origin we lack, and ours it lacks."""
         counted = self.run("rev-list", "--left-right", "--count", f"{upstream}...HEAD")
         behind, ahead = counted.split()
         return int(behind), int(ahead)
 
-    def dirty(self):
+    def dirty(self) -> int:
         """How many files in the working tree are modified or untracked."""
         porcelain = self.run("status", "--porcelain")
         if not porcelain:
             return 0
         return len(porcelain.splitlines())
 
-    def newest(self, upstream):
+    def newest(self, upstream: str) -> str:
         """Origin's newest commit, as the page would like to read it."""
         return self.run("log", "-1", "--format=%h %s", upstream)
 
     # --- the two things it does ----------------------------------------
 
-    def fetch(self):
+    def fetch(self) -> None:
         """Ask origin what it has. Writes nothing outside .git/."""
         self.run("fetch", "--quiet", timeout=FETCH_TIMEOUT)
 
-    def status(self):
+    def status(self) -> Status:
         """Everything the page shows, in one go, without fetching."""
         branch = self.branch()
         if branch is None:
@@ -199,12 +213,12 @@ class Git:
             newest=self.newest(upstream),
         )
 
-    def pull(self):
+    def pull(self) -> str:
         """Wind the branch forward, or refuse. Never merges."""
         return self.run("pull", "--ff-only", timeout=FETCH_TIMEOUT)
 
 
-def explain(args, completed):
+def explain(args: tuple[str, ...], completed) -> str:
     """What to put on the page when git said no.
 
     git writes its reasons to stderr and its answers to stdout, but

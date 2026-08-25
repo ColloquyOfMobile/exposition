@@ -31,7 +31,7 @@ from colloquy.base_thread import BaseThread
 from colloquy.ui import leaves
 from colloquy.utils import timelap_to_string
 
-from .git import Git, GitError
+from .git import Git, GitError, Status
 
 # Every five minutes. The thing being watched is somebody else's git push,
 # which happens a handful of times a day at best, so this is already far
@@ -55,17 +55,17 @@ class Repository(BaseThread):
 
     interval = CHECK_INTERVAL
 
-    def __init__(self, owner, git=None):
+    def __init__(self, owner, git: Git | None = None):
         super().__init__(owner=owner)
         self._git = git if git is not None else Git()
 
         # Written by the polling thread, read by whichever thread is
         # rendering the page. Each is replaced whole rather than mutated,
         # so a render sees one or the other and never a half-built one.
-        self._status = None
-        self._error = None
-        self._checked_at = None
-        self._pull_report = None
+        self._status: Status | None = None
+        self._error: str | None = None
+        self._checked_at: float | None = None
+        self._pull_report: str | None = None
         self._needs_restart = False
         self._pull_asked = False
 
@@ -229,7 +229,13 @@ class Repository(BaseThread):
             self._pull_report = refusal
             return refusal
 
-        behind = self._status.behind
+        # _why_not_pull() refuses on a missing status, so there is one
+        # here. Spelled out rather than assumed: it is the kind of
+        # implication that survives until somebody reorders the refusals.
+        status = self._status
+        assert status is not None
+        behind = status.behind
+
         with self._git_lock:
             try:
                 answer = self._git.pull()

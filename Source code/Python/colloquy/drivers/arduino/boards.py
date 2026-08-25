@@ -24,7 +24,7 @@ not. Hence the `is_arduino` column, which is really "would it be sane to
 point the Arduino driver at this one".
 """
 
-from collections import namedtuple
+from typing import NamedTuple
 
 import serial.tools.list_ports
 
@@ -37,7 +37,7 @@ from colloquy.ui import leaves
 # The `False` rows are as useful as the `True` ones. An FTDI part here is
 # almost certainly the U2D2 - opening it as the Arduino gets a silence
 # that looks exactly like a dead board.
-KNOWN_DEVICES = {
+KNOWN_DEVICES: dict[tuple[int, int], tuple[str, bool]] = {
     # Official Megas: the ATmega16U2 bridge, in its two revisions.
     (0x2341, 0x0010): ("Arduino Mega 2560 (R2)", True),
     (0x2341, 0x0042): ("Arduino Mega 2560 (R3)", True),
@@ -67,12 +67,26 @@ KNOWN_DEVICES = {
 }
 
 
-class Board(namedtuple("Board", "device name is_arduino vid pid serial_number")):
+class Board(NamedTuple):
     """One thing on the USB bus, as far as it can be seen without opening
-    it. `device` is the COM name, `name` is what the chip says it is."""
+    it. `device` is the COM name, `name` is what the chip says it is.
+
+    The three Nones are the whole reason this says its types out loud: a
+    port whose VID/PID the operating system will not tell us is a normal
+    thing to meet, not a fault, and the identify() below leans on it.
+    """
+
+    device: str
+    name: str
+    is_arduino: bool
+    # Numbers, not the hex strings they are written as in KNOWN_DEVICES,
+    # and absent for a port the OS declines to describe.
+    vid: int | None
+    pid: int | None
+    serial_number: str | None
 
     @property
-    def label(self):
+    def label(self) -> str:
         """How it reads on the page, and the key it is filed under: the
         COM name is what you have to choose, the rest is why."""
         return f"{self.device} - {self.name}"
@@ -89,9 +103,18 @@ def identify(port):
     """
     vid = getattr(port, "vid", None)
     pid = getattr(port, "pid", None)
-    name, is_arduino = KNOWN_DEVICES.get(
-        (vid, pid), (getattr(port, "description", None) or "unknown device", False)
-    )
+
+    # A port the operating system will not put a VID/PID on never matched
+    # the table anyway - it fell through to the default. Said out loud
+    # now, because the table is keyed by two numbers and looking it up
+    # with a pair of Nones only worked by never being there.
+    known = None
+    if vid is not None and pid is not None:
+        known = KNOWN_DEVICES.get((vid, pid))
+
+    if known is None:
+        known = (getattr(port, "description", None) or "unknown device", False)
+    name, is_arduino = known
     return Board(
         device=port.device,
         name=name,
