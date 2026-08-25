@@ -83,6 +83,9 @@ class WSGI2(Base):
         if key == "shutdown":
             return self._parse_shutdown(*leftovers)
 
+        if key == "unmount-main-pcb":
+            return self._parse_unmount_main_pcb(*leftovers)
+
         if key == "restart":
             return self._parse_restart(*leftovers)
 
@@ -715,6 +718,58 @@ class WSGI2(Base):
 
         html = doc.getvalue()
         content = html.encode()
+
+        return status, headers, content
+
+    def _parse_unmount_main_pcb(self):
+        """Shut down, and say the board can come out.
+
+        The same sequence as /shutdown - it *is* a shutdown - with the
+        note written first (`MainPCB.unmount`) and a last line that
+        answers the only question somebody standing over a screwdriver
+        has. It is a route rather than a tree command because it ends
+        with the server stopped: the tree re-renders the node a command
+        was called on and discards whatever the command returned, which
+        would leave a page full of navigation links served by a server in
+        the act of stopping.
+        """
+        main_pcb = self.colloquy.hardware.main_pcb
+
+        with self.colloquy.hold_commands() as held:
+            arrived = main_pcb.unmount()
+
+        self.shutdown_event.set()
+
+        content_type = "text/plain; charset=utf-8"
+        status = "200 OK"
+        headers = [("Content-Type", content_type)]
+        lines = [
+            f"thread count: {len(self.all_threads)}",
+        ]
+        if not held:
+            lines.append(
+                "Note: a command was still running and did not finish in time; "
+                "shut down anyway."
+            )
+        if arrived:
+            lines.append("Everything reached its origin; torque is off.")
+        else:
+            lines.append(
+                "WARNING: not everything reached its origin before torque was "
+                "cut. A servo powered down away from its origin loses its turn "
+                "count - check the bar before trusting its calibration."
+            )
+        lines.append("")
+        lines.append("The server is stopped and the main PCB is noted as unmounted.")
+        lines.append("It is now safe to disconnect the Arduino and the U2D2.")
+        lines.append("")
+        lines.append(
+            "When the board is back: start the app again, then hardware > "
+            'main pcb > "the main PCB is back", and restart once more.'
+        )
+        lines.append("")
+        lines.append("Goodbye!")
+        content = "\n".join(lines).encode()
 
         return status, headers, content
 

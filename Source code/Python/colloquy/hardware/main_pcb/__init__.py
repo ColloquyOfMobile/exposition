@@ -44,7 +44,17 @@ class MainPCB(Base):
 
     def __init__(self, owner):
         super().__init__(owner=owner)
-        self["unmount the main PCB"] = self.unmount
+        # Only the remount is a tree command. Unmounting is a *route*
+        # (/unmount-main-pcb, see server2/wsgi2.py) for the same reason
+        # /shutdown is one: it ends with the server stopped, and a tree
+        # command cannot say so. The tree calls a command and then
+        # re-renders the node it was called on - `update()`'s return
+        # value is discarded by `ui/tree.py` - so whatever it had to say
+        # would be thrown away and the reader would be left looking at an
+        # ordinary node page, with navigation links, served by a server
+        # that is in the act of stopping. The one thing somebody standing
+        # over a screwdriver needs is a page that says it is safe to
+        # disconnect, and that has to be the last page.
         self["the main PCB is back"] = self.remount
 
     @property
@@ -67,46 +77,23 @@ class MainPCB(Base):
     def unmounted_at(self):
         return self.params["unmounted at"]
 
-    # --- the two commands -------------------------------------------------
+    # --- taking it out ----------------------------------------------------
 
-    def unmount(self, request=None):
-        """Write the note, bring everything home, cut torque, stop the server.
+    def unmount(self):
+        """Write the note, then bring everything home and cut torque.
 
-        In that order, and the order is the whole point: the note is
-        written *first* so that a shutdown which then fails halfway still
-        leaves the next start knowing the board is going away. Homing
-        before torque is cut is what saves the calibration.
+        In that order, and the order is the point: the note is written
+        *first* so that a power-down which then fails halfway still
+        leaves the next start knowing the board is going away.
 
-        This runs inside a page request, which already holds the command
-        lock (`Colloquy.get_states`), so it calls `power_down()` directly
-        rather than `hold_commands()` - that would sit waiting for a lock
-        this very call is holding.
+        Returns whether everything actually reached its origin. Called by
+        the /unmount-main-pcb route, which owns the command lock, stops
+        the server and writes the farewell page.
         """
         self.params["mounted"] = False
         self.params["unmounted at"] = datetime.now().isoformat(timespec="seconds")
         self.log("Main PCB is being unmounted - bringing everything home.")
-
-        arrived = self.colloquy.power_down()
-        stopping = self.colloquy.request_stop()
-
-        lines = [
-            "The main PCB is noted as unmounted.",
-            (
-                "Everything reached its origin."
-                if arrived
-                else "WARNING: not everything reached its origin before torque "
-                "was cut - check the bar before trusting its calibration."
-            ),
-            "Torque is off on every servo.",
-            (
-                "The server is stopping; it is safe to disconnect once this "
-                "page has finished loading."
-                if stopping
-                else "No server to stop - close the process by hand before "
-                "disconnecting."
-            ),
-        ]
-        return " ".join(lines)
+        return self.colloquy.power_down()
 
     def remount(self, request=None):
         """Say the board is back. Takes effect at the next start, since
@@ -123,20 +110,36 @@ class MainPCB(Base):
 
     @property
     def snapshot_children(self):
+        # The unmount is not here: it is a link to its own route (see
+        # __init__). Only the remount is an ordinary command.
         if self.is_mounted:
-            return {"unmount the main PCB": self.unmount}
+            return {}
         return {"the main PCB is back": self.remount}
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
         leaf = leaves.into(states, path)
+
         if self.is_mounted:
             leaf("state", "mounted")
-        else:
-            leaf("state", f"UNMOUNTED since {self.unmounted_at or 'unknown'}")
-            leaf(
-                "what that means",
-                "the Arduino and the U2D2 were not opened at startup - "
-                "nothing can move or light up until the board is back",
+            # An anchor rather than a command link, because it goes to a
+            # route rather than into the tree. Both renderers drop an
+            # html leaf in as it is.
+            states["taking it out"] = leaves.html(
+                path,
+                "taking it out",
+                '<p>Brings every body and the bar home, cuts torque, and '
+                "stops the server, so the board can be unplugged without "
+                "losing where anything is.</p>"
+                '<p><a href="/unmount-main-pcb"><strong>'
+                "unmount the main PCB</strong></a></p>",
             )
+            return states
+
+        leaf("state", f"UNMOUNTED since {self.unmounted_at or 'unknown'}")
+        leaf(
+            "what that means",
+            "the Arduino and the U2D2 were not opened at startup - "
+            "nothing can move or light up until the board is back",
+        )
         return states

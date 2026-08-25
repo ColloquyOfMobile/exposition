@@ -17,8 +17,6 @@ for params on disk and a servo bus.
 """
 from types import SimpleNamespace
 
-import pytest
-
 from colloquy import HOMING_TIMEOUT, Colloquy
 
 
@@ -159,36 +157,3 @@ def test_an_emergency_stop_cuts_torque_before_signalling_threads():
     Colloquy.emergency_stop(fake)
 
     assert done.index("torque off") < done.index("threads down")
-
-
-# --- asking the server to stop -------------------------------------------
-
-
-def test_request_stop_sets_the_servers_event():
-    stopped = []
-    server = SimpleNamespace(
-        shutdown_event=SimpleNamespace(set=lambda: stopped.append(True))
-    )
-    fake = SimpleNamespace(_server=server)
-
-    assert Colloquy.request_stop(fake) is True
-    assert stopped == [True]
-
-
-def test_request_stop_copes_with_no_server():
-    """mock_ui.py and every test in this suite build a tree with no server
-    behind it. Saying so is the honest answer; raising would make the
-    unmount command unusable anywhere but the installation."""
-    fake = SimpleNamespace(_server=None)
-
-    assert Colloquy.request_stop(fake) is False
-
-
-@pytest.mark.parametrize("attached", [True, False])
-def test_attach_server_records_what_was_given(attached):
-    fake = SimpleNamespace(_server="something else")
-    server = object() if attached else None
-
-    Colloquy.attach_server(fake, server)
-
-    assert fake._server is server

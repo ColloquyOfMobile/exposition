@@ -18,7 +18,7 @@ from types import SimpleNamespace
 from colloquy.hardware.main_pcb import MainPCB
 
 
-def make_pcb(mounted=True, unmounted_at="", arrived=True, has_server=True):
+def make_pcb(mounted=True, unmounted_at="", arrived=True):
     """A MainPCB over a throwaway params dict and a recording colloquy."""
     done = []
     params = {"main pcb": {"mounted": mounted, "unmounted at": unmounted_at}}
@@ -26,7 +26,6 @@ def make_pcb(mounted=True, unmounted_at="", arrived=True, has_server=True):
     colloquy = SimpleNamespace(
         params=params,
         power_down=lambda: (done.append("powered down"), arrived)[1],
-        request_stop=lambda: (done.append("asked to stop"), has_server)[1],
     )
     owner = SimpleNamespace(owners=[], colloquy=colloquy, name="hardware")
     pcb = MainPCB(owner=owner)
@@ -97,45 +96,49 @@ def test_nothing_clears_the_note_on_its_own():
 # --- what unmounting actually does ---------------------------------------
 
 
-def test_unmounting_homes_everything_and_stops_the_server():
+def test_unmounting_powers_everything_down():
     pcb = make_pcb()
 
-    message = pcb.unmount()
-
-    assert pcb.done == ["powered down", "asked to stop"]
-    assert "unmounted" in message
-    assert "reached its origin" in message
+    assert pcb.unmount() is True
+    assert pcb.done == ["powered down"]
 
 
-def test_unmounting_warns_when_something_did_not_get_home():
-    """The one thing somebody about to pull a cable needs told."""
+def test_unmounting_reports_when_something_did_not_get_home():
+    """The one thing somebody about to pull a cable needs told - the route
+    turns this into the warning on the farewell page."""
     pcb = make_pcb(arrived=False)
 
-    message = pcb.unmount()
-
-    assert "WARNING" in message
-    assert "check the bar" in message
-
-
-def test_unmounting_says_so_when_there_is_no_server_to_stop():
-    pcb = make_pcb(has_server=False)
-
-    message = pcb.unmount()
-
-    assert "close the process by hand" in message
+    assert pcb.unmount() is False
 
 
 # --- the page ------------------------------------------------------------
 
 
-def test_only_the_command_that_makes_sense_is_offered():
+def test_only_the_action_that_makes_sense_is_offered():
+    """Unmounting is a link to its own route, not a tree command, so it
+    appears as an html leaf rather than in snapshot_children - see the
+    route in server2/wsgi2.py for why it cannot be a command."""
+    path = ("hardware", "main pcb")
+
     mounted = make_pcb(mounted=True)
-    assert "unmount the main PCB" in mounted.snapshot_children
-    assert "the main PCB is back" not in mounted.snapshot_children
+    assert mounted.snapshot_children == {}
+    markup = mounted._snapshot_if_opened(path)["taking it out"]["html"]
+    assert 'href="/unmount-main-pcb"' in markup
+    assert "unmount the main PCB" in markup
 
     out = make_pcb(mounted=False)
     assert "the main PCB is back" in out.snapshot_children
-    assert "unmount the main PCB" not in out.snapshot_children
+    assert "taking it out" not in out._snapshot_if_opened(path)
+
+
+def test_the_link_says_what_it_will_do_before_it_is_clicked():
+    # It homes everything, cuts torque and stops the server. None of that
+    # is guessable from four words on a link.
+    markup = make_pcb()._snapshot_if_opened(("hardware", "main pcb"))["taking it out"]["html"]
+
+    assert "home" in markup
+    assert "torque" in markup
+    assert "stops the server" in markup
 
 
 def test_the_state_is_readable_at_a_glance():

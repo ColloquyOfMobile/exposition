@@ -53,12 +53,6 @@ class Colloquy(BaseThread):
         self._is_opened = False
         self._virtual_drivers = None
 
-        # Set by Server2 when it starts serving this tree. A command deep
-        # in the tree cannot otherwise ask the process to stop: the HTTP
-        # server owns that event, and until now only its own /shutdown
-        # route could reach it.
-        self._server = None
-
         # One command at a time, now that the server runs several
         # requests at once. See get_states() for why this has to exist
         # and why it deliberately does not cover the whole request.
@@ -190,23 +184,6 @@ class Colloquy(BaseThread):
         # takes for a crash and turns into an emergency stop.
         self._is_opened = False
 
-    def attach_server(self, server):
-        """Told by Server2 which server is serving this tree, so that a
-        command on a node can ask the process to stop.
-
-        Nothing here reaches back into the server for anything else, and
-        it stays None under `mock_ui.py` and in tests - `request_stop`
-        below is written to cope with that rather than assume it.
-        """
-        self._server = server
-
-    def request_stop(self):
-        """Ask the server to come out of its accept loop after this
-        request. Returns False when there is no server to ask."""
-        if self._server is None:
-            return False
-        self._server.shutdown_event.set()
-        return True
 
     @property
     def snapshot_children(self):

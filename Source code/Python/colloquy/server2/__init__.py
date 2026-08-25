@@ -50,10 +50,6 @@ class Server2(Base):
         self._shutdown_event = Event()
         self._restart_event = Event()
         self._colloquy = colloquy
-        # So a command on a node can ask this server to stop - what
-        # "unmount the main PCB" needs, and what only the /shutdown route
-        # could do before.
-        colloquy.attach_server(self)
         self.run(port=self.DEFAULT_PORT if port is None else port)
 
     @property
