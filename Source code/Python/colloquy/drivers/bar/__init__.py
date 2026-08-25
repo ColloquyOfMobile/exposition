@@ -125,13 +125,36 @@ class Bar(BaseThread):
             return
 
     def loop(self):
-        if self.search.is_started:
+        """The bar is the one that decides whether the bar is wandering.
+
+        It has no appetite of its own, so the only thing that can tell it
+        whether to move is what the males are doing: the rail exists to
+        carry a calling male past a female, and with nobody calling there
+        is nothing to carry. So it watches their search flags and follows
+        them in both directions.
+
+        Only the starting half was here before, which meant the first male
+        to get hungry set the bar going for the rest of the run
+        (CODE_DOCUMENTATION 4.1). Stopping is the half that makes the
+        piece able to come to rest: males go quiet as their appetites
+        fall, and when the last one does the bar stops where it stands
+        rather than sliding back and forth in front of nobody.
+
+        Deliberately asking `search.is_started` rather than
+        `is_satisfied()`: what matters is whether he is *calling*, which
+        is a thread that may still be winding down a moment after his
+        drives changed. Reading the flag keeps the two in step.
+        """
+        anyone_calling = any(male.search.is_started for male in self.males)
+
+        if anyone_calling:
+            if not self.search.is_started:
+                self.search.start(started_by=self)
             return
 
-        for male in self.males:
-            if male.search.is_started:
-                self.search.start(started_by=self)
-                return
+        if self.search.is_started:
+            self.log("No male is calling - the bar stops wandering.")
+            self.search.stop()
 
     def setup(self):
         self.dxl.init_hardware()

@@ -150,7 +150,26 @@ class Female(BaseThread):
         self.dxl_origin.set(self.dxl.position.read())
 
     def is_satisfied(self):
-        return self.drives.o_drive.is_satisfied or self.drives.p_drive.is_satisfied
+        """Is she inert - wanting nothing, and so not searching?
+
+        Both appetites, not either. This is TJ's `internal_drive_state ==
+        1 [Neither/Inert]`, which `updateInternalDriveState()`
+        (internal.ino) reaches only when *both* drives are below the
+        interested floor: `(internal_drive_LL > internal_drive_O) &&
+        (internal_drive_LL > internal_drive_P)`.
+
+        It said `or` until 2026-08-25, which made a body with one
+        appetite full and one empty count as satisfied - so it would not
+        search, while `which_is_frustated()` (the same five rules as TJ's,
+        one place over) said it wanted the full one and a male in that
+        state would blink asking for it. A body advertising a want it had
+        decided not to act on.
+
+        Expressed through `which_is_frustated()` rather than spelled out
+        again, so the two cannot drift apart a second time: an empty
+        tuple *is* the inert state.
+        """
+        return not self.drives.which_is_frustated()
 
     def turn_to(self, degrees):
         self.angle.turn_to(degrees)

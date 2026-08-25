@@ -121,6 +121,11 @@ def make_search_with_drives(stub_factory, wants, last_match=None, moving=True):
     search._read_pattern = SimpleNamespace(
         name="read pattern female1",
         last_match=last_match,
+        # When she decoded it. loop() ignores an answer older than the
+        # search itself (see _decoded_before_this_search_began), so the
+        # default is "just now" and the staleness tests below set the two
+        # clocks against each other explicitly.
+        last_match_time=None,
         start=lambda started_by=None: None,
     )
     return search
@@ -226,3 +231,54 @@ def test_starting_a_search_forgets_the_previous_find(stub_factory, monkeypatch):
     search.start()
 
     assert search.partner is None
+
+
+# --- an answer left over from the previous search --------------------------
+
+
+def test_she_ignores_a_match_decoded_before_this_search_began(stub_factory):
+    """read_pattern outlives the search that starts it, and forgets the
+    last run's answer on its own thread a tick later. Until it does, this
+    loop can read the match that *ended the previous search* and find the
+    same male again instantly, having looked at nothing."""
+    search = make_search_with_drives(stub_factory, wants=("O",),
+                                     last_match=("male1", ("O",)))
+    stopped = []
+    search.stop = lambda: stopped.append(True)
+
+    search._started_at = 100.0
+    search.read_pattern.last_match_time = 99.0
+
+    search.loop()
+
+    assert search.partner is None
+    assert stopped == [], "a find on a stale answer is not a find"
+
+
+def test_she_acts_on_a_match_decoded_since_the_search_started(stub_factory):
+    search = make_search_with_drives(stub_factory, wants=("O",),
+                                     last_match=("male1", ("O",)))
+    search.stop = lambda: None
+
+    search._started_at = 100.0
+    search.read_pattern.last_match_time = 100.5
+
+    search.loop()
+
+    assert search.partner == ("male1", "O")
+
+
+def test_nothing_is_stale_before_there_are_two_times_to_compare(stub_factory):
+    # A loop() called directly, as every test above does, has never been
+    # start()ed and so has no _started_at. That must not read as stale, or
+    # the guard would silently disable the whole behaviour under test.
+    search = make_search_with_drives(stub_factory, wants=("O",),
+                                     last_match=("male1", ("O",)))
+    search.stop = lambda: None
+
+    assert search._started_at is None
+    assert search._decoded_before_this_search_began() is False
+
+    search.loop()
+
+    assert search.partner == ("male1", "O")

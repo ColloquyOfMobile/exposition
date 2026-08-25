@@ -18,6 +18,9 @@ to what is written to the register, reduction included.
 """
 from types import SimpleNamespace
 
+from colloquy.drivers.drive import which_is_frustated
+from pytest_tests.conftest import FakeDrive
+
 from colloquy.drivers.angle import Angle
 from colloquy.drivers.angle.conversion import REDUCTIONS
 from colloquy.drivers.female import Female
@@ -171,36 +174,61 @@ def test_the_sweep_is_read_from_params_so_the_page_can_change_it():
     assert Female.sweep.fget(fake) == 20
 
 
-def make_satisfaction_female(o_satisfied, p_satisfied):
+def make_satisfaction_female(o_value, p_value):
     """Build a fake exposing exactly what is_satisfied() touches:
-    .drives.o_drive.is_satisfied / .drives.p_drive.is_satisfied."""
+    `.drives.which_is_frustated()`.
+
+    Built over the **real** `which_is_frustated` and conftest's FakeDrive
+    rather than a stubbed boolean, so these pin the whole rule chain -
+    which is the point, since is_satisfied() is now defined as "that
+    returned nothing" and a stub could agree with itself while both were
+    wrong. FakeDrive satisfies below 30 and frustrates above 180.
+    """
+    o_drive = FakeDrive(o_value)
+    p_drive = FakeDrive(p_value)
     return SimpleNamespace(
         drives=SimpleNamespace(
-            o_drive=SimpleNamespace(is_satisfied=o_satisfied),
-            p_drive=SimpleNamespace(is_satisfied=p_satisfied),
+            o_drive=o_drive,
+            p_drive=p_drive,
+            which_is_frustated=lambda: which_is_frustated(o_drive, p_drive),
         )
     )
 
 
-def test_is_satisfied_true_when_both_drives_satisfied():
-    fake = make_satisfaction_female(o_satisfied=True, p_satisfied=True)
+def test_is_satisfied_true_only_when_both_appetites_are_below_the_floor():
+    # TJ's inert state (internal.ino's updateInternalDriveState, state 1
+    # [Neither]) is reached only when `LL > O && LL > P`.
+    fake = make_satisfaction_female(0, 0)
 
     assert Female.is_satisfied(fake) is True
 
 
-def test_is_satisfied_true_when_only_o_drive_satisfied():
-    fake = make_satisfaction_female(o_satisfied=True, p_satisfied=False)
+def test_one_full_appetite_is_not_satisfied():
+    """The case that changed on 2026-08-25, and the reason it had to.
 
-    assert Female.is_satisfied(fake) is True
+    This used to be True - `o.is_satisfied or p.is_satisfied` - so a body
+    with one appetite full and one empty would not search, while
+    which_is_frustated() said it wanted the full one. A male in that
+    state blinked a pattern asking for something he had decided not to
+    look for; a female in it ignored every male while advertising a want.
+    """
+    assert make_satisfaction_female(200, 0).drives.which_is_frustated() == ("O",)
+
+    assert Female.is_satisfied(make_satisfaction_female(200, 0)) is False
+    assert Female.is_satisfied(make_satisfaction_female(0, 200)) is False
 
 
-def test_is_satisfied_true_when_only_p_drive_satisfied():
-    fake = make_satisfaction_female(o_satisfied=False, p_satisfied=True)
+def test_a_half_risen_appetite_is_not_satisfied_either():
+    # Above the interested floor but below the desperate one: still a
+    # want, and still a reason to search.
+    fake = make_satisfaction_female(100, 0)
 
-    assert Female.is_satisfied(fake) is True
+    assert fake.drives.which_is_frustated() == ("O",)
+    assert Female.is_satisfied(fake) is False
 
 
-def test_is_satisfied_false_when_neither_drive_satisfied():
-    fake = make_satisfaction_female(o_satisfied=False, p_satisfied=False)
+def test_is_satisfied_false_when_both_appetites_are_up():
+    fake = make_satisfaction_female(200, 200)
 
+    assert fake.drives.which_is_frustated() == ("O", "P")
     assert Female.is_satisfied(fake) is False

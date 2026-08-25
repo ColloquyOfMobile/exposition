@@ -140,7 +140,26 @@ class Male(BaseThread):
         self.dxl_origin.set(self.dxl.position.read())
 
     def is_satisfied(self):
-        return self.drives.o_drive.is_satisfied or self.drives.p_drive.is_satisfied
+        """Is he inert - wanting nothing, and so not searching?
+
+        Both appetites, not either. This is TJ's `internal_drive_state ==
+        1 [Neither/Inert]`, which `updateInternalDriveState()`
+        (internal.ino) reaches only when *both* drives are below the
+        interested floor: `(internal_drive_LL > internal_drive_O) &&
+        (internal_drive_LL > internal_drive_P)`.
+
+        It said `or` until 2026-08-25, which made a body with one
+        appetite full and one empty count as satisfied - so it would not
+        search, while `which_is_frustated()` (the same five rules as TJ's,
+        one place over) said it wanted the full one and a male in that
+        state would blink asking for it. A body advertising a want it had
+        decided not to act on.
+
+        Expressed through `which_is_frustated()` rather than spelled out
+        again, so the two cannot drift apart a second time: an empty
+        tuple *is* the inert state.
+        """
+        return not self.drives.which_is_frustated()
 
     def turn_to_origin(self):
         self.angle.turn_to_origin()
@@ -170,13 +189,24 @@ class Male(BaseThread):
             return
 
     def loop(self):
+        """Search while he wants something, and stop when he stops.
 
-        if self.search.is_started:
+        The stop half was missing: he started calling the first time an
+        appetite climbed and then called for the rest of the run, whatever
+        his drives did afterwards (CODE_DOCUMENTATION 1.2). TJ's
+        `Logic_male.ino` transmits only while `internal_drive_state` is
+        not the inert one, and goes quiet the moment it is - so does this
+        now, and the bar watches these flags to decide whether to keep
+        wandering (`Bar.loop()`).
+        """
+        if self.is_satisfied():
+            if self.search.is_started:
+                self.log(f"{self.name} wants nothing now - stopping his search.")
+                self.search.stop()
             return
 
-        if not self.is_satisfied():
+        if not self.search.is_started:
             self.search.start(started_by=self)
-            return
 
     def setup(self):
         self.dxl.init_hardware()

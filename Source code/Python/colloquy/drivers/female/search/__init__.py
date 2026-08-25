@@ -66,12 +66,41 @@ class Search(BaseThread):
     def setup(self):
         self.read_pattern.start(started_by=self)
 
+    def _decoded_before_this_search_began(self):
+        """Is the answer she is holding left over from the last search?
+
+        `read_pattern` is one long-lived object restarted alongside each
+        search, and its setup() - which forgets the previous run's answer
+        - runs on its own thread a tick or two after start() returns. So
+        `loop()` can get here first and read the match that *ended the
+        last search*, act on it, and find the same male again instantly
+        without having looked at anything.
+
+        Seen as a doubled find in `test_search`: the same partner logged
+        twice, a tenth of a second apart. Harmless today only because
+        reinforcement is a placeholder - it is still a find made on no
+        evidence.
+
+        Both times are None until a search has actually been started and
+        a decode has actually happened, which is the case in unit tests
+        that call loop() directly; nothing is stale until there are two
+        times to compare.
+        """
+        started_at = self._started_at
+        match_time = self.read_pattern.last_match_time
+        if started_at is None or match_time is None:
+            return False
+        return match_time < started_at
+
     def loop(self):
         if not self.owner.is_moving:
             self.owner.toggle_position()
 
         match = self.read_pattern.last_match
         if match is None:
+            return
+
+        if self._decoded_before_this_search_began():
             return
 
         male, offered = match
