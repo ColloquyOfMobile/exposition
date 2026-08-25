@@ -30,9 +30,9 @@ class Angle(Base):
 
     # What the jog buttons on the page step by. Coarse then fine, which is
     # the order calibration actually goes in.
-    JOGS = (-10, -1, 1, 10)
+    JOGS: tuple[int, ...] = (-10, -1, 1, 10)
 
-    def __init__(self, owner, reduction):
+    def __init__(self, owner, reduction: int):
         super().__init__(owner=owner)
         self._reduction = reduction
         self._setter = ValueSetter2(
@@ -49,7 +49,7 @@ class Angle(Base):
         self["turn to origin"] = self.turn_to_origin
 
     @property
-    def name(self):
+    def name(self) -> str:
         return "angle"
 
     @property
@@ -61,24 +61,24 @@ class Angle(Base):
         return self.owner.dxl
 
     @property
-    def reduction(self):
+    def reduction(self) -> int:
         return self._reduction
 
     @property
-    def origin(self):
+    def origin(self) -> int:
         """The servo reading this body calls zero degrees."""
         return self.owner.dxl_origin.get()
 
-    def get(self, request=None):
+    def get(self, request=None) -> float:
         """Where the body is now, in degrees from its origin."""
         return self._to_degrees(self.dxl.position.read())
 
-    def rounded(self, request=None):
+    def rounded(self, request=None) -> int:
         """The same, as a whole degree - what the page's setter works in."""
         return round(self.get())
 
     @property
-    def goal(self):
+    def goal(self) -> float:
         """Where it has been told to go, in the same terms."""
         return self._to_degrees(self.dxl.goal_position.read())
 
@@ -86,33 +86,33 @@ class Angle(Base):
     def is_moving(self):
         return self.dxl.is_moving
 
-    def turn_to(self, degrees):
+    def turn_to(self, degrees: float) -> None:
         """Send the body to an angle. Non-blocking, like every other write
         in this codebase: the goal is written and the servo gets there in
         its own time."""
         self.dxl.goal_position.write(self.to_ticks(degrees))
 
-    def turn_to_origin(self, request=None):
+    def turn_to_origin(self, request=None) -> None:
         self.turn_to(0)
 
-    def jog(self, degrees):
+    def jog(self, degrees: float) -> None:
         """Step by an angle, measured from where the body is *going* rather
         than where it is: pressing +1 twice while it is still moving should
         add up to two degrees, not to one and a bit."""
         self.turn_to(self.goal + degrees)
 
-    def wait(self, timeout=None):
+    def wait(self, timeout: float | None = None) -> None:
         self.dxl.wait_for_servo(timeout=timeout)
 
-    def to_ticks(self, degrees):
+    def to_ticks(self, degrees: float) -> int:
         """The servo position for an angle of this body."""
         return self.origin + degrees_to_ticks(degrees, self._reduction)
 
-    def to_degrees(self, ticks):
+    def to_degrees(self, ticks: float) -> float:
         """The angle of this body for a servo position."""
         return self._to_degrees(ticks)
 
-    def _to_degrees(self, ticks):
+    def _to_degrees(self, ticks: float) -> float:
         return ticks_to_degrees(ticks - self.origin, self._reduction)
 
     def commit(self, value):

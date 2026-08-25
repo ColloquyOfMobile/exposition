@@ -26,8 +26,8 @@ reads it back as an unsigned dword, so a position of -900 comes back as
 """
 
 # X-series: 4096 position units to one turn of the servo shaft.
-TICKS_PER_TURN = 4096
-DEGREES_PER_TURN = 360
+TICKS_PER_TURN: int = 4096
+DEGREES_PER_TURN: int = 360
 
 # How many times slower the body turns than its servo. Measured on the
 # rig, not derived: a female, a male and the bar all have a 1:3 reduction
@@ -35,7 +35,7 @@ DEGREES_PER_TURN = 360
 # for a while, which is a fact about the rig this file had wrong - every
 # male angle it produced was three times the truth, and the params
 # migration to v3 is that error being taken back out of the calibration.
-REDUCTIONS = {
+REDUCTIONS: dict[str, int] = {
     "female": 3,
     "male": 3,
     "bar": 3,
@@ -47,18 +47,18 @@ _DWORD = 1 << 32
 _DWORD_SIGN_BIT = 1 << 31
 
 
-def ticks_per_degree(reduction):
+def ticks_per_degree(reduction: int) -> float:
     """Servo units for one degree of the body: 11.378 direct, 34.133 at 1:3."""
     return TICKS_PER_TURN * reduction / DEGREES_PER_TURN
 
 
-def ticks_to_degrees(ticks, reduction):
+def ticks_to_degrees(ticks: float, reduction: int) -> float:
     """Servo units to degrees of the body. Exact - no rounding, since the
     caller may be about to subtract two of these."""
     return ticks / ticks_per_degree(reduction)
 
 
-def degrees_to_ticks(degrees, reduction):
+def degrees_to_ticks(degrees: float, reduction: int) -> int:
     """Degrees of the body to whole servo units.
 
     Rounded, because a register takes integers: the error is at most half
@@ -69,7 +69,7 @@ def degrees_to_ticks(degrees, reduction):
     return round(degrees * ticks_per_degree(reduction))
 
 
-def as_signed(raw):
+def as_signed(raw: int) -> int:
     """A position register read back as an unsigned dword, as the number it
     was written as.
 
@@ -82,7 +82,7 @@ def as_signed(raw):
     return raw
 
 
-def as_unsigned(value):
+def as_unsigned(value: int) -> int:
     """The inverse: what the wire carries for a possibly-negative position.
 
     Only the simulator needs this - the real SDK's write path already

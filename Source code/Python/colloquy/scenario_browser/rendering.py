@@ -29,20 +29,23 @@ class ScenarioEntry:
     # ": label" (e.g. "O drive", "male1") - see flatten_entries, which
     # carries the label into every descendant's description as context
     # instead of just dropping it.
-    children: list = field(default_factory=list)
-    label: str = None
+    children: list["ScenarioEntry"] = field(default_factory=list)
+    # Optional: only an include line carries one, and `str` said otherwise
+    # while defaulting to None - the first annotation in this repo to be
+    # read as documentation and be wrong.
+    label: str | None = None
     is_branch: bool = False
     is_problem: bool = False
 
     @property
-    def is_event(self):
+    def is_event(self) -> bool:
         return self.duration_seconds == 0
 
 
 def parse_title(content):
     """Leading run of "#" comment lines, stripped of their leading '#'s -
     the scenario's own title/description, shown above its rendered rows."""
-    lines = []
+    lines: list[str] = []
     for raw_line in content.splitlines():
         line = raw_line.strip()
         if not line:
