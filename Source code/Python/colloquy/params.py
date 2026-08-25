@@ -18,9 +18,9 @@ DEFAULTS = {
     "emulate light sensor": False,
     # Is the board carrying the Arduino and the U2D2 actually in the
     # installation? Written by the "unmount the main PCB" command
-    # (drivers/main_pcb/) so that the next start knows not to reach for
-    # two serial ports that have been physically taken out, instead of
-    # failing to open them and saying something about COM4.
+    # (colloquy/hardware/main_pcb/) so that the next start knows not to
+    # reach for two serial ports that have been physically taken out,
+    # instead of failing to open them and saying something about COM4.
     #
     # Nothing sets this back on its own: a board that is out stays out
     # until somebody says it is back, because the alternative is an

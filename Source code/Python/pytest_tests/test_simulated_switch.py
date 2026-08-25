@@ -70,6 +70,7 @@ def _tabs(is_simulated):
         _tests="tests",
         _params_view="params",
         _logs="logs",
+        _hardware="hardware",
         _repository="repository",
         _code_documentation=SimpleNamespace(name="code documentation"),
         is_simulated=is_simulated,
@@ -99,6 +100,14 @@ def test_the_installation_is_not_offered_the_code_documentation():
     assert "code documentation" not in _tabs(is_simulated=False)
 
 
+def test_the_hardware_section_is_on_both_machines():
+    # What is physically in the rack, as opposed to the layer that drives
+    # it. Not gated: the machine with the boards actually in it is the one
+    # place it is not hypothetical.
+    assert "hardware" in _tabs(is_simulated=False)
+    assert "hardware" in _tabs(is_simulated=True)
+
+
 def test_the_repository_watch_is_on_both_machines():
     # Deliberately not gated, unlike the code documentation beside it.
     # The repo is worked on from two computers, and the one that most
@@ -106,6 +115,8 @@ def test_the_repository_watch_is_on_both_machines():
     # laptop, sitting in a gallery on a checkout from a fortnight ago.
     assert "repository" in _tabs(is_simulated=False)
     assert "repository" in _tabs(is_simulated=True)
+
+
 def test_nothing_builds_the_simulation_when_not_simulated():
     # The tab is what first touches Colloquy.virtual_drivers, and that
     # property constructs the whole simulated stack on access.
@@ -124,6 +135,7 @@ def test_nothing_builds_the_simulation_when_not_simulated():
         _tests="tests",
         _params_view="params",
         _logs="logs",
+        _hardware="hardware",
         _repository="repository",
         _code_documentation=SimpleNamespace(name="code documentation"),
         is_simulated=False,

@@ -6,12 +6,16 @@ everything is at its origin (a servo powered down away from it loses its
 turn count), and the next start knows the board is gone rather than
 failing to open two ports that are not there.
 
+It lives under `hardware` rather than `drivers`: that section is the
+physical installation - a board and whether it is in the rack - as
+opposed to the layer that drives the piece.
+
 `MainPCB` is a plain `Base` over one params entry, so it builds against a
 stub owner - no bus, no filesystem beyond the dict it is handed.
 """
 from types import SimpleNamespace
 
-from colloquy.drivers.main_pcb import MainPCB
+from colloquy.hardware.main_pcb import MainPCB
 
 
 def make_pcb(mounted=True, unmounted_at="", arrived=True, has_server=True):
@@ -24,7 +28,7 @@ def make_pcb(mounted=True, unmounted_at="", arrived=True, has_server=True):
         power_down=lambda: (done.append("powered down"), arrived)[1],
         request_stop=lambda: (done.append("asked to stop"), has_server)[1],
     )
-    owner = SimpleNamespace(owners=[], colloquy=colloquy, name="drivers")
+    owner = SimpleNamespace(owners=[], colloquy=colloquy, name="hardware")
     pcb = MainPCB(owner=owner)
     pcb._log = lambda *a, **k: None
     pcb.done = done
@@ -85,7 +89,7 @@ def test_nothing_clears_the_note_on_its_own():
     pcb = make_pcb(mounted=False, unmounted_at="2026-08-25T10:00:00")
 
     pcb.is_mounted
-    pcb._snapshot_if_opened(("drivers", "main pcb"))
+    pcb._snapshot_if_opened(("hardware", "main pcb"))
 
     assert pcb.stored["mounted"] is False
 
@@ -135,7 +139,7 @@ def test_only_the_command_that_makes_sense_is_offered():
 
 
 def test_the_state_is_readable_at_a_glance():
-    path = ("drivers", "main pcb")
+    path = ("hardware", "main pcb")
 
     mounted = make_pcb(mounted=True)._snapshot_if_opened(path)
     assert mounted["state"]["value"] == "mounted"
@@ -150,7 +154,7 @@ def test_the_state_is_readable_at_a_glance():
 
 def test_an_unmounted_board_with_no_recorded_date_still_reads():
     states = make_pcb(mounted=False, unmounted_at="")._snapshot_if_opened(
-        ("drivers", "main pcb")
+        ("hardware", "main pcb")
     )
 
     assert "unknown" in states["state"]["value"]

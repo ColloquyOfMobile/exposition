@@ -10,6 +10,7 @@ from .tests import Tests
 
 from .drivers import Drivers
 from .exposition import Exposition
+from .hardware import Hardware
 from .params import Params
 from .params_browser import ParamsNode
 from .repository import Repository
@@ -67,12 +68,14 @@ class Colloquy(BaseThread):
         self._tests = Tests(owner=self)
         self._exposition = Exposition(owner=self)
         self._logs = Logs(owner=self)
+        self._hardware = Hardware(owner=self)
         self._code_documentation = CodeDocumentation(owner=self)
         self._repository = Repository(owner=self)
 
         self["drivers"] = self._drivers
         self["params"] = self._params_view
         self["logs"] = self._logs
+        self["hardware"] = self._hardware
         self["repository"] = self._repository
 
         self._events = Events(shutdown=BaseThread._shutdown)
@@ -159,6 +162,10 @@ class Colloquy(BaseThread):
         return self._logs
 
     @property
+    def hardware(self):
+        return self._hardware
+
+    @property
     def repository(self):
         return self._repository
 
@@ -209,6 +216,11 @@ class Colloquy(BaseThread):
             "tests": self._tests,
             "params": self._params_view,
             "logs": self._logs,
+            # The physical installation, as opposed to the layer that
+            # drives it - see colloquy/hardware/. Not gated by
+            # is_simulated: the machine with the boards actually in it is
+            # the one place this is not hypothetical.
+            "hardware": self._hardware,
             # Not gated by is_simulated, unlike the code documentation
             # below. The two computers this repo is worked on from are
             # the installation's laptop and a dev machine, so the one

@@ -53,21 +53,21 @@ def open_the_hardware(colloquy):
 def colloquy1(*args):
     colloquy = Colloquy()
 
-    if colloquy.drivers.main_pcb.is_mounted:
+    if colloquy.hardware.main_pcb.is_mounted:
         open_the_hardware(colloquy)
     else:
         # The board carrying the Arduino and the U2D2 has been taken out
-        # (drivers/main_pcb/). Opening either port would fail somewhere
+        # (colloquy/hardware/main_pcb/). Opening either port would fail somewhere
         # down in pyserial, saying something about COM4, which is a poor
         # way to be told a board is missing. Say it here instead and come
         # up anyway: the page still works, and it carries the command to
         # say the board is back.
-        since = colloquy.drivers.main_pcb.unmounted_at or "unknown"
+        since = colloquy.hardware.main_pcb.unmounted_at or "unknown"
         print(
             f"The main PCB is noted as UNMOUNTED (since {since}).\n"
             "The Arduino and the U2D2 have not been opened, so nothing can "
             "move or light up.\n"
-            "When the board is back: /app/drivers/main pcb -> "
+            "When the board is back: /app/hardware/main pcb -> "
             "'the main PCB is back', then restart."
         )
 
