@@ -288,6 +288,27 @@ trying every rotation at once is the same idea, not a shortcut).
 | 8.5 | Error budget | ≥34 of 40 samples must agree (6 wrong, 15%); closest pair over all rotations is 8 samples apart, so ≥4 bad samples are needed before a reading sits between two patterns | 1 wrong bin of 10 (10%); closest pair is 2 apart, so **one** bad bin is already halfway to another answer | Same ratio, very different margin: oversampling is what buys TJ's robustness, not the percentage |
 | 8.6 | Reply channel | the female answers a light match by transmitting **the same pattern back as sound** (`act_transmit_I_O_sound()`), and the male spends his 2.35s gap listening for it before stopping and entering reinforcement | no sound channel at all | This is the missing closing link of §7.1 — in the original the loop closes over sound, not light. Broken out in full in §9 |
 | 8.7 | Who she answers | she filters by her own drive state: looking for O, she accepts only `I_O`, `I_OP`, `II_O`, `II_OP` and ignores a male asking for P (`Logic_fem.ino:110-225`) | **Ported** (2.8): `Search.loop()` applies the same filter, and `which_is_frustated()` moved to `drivers/drive/` so both sexes share one state machine - the female's `Drives` had none at all before, exactly the gap this exposed | — resolved |
+| 8.8 | Which pattern wins when two both fit | the six flags are computed independently (`sense_light_pattern.ino` sets all six, and several can be true at once), then resolved by an explicit `if`/`else if` chain **inside her drive-state branch**: looking for P she tries `I_P`, `I_OP`, `II_P`, `II_OP` in that order, and `I_O` is never evaluated at all | `_try_match()` returns the **first** pattern within tolerance while walking `readable_light_patterns` in dict order - male1 `O`, `P`, `both`, then male2 - and the drive filter is applied afterwards, in `Search._shared_drive()` | 8.7 is ported in intent but not in sequencing, and 8.5's thin margin is what makes the difference observable. A burst sitting within tolerance of both `male1/O` and `male1/P`, read by a female who wants P, decodes here as `O` and is then discarded as uninteresting - where TJ never tests `O` in that branch, matches `I_P`, and she finds him. **Fails safe** (a missed find, not a wrong approach) but she takes longer to settle than the original would |
+
+**Measured, `test read pattern`, 2026-08-21**
+(`docs/test_results/test read pattern/2026_08_21_17h_09min_23s.csv`) — male1 to
+female1, 129 readings over 128.6s (~30 burst cycles), 117 correct. The wrong
+ones are four events, not twelve: consecutive rows share 54% of their sample
+buffer (2.2s window, logged every 1.005s), so one bad burst shows as two or
+three bad rows.
+
+- 3 rows "nothing seen" at the start — her buffer filling. Expected (8.4).
+- 5 rows on the `both`→`P` change, lag 4.02s ≈ one 4.35s cycle. Expected
+  (1.3 — the male re-reads his drive state only at a burst boundary), and
+  it is the **log** that is wrong here, not the decode: the test's
+  `expected drive` column flips instantly where the piece cannot.
+- 2 genuine misdecodes (~2 corrupted bursts in 30, ~7%): one `both` read as
+  `P`, one `P` read as `O`. Both are 8.8 — distance-2 pairs resolved by dict
+  order rather than by her appetite.
+
+So the decode rate itself is unremarkable for a light link; what the run
+actually surfaces is 8.8, and it took real bursts to show it because the
+simulator is too clean to produce an ambiguous one.
 
 ---
 
@@ -506,6 +527,11 @@ Ranked by how much of the above unblocks:
    tolerance of 6, rather than 10 majority-voted bins with a tolerance of
    1. The oversampling is what buys his robustness, and it is why a
    reading one bin wrong still sits halfway to another answer here.
+   Related and far cheaper, independent of the sampling work: 8.8, where
+   an ambiguous reading is settled by dict order instead of by what she
+   is short of. Either resolve to the *best* match rather than the first,
+   or filter the candidate set by her drive state before matching as TJ
+   does — the second is what the original actually is.
 6. Add `"drive start values"` to `params.py`'s `DEFAULTS` (3.5), or
    document that `local/params.json` must be seeded before first run.
 7. Decide whether 1.2/1.7/4.1 (search/wander never stopping itself) is
