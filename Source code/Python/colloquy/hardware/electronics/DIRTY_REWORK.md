@@ -337,7 +337,8 @@ for the next board not to put audio on D13.
 
 ## 4. The wires
 
-Twelve on the board, ten at `J11`, plus power. Nothing else is cut.
+Fourteen on the board - six to the filter board, four to the analyser,
+four re-driving the lights - and ten at `J11`. Nothing else is cut.
 
 ### 4a. Voices out to the filter board - 6 wires
 

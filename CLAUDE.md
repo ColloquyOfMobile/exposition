@@ -135,7 +135,7 @@ That is also why `Colloquy` has no `attach_server`/`request_stop`: they existed 
 
 Two findings in `as built` are why the rework is small, and both are worth knowing before touching the board:
 
-- **`J4`, `J8` and `J10` are a straight 1:1 breakout of D0–D21.** The shield pads run down one column at x = 191.96 mm and the header pins down another at x = 200.85 mm, joined by one 1 mm front-copper track each with nothing else touching the pad. So every disconnection is one scalpel stroke in that 8.89 mm gap, with a solderable pad on each side — which is what makes the whole rework five cuts and twelve wires.
+- **`J4`, `J8` and `J10` are a straight 1:1 breakout of D0–D21.** The shield pads run down one column at x = 191.96 mm and the header pins down another at x = 200.85 mm, joined by one 1 mm front-copper track each with nothing else touching the pad. So every disconnection is one scalpel stroke in that 8.89 mm gap, with a solderable pad on each side — which is what makes the whole rework five cuts and fourteen wires on the board.
 - **`J11` and `J12` are break points, not headers.** Each row is *two separate nets* — the body's wire off the DSUB on the odd pin, the Mega's ADC pin on the even one — joined only by whatever is physically fitted across it. So the analyser array goes *into the gap* and the whole hearing side needs no cut at all. The files do not say whether what is fitted is a shunt or a resistor; look before pulling one out.
 
 ## Male blink pattern / female pattern reading (morse-code identity signal)
