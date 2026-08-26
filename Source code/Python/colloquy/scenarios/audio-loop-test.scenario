@@ -6,6 +6,10 @@
 # of the analyser's seven bands. So the whole question is a grid: five voices against five
 # ears, twenty-five answers.
 # Safe to run in front of visitors. It is not quiet.
+# It sweeps only the bodies listed under params > audio > wired bodies, so on a part-built
+# board it is a smaller grid than five by five. While channels are still going in, the test
+# to run is "test audio bringup" instead - it asks the same question and, when the answer is
+# no, says which half of the chain to look in.
 
 0 Everything goes silent first. All five tones off, whatever they were doing - a run that begins with a tone already sounding would measure its floor against that tone and then report the other four bodies as deaf.
 3.7 It listens with nothing sounding. Three seconds of every ear reading all seven of its bands, over and over, averaged. This is the floor every later reading is measured against, so the quieter the room is now, the more the rest of the run means.

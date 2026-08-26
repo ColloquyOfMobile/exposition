@@ -55,6 +55,19 @@ DEFAULTS = {
         "baudrate": 9600,
         "communication port": None,
     },
+    # Which bodies have their audio channel physically wired, in the order
+    # they were done. The sound hardware arrived one pair of channels at a
+    # time and the software has to cope with that honestly: an unwired
+    # analyser input is a floating ADC pin, and a floating ADC pin does
+    # not read silence, it reads garbage. So a test that assumed five
+    # would bury the two real answers under three fictional ones.
+    #
+    # Add a body here the moment its amplifier and its analyser are in.
+    # Nothing else needs changing - the pitch, the pin and the module are
+    # already decided for all five in drivers/audio.py.
+    "audio": {
+        "wired bodies": ["female1", "male1"],
+    },
     # "dxl origin" is in servo units: it is the raw reading a body gives
     # when it is pointing where it should. Everything else here is in
     # degrees of the thing that moves.

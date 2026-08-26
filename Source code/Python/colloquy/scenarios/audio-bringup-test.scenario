@@ -1,0 +1,26 @@
+# Test: has the audio channel that was just wired come up?
+# The first thing to run after soldering a body's amplifier and its analyser in. It looks only
+# at the bodies listed under params > audio > wired bodies, because an analyser input that is
+# not wired is a floating pin, and a floating pin does not read silence - it reads whatever it
+# feels like, and three of those would bury the two answers you came for.
+# Nothing turns and nothing lights up. It reads in silence, then holds each wired voice in turn.
+# With two channels wired it is about twenty seconds.
+# When it fails it does not stop at "silent": it says which half of the chain to look in, and
+# where the software runs out and you have to use your ears.
+
+0 Everything goes quiet first, whatever it was doing. A run that starts with a tone already sounding measures its floor against that tone and then declares every other body deaf.
+5.8 It reads every wired ear for five seconds with nothing playing. Longer than any of the tones get, because every later verdict is a rise over these numbers - the floor is the one measurement worth taking more of.
+0 Then it answers the first question, before a note is played: does each ear answer at all? A reading pinned at the top of the ADC range is a pin that is not on a working module output. One pinned at the bottom is no supply, or an output not reaching its analog input. One that is identical on every single sweep is frozen, which a live analyser never is.
+0 If an ear fails here the run stops. Everything after this point is a rise over a floor, and a floor that is not being measured makes the rest of the run noise rather than evidence. It names the module, and the J11 row that carries it.
+4.8 Otherwise the first wired voice sounds - female 1, 160 Hz, out of D11 - and every wired ear is read again for four seconds. Listen while it plays. It should be one body, and it should be hers.
+4.8 Then the next wired voice. Male 1 is 2.5 kHz out of D46, which is a much brighter sound; if the two are hard to tell apart by ear, something is wrong before the analysers ever see it.
+0 Each pair gets a verdict. "heard" means that ear's reading in the singer's own band rose well clear of its own silence, and rose more than any other band did - which is nine things working at once.
+0 "wrong band" is the interesting one, and it names the frequency it arrived at instead. That is a fact about frequency, not about the room, so it survives a bench where everything is thirty centimetres from everything else: a tone in a neighbour's band means a pin feeding the wrong filter channel, or two channels crossed between the filter and the amplifiers.
+0 If two voices arrive in each other's bands it says so outright - those two channels are swapped, and the fix is one exchange at whichever end is easiest to reach.
+0 "silent" is the one that needs you. A voice heard by nobody, on a run where the ears plainly answer, is either a tone that is not being made or a tone going into a dead amplifier - and both of those are silence. No reading can separate them.
+0 So it asks you to listen while "hold female1" is on, and it tells you what each answer means. If you CAN hear it, the sound is in the room and not in the numbers. If you CANNOT, the speaking side: scope D11 first - it should be a square wave the whole time that tone is held - then the filter input, its output, the divider, the amplifier, and the volume pot, which is silent at minimum and is where it should have been left.
+0 One more shape it knows. If the overall level rises when a tone plays but no single band stands out, sound is reaching the microphone and the seven readings are not seven different bands - the multiplexer is not advancing. That is the strobe on D4 or the reset on D3, and because both are commoned to every module it is never a fault in one ear.
+0 If nothing at all is heard while both ears answer, it says to check what the channels share before investigating them one at a time: power to the amplifiers, the ground between the filter board and the PCB at J4 pin 4, and whether both volume pots are still sitting at minimum.
+0 The commands beside it are for the walking-about part. "hold female1" and "hold male1" leave one tone sounding for as long as you like. All five holds are there, not just the wired ones - holding an unwired body's tone makes no sound at all, which is exactly how you put a scope on its pin before its amplifier exists. "read every wired ear" takes one sweep and prints it, and needs no run at all.
+0 Run in simulation it passes every time. The simulator has no room in it - no distance, no directions, and no ear that can be deaf - so a green run on a laptop says the driver drives the firmware correctly and nothing whatever about anybody's soldering.
+0 When all five channels are in, this stops being the right test: "test audio loop" is the twenty-five-answer grid for a finished board.

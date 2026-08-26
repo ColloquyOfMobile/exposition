@@ -482,13 +482,28 @@ this one's.
    female1's speaker and nothing else. Read the microphones again: band 1
    should have jumped on every module.
 4. Walk the other four, one at a time.
-5. Then run **`tests > test audio loop`**: twenty-five verdicts in about
-   twenty-two seconds. Its scenario says what each one means.
+5. Then run **`tests > test audio bringup`**. It looks only at the
+   bodies listed under `params > audio > wired bodies`, which matters
+   while the board is part-built: an unwired analyser input is a floating
+   ADC pin, and a floating pin does not read silence - it reads garbage,
+   so a five-channel test on a two-channel board buries the real answers
+   under fictional ones. **Add each body to that list as its channel goes
+   in.**
+6. When it fails, read its `next` lines rather than guessing. It knows
+   four shapes: an ear that is not answering (and which J11 row carries
+   it), a strobe that never pulses, two channels crossed, and a voice
+   that is not in the room at all. For that last one it will ask you to
+   *listen* while the tone is held - no reading can tell a tone that is
+   not being generated from a tone going into a dead amplifier, and one
+   second of listening splits the chain in half.
+7. Once all five channels are in, **`tests > test audio loop`** is the
+   acceptance test: the full twenty-five-verdict grid.
 
 **Reading the first run.** `wrong band` naming a neighbour is a body on
-the wrong filter channel - section 4a. `silent` across one *row* of five
-is that body's voice; `silent` down one *column* of five is that body's
-ear. Silent everywhere is power, ground, or the strobe.
+the wrong filter channel - section 4a. `silent` across one *row* is that
+body's voice; `silent` down one *column* is that body's ear. Silent
+everywhere is power, ground, or the strobe. `test audio bringup` says all
+of that for you, in those words, and names the pin and the connector.
 
 ---
 

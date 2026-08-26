@@ -71,6 +71,9 @@ class TestAudioLoop(BaseThread):
         # For chasing a failure once the sweep has said there is one. Each
         # holds a tone on until something else turns it off, which is what
         # you want while walking the room.
+        # All five, not just the wired ones, and on purpose: holding an
+        # unwired body's tone is how you put a scope on its pin *before*
+        # its amplifier exists. It makes no sound, which is the point.
         self._manual = {}
         for name in audio.BODIES_BY_PITCH:
             voice = audio.VOICES[name]
@@ -99,6 +102,19 @@ class TestAudioLoop(BaseThread):
     def audio(self):
         return self.drivers.audio
 
+    @property
+    def wired(self):
+        """The bodies whose audio channel is actually built.
+
+        The grid is 5x5 only when the hardware is. An unwired analyser
+        input is a floating ADC pin, and a floating pin does not read
+        silence - so a full sweep on a part-built board reports a wall of
+        fictional failures with the real answers buried in it. Read from
+        params on every use, the same list `test audio bringup` reads.
+        """
+        chosen = list(self.colloquy.params["audio"]["wired bodies"])
+        return [name for name in audio.BODIES_BY_PITCH if name in chosen]
+
     # --- the manual commands ----------------------------------------------
 
     def _hold(self, name, request=None):
@@ -114,9 +130,12 @@ class TestAudioLoop(BaseThread):
         return "everything is quiet"
 
     def _all_at_once(self, request=None):
-        for name in audio.BODIES_BY_PITCH:
+        for name in self.wired:
             self._bodies[name].speaker.on()
-        return "all five sounding - every band should rise on every module"
+        return (
+            f"{len(self.wired)} sounding at once - every wired band should "
+            "rise on every wired module"
+        )
 
     # --- the run ----------------------------------------------------------
 
@@ -145,7 +164,7 @@ class TestAudioLoop(BaseThread):
         # every other body as silent - which reads as five broken
         # speakers rather than as one that was left on.
         self.audio.silence()
-        self._queue = [None] + list(audio.BODIES_BY_PITCH)
+        self._queue = [None] + list(self.wired)
         self._advance()
 
     def setdown(self):
@@ -202,13 +221,14 @@ class TestAudioLoop(BaseThread):
         decodes a pattern will have to do it Thomas's way instead - four
         reads in quick succession at 160 Hz, two at 400.
         """
-        totals = {name: [0] * len(audio.BANDS_HZ) for name in audio.BODIES_BY_PITCH}
+        totals = {name: [0] * len(audio.BANDS_HZ) for name in self.wired}
         sweeps = 0
 
         deadline = time() + self.TONE_SECONDS
         while time() < deadline and not self._stop_event.is_set():
-            for name, values in self.audio.read_all().items():
-                for index, value in enumerate(values):
+            everything = self.audio.read_all()
+            for name in self.wired:
+                for index, value in enumerate(everything[name]):
                     totals[name][index] += value
             sweeps += 1
 
@@ -217,7 +237,7 @@ class TestAudioLoop(BaseThread):
 
         elapsed = time() - self._start_time
         averages = {}
-        for name in audio.BODIES_BY_PITCH:
+        for name in self.wired:
             averages[name] = tuple(total / sweeps for total in totals[name])
             self._file.write(
                 f"{elapsed}, {label}, {name}, "
@@ -227,7 +247,7 @@ class TestAudioLoop(BaseThread):
         return averages
 
     def _judge(self, singer, readings):
-        for listener in audio.BODIES_BY_PITCH:
+        for listener in self.wired:
             floor = (self._silence_floor or {}).get(listener)
             heard = readings.get(listener)
             self._verdicts[(singer, listener)] = verdicts.verdict(
@@ -239,7 +259,7 @@ class TestAudioLoop(BaseThread):
     @property
     def snapshot_children(self):
         children = dict(self._manual)
-        for name in audio.BODIES_BY_PITCH:
+        for name in self.wired:
             body = self._bodies[name]
             children[f"{name} speaker"] = body.speaker
             children[f"{name} microphone"] = body.microphone
