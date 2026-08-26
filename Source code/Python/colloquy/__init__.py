@@ -285,6 +285,27 @@ class Colloquy(BaseThread):
             neopixel.off()
         # raise NotImplementedError
 
+    def silence_speakers(self):
+        """Every tone off, in one command, and never raising.
+
+        Beside the lights rather than folded into them, because they fail
+        differently: a strip left lit is visible from the door, and a body
+        left humming at 160 Hz in an empty gallery is not something
+        anybody notices until the morning. One command, so a link that is
+        about to be closed does not have to survive five.
+
+        Swallowing the failure is the point of the try. This is called
+        from `emergency_stop`, which cuts torque and *then* signals every
+        thread to stop - so anything that raises in between leaves the
+        threads running, which is the one outcome an emergency stop must
+        not have. A dead Arduino link is exactly when that would happen,
+        and a dead link is also a link that is not making any sound.
+        """
+        try:
+            self._drivers.audio.silence()
+        except Exception as error:  # noqa: BLE001 - see the docstring
+            self.log(f"Could not silence the speakers: {error}")
+
     def move_to_origin(self):
         """Send every body and the bar home, and say whether they got there.
 
@@ -323,6 +344,7 @@ class Colloquy(BaseThread):
         self.shutdown()
         self.join_all()
         self.shutdown_neopixels()
+        self.silence_speakers()
         arrived = self.move_to_origin()
         self.disable_torque()
         if not arrived:
@@ -353,4 +375,5 @@ class Colloquy(BaseThread):
         another emergency-stop click) while blocked in a request.
         """
         self._drivers.disable_torque()
+        self.silence_speakers()
         self.shutdown()

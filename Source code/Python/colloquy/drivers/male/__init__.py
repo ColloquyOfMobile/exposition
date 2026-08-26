@@ -4,6 +4,8 @@ from colloquy.base_thread import BaseThread
 
 from .light_sensor import LightSensor
 from ..angle import Angle
+from ..microphone import Microphone
+from ..speaker import Speaker
 from ..angle.conversion import REDUCTIONS
 from ..dxl_origin import DXLOrigin
 from .search import Search
@@ -44,8 +46,15 @@ class Male(BaseThread):
         self.turn_back_and_forth = TurnBackAndForth(owner=self)
 
         self._neopixels = Neopixels(owner=self)
+        # His voice and his ear. See the note on the female's: the only
+        # message a male ever sends by sound is "keep going", and the
+        # only one he listens for is her answer (9.3, 9.7).
+        self._speaker = Speaker(owner=self)
+        self._microphone = Microphone(owner=self)
 
         self[self.neopixels.name] = self.neopixels
+        self[self.speaker.name] = self.speaker
+        self[self.microphone.name] = self.microphone
         self[self.drives.name] = self.drives
         self[self.search.name] = self.search
         self[self.dxl_origin.name] = self.dxl_origin
@@ -67,6 +76,14 @@ class Male(BaseThread):
     @property
     def dxl(self):
         return self._dxl
+
+    @property
+    def speaker(self):
+        return self._speaker
+
+    @property
+    def microphone(self):
+        return self._microphone
 
     @property
     def ring(self):

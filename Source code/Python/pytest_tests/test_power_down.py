@@ -30,6 +30,7 @@ def make_colloquy(arrived=True):
         ),
         bar=SimpleNamespace(turn_to_origin=lambda: done.append("bar home")),
         neopixels=[SimpleNamespace(off=lambda: done.append("lights off"))],
+        audio=SimpleNamespace(silence=lambda: done.append("speakers silent")),
         disable_torque=lambda: done.append("torque off"),
     )
 
@@ -49,6 +50,7 @@ def make_colloquy(arrived=True):
         log=lambda *a, **k: done.append("logged"),
     )
     fake.shutdown_neopixels = lambda: Colloquy.shutdown_neopixels(fake)
+    fake.silence_speakers = lambda: Colloquy.silence_speakers(fake)
     fake.move_to_origin = lambda: Colloquy.move_to_origin(fake)
     fake.disable_torque = lambda: Colloquy.disable_torque(fake)
     fake.done = done
@@ -133,15 +135,19 @@ def test_an_emergency_stop_never_commands_a_move():
     double has no turn_to_origin at all, so reaching for one raises rather
     than passing quietly."""
     done = []
-    drivers = SimpleNamespace(disable_torque=lambda: done.append("torque off"))
+    drivers = SimpleNamespace(
+        disable_torque=lambda: done.append("torque off"),
+        audio=SimpleNamespace(silence=lambda: done.append("speakers silent")),
+    )
     fake = SimpleNamespace(
         _drivers=drivers,
         shutdown=lambda: done.append("threads down"),
     )
+    fake.silence_speakers = lambda: Colloquy.silence_speakers(fake)
 
     Colloquy.emergency_stop(fake)
 
-    assert done == ["torque off", "threads down"]
+    assert done == ["torque off", "speakers silent", "threads down"]
     assert not hasattr(drivers, "bodies")
     assert not hasattr(drivers, "bar")
 
@@ -150,10 +156,75 @@ def test_an_emergency_stop_cuts_torque_before_signalling_threads():
     # Torque off is the actual physical halt; the rest is bookkeeping.
     done = []
     fake = SimpleNamespace(
-        _drivers=SimpleNamespace(disable_torque=lambda: done.append("torque off")),
+        _drivers=SimpleNamespace(
+            disable_torque=lambda: done.append("torque off"),
+            audio=SimpleNamespace(silence=lambda: done.append("speakers silent")),
+        ),
         shutdown=lambda: done.append("threads down"),
     )
+    fake.silence_speakers = lambda: Colloquy.silence_speakers(fake)
 
     Colloquy.emergency_stop(fake)
 
     assert done.index("torque off") < done.index("threads down")
+
+
+# --- the sound half ------------------------------------------------------
+
+
+def test_power_down_silences_every_speaker_before_the_power_can_go():
+    """A body left humming is not something anybody notices from the door,
+    which is exactly why it is not left to the lights' loop."""
+    fake = make_colloquy()
+
+    Colloquy.power_down(fake)
+
+    assert fake.done.index("speakers silent") < fake.done.index("torque off")
+
+
+def test_an_emergency_stop_silences_too():
+    """It refuses to *move* anything, not to stop anything. A tone is not
+    motion, and leaving five of them sounding after a red button has been
+    pressed would be its own kind of alarming."""
+    done = []
+    fake = SimpleNamespace(
+        _drivers=SimpleNamespace(
+            disable_torque=lambda: done.append("torque off"),
+            audio=SimpleNamespace(silence=lambda: done.append("speakers silent")),
+        ),
+        shutdown=lambda: done.append("threads down"),
+    )
+    fake.silence_speakers = lambda: Colloquy.silence_speakers(fake)
+
+    Colloquy.emergency_stop(fake)
+
+    assert "speakers silent" in done
+
+
+def test_a_dead_link_while_silencing_still_lets_the_threads_be_stopped():
+    """The reason silence_speakers swallows its exception.
+
+    Torque is cut first and the threads are signalled last, so anything
+    that raises in between leaves every thread running - which is the one
+    outcome an emergency stop must not have. A dead Arduino link is
+    exactly when that would happen, and a dead link is also a link that is
+    not making any sound.
+    """
+    done = []
+
+    def explode():
+        raise OSError("the port is not open")
+
+    fake = SimpleNamespace(
+        _drivers=SimpleNamespace(
+            disable_torque=lambda: done.append("torque off"),
+            audio=SimpleNamespace(silence=explode),
+        ),
+        shutdown=lambda: done.append("threads down"),
+        log=lambda *a, **k: done.append("logged"),
+    )
+    fake.silence_speakers = lambda: Colloquy.silence_speakers(fake)
+
+    Colloquy.emergency_stop(fake)
+
+    assert done == ["torque off", "logged", "threads down"]

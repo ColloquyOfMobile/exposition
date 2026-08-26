@@ -4,6 +4,7 @@ import re
 from time import sleep
 from colloquy.base import Base
 from colloquy.drivers.angle.conversion import REDUCTIONS, ticks_to_degrees
+from colloquy.drivers import audio
 from colloquy.drivers.arduino import firmware
 from random import Random
 
@@ -86,6 +87,18 @@ class VirtualSerialPort(Base):
             "m2/light sensor/b": self._read_sensor,
             "m2/light sensor/c": self._read_sensor,
             "m2/light sensor/d": self._read_sensor,
+            "f1/speaker": self._set_speaker,
+            "f2/speaker": self._set_speaker,
+            "f3/speaker": self._set_speaker,
+            "m1/speaker": self._set_speaker,
+            "m2/speaker": self._set_speaker,
+            "f1/microphone": self._read_microphone,
+            "f2/microphone": self._read_microphone,
+            "f3/microphone": self._read_microphone,
+            "m1/microphone": self._read_microphone,
+            "m2/microphone": self._read_microphone,
+            "microphones": self._read_microphones,
+            "speakers/off": self._silence_speakers,
             "version": self._greet,
         }
 
@@ -115,6 +128,9 @@ class VirtualSerialPort(Base):
             male["light sensor"] = sensors = {}
             for name in "abcd":
                 sensors[name] = 0
+
+        for name in audio.BODIES_BY_PITCH:
+            states[name]["speaker"] = False
 
     def readline(self):
         """Always bytes, and always shaped like a real reply.
@@ -257,6 +273,77 @@ class VirtualSerialPort(Base):
         if self._states[male]["ring"]["w"] != 0:
             return self._lit_value()
         return self._dark_value()
+
+    # --- the sound channel, such as it is here ----------------------------
+    #
+    # A room this simulator does not have. It models one thing and says so:
+    # a body that is singing puts energy into its own band, on every
+    # module, and nothing else does. That is enough to exercise the whole
+    # command path - the paths exist, the numbers are the right shape and
+    # in the right order - and it is *not* enough to say anything about
+    # anybody's wiring.
+    #
+    # Note in particular what it cannot produce. There is no distance and
+    # no directionality, so every ear hears every voice equally; a real
+    # bench will not. A green run here means the driver drives the
+    # firmware correctly and nothing whatever about the hardware, which is
+    # the same caveat test_audio_subsystem carries against Thomas's
+    # stand-in board.
+
+    # What a band reads with nothing in it, and with a tone in it. Off the
+    # ADC the MSGEQ7's range is 0-1023; a tone in its own band is not
+    # subtle, which is why these two are so far apart.
+    QUIET_BAND = 60
+    LOUD_BAND = 700
+
+    def _set_speaker(self, data):
+        body = self._body_of(data["path"])
+        self._states[body]["speaker"] = bool(data.get("on", 0))
+        return self._as_reply(1 if self._states[body]["speaker"] else 0)
+
+    def _silence_speakers(self, data):
+        for name in audio.BODIES_BY_PITCH:
+            self._states[name]["speaker"] = False
+
+    def _read_microphone(self, data):
+        # The body in the path is not consulted, and that is the model
+        # rather than an oversight: with no room in it, every module hears
+        # the same thing.
+        return self._as_reply(" ".join(str(v) for v in self._bands()))
+
+    def _read_microphones(self, data):
+        bands = self._bands()
+        return self._as_reply(
+            " ".join(
+                str(value) for _ in audio.BODIES_BY_PITCH for value in bands
+            )
+        )
+
+    def _bands(self):
+        """One module's seven bands. Every module reads the same thing
+        here, which is the whole of what this simulator does not know."""
+        singing = {
+            audio.band_of_body(name)
+            for name in audio.BODIES_BY_PITCH
+            if self._states[name]["speaker"]
+        }
+        return [
+            (self.LOUD_BAND if index in singing else self.QUIET_BAND)
+            + self._random.randrange(20)
+            for index in range(len(audio.BANDS_HZ))
+        ]
+
+    @staticmethod
+    def _body_of(path):
+        """"f2/speaker" -> "female2", "m1/speaker" -> "male1".
+
+        Written as a branch rather than two chained replaces, which is
+        what it was: "f2".replace("f", "female") is "female2", and
+        replacing "m" in *that* gives "femaleale2".
+        """
+        prefix = Path(path).parts[0]
+        kind = "female" if prefix.startswith("f") else "male"
+        return f"{kind}{prefix[1:]}"
 
     def _record(self, states, key, value=None):
         """Keep the last value actually served, so the simulated state the

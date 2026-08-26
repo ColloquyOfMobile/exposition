@@ -9,6 +9,7 @@ from .commands import Commands
 from .test import Test
 from .bodies import Bodies
 from .all_neopixels import AllNeopixels
+from .all_audio import AllAudio
 
 
 class Drivers(BaseThread):
@@ -35,9 +36,6 @@ class Drivers(BaseThread):
             Male(owner=self, id_number=1),
             Male(owner=self, id_number=2),
         )
-        # Where the speakers will go - see CODE_DOCUMENTATION section 9,
-        # and the wiring that is already in the box for them.
-        self._speakers = []
 
         self._females = (
             Female(owner=self, id_number=1),
@@ -48,12 +46,20 @@ class Drivers(BaseThread):
         self._mirrors = [female.mirror for female in self._females]
         self._bodies = Bodies(owner=owner, males=self.males, females=self.females)
         self._neopixels = AllNeopixels(owner=self, bodies=self._bodies)
+        # The list that stood empty here since before there was a Speaker
+        # class. It is built from the bodies rather than kept beside them,
+        # so a body cannot own a speaker the installation does not know
+        # about.
+        self._audio = AllAudio(owner=self, bodies=self._bodies)
+        self._speakers = self._audio.speakers
+        self._microphones = self._audio.microphones
 
         self._bar = Bar(owner=self)
 
         self._test = Test(owner=self)
 
         self[self.arduino.name] = self.arduino
+        self[self._audio.name] = self._audio
         self.add(self.test)
 
         self[self.bar.name] = self.bar
@@ -118,6 +124,14 @@ class Drivers(BaseThread):
     @property
     def mirrors(self):
         return self._mirrors
+
+    @property
+    def audio(self):
+        return self._audio
+
+    @property
+    def microphones(self):
+        return self._microphones
 
     @property
     def males(self):

@@ -3,6 +3,8 @@ from .drives import Drives
 from colloquy.base_thread import BaseThread
 from .light_sensor import LightSensor
 from ..angle import Angle
+from ..microphone import Microphone
+from ..speaker import Speaker
 from ..angle.conversion import REDUCTIONS
 from ..dxl_origin import DXLOrigin
 from ..mirror import Mirror
@@ -42,6 +44,12 @@ class Female(BaseThread):
         self.turn_back_and_forth = TurnBackAndForth(owner=self)
 
         self._neopixels = Neopixels(owner=self)
+        # Her voice and her ear. Nothing drives either yet - see
+        # CODE_DOCUMENTATION section 9 - but the hardware under them is
+        # real, and a body that owns a speaker can be given a Sing thread
+        # in one place instead of five.
+        self._speaker = Speaker(owner=self)
+        self._microphone = Microphone(owner=self)
         self._test = Test(owner=self)
 
         self[self.neopixels.name] = self.neopixels
@@ -56,6 +64,8 @@ class Female(BaseThread):
         )
         self[self.light_sensor.name] = self.light_sensor
         self[self.mirror.name] = self.mirror
+        self[self.speaker.name] = self.speaker
+        self[self.microphone.name] = self.microphone
 
     @property
     def params(self):
@@ -80,6 +90,14 @@ class Female(BaseThread):
     @property
     def reinforcement(self):
         return self._reinforcement
+
+    @property
+    def speaker(self):
+        return self._speaker
+
+    @property
+    def microphone(self):
+        return self._microphone
 
     @property
     def drives(self):

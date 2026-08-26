@@ -50,7 +50,13 @@ SKETCH_PATH = (
 # question: the sketch says what you would flash today, this says what the
 # driver can still cope with. They are the same number only until the
 # driver learns to handle two shapes of reply at once.
-MINIMUM_FIRMWARE_VERSION = 2
+#
+# Raised to 3 with the audio rework, and this one is not about a reply
+# shape at all: firmware 2 and firmware 3 disagree about which pin drives
+# which NeoPixel strip. A board flashed with 2 in an installation wired
+# for 3 answers every command cheerfully and lights the wrong bodies, and
+# no reading anywhere would say so.
+MINIMUM_FIRMWARE_VERSION = 3
 
 # What v1 was: a bare "Hello!" and no way to ask it anything about itself.
 # Kept here so a board that predates the greeting is *diagnosed* rather
