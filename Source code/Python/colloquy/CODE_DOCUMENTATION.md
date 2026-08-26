@@ -352,30 +352,61 @@ bare microphone pair per body, no analyser chip" is answered outright.
 `colloquy/tests/test_audio_subsystem` is the bench test for that board.
 It drives Thomas's own tester firmware over its serial menu and reports,
 for each of the five tones against each of the five modules, whether the
-right band rose — `heard`, `wrong band` or `silent`. It is the only thing
-in this repo that talks to audio hardware at all, and it claims nothing
-about the rows above: it says whether the hardware a sound channel would
-be built on is working, not that any of it is built.
+right band rose — `heard`, `wrong band` or `silent`. It claims nothing
+about the rows above: it says whether the five boards work, not that any
+of the channel is built.
 
-**Where it stands in this installation.** The wiring exists and nothing
-above it does:
+**Where it stands in this installation** *(rewritten 2026-08-26 — the
+hardware half of this section is no longer hypothetical)*:
 
-- **Wired.** The electronics box carries, per body, a `<body>/audio` line
-  into a SparkFun TPA2005D1 mono amp, `<body>/speaker +/out` and
-  `-/out` to the speaker, and `<body>/microphone/1|2` back in — all five
-  bodies, on the Mega 2560 shield (`CAD/KiCad/electronic box/electronic
-  box.kicad_sch`; the amp itself is `CAD/Eagle/Mono Audio Amp (TPA2005D1)
-  v10/`). The net labels are in the schematic text but the net-to-pin
-  mapping is geometry: open the sheet to read which Mega pin each one
-  lands on rather than trusting a guess.
-- **Not in the firmware.** `Source code/Arduino/colloquy_of_mobiles/
-  colloquy_of_mobiles.ino` handles NeoPixel groups and analog light
-  sensors and nothing else — no `tone()`, no microphone read, no amp
-  enable line.
-- **Not in the tree.** `Drivers._speakers` and `Drivers._mirrors` are
-  empty lists (`drivers/__init__.py`), nothing constructs a speaker or
-  microphone node, and `Female.Reinforcement` raises on its first tick
-  (2.9).
+- **Wired, and now driven.** The electronics box always carried, per
+  body, a `<body>/audio` line into a SparkFun TPA2005D1 mono amp,
+  `<body>/speaker +/out` and `-/out` to the speaker, and
+  `<body>/microphone/1|2` back in. Every net of it is now read out of the
+  netlist and written down in **`hardware > electronics > as built`**,
+  pin by pin, rather than left as "open the sheet and see".
+- **In the firmware.** `colloquy_of_mobiles.ino` at **firmware 3** makes
+  five tones on five hardware timers — one per body, on Thomas's own
+  pins — and reads all five MSGEQ7 modules through one commoned strobe.
+  Paths: `<body>/speaker` with `{"on": 0|1}`, `<body>/microphone`,
+  `microphones` for all five at once, `speakers/off`.
+- **In the tree.** Every body owns a `speaker` and a `microphone`;
+  `Drivers._speakers` is no longer an empty list; `drivers/all audio`
+  reads every ear in one sweep and silences every voice in one command;
+  `power_down()` and `emergency_stop()` both silence. `drivers/audio.py`
+  holds the body/pitch/pin/module table once.
+- **Still not built:** the message layer. `Female.Reinforcement` still
+  raises on its first tick (2.9), nothing sings a pattern and nothing
+  listens for one. 9.1 through 9.9 below are untouched.
+
+**The pin conflict, and what it cost.** Four of Thomas's five tone pins
+were NeoPixel lines on this board, and D4 — wanted for the analyser
+strobe — was a fifth. A tone pin cannot move (a timer toggles its own
+`OCnA` output and no other) and a NeoPixel pin can, so the lights moved
+to D14–D17 and the tones did not. The cuts and jumpers that make the
+board match are **`hardware > electronics > dirty rework`**; what the
+next board should do is **`next pcb`**.
+
+Two of the questions below are answered by that arrangement rather than
+by anything written since:
+
+- **9.13 is void.** Sound and NeoPixels no longer fight. The compare
+  output toggles its pin in hardware, so `NeoPixel.show()` disabling
+  interrupts cannot tear a tone, and nothing has to mute an amplifier
+  around every pixel write — which is as well, since `set` is strapped
+  high on all five amps and there is no mute line to pull.
+- **"One tone at a time" (the second of the three things to settle) is
+  void too.** It was a limit of AVR `tone()`, which owns one timer and
+  one pin. Five timers means five simultaneous voices, which is what a
+  piece with three females and two males needs.
+
+**And one it does not answer.** `test_audio_loop`
+(`colloquy/tests/test_audio_loop/`) asks the installation's own board
+whether each body's voice reaches each body's ear — twenty-five verdicts,
+about twenty-two seconds. It is the only test that can catch a body wired
+to another body's filter channel, because it is the only one that knows
+which body is which. It still says nothing about whether an MSGEQ7 can
+hear anything across a gallery full of visitors.
 
 **The message layer is already here.** This is the part worth knowing
 before designing anything: in TJ's firmware *a sound message is the same
@@ -410,10 +441,10 @@ Two differences in *which* patterns each channel uses, both deliberate:
 | 9.7 | The male's "keep going" | On enough collected light he sings `act_transmit_I_R_sound()` / `_II_R_sound()` — the R pattern, 2s — and subtracts `sense_light_reinforce_sum * 10` from the shared drive. Not enough light and he ends the exchange on the spot | The R patterns are already in `Colloquy.light_patterns` under the `tuple()` key, kept precisely for this (see its comment). Scale: his 4800-unit appetite is this port's 0-100, so `sum * 10` is at most ~17 points a round |
 | 9.8 | The female's side of the loop | Hearing either R pattern, she subtracts a fixed `FEMALE_reinforcement_decrement` (1200, 600, 1200 for females 1-3) and resets her timer. Ten and a quarter seconds (205 ticks) without hearing it and she gives up and goes back to searching | On the 0-100 scale those are 25, 12.5 and 25 points a round. Don't copy the raw numbers - `Drive` here is 0-100 with the interested floor at 12.5 and the desperate floor at 75 |
 | 9.9 | Satisfaction | When the shared drive falls below the interested floor it is **zeroed** and a 6s (120-tick) moment begins, during which neither drive climbs. The male plays a 15-note melody (`act_satisfaction_vals`, note lengths per male in `act_satisfaction_Durations_I/II`, both summing to exactly 120 ticks); the female plays the same rhythm as a brightness ramp in the shared appetite's colour | The only sound in the piece that is not a message. Also the only place anything is ever satisfied - 3.3's missing "interaction satisfies the drive" is this |
-| 9.10 | Pitch per body | `act_tone_index = 5 - UNIT_ID` over `act_tone_vals[5] = {1760, 1976, 2093, 2349, 2637}`: female1 2637 Hz, female2 2349, female3 2093, male1 1976, male2 1760. One tone, switched on and off - the pattern is in the on/off, not in the pitch | Gives each body an audible identity on top of the decodable one. Worth keeping: it is also how you tell by ear which body is talking while testing |
-| 9.11 | Hearing | A 7-band MSGEQ7 analyser (strobe/reset/signal on pins 2/A5/A4), read 16 times a tick for sensitivity, looking only at band 4 (~2.5kHz, where the tones sit); a sample counts as a tone when that band exceeds a fixed `sense_sound_thresh = 200` | The box has a bare microphone pair per body, no analyser chip. Either band-pass in hardware, or do it in the sketch, or choose tones and thresholds a plain envelope can separate. See 8.2: a fixed absolute threshold is already the weakest part of the light side, and a microphone in a gallery is worse |
+| 9.10 | Pitch per body | `act_tone_index = 5 - UNIT_ID` over `act_tone_vals[5] = {1760, 1976, 2093, 2349, 2637}`: female1 2637 Hz, female2 2349, female3 2093, male1 1976, male2 1760. One tone, switched on and off - the pattern is in the on/off, not in the pitch | **Done, and not as a port.** Five pitches, one per body, each in a *different* analyser band, so the pitch itself says who is speaking - which TJ's could not, all five of his sitting in band 4. Order reversed from his: female1 160 Hz up to male2 6.25 kHz, because the pin a timer comes out on is fixed and D11 was already female1's. `drivers/audio.py` |
+| 9.11 | Hearing | A 7-band MSGEQ7 analyser (strobe/reset/signal on pins 2/A5/A4), read 16 times a tick for sensitivity, looking only at band 4 (~2.5kHz, where the tones sit); a sample counts as a tone when that band exceeds a fixed `sense_sound_thresh = 200` | **Done in hardware.** ~~The box has a bare microphone pair per body, no analyser chip~~ - five MSGEQ7s now, one per body, on A0-A4 with strobe and reset commoned; five MAX9814 modules with AGC replace the bare pairs. What survives: the threshold. It is still absolute, still the weakest part of the light side (8.2), and a microphone in a gallery is still worse |
 | 9.12 | Half duplex, per body | Transmitting anything - light or sound - sets `sense_sound_active = false`; `act_transmit_sound_end()` sets it back. Nobody listens to their own voice | Cheap to keep, and the reason a male never decodes his own R pattern as an answer |
-| 9.13 | Sound and NeoPixels fight | `act_showlights()` is wrapped in `act_blockSound()`/`act_unblockSound()`, muting the amp for the duration of every pixel write, because `NeoPixel.show()` disables interrupts and the tone tears | This port writes pixels far more often than TJ did (every ring bit is a serial command). Whatever generates the tone has to survive that, or be muted around it the same way |
+| 9.13 | Sound and NeoPixels fight | `act_showlights()` is wrapped in `act_blockSound()`/`act_unblockSound()`, muting the amp for the duration of every pixel write, because `NeoPixel.show()` disables interrupts and the tone tears | **Void.** ~~Whatever generates the tone has to survive that, or be muted around it the same way~~ - the tone is made by a timer's compare output toggling its own pin in hardware, so interrupts being off cannot tear it. As well, since `set` is strapped high on all five amplifiers and there is no mute line to pull |
 | 9.14 | Rejection | `com_pattern_rejection` and `act_transmit_rejection_sound()` exist, and the one call site is commented out with `//need a timer for this?` | A female never audibly refuses anyone. Unbuilt in the original too - if it is wanted here, it is a new decision, not a port |
 
 **Three things to settle before writing any of it.**
@@ -428,17 +459,18 @@ Two differences in *which* patterns each channel uses, both deliberate:
    enough to survive the serial link. This is the one decision that
    shapes everything else, and it breaks the symmetry with the light
    channel either way.
-2. **One tone at a time.** TJ had an Arduino per body. This port has one
-   Mega for all five, and AVR `tone()` owns a single timer and a single
-   pin at a time. Within one pair the sound is already strictly
-   alternating (she sings, then he does), but two pairs reinforcing at
-   once is normal in this piece — three females and two males. So either
-   the tone generation is multiplexed deliberately, or it moves off
-   `tone()` onto per-body hardware.
-3. **Hearing in a gallery.** 9.11. The original solved the "is there a
-   tone" question in hardware with a band-pass and still needed a fixed
-   threshold; whatever replaces the MSGEQ7 here inherits the problem, and
-   the room is full of visitors.
+2. ~~**One tone at a time.**~~ **Settled.** It was a limit of AVR
+   `tone()`, which owns one timer and one pin at a time - and two pairs
+   reinforcing at once is normal here, with three females and two males.
+   The five voices are on five *separate* hardware timers, so all five
+   can sound together and none of them costs anything while it does.
+   Timer 0 is left to `millis()`.
+3. **Hearing in a gallery.** 9.11, and the one of the three still fully
+   open. The original solved "is there a tone" in hardware with a
+   band-pass and still needed a fixed threshold; the MSGEQ7s inherit
+   exactly that, and the room is full of visitors. The MAX9814's AGC is
+   the headroom that makes it survivable, and its two straps are Thomas's
+   bench results rather than measurements in this room.
 
 When there is something to run, it should look like the two hardware
 tests that already exist for the light side: `test_read_pattern` stages one pair and

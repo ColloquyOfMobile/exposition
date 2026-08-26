@@ -11,6 +11,19 @@ Everything here is from Thomas Erforth's *Colloquy of Mobiles — Redesign
 of 2018 Version* (23.6.2026) in `Source code/Thomas/`, and from his
 `AudioAnalyzerTest.cpp` firmware.
 
+> **This is the bench, not the installation** — and since 2026-08-26
+> there is a second document for the other one. The same five boards are
+> now driven by the installation's *own* Arduino, on the same five pins,
+> reworked into the electronics box: `hardware > electronics > dirty
+> rework` is how, `as built` is what the box was before it, and `next
+> pcb` is what should replace it. The bench test below is unaffected and
+> stays — it asks whether the five boards work, which is a different
+> question from whether they are wired into the piece correctly, and it
+> can be asked in an office with the piece nowhere near.
+>
+> The installation's own version of the same twenty-five-answer grid is
+> `tests > test audio loop`.
+
 ---
 
 ## The loop this test closes
@@ -373,13 +386,22 @@ Note the menu counts *timers*, not pitches, and timer 2 is the 8-bit one
    ascending pitch, reading again.
 3. Read the twenty-five lines it fills in — `heard`, `wrong band`, or
    `silent`. Their meanings are in the scenario.
-4. **Then find out which module is which body**, which no software here
-   knows: hold one tone with `hold 160 Hz on`, cover one microphone with
-   your hand, and see which module number drops. Write it down.
+4. **Then find out which module is which body**, which no software *on
+   this board* knows: hold one tone with `hold 160 Hz on`, cover one
+   microphone with your hand, and see which module number drops. Write it
+   down.
 
 Thomas's figure 2 suggests `A0` is the 6.25 kHz body down to `A4` at
 160 Hz — but that is the same diagram as the disagreement above. Confirm
 it; don't assume it.
+
+> **In the installation this one is settled by construction.** The
+> electronics box already had `female1 … male2/microphone/2` on A0–A4 in
+> body order, and the analyser modules took their places — so module N is
+> body N, and one number identifies a body the whole way round the loop.
+> That is luck rather than design, and `tests > test audio loop` is what
+> confirms it: it is the only test that knows which body is which, and so
+> the only one that can catch a body wired to another body's channel.
 
 **Against the stand-in it passes every time, all twenty-five.** It
 answers the same menu but has no room in it — no air, no distance, no
