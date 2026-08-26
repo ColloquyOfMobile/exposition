@@ -13,6 +13,7 @@ from .test_graph_zoom import TestGraphZoom
 from .test_neopixels import TestNeopixels
 from .test_sensors import TestSensors
 from .test_audio_subsystem import TestAudioSubsystem
+from .test_audio_loop import TestAudioLoop
 
 
 class Tests(Base):
@@ -46,6 +47,7 @@ class Tests(Base):
         self.test_audio_subsystem = TestAudioSubsystem(
             owner=self, result_folder=result_folder
         )
+        self.test_audio_loop = TestAudioLoop(owner=self, result_folder=result_folder)
 
 
         self._threaded_tests = {
@@ -59,6 +61,7 @@ class Tests(Base):
             self.test_neopixels,
             self.test_sensors,
             self.test_audio_subsystem,
+            self.test_audio_loop,
         }
 
     @property

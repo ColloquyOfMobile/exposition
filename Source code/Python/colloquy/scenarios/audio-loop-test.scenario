@@ -1,0 +1,25 @@
+# Test: does each body's voice reach each body's ear?
+# Started by hand from the control page, and run on the installation's own Arduino - not on
+# Thomas's bench board. Nothing turns and nothing lights up: the only thing that changes in
+# the room is that it hums, one tone at a time, for about twenty seconds.
+# Each body has one fixed pitch and one microphone, and each pitch lands in a different one
+# of the analyser's seven bands. So the whole question is a grid: five voices against five
+# ears, twenty-five answers.
+# Safe to run in front of visitors. It is not quiet.
+
+0 Everything goes silent first. All five tones off, whatever they were doing - a run that begins with a tone already sounding would measure its floor against that tone and then report the other four bodies as deaf.
+3.7 It listens with nothing sounding. Three seconds of every ear reading all seven of its bands, over and over, averaged. This is the floor every later reading is measured against, so the quieter the room is now, the more the rest of the run means.
+3.7 Female 1 sings: 160 Hz, a low hum, out of pin D11. It holds for three seconds while every ear is read again. Listen for where in the room it is coming from - it should be one body, and it should be hers.
+3.7 Female 2, 400 Hz on D5. Three seconds. Still one body at a time; if two are humming, two speakers are on one channel.
+3.7 Female 3, 1 kHz on D6. The middle of the range and the easiest one to hear across a room.
+3.7 Male 1, 2.5 kHz on D46. Getting shrill.
+3.7 Male 2, 6.25 kHz on D10. The top of the five, and the one an older ear may lose first - the page will still say whether the analyser heard it.
+0 The run stops itself after the fifth voice and leaves everything silent, which is also what pressing stop halfway does.
+0 Twenty-five lines fill in as it goes: "female1 -> male2: heard", one per voice-and-ear pair.
+0 "heard" means that ear's 160 Hz band - the singer's own band - rose well clear of its own silence, and rose more than any other band did. That is nine things working at once: timer, pin, filter, amplifier, speaker, air, microphone, MSGEQ7, ADC.
+0 "silent" means nothing rose at all. Either that voice is not being made, or that ear is not hearing it, and this test cannot tell you which.
+0 "wrong band" is the interesting one, and it names the band that rose instead. A tone arriving in a neighbouring band usually means a body is wired to the wrong filter channel - a low-pass passes anything below its corner, so the tone still comes out and still sounds right, and what has been lost is the filtering that keeps its own first harmonic out of its neighbour's band.
+0 Every body also hears itself, and that row is reported rather than skipped. Nobody listens while they speak, so what a body hears of its own voice is the one reading here that measures the room rather than the wiring.
+0 To chase a failure, use the commands beside the test rather than running it again. "hold female2 on" leaves that one voice sounding for as long as you like, so you can walk the room with an ear or put a scope on D5. "all five at once" is the chord - every one of the five bands should rise on every module. "silence" ends it.
+0 Each body's own speaker and microphone are also here as nodes: one to switch a voice on by hand, one to read seven numbers out of an ear.
+0 Run in simulation it passes, every time, all twenty-five. The simulator has no room in it - no distance and no directions, so every ear hears every voice equally and none of them can be deaf. A green run on a laptop says the driver drives the firmware correctly and nothing whatever about anybody's wiring.
