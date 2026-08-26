@@ -80,6 +80,7 @@ WITHOUT_SCENARIOS = {
     "colloquy.drivers.male.search.blink.Blink",
     "colloquy.drivers.bar.turn_back_and_forth.TurnBackAndForth",
     "colloquy.repository.Repository",
+    "colloquy.drivers.arduino.flasher.Flasher",
 }
 
 

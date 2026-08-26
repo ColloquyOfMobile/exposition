@@ -10,6 +10,7 @@ from . import boards
 from . import firmware
 from .boards import Boards
 from .com_port import ComPort
+from .flasher import Flasher
 
 from .neopixel_command import NeopixelCommand
 from .light_sensor_command import LightSensorCommand
@@ -80,6 +81,14 @@ class Arduino(Base):
         self._boards = Boards(owner=self)
         self[self._boards.name] = self._boards
 
+        # Putting the sketch in this repo onto the board on the other end.
+        # It belongs here rather than anywhere else because everything it
+        # needs is already on this node - which lead, what is on the bus,
+        # what version the sketch is and what version the board says it
+        # is. Flashing was the one step that was somewhere else.
+        self._flasher = Flasher(owner=self)
+        self[self._flasher.name] = self._flasher
+
         # What the board said about itself the last time the port was
         # opened - None until it has been asked. See firmware.py.
         self._greeting = None
@@ -116,6 +125,10 @@ class Arduino(Base):
     @property
     def boards(self):
         return self._boards
+
+    @property
+    def flasher(self):
+        return self._flasher
 
     @property
     def greeting(self):
@@ -391,6 +404,7 @@ class Arduino(Base):
         return {
             self.com_port.name: self.com_port,
             self._boards.name: self._boards,
+            self._flasher.name: self._flasher,
         }
 
     def _snapshot_if_opened(self, path):

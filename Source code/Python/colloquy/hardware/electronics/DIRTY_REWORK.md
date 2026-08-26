@@ -26,6 +26,14 @@ Read `as built` first if you have not. This assumes its net map.
   about it. The driver refuses to open a link to firmware 2 for exactly
   that reason, so the mismatch is loud in one direction and silent in the
   other.
+
+  The page can do it: `drivers > arduino > flash firmware`. Press
+  **compile only** first - it needs no board and it is how you find out
+  whether this machine has a working toolchain without gambling a board
+  on the answer - then **flash the board**, which appears once the port
+  is chosen and nothing is running. It will not flash the U2D2 by
+  mistake, and it reopens the link afterwards so the outcome line is the
+  board saying which firmware it now has.
 - **Photograph `J11` and `J12` before touching them.** Each row is two
   separate nets joined by whatever is physically fitted across it, and
   the KiCad files do not say whether that is a shunt or a resistor. The
@@ -462,8 +470,9 @@ this one's.
 
 ## 6. Switching on
 
-1. Flash firmware 3 and open the page. `drivers > arduino` should say
-   **in sync: yes** and *board says: firmware 3 at 1000000 baud*. If it
+1. Flash firmware 3 - `drivers > arduino > flash firmware`, or the
+   Arduino IDE if you prefer. `drivers > arduino` should then say **in
+   sync: yes** and *board says: firmware 3 at 1000000 baud*. If it
    refuses to open the port it will name the mismatch.
 2. `drivers > all audio > silence every speaker`, then **`read every
    microphone`**. Five rows of seven numbers. All five near-identical and

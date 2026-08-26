@@ -35,6 +35,16 @@ DEFAULTS = {
     "arduino": {
         "baudrate": 1000000,
         "communication port": None,
+        # What arduino-cli calls this board. Only the flasher reads it,
+        # and it is here rather than in the code because the day it is
+        # wrong is a day somebody is standing in front of the rack and
+        # cannot edit a source file.
+        "fqbn": "arduino:avr:mega",
+        # Where arduino-cli is, when it is somewhere this cannot guess.
+        # Left None on every machine that has the Arduino IDE installed
+        # in the usual place, or arduino-cli on PATH - see
+        # drivers/arduino/flasher/toolchain.py, which says where it looks.
+        "arduino-cli": None,
     },
     # Thomas's audio subsystem tester: a second Mega 2560, on its own USB
     # lead, running Source code/Thomas/AudioAnalyzerTest.cpp. Nothing in

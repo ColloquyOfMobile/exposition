@@ -44,6 +44,10 @@ files = [
     # index and a band index is not a module number, and all three are
     # small ints that read alike at a glance.
     "Source code/Python/colloquy/drivers/audio.py",
+    # Paths in, an argv out. Which program gets run with which arguments
+    # is the part of flashing worth being sure about, and none of it
+    # needs a board.
+    "Source code/Python/colloquy/drivers/arduino/flasher/toolchain.py",
 ]
 mypy_path = "Source code/Python"
 
