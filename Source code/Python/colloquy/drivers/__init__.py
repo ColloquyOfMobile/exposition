@@ -241,6 +241,13 @@ class Drivers(BaseThread):
         # the one question you actually ask at a rig ("is the board there,
         # and is it the right one") had no answer on the page.
         children[self.arduino.name] = self.arduino
+        # The five voices and five ears as one thing, for the same reason
+        # the link above is here: the questions worth asking of the sound
+        # channel are "is anything sounding" and "what does every ear hear
+        # right now", and neither can be asked of one body at a time - the
+        # analysers share a strobe, so five separate reads are five
+        # different moments.
+        children[self._audio.name] = self._audio
         children["bodies"] = self.bodies
         for body in self.bodies:
             children[body.name] = body

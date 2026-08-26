@@ -266,5 +266,10 @@ class Female(BaseThread):
         children["neopixels"] = self.neopixels
         children["light sensor"] = self.light_sensor
         children[self.mirror.name] = self.mirror
+        # Beside the light sensor rather than beside the neopixels, since
+        # the pairing that matters is what a body can say and what it can
+        # hear - and in this piece those are two channels each.
+        children["speaker"] = self.speaker
+        children["microphone"] = self.microphone
         return self._with_scenarios(children)
 

@@ -98,7 +98,10 @@ class Speaker(Base):
 
     @property
     def snapshot_children(self):
-        return {}
+        # Two commands and no child nodes. They have to be listed here as
+        # well as registered in __init__: registering makes them reachable
+        # by path, snapshot_children is what draws them.
+        return {"on": self.on, "off": self.off}
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

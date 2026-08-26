@@ -35,9 +35,28 @@ all; here the pitch *is* which body is speaking. Reversing it would cost
 five jumpers on the board and buy nothing.
 """
 
+from typing import Final, TypedDict
+
 # The MSGEQ7's seven bands, in the order the chip walks them under the
 # strobe - which is the order the firmware returns them in.
-BANDS_HZ = (63, 160, 400, 1000, 2500, 6250, 16000)
+BANDS_HZ: Final = (63, 160, 400, 1000, 2500, 6250, 16000)
+
+
+class Voice(TypedDict):
+    """One body's row of the table below.
+
+    Spelled out rather than left as a bare dict because three of these
+    four are small integers that read alike at a glance and mean entirely
+    different things - a pitch in hertz, an index into `BANDS_HZ`, and an
+    analyser module number - and the checker had no way to tell them
+    apart while the dict's values were `object`.
+    """
+
+    hz: int
+    timer: str
+    pin: str
+    module: int
+
 
 # body name -> everything about its voice and its ear.
 #
@@ -46,7 +65,7 @@ BANDS_HZ = (63, 160, 400, 1000, 2500, 6250, 16000)
 # to be mute, the first question is which pin to put a scope on, and the
 # person asking it is standing in front of the installation rather than
 # in front of this file.
-VOICES = {
+VOICES: Final[dict[str, Voice]] = {
     "female1": {"hz": 160, "timer": "T1", "pin": "D11", "module": 0},
     "female2": {"hz": 400, "timer": "T3", "pin": "D5", "module": 1},
     "female3": {"hz": 1000, "timer": "T4", "pin": "D6", "module": 2},
@@ -58,7 +77,7 @@ VOICES = {
 # hears it climb rather than jump about. Same order as the table above,
 # named separately so that the table can be reordered without silently
 # reordering every test that sweeps it.
-BODIES_BY_PITCH = ("female1", "female2", "female3", "male1", "male2")
+BODIES_BY_PITCH: Final = ("female1", "female2", "female3", "male1", "male2")
 
 
 def band_of(hz: int) -> int:

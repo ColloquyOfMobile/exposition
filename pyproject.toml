@@ -39,6 +39,11 @@ files = [
     "Source code/Python/colloquy/repository",
     "Source code/Python/colloquy/drivers/arduino/boards.py",
     "Source code/Python/colloquy/scenario_browser/rendering.py",
+    # The audio table: body names in, pitches and band indices out, and
+    # every one of its confusions is a real one - a pitch is not a band
+    # index and a band index is not a module number, and all three are
+    # small ints that read alike at a glance.
+    "Source code/Python/colloquy/drivers/audio.py",
 ]
 mypy_path = "Source code/Python"
 

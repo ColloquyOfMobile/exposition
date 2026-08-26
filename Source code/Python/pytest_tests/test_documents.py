@@ -6,19 +6,28 @@ documents are the same machinery with a different file and a different
 name - which is the point of the base class, and worth a test each so
 that a document cannot lose its file by being moved.
 
-The one thing they do *not* share is where they hang. The code
-documentation is on the root and hidden on the installation's own machine,
-since reading source is not what that machine is for. The hardware setup
-hangs off the audio bench test and is not gated at all: it is about that
-one bench, and a bench is exactly where it is wanted.
+The one thing they do *not* share is where they hang, and that is the
+whole of what distinguishes them:
+
+- the **code documentation** is on the root and hidden on the
+  installation's own machine, since reading source is not what that
+  machine is for;
+- the **hardware setup** hangs off the audio bench test and is not gated
+  at all - it is about that one bench, and a bench is where it is wanted;
+- the **three electronics documents** hang under `hardware`, beside the
+  main PCB's own state, and are not gated either. The machine with the
+  board in it is the one place none of it is hypothetical, and the
+  machine somebody is holding a scalpel over is likely to be the other
+  one.
 """
 import pytest
 
 from colloquy.code_documentation import CodeDocumentation
+from colloquy.hardware.electronics import AsBuilt, DirtyRework, NextPCB
 from colloquy.tests.test_audio_subsystem.setup_document import HardwareSetup
 from colloquy.markdown_document import MarkdownDocument
 
-DOCUMENTS = (CodeDocumentation, HardwareSetup)
+DOCUMENTS = (CodeDocumentation, HardwareSetup, AsBuilt, DirtyRework, NextPCB)
 
 
 @pytest.fixture(params=DOCUMENTS, ids=lambda cls: cls.__name__)
@@ -48,6 +57,9 @@ def test_each_document_sits_beside_what_it_describes(document):
     expected = {
         "CODE_DOCUMENTATION.md": "colloquy",
         "HARDWARE_SETUP.md": "test_audio_subsystem",
+        "AS_BUILT.md": "electronics",
+        "DIRTY_REWORK.md": "electronics",
+        "NEXT_PCB.md": "electronics",
     }
     assert document.file_path.parent.name == expected[document.file_name]
 
@@ -57,14 +69,38 @@ def test_each_document_is_actually_there(document):
     assert document.file_path.read_text(encoding="utf-8").startswith("#")
 
 
-def test_they_are_two_different_files(stub_factory):
-    names = {cls.file_name for cls in DOCUMENTS}
+def test_no_two_documents_share_a_file(stub_factory):
+    """Three of them now share a folder as well as a base class, and a
+    copied `file_name` would have two nodes editing one file - with the
+    second save silently undoing the first."""
+    names = [cls.file_name for cls in DOCUMENTS]
 
-    assert names == {"CODE_DOCUMENTATION.md", "HARDWARE_SETUP.md"}
+    assert len(set(names)) == len(names)
+    assert set(names) == {
+        "CODE_DOCUMENTATION.md",
+        "HARDWARE_SETUP.md",
+        "AS_BUILT.md",
+        "DIRTY_REWORK.md",
+        "NEXT_PCB.md",
+    }
+
+
+def test_no_two_documents_share_a_name_on_the_page(stub_factory):
+    """They are registered into their owner by name, so two alike would
+    mean one of them simply not being drawn."""
+    names = [cls.document_name for cls in DOCUMENTS]
+
+    assert len(set(names)) == len(names)
 
 
 def test_they_are_named_for_what_they_are(document):
-    assert document.name in {"code documentation", "hardware setup"}
+    assert document.name in {
+        "code documentation",
+        "hardware setup",
+        "as built",
+        "dirty rework",
+        "next pcb",
+    }
     assert document.name == type(document).document_name
 
 

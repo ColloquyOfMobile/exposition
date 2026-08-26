@@ -244,5 +244,7 @@ class Male(BaseThread):
         children["neopixels"] = self.neopixels
         for light_sensor in self._light_sensors.values():
             children[light_sensor.name] = light_sensor
+        children["speaker"] = self.speaker
+        children["microphone"] = self.microphone
         return self._with_scenarios(children)
 

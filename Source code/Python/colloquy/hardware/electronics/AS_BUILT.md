@@ -1,0 +1,159 @@
+# The electronics box, as built
+
+**What the board in the rack actually does.** Every line here is read out
+of `CAD/KiCad/electronic box/electronic box.kicad_pcb` — the netlist, not
+the drawing and not anybody's memory. Where a net's name and its wiring
+disagree, this says so and believes the wiring.
+
+It describes the board **before** the audio rework. What to change is in
+`dirty rework`; what to build instead is in `next pcb`.
+
+---
+
+## 1. What it is
+
+One PCB carrying a **Mega 2560 as a shield** (`A1`), the **U2D2** on its
+own mount (`U1`), **five SparkFun TPA2005D1 mono amplifier breakouts**
+with a volume pot each, and the connectors out to the five bodies.
+
+Both serial links into the installation land here, which is why taking
+this board out disconnects the Arduino and the U2D2 together — see
+`hardware/main pcb`.
+
+Power comes in on the DC jack `J2` through the screw bridge `J6` to the
+board's own **+5 V** rail (the amplifiers, the NeoPixels, the sensors).
+The Mega's own 5 V is a **separate** net, broken out to `J3` and `J9` and
+not tied to it. **+12 V** and the Dynamixel data line arrive on the JST
+`J7` and go straight out to the bodies.
+
+---
+
+## 2. Every Mega pin
+
+| Pin | Net | Goes to |
+|---|---|---|
+| **D0, D1** | `D0`, `D1` | USB serial — the link to the driver. Also on `J8` 8, 7. |
+| **D2, D3** | `D2`, `D3` | free, on `J8` 6, 5 |
+| **D4** | `male2/bar neopixel` | `J8` 4 → DSUB `B-J4` 8 |
+| **D5** | `male1/bar neopixel` | `J8` 3 → DSUB `B-J4` 15 |
+| **D6** | `female1/neopixel` | `J8` 2 → DSUB `J5` 13 |
+| **D7** | `female2/neopixel` | `J8` 1 → DSUB `J1` 13 |
+| **D8** | `female3/neopixel` | `J4` 10 → DSUB `A-J3` 11 |
+| **D9** | `male1/neopixel` | `J4` 9 → DSUB `A-J3` 6 |
+| **D10** | `male2/neopixel` | `J4` 8 → DSUB `B-J4` 3 |
+| **D11** | `female1/audio` | `J4` 7 → `female1/amp1` pin 6 (`in+`) |
+| **D12** | `female2/audio` | `J4` 6 → `female2/amp1` pin 6 |
+| **D13** | `female3/audio` | `J4` 5 → `female3/amp1` pin 6 |
+| **D14 … D21** | `D14` … `D21` | free, on `J10` 1…8 |
+| **D22** | `male1/audio` | `J9` 33 → `male1/amp1` pin 6 |
+| **D23** | `male2/audio` | `J9` 34 → `male2/amp1` pin 6 |
+| **D24** | `D24` | `J9` 31, and **R3 (10K) → J13 → Q1 (BC557) → R1 (150R) → `male1/state LED`** |
+| **D25** | `D25` | `J9` 32, and the same chain for `male2/state LED` (R4, J14, Q2, R2) |
+| **D26 … D53** | `D26` … `D53` | free, on `J9` |
+| **A0 … A4** | `female1/2/3`, `male1/2` `/microphone/2` | `J11` even pins 2, 4, 6, 8, 10 |
+| **A5, A6, A7** | `female1/2/3/photosensor/2` | `J11` even pins 12, 14, 16 |
+| **A8 … A11** | `male1/photosensor/A…D/2` | `J12` even pins 2, 4, 6, 8 |
+| **A12 … A15** | `male2/photosensor/A…D/2` | `J12` even pins 10, 12, 14, 16 |
+| **SCL, SDA, AREF** | own nets | `J4` 1, 2, 3 |
+
+### Three things worth knowing before touching any of it
+
+**Every one of D0–D21 leaves its shield pad on a single straight track.**
+The pads run down one column at x = 191.96 mm and the header pins down
+another at x = 200.85 mm, 8.89 mm apart, one 1 mm front-copper track each,
+nothing else on either layer touching the pad. `J4` takes SCL…D8, `J8`
+takes D7…D0, `J10` takes D14…D21. That is what makes the rework in the
+next document a row of scalpel strokes rather than a hunt.
+
+**D24 and D25 are not free**, whatever `J9` suggests. Each drives a male's
+state LED through a 10K, a jumper header, a BC557 and a 150R. Nothing in
+`colloquy_of_mobiles.ino` writes to either, so the two state LEDs exist in
+copper and not in software.
+
+**`J11` and `J12` are break points, not headers.** Each row is **two
+separate nets** — the odd pin is the body's wire off the DSUB, the even
+pin is the Mega's ADC pin — joined only by whatever is physically fitted
+across the row. The light sensors work, so something is fitted; the files
+do not say whether it is a shunt or a resistor. Look, and photograph it,
+before pulling one out.
+
+---
+
+## 3. The five bodies
+
+Each body has, per the netlist: a Dynamixel (on the shared `dxl_data` and
++12 V), a NeoPixel line, a photosensor pair, a microphone pair and a
+speaker pair. The males have four photosensors each and a state LED.
+
+| Connector | Carries |
+|---|---|
+| **`J5`** (DSUB-15) | **female1**: speaker ±, photosensor/1, microphone/1, neopixel, `dxl_data`, +12 V, +5 V, GND — **and six spare conductors** brought to `Extra2` |
+| **`J1`** (DSUB-15) | **female2**: the same, with six spares on `Extra1` |
+| **`A-J3`** (DSUB-15) | **female3** (microphone/1, photosensor/1, speaker ±, neopixel) **and male1** (neopixel, photosensor A–D /1), plus `dxl_data`, +12 V, +5 V, GND. No spares. |
+| **`B-J4`** (DSUB-15) | **male1** speaker ± and state LED, **male2** everything, both bar-NeoPixel lines. Signal only — no power. One spare (`center/extra1`). |
+| **`J7`** (JST EH 3) | GND, +12 V, `dxl_data` — the servo bus |
+| **`J2` / `J6`** | DC jack into a screw bridge onto the board's +5 V |
+
+**The twelve spare conductors on `Extra1` and `Extra2` are the only slack
+in the harness**, and they go to female2 and female1 only. Anything the
+other three bodies need a new wire for needs a new cable.
+
+---
+
+## 4. The amplifiers
+
+Five SparkFun **TPA2005D1** breakouts, one per body, identically wired:
+
+| Breakout pin | Net |
+|---|---|
+| 1, 2 `out+`, `out−` | `<body>/speaker +/out`, `<body>/speaker −/out` → DSUB → the body |
+| 3, 4 `pwr−`, `pwr+` | GND, +5 V |
+| 5 `set` | **+5 V** — permanently enabled, no mute line |
+| 6, 7 `in+`, `in−` | `<body>/audio` (straight off a Mega pin), GND |
+| 8, 9, 10 | the volume pot `RV1…RV5` |
+
+Two consequences:
+
+- **The Mega drives an amplifier input directly.** No filter, no divider,
+  nothing in series. Whatever comes out of the pin is what the amplifier
+  amplifies — which is fine for the `tone()` this was drawn for and is
+  the thing Thomas's low-pass board exists to fix.
+- **There is no way to mute an amplifier from software.** `set` is
+  strapped high. TJ's firmware muted around every NeoPixel write
+  (CODE_DOCUMENTATION 9.13); this board could not have, and with hardware
+  timers making the tone it does not need to.
+
+And one thing the board and Thomas disagree about: **the amplifier is in
+the box and the speaker is in the body**, so the amplifier's differential
+PWM output — roughly 250 kHz, sharp edges, real currents — travels the
+whole length of a DSUB cable. Thomas's note is *mount the amplifier close
+to its loudspeaker and keep the speaker wires short*. See `next pcb`.
+
+---
+
+## 5. Where the sketch and the board disagree
+
+One place, and it predates all of this. The board calls **D4**
+`male2/bar neopixel` and **D5** `male1/bar neopixel`. The sketch's
+`#define`s agreed — and then built the two strips on bare literals the
+other way round, so male1's up-ring was driven onto the *male2* net.
+
+Nobody has said which is wrong. The rework kept each strip on the wire it
+was actually driving and wrote the net name beside each `#define`, so if
+the up-rings come out on the wrong male the fix is to swap those two
+lines — and then the net names were the ones that were right all along.
+
+---
+
+## 6. What was never wired
+
+- **No microphone conditioning of any kind.** `<body>/microphone/1` comes
+  in off the DSUB, `<body>/microphone/2` goes to the ADC, and the only
+  thing between them is whatever is fitted across `J11`. No preamp, no
+  bias, no analyser. This is CODE_DOCUMENTATION 9.11's "the box has a
+  bare microphone pair per body, no analyser chip", and it is what
+  Thomas's MAX9814 modules and MSGEQ7 array replace.
+- **No mirror servos.** The mirrors are on the Dynamixel bus at ids 2, 4
+  and 6, which the bus carries already; nothing on this board is specific
+  to them.
+- **The two state LEDs**, above.

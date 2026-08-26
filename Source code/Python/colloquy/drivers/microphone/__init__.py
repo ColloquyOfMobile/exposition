@@ -11,10 +11,10 @@ the ADC.
 **Reading one body costs what reading five costs.** The five modules share
 one strobe line, so the firmware walks the seven bands once and every
 module answers at every step. Anything that wants more than one body
-should ask `Microphones.read_all()` on the Arduino rather than five of
-these in a row: five separate reads take five times as long and, worse,
-take place at five different moments, which is the one thing you do not
-want when comparing bodies to each other.
+should ask `AllAudio.read_all()` (`drivers/all audio` on the page) rather
+than five of these in a row: five separate reads take five times as long
+and, worse, take place at five different moments, which is the one thing
+you must not do when comparing what two bodies heard of the same sound.
 
 **One property to know before deciding anything on a single reading.** The
 MSGEQ7's internal scan is fast enough to catch individual points on the
@@ -115,7 +115,7 @@ class Microphone(Base):
 
     @property
     def snapshot_children(self):
-        return {}
+        return {"read": self.read_command}
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
