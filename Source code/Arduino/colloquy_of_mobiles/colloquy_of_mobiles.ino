@@ -20,7 +20,12 @@
 // 1: the original. Greeted with a bare "Hello!" and ran at 57600.
 // 2: greets with JSON saying this version and this baud rate, answers
 //    "version" with the same, and runs the link at 1 Mbaud.
-#define FIRMWARE_VERSION 2
+// 3: the audio subsystem. Five tones on five hardware timers and five
+//    MSGEQ7 analyser modules read through one commoned strobe - see the
+//    PINs block below. Four NeoPixel lines moved to make room for them,
+//    so a board flashed with 2 and wired for 3 lights the wrong strips:
+//    this is exactly the kind of mismatch the version number is for.
+#define FIRMWARE_VERSION 3
 
 // As fast as this link will honestly go. The Mega's USART divides its
 // 16 MHz exactly at 1 Mbaud (U2X, UBRR = 1), so there is no framing error
@@ -40,19 +45,79 @@
 // a fixed buffer rather than a String - see loop().
 #define COMMAND_BUFFER_SIZE 128
 
+// ##########################################################
 // PINs
-#define FEMALE1_NEOPIXEL_PIN 6
+//
+// Four of the NeoPixel lines moved on 2026-08-26, and the reason is worth
+// knowing before moving any of them again: a NeoPixel line is bit-banged
+// and can be *any* pin, while a tone output cannot be. Each of the five
+// tone pins below is the OCnA output of one hardware timer and is fixed
+// in the silicon. So when the two wanted the same pins, the lights moved
+// and the tones did not.
+//
+// This expects the board to have been reworked to match. The cuts and
+// jumpers are written down in colloquy/hardware/electronics/, which is
+// also on the page under `hardware`.
+
+// --- lights -----------------------------------------------------------
+#define FEMALE1_NEOPIXEL_PIN 14  // was D6, which is now the 1 kHz tone
 #define FEMALE2_NEOPIXEL_PIN 7
 #define FEMALE3_NEOPIXEL_PIN 8
 
 #define FEMALE_NUM_PIXELS 50  // Female LED number
 
 #define MALE1_BODY_NEOPIXEL_PIN 9
-#define MALE2_BODY_NEOPIXEL_PIN 10
-#define MALE1_UP_RING_NEOPIXEL_PIN 5
-#define MALE2_UP_RING_NEOPIXEL_PIN 4
+#define MALE2_BODY_NEOPIXEL_PIN 15  // was D10, which is now the 6.25 kHz tone
+
+// These two carry the PCB nets named beside them, and the board and this
+// sketch have disagreed about which male owns which since long before the
+// audio rework: the schematic calls D4 "male2/bar neopixel" and D5
+// "male1/bar neopixel", while the strips were constructed on those pins
+// the other way round. The rework kept each strip on the wire it was
+// actually driving, so nothing in the room changed. If the up-rings come
+// out on the wrong male, these two are the swap - and then the net names
+// are the ones that were right.
+#define MALE1_UP_RING_NEOPIXEL_PIN 17  // PCB net "male2/bar neopixel", was D4
+#define MALE2_UP_RING_NEOPIXEL_PIN 16  // PCB net "male1/bar neopixel", was D5
 
 #define NUMBER_OF_PIXEL_IN_MALE_BODY 40
+
+// --- voices -----------------------------------------------------------
+// One tone per body, five bodies, five hardware timers. The frequencies,
+// the pins and the OCR values are Thomas Erforth's, out of
+// `Source code/Thomas/AudioAnalyzer.h`; his own tester firmware makes the
+// same five tones on the same five pins, which is what makes his bench
+// results transferable to this board.
+//
+// Each tone sits in a different one of the analyser's seven bands, and
+// that is the whole design: five bodies, five voices, no two competing
+// for one band. 63 Hz and 16 kHz are left unused - a typical electret
+// microphone is only specified from 100 Hz to 10 kHz.
+//
+// The pins are NOT a free choice. Timer n toggles its own OCnA pin and no
+// other, so moving a tone means moving a body's whole audio channel on
+// the board.
+#define FEMALE1_TONE_PIN 11  // OC1A - timer 1 -  160 Hz
+#define FEMALE2_TONE_PIN 5   // OC3A - timer 3 -  400 Hz
+#define FEMALE3_TONE_PIN 6   // OC4A - timer 4 - 1000 Hz
+#define MALE1_TONE_PIN 46    // OC5A - timer 5 - 2500 Hz
+#define MALE2_TONE_PIN 10    // OC2A - timer 2 - 6250 Hz
+
+// --- ears -------------------------------------------------------------
+// Five MSGEQ7 modules on one carrier, one per body. Their STROBE and
+// RESET are tied together across the back of the board, so one cycle
+// through the seven bands reads all five bodies at once - which is why
+// reading one body costs exactly what reading all five does.
+#define ANALYSER_STROBE_PIN 4
+#define ANALYSER_RESET_PIN 3
+
+// Module 0 is on A0 and they ascend from there, in body order:
+// female1, female2, female3, male1, male2. That is not a convention this
+// sketch chose - the board already had female1..male2's microphone pairs
+// on A0..A4, and the analyser modules took their place.
+#define ANALYSER_FIRST_ADC A0
+#define ANALYSER_MODULES 5
+#define ANALYSER_BANDS 7
 
 // ##########################################################
 // Class definitions
@@ -67,6 +132,205 @@ public:
   }
 
 };
+
+// One body's voice: a square wave of one fixed pitch, on or off.
+//
+// The tone is made by the timer itself, not by this code and not by an
+// interrupt: the timer runs in CTC mode and the compare-match output
+// toggles its own pin in hardware. Two things follow, and both matter
+// here.
+//
+// The first is that a tone costs nothing while it sounds. There is no
+// ISR, so nothing competes with the serial link, and - the reason this is
+// not `tone()` - nothing is disturbed by Adafruit_NeoPixel::show(), which
+// turns interrupts off for a couple of milliseconds every time a pixel
+// group is written. TJ's firmware had to mute the amplifier around every
+// pixel write for exactly that reason (act_blockSound / act_unblockSound,
+// CODE_DOCUMENTATION 9.13). This port writes pixels far more often than
+// his did, and does not have to.
+//
+// The second is that five simultaneous tones need five timers, one each,
+// which is why there is a fixed pin per body rather than a pitch that can
+// be asked for. Timer 0 is not among them: it is the one the Arduino core
+// runs millis(), micros() and delay() on, and the analyser read below
+// depends on those.
+class Voice {
+public:
+  const uint8_t pin;
+  const uint8_t timer;  // 1..5, the AVR timer this voice is made on
+  const uint16_t hz;
+  const uint16_t ocr;
+
+  Voice(uint8_t pin, uint8_t timer, uint16_t hz, uint16_t ocr)
+    : pin(pin), timer(timer), hz(hz), ocr(ocr) {}
+
+  void begin() {
+    pinMode(pin, OUTPUT);
+    digitalWrite(pin, LOW);
+    silence();
+  }
+
+  bool isSinging() const {
+    return _isSinging;
+  }
+
+  // {"path": "f1/speaker", "on": 1}. Answers with the state it is now in,
+  // so a caller can read back what it asked for rather than assume it.
+  String set(JsonDocument& doc) {
+    int on = doc["on"] | 0;
+    if (on) {
+      sing();
+    } else {
+      silence();
+    }
+    return String(_isSinging ? 1 : 0);
+  }
+
+  void sing() {
+    // COM1A0 / COM3A0 / COM4A0 / COM5A0 are all bit 6, and WGM12 / WGM32
+    // / WGM42 / WGM52 are all bit 3, so one pair of literals covers all
+    // four 16-bit timers. Timer 2 is the 8-bit one and its bits sit
+    // elsewhere, which is the whole reason for the branch.
+    if (timer == 2) {
+      TCCR2A = (1 << COM2A0) | (1 << WGM21);  // toggle OC2A on match, CTC
+      TCCR2B = 2;                             // prescaler 8
+      OCR2A = (uint8_t)ocr;
+    } else {
+      *timerControlA() = (1 << COM1A0);              // toggle OCnA on match
+      *timerControlB() = (1 << WGM12) | 1;           // CTC, prescaler 1
+      *timerCompare() = ocr;
+    }
+    _isSinging = true;
+  }
+
+  void silence() {
+    if (timer == 2) {
+      TCCR2A = 0;
+      TCCR2B = 0;
+    } else {
+      *timerControlA() = 0;
+      *timerControlB() = 0;
+    }
+    // Releasing the pin from the timer leaves it at whatever level the
+    // last toggle happened to end on, and half the time that is HIGH -
+    // which is a 5 V step into the amplifier rather than silence, and
+    // audible as a thump. Put it back down by hand.
+    digitalWrite(pin, LOW);
+    _isSinging = false;
+  }
+
+private:
+  bool _isSinging = false;
+
+  volatile uint8_t* timerControlA() const {
+    switch (timer) {
+      case 1: return &TCCR1A;
+      case 3: return &TCCR3A;
+      case 4: return &TCCR4A;
+      default: return &TCCR5A;
+    }
+  }
+
+  volatile uint8_t* timerControlB() const {
+    switch (timer) {
+      case 1: return &TCCR1B;
+      case 3: return &TCCR3B;
+      case 4: return &TCCR4B;
+      default: return &TCCR5B;
+    }
+  }
+
+  volatile uint16_t* timerCompare() const {
+    switch (timer) {
+      case 1: return &OCR1A;
+      case 3: return &OCR3A;
+      case 4: return &OCR4A;
+      default: return &OCR5A;
+    }
+  }
+};
+
+
+// The five MSGEQ7 modules, read as one.
+//
+// Ported from Thomas Erforth's `Analyzer::ReadFreq` (Source code/Thomas/
+// AudioAnalyzer.cpp), timings and all - they are his measurements against
+// the chip's datasheet minimums and are not numbers to round off.
+//
+// Strobe and reset are commoned across all five modules, so one walk
+// through the seven bands hands back a reading for every body at once.
+// That is why there is no such thing here as reading one body's
+// microphone cheaply: reading one costs what reading five costs, and the
+// driver on the other end is written knowing it.
+class Analyser {
+public:
+  void begin() {
+    pinMode(ANALYSER_STROBE_PIN, OUTPUT);
+    pinMode(ANALYSER_RESET_PIN, OUTPUT);
+    digitalWrite(ANALYSER_STROBE_PIN, LOW);
+    digitalWrite(ANALYSER_RESET_PIN, LOW);
+  }
+
+  // Every band of every module, space separated, module-major - or one
+  // module's seven bands when `onlyModule` is 0..4.
+  //
+  // A bare list of numbers rather than JSON, which is what every other
+  // reading on this link is: a light sensor answers with a decimal and
+  // nothing else. The whole sweep takes about eight milliseconds, which
+  // is a long time to spend not reading the serial port at 1 Mbaud - but
+  // this link is strictly one command and one reply, so nothing is
+  // arriving while it runs.
+  String read(int8_t onlyModule = -1) {
+    uint16_t values[ANALYSER_MODULES][ANALYSER_BANDS];
+    sweep(values);
+
+    String out;
+    out.reserve(ANALYSER_MODULES * ANALYSER_BANDS * 5);
+    for (uint8_t module = 0; module < ANALYSER_MODULES; module++) {
+      if (onlyModule >= 0 && module != onlyModule) continue;
+      for (uint8_t band = 0; band < ANALYSER_BANDS; band++) {
+        if (out.length()) out += ' ';
+        out += values[module][band];
+      }
+    }
+    return out;
+  }
+
+private:
+  void reset() {
+    digitalWrite(ANALYSER_STROBE_PIN, LOW);
+    digitalWrite(ANALYSER_RESET_PIN, LOW);
+    digitalWrite(ANALYSER_RESET_PIN, HIGH);  // tr, 100 ns min, 28 us measured
+    digitalWrite(ANALYSER_RESET_PIN, LOW);
+    delayMicroseconds(54);  // tRS, reset low to strobe low, 72 us min
+  }
+
+  void step() {
+    digitalWrite(ANALYSER_STROBE_PIN, HIGH);
+    delayMicroseconds(18);                   // tS, strobe pulse, 18 us min
+    digitalWrite(ANALYSER_STROBE_PIN, LOW);  // tO, output settling, 36 us min
+    delayMicroseconds(36);
+  }
+
+  void sweep(uint16_t values[ANALYSER_MODULES][ANALYSER_BANDS]) {
+    reset();
+
+    // Ten sweeps thrown away before the one that counts. The MSGEQ7 holds
+    // a peak with its own decay, so a band that was loud a moment ago is
+    // still reading loud; walking it round ten times first is what makes
+    // the inactive bands fall. Thomas's number, and the reason a reading
+    // taken immediately after a tone changes is not to be trusted.
+    for (uint8_t i = 0; i < 10 * ANALYSER_BANDS; i++) step();
+
+    for (uint8_t band = 0; band < ANALYSER_BANDS; band++) {
+      step();
+      for (uint8_t module = 0; module < ANALYSER_MODULES; module++) {
+        values[module][band] = analogRead(ANALYSER_FIRST_ADC + module);
+      }
+    }
+  }
+};
+
 
 class PixelGroup {
 public:
@@ -241,7 +505,7 @@ Female females[] = {
 
 Adafruit_NeoPixel male1UpRingStrip(
   24,
-  4,
+  MALE1_UP_RING_NEOPIXEL_PIN,
   NEO_GRBW + NEO_KHZ800);
 
 Adafruit_NeoPixel male1Strip(
@@ -267,7 +531,7 @@ Male male1(upRing1, ring1, beam1, pDriveLevel1, oDriveLevel1,
 
 Adafruit_NeoPixel male2UpRingStrip(
   24,
-  5,
+  MALE2_UP_RING_NEOPIXEL_PIN,
   NEO_GRBW + NEO_KHZ800);
 
 Adafruit_NeoPixel male2Strip(
@@ -305,6 +569,32 @@ Adafruit_NeoPixel strips[] = {
   male1UpRingStrip,
   male2UpRingStrip,
 };
+
+// The five voices, in body order - which is also ascending pitch, and
+// also the order of the analyser modules, because the board put
+// female1..male2's microphones on A0..A4 and the modules took their
+// place. One number identifies a body all the way round the loop.
+//
+// The OCR values are Thomas's (AudioAnalyzer.h, OCRVALS16). They are not
+// the exactly-calculated ones: he trimmed them against a counter, so the
+// tones come out at 162, 405, 1012, 2531 and 6329 Hz. Each is comfortably
+// inside its own analyser band and nowhere near a neighbouring one, which
+// is all the accuracy this needs.
+Voice female1Voice(FEMALE1_TONE_PIN, 1, 160, 0xC0F7);
+Voice female2Voice(FEMALE2_TONE_PIN, 3, 400, 0x4D31);
+Voice female3Voice(FEMALE3_TONE_PIN, 4, 1000, 0x1EE4);
+Voice male1Voice(MALE1_TONE_PIN, 5, 2500, 0x0C58);
+Voice male2Voice(MALE2_TONE_PIN, 2, 6250, 0x009D);
+
+Voice* voices[] = {
+  &female1Voice,
+  &female2Voice,
+  &female3Voice,
+  &male1Voice,
+  &male2Voice,
+};
+
+Analyser analyser;
 // ##########################################################
 
 // Who this board is, in one line the driver can parse. Sent once on
@@ -323,6 +613,16 @@ void setup() {
     strip.begin();
     strip.show();
   }
+
+  // Silent first, and deliberately before anything else can take time
+  // over it. A Mega comes out of reset with its timers cleared, so this
+  // is not undoing anything the chip did - it is putting every tone pin
+  // low and known, so that a body cannot be left humming by a sketch that
+  // failed to start properly.
+  for (auto* voice : voices) {
+    voice->begin();
+  }
+  analyser.begin();
 
   Serial.begin(SERIAL_BAUDRATE);
   // Each time the serial port is opened the Arduino is rebooted, so this
@@ -380,6 +680,26 @@ String processCommand(const char* input) {
     return greeting();
   }
 
+  // Every module at once. One sweep of the commoned strobe reads all five
+  // bodies, so this costs exactly what "f1/microphone" costs and returns
+  // five times as much - which is why anything reading more than one body
+  // should ask for this one instead. Thirty-five numbers, module-major,
+  // in body order: female1, female2, female3, male1, male2.
+  if (path == "microphones") {
+    return analyser.read();
+  }
+
+  // Everything quiet, in one command. Worth having as its own path rather
+  // than as five: it is what a shutdown, an emergency stop and a failed
+  // run all want, and none of them is in a position to send five commands
+  // and check five replies.
+  if (path == "speakers/off") {
+    for (auto* voice : voices) {
+      voice->silence();
+    }
+    return "";
+  }
+
   if (path == "f1/head") {
     return female1.head.fill(jsonDoc);
   } else if (path == "f1/bodyO") {
@@ -390,6 +710,10 @@ String processCommand(const char* input) {
     return female1.feet.fill(jsonDoc);
   } else if (path == "f1/light sensor") {
     return female1.lightSensor.read();
+  } else if (path == "f1/speaker") {
+    return female1Voice.set(jsonDoc);
+  } else if (path == "f1/microphone") {
+    return analyser.read(0);
   } 
   
   
@@ -403,6 +727,10 @@ String processCommand(const char* input) {
     return female2.feet.fill(jsonDoc);
   } else if (path == "f2/light sensor") {
     return female2.lightSensor.read();
+  } else if (path == "f2/speaker") {
+    return female2Voice.set(jsonDoc);
+  } else if (path == "f2/microphone") {
+    return analyser.read(1);
   }  
   
   
@@ -416,6 +744,10 @@ String processCommand(const char* input) {
     return female3.feet.fill(jsonDoc);
   } else if (path == "f3/light sensor") {
     return female3.lightSensor.read();
+  } else if (path == "f3/speaker") {
+    return female3Voice.set(jsonDoc);
+  } else if (path == "f3/microphone") {
+    return analyser.read(2);
   } 
   
   
@@ -437,6 +769,10 @@ String processCommand(const char* input) {
     return male1.lightSensorC.read();
   }  else if (path == "m1/light sensor/d") {
     return male1.lightSensorD.read();
+  } else if (path == "m1/speaker") {
+    return male1Voice.set(jsonDoc);
+  } else if (path == "m1/microphone") {
+    return analyser.read(3);
   } 
 
   
@@ -458,7 +794,17 @@ String processCommand(const char* input) {
     return male2.lightSensorC.read();
   }  else if (path == "m2/light sensor/d") {
     return male2.lightSensorD.read();
-  } 
+  } else if (path == "m2/speaker") {
+    return male2Voice.set(jsonDoc);
+  } else if (path == "m2/microphone") {
+    return analyser.read(4);
+  }
+
+  // Falling off the end of a String-returning function is undefined
+  // behaviour, and this chain used to do exactly that for any path it did
+  // not recognise. An unknown path is now said out loud, which is what a
+  // renamed pixel group looks like from the Python side.
+  return String("Unknown path: ") + path;
 }
 
 
