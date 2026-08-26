@@ -20,6 +20,8 @@ import socketserver
 from threading import Lock, Thread
 from time import sleep
 
+import pytest
+
 from colloquy import COMMAND_WAIT, Colloquy
 from colloquy.server2 import ThreadingWSGIServer
 
@@ -152,3 +154,78 @@ def test_in_flight_requests_are_joined_before_the_socket_closes():
     later edit sets them."""
     assert ThreadingWSGIServer.daemon_threads is False
     assert ThreadingWSGIServer.block_on_close is True
+
+
+# --- the crash handler, which must not crash -----------------------------
+
+
+class _Boom(Exception):
+    """The original crash, the one that must survive being handled."""
+
+
+def _server_double(emergency_stop):
+    """Everything `Server2.wsgi` touches while handling a crash."""
+    from types import SimpleNamespace
+
+    done = []
+    fake = SimpleNamespace(
+        colloquy=SimpleNamespace(emergency_stop=emergency_stop),
+        shutdown_event=SimpleNamespace(set=lambda: done.append("server asked to stop")),
+        log=lambda message: done.append("logged"),
+    )
+    fake.done = done
+    return fake
+
+
+def _crashing_wsgi(monkeypatch):
+    from colloquy import server2
+
+    def boom(**kwargs):
+        raise _Boom("the original crash")
+
+    monkeypatch.setattr(server2, "WSGI2", boom)
+
+
+def test_a_crash_becomes_an_emergency_stop(monkeypatch):
+    """An unhandled exception only kills the HTTP loop; it does not touch
+    `BaseThread._shutdown`. So any hardware thread still running would go
+    on moving unsupervised with no UI left to stop it."""
+    from colloquy.server2 import Server2
+
+    _crashing_wsgi(monkeypatch)
+    stopped = []
+    fake = _server_double(lambda: stopped.append("emergency stop"))
+
+    with pytest.raises(_Boom):
+        Server2.wsgi(fake, {}, None)
+
+    assert stopped == ["emergency stop"]
+    assert "server asked to stop" in fake.done
+
+
+def test_an_emergency_stop_that_fails_does_not_take_the_handler_with_it(monkeypatch):
+    """The traceback this was written after.
+
+    The emergency stop itself raised - a bare AssertionError out of
+    `U2D2.open`, on an installation whose main PCB was noted as unmounted
+    - and took the rest of the handler with it. The server was never
+    asked to stop, and what reached wsgiref was the *second* exception,
+    with the first nowhere in it. A handler that can fail the same way as
+    the thing it is handling is not a handler.
+    """
+    from colloquy.server2 import Server2
+
+    _crashing_wsgi(monkeypatch)
+
+    def explode():
+        raise RuntimeError("the servo bus is not there")
+
+    fake = _server_double(explode)
+
+    with pytest.raises(_Boom):
+        Server2.wsgi(fake, {}, None)
+
+    # The original survives, the secondary is written down, and the
+    # server is still told to stop.
+    assert "server asked to stop" in fake.done
+    assert "logged" in fake.done

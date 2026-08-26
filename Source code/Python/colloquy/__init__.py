@@ -278,12 +278,41 @@ class Colloquy(BaseThread):
             if held:
                 self._command_lock.release()
 
+    @property
+    def servos_were_opened(self):
+        """Did this run ever set up the servo bus?
+
+        Asked of the *port name* rather than of `is_open`, and the
+        difference matters: `U2D2.__enter__`/`__exit__` open and close the
+        port around a transaction that finds it closed, so `is_open`
+        flickers during normal running and a shutdown that consulted it
+        could decide, on a perfectly healthy installation, that there were
+        no servos to bring home.
+
+        The name is set once, by `main.py`'s `open_the_hardware()`, and
+        never cleared - and `open_the_hardware()` is skipped entirely when
+        the main PCB is noted as unmounted. So an empty name means exactly
+        "the links were never opened this run", which is the question.
+        """
+        return bool(self._drivers.u2d2.port_name)
+
     def shutdown_neopixels(self):
-        neopixels = self._drivers.neopixels
-        assert neopixels
-        for neopixel in neopixels:
-            neopixel.off()
-        # raise NotImplementedError
+        """Every light off, and never raising.
+
+        The try is here for the same reason as `silence_speakers`' and it
+        was missing: with the main PCB out, or the Arduino simply not
+        answering, this raised inside `power_down` before a single body
+        had been sent home - and inside `emergency_stop` before a single
+        thread had been signalled. Failing to turn a light off must never
+        be the thing that stops an installation being stopped.
+        """
+        try:
+            neopixels = self._drivers.neopixels
+            assert neopixels
+            for neopixel in neopixels:
+                neopixel.off()
+        except Exception as error:  # noqa: BLE001 - see the docstring
+            self.log(f"Could not turn the lights off: {error}")
 
     def silence_speakers(self):
         """Every tone off, in one command, and never raising.
@@ -326,6 +355,18 @@ class Colloquy(BaseThread):
         with room in it, and a returned answer that the caller is
         expected to pass on.
         """
+        if not self.servos_were_opened:
+            # Nothing to bring home, which is not the same as having
+            # failed to bring it home - and the difference is the whole
+            # meaning of the answer. Returning False here would print the
+            # warning about a bar that has lost its turn count, about a
+            # bar that was never powered this run.
+            self.log(
+                "The servo bus was never opened this run, so nothing was "
+                "homed. Its calibration is exactly as the last run left it."
+            )
+            return True
+
         self._drivers.bodies.turn_all_bodies_origin()
         self._drivers.bar.turn_to_origin()
         return self._drivers.wait_until_everything_is_still(timeout=HOMING_TIMEOUT)
@@ -356,6 +397,16 @@ class Colloquy(BaseThread):
         return arrived
 
     def disable_torque(self):
+        """Cut torque on every servo, if there is a bus to cut it over.
+
+        `Drivers.disable_torque` already keeps going past a servo that
+        will not answer, so the bus being absent would be survived - but
+        it would be survived nine times, once per servo, each with the
+        same paragraph in the log. One fact deserves one line.
+        """
+        if not self.servos_were_opened:
+            self.log("The servo bus was never opened this run - no torque to cut.")
+            return
         self._drivers.disable_torque()
 
     def emergency_stop(self):
@@ -374,6 +425,17 @@ class Colloquy(BaseThread):
         the single-threaded dev server can't serve anything else (including
         another emergency-stop click) while blocked in a request.
         """
-        self._drivers.disable_torque()
-        self.silence_speakers()
-        self.shutdown()
+        # try/finally, and it is the whole point of this method. Torque
+        # off is the physical halt and goes first; signalling the threads
+        # is what stops anything commanding a body again. Before this,
+        # anything raising in the first left every thread running with no
+        # UI left to stop them - which is precisely the outcome the
+        # caller (Server2.wsgi, treating any crash as an emergency stop)
+        # is reaching for this method to avoid. It arrived as an
+        # AssertionError out of U2D2.open on an installation whose main
+        # PCB was noted as unmounted.
+        try:
+            self.disable_torque()
+            self.silence_speakers()
+        finally:
+            self.shutdown()

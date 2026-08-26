@@ -1,3 +1,4 @@
+from traceback import format_exc
 import sys, os
 from colloquy.base import Base
 from socketserver import ThreadingMixIn
@@ -103,8 +104,24 @@ class Server2(Base):
             # blink, search, ...) would otherwise keep moving completely
             # unsupervised with no UI left to stop it. Treat any crash as an
             # emergency stop.
-            self.colloquy.emergency_stop()
-            self.shutdown_event.set()
+            #
+            # The nested try is the lesson of a real traceback: the
+            # emergency stop raised too - a bare AssertionError out of
+            # U2D2.open, on an installation whose main PCB was noted as
+            # unmounted - and took the two lines below with it. So the
+            # server was never asked to stop, and the crash that reached
+            # wsgiref was the second one, with the first nowhere in it.
+            # A handler that can fail the same way as the thing it is
+            # handling is not a handler.
+            try:
+                self.colloquy.emergency_stop()
+            except Exception:
+                self.log("The emergency stop itself failed:")
+                self.log(format_exc())
+            finally:
+                self.shutdown_event.set()
+            # Bare, so this is still the original exception rather than
+            # anything that happened while handling it.
             raise
 
     def restart_process(self):

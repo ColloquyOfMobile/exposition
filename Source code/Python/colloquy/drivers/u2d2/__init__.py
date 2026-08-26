@@ -219,7 +219,34 @@ class U2D2(Base):
         self._is_open = False
 
     def open(self):
-        assert self.port_name
+        """Open the servo bus. Raises U2D2Error if there is no port to open.
+
+        This used to be a bare `assert self.port_name`, which is the least
+        useful exception in the file: no message, and the caller learns
+        only that *something* was falsy. It also disappears under
+        `python -O`, so a check meant to stop a nameless port being opened
+        would have stopped nothing.
+
+        Raising a U2D2Error instead is not cosmetic. Every caller that
+        already copes with a servo that will not answer copes with this
+        one - `Drivers.disable_torque` catches U2D2Error per servo so one
+        dead servo cannot leave the other eight powered, and an
+        AssertionError went straight past it.
+
+        The port name is not persisted anywhere: `main.py` sets it, in
+        `open_the_hardware()`, which is skipped entirely when the main PCB
+        is noted as unmounted. So an empty name means the links were never
+        opened, and the message says so rather than leaving somebody to
+        work it out from a bare traceback.
+        """
+        if not self.port_name:
+            raise U2D2Error(
+                "the U2D2's port has not been set, so the servo bus was "
+                "never opened. That is what a start with the main PCB "
+                "noted as unmounted leaves behind - see hardware > main "
+                "pcb - and nothing can move until the board is back and "
+                "the process restarted."
+            )
 
         if not self.is_simulated:
             self._port_handler = PortHandler(self.port_name)

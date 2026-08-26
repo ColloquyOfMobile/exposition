@@ -721,6 +721,34 @@ class WSGI2(Base):
 
         return status, headers, content
 
+    def _homing_lines(self, arrived):
+        """What the goodbye page says about the servos. Three cases.
+
+        There were two, and the missing one was being reported as the
+        wrong one of the pair: a run that never opened the servo bus
+        homes nothing, which `power_down` correctly does not call a
+        failure - so the page said "Everything reached its origin; torque
+        is off" about an installation where nothing had been moved and no
+        torque had been cut.
+
+        That is the one page somebody reads before pulling a cable out,
+        so it is the last page in the program that should be reassuring
+        about something it did not do.
+        """
+        if not self.colloquy.servos_were_opened:
+            return [
+                "The servo bus was never opened this run, so nothing was "
+                "homed and there was no torque to cut. Every servo is "
+                "exactly as the last run left it."
+            ]
+        if arrived:
+            return ["Everything reached its origin; torque is off."]
+        return [
+            "WARNING: not everything reached its origin before torque was "
+            "cut. A servo powered down away from its origin loses its turn "
+            "count - check the bar before trusting its calibration."
+        ]
+
     def _parse_unmount_main_pcb(self):
         """Shut down, and say the board can come out.
 
@@ -751,14 +779,7 @@ class WSGI2(Base):
                 "Note: a command was still running and did not finish in time; "
                 "shut down anyway."
             )
-        if arrived:
-            lines.append("Everything reached its origin; torque is off.")
-        else:
-            lines.append(
-                "WARNING: not everything reached its origin before torque was "
-                "cut. A servo powered down away from its origin loses its turn "
-                "count - check the bar before trusting its calibration."
-            )
+        lines.extend(self._homing_lines(arrived))
         lines.append("")
         lines.append("The server is stopped and the main PCB is noted as unmounted.")
         lines.append("It is now safe to disconnect the Arduino and the U2D2.")
@@ -800,14 +821,7 @@ class WSGI2(Base):
                 "Note: a command was still running and did not finish in time; "
                 "shut down anyway."
             )
-        if arrived:
-            lines.append("Everything reached its origin; torque is off.")
-        else:
-            lines.append(
-                "WARNING: not everything reached its origin before torque was "
-                "cut. A servo powered down away from its origin loses its turn "
-                "count - check the bar before trusting its calibration."
-            )
+        lines.extend(self._homing_lines(arrived))
         lines.append("Goodbye!")
         content = "\n".join(lines).encode()
 
