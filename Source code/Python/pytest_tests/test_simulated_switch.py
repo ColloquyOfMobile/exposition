@@ -73,6 +73,9 @@ def _tabs(is_simulated):
         _hardware="hardware",
         _repository="repository",
         _code_documentation=SimpleNamespace(name="code documentation"),
+        # A clean start puts nothing on the front page for this; its
+        # appearing is covered in test_startup_problems.py.
+        _startup=SimpleNamespace(name="startup problems", has_problems=False),
         is_simulated=is_simulated,
         virtual_drivers=virtual,
     )
@@ -138,6 +141,9 @@ def test_nothing_builds_the_simulation_when_not_simulated():
         _hardware="hardware",
         _repository="repository",
         _code_documentation=SimpleNamespace(name="code documentation"),
+        # A clean start puts nothing on the front page for this; its
+        # appearing is covered in test_startup_problems.py.
+        _startup=SimpleNamespace(name="startup problems", has_problems=False),
         is_simulated=False,
     )
 

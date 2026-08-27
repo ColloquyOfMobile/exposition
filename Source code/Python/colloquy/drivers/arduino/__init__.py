@@ -10,6 +10,7 @@ from . import boards
 from . import firmware
 from .boards import Boards
 from .com_port import ComPort
+from .errors import ArduinoError, FirmwareTooOld
 from .flasher import Flasher
 
 from .neopixel_command import NeopixelCommand
@@ -250,7 +251,7 @@ class Arduino(Base):
 
         problems = firmware.baudrate_problems(self.baudrate)
         if problems:
-            raise RuntimeError(f"Arduino: {' '.join(problems)}")
+            raise ArduinoError(f"Arduino: {' '.join(problems)}")
 
         # The handler was built with whatever params said at the time, and
         # params can be edited from the page between two opens.
@@ -270,14 +271,20 @@ class Arduino(Base):
         """
         greeting = self._read_greeting()
         if greeting is None:
-            raise RuntimeError(self._diagnose_silence())
+            raise ArduinoError(self._diagnose_silence())
 
         self._greeting = greeting
         self.log(f"Arduino on {self.port_name}: {firmware.describe(greeting)}")
 
         problems = firmware.greeting_problems(greeting, self.baudrate)
         if problems:
-            raise RuntimeError(f"Arduino on {self.port_name}: {' '.join(problems)}")
+            message = f"Arduino on {self.port_name}: {' '.join(problems)}"
+            # An old sketch is the one failure here with a remedy the page
+            # can offer, so it gets its own class and startup turns it into
+            # the offer instead of a traceback. See drivers/arduino/errors.py.
+            if firmware.is_too_old(greeting):
+                raise FirmwareTooOld(message, greeting=greeting)
+            raise ArduinoError(message)
 
     def _read_greeting(self, timeout=None):
         """The board's own line about itself, or None if none arrived.

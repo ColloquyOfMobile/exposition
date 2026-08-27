@@ -584,3 +584,14 @@ Ranked by how much of the above unblocks:
 9. Measure how far a mirror can turn before it fouls, and put it in its
    `"motion range"` — it is 0 today, which is why the two "turn to one
    end" commands on a mirror both mean its origin.
+10. Build a small **dxl debug tool** under `colloquy/tests/`: ping every id
+   on the bus, say which answered and which did not, read back each one's
+   id, model and baud rate, and let one servo be jogged on its own. Today
+   a servo that will not answer is found out by starting the whole
+   installation and reading `startup problems` (`colloquy/startup/`),
+   which says *that* `female2` is silent but nothing about why — a lead,
+   a duplicated id, a servo at the wrong baud rate and a dead servo all
+   look identical from there. It is also the tool wanted when the three
+   mirrors are finally wired, since ids 2, 4 and 6 have never been talked
+   to in anger. Cheap, and it turns the commonest hardware fault in the
+   piece from a guess into a reading.

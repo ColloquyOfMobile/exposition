@@ -69,6 +69,10 @@ class U2D2(Base):
 
         # self._path = Path("dxl manager")
         self._was_open = None
+        # Latched by the first open() that succeeds and never cleared.
+        # Not the same question as is_open, which flickers - see
+        # ever_opened below.
+        self._ever_opened = False
         self._context_depth = 0
         self._is_open = False
 
@@ -136,8 +140,47 @@ class U2D2(Base):
         return self._dxl_list
 
     @property
+    def ever_opened(self):
+        """Did an open() on this bus ever succeed this run?
+
+        Asked instead of the port name by everything that wants to know
+        whether there are servos to talk to. The name is set by `main.py`
+        *before* the port is opened, so a bus whose open() raised has a
+        name and no link - which used to be indistinguishable, back when
+        a failed open ended the process and the question never came up.
+        Now that startup survives one (see colloquy/startup/), a shutdown
+        that trusted the name would set off to home five bodies over a bus
+        that was never there.
+
+        Not `is_open`, which flickers: `__enter__`/`__exit__` open and
+        close the port around each transaction.
+        """
+        return self._ever_opened
+
+    @property
     def dxls(self):
         return self._dxls
+
+    # The five bodies and the bar: the six that are wired on every
+    # installation, in the order somebody reads them on the page.
+    BODY_NAMES = ("female1", "female2", "female3", "male1", "male2", "bar")
+
+    @property
+    def body_dxls(self):
+        """The six always-wired servos, by name. Mirrors deliberately absent.
+
+        Startup iterates this rather than `dxl_list`, which is all nine.
+        Nothing drives a mirror yet and the three of them may not be wired
+        at all, so nothing may enable torque on one until somebody asks for
+        it by hand - "init hardware" on the dxl node is that asking
+        (drivers/mirror/). Initialising all nine contradicted that, and an
+        unwired mirror then took the whole process down on the first write
+        it did not answer (docs/errors/2026-08-27-01.txt).
+
+        Keyed by body name because "dxl_2" is not what somebody reading a
+        startup failure needs to be told.
+        """
+        return {name: self._dxls[name] for name in self.BODY_NAMES}
 
     @property
     def colloquy(self):
@@ -259,3 +302,4 @@ class U2D2(Base):
         # PortHandler(self.port_name)
         self.port_handler.setBaudRate(self._baudrate)
         self._is_open = True
+        self._ever_opened = True

@@ -8,12 +8,13 @@ from .code_documentation import CodeDocumentation
 from .events import Events
 from .tests import Tests
 
-from .drivers import Drivers
+from .drivers import Drivers, U2D2Error
 from .exposition import Exposition
 from .hardware import Hardware
 from .params import Params
 from .params_browser import ParamsNode
 from .repository import Repository
+from .startup import Startup
 from .ui import tree
 from .virtual_drivers import VirtualDrivers
 from .logs import Logs
@@ -65,12 +66,14 @@ class Colloquy(BaseThread):
         self._hardware = Hardware(owner=self)
         self._code_documentation = CodeDocumentation(owner=self)
         self._repository = Repository(owner=self)
+        self._startup = Startup(owner=self)
 
         self["drivers"] = self._drivers
         self["params"] = self._params_view
         self["logs"] = self._logs
         self["hardware"] = self._hardware
         self["repository"] = self._repository
+        self[self._startup.name] = self._startup
 
         self._events = Events(shutdown=BaseThread._shutdown)
 
@@ -186,8 +189,20 @@ class Colloquy(BaseThread):
 
 
     @property
+    def startup(self):
+        """Where main.py reports what would otherwise have been a traceback."""
+        return self._startup
+
+    @property
     def snapshot_children(self):
-        children = {
+        children = {}
+        if self._startup.has_problems:
+            # First, and only when there is something wrong. A clean start
+            # puts nothing here at all, so this appearing on the front page
+            # *is* the alarm - the same arrangement as the repository's
+            # pull link. See colloquy/startup/.
+            children[self._startup.name] = self._startup
+        children.update({
             "drivers": self._drivers,
             "exposition": self._exposition,
             "tests": self._tests,
@@ -204,7 +219,7 @@ class Colloquy(BaseThread):
             # that most needs telling that origin has moved is the one
             # standing in the gallery with a fortnight-old checkout.
             "repository": self._repository,
-        }
+        })
         if self.is_simulated:
             # Only when there is a simulation to look at - and only then is
             # it built at all, since the property below constructs it on
@@ -292,9 +307,16 @@ class Colloquy(BaseThread):
         The name is set once, by `main.py`'s `open_the_hardware()`, and
         never cleared - and `open_the_hardware()` is skipped entirely when
         the main PCB is noted as unmounted. So an empty name means exactly
-        "the links were never opened this run", which is the question.
+        "the links were never opened this run".
+
+        The name alone is not enough any more, though: it is set *before*
+        the port is opened, and since startup began surviving a bus that
+        will not open (colloquy/startup/) a named-but-never-opened bus is
+        a state that reaches this. So both are asked, and `ever_opened` is
+        a latch rather than `is_open` for the flicker reason above.
         """
-        return bool(self._drivers.u2d2.port_name)
+        u2d2 = self._drivers.u2d2
+        return bool(u2d2.port_name) and u2d2.ever_opened
 
     def shutdown_neopixels(self):
         """Every light off, and never raising.
@@ -367,8 +389,18 @@ class Colloquy(BaseThread):
             )
             return True
 
-        self._drivers.bodies.turn_all_bodies_origin()
-        self._drivers.bar.turn_to_origin()
+        try:
+            self._drivers.bodies.turn_all_bodies_origin()
+            self._drivers.bar.turn_to_origin()
+        except U2D2Error as error:
+            # Whatever else happens, torque still has to be cut: power_down
+            # calls disable_torque *after* this, so an exception escaping
+            # here would leave every body powered and standing where it
+            # stopped. A servo that dies between opening and shutting down
+            # is exactly the case, and it is not hypothetical - the bus can
+            # now be half-working for a whole run (colloquy/startup/).
+            self.log(f"Could not send everything home: {error}")
+            return False
         return self._drivers.wait_until_everything_is_still(timeout=HOMING_TIMEOUT)
 
     def power_down(self):

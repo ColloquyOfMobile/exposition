@@ -153,6 +153,17 @@ def baudrate_problems(params_baudrate):
     ]
 
 
+def is_too_old(greeting):
+    """Is this board's sketch older than the minimum, on its own?
+
+    Split out of greeting_problems() so that startup can tell the one link
+    failure it can offer a remedy for - flash the board - from the ones it
+    cannot, without matching on the prose of a message somebody may reword.
+    """
+    version = greeting.get("firmware")
+    return not isinstance(version, int) or version < MINIMUM_FIRMWARE_VERSION
+
+
 def greeting_problems(greeting, params_baudrate):
     """Is the board on the other end one this driver can drive?
 
@@ -160,7 +171,7 @@ def greeting_problems(greeting, params_baudrate):
     """
     found = []
     version = greeting.get("firmware")
-    if not isinstance(version, int) or version < MINIMUM_FIRMWARE_VERSION:
+    if is_too_old(greeting):
         found.append(
             f"the board is running firmware {version}, and this driver "
             f"needs at least {MINIMUM_FIRMWARE_VERSION}. Flash "

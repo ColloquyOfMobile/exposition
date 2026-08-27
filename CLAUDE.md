@@ -20,6 +20,28 @@ This calls `colloquy1()` in `main.py`, which:
 3. Blinks all NeoPixels once (Arduino reboot can leave LEDs on in a random state)
 4. Starts `Server2`, a blocking WSGI server on `http://localhost:8087/`
 
+**Steps 2 and 3 cannot stop step 4.** `open_the_hardware()` reports every
+failure to `colloquy/startup/` and carries on, because an installation
+that comes up unable to move is worth far more than one that does not come
+up at all: the page that explains the fault and the command that fixes it
+both live in the server that used to die with it
+(`docs/errors/2026-08-27-01.txt` is both crashes). The `startup problems`
+node is registered on the root **only when it has something to say**, so
+its appearing on the front page *is* the alarm - the same arrangement as
+`Repository`'s pull link. Every problem says what happened, what it means
+for the room, and what to do; a stale Arduino sketch is the one whose
+remedy is a link rather than a sentence, straight to `flash firmware`.
+
+The three halves are independent on purpose - a dead Arduino must not cost
+the servos, a dead bus must not cost the lights, one silent servo must not
+cost the other five - and only the **six wired servos** are woken
+(`U2D2.body_dxls`). Initialising all nine contradicted `Mirror`'s own rule
+that nothing may enable torque on a mirror until somebody asks by hand,
+and an unwired mirror then took the process down on the first write it
+ignored. `Colloquy.servos_were_opened` asks `U2D2.ever_opened` as well as
+the port name, since the name is set *before* the port is opened and a
+named-but-never-opened bus now survives long enough to reach a shutdown.
+
 There is no separate build step (pure Python, no bundler). `requirements.txt` only lists `yattag` (HTML generation) and `dynamixel_sdk`; `pyserial`, `watchdog`, etc. are used but not currently pinned there — check imports if `pip install -r requirements.txt` isn't enough.
 
 `process_csv.py` (dev helper, hardcodes local Windows paths) does majority-vote smoothing over a light-sensor CSV column and writes `<name>_averaged.csv` next to the input.

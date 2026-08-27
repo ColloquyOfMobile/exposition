@@ -17,6 +17,8 @@ for params on disk and a servo bus.
 """
 from types import SimpleNamespace
 
+from colloquy.drivers import U2D2Error
+
 import pytest
 
 from colloquy import HOMING_TIMEOUT, Colloquy
@@ -39,7 +41,7 @@ def make_colloquy(arrived=True, port_name="COM4"):
         bar=SimpleNamespace(turn_to_origin=lambda: done.append("bar home")),
         neopixels=[SimpleNamespace(off=lambda: done.append("lights off"))],
         audio=SimpleNamespace(silence=lambda: done.append("speakers silent")),
-        u2d2=SimpleNamespace(port_name=port_name),
+        u2d2=SimpleNamespace(port_name=port_name, ever_opened=bool(port_name)),
         disable_torque=lambda: done.append("torque off"),
     )
 
@@ -148,7 +150,7 @@ def test_an_emergency_stop_never_commands_a_move():
     drivers = SimpleNamespace(
         disable_torque=lambda: done.append("torque off"),
         audio=SimpleNamespace(silence=lambda: done.append("speakers silent")),
-        u2d2=SimpleNamespace(port_name="COM4"),
+        u2d2=SimpleNamespace(port_name="COM4", ever_opened=True),
     )
     fake = SimpleNamespace(
         _drivers=drivers,
@@ -194,7 +196,7 @@ def emergency_double(port_name="COM4", disable_torque=None):
         _drivers=SimpleNamespace(
             disable_torque=disable_torque or (lambda: done.append("torque off")),
             audio=SimpleNamespace(silence=lambda: done.append("speakers silent")),
-            u2d2=SimpleNamespace(port_name=port_name),
+            u2d2=SimpleNamespace(port_name=port_name, ever_opened=bool(port_name)),
         ),
         shutdown=lambda: done.append("threads down"),
         log=lambda *a, **k: done.append("logged"),
@@ -296,10 +298,42 @@ def test_the_servo_check_asks_the_port_name_not_whether_it_is_open():
     running. A shutdown that consulted it could decide, on a perfectly
     healthy installation, that there were no servos to bring home."""
     flickering = SimpleNamespace(
-        _drivers=SimpleNamespace(u2d2=SimpleNamespace(port_name="COM4", is_open=False))
+        _drivers=SimpleNamespace(
+            u2d2=SimpleNamespace(port_name="COM4", is_open=False, ever_opened=True)
+        )
     )
 
     assert Colloquy.servos_were_opened.fget(flickering) is True
+
+
+def test_a_bus_that_was_named_but_never_opened_has_nothing_to_home():
+    """`main.py` sets the port name *before* opening the port, so a bus
+    whose open() raised has a name and no link. That state only started
+    reaching a shutdown once startup began surviving it (colloquy/startup/)
+    - before, the process died and the question never came up."""
+    named_but_dead = SimpleNamespace(
+        _drivers=SimpleNamespace(
+            u2d2=SimpleNamespace(port_name="COM4", ever_opened=False)
+        )
+    )
+
+    assert Colloquy.servos_were_opened.fget(named_but_dead) is False
+
+
+def test_a_servo_that_dies_during_homing_still_gets_its_torque_cut():
+    """power_down() calls disable_torque *after* move_to_origin, so an
+    exception escaping the homing would leave every body powered and
+    standing where it stopped - which is the one outcome the whole
+    sequence exists to prevent."""
+    fake = make_colloquy()
+
+    def refuse():
+        raise U2D2Error("female2 is not answering")
+
+    fake._drivers.bodies.turn_all_bodies_origin = refuse
+
+    assert Colloquy.power_down(fake) is False
+    assert "torque off" in fake.done
 
 
 def test_a_light_that_will_not_go_out_does_not_stop_the_shutdown():
