@@ -4,7 +4,7 @@
 while the dirty rework was being planned, so that the rework is a
 prototype of this rather than a detour — every pin it moves, this keeps.
 
-Two decisions are now taken, and everything below follows from them:
+Two decisions are taken, and one constraint is given:
 
 1. **Absorb Thomas's filter board and analyser array onto the main PCB.**
    One board, no daughterboards, no patch wires. More work to lay out,
@@ -12,9 +12,13 @@ Two decisions are now taken, and everything below follows from them:
    months from now.
 2. **The amplifier moves to the body.** The board sends line level down
    the harness and the amplifier sits next to its loudspeaker. This was
-   section 3's open question in the previous draft; it is answered below,
-   and it is the change with the widest reach — it is why the body
-   connectors are redrawn.
+   section 3's open question in the previous draft; it is answered below.
+3. **The DSUB connectors and the harness behind them are fixed** — a
+   supplier constraint, not a design choice. Four DSUB-15s, the pinout
+   `as built` records, no new conductors. Everything below is specified
+   against that. **Section 8 keeps the case for redrawing them**, because
+   it is a good case and it should not be lost; it is just not what this
+   board can assume.
 
 Read `as built` for what exists and `dirty rework` for what is being
 proved before this is committed to.
@@ -41,7 +45,7 @@ section.
 | female3 tone, 1 kHz | **D6** | `OC4A` |
 | male1 tone, 2.5 kHz | **D46** | `OC5A` |
 | male2 tone, 6.25 kHz | **D10** | `OC2A` |
-| amplifier shutdown | **D2** | new, and free; see section 4 |
+| amplifier shutdown | **D2** | reserved, not wired out; see section 4 |
 | analyser RESET | **D3** | free choice, but keep it |
 | analyser STROBE | **D4** | free choice, but keep it |
 | analyser modules 0–4 | **A0–A4** | body order, and the reason module N is body N |
@@ -49,7 +53,7 @@ section.
 | male light sensors | **A8–A15** | unchanged |
 | NeoPixels ×7 | **D7, D8, D9, D14, D15, D16, D17** | any pins; these are the ones the rework used |
 
-**D2, D3 and D4 are now the audio control block** — mute, reset, strobe,
+**D2, D3 and D4 are the audio control block** — mute, reset, strobe,
 three pins in a row, none of them fixed by silicon and all three worth
 keeping together so the silkscreen can say so in one place.
 
@@ -154,16 +158,18 @@ puts there:
 
 | Part | Note |
 |---|---|
-| amplifier module | class-D, `SHUTDOWN`/`set` **brought out**, not strapped |
+| amplifier module | class-D; supply rail is a decision, see section 5 |
 | 22K / 3K3 divider | at the amplifier input, sized for volume at maximum |
-| 470 µF reservoir | across the amplifier's +5 V and GND, **at the module** |
+| 470 µF reservoir | across the amplifier's supply and GND, **at the module** |
 | loudspeaker | short leads, in the body, as now |
 | MAX9814 module | from `dirty rework` section 5 |
 
-The reservoir is not optional. A class-D amplifier at the end of several
-metres of thin conductor is a load with real peaks and no local energy
-behind it; without a capacitor at the module its supply sags on every
-transient and takes the NeoPixels on that cable with it.
+The reservoir is not optional, and under the fixed harness it is doing
+more work than it would otherwise: a class-D amplifier at the end of
+several metres of thin conductor is a load with real peaks and no local
+energy behind it, and for three of the five bodies that conductor is
+shared (section 5). Without a capacitor at the module its supply sags on
+every transient and takes the NeoPixels on that cable with it.
 
 **This does not reopen "one board, no daughterboards".** That decision
 was about the box — the filter board and the analyser array stop being
@@ -189,12 +195,14 @@ DSUB shared with a NeoPixel line and the Dynamixel bus.
 That is a measurement, not an argument, and it needs no new hardware:
 **run one channel's line level down a full-length body cable, with the
 NeoPixels on that cable running, and listen.** Do it before this board is
-laid out. If it hums, the answer is a screened pair on the spare
-conductors, and the connector tables below already have the spares for it.
+laid out. With the connectors fixed there is no screened pair to fall
+back on, so this one matters more than it did: if it hums, the remedy has
+to be found at the two ends — source impedance, the return, the divider's
+position — rather than in the cable.
 
 ---
 
-## 4. The mute line, and why it survives the move
+## 4. The mute line: reserved on the board, not wired to the bodies
 
 The current amplifiers have `set` strapped permanently high, so nothing
 can silence one from software. TJ needed a mute for a reason that is now
@@ -203,63 +211,221 @@ interrupts (CODE_DOCUMENTATION 9.13) — and with the tone made by a timer,
 *stopping the timer already silences the room*: the pin sits low, the
 filter output is 0 V, the amplifier has nothing to amplify.
 
-**So the mute line is not for silencing the signal. It is for silencing
-the amplifier**, which is a different thing once the amplifier is out of
-reach inside a body: its own noise floor, its own turn-on thump, and
-whatever a floating input does to it during a reflash.
+**So a mute line would not be silencing the signal. It would be silencing
+the amplifier** — its own noise floor, its own turn-on thump — which is a
+different thing once the amplifier is out of reach inside a body.
 
-- **One Mega pin, `D2`, commoned to all five** — one conductor per body
-  cable, one net on the board.
-- **Pull it up to +5 V on the board with 10 K.** Firmware 3 leaves `D2`
-  an input, and the default of a pin nobody drives must be *amplifiers
-  enabled*, not five silent bodies and a morning spent looking for why.
-  A later firmware drives it low to mute.
+**The fixed harness cannot deliver it to all five bodies**, and that is
+what decides it. female1 and female2 have six spare conductors each;
+female3 and male1 have none; male2 shares `B-J4`'s single spare. **A mute
+that reaches three bodies out of five is worse than no mute at all** —
+`Colloquy.silence_speakers()` would half-work, and a command that
+half-works is the kind of thing that costs a morning.
+
+So, for this board:
+
+- **`D2` is reserved, pulled up to +5 V through 10 K, and brought to a
+  labelled pad** — not to a connector. The net exists, the polarity is
+  decided, and wiring it later is a wire rather than a board spin.
+- **The pull-up is the safe default.** Firmware 3 leaves `D2` an input,
+  and the default of a pin nobody drives must be *amplifiers enabled*,
+  not five silent bodies and a morning spent looking for why.
+- **If it is ever wanted, the two dead state-LED conductors are the way
+  in.** `B-J4` 1 and 13 are wired to nothing in firmware and have been for
+  years (section 7); they reach both males. With female1 and female2 on
+  their spares, that is four bodies out of five, and only female3 left to
+  solve.
 - **Confirm the polarity against the module actually chosen.** The
   TPA2005D1's `SHUTDOWN` is active low, which is what the pull-up assumes.
   A module with the opposite sense needs the pull-up to become a
   pull-down, and that is a resistor, not a redesign.
 
-`Colloquy.silence_speakers()` then means what it says.
-
 ---
 
-## 5. The body connectors, redrawn
+## 5. The body connectors, as they are
 
-**This is the part the amplifier decision forces**, and it would be worth
-doing anyway. Read out of the netlist rather than remembered:
+**Fixed by the supplier**, so the audio has to land on conductors that
+already exist. It does, and neatly: **the speaker pair is exactly the two
+conductors that stop carrying a speaker** the moment the amplifier moves
+into the body.
+
+### The one substitution, per body
+
+| Was | Becomes |
+|---|---|
+| `<body>/speaker +/out` | **line out** — filter output to the body amplifier |
+| `<body>/speaker −/out` | **audio return** |
+
+No new conductor, no new connector, no change to the pinout, and nothing
+to ask the supplier for. The loudspeaker moves from the far end of that
+pair to the output of the amplifier, a few centimetres away.
+
+**`audio return` is the return for the line out, and for nothing else.**
+Join it to the analogue ground at the board, and at the body to the
+divider's bottom end and the amplifier's input ground; the amplifier's
+*supply* current goes home on the GND conductor. The point is to keep
+class-D switching current and NeoPixel current out of the copper the
+MSGEQ7 inputs are referenced to.
+
+### Where every audio conductor lands
+
+Read out of the netlist rather than remembered:
+
+| Body | Connector | Line out | Audio return | Microphone | +5 V | GND | Spares |
+|---|---|---|---|---|---|---|---|
+| **female1** | `J5` | 12 | 4 | 6 | **15** | 8, shell | 6 (`Extra2`) |
+| **female2** | `J1` | 12 | 4 | 6 | **15** | 8, shell | 6 (`Extra1`) |
+| **female3** | `A-J3` | 12 | 5 | 3 | 9 *(shared)* | 1, shell | none |
+| **male1** | `B-J4` | 9 | 2 | `A-J3` 13 | `A-J3` 9 *(shared)* | `A-J3` 1; `B-J4` shell | none |
+| **male2** | `B-J4` | 6 | 14 | 10 | **none** | shell only | `B-J4` 7 *(shared)* |
+
+### The supply problem, which the board cannot fix
 
 > **`+5V` leaves the current board on exactly three pins** — `J5` 15
 > (female1), `J1` 15 (female2) and `A-J3` 9. `+12V` and `dxl_data` leave
 > on the same three connectors. **`B-J4` carries no power at all**, only
 > GND on its shell — and `B-J4` is the only connector male2 has.
 
-Two things follow, and the second one is urgent:
+With the connectors fixed, this is a constraint to design around rather
+than a fault to correct:
 
-- **One +5 V conductor already feeds three bodies.** Whatever reaches
-  female3, male1 and male2 goes through `A-J3` pin 9 and is distributed
-  beyond the board. Three bodies' NeoPixels on one DSUB pin is the
-  existing bottleneck; hanging three amplifiers behind it as well is not
-  sound.
-- **`dirty rework` section 5 says to power each MAX9814 "from the DSUB,
-  which already carries +5 V and GND to every body". That is not true of
-  male1's or male2's connector.** male1's power arrives on `A-J3` and its
-  speaker pair on `B-J4`; male2 has neither. Before wiring a MAX9814 into
-  either male, **go and look at where those bodies get their 5 V today** —
-  the answer is off this board, and it is not in these files.
+- **female1 and female2 are fine.** Each has its own +5 V conductor and
+  its own return, and six spares besides.
+- **female3, male1 and male2 share `A-J3` pin 9.** One conductor already
+  feeds three bodies' NeoPixels; three amplifiers now sit behind it too.
+  This is the number to check before ordering anything.
+- **male1's audio and male1's power arrive on different cables** —
+  signal on `B-J4`, supply on `A-J3`. Keep the audio return on `B-J4` 2
+  paired with `B-J4`'s shell rather than reaching across to `A-J3` 1, so
+  the signal's return stays in the cable the signal is in.
+- **male2 has no supply from this board at all**, and its NeoPixels run
+  today — so its 5 V comes from somewhere off these files. **Find where
+  before hanging an amplifier on it.** This is the one open item that can
+  block the build, and it is answered by looking at the piece, not at the
+  CAD.
 
-### The rule for the new board
+The same finding corrects `dirty rework` section 5, which is being worked
+from right now: it says to power each MAX9814 "from the DSUB, which
+already carries +5 V and GND to every body". True of the three females
+and of neither male.
+
+### Which rail the amplifier runs from
+
+**Not yet decided, and the fixed harness makes it the deciding spec of
+the module.** Every body's connector that carries power carries **+12 V**
+as well as +5 V:
+
+- **On +5 V**, three bodies share one conductor with three NeoPixel
+  strips, and male2 has no conductor at all.
+- **On +12 V**, the same acoustic power costs roughly 40% of the current,
+  on a conductor the NeoPixels do not touch. The cost is that +12 V also
+  feeds the Dynamixels, whose current steps when a servo starts — so the
+  local reservoir and the module's own decoupling are doing real work.
+
+Neither rail reaches male2. **Choose the module once male2's supply is
+found**, because that answer may decide it.
+
+### Current budget
+
+Budget **0.5 A of peak amplifier current per body** at 5 V and confirm it
+against the module actually chosen — a TPA2005D1 delivering 1.4 W into
+8 Ω is roughly that. That is on top of the NeoPixels, it is peak rather
+than average, and for female3 and male1 it is on a shared conductor. The
+local 470 µF is what keeps it from being seen at the board at all.
+
+### Grounding, since it now matters
+
+One analogue ground region under the five filters and the five analysers,
+joined to the power ground at **a single point** near the Mega's own GND
+pad. The +5 V rail that leaves on the body connectors, and its return,
+should not run under the filter stages.
+
+---
+
+## 6. Test points and silkscreen
+
+**Put a pad on each filter output.** With the amplifier at the body, the
+filter output *is* the line out — it is the single measurement that says
+whether a body's voice is right before it leaves the box, and it is now
+also the last point on the board where the signal exists at all.
+
+Test points, all of them plain pads:
+
+| Where | Why |
+|---|---|
+| filter output ×5 | the voice, before it leaves the board |
+| analyser output ×5 (A0–A4) | the ear, before the ADC |
+| `STROBE`, `RESET` | the two the bringup test cannot tell apart from silence |
+| `SHUTDOWN` | the reserved mute net, and where it gets wired from |
+| board +5 V, Mega 5 V, GND, analogue GND | four rails, four pads, no probing on a pin |
+
+Silkscreen, because every one of these is a fault that reads as something
+else months later:
+
+- **Each filter stage: its frequency and its Mega pin.** `160 Hz — D11`.
+- **Each analyser module: its body name.** `module 0 — female1`.
+- **Each body connector: which bodies it serves**, next to the shell, in
+  the largest type that fits. `A-J3` and `B-J4` are two identical 15-ways
+  carrying entirely different things and neither says so.
+- **On `B-J4`: `NO POWER`.** It is the one fact about that connector that
+  nobody expects and everybody needs.
+- **The speaker pair, relabelled.** Those two pins no longer carry a
+  speaker. `LINE OUT` and `AUDIO RTN`, or somebody will connect one.
+- **`MEGA 5V` and `BOARD +5V`, spelled out.** They are separate nets and
+  should stay separate — the amplifiers and NeoPixels must not draw
+  through the Mega's regulator — and on the current board `J9` 35 looks
+  exactly like a convenient 5 V rail.
+- **`D2 D3 D4 — AUDIO CONTROL`** over the three-pin block.
+
+---
+
+## 7. Smaller things the current board got wrong or left out
+
+- **The two state LEDs are wired and unused.** D24 and D25 drive them
+  through a 10K, a jumper header, a BC557 and a 150R, and no firmware has
+  ever written to either. **Drop the driver chain and keep the
+  conductors** — `B-J4` 1 and 13 are then two free wires to the two males,
+  which is where a mute line would go if one is ever wanted (section 4).
+  Four passives per male for a feature nobody has asked for is the wrong
+  way round; two spare conductors are not.
+- **The spares stay where they are.** Twelve spare conductors, six to
+  female1 and six to female2, none to the other three. That is a harness
+  fact and this board cannot change it — it is the strongest single
+  argument in section 8.
+- **`J11` and `J12` stop being unlabelled break points**, for the reason
+  in section 2 — the analyser is in that path by design now. Whatever
+  survives as a series element gets a footprint, a value and a silkscreen
+  label.
+- **No audio on D13**, and nothing else that minds a pulse train at
+  power-on. See section 1.
+
+---
+
+## 8. Open question: the connectors, if they were ever free
+
+**Kept because it is a good case, not because it is available.** The
+supplier constraint is real and this board is specified without it. But
+the constraint is a supplier's, and suppliers change — so this is what to
+ask for if the question is ever reopened, and it is the shape the harness
+should take whenever it is next rebuilt.
 
 **Every body gets its own connector, carrying its own power, its own
 signals and its own spares.** No body's supply passes through another
-body's cable, and no connector carries two bodies.
+body's cable, and no connector carries two bodies. Three things it fixes,
+all of them things sections 4, 5 and 7 have to work around:
+
+- male2 gets a supply of its own, and the question that can block this
+  build stops existing.
+- female3, male1 and male2 stop sharing one +5 V conductor.
+- every body gets spares, so a mute line — or anything else that next
+  needs a wire — is available to all five rather than to two.
 
 **Females keep a DSUB-15; males get a DSUB-25.** Two part numbers rather
 than one, for two reasons: a male genuinely needs the pins (four light
 sensors, two NeoPixel lines and a state LED fill a 15-way exactly, with
 nothing left over), and different shells make it **physically impossible
 to plug a female cable into a male port** — which the current
-`A-J3`/`B-J4` pair, two identical 15-ways carrying entirely different
-things, very much is not.
+`A-J3`/`B-J4` pair very much is not.
 
 ### Female body connector — DSUB-15, ×3, identical
 
@@ -272,7 +438,7 @@ things, very much is not.
 | 7 | neopixel |
 | 8 | photosensor |
 | 9 | microphone — MAX9814 `AOUT` in |
-| 10 | **line out** — filter output to the body amplifier |
+| 10 | **line out** |
 | 11 | **audio return** |
 | 12 | **amplifier shutdown** |
 | 13, 14, 15 | spare |
@@ -302,85 +468,9 @@ available answer to the volt dropped in several metres of thin conductor,
 now that the current at the far end includes an amplifier's peaks as well
 as a NeoPixel strip's.
 
-**`audio return` is the return for the line out and the microphone, and
-for nothing else.** Join it to the analogue ground at the board and to
-the divider's bottom end and the MAX9814's ground at the body; the
-amplifier's *supply* current goes home on the GND pins. The point is to
-keep class-D switching current and NeoPixel current out of the copper the
-MSGEQ7 inputs are referenced to.
-
-### Grounding, since it now matters
-
-One analogue ground region under the five filters and the five analysers,
-joined to the power ground at **a single point** near the Mega's own GND
-pad. The +5 V rail that leaves on the body connectors, and its return,
-should not run under the filter stages.
-
-### Current budget
-
-Budget **0.5 A of peak amplifier current per body** at 5 V and confirm it
-against the module actually chosen — a TPA2005D1 delivering 1.4 W into
-8 Ω is roughly that. That is on top of the NeoPixels, it is peak rather
-than average, and the local 470 µF is what keeps it from being seen at
-the board at all. Check the DC jack and whatever feeds it against the
-total before ordering.
-
 ---
 
-## 6. Test points and silkscreen
-
-**Put a pad on each filter output.** With the amplifier at the body, the
-filter output *is* the line out — it is the single measurement that says
-whether a body's voice is right before it leaves the box, and it is now
-also the last point on the board where the signal exists at all.
-
-Test points, all of them plain pads:
-
-| Where | Why |
-|---|---|
-| filter output ×5 | the voice, before it leaves the board |
-| analyser output ×5 (A0–A4) | the ear, before the ADC |
-| `STROBE`, `RESET` | the two the bringup test cannot tell apart from silence |
-| `SHUTDOWN` | is the mute line where you think it is |
-| board +5 V, Mega 5 V, GND, analogue GND | four rails, four pads, no probing on a pin |
-
-Silkscreen, because every one of these is a fault that reads as something
-else months later:
-
-- **Each filter stage: its frequency and its Mega pin.** `160 Hz — D11`.
-- **Each analyser module: its body name.** `module 0 — female1`.
-- **Each body connector: its body name**, next to the shell, in the
-  largest type that fits.
-- **`MEGA 5V` and `BOARD +5V`, spelled out.** They are separate nets and
-  should stay separate — the amplifiers and NeoPixels must not draw
-  through the Mega's regulator — and on the current board `J9` 35 looks
-  exactly like a convenient 5 V rail.
-- **`D2 D3 D4 — AUDIO CONTROL`** over the three-pin block.
-
----
-
-## 7. Smaller things the current board got wrong or left out
-
-- **The two state LEDs are wired and unused.** D24 and D25 drive them
-  through a 10K, a jumper header, a BC557 and a 150R, and no firmware has
-  ever written to either. **Drop the driver chain**; keep the pin and the
-  conductor (male pin 19), so that writing the firmware later costs a
-  transistor at the body rather than a board spin. Four passives per male
-  for a feature nobody has asked for is the wrong way round.
-- **Spares are no longer a privilege of female1 and female2.** The current
-  harness has twelve spare conductors and all twelve go to two bodies;
-  the tables above give every body three or six. The next thing that
-  needs a wire will not be politely limited to the bodies that have one.
-- **`J11` and `J12` stop being unlabelled break points**, for the reason
-  in section 2 — the analyser is in that path by design now. Whatever
-  survives as a series element gets a footprint, a value and a silkscreen
-  label.
-- **No audio on D13**, and nothing else that minds a pulse train at
-  power-on. See section 1.
-
----
-
-## 8. What is still open above the board
+## 9. What is still open above the board
 
 None of this is the sound *channel*, only the hardware it would run on.
 CODE_DOCUMENTATION section 9 has the rest, and three of its questions bear
