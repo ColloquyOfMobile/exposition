@@ -39,6 +39,19 @@ class _StrikethroughExtension(Extension):
         )
 
 
+def render_markdown(text):
+    """Markdown to HTML, with the extensions both document kinds want."""
+    return markdown.markdown(
+        text,
+        extensions=[
+            "tables",
+            "fenced_code",
+            "sane_lists",
+            _StrikethroughExtension(),
+        ],
+    )
+
+
 class MarkdownDocument(Base):
     """Subclass and set `file_name` and `document_name`."""
 
@@ -74,15 +87,7 @@ class MarkdownDocument(Base):
             return ""
 
     def render_html(self):
-        return markdown.markdown(
-            self.read(),
-            extensions=[
-                "tables",
-                "fenced_code",
-                "sane_lists",
-                _StrikethroughExtension(),
-            ],
-        )
+        return render_markdown(self.read())
 
     def enter_edit(self):
         self._mode = "edit"
@@ -106,3 +111,53 @@ class MarkdownDocument(Base):
             "edit": self.enter_edit,
             "rendered": leaves.html(path, "rendered", self.render_html()),
         }
+
+class GeneratedDocument(Base):
+    """A document produced by code: shown, never edited.
+
+    **Rendered from the generator on every view, not from the file.** The
+    generated documents are also written to disk - that is what somebody
+    opens beside a schematic editor - but a page that read the file could
+    show a copy from before the last change to the design, and be
+    convincing about it. Calling the generator is what makes the page and
+    the design the same thing by construction.
+
+    It follows that there is no `edit` and no `save`. `MarkdownDocument`
+    has both, and hanging one of those on a generated file would offer an
+    edit that the next `py next_pcb.py` silently throws away. The file
+    says "Generated. Do not edit." at the top; this is that rule expressed
+    as the absence of a button rather than as a sentence.
+
+    `source` is a callable returning markdown, so the import it needs
+    happens when somebody opens the node rather than at startup - which
+    matters for the mechanical one, since it parses a 1.7 MB board file.
+    """
+
+    def __init__(self, owner, document_name, source, written_to=None):
+        super().__init__(owner=owner)
+        self._document_name = document_name
+        self._source = source
+        self._written_to = written_to
+
+    @property
+    def name(self):
+        return self._document_name
+
+    @property
+    def snapshot_children(self):
+        return {}
+
+    def read(self):
+        return self._source()
+
+    def render_html(self):
+        return render_markdown(self.read())
+
+    def _snapshot_if_opened(self, path):
+        states = super()._snapshot_if_opened(path)
+        if self._written_to is not None:
+            # Where the copy on disk lives, for whoever wants it next to
+            # KiCad rather than next to a browser.
+            leaves.into(states, path)("file", self._written_to)
+        states["rendered"] = leaves.html(path, "rendered", self.render_html())
+        return states

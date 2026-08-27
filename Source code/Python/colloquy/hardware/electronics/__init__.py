@@ -29,7 +29,7 @@ is holding a scalpel over is likely to be the other one. Both want it.
 from pathlib import Path
 
 from colloquy.base import Base
-from colloquy.markdown_document import MarkdownDocument
+from colloquy.markdown_document import GeneratedDocument, MarkdownDocument
 
 _FOLDER = Path(__file__).resolve().parent
 
@@ -55,8 +55,40 @@ class NextPCB(_ElectronicsDocument):
     document_name = "next pcb"
 
 
+# The three generated ones, and where `py next_pcb.py` also writes them.
+# Imported inside the callables rather than at module scope: the mechanical
+# one parses a 1.7 MB board file, and nothing should pay for that at
+# startup on the chance somebody opens the node.
+_GENERATED_FOLDER = "CAD/KiCad/electronic box v2"
+
+
+def _netlist():
+    from .next_pcb_report import netlist_markdown
+
+    return netlist_markdown()
+
+
+def _bom():
+    from .next_pcb_report import bom_markdown
+
+    return bom_markdown()
+
+
+def _mechanical():
+    from .next_pcb_report import mechanical_markdown
+
+    return mechanical_markdown()
+
+
 class Electronics(Base):
-    """The three documents, in the order they are wanted."""
+    """The documents, in the order they are wanted.
+
+    Three written and three generated, and the split is visible on the
+    page: the generated ones have no `edit`. See `GeneratedDocument` -
+    they are rendered from the generator on every view rather than from
+    the file it also writes, so the page cannot show a stale copy of a
+    design that has moved.
+    """
 
     def __init__(self, owner):
         super().__init__(owner=owner)
@@ -64,6 +96,21 @@ class Electronics(Base):
             AsBuilt(owner=self),
             DirtyRework(owner=self),
             NextPCB(owner=self),
+            GeneratedDocument(
+                owner=self, document_name="next pcb netlist",
+                source=_netlist,
+                written_to=f"{_GENERATED_FOLDER}/NETLIST.md",
+            ),
+            GeneratedDocument(
+                owner=self, document_name="next pcb bill of materials",
+                source=_bom,
+                written_to=f"{_GENERATED_FOLDER}/BOM.md",
+            ),
+            GeneratedDocument(
+                owner=self, document_name="next pcb mechanical",
+                source=_mechanical,
+                written_to=f"{_GENERATED_FOLDER}/MECHANICAL.md",
+            ),
         ]
 
     @property
