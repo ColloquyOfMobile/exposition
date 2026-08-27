@@ -25,7 +25,15 @@
 //    PINs block below. Four NeoPixel lines moved to make room for them,
 //    so a board flashed with 2 and wired for 3 lights the wrong strips:
 //    this is exactly the kind of mismatch the version number is for.
-#define FIRMWARE_VERSION 3
+// 4: the males took the two low voices and the females the three high
+//    ones. Nothing about the board changed - the pitches stayed on their
+//    timers and the bodies moved across the pins - but a driver judging
+//    a firmware-3 board by this table gets every verdict wrong while
+//    everything still appears to work: a tone comes out, a band rises,
+//    and only the attribution is silently for another body. That is the
+//    worst kind of mismatch and the reason this is a version and not a
+//    quiet edit.
+#define FIRMWARE_VERSION 4
 
 // As fast as this link will honestly go. The Mega's USART divides its
 // 16 MHz exactly at 1 Mbaud (U2X, UBRR = 1), so there is no framing error
@@ -97,11 +105,19 @@
 // The pins are NOT a free choice. Timer n toggles its own OCnA pin and no
 // other, so moving a tone means moving a body's whole audio channel on
 // the board.
-#define FEMALE1_TONE_PIN 11  // OC1A - timer 1 -  160 Hz
-#define FEMALE2_TONE_PIN 5   // OC3A - timer 3 -  400 Hz
-#define FEMALE3_TONE_PIN 6   // OC4A - timer 4 - 1000 Hz
-#define MALE1_TONE_PIN 46    // OC5A - timer 5 - 2500 Hz
-#define MALE2_TONE_PIN 10    // OC2A - timer 2 - 6250 Hz
+//
+// The males have the two low voices and the females the three high ones.
+// A pitch cannot be moved to another body on its own: the pitch belongs
+// to the timer, Thomas's OCR values are indexed by timer, and 6250 Hz is
+// on timer 2 precisely because timer 2 is the 8-bit one - at prescaler 8
+// it cannot reach down to 160 Hz at all. So the pitches stayed where they
+// were and the bodies moved across the pins. Every OCR value and every
+// filter channel is untouched; what changed is which body each one is.
+#define MALE1_TONE_PIN 11    // OC1A - timer 1 -  160 Hz
+#define MALE2_TONE_PIN 5     // OC3A - timer 3 -  400 Hz
+#define FEMALE1_TONE_PIN 6   // OC4A - timer 4 - 1000 Hz
+#define FEMALE2_TONE_PIN 46  // OC5A - timer 5 - 2500 Hz
+#define FEMALE3_TONE_PIN 10  // OC2A - timer 2 - 6250 Hz
 
 // --- ears -------------------------------------------------------------
 // Five MSGEQ7 modules on one carrier, one per body. Their STROBE and
@@ -570,21 +586,27 @@ Adafruit_NeoPixel strips[] = {
   male2UpRingStrip,
 };
 
-// The five voices, in body order - which is also ascending pitch, and
-// also the order of the analyser modules, because the board put
-// female1..male2's microphones on A0..A4 and the modules took their
-// place. One number identifies a body all the way round the loop.
+// The five voices, in body order - which is the order of the analyser
+// modules, because the board put female1..male2's microphones on A0..A4
+// and the modules took their place. One number still identifies a body
+// round the whole loop.
 //
-// The OCR values are Thomas's (AudioAnalyzer.h, OCRVALS16). They are not
-// the exactly-calculated ones: he trimmed them against a counter, so the
+// It is no longer ascending pitch, and that is the change of 2026-08-27:
+// the males hold the two low voices. Pitch order is male1, male2,
+// female1, female2, female3.
+//
+// The OCR values are Thomas's (AudioAnalyzer.h, OCRVALS16), and they are
+// indexed by *timer* - which is why the bodies moved across the pins
+// rather than the pitches moving across the bodies. They are not the
+// exactly-calculated ones: he trimmed them against a counter, so the
 // tones come out at 162, 405, 1012, 2531 and 6329 Hz. Each is comfortably
 // inside its own analyser band and nowhere near a neighbouring one, which
 // is all the accuracy this needs.
-Voice female1Voice(FEMALE1_TONE_PIN, 1, 160, 0xC0F7);
-Voice female2Voice(FEMALE2_TONE_PIN, 3, 400, 0x4D31);
-Voice female3Voice(FEMALE3_TONE_PIN, 4, 1000, 0x1EE4);
-Voice male1Voice(MALE1_TONE_PIN, 5, 2500, 0x0C58);
-Voice male2Voice(MALE2_TONE_PIN, 2, 6250, 0x009D);
+Voice female1Voice(FEMALE1_TONE_PIN, 4, 1000, 0x1EE4);
+Voice female2Voice(FEMALE2_TONE_PIN, 5, 2500, 0x0C58);
+Voice female3Voice(FEMALE3_TONE_PIN, 2, 6250, 0x009D);
+Voice male1Voice(MALE1_TONE_PIN, 1, 160, 0xC0F7);
+Voice male2Voice(MALE2_TONE_PIN, 3, 400, 0x4D31);
 
 Voice* voices[] = {
   &female1Voice,

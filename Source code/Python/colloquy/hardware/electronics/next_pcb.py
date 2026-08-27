@@ -98,7 +98,7 @@ BUILD_OUT = "100R"
 NEOPIXEL_SERIES = "330R"
 
 # Holds the amplifier-shutdown net at "enabled" while nothing drives D2.
-# Firmware 3 leaves that pin an input, and the default of a pin nobody
+# Firmware 4 leaves that pin an input, and the default of a pin nobody
 # drives must be five bodies that can speak. See NEXT_PCB.md section 4.
 SHUTDOWN_PULLUP = "10K"
 

@@ -171,9 +171,12 @@ def test_a_voice_nobody_heard_asks_you_to_listen_first():
     assert "Listen while 'hold female1' is on" in joined
     # And when you cannot hear it, it names the pin to scope and the
     # filter channel it should be feeding.
-    assert "D11" in joined
-    assert "160 Hz square wave" in joined
-    assert "filter IN 160" in joined
+    assert audio.VOICES["female1"]["pin"] in joined
+    hz = audio.VOICES["female1"]["hz"]
+    assert f"{hz} Hz square wave" in joined
+    # The pad's own silkscreen label, not the number: the filter board
+    # reads 160, 400, 1K, 2K5, 6K25.
+    assert f"filter IN {diagnosis._channel(hz)}" in joined
     # male1 worked, so it is not accused of anything. Counted rather than
     # matched on "male1 ...": "female1 was heard by nobody" *contains*
     # "male1 was heard by nobody", which is the same female/male substring
@@ -291,7 +294,10 @@ def test_a_tone_in_the_wrong_band_is_called_a_frequency_not_a_room():
 
     joined = " ".join(diagnosis.diagnose(healths, readings, WIRED))
 
-    assert "arrived at 2500 Hz instead of 160 Hz" in joined
+    assert (
+        f"arrived at {audio.VOICES['male1']['hz']} Hz instead of "
+        f"{audio.VOICES['female1']['hz']} Hz"
+    ) in joined
     assert "not the room" in joined
     assert "wrong filter channel" in joined
 

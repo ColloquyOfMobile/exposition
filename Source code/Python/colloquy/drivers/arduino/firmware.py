@@ -56,7 +56,7 @@ SKETCH_PATH = (
 # which NeoPixel strip. A board flashed with 2 in an installation wired
 # for 3 answers every command cheerfully and lights the wrong bodies, and
 # no reading anywhere would say so.
-MINIMUM_FIRMWARE_VERSION = 3
+MINIMUM_FIRMWARE_VERSION = 4
 
 # What v1 was: a bare "Hello!" and no way to ask it anything about itself.
 # Kept here so a board that predates the greeting is *diagnosed* rather

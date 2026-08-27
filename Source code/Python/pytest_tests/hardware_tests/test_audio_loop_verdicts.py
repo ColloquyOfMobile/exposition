@@ -52,7 +52,7 @@ def test_a_voice_arriving_somewhere_else_names_the_band_it_arrived_in():
     result = verdicts.verdict(FLOOR, wrong, "female2", MARGIN)
 
     assert result.startswith("wrong band")
-    assert "2500 Hz" in result
+    assert f"{audio.VOICES['male1']['hz']} Hz" in result
 
 
 def test_a_missing_sweep_is_a_broken_link_not_a_broken_chain():

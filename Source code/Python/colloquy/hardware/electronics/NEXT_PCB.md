@@ -57,7 +57,7 @@ only one the silicon allows, and it is the one Thomas's own firmware
 already uses. Copy it.
 
 **The acceptance test for the pinout is that one sketch runs on both
-boards.** Firmware 3 should run unmodified on the reworked board and on
+boards.** Firmware 4 should run unmodified on the reworked board and on
 this one, so that swapping the board is swapping the board and nothing
 else. That is a better reason to keep the NeoPixel pins where the rework
 put them than tidiness is to move them — see the note at the end of this
@@ -65,11 +65,11 @@ section.
 
 | Signal | Pin | Why it cannot move |
 |---|---|---|
-| female1 tone, 160 Hz | **D11** | `OC1A`, the only pin timer 1 can toggle |
-| female2 tone, 400 Hz | **D5** | `OC3A` |
-| female3 tone, 1 kHz | **D6** | `OC4A` |
-| male1 tone, 2.5 kHz | **D46** | `OC5A` |
-| male2 tone, 6.25 kHz | **D10** | `OC2A` |
+| male1 tone, 160 Hz | **D11** | `OC1A`, the only pin timer 1 can toggle |
+| male2 tone, 400 Hz | **D5** | `OC3A` |
+| female1 tone, 1 kHz | **D6** | `OC4A` |
+| female2 tone, 2.5 kHz | **D46** | `OC5A` |
+| female3 tone, 6.25 kHz | **D10** | `OC2A` |
 | amplifier shutdown | **D2** | reserved, not wired out; see section 4 |
 | analyser RESET | **D3** | free choice, but keep it |
 | analyser STROBE | **D4** | free choice, but keep it |
@@ -77,6 +77,16 @@ section.
 | female light sensors | **A5–A7** | unchanged |
 | male light sensors | **A8–A15** | unchanged |
 | NeoPixels ×7 | **D7, D8, D9, D14, D15, D16, D17** | any pins; these are the ones the rework used |
+
+**The males hold the two low voices and the females the three high ones**,
+which is why the body names in that table are not the ones the previous
+draft had. Nothing about the *board* moved: a pitch belongs to its timer
+(Thomas's OCR values are indexed by timer, and 6250 Hz is on T2 because T2
+is the 8-bit one and cannot reach 160 Hz at its prescaler), so the pitches
+stayed put and the bodies moved across the pins. Every filter channel is
+still cut for the pin that feeds it. What changed is which body's line out
+each filter output lands on — five nets, and on the reworked board five
+re-jumperings.
 
 **D2, D3 and D4 are the audio control block** — mute, reset, strobe,
 three pins in a row, none of them fixed by silicon and all three worth
@@ -252,7 +262,7 @@ So, for this board:
 - **`D2` is reserved, pulled up to +5 V through 10 K, and brought to a
   labelled pad** — not to a connector. The net exists, the polarity is
   decided, and wiring it later is a wire rather than a board spin.
-- **The pull-up is the safe default.** Firmware 3 leaves `D2` an input,
+- **The pull-up is the safe default.** Firmware 4 leaves `D2` an input,
   and the default of a pin nobody drives must be *amplifiers enabled*,
   not five silent bodies and a morning spent looking for why.
 - **If it is ever wanted, the two dead state-LED conductors are the way

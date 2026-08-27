@@ -159,7 +159,10 @@ def netlist_markdown(design=None):
                     f"band {audio.band_of_body(body)}",
                     f"TP{channels[body] + 10}",
                 )
-                for body in audio.BODIES_BY_PITCH
+                # Module order, not pitch order: this is the table about
+                # the modules, and reading it 0,1,2,3,4 is the whole point
+                # of module N being body N.
+                for body in audio.BODIES
             ],
         ),
         "",

@@ -88,8 +88,26 @@ def test_the_modules_are_in_body_order():
     """One number identifies a body all the way round the loop - out of
     the timer, through the room, back into the ADC. `AllAudio.read_all`
     splits the firmware's thirty-five numbers on exactly this."""
-    for index, name in enumerate(audio.BODIES_BY_PITCH):
+    for index, name in enumerate(audio.BODIES):
         assert audio.module_of(name) == index
+
+
+def test_body_order_and_pitch_order_are_not_the_same_thing():
+    """They were one tuple's worth of names in the same order until the
+    males took the two low voices, and that coincidence hid the
+    difference - `AllAudio.read_all` named body order and iterated the
+    pitch-ordered tuple. Splitting module-major readings on the wrong one
+    hands every body another body's ear."""
+    assert set(audio.BODIES) == set(audio.BODIES_BY_PITCH)
+    assert audio.BODIES != audio.BODIES_BY_PITCH
+
+
+def test_the_males_have_the_low_voices_and_the_females_the_high_ones():
+    """The artist's decision, and the sense TJ's firmware ran in."""
+    males = [audio.VOICES[name]["hz"] for name in ("male1", "male2")]
+    females = [audio.VOICES[name]["hz"] for name in ("female1", "female2", "female3")]
+
+    assert max(males) < min(females)
 
 
 # --- and the firmware on the other end -----------------------------------

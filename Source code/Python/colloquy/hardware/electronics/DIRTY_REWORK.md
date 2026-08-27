@@ -20,10 +20,11 @@ Read `as built` first if you have not. This assumes its net map.
 
 - **Everything on hand:** the filter board, the analyser array, five
   MAX9814 modules, five GF1002 amplifiers and five speakers.
-- **Flash the Mega with firmware 3** before switching anything on.
-  Version 3 of `colloquy_of_mobiles.ino` expects the pin moves below;
-  version 2 on a reworked board lights the wrong bodies and says nothing
-  about it. The driver refuses to open a link to firmware 2 for exactly
+- **Flash the Mega with firmware 4** before switching anything on.
+  Version 4 of `colloquy_of_mobiles.ino` expects the pin moves below
+  and the body-to-pitch mapping in section 2; version 2 on a reworked
+  board lights the wrong bodies and says nothing about it, and version 3
+  sings each body with another body's voice. The driver refuses to open a link to firmware 2 for exactly
   that reason, so the mismatch is loud in one direction and silent in the
   other.
 
@@ -70,11 +71,11 @@ of that board rather than a detour.
 
 | Body | Voice | Timer | Mega pin | Filter channel | Analyser module | ADC |
 |---|---|---|---|---|---|---|
-| **female1** | 160 Hz | T1 | **D11** | `160` | 0 | A0 |
-| **female2** | 400 Hz | T3 | **D5** | `400` | 1 | A1 |
-| **female3** | 1 kHz | T4 | **D6** | `1K` | 2 | A2 |
-| **male1** | 2.5 kHz | T5 | **D46** | `2K5` | 3 | A3 |
-| **male2** | 6.25 kHz | T2 | **D10** | `6K25` | 4 | A4 |
+| **male1** | 160 Hz | T1 | **D11** | `160` | 3 | A3 |
+| **male2** | 400 Hz | T3 | **D5** | `400` | 4 | A4 |
+| **female1** | 1 kHz | T4 | **D6** | `1K` | 0 | A0 |
+| **female2** | 2.5 kHz | T5 | **D46** | `2K5` | 1 | A1 |
+| **female3** | 6.25 kHz | T2 | **D10** | `6K25` | 2 | A2 |
 
 **Module N is body N, and it is free.** The board already had
 `female1...male2/microphone/2` on A0...A4 in exactly that order, so
@@ -88,14 +89,31 @@ microphones with your hand. **Confirm it once anyway** with `test audio
 loop`: it is the only test that can catch a body wired to another body's
 channel.
 
-> **The pitch order runs the other way from TJ's.** His firmware gave
-> female1 the highest note and male2 the lowest (`act_tone_index =
-> 5 - UNIT_ID`, CODE_DOCUMENTATION 9.10). His five pitches all sat inside
-> one analyser band and carried no information at all; here the pitch
-> *is* which body is speaking, and D11 was already female1's channel.
-> Reversing it would cost five re-jumperings and buy nothing - but it is
-> five re-jumperings and not a rebuild, if it turns out to matter
-> musically.
+> **The males have the two low voices**, decided on 2026-08-27. It ran
+> the other way until then - female1 lowest, male2 highest - and the
+> earlier draft of this document said reversing it would be "five
+> re-jumperings and not a rebuild, if it turns out to matter musically".
+> It did, and that is the price paid.
+>
+> **What moved is the bodies, not the pitches**, and the difference is
+> the whole of why it is cheap. A pitch belongs to its timer: Thomas's
+> OCR values are indexed by timer (`AudioAnalyzer.h`, `OCRVALS16`), and
+> 6250 Hz is on T2 because T2 is the 8-bit one - at its prescaler of 8 it
+> cannot reach anywhere near 160 Hz. So every pin still carries the pitch
+> it always carried, **section 3's cuts and section 4a's six wires are
+> unchanged**, and what moved is which body's amplifier each filter
+> output feeds. See section 4b.
+>
+> This is also the sense TJ's firmware ran in (`act_tone_index =
+> 5 - UNIT_ID`, CODE_DOCUMENTATION 9.10), though for no reason worth
+> inheriting: his five pitches all sat inside one analyser band and
+> carried no information at all. Here the pitch *is* which body is
+> speaking.
+>
+> **It is firmware 4.** A driver judging a firmware-3 board by the new
+> table gets every verdict wrong while everything still appears to work -
+> a tone comes out, a band rises, and only the attribution is silently
+> for another body.
 
 ---
 
@@ -379,6 +397,22 @@ are **not used**. Each channel goes:
 
     filter OUT <channel>  ->  22K / 3K3 divider  ->  GF1002  ->  loudspeaker
 
+**Which body each channel now feeds is the one thing that changed** when
+the males took the low voices. The channel is still cut for the pin that
+drives it; the loudspeaker on the end of it belongs to somebody else:
+
+| Filter channel | Feeds |
+|---|---|
+| `160` | **male1** |
+| `400` | **male2** |
+| `1K` | **female1** |
+| `2K5` | **female2** |
+| `6K25` | **female3** |
+
+Get this wrong and nothing sounds broken - each body simply speaks with
+another body's voice, and every verdict `test audio loop` gives is
+against the wrong name.
+
 The divider keeps the filter output under the GF1002's maximum input
 **with the module's volume control at maximum**. Exceed it and the
 amplifier clips, and a clipped output is a square wave again - throwing
@@ -477,17 +511,17 @@ this one's.
 
 ## 6. Switching on
 
-1. Flash firmware 3 - `drivers > arduino > flash firmware`, or the
+1. Flash firmware 4 - `drivers > arduino > flash firmware`, or the
    Arduino IDE if you prefer. `drivers > arduino` should then say **in
-   sync: yes** and *board says: firmware 3 at 1000000 baud*. If it
+   sync: yes** and *board says: firmware 4 at 1000000 baud*. If it
    refuses to open the port it will name the mismatch.
 2. `drivers > all audio > silence every speaker`, then **`read every
    microphone`**. Five rows of seven numbers. All five near-identical and
    low is a quiet room read correctly. A row of zeros or a row of 1023s is
    that module, its supply, or its ADC wire.
-3. `drivers > female1 > speaker > on`. You should hear 160 Hz from
-   female1's speaker and nothing else. Read the microphones again: band 1
-   should have jumped on every module.
+3. `drivers > male1 > speaker > on`. You should hear 160 Hz from
+   male1's speaker and nothing else - male1 is the lowest voice now. Read
+   the microphones again: band 1 should have jumped on every module.
 4. Walk the other four, one at a time.
 5. Then run **`tests > test audio bringup`**. It looks only at the
    bodies listed under `params > audio > wired bodies`, which matters

@@ -65,14 +65,14 @@ class AllAudio(Base):
 
         The firmware answers thirty-five numbers, module-major, in body
         order - so the split below is the *only* place that order is
-        assumed, and `audio.BODIES_BY_PITCH` is where it is written down.
+        assumed, and `audio.BODIES` is where it is written down.
         """
         with self.arduino:
             response = self.arduino.send(_READ_ALL)
 
         values = [int(token) for token in response.split()]
         width = len(audio.BANDS_HZ)
-        expected = width * len(audio.BODIES_BY_PITCH)
+        expected = width * len(audio.BODIES)
         if len(values) != expected:
             raise ValueError(
                 f"'microphones' answered {len(values)} numbers, expected "
@@ -80,7 +80,7 @@ class AllAudio(Base):
             )
 
         readings = {}
-        for index, name in enumerate(audio.BODIES_BY_PITCH):
+        for index, name in enumerate(audio.BODIES):
             readings[name] = tuple(values[index * width : (index + 1) * width])
             # Each body's own node keeps what it heard, so opening one
             # microphone on the page shows the sweep it took part in
@@ -130,7 +130,7 @@ class AllAudio(Base):
             leaf("last sweep", "not read yet")
             return states
 
-        for name in audio.BODIES_BY_PITCH:
+        for name in audio.BODIES:
             leaf(name, " ".join(str(value) for value in self._last[name]))
         leaf("bands", " ".join(f"{hz}Hz" for hz in audio.BANDS_HZ))
         return states

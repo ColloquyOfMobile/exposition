@@ -192,7 +192,7 @@ def test_every_body_that_can_be_powered_from_its_own_connector_is(design):
 
 
 def test_the_shutdown_net_defaults_to_amplifiers_enabled(design):
-    """Firmware 3 leaves D2 an input. The default of a pin nobody drives
+    """Firmware 4 leaves D2 an input. The default of a pin nobody drives
     must be five bodies that can speak, not five silent ones and a morning
     spent looking for why."""
     terminals = dict(design.net("amp shutdown").terminals)

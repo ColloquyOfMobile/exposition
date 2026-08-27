@@ -129,7 +129,7 @@ class VirtualSerialPort(Base):
             for name in "abcd":
                 sensors[name] = 0
 
-        for name in audio.BODIES_BY_PITCH:
+        for name in audio.BODIES:
             states[name]["speaker"] = False
 
     def readline(self):
@@ -302,7 +302,7 @@ class VirtualSerialPort(Base):
         return self._as_reply(1 if self._states[body]["speaker"] else 0)
 
     def _silence_speakers(self, data):
-        for name in audio.BODIES_BY_PITCH:
+        for name in audio.BODIES:
             self._states[name]["speaker"] = False
 
     def _read_microphone(self, data):
@@ -315,7 +315,7 @@ class VirtualSerialPort(Base):
         bands = self._bands()
         return self._as_reply(
             " ".join(
-                str(value) for _ in audio.BODIES_BY_PITCH for value in bands
+                str(value) for _ in audio.BODIES for value in bands
             )
         )
 
@@ -324,7 +324,7 @@ class VirtualSerialPort(Base):
         here, which is the whole of what this simulator does not know."""
         singing = {
             audio.band_of_body(name)
-            for name in audio.BODIES_BY_PITCH
+            for name in audio.BODIES
             if self._states[name]["speaker"]
         }
         return [

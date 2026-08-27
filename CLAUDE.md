@@ -202,17 +202,21 @@ Each male sends his ring a 10-bit on/off pattern — a morse-code-like signal en
 
 ## The sound channel (`drivers/audio.py`, `speaker/`, `microphone/`, `all_audio/`)
 
-Every body has a **voice** and an **ear**, and both are real hardware as of 2026-08-26: five tones on five AVR hardware timers, five MSGEQ7 analyser modules read through one commoned strobe. Thomas Erforth's boards, driven by the installation's own Arduino rather than by his bench Mega. Firmware 3.
+Every body has a **voice** and an **ear**, and both are real hardware as of 2026-08-26: five tones on five AVR hardware timers, five MSGEQ7 analyser modules read through one commoned strobe. Thomas Erforth's boards, driven by the installation's own Arduino rather than by his bench Mega. Firmware 4.
 
 **`drivers/audio.py` is the one table**, and it is wanted in four places (speaker, microphone, the loop test, the simulator) — so a row out of step with the firmware is silent: a tone still comes out, a band still rises, and only the *judging* is wrong. None of its numbers are ours to choose.
 
 | body | pitch | timer | pin | analyser module |
 |---|---|---|---|---|
-| female1 | 160 Hz | T1 | D11 | 0 (A0) |
-| female2 | 400 Hz | T3 | D5 | 1 (A1) |
-| female3 | 1 kHz | T4 | D6 | 2 (A2) |
-| male1 | 2.5 kHz | T5 | D46 | 3 (A3) |
-| male2 | 6.25 kHz | T2 | D10 | 4 (A4) |
+| female1 | 1 kHz | T4 | D6 | 0 (A0) |
+| female2 | 2.5 kHz | T5 | D46 | 1 (A1) |
+| female3 | 6.25 kHz | T2 | D10 | 2 (A2) |
+| male1 | 160 Hz | T1 | D11 | 3 (A3) |
+| male2 | 400 Hz | T3 | D5 | 4 (A4) |
+
+**The males have the two low voices and the females the three high ones** (changed 2026-08-27; it ran the other way before, and TJ's firmware ran this way). A pitch cannot be moved to a body on its own: the pitch belongs to the *timer*, Thomas's OCR values are indexed by timer, and 6250 Hz is on T2 because T2 is the 8-bit one — at its prescaler of 8 it cannot reach 160 Hz at all. So the pitches stayed on their timers and the **bodies moved across the pins**. Every OCR value and every filter channel is untouched; what changed is which body's amplifier each filter output feeds — the "five re-jumperings, not a rebuild" `dirty rework` predicted. It is **firmware 4**, because a driver judging a firmware-3 board by this table gets every verdict wrong while a tone still comes out and a band still rises.
+
+**`audio.BODIES` and `audio.BODIES_BY_PITCH` are no longer the same order**, and that matters: `BODIES` is body order, which is module order, which is A0–A4 and how the firmware's thirty-five numbers arrive. They were identical until this change, and the coincidence had already hidden a bug — `AllAudio.read_all` said "in body order" in its docstring and iterated the pitch-ordered tuple, which after the flip would have handed every body another body's ear.
 
 - **The pitches are Thomas's**, chosen so each lands in a *different* one of the MSGEQ7's seven bands — so the pitch itself says who is speaking. TJ's five all sat inside band 4 and carried nothing, which is why CODE_DOCUMENTATION 9.10's table does not survive. 63 Hz and 16 kHz are unused on purpose (an electret mic is specified 100 Hz–10 kHz).
 - **The pins are fixed by silicon.** Timer n toggles its own `OCnA` pin and no other, so a body's pitch and its pin are one decision. **That is the whole reason four NeoPixel lines moved to D14–D17**: a NeoPixel line is bit-banged and can be any pin, a tone pin cannot, so when they collided the lights moved and the tones did not. `pytest_tests/drivers/test_audio.py` reads the `#define`s straight out of the `.ino` and holds the two sets apart.
