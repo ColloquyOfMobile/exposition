@@ -165,8 +165,14 @@ That is also why `Colloquy` has no `attach_server`/`request_stop`: they existed 
 **The next board's wiring is generated, not written.** `NEXT_PCB.md` is
 the specification and the reasoning; `colloquy/hardware/electronics/next_pcb.py`
 is the board as data - every part, every net, every terminal - and
-`py next_pcb.py` at the repo root writes `NETLIST.md` and `BOM.md` into
-`CAD/KiCad/electronic box v2/`. It is generated because it **reads
+`py next_pcb.py` at the repo root writes `NETLIST.md`, `BOM.md` and
+`MECHANICAL.md` into `CAD/KiCad/electronic box v2/`. The mechanical one
+is read out of the *old* board's `.kicad_pcb`
+(`next_pcb_mechanical.py`) rather than restated, because the enclosure
+was cut for that board: outline (A4, 210x297, 5 mm corners), the seven
+placements the panel has a hole for, and the room the five departing
+amplifiers free. It also turned up that the board has **no mounting
+holes at all** - empty NPTH drill file, no MountingHole footprint. It is generated because it **reads
 `drivers/audio.py`**: which body speaks at which pitch, out of which timer
 pin, into which analyser module is one table that the firmware and four
 Python nodes already share, so a channel cannot be laid out against a pin

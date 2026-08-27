@@ -14,6 +14,7 @@ file that does not announce itself gets edited by hand exactly once.
 """
 from colloquy.drivers import audio
 
+from . import next_pcb_mechanical as mechanical
 from .next_pcb import (
     ANALYSER_RESET_PIN,
     ANALYSER_STROBE_PIN,
@@ -272,5 +273,120 @@ def bom_markdown(design=None):
         "  something. Measure one and put the number here.",
         "",
         _table(("Kind", "Value", "Qty", "References"), grouped(confirm)),
+        "",
+    ])
+
+def mechanical_markdown():
+    """Where the edges and the connectors have to be, and what is free.
+
+    Everything here is read out of the board that exists. The enclosure
+    was cut for it, so a replacement that is a millimetre out anywhere in
+    section 1 is a replacement that does not go in the rack.
+    """
+    board = mechanical.outline()
+    freed = mechanical.freed_region()
+
+    rows = []
+    for reference, place in mechanical.fixed_placements().items():
+        edge, distance = mechanical.edges_of(reference)
+        rows.append((
+            f"`{reference}`",
+            f"{place['x']:.2f}, {place['y']:.2f}",
+            f"{place['rotation']:.0f}°",
+            f"{edge}, {distance:.2f} mm in",
+            place["why"],
+        ))
+
+    return "\n".join([
+        "# The next PCB — mechanical envelope",
+        "",
+        _GENERATED,
+        "",
+        "Read out of `CAD/KiCad/electronic box/electronic box.kicad_pcb`, not",
+        "remembered. The enclosure was cut for that board; a replacement that",
+        "is a millimetre out in section 1 does not go in the rack.",
+        "",
+        "---",
+        "",
+        "## 1. The outline, which does not change",
+        "",
+        _table(
+            ("", "Value"),
+            [
+                ("Size", f"**{board['width']:.0f} × {board['height']:.0f} mm** (A4)"),
+                ("Corner radius", f"{board['corner_radius']:.0f} mm, all four"),
+                ("Extent, x", f"{board['left']:.2f} … {board['right']:.2f} mm"),
+                ("Extent, y", f"{board['top']:.2f} … {board['bottom']:.2f} mm"),
+            ],
+        ),
+        "",
+        "Keep the same origin as well as the same size. Every coordinate",
+        "below is in that file's frame, and a new board drawn at 0,0 would",
+        "make all of them arithmetic somebody has to redo by hand.",
+        "",
+        "## 2. What the panel has a hole for",
+        "",
+        "These positions are the enclosure's, not the layout's. Everything",
+        "else on the board is free.",
+        "",
+        _table(("Ref", "x, y", "Rot", "Edge", "What it is"), rows),
+        "",
+        "Three edges carry connectors — two DSUBs on the bottom, one on the",
+        "left, one on the right — and the DC jack is on the right near the",
+        "top. The Mega and the U2D2 both sit along the top, because both of",
+        "their USB sockets have to be reachable.",
+        "",
+        "## 3. Mounting holes: there are none",
+        "",
+        "The exported NPTH drill file has a header, an `M30`, and not one",
+        "coordinate between them, and there is no `MountingHole` footprint on",
+        "the board either. An A4 board carrying a Mega 2560 as a shield, five",
+        "DSUB housings and a DC jack is held by nothing but those housings'",
+        "own jackscrews.",
+        "",
+        "**Decide this on purpose for the next one.** It is four holes and a",
+        "keep-out, and the board is large enough to flex against a shield",
+        "with forty-odd pins in it.",
+        "",
+        "## 4. The room the amplifiers free",
+        "",
+        f"Ten parts leave the board — five TPA2005D1 breakouts and their five",
+        f"volume pots — because the amplifier moved to the body. They occupied",
+        f"a band **{freed['width']:.0f} mm wide and "
+        f"{freed['height']:.0f} mm tall** across the middle of the board:",
+        "",
+        _table(
+            ("", "Value"),
+            [
+                ("x", f"{freed['left']:.2f} … {freed['right']:.2f} mm"),
+                ("y", f"{freed['top']:.2f} … {freed['bottom']:.2f} mm"),
+                ("Parts removed", freed["parts"]),
+            ],
+        ),
+        "",
+        "That is a bounding box of what was there, not a keep-out and not a",
+        "promise — the parts around it have not moved. But the filter stages",
+        "and the analyser array have to go somewhere, and this is the room",
+        "that appeared, in the half of the board nearest the body connectors.",
+        "",
+        "## 5. What the placement has to respect",
+        "",
+        "Not a layout — that is a person's job in front of a screen — but the",
+        "constraints the netlist and `NEXT_PCB.md` between them impose:",
+        "",
+        "- **One analogue ground region** under the five filters and the five",
+        "  analysers, bonded to power ground at a single point (`JP1`).",
+        "- **The +5 V that leaves on the body connectors, and its return,",
+        "  must not run under the filter stages.** That rail now carries an",
+        "  amplifier's peaks at the far end of every cable.",
+        "- **Each filter channel next to the connector it feeds**, so the",
+        "  track from a tone pin to its own stage is short and unambiguous.",
+        "  The one fault this design cannot detect is a tone in the wrong",
+        "  channel, and a layout where that is obvious to the eye is worth",
+        "  more than a note about it.",
+        "- **The five analysers together**, since strobe and reset are",
+        "  commoned across all five and their outputs land on A0–A4.",
+        "- **Test pads reachable with the board in the rack**, or they are",
+        "  test pads for a board on a bench, which is not where it fails.",
         "",
     ])

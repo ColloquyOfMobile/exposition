@@ -24,6 +24,7 @@ sys.path.append(str((ROOT / "Source code" / "Python").resolve()))
 from colloquy.hardware.electronics.next_pcb import Design
 from colloquy.hardware.electronics.next_pcb_report import (
     bom_markdown,
+    mechanical_markdown,
     netlist_markdown,
 )
 
@@ -37,6 +38,7 @@ def main():
     for name, text in (
         ("NETLIST.md", netlist_markdown(design)),
         ("BOM.md", bom_markdown(design)),
+        ("MECHANICAL.md", mechanical_markdown()),
     ):
         path = FOLDER / name
         path.write_text(text, encoding="utf-8", newline="\n")

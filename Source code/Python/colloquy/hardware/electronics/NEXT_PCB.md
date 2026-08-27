@@ -23,11 +23,12 @@ Two decisions are taken, and one constraint is given:
 Read `as built` for what exists and `dirty rework` for what is being
 proved before this is committed to.
 
-**The wiring itself is generated, not written here.**
-`CAD/KiCad/electronic box v2/NETLIST.md` and `BOM.md` are produced by
-`py next_pcb.py` from `colloquy/hardware/electronics/next_pcb.py` — every
-part, every net, every terminal, and what to order. This document is the
-specification and the reasoning; that one is what a schematic is drawn
+**The wiring and the envelope are generated, not written here.**
+`py next_pcb.py` produces three files into
+`CAD/KiCad/electronic box v2/` — `NETLIST.md` (every part, every net,
+every terminal), `BOM.md` (what to order) and `MECHANICAL.md` (where the
+edges and the connectors have to be). This document is the specification
+and the reasoning; those are what a schematic and a layout are drawn
 from.
 
 It is generated for one reason. Which body speaks at which pitch, out of
@@ -433,6 +434,12 @@ else months later:
   label.
 - **No audio on D13**, and nothing else that minds a pulse train at
   power-on. See section 1.
+- **The board has no mounting holes**, and never had. The exported NPTH
+  drill file has a header, an `M30` and not one coordinate between them,
+  and there is no `MountingHole` footprint either — an A4 board carrying
+  a Mega 2560 as a shield, five DSUB housings and a DC jack, held by
+  nothing but those housings' own jackscrews. Four holes and a keep-out
+  is a cheap thing to decide on purpose; `MECHANICAL.md` section 3.
 
 ---
 
