@@ -1,0 +1,37 @@
+
+# Looks like the audio system is not Simulated !
+Traceback (most recent call last):
+  File "C:\Users\Joa\AppData\Local\Python\pythoncore-3.14-64\Lib\wsgiref\handlers.py", line 137, in run
+    self.result = application(self.environ, self.start_response)
+                  ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workspace\workspace2\Colloquy\exposition\Source code\Python\colloquy\server2\__init__.py", line 99, in wsgi
+    return WSGI2(server=self, environ=environ, start_response=start_response)
+  File "C:\workspace\workspace2\Colloquy\exposition\Source code\Python\colloquy\server2\wsgi2.py", line 45, in __init__
+    self._status, self._headers, self._content = self._parse()
+                                                 ~~~~~~~~~~~^^
+  File "C:\workspace\workspace2\Colloquy\exposition\Source code\Python\colloquy\server2\wsgi2.py", line 93, in _parse
+    return self._parse_app(*leftovers)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\workspace\workspace2\Colloquy\exposition\Source code\Python\colloquy\server2\wsgi2.py", line 182, in _parse_app
+    to_render = self.get_states(*args)
+  File "C:\workspace\workspace2\Colloquy\exposition\Source code\Python\colloquy\server2\wsgi2.py", line 68, in get_states
+    return self.colloquy.get_states(*args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\workspace\workspace2\Colloquy\exposition\Source code\Python\colloquy\__init__.py", line 250, in get_states
+    walk both renders and *calls* (tree.get_states runs the command
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workspace\workspace2\Colloquy\exposition\Source code\Python\colloquy\ui\tree.py", line 74, in get_states
+    update(*leftovers, focus=focus)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workspace\workspace2\Colloquy\exposition\Source code\Python\colloquy\ui\tree.py", line 59, in update
+    return update(*leftovers, focus=focus[key])
+  File "C:\workspace\workspace2\Colloquy\exposition\Source code\Python\colloquy\ui\tree.py", line 54, in update
+    return focus(*args)
+  File "C:\workspace\workspace2\Colloquy\exposition\Source code\Python\colloquy\tests\test_audio_subsystem\__init__.py", line 270, in _send_manual
+    self.port_handler.open()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Joa\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\serial\serialwin32.py", line 64, in open
+    raise SerialException("could not open port {!r}: {!r}".format(self.portstr, ctypes.WinError()))
+serial.serialutil.SerialException: could not open port 'COM5': FileNotFoundError(2, 'Das System kann die angegebene Datei nicht finden.', None, 2)
+Shutdown event!
+Out from server loop.

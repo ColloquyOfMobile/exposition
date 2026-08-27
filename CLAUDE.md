@@ -162,6 +162,24 @@ That is also why `Colloquy` has no `attach_server`/`request_stop`: they existed 
 
 **`hardware/electronics/`** is the other half of the section, and the split from `main_pcb` is state versus description: `main_pcb` says whether the board is in the rack, `electronics` says what it *does*. Three `MarkdownDocument`s, because they answer three questions that get confused the moment they share a page — `as built` (the current PCB, read out of the KiCad netlist pin by pin), `dirty rework` (the cuts and jumpers that put Thomas's audio subsystem into it), `next pcb` (what should replace it). Not gated by `is_simulated`: the machine with the board in it is where none of it is hypothetical, and the machine somebody is holding a scalpel over is likely to be the other one.
 
+**The next board's wiring is generated, not written.** `NEXT_PCB.md` is
+the specification and the reasoning; `colloquy/hardware/electronics/next_pcb.py`
+is the board as data - every part, every net, every terminal - and
+`py next_pcb.py` at the repo root writes `NETLIST.md` and `BOM.md` into
+`CAD/KiCad/electronic box v2/`. It is generated because it **reads
+`drivers/audio.py`**: which body speaks at which pitch, out of which timer
+pin, into which analyser module is one table that the firmware and four
+Python nodes already share, so a channel cannot be laid out against a pin
+the sketch does not drive. Same arrangement as `arduino/firmware.py`
+reading the baud rate out of the `.ino`. `pytest_tests/hardware/test_next_pcb.py`
+holds it to the spec - no Mega pin on two signals, no net with one end, no
+tone into a filter cut for another frequency - and it earned that on the
+first run, catching a reference collision where `R301` was both female3's
+filter resistor and the shutdown pull-up. Two groups of values are
+deliberately absent and kept in their own BOM section: the MSGEQ7's
+support network and whatever is fitted across `J11`/`J12`, neither of
+which is recorded anywhere in this repo.
+
 Two findings in `as built` are why the rework is small, and both are worth knowing before touching the board:
 
 - **`J4`, `J8` and `J10` are a straight 1:1 breakout of D0–D21.** The shield pads run down one column at x = 191.96 mm and the header pins down another at x = 200.85 mm, joined by one 1 mm front-copper track each with nothing else touching the pad. So every disconnection is one scalpel stroke in that 8.89 mm gap, with a solderable pad on each side — which is what makes the whole rework five cuts and fourteen wires on the board.

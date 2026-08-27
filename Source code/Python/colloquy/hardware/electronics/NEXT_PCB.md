@@ -23,6 +23,31 @@ Two decisions are taken, and one constraint is given:
 Read `as built` for what exists and `dirty rework` for what is being
 proved before this is committed to.
 
+**The wiring itself is generated, not written here.**
+`CAD/KiCad/electronic box v2/NETLIST.md` and `BOM.md` are produced by
+`py next_pcb.py` from `colloquy/hardware/electronics/next_pcb.py` — every
+part, every net, every terminal, and what to order. This document is the
+specification and the reasoning; that one is what a schematic is drawn
+from.
+
+It is generated for one reason. Which body speaks at which pitch, out of
+which timer pin, into which analyser module is **one table**, and the
+firmware and four Python nodes already read it (`colloquy/drivers/audio.py`).
+The board reads the same one, so a channel cannot be laid out against a pin
+the sketch does not drive — the same arrangement as
+`drivers/arduino/firmware.py` reading the baud rate straight out of the
+`.ino` rather than restating it. `pytest_tests/hardware/test_next_pcb.py`
+then holds the netlist to what this document says: no Mega pin on two
+signals, no net with one end, no tone into a filter cut for another
+frequency, nothing on D0, D1 or D13.
+
+Two groups of values are deliberately **not** in it, and sit in their own
+section of the BOM rather than among the decided ones: the MSGEQ7's
+support network (the analyser array is five ready-made modules today and
+nobody here has drawn the chip) and whatever is fitted across `J11`/`J12`
+for each light sensor. A plausible-looking number passing for a known one
+is how a board comes back wrong.
+
 ---
 
 ## 1. Keep the pinout exactly
