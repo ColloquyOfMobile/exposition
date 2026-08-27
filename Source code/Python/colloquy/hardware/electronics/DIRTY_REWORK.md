@@ -454,8 +454,15 @@ are not touched.
 
 Replace the bare microphone with a **MAX9814** module:
 
-- **Power it from the DSUB**, which already carries +5 V and GND to every
-  body.
+- **Power it from the DSUB - but check the connector first.** +5 V leaves
+  the board on three pins only - `J5` 15 (female1), `J1` 15 (female2) and
+  `A-J3` 9 - and **`B-J4` carries no power at all**, only GND on its
+  shell. So the three females have +5 V on the same connector their
+  microphone wire arrives on; male1's arrives on `A-J3` while its speaker
+  pair is on `B-J4`; and male2, whose everything is on `B-J4`, has none
+  from this board at all. Its NeoPixels run today, so its 5 V comes from
+  somewhere - **find where before you wire a module to it.** See
+  `next pcb` section 5.
 - **`AOUT` onto the existing microphone wire** - the one landing on
   `J11`'s odd pin for that body.
 - **Strap `Gain` to VDD** (40 dB) and **`A/R` to GND** (1:500). Thomas's
