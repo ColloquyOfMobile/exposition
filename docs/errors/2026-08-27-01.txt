@@ -1,0 +1,48 @@
+C:\Users\admin\Documents\GitHub\exposition>py main.py
+00.90s Waiting for Arduino to reboot.
+01.83s Arduino on COM22: firmware 2 at 1000000 baud
+01.97s COM ERR: (dxl_id=2) [TxRxResult] There is no status packet!
+02.01s COM ERR: (dxl_id=2) [TxRxResult] There is no status packet!
+02.06s COM ERR: (dxl_id=2) [TxRxResult] There is no status packet!
+02.11s COM ERR: (dxl_id=2) [TxRxResult] There is no status packet!
+02.16s COM ERR: (dxl_id=2) [TxRxResult] There is no status packet!
+02.16s write_1_byte gave up on dxl 2 after 5 attempts: [TxRxResult] There is no status packet!
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\GitHub\exposition\main.py", line 85, in <module>
+    main(*args)
+  File "C:\Users\admin\Documents\GitHub\exposition\main.py", line 32, in main
+    colloquy1()
+  File "C:\Users\admin\Documents\GitHub\exposition\main.py", line 57, in colloquy1
+    open_the_hardware(colloquy)
+  File "C:\Users\admin\Documents\GitHub\exposition\main.py", line 45, in open_the_hardware
+    dxl.init_hardware()
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\drivers\dxl\__init__.py", line 126, in init_hardware
+    self.torque_enabled.write(value=0)
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\drivers\dxl\torque_enabled\__init__.py", line 56, in write
+    return self._write_func(self.dxl_id, self._register, value)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\drivers\u2d2\__init__.py", line 61, in wrapper
+    raise U2D2Error(message)
+colloquy.drivers.u2d2.U2D2Error: write_1_byte gave up on dxl 2 after 5 attempts: [TxRxResult] There is no status packet!
+
+
+
+
+
+
+00.87s Waiting for Arduino to reboot.
+01.79s Arduino on COM22: firmware 2 at 1000000 baud
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\GitHub\exposition\main.py", line 85, in <module>
+    main(*args)
+  File "C:\Users\admin\Documents\GitHub\exposition\main.py", line 32, in main
+    colloquy1()
+  File "C:\Users\admin\Documents\GitHub\exposition\main.py", line 57, in colloquy1
+    open_the_hardware(colloquy)
+  File "C:\Users\admin\Documents\GitHub\exposition\main.py", line 43, in open_the_hardware
+    colloquy.drivers.arduino.open()
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\drivers\arduino\__init__.py", line 259, in open
+    self.wait_for_reboot()
+  File "C:\Users\admin\Documents\GitHub\exposition\Source code\Python\colloquy\drivers\arduino\__init__.py", line 280, in wait_for_reboot
+    raise RuntimeError(f"Arduino on {self.port_name}: {' '.join(problems)}")
+RuntimeError: Arduino on COM22: the board is running firmware 2, and this driver needs at least 3. Flash colloquy_of_mobiles.ino (firmware 3) onto it.
