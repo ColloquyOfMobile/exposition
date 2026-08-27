@@ -78,6 +78,10 @@ class MarkdownDocument(Base):
 
     @property
     def snapshot_children(self):
+        """None by default. A subclass may hang nodes under a document -
+        `NextPCB` puts its three generated companions there, so they read
+        as belonging to it rather than as three more siblings with its
+        name repeated at the front of each."""
         return {}
 
     def read(self):
@@ -101,16 +105,20 @@ class MarkdownDocument(Base):
         self.open()
 
     def _snapshot_if_opened(self, path):
-        if self._mode == "edit":
-            return {
-                "cancel": self.cancel,
-                "editor": leaves.editor(path, "editor", self.read()),
-            }
+        # Base first, so whatever `snapshot_children` offers is drawn. It
+        # used to return its own dict outright, which silently meant a
+        # document could never have a child: `snapshot()` would walk to
+        # one, and opening the parent would not list it.
+        states = super()._snapshot_if_opened(path)
 
-        return {
-            "edit": self.enter_edit,
-            "rendered": leaves.html(path, "rendered", self.render_html()),
-        }
+        if self._mode == "edit":
+            states["cancel"] = self.cancel
+            states["editor"] = leaves.editor(path, "editor", self.read())
+            return states
+
+        states["edit"] = self.enter_edit
+        states["rendered"] = leaves.html(path, "rendered", self.render_html())
+        return states
 
 class GeneratedDocument(Base):
     """A document produced by code: shown, never edited.

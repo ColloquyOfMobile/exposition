@@ -51,8 +51,43 @@ class DirtyRework(_ElectronicsDocument):
 
 
 class NextPCB(_ElectronicsDocument):
+    """The specification, and under it the three things generated from it.
+
+    They hang here rather than beside it because that is what they are:
+    `NEXT_PCB.md` is the reasoning and these are what it produces, so a
+    reader who has not opened `next pcb` has no use for its netlist. As
+    siblings they also had to carry its name at the front of each of
+    theirs, which is a namespace spelled out three times in the one place
+    the tree already provides one.
+    """
+
     file_name = "NEXT_PCB.md"
     document_name = "next pcb"
+
+    def __init__(self, owner):
+        super().__init__(owner=owner)
+        self._generated = [
+            GeneratedDocument(
+                owner=self, document_name="netlist", source=_netlist,
+                written_to=f"{_GENERATED_FOLDER}/NETLIST.md",
+            ),
+            GeneratedDocument(
+                owner=self, document_name="bill of materials", source=_bom,
+                written_to=f"{_GENERATED_FOLDER}/BOM.md",
+            ),
+            GeneratedDocument(
+                owner=self, document_name="mechanical", source=_mechanical,
+                written_to=f"{_GENERATED_FOLDER}/MECHANICAL.md",
+            ),
+        ]
+
+    @property
+    def generated(self):
+        return list(self._generated)
+
+    @property
+    def snapshot_children(self):
+        return {document.name: document for document in self._generated}
 
 
 # The three generated ones, and where `py next_pcb.py` also writes them.
@@ -81,13 +116,11 @@ def _mechanical():
 
 
 class Electronics(Base):
-    """The documents, in the order they are wanted.
+    """The three documents, in the order they are wanted.
 
-    Three written and three generated, and the split is visible on the
-    page: the generated ones have no `edit`. See `GeneratedDocument` -
-    they are rendered from the generator on every view rather than from
-    the file it also writes, so the page cannot show a stale copy of a
-    design that has moved.
+    Three, not six: what `next pcb` generates hangs under `next pcb`. The
+    split between written and generated is visible on the page anyway,
+    because a generated one has no `edit` - see `GeneratedDocument`.
     """
 
     def __init__(self, owner):
@@ -96,21 +129,6 @@ class Electronics(Base):
             AsBuilt(owner=self),
             DirtyRework(owner=self),
             NextPCB(owner=self),
-            GeneratedDocument(
-                owner=self, document_name="next pcb netlist",
-                source=_netlist,
-                written_to=f"{_GENERATED_FOLDER}/NETLIST.md",
-            ),
-            GeneratedDocument(
-                owner=self, document_name="next pcb bill of materials",
-                source=_bom,
-                written_to=f"{_GENERATED_FOLDER}/BOM.md",
-            ),
-            GeneratedDocument(
-                owner=self, document_name="next pcb mechanical",
-                source=_mechanical,
-                written_to=f"{_GENERATED_FOLDER}/MECHANICAL.md",
-            ),
         ]
 
     @property

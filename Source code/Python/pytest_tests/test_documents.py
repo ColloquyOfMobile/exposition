@@ -15,7 +15,9 @@ whole of what distinguishes them:
 - the **hardware setup** hangs off the audio bench test and is not gated
   at all - it is about that one bench, and a bench is where it is wanted;
 - the **three electronics documents** hang under `hardware`, beside the
-  main PCB's own state, and are not gated either. The machine with the
+  main PCB's own state, and are not gated either. `next pcb` also
+  carries the three documents generated from it - see
+  `test_electronics_documents.py`. The machine with the
   board in it is the one place none of it is hypothetical, and the
   machine somebody is holding a scalpel over is likely to be the other
   one.
@@ -112,8 +114,19 @@ def test_a_missing_file_reads_as_empty_rather_than_raising(
     assert document.read() == ""
 
 
-def test_a_document_has_no_children_of_its_own(document):
-    assert document.snapshot_children == {}
+def test_only_next_pcb_has_children_of_its_own(document):
+    """A document is a file on the page and nothing else - except `next
+    pcb`, which carries the three things generated from it. They hang
+    under it because that is what they are, and because as siblings each
+    had to repeat its name at the front of its own."""
+    if isinstance(document, NextPCB):
+        assert set(document.snapshot_children) == {
+            "netlist",
+            "bill of materials",
+            "mechanical",
+        }
+    else:
+        assert document.snapshot_children == {}
 
 
 # --- view / edit / save ---------------------------------------------------
@@ -122,7 +135,7 @@ def test_a_document_has_no_children_of_its_own(document):
 def test_it_opens_on_the_rendered_view(local):
     states = local._snapshot_if_opened(("doc",))
 
-    assert set(states) == {"edit", "rendered"}
+    assert set(states) == {"edit", "rendered"} | set(local.snapshot_children)
     assert "html" in states["rendered"]
 
 
@@ -140,7 +153,7 @@ def test_edit_swaps_the_rendered_view_for_a_textarea(local):
 
     states = local._snapshot_if_opened(("doc",))
 
-    assert set(states) == {"cancel", "editor"}
+    assert set(states) == {"cancel", "editor"} | set(local.snapshot_children)
     assert states["editor"]["editor"] == local.read()
 
 
@@ -150,7 +163,8 @@ def test_cancel_goes_back_without_writing(local):
 
     local.cancel()
 
-    assert set(local._snapshot_if_opened(())) == {"edit", "rendered"}
+    expected = {"edit", "rendered"} | set(local.snapshot_children)
+    assert set(local._snapshot_if_opened(())) == expected
     assert local.read() == before
 
 
@@ -160,7 +174,8 @@ def test_save_writes_the_file_and_returns_to_the_rendered_view(local):
     local.save("# Rewritten\n")
 
     assert local.read() == "# Rewritten\n"
-    assert set(local._snapshot_if_opened(())) == {"edit", "rendered"}
+    expected = {"edit", "rendered"} | set(local.snapshot_children)
+    assert set(local._snapshot_if_opened(())) == expected
 
 
 def test_save_is_reachable_as_a_command(document):
