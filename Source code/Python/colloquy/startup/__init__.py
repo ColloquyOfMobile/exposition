@@ -29,6 +29,7 @@ is not answering). The second kind says which one and what to do, and
 that is as far as software can take it.
 """
 from colloquy.base import Base
+from colloquy.drivers.arduino.errors import flash_firmware_offer_html
 from colloquy.ui import leaves
 
 
@@ -100,16 +101,9 @@ class Startup(Base):
                 "would simply never read a pattern"
             ),
             remedy="Flash this repo's sketch onto the board, then restart.",
-            remedy_html=(
-                "<p>The board can be flashed from here - it compiles and "
-                "uploads this repo's own sketch, and reopens the link "
-                "afterwards so the board says in its own words which "
-                "firmware it ends up with.</p>"
-                '<p><a href="/app/drivers/arduino/flash firmware">'
-                "<strong>go to flash firmware</strong></a> "
-                "(press <em>compile only</em> first if you have never "
-                "flashed from this machine)</p>"
-            ),
+            # Shared with the mid-session page that meets the same
+            # fault - see drivers/arduino/errors.py.
+            remedy_html=flash_firmware_offer_html(),
         )
 
     def arduino_failed(self, error):

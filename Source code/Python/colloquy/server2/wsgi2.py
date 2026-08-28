@@ -7,6 +7,11 @@ from colloquy.utils import (
     export_style,
 )
 from colloquy.base import Base
+from colloquy.drivers.arduino.errors import (
+    ArduinoError,
+    FirmwareTooOld,
+    flash_firmware_offer_html,
+)
 from wsgiref.simple_server import WSGIRequestHandler
 
 WSGIRequestHandler.log_message = lambda *args, **kwargs: None
@@ -182,6 +187,8 @@ class WSGI2(Base):
             to_render = self.get_states(*args)
         except NotImplementedError as error:
             return self._parse_not_found(args, error)
+        except ArduinoError as error:
+            return self._parse_link_problem(args, error)
         self._base_path = Path(*to_render["path"])
 
         # pprint4(obj=to_render)
@@ -408,6 +415,58 @@ class WSGI2(Base):
 
         html = doc.getvalue()
         return status, headers, html.encode()
+
+    def _parse_link_problem(self, args, error):
+        """The Arduino link is not usable, and the command that met it
+        said exactly why.
+
+        The same trade as _parse_not_found above, for the same reason and
+        with the same limit: everything that is not one of these two kinds
+        still reaches Server2.wsgi()'s catch-all and still emergency-stops
+        the installation.
+
+        This one is worth the exception because of when it is raised.
+        `Arduino.open()` raises it out of the greeting - before a pixel,
+        a tone or a servo has been asked for anything - so nothing is in
+        motion and nothing is half-written. Treating it as a fault serious
+        enough to stop everything cost the whole server instead, including
+        `flash firmware`, which is the page that fixes the commonest one
+        of them. That is exactly the trade `main.py` already makes at
+        startup, one file over: report it, offer the remedy, keep the
+        server. A board carrying last month's sketch is a thing to be told
+        about, not a crash.
+        """
+        self.log(f"Arduino link problem on /{'/'.join(('app',) + args)}: {error}")
+
+        # The node the command hangs off, so "back" does not re-run the
+        # command that just failed. Everything from "call" on is the
+        # command and its arguments - see ui/tree.py.
+        node = args[: args.index("call")] if "call" in args else args
+
+        status = "200 OK"
+        headers = [("Content-Type", "text/html; charset=utf-8")]
+
+        doc, tag, text = Doc().tagtext()
+        with tag("div"):
+            with tag("strong"):
+                text("The Arduino link is not usable.")
+        with tag("div"):
+            text(str(error))
+        with tag("div"):
+            text(
+                "Nothing was driven: the link failed while the board was "
+                "greeting, so the command you clicked never ran."
+            )
+        if isinstance(error, FirmwareTooOld):
+            doc.asis(flash_firmware_offer_html())
+        with tag("div"):
+            with tag("a", href="/" + "/".join((self._root.name,) + node)):
+                text("back")
+        with tag("div"):
+            with tag("a", href="/app"):
+                text("home")
+
+        return status, headers, doc.getvalue().encode()
 
     def _html_navigation(self, to_render):
         doc, tag, text = Doc().tagtext()
