@@ -192,9 +192,20 @@ class TestAudioBringup(BaseThread):
     def setdown(self):
         self._start_time = None
         self._current = None
-        self.audio.silence()
-        if self._file is not None:
-            self._file.close()
+        # Never raising, and the file closed either way. This was a bare
+        # `self.audio.silence()`, so a link that dropped during the run
+        # took the whole teardown with it: the tone stayed on, the CSV
+        # was left open, and BaseThread._run_in_context never reached the
+        # stop() after its setdown(). A dropped link is exactly when this
+        # happens - see hardware > electronics > dirty rework, section 0,
+        # on the 5 V - and it is the moment a body is most likely to be
+        # left humming at somebody. Colloquy.silence_speakers is the one
+        # that swallows, for this reason.
+        try:
+            self.colloquy.silence_speakers()
+        finally:
+            if self._file is not None:
+                self._file.close()
 
     def _refuse(self, reason):
         self._outcome = f"refused: {reason}"

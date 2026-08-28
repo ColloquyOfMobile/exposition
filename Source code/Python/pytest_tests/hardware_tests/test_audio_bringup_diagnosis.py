@@ -384,3 +384,98 @@ def test_every_body_can_be_diagnosed_not_just_the_two_wired_today(body):
 
     assert health.ok
     assert reading.heard
+
+
+# --- when the ears do not agree ------------------------------------------
+#
+# Straight out of local/test results/test audio bringup/
+# 2026_08_28_14h_37min_46s.csv, on the reworked board with two channels in.
+# Kept as the numbers the analysers actually returned rather than as a
+# constructed fault: this is the run that sent somebody to re-jumper a D11
+# that was right.
+
+BENCH_FLOOR = {
+    "male1": [(84.3, 85.6, 88.8, 91.8, 89.7, 86.6, 101.1)],
+    "female1": [(72.4, 92.5, 100.0, 104.0, 79.2, 72.5, 106.7)],
+}
+BENCH_TONE = {
+    ("male1", "male1"): [(174.3, 314.3, 351.4, 321.1, 263.9, 226.6, 191.6)],
+    ("male1", "female1"): [(237.8, 722.6, 344.3, 183.7, 123.1, 179.2, 91.5)],
+    ("female1", "male1"): [(86.9, 88.6, 95.0, 101.5, 99.0, 93.3, 105.7)],
+    ("female1", "female1"): [(69.2, 97.9, 118.1, 121.9, 84.9, 71.7, 105.7)],
+}
+
+
+def bench_run():
+    healths = [diagnosis.health(name, BENCH_FLOOR[name]) for name in WIRED]
+    readings = [
+        diagnosis.read(singer, listener, BENCH_FLOOR[listener], tone)
+        for (singer, listener), tone in BENCH_TONE.items()
+    ]
+    return healths, readings
+
+
+def test_two_ears_in_two_bands_is_never_the_filter_channel():
+    """The fault this branch was written after.
+
+    male1's own ear peaked at 400 Hz and female1's at 160 Hz, and the
+    report concluded that D11 fed the wrong filter channel. It did not.
+    One sound has one frequency, and the filter sits upstream of the air
+    both microphones are listening to - so it cannot be what two ears
+    disagree about.
+    """
+    joined = " ".join(diagnosis.diagnose(*bench_run(), WIRED))
+
+    # The sentence that sends somebody to a soldering iron.
+    assert "It should feed IN" not in joined
+    assert "landed in different bands on different ears" in joined
+    assert "One sound has one frequency" in joined
+    # It says which fault it is *not*, since that is the tempting reading.
+    assert "not D11 on the wrong filter channel" in joined
+
+
+def test_it_names_which_ear_to_believe():
+    """The agreeing ear is evidence, not noise: it puts the voice exactly
+    where the voice is supposed to be."""
+    joined = " ".join(diagnosis.diagnose(*bench_run(), WIRED))
+
+    assert "Believe female1 says 160 Hz" in joined
+
+
+def test_a_body_hearing_its_own_speaker_is_named_as_the_near_field_case():
+    """Why male1's ear was the one out of step: it sits beside the cone it
+    is listening to, and a MAX9814 in compression makes its own harmonics
+    - which lifts every band and moves the peak off the fundamental."""
+    joined = " ".join(diagnosis.diagnose(*bench_run(), WIRED))
+
+    assert "listening to its own speaker" in joined
+    assert "MAX9814 straps" in joined
+
+
+def test_the_run_still_finds_the_voice_nobody_heard():
+    """The other half of that afternoon, unchanged: female1's 1 kHz was in
+    nobody's numbers, and only a person can say whether it was in the
+    room."""
+    joined = " ".join(diagnosis.diagnose(*bench_run(), WIRED))
+
+    assert "female1 was not heard by any ear" in joined
+    assert "hold female1" in joined
+
+
+def test_one_ear_alone_says_so_rather_than_sounding_certain():
+    """With nothing to cross-check against, the channel conclusion is
+    still the best available - but it is one ear's word."""
+    floor = {name: sweeps() for name in WIRED}
+    healths = [diagnosis.health(name, floor[name]) for name in WIRED]
+    # female1's tone arrives in male1's band, and only female1 hears it.
+    readings = [
+        diagnosis.read(
+            "female1", "female1", floor["female1"], sweeps({band("male1"): LOUD})
+        ),
+        diagnosis.read("female1", "male1", floor["male1"], sweeps()),
+    ]
+
+    joined = " ".join(diagnosis.diagnose(healths, readings, ["female1"]))
+
+    assert "wrong filter channel" in joined
+    assert "the only ear that heard it" in joined

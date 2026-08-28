@@ -278,17 +278,18 @@ def diagnose(healths, readings, wired):
 
     # 4. A tone that arrives at the wrong frequency. Reported before the
     #    mute voices, because it is the more specific of the two.
+    #
+    #    **Only when every ear that heard it agrees.** A frequency is a
+    #    property of the sound, not of the ear: one tone in the room
+    #    cannot be 160 Hz to one microphone and 400 Hz to another, and
+    #    the filter is upstream of the air both of them are listening to,
+    #    so it cannot be the answer when they differ. Told otherwise this
+    #    sent somebody to re-jumper D11 on a real board whose D11 was
+    #    right - see the disagreement branch below.
     for reading in readings:
         if not reading.verdict.startswith("wrong band"):
             continue
-        arrived = audio.BANDS_HZ[reading.best_band]
-        voice = audio.VOICES[reading.singer]
-        steps.append(
-            f"{reading.singer} arrived at {arrived} Hz instead of {voice['hz']} Hz "
-            f"on {reading.listener}'s ear. That is a frequency, so it is not "
-            f"the room and not the level: {voice['pin']} is feeding the wrong "
-            f"filter channel. It should feed IN {_channel(voice['hz'])}."
-        )
+        steps.extend(_wrong_band_steps(reading, by_singer[reading.singer]))
         break
 
     # 5. A voice that is not in the room at all.
@@ -329,6 +330,93 @@ def diagnose(healths, readings, wired):
             "Every wired channel worked. Run 'test audio loop' for the full "
             "grid once the other three are in."
         )
+    return steps
+
+
+def _wrong_band_steps(reading, siblings):
+    """One voice landing in the wrong band - as a channel fault only if
+    the ears agree that it did.
+
+    `siblings` is every reading of the same voice, this one included.
+    Those with a peak are the ears that heard it at all; the band each one
+    picked is its opinion of the frequency, and the ears have to agree
+    before the frequency itself can be blamed.
+    """
+    voice = audio.VOICES[reading.singer]
+    arrived = audio.BANDS_HZ[reading.best_band]
+
+    heard = [r for r in siblings if r.peak_rise >= MARGIN]
+    bands = {r.best_band for r in heard}
+
+    if len(bands) > 1:
+        return _disagreeing_ears_steps(reading.singer, heard)
+
+    where = f"on {reading.listener}'s ear"
+    if len(heard) < 2:
+        # Nothing to cross-check it against, so say so rather than let the
+        # sentence below sound better evidenced than it is.
+        where += " - the only ear that heard it, so nothing confirms the band"
+
+    return [
+        f"{reading.singer} arrived at {arrived} Hz instead of {voice['hz']} Hz "
+        f"{where}. That is a frequency, so it is not the room and not the "
+        f"level: {voice['pin']} is feeding the wrong filter channel. It "
+        f"should feed IN {_channel(voice['hz'])}."
+    ]
+
+
+def _disagreeing_ears_steps(singer, heard):
+    """The ears put one voice in different bands, so an ear is wrong.
+
+    Which is worth saying plainly, because the tempting reading is the
+    one about the filter and it is the one thing this cannot be. The ear
+    to look at first is the one in the minority, and if that is the
+    singer's *own* ear the reason is usually the obvious one: it sits
+    beside the speaker it is listening to, a MAX9814 has automatic gain
+    control, and a microphone driven into compression makes harmonics of
+    its own - which lifts every band at once and leaves the peak
+    somewhere other than the fundamental.
+    """
+    expected = audio.band_of_body(singer)
+    agreeing = [r for r in heard if r.best_band == expected]
+    odd = [r for r in heard if r.best_band != expected]
+
+    def described(readings):
+        return ", ".join(
+            f"{r.listener} says {audio.BANDS_HZ[r.best_band]} Hz" for r in readings
+        )
+
+    steps = [
+        f"{singer}'s voice landed in different bands on different ears "
+        f"({described(heard)}). One sound has one frequency, so this is an "
+        f"ear reading it wrongly and not {audio.VOICES[singer]['pin']} on the "
+        f"wrong filter channel - the filter is upstream of the air all of "
+        f"them are listening to."
+    ]
+
+    if agreeing:
+        steps.append(
+            f"  Believe {described(agreeing)}: that is the band "
+            f"{singer} is supposed to arrive in, and an ear that puts it "
+            f"there is not the one with the problem."
+        )
+
+    for reading in odd:
+        if reading.listener == singer:
+            steps.append(
+                f"  {reading.listener}'s ear is listening to its own speaker, "
+                f"which is the near-field case: check its MAX9814 straps "
+                f"(Gain to VDD is 40 dB, A/R to GND) and how far the "
+                f"microphone sits from the cone. A microphone in compression "
+                f"makes its own harmonics and the peak stops meaning the "
+                f"fundamental."
+            )
+        else:
+            steps.append(
+                f"  {reading.listener}'s ear is the one out of step - check "
+                f"its module and its microphone before touching any wiring "
+                f"that is shared."
+            )
     return steps
 
 
