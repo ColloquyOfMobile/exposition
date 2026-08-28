@@ -1,0 +1,17 @@
+
+# the sound setup is wired on the arduino's 5v, but it worked just fine on the bench
+# Reopening works fine after.
+
+read every wired ear failed.
+SerialException: WriteFile failed (PermissionError(13, 'The device does not recognize the command.', None, 22))
+The installation is still running and this page is still here - nothing was stopped.
+
+The port was remembered from an earlier run and is not on this machine now. What is:
+
+    COM1 - Communications Port (COM1)
+    COM22 - Arduino Mega 2560 (R3)
+    COM4 - FTDI FT232H - the U2D2 is an FTDI device
+
+Pick one under the node's own com port.
+back
+home
