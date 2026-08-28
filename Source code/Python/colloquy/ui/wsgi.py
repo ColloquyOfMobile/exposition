@@ -22,6 +22,7 @@ the scripts and styles this page loads can change without touching the
 installation's.
 """
 
+from email.utils import formatdate
 import json
 import re
 from yattag import Doc, indent
@@ -52,6 +53,25 @@ _STATIC_CONTENT_TYPES = {
     ".png": "image/png",
     ".svg": "image/svg+xml",
 }
+
+
+def _if_none_match(environ):
+    """The ETags a conditional request says it already holds.
+
+    A list rather than one value, and stripped of the `W/` weak marker,
+    because both are ordinary in the header and neither is worth a stale
+    photograph.
+    """
+    header = environ.get("HTTP_IF_NONE_MATCH")
+    if not header:
+        return ()
+    tags = []
+    for tag in header.split(","):
+        tag = tag.strip()
+        if tag.startswith("W/"):
+            tag = tag[2:]
+        tags.append(tag)
+    return tuple(tags)
 
 
 class MockWSGI(Base):
@@ -134,10 +154,34 @@ class MockWSGI(Base):
         content_type = _STATIC_CONTENT_TYPES.get(
             file_path.suffix, "application/octet-stream"
         )
+
+        # A validator, not a promise. This said `max-age=3600` and nothing
+        # else, which tells the browser not to *ask* for an hour - so a
+        # file replaced on disk went on being drawn from the old copy
+        # until the hour was up, with the server serving the new bytes to
+        # anything that bothered to request them. That is how Thomas's pin
+        # labels stayed missing from the page on the day they were put
+        # back.
+        #
+        # `no-cache` does not mean "do not store": it means store it and
+        # check first. The check is one conditional request answered with
+        # a 304 and no body, over a socket to this same machine, which is
+        # what the max-age was saving in the first place.
+        stat = file_path.stat()
+        # Nanoseconds, not seconds: a file regenerated twice inside one
+        # second at the same size is exactly the case this is here to
+        # notice, and `py extract_hardware_photos.py` writes four of them
+        # in a row.
+        etag = f'"{stat.st_mtime_ns:x}-{stat.st_size:x}"'
         headers = [
-            ("Content-Type", content_type),
-            ("Cache-Control", "public, max-age=3600"),
+            ("Cache-Control", "no-cache"),
+            ("ETag", etag),
+            ("Last-Modified", formatdate(stat.st_mtime, usegmt=True)),
         ]
+        if etag in _if_none_match(self._environ):
+            return "304 Not Modified", headers, b""
+
+        headers.insert(0, ("Content-Type", content_type))
         return "200 OK", headers, file_path.read_bytes()
 
     def _parse_post(self, *args):
