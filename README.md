@@ -5,7 +5,7 @@ Colloquy of Mobiles for exposition in ZKM
 In KiCad:
 - Choose the footprint for power supply capacitor.
 - Check dimension of jack barrel.
-
+- For unexpected error on the Colloquy-PC, catch them, show them to the user, invite the user to add additional information, invite the user to log (with context), commit and push.
 
 ## Todo: software roadmap
 

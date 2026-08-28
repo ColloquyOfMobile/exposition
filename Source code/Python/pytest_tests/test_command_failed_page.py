@@ -56,6 +56,12 @@ SERIAL_MESSAGE = (
     "could not open port 'COM5': FileNotFoundError(2, 'Das System kann die "
     "angegebene Datei nicht finden.', None, 2)"
 )
+# The other shape, from docs/errors/2026-08-28-01.txt: a write on a handle
+# that was already open, with no port named in it at all.
+WRITE_MESSAGE = (
+    "WriteFile failed (PermissionError(13, 'The device does not recognize "
+    "the command.', None, 22))"
+)
 COMMAND = ("tests", "test audio bringup", "call", "hold male1 (160 Hz, D11)")
 # What `get_focus` hands back: the "call" marker is consumed by the
 # walk, so the leftovers are the command and its arguments.
@@ -243,6 +249,47 @@ def test_a_port_that_is_not_there_is_answered_with_the_ones_that_are():
     assert "COM5" in html
     assert "Arduino Mega 2560 (R3)" in html
     assert "com port" in html
+
+
+def test_a_link_that_dropped_mid_transfer_is_not_called_a_missing_port():
+    """docs/errors/2026-08-28-01.txt, which is this remedy getting it
+    wrong.
+
+    A `WriteFile failed` is a handle that was open and working a moment
+    ago. The first version of this told it "the port was remembered from
+    an earlier run and is not on this machine now" - printed underneath a
+    listing showing an Arduino Mega on the bus. That is the raw exception
+    plus a confident wrong sentence, and it sends somebody to re-pick a
+    port that was never the problem.
+    """
+    _, html = page(failure(serial.SerialException(WRITE_MESSAGE)))
+
+    assert "not on this machine" not in html
+    assert "stopped answering part way through" in html
+    # And the thing that is actually worth knowing about this board.
+    assert "supply" in html
+    assert "comes back at a new COM number" in html
+
+
+def test_a_dropped_link_still_lists_what_is_on_the_bus():
+    """Because a board that reset is back at a different number, which is
+    exactly what happened - COM6 became COM22."""
+    _, html = page(failure(serial.SerialException(WRITE_MESSAGE)))
+
+    assert "Arduino Mega 2560 (R3)" in html
+    assert "open port" in html
+
+
+def test_a_port_that_is_there_and_will_not_open_is_held_by_something_else():
+    """The third shape, and the only one of the three where the port name
+    is right and the machine is right."""
+    _, html = page(
+        failure(serial.SerialException("could not open port 'COM6': Access denied"))
+    )
+
+    assert "COM6 is on this machine" in html
+    assert "something else is holding it" in html
+    assert "not on this machine" not in html
 
 
 def test_a_machine_with_nothing_plugged_in_says_so(monkeypatch):

@@ -20,6 +20,9 @@ Read `as built` first if you have not. This assumes its net map.
 
 - **Everything on hand:** the filter board, the analyser array, five
   MAX9814 modules, five GF1002 amplifiers and five speakers.
+- **A supply for the amplifiers that is not the Arduino.** See the
+  warning at the end of this section: this is the one thing the bench
+  could not have told anybody, and it is what a first switch-on runs into.
 - **Flash the Mega with firmware 4** before switching anything on.
   Version 4 of `colloquy_of_mobiles.ino` expects the pin moves below
   and the body-to-pitch mapping in section 2; version 2 on a reworked
@@ -45,6 +48,40 @@ Read `as built` first if you have not. This assumes its net map.
   stops the server on a page saying it is safe to disconnect. A bar
   powered down at the far end loses its turn count, and its calibration
   with it.
+
+> ### Do not hang the audio subsystem off the Arduino's 5 V
+>
+> **Observed on the bench, 2026-08-28, with two channels in.** With the
+> sound side taken from the Mega's own 5 V, a command failed part way
+> through with `SerialException: WriteFile failed (PermissionError(13,
+> 'The device does not recognize the command.'))`, and the board came
+> back on a **different COM number** - it had been COM6 and reappeared as
+> COM22. Reopening the link worked every time. That is a board browning
+> out and re-enumerating, not a driver fault and not a lead fault.
+> `docs/errors/2026-08-28-01.txt` is the report.
+>
+> **Why the bench never showed it.** On Thomas's bench his boards had
+> their own supply and his Mega carried only itself. Here one rail feeds
+> the Mega, the NeoPixels, the analysers and the amplifiers, and it is
+> the amplifiers that matter: five class-D modules driving loudspeakers
+> are amps of peak current between them, on a rail that reaches the
+> Mega through a 500 mA polyfuse when it is powered over USB. Five
+> MSGEQ7s and five MAX9814s really are the milliamps section 4d says
+> they are. The amplifiers are three orders of magnitude away from that,
+> and nothing in this document had said so.
+>
+> **So give the five GF1002s their own supply**, grounded common with
+> the board, and keep the Mega's 5 V for the analysers, the microphones
+> and the lights. `next pcb` section 5 already reasons this out for the
+> board that replaces this one - a current budget per body, and +12 V
+> rather than +5 V so the same acoustic power costs 40% of the current.
+> The rework has to answer it with a bench supply and a wire.
+>
+> **The symptom is worth recognising on sight**, because it looks like
+> three other things: a serial write that fails mid-command, a link that
+> reopens perfectly afterwards, and a COM number that has moved. Any two
+> of those together mean look at the supply before anything else. The
+> page says so now (`server2/remedies.py`).
 
 ---
 
@@ -457,8 +494,15 @@ they are.
 | `J9` **1** | analyser array `GND` |
 
 `J9` 35 and `J9` 1 are the Mega's own 5 V and ground rather than the
-board's +5 V rail - which is fine: five MSGEQ7s draw a few milliamps, and
-the two grounds are common through the shield's `GND1` pad anyway.
+board's +5 V rail - which is fine **for the analysers**: five MSGEQ7s
+draw a few milliamps, and the two grounds are common through the shield's
+`GND1` pad anyway.
+
+**It is not a licence to hang the rest of the sound side there.** Read
+that sentence as being about the analyser array and nothing else - the
+five amplifiers are amps, not milliamps, and taking them from this rail
+browns the Mega out and drops the USB link mid-command. See the warning
+at the end of section 0.
 
 ### 4e. The lights, moved - 4 wires
 
