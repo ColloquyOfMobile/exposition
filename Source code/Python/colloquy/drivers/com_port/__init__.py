@@ -2,6 +2,14 @@ import serial.tools.list_ports
 from colloquy.base import Base
 from functools import partial
 
+# What the stand-in ports are called. Names rather than objects because a
+# port name is what gets written to params.json and read back on the next
+# run - and, since the board first came off the installation and onto a
+# desk, it is also what decides whether the Arduino opens a real lead or
+# the stand-in. See `Arduino.is_using_the_stand_in`.
+SIMULATED_U2D2_PORT = "simulated u2d2 port"
+SIMULATED_ARDUINO_PORT = "simulated arduino port"
+
 
 class ComPort(Base):
     def __init__(self, owner, value=None):
@@ -29,7 +37,7 @@ class ComPort(Base):
             self._dict.pop(name)
 
         if self.is_simulated:
-            self._ports = ["simulated u2d2 port", "simulated arduino port"]
+            self._ports = [SIMULATED_U2D2_PORT, SIMULATED_ARDUINO_PORT]
         else:
             self._ports = [port.device for port in serial.tools.list_ports.comports()]
 

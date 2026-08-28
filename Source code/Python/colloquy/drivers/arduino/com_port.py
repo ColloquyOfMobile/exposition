@@ -3,7 +3,7 @@
 
 from functools import partial
 
-from colloquy.drivers.com_port import ComPort
+from colloquy.drivers.com_port import SIMULATED_ARDUINO_PORT, ComPort
 from colloquy.ui import leaves
 
 from . import boards
@@ -28,24 +28,45 @@ class ComPort(ComPort):
         self._devices = {}
 
     def set(self, com_port, *args, **kwargs):
-        self.owner.port_handler.port = com_port
+        """Remember the lead, and point the link at it.
+
+        Params first, then the handler. Which handler is the right one is
+        read out of params (`Arduino.is_using_the_stand_in`), so building
+        it before the write would build one for the lead being replaced -
+        and a change between a real lead and the stand-in would then write
+        the new name onto the wrong object and open nothing.
+        """
         self.owner.params["arduino"]["communication port"] = com_port
+        self.owner.use_port(com_port)
         self._value = com_port
 
     @property
     def ports(self):
+        """Every lead on this machine, and the stand-in where there is one.
+
+        Real leads are listed **wherever there are any**, not only on the
+        installation. Which handler is opened follows the lead chosen here
+        rather than which computer this is (see `Arduino.port_handler`),
+        and the case that forced the two apart is the main PCB coming off
+        the installation and onto the bench for an afternoon: the bench is
+        `is_simulated`, so this picker offered nothing but the stand-in,
+        and every tone "sounded" while the real Mega sat on the desk
+        beside it.
+
+        The stand-in is still offered wherever the piece is simulated - it
+        is the only port CI and the other dev machine have - and it comes
+        last, because on a machine with a board on it the board is the
+        answer.
+        """
         for name in self._ports:
             self._dict.pop(name, None)
 
+        self._devices = {board.label: board.device for board in boards.detect()}
         if self.is_simulated:
             # One stand-in, not two. The base class offers the U2D2's
             # simulated port here as well, and the only thing that can be
             # done with that one is choose it by mistake.
-            self._devices = {"simulated arduino port": "simulated arduino port"}
-        else:
-            self._devices = {
-                board.label: board.device for board in boards.detect()
-            }
+            self._devices[SIMULATED_ARDUINO_PORT] = SIMULATED_ARDUINO_PORT
 
         self._ports = list(self._devices)
         for name, device in self._devices.items():

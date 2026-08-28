@@ -299,6 +299,19 @@ class TestAudioBringup(BaseThread):
         states = super()._snapshot_if_opened(path)
         leaf = leaves.into(states, path)
 
+        # Which board this is talking to, said before anything it goes on
+        # to say about it. The stand-in answers a sweep with plausible
+        # numbers, so a whole run against it comes out clean and reads
+        # exactly like a good one. Told by the lead rather than by the
+        # machine: the bench is `is_simulated` and the board is on the end
+        # of a USB lead all the same - see `Arduino.is_using_the_stand_in`.
+        leaf(
+            "board",
+            "the stand-in - nothing below was measured"
+            if self.drivers.arduino.is_using_the_stand_in
+            else f"a real board on {self.drivers.arduino.port_name}",
+        )
+
         wired = self.wired
         leaf(
             "wired",

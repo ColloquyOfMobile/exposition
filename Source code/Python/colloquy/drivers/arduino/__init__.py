@@ -8,6 +8,8 @@ from colloquy.base import Base
 from colloquy.ui import leaves
 from . import boards
 from . import firmware
+from colloquy.drivers.com_port import SIMULATED_ARDUINO_PORT
+
 from .boards import Boards
 from .com_port import ComPort
 from .errors import ArduinoError, FirmwareTooOld
@@ -34,6 +36,10 @@ class Arduino(Base):
         super().__init__(owner=owner)
         self.lock = Lock()
         self._port_handler = None
+        # Which kind the handler in hand is, since the two are different
+        # objects and changing lead may mean replacing it. None until one
+        # has been built. See use_port().
+        self._handler_is_the_stand_in = None
         self._was_open = None
         self._context_depth = 0
         self._commands = [
@@ -173,17 +179,59 @@ class Arduino(Base):
         return self.params["arduino"]["baudrate"]
 
     @property
+    def is_using_the_stand_in(self):
+        """Is this link the virtual serial port rather than a real lead?
+
+        Asked of the **lead**, not of the machine. `is_simulated` answers
+        "is the piece here", which is not the same question as "is an
+        Arduino plugged into this computer" - and the two came apart the
+        first afternoon the main PCB was carried off to a desk to be
+        debugged. On the bench `is_simulated` is true and the board is
+        nonetheless on the end of a USB lead.
+
+        Everything the sound channel does goes through this link and
+        nothing else in it asks the question at all (speaker, microphone,
+        all audio and both installation audio tests are silent on
+        `is_simulated`), so this one property is the whole of what "real"
+        means for a voice.
+        """
+        return self.params["arduino"]["communication port"] == SIMULATED_ARDUINO_PORT
+
+    @property
     def port_handler(self):
         if self._port_handler is None:
-            if not self.is_simulated:
-                self._port_handler = serial.Serial(baudrate=self.baudrate, timeout=1)
-            else:
+            self._handler_is_the_stand_in = self.is_using_the_stand_in
+            if self._handler_is_the_stand_in:
                 self._port_handler = self.colloquy.virtual_drivers.arduino_serial_port
+            else:
+                self._port_handler = serial.Serial(baudrate=self.baudrate, timeout=1)
 
             # Setting port name here avoid opening the port
-            self.port_handler.port = self.params["arduino"]["communication port"]
+            self._port_handler.port = self.params["arduino"]["communication port"]
 
         return self._port_handler
+
+    def use_port(self, port_name):
+        """Point the link at a lead, with the right handler behind it.
+
+        A real lead and the stand-in are different objects, so moving
+        between them is not a matter of writing a new name onto the
+        handler already in hand - that one has to go first. It is closed
+        before it is dropped: a discarded pyserial handle keeps the COM
+        port open until the garbage collector reaches it, and the next
+        open then fails saying the port is busy, which reads exactly like
+        a board that is not there.
+        """
+        wants_the_stand_in = port_name == SIMULATED_ARDUINO_PORT
+        if (
+            self._port_handler is not None
+            and self._handler_is_the_stand_in != wants_the_stand_in
+        ):
+            if self._port_handler.is_open:
+                self._port_handler.close()
+            self._port_handler = None
+
+        self.port_handler.port = port_name
 
     def send(self, path, **data):
         with self:
@@ -322,12 +370,14 @@ class Arduino(Base):
         and it is not talking" is a different thing from "there is nothing
         there", and only one of them means fetch a cable. See boards.py.
 
-        Not on a simulated port, which ignores baud rates entirely - it
-        would "find" the board at the first rate tried and say something
-        confidently wrong.
+        Not on the stand-in, which ignores baud rates entirely - it would
+        "find" the board at the first rate tried and say something
+        confidently wrong. The stand-in is told by the lead rather than by
+        the machine: a real board on a simulated machine is now an
+        ordinary thing to meet.
         """
         where = f"Arduino on {self.port_name}"
-        if self.is_simulated:
+        if self.is_using_the_stand_in:
             return f"{where} did not greet within {self.GREETING_TIMEOUT}s."
 
         for baudrate in firmware.PROBE_BAUDRATES:
@@ -419,6 +469,17 @@ class Arduino(Base):
         leaf = leaves.into(states, path)
 
         leaf("port", self.params["arduino"]["communication port"] or "not set")
+        # The one thing this node must never be ambiguous about. The
+        # stand-in answers every command exactly as the board does - a
+        # speaker reports "sounding", a microphone reports a band rising -
+        # so without this line a simulated run and a real one read alike,
+        # which is how an afternoon gets spent debugging a simulation.
+        leaf(
+            "driving",
+            "the stand-in - nothing here is a board"
+            if self.is_using_the_stand_in
+            else "a real board on this lead",
+        )
         leaf("baudrate", f"{self.baudrate} baud")
         leaf("link", "open" if self.is_open else "closed")
         # The two ends, side by side, which is the whole point of showing

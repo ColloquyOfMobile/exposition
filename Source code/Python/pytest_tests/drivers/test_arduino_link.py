@@ -57,7 +57,10 @@ def fake_arduino(**kwargs):
         port_name="COM4",
         port_handler=FakePort(),
         GREETING_TIMEOUT=0.2,
-        is_simulated=True,
+        # Asked of the lead, not of the machine: a real board on a
+        # simulated computer is what the bench is. Default False, so a
+        # test that does not say otherwise is talking about a real board.
+        is_using_the_stand_in=False,
         log=lambda *args, **kwargs: None,
         _greeting=None,
     )
@@ -166,13 +169,15 @@ def test_wait_for_reboot_asks_for_a_diagnosis_when_nothing_comes_back():
 # --- and the diagnosis ---------------------------------------------------
 
 
-def test_a_simulated_port_is_not_probed():
+def test_the_stand_in_is_not_probed():
     # It ignores baud rates entirely, so probing would "find" the board at
-    # the first rate tried and say something confidently wrong.
+    # the first rate tried and say something confidently wrong. Told by
+    # the lead rather than by the machine - on the bench the computer is
+    # simulated and the board on the end of the lead is not.
     def must_not_be_called(baudrate):
-        raise AssertionError("probed a simulated port")
+        raise AssertionError("probed the stand-in")
 
-    fake = fake_arduino(is_simulated=True, _greet_at=must_not_be_called)
+    fake = fake_arduino(is_using_the_stand_in=True, _greet_at=must_not_be_called)
 
     assert "did not greet" in Arduino._diagnose_silence(fake)
 
@@ -188,7 +193,7 @@ def test_the_probe_names_the_rate_the_board_is_really_at():
             return dict(firmware.LEGACY_GREETING)
         return None
 
-    fake = fake_arduino(is_simulated=False, _greet_at=greet_at)
+    fake = fake_arduino(_greet_at=greet_at)
 
     message = Arduino._diagnose_silence(fake)
 
@@ -212,7 +217,7 @@ def test_a_board_that_answers_at_no_rate_is_reported_with_the_usb_bus(monkeypatc
             boards.Board("COM4", "Arduino Mega 2560 (R3)", True, 0x2341, 0x0042, None)
         ],
     )
-    fake = fake_arduino(is_simulated=False, _greet_at=lambda baudrate: None)
+    fake = fake_arduino(_greet_at=lambda baudrate: None)
 
     message = Arduino._diagnose_silence(fake)
 
@@ -224,7 +229,7 @@ def test_nothing_on_the_bus_at_all_says_so(monkeypatch):
     from colloquy.drivers.arduino import boards
 
     monkeypatch.setattr(boards, "detect", lambda ports=None: [])
-    fake = fake_arduino(is_simulated=False, _greet_at=lambda baudrate: None)
+    fake = fake_arduino(_greet_at=lambda baudrate: None)
 
     assert "USB lead" in Arduino._diagnose_silence(fake)
 
