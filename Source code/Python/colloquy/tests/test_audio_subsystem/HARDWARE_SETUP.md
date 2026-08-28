@@ -303,30 +303,41 @@ do that yet* — it averages whole sweeps instead, which is enough to say
 
 ## 4. The four boards
 
+**The pin names are on the photographs.** They are Thomas's own, drawn
+over his figures 4 to 7, and they are the reason to look at a picture
+here rather than at a table — a label sits beside the header it names, at
+the end of the board it is actually on. The prose under each one repeats
+them so they can be searched for, but the picture is what to hold the
+board against. (If a photograph ever comes back bare, it has been pulled
+out of the PDF as an embedded image rather than rendered — see
+`extract_hardware_photos.py` at the repository root.)
+
 **Low-pass filter board** — five channels. `IN` along one edge in the
 order **160, 400, 1K, 2K5, 6K25**, `OUT` on the other, GND and VDD as
 marked. The five groups of yellow capacitors are the five bands; the
 biggest capacitors belong to the lowest tone.
 
-![Low-pass filter board](/static/hardware/low-pass-filter-board.jpg)
+![Low-pass filter board — Figure 4, pin labels as marked](/static/hardware/low-pass-filter-board.jpg)
 
 **Microphone module** — a MAX9814 breakout on a carrier. Header:
-`GND / VDD / AOUT`, plus `Gain` and `AR` to strap per §3.
+`GND / VDD / AOUT`, plus `Gain` and `AR` to strap per §3. The strap table
+is on the photograph too: `AR` to GND is 1:500, to VDD 1:2000, floating
+1:4000; `Gain` to GND is 50 dB, to VDD 40 dB, floating 60 dB.
 
-![Microphone module](/static/hardware/microphone-module.jpg)
+![Microphone module — Figure 5, pin labels as marked](/static/hardware/microphone-module.jpg)
 
 **Amplifier module** — the GF1002 with its volume pot, on a carrier with
 a screw terminal for supply and JST connectors for audio in and speaker
 out (`Audio`/`GND`, `VDD`/`GND`, `ROUT+`). One per body, each close to
 its own speaker.
 
-![Amplifier module](/static/hardware/amplifier-module.jpg)
+![Amplifier module — Figure 6, pin labels as marked](/static/hardware/amplifier-module.jpg)
 
 **Audio analyser array** — the five MSGEQ7 boards on one carrier, strobe
 and reset commoned across the back, one JST per module for its
 microphone. This single board is the whole hearing side.
 
-![Audio analyser array](/static/hardware/audio-analyzer-array.jpg)
+![Audio analyser array — Figure 7, pin labels as marked](/static/hardware/audio-analyzer-array.jpg)
 
 ---
 
