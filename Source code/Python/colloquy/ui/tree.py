@@ -17,6 +17,26 @@ command on that node and its arguments.
 """
 
 
+class CommandFailed(Exception):
+    """A command raised, and this says which one.
+
+    The walk knows two things the request layer cannot work out for
+    itself once an exception is loose: that what raised was a *command*
+    rather than the render around it, and which command it was. Both go in
+    here, so a page can name what failed and offer a way back that does
+    not run it again.
+
+    Nothing catches it here on purpose. Whether a failed command is worth
+    a page or worth stopping the installation is a decision for whoever is
+    serving, and the two roots answer it differently.
+    """
+
+    def __init__(self, command, error):
+        super().__init__(f"{'/'.join(str(part) for part in command)}: {error}")
+        self.command = tuple(command)
+        self.error = error
+
+
 def get_focus(root, *args, obj=None, path=None):
     """The node a path points at, as a snapshot, plus whatever is left.
 
@@ -71,7 +91,16 @@ def get_states(root, *args):
     focus, leftovers = get_focus(root, *args)
 
     if leftovers:
-        update(*leftovers, focus=focus)
+        try:
+            update(*leftovers, focus=focus)
+        except NotImplementedError:
+            # The routing idiom for "no such key" - `update` raises it on
+            # a miss, and the page answers that with a 404. Wrapping it
+            # would turn a mistyped link into a report of a hardware
+            # fault.
+            raise
+        except Exception as error:
+            raise CommandFailed(leftovers, error) from error
         focus, leftovers = get_focus(root, *args)
 
     return focus

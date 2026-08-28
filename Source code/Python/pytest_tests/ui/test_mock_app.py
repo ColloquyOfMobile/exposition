@@ -76,11 +76,25 @@ def test_a_command_is_a_link_that_calls_it(app):
     assert "said: hello" in html
 
 
-def test_a_command_that_raises_is_not_swallowed(app):
-    # It reaches the server, which treats it as a crash - the behaviour
-    # this button exists to make visible. Here it is only an exception.
-    with pytest.raises(RuntimeError):
-        request("/app/buttons/call/fail on purpose", app=app)
+def test_a_command_that_raises_draws_a_page_and_keeps_the_server(app):
+    """What this button exists to make visible, and it changed.
+
+    It used to reach the server's catch-all, which treats any unhandled
+    exception as a fault worth taking everything down - and on the
+    installation, worth an emergency stop. Twice in two days that cost
+    the whole server over a fault with a page-sized answer (a board on
+    last month's sketch, a COM number remembered from another machine),
+    so a *command* that raises is now drawn instead. The limit is
+    pinned in pytest_tests/test_command_failed_page.py: anything raised
+    outside a command still propagates.
+    """
+    status, html = request("/app/buttons/call/fail on purpose", app=app)
+
+    assert status == "200 OK"
+    assert "fail on purpose failed." in html
+    assert "RuntimeError: this command always fails" in html
+    # And a way back that does not run it again.
+    assert 'href="/app/buttons"' in html
 
 
 def test_the_document_page_carries_both_formatted_kinds(app):

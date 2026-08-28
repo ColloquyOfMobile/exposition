@@ -28,6 +28,7 @@ from yattag import Doc, indent
 from urllib.parse import unquote, parse_qs
 from pathlib import Path
 from colloquy.base import Base
+from colloquy.ui.tree import CommandFailed
 from wsgiref.simple_server import WSGIRequestHandler
 
 WSGIRequestHandler.log_message = lambda *args, **kwargs: None
@@ -195,6 +196,8 @@ class MockWSGI(Base):
             to_render = self.get_states(*args)
         except NotImplementedError as error:
             return self._parse_not_found(args, error)
+        except CommandFailed as error:
+            return self._parse_command_failed(args, error)
         self._base_path = Path(*to_render["path"])
 
         # pprint4(obj=to_render)
@@ -334,6 +337,46 @@ class MockWSGI(Base):
 
         html = doc.getvalue()
         return status, headers, html.encode()
+
+    def _parse_command_failed(self, args, failure):
+        """A command raised. Say what failed, and leave the server up.
+
+        The installation's twin of this (`server2/wsgi2.py`) carries the
+        reasoning and a remedy for the two failures it can name a next
+        click for. There are none here: nothing is plugged into the mock,
+        so a sentence about which COM ports exist would be fiction. What
+        the mock has instead is the `fail on purpose` button, which is now
+        a page to look at rather than a dead server - see
+        `colloquy/ui/mock.py`.
+        """
+        error = failure.error
+        self.log(
+            f"Command failed on /{'/'.join(('app',) + args)}: "
+            f"{type(error).__name__}: {error}"
+        )
+
+        node = args[: args.index("call")] if "call" in args else args
+        command = "/".join(str(part) for part in failure.command)
+
+        status = "200 OK"
+        headers = [("Content-Type", "text/html; charset=utf-8")]
+
+        doc, tag, text = Doc().tagtext()
+        with tag("div", name="command failed"):
+            with tag("div", name="title"):
+                text(f"{command} failed." if command else "That did not work.")
+            with tag("div", name="error"):
+                text(f"{type(error).__name__}: {error}")
+            with tag("div", name="reassurance"):
+                text("The server is still running and this page is still here.")
+            with tag("div"):
+                with tag("a", href="/" + "/".join((self._root.name,) + node)):
+                    text("back")
+            with tag("div"):
+                with tag("a", href="/app"):
+                    text("home")
+
+        return status, headers, doc.getvalue().encode()
 
     def _html_navigation(self, to_render):
         doc, tag, text = Doc().tagtext()

@@ -267,6 +267,17 @@ class TestAudioSubsystem(BaseThread):
         """
         was_open = self._port_handler is not None and self.port_handler.is_open
         if not was_open:
+            # The same check the run makes, and for the same reason. It
+            # lived only in setup(), so these commands - which are how
+            # somebody at a bench holds one tone while they listen - went
+            # straight at pyserial and came back as
+            # `SerialException: could not open port 'COM5'` out of a
+            # request, which the server read as a crash worth stopping
+            # the installation over.
+            refusal = self._why_not_open()
+            if refusal is not None:
+                self._manual_reply = f"refused: {refusal}"
+                return self._manual_reply
             self.port_handler.open()
             self._read_until(protocol.PROMPT, timeout=8.0)
         self._settle(self.PROMPT_SETTLE)
@@ -306,22 +317,9 @@ class TestAudioSubsystem(BaseThread):
             + "\n"
         )
 
-        chosen = self.params["audio subsystem"]["communication port"]
-        if chosen is None:
-            self._refuse("no port chosen - pick Thomas's board under 'com port'")
-            return
-
-        # The chosen port is remembered in params, and it outlives the
-        # machine that chose it: a laptop that ran this simulated leaves
-        # "simulated audio port" behind, and on the bench that opens
-        # nothing and fails with a pyserial error about a port nobody
-        # recognises. Say what is stored and what is actually there.
-        available = self.com_port.ports
-        if chosen not in available:
-            self._refuse(
-                f"{chosen!r} is not a port on this machine - "
-                f"available: {', '.join(available) or 'none, is the board plugged in?'}"
-            )
+        refusal = self._why_not_open()
+        if refusal is not None:
+            self._refuse(refusal)
             return
 
         self.port_handler.open()
@@ -355,6 +353,31 @@ class TestAudioSubsystem(BaseThread):
             self.port_handler.close()
         if self._file is not None:
             self._file.close()
+
+    def _why_not_open(self):
+        """Why opening the line would fail, or None if it would not.
+
+        Instant and reading only what is already known, so both the run
+        and the manual commands can ask before they touch pyserial. The
+        chosen port is remembered in params and it outlives the machine
+        that chose it: a laptop that ran this simulated leaves
+        "simulated audio port" behind, and a board that has moved leaves
+        a COM number that is not there any more. Either way pyserial
+        answers with a FileNotFoundError about a name nobody recognises,
+        so say what is stored and what is actually on the machine instead.
+        """
+        chosen = self.params["audio subsystem"]["communication port"]
+        if chosen is None:
+            return "no port chosen - pick Thomas's board under 'com port'"
+
+        available = self.com_port.ports
+        if chosen not in available:
+            return (
+                f"{chosen!r} is not a port on this machine - available: "
+                f"{', '.join(available) or 'none, is the board plugged in?'}"
+                " - pick one under 'com port'"
+            )
+        return None
 
     def _refuse(self, reason):
         self._outcome = f"refused: {reason}"

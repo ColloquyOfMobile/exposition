@@ -7,11 +7,9 @@ from colloquy.utils import (
     export_style,
 )
 from colloquy.base import Base
-from colloquy.drivers.arduino.errors import (
-    ArduinoError,
-    FirmwareTooOld,
-    flash_firmware_offer_html,
-)
+from colloquy.drivers.arduino.errors import ArduinoError
+from colloquy.server2.remedies import remedy_html
+from colloquy.ui.tree import CommandFailed
 from wsgiref.simple_server import WSGIRequestHandler
 
 WSGIRequestHandler.log_message = lambda *args, **kwargs: None
@@ -187,8 +185,13 @@ class WSGI2(Base):
             to_render = self.get_states(*args)
         except NotImplementedError as error:
             return self._parse_not_found(args, error)
+        except CommandFailed as error:
+            return self._parse_command_failed(args, error)
         except ArduinoError as error:
-            return self._parse_link_problem(args, error)
+            # The same page, for the same kind of fault met while
+            # *rendering* rather than while running a command - a reading
+            # that has to ask the board something.
+            return self._parse_command_failed(args, CommandFailed((), error))
         self._base_path = Path(*to_render["path"])
 
         # pprint4(obj=to_render)
@@ -416,32 +419,39 @@ class WSGI2(Base):
         html = doc.getvalue()
         return status, headers, html.encode()
 
-    def _parse_link_problem(self, args, error):
-        """The Arduino link is not usable, and the command that met it
-        said exactly why.
+    def _parse_command_failed(self, args, failure):
+        """A command raised. Say what failed, and where to go next.
 
-        The same trade as _parse_not_found above, for the same reason and
-        with the same limit: everything that is not one of these two kinds
-        still reaches Server2.wsgi()'s catch-all and still emergency-stops
-        the installation.
+        The same trade as _parse_not_found above, made for the same
+        reason and with the same limit - but drawn around what raised
+        rather than around its type, which is what stopped this being a
+        new catch every time a different exception found its way out.
 
-        This one is worth the exception because of when it is raised.
-        `Arduino.open()` raises it out of the greeting - before a pixel,
-        a tone or a servo has been asked for anything - so nothing is in
-        motion and nothing is half-written. Treating it as a fault serious
-        enough to stop everything cost the whole server instead, including
-        `flash firmware`, which is the page that fixes the commonest one
-        of them. That is exactly the trade `main.py` already makes at
-        startup, one file over: report it, offer the remedy, keep the
-        server. A board carrying last month's sketch is a thing to be told
-        about, not a crash.
+        **Why it is safe to answer rather than to stop.** Server2.wsgi
+        emergency-stops on an unhandled exception because the exception
+        kills the HTTP loop, and a running thread would then go on moving
+        with no page left to stop it. Answering keeps the loop, so the
+        page is still there - EMERGENCY STOP included - and the thing the
+        catch-all exists to protect against cannot happen. Twice now the
+        cure has been worse than the fault: a board carrying last month's
+        sketch, and a COM number remembered from a machine the board is no
+        longer plugged into, each took the whole server down along with
+        the pages that fix them.
+
+        The limit is unchanged. Everything raised *outside* a command -
+        the walk, the render, the parse - still propagates and still
+        emergency-stops, because there the process really is somewhere
+        nobody can describe.
         """
-        self.log(f"Arduino link problem on /{'/'.join(('app',) + args)}: {error}")
+        error = failure.error
+        where = "/" + "/".join((self._root.name,) + args)
+        self.log(f"Command failed on {where}: {type(error).__name__}: {error}")
 
         # The node the command hangs off, so "back" does not re-run the
-        # command that just failed. Everything from "call" on is the
-        # command and its arguments - see ui/tree.py.
+        # thing that just failed. Everything from "call" on is the command
+        # and its arguments - see ui/tree.py.
         node = args[: args.index("call")] if "call" in args else args
+        command = "/".join(str(part) for part in failure.command)
 
         status = "200 OK"
         headers = [("Content-Type", "text/html; charset=utf-8")]
@@ -449,16 +459,19 @@ class WSGI2(Base):
         doc, tag, text = Doc().tagtext()
         with tag("div"):
             with tag("strong"):
-                text("The Arduino link is not usable.")
+                text(f"{command} failed." if command else "That did not work.")
         with tag("div"):
-            text(str(error))
+            text(f"{type(error).__name__}: {error}")
         with tag("div"):
             text(
-                "Nothing was driven: the link failed while the board was "
-                "greeting, so the command you clicked never ran."
+                "The installation is still running and this page is still "
+                "here - nothing was stopped."
             )
-        if isinstance(error, FirmwareTooOld):
-            doc.asis(flash_firmware_offer_html())
+
+        remedy = remedy_html(error)
+        if remedy is not None:
+            doc.asis(remedy)
+
         with tag("div"):
             with tag("a", href="/" + "/".join((self._root.name,) + node)):
                 text("back")

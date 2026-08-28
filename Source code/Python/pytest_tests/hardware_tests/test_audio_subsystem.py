@@ -427,9 +427,41 @@ def test_a_port_remembered_from_another_machine_is_refused(monkeypatch):
         _buffer="",
         _file=io.StringIO(),
     )
+    double._why_not_open = lambda: AudioSubsystemTest._why_not_open(double)
 
     AudioSubsystemTest.setup(double)
 
     assert refused, "a stale port should be refused, not opened"
     assert "simulated audio port" in refused[0]
     assert "COM3" in refused[0]
+
+
+def test_a_manual_command_refuses_the_same_stale_port(monkeypatch):
+    """The traceback this was split out for.
+
+    The check lived only in setup(), so the manual commands - which are
+    how somebody at a bench holds one tone while they listen for it -
+    went straight at pyserial and raised
+    `SerialException: could not open port 'COM5'` out of a request. The
+    server read that as a crash worth emergency-stopping the
+    installation and left the loop. A stale port name is not that.
+    """
+
+    def must_not_be_opened():
+        raise AssertionError("opened a port that is not on this machine")
+
+    double = SimpleNamespace(
+        params={"audio subsystem": {"communication port": "COM5"}},
+        com_port=SimpleNamespace(ports=["COM6"]),
+        _port_handler=None,
+        _manual_reply=None,
+        port_handler=SimpleNamespace(open=must_not_be_opened, is_open=False),
+    )
+    double._why_not_open = lambda: AudioSubsystemTest._why_not_open(double)
+
+    reply = AudioSubsystemTest._send_manual(double, "e a")
+
+    assert reply.startswith("refused: ")
+    assert "COM5" in reply
+    assert "COM6" in reply
+    assert reply == double._manual_reply
