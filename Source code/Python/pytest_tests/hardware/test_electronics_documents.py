@@ -36,10 +36,24 @@ def _generated(electronics=None):
     raise AssertionError("no next pcb document")
 
 
-def test_the_section_offers_three_documents_not_six():
+def test_the_section_offers_the_written_documents_not_the_generated_ones():
+    """Four written, not seven: what `next pcb` generates hangs under
+    `next pcb`, and `harness` is generated too and is not a document
+    anybody edits."""
     names = [document.name for document in _electronics().documents]
 
-    assert names == ["as built", "dirty rework", "next pcb"]
+    assert names == ["as built", "dirty rework", "next pcb", "one board per body"]
+
+
+def test_the_two_solutions_are_siblings():
+    """`one board per body` is not a variation on `next pcb` - it is a
+    second complete answer to the same question, against the same fixed
+    harness, and it sits beside it rather than under it."""
+    children = _electronics().snapshot_children
+
+    assert "next pcb" in children
+    assert "one board per body" in children
+    assert "one board per body" not in children["next pcb"].snapshot_children
 
 
 def test_what_next_pcb_generates_hangs_under_next_pcb():

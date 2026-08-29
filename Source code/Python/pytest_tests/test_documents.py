@@ -25,11 +25,23 @@ whole of what distinguishes them:
 import pytest
 
 from colloquy.code_documentation import CodeDocumentation
-from colloquy.hardware.electronics import AsBuilt, DirtyRework, NextPCB
+from colloquy.hardware.electronics import (
+    AsBuilt,
+    DirtyRework,
+    NextPCB,
+    OneBoardPerBody,
+)
 from colloquy.tests.test_audio_subsystem.setup_document import HardwareSetup
 from colloquy.markdown_document import MarkdownDocument
 
-DOCUMENTS = (CodeDocumentation, HardwareSetup, AsBuilt, DirtyRework, NextPCB)
+DOCUMENTS = (
+    CodeDocumentation,
+    HardwareSetup,
+    AsBuilt,
+    DirtyRework,
+    NextPCB,
+    OneBoardPerBody,
+)
 
 
 @pytest.fixture(params=DOCUMENTS, ids=lambda cls: cls.__name__)
@@ -62,6 +74,7 @@ def test_each_document_sits_beside_what_it_describes(document):
         "AS_BUILT.md": "electronics",
         "DIRTY_REWORK.md": "electronics",
         "NEXT_PCB.md": "electronics",
+        "ONE_BOARD_PER_BODY.md": "electronics",
     }
     assert document.file_path.parent.name == expected[document.file_name]
 
@@ -72,7 +85,7 @@ def test_each_document_is_actually_there(document):
 
 
 def test_no_two_documents_share_a_file(stub_factory):
-    """Three of them now share a folder as well as a base class, and a
+    """Four of them now share a folder as well as a base class, and a
     copied `file_name` would have two nodes editing one file - with the
     second save silently undoing the first."""
     names = [cls.file_name for cls in DOCUMENTS]
@@ -84,6 +97,7 @@ def test_no_two_documents_share_a_file(stub_factory):
         "AS_BUILT.md",
         "DIRTY_REWORK.md",
         "NEXT_PCB.md",
+        "ONE_BOARD_PER_BODY.md",
     }
 
 
@@ -102,6 +116,7 @@ def test_they_are_named_for_what_they_are(document):
         "as built",
         "dirty rework",
         "next pcb",
+        "one board per body",
     }
     assert document.name == type(document).document_name
 

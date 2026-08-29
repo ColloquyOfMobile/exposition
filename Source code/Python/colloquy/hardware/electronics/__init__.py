@@ -16,6 +16,11 @@ that get confused with each other the moment they share a page:
 - **next PCB** - what the board that replaces it should do, with the
   rework's findings folded in. It exists so that the dirty version is a
   prototype of something rather than a detour.
+- **one board per body** - the second full solution, and the reason the
+  two are kept side by side rather than one being folded into the other.
+  Same fixed harness, five Arduino Pro Minis instead of one Mega, and the
+  filters and analysers moved out of the rack and into the bodies. It
+  ends by comparing itself with `next pcb` and saying which to build.
 
 And beside them, generated rather than written:
 
@@ -57,6 +62,20 @@ class AsBuilt(_ElectronicsDocument):
 class DirtyRework(_ElectronicsDocument):
     file_name = "DIRTY_REWORK.md"
     document_name = "dirty rework"
+
+
+class OneBoardPerBody(_ElectronicsDocument):
+    """The second full solution, against the same fixed harness.
+
+    A sibling of `next pcb` rather than a child of it: it is not a
+    variation on that board, it is a different answer to the same
+    question, and both are complete. Written rather than generated -
+    it is a specification and the reasoning behind it, and there is no
+    netlist behind it yet.
+    """
+
+    file_name = "ONE_BOARD_PER_BODY.md"
+    document_name = "one board per body"
 
 
 class NextPCB(_ElectronicsDocument):
@@ -131,10 +150,11 @@ def _harness():
 
 
 class Electronics(Base):
-    """The three written documents, and the harness beside them.
+    """The written documents, and the harness beside them.
 
-    Three written, because they answer three questions that get confused
-    the moment they share a page. What `next pcb` generates hangs under
+    Four written: three that answer questions about the board in the rack
+    and get confused the moment they share a page, and a fourth that is a
+    whole second answer to the third. What `next pcb` generates hangs under
     `next pcb` rather than beside it. The split between written and
     generated is visible on the page anyway, since a generated one has no
     `edit` - see `GeneratedDocument`.
@@ -153,6 +173,7 @@ class Electronics(Base):
             AsBuilt(owner=self),
             DirtyRework(owner=self),
             NextPCB(owner=self),
+            OneBoardPerBody(owner=self),
         ]
         # Not written to disk: nothing generates a file for it, and the
         # KiCad projects it reads are the copy anybody would want open.
