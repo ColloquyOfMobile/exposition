@@ -291,6 +291,62 @@ trying every rotation at once is the same idea, not a shortcut).
 | 8.8 | Which pattern wins when two both fit | the six flags are computed independently (`sense_light_pattern.ino` sets all six, and several can be true at once), then resolved by an explicit `if`/`else if` chain **inside her drive-state branch**: looking for P she tries `I_P`, `I_OP`, `II_P`, `II_OP` in that order, and `I_O` is never evaluated at all | `_try_match()` returns the **first** pattern within tolerance while walking `readable_light_patterns` in dict order - male1 `O`, `P`, `both`, then male2 - and the drive filter is applied afterwards, in `Search._shared_drive()` | 8.7 is ported in intent but not in sequencing, and 8.5's thin margin is what makes the difference observable. A burst sitting within tolerance of both `male1/O` and `male1/P`, read by a female who wants P, decodes here as `O` and is then discarded as uninteresting - where TJ never tests `O` in that branch, matches `I_P`, and she finds him. **Fails safe** (a missed find, not a wrong approach) but she takes longer to settle than the original would |
 | 8.9 | When a body is inert | `updateInternalDriveState()` (internal.ino) reaches the inert state 1 [Neither] only when **both** appetites are below the interested floor: `(internal_drive_LL > internal_drive_O) && (internal_drive_LL > internal_drive_P)` | **Ported** (2026-08-25). `Male.is_satisfied()` / `Female.is_satisfied()` said `o.is_satisfied or p.is_satisfied`, and now delegate to `which_is_frustated()` - an empty tuple *is* the inert state - so the two cannot drift apart again | — resolved, and it mattered: a body with one appetite full and one empty counted as satisfied and would not search, while `which_is_frustated()` one file over said it wanted the full one. A male in that state blinked a pattern asking for something he had decided not to look for; a female in it ignored every male while advertising a want. It also made half the drive settings unusable for a test - O=100/P=0 is a perfectly ordinary search state and nothing would move |
 
+### 8.10 Did his actually work? Read against the source, 2026-08-30
+
+Worth asking, since this document treats `logic35_systems` as the
+reference. **Nothing in it is faked.** Every path is real and reachable:
+`loop()` calls `readSensors()`, `runLogic()` and `actOnLogic()`
+unconditionally; `act_tone_on` is `true`; the female's sung answer has
+fourteen real call sites in `Logic_fem.ino`; the male's reinforcement
+genuinely counts reflected light against `sense_light_reinforce_TRIGGER`
+(20 ticks of 80). No stub returns true, no decision is commented out. The
+one commented-out enable is the female's *satisfaction* sound, and that
+is the design — she plays light while he plays the melody.
+
+**It was fragile, though, and the sound half was where.** Two of these
+are his own words:
+
+- **`//hmmm...need to overcome the hardware problem. unit 4 does not
+  reset spectral analyzer consistently.`** (`sense_sound.ino`.) The
+  workaround in place is `delay(5)` and `delay(1)` around the MSGEQ7
+  reset where the datasheet asks for microseconds; the microsecond
+  version is commented out directly above it.
+- **`int sense_sound_spectrum_focus = 4;//does this change? why?...it
+  does as of 21/11/29. check reset code on spect analyzer`.** He did not
+  know which band he was reading. That is exactly the fault
+  `test_audio_bringup`'s `_mux_looks_frozen` was written for, arrived at
+  independently and years later.
+- **An off-by-one in both matchers.** `sense_light_pattern.ino:25` and
+  `sense_sound_pattern.ino:23` wrap on `offset > com_pattern_count`, and
+  the buffer has exactly `com_pattern_count` elements — so index 40 of a
+  40-element array is read every pass. `offset = index - 1` is also `-1`
+  whenever the ring has just wrapped. Both read whatever global sits
+  next in memory. On an AVR that is silent: one comparison in forty goes
+  wrong, which shows up as noise in the score rather than a crash, and
+  his budget is six errors in forty.
+- **All five voices in one analyser band.** `act_tone_vals[5] = {1760,
+  1976, 2093, 2349, 2637}` against a band 4 centred on 2500 Hz, and he
+  tests only that band. Identity therefore comes entirely from the
+  *pattern* and never from the pitch — so two bodies singing at once are
+  the OR of two patterns and neither decodes. With two males that is
+  reachable, since both sing `R` during reinforcement.
+- **The answer is single-shot.** She calls `act_transmit_*_sound()` once,
+  at the find, and never repeats it; her reinforcement branch only
+  listens. If he misses that one two-second burst she wiggles her mirror
+  at nothing for 10.25 s and gives up. There is no retry anywhere.
+- **The tick does not drift-correct.** `timeLast = timeNow` makes 50 ms a
+  floor rather than a period, and a tick carries a ~14 ms analyser read,
+  a NeoPixel write and a 115200-baud debug line. Both ends of a pattern
+  exchange run the same nominal clock under different loads.
+
+**What that means for this port.** His *design* is sound and worth
+following; his sound *channel* is the part not to inherit. Three of the
+six above are already answered here and not by accident: Thomas's five
+pitches land in five different bands, which kills the fourth outright
+(9.10); `drivers/sing/` repeats every 4.35 s rather than once, which
+kills the fifth; and the analyser is read through one commoned strobe
+with a per-band rise and a frozen-mux tell, which is the first two.
+
 **Measured, `test read pattern`, 2026-08-21**
 (`docs/test_results/test read pattern/2026_08_21_17h_09min_23s.csv`) — male1 to
 female1, 129 readings over 128.6s (~30 burst cycles), 117 correct. The wrong
