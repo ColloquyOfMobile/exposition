@@ -219,6 +219,9 @@ class Branch(Base):
         return states
 
 
+from colloquy.ui.graph_view import GraphView
+
+
 class MockApp(Base):
     """A root the UI can be pointed at.
 
@@ -237,6 +240,9 @@ class MockApp(Base):
         self._documents = Documents(owner=self)
         self._pictures = Pictures(owner=self)
         self._deep = Branch(owner=self, name="deep", depth=2)
+        # A chart that needs no script: every control is an href and
+        # the server redraws. See ui/graph_view.py.
+        self._graph = GraphView(owner=self)
         self.called = []
 
     @property
@@ -255,6 +261,7 @@ class MockApp(Base):
             self._buttons.name: self._buttons,
             self._documents.name: self._documents,
             self._pictures.name: self._pictures,
+            self._graph.name: self._graph,
             self._deep.name: self._deep,
         }
 
