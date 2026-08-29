@@ -74,6 +74,24 @@ class FakeDrive:
         return self.value < 12.5
 
 
+class FakeSatisfaction:
+    """The six-second moment, recorded rather than run."""
+
+    def __init__(self):
+        self.about_args = None
+        self.started = 0
+        self.stopped = 0
+
+    def about(self, male_name, drive_name):
+        self.about_args = (male_name, drive_name)
+
+    def start(self, started_by=None):
+        self.started += 1
+
+    def stop(self):
+        self.stopped += 1
+
+
 def body(name, sing=None):
     return SimpleNamespace(name=name, sing=sing or FakeSing())
 
@@ -151,6 +169,7 @@ def female_reinforcement(partner=("male1", "O"), drive_value=100):
         drivers=SimpleNamespace(hearing=None),
         # TJ gives each female her own decrement - see params.
         reinforcement_decrement=25,
+        satisfaction=FakeSatisfaction(),
     )
     node._log = lambda *args, **kwargs: None
     node.drive = drive
@@ -267,6 +286,7 @@ def male_reinforcement(partner=("female1", "O")):
         drivers=SimpleNamespace(hearing=None),
         # A stand-in for the light he would have collected - see params.
         reinforcement_decrement=17,
+        satisfaction=FakeSatisfaction(),
     )
     node._log = lambda *args, **kwargs: None
     node.drive = drive
@@ -512,3 +532,91 @@ def test_an_appetite_climbs_the_rest_of_the_time():
     Drive.loop(fake)
 
     assert climbed == [1]
+
+
+# --- the six seconds afterwards -------------------------------------------
+
+
+def test_both_note_tables_are_exactly_the_moment_long():
+    """TJ's two tables both sum to 120 ticks of his 50 ms clock, which is
+    the six seconds. A table that did not would leave a body mid-note when
+    the moment ended."""
+    from colloquy.drivers import satisfaction
+
+    for male, ticks in satisfaction.DURATIONS.items():
+        assert sum(ticks) == satisfaction.TOTAL_TICKS, male
+        assert len(ticks) == len(satisfaction.NOTES_HZ), male
+
+
+def test_male1_taps_evenly_and_male2_swings():
+    """The two rhythms are the whole difference between the two males'
+    moments, and which male it was decides the rhythm the pair keeps."""
+    from colloquy.drivers import satisfaction
+
+    even = satisfaction.DURATIONS["male1"]
+    swung = satisfaction.DURATIONS["male2"]
+
+    assert set(even[:12]) == {5}          # a quarter second a note
+    assert even[-3:] == (10, 20, 30)      # then held: 0.5s, 1s, 1.5s
+    assert swung[:4] == (10, 5, 10, 5)    # long-short-long-short
+    assert swung[-1] == 15                # and only the last held
+
+
+def test_a_female_keeps_her_partners_rhythm_not_her_own():
+    """`internal_partner_ID` in Logic_fem.ino. It is what puts the two of
+    them in step without either following the other."""
+    from colloquy.drivers.satisfaction import durations_for
+
+    assert durations_for("male1") != durations_for("male2")
+    # She is handed the male's name, so she gets his table.
+    assert durations_for("male1")[0] == 5 * 0.05
+
+
+def test_the_notes_walk_in_order_and_then_stop():
+    from colloquy.drivers.satisfaction import DURATION, note_at
+
+    assert note_at(0.0, "male1")[0] == 0
+    assert note_at(0.2, "male1")[0] == 0          # 5 ticks is 0.25s
+    assert note_at(0.3, "male1")[0] == 1
+    assert note_at(DURATION - 0.01, "male1")[0] == 14
+    assert note_at(DURATION + 0.01, "male1") is None
+
+
+def test_each_note_is_a_ramp_from_dark_to_full():
+    """Her brightness is TJ's `(timer_satisfactionanimation * 256) /
+    act_satisfaction_Duration` - a ramp across the note, not a step."""
+    from colloquy.drivers.satisfaction import note_at
+
+    _index, at_start = note_at(0.0, "male1")
+    _index, part_way = note_at(0.12, "male1")
+
+    assert at_start == 0.0
+    assert 0.4 < part_way < 0.6
+
+
+def test_she_is_started_with_his_rhythm_and_their_colour():
+    node = female_reinforcement(drive_value=20)
+    FemaleReinforcement.setup(node)
+    him = body("male1", FakeSing(transmitting=True, bits=pattern("male1", None)))
+    node.female.sing.is_transmitting = False
+    node.female.drivers.hearing = hearing(node.female, him)
+
+    FemaleReinforcement.loop(node)
+
+    assert node.is_satisfied_moment
+    assert node.female.satisfaction.about_args == ("male1", "O")
+    assert node.female.satisfaction.started == 1
+
+
+def test_he_is_started_with_his_own_rhythm():
+    node = male_reinforcement()
+    node.drive.value = 10          # one round finishes him
+    MaleReinforcement.setup(node)
+    her = body("female1", FakeSing(transmitting=True, bits=pattern("male1", "O")))
+    node.male.sing.is_transmitting = False
+    node.male.drivers.hearing = hearing(node.male, her)
+
+    MaleReinforcement.loop(node)
+
+    assert node.male.satisfaction.about_args == ("male1", "O")
+    assert node.male.satisfaction.started == 1

@@ -206,6 +206,10 @@ class Reinforcement(BaseThread):
         )
         # Nothing more to say to him.
         self.sing.stop()
+        # She plays his rhythm as light, in the colour of what they
+        # shared - drivers/satisfaction/.
+        self.female.satisfaction.about(self.male_name, self.drive_name)
+        self.female.satisfaction.start(started_by=self)
 
     def _run_satisfaction(self):
         if time() - self._satisfied_at >= self.SATISFACTION:
@@ -214,10 +218,12 @@ class Reinforcement(BaseThread):
     def setdown(self):
         # Must not raise: BaseThread runs this from a finally block, and
         # an error here would escape the thread's own error handling.
-        try:
-            self.sing.stop()
-        except Exception as error:  # noqa: BLE001 - a silent body, not a crash
-            self.log(f"Could not stop {self.female.name} singing: {error}")
+        for what, action in (("singing", self.sing.stop),
+                             ("her moment", self.female.satisfaction.stop)):
+            try:
+                action()
+            except Exception as error:  # noqa: BLE001 - a silent body, not a crash
+                self.log(f"Could not stop {self.female.name}'s {what}: {error}")
         self.partner = None
 
     # --- the page ---------------------------------------------------------

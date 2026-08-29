@@ -8,6 +8,7 @@ from ..microphone import Microphone
 from ..speaker import Speaker
 from ..angle.conversion import REDUCTIONS
 from ..dxl_origin import DXLOrigin
+from ..satisfaction import Satisfaction
 from ..sing import Sing
 from .reinforcement import Reinforcement
 from .search import Search
@@ -46,6 +47,7 @@ class Male(BaseThread):
         self._drives = Drives(owner=self)
         self._search = Search(owner=self)
         self._sing = Sing(owner=self)
+        self._satisfaction = Satisfaction(owner=self)
         self._reinforcement = Reinforcement(owner=self)
         self.turn_back_and_forth = TurnBackAndForth(owner=self)
 
@@ -96,6 +98,10 @@ class Male(BaseThread):
     @property
     def sing(self):
         return self._sing
+
+    @property
+    def satisfaction(self):
+        return self._satisfaction
 
     @property
     def reinforcement(self):

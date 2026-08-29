@@ -1,5 +1,7 @@
 # The satisfaction moment
-# The moment itself is built and runs; the music in it is not. Six seconds that begin the
+# Built, bar one thing: the rhythm is his, the light is hers, and the fifteen pitches are
+# not - a body here has one pitch, fixed by which timer drives its pin, so a male keys his
+# own tone to the melody's shape instead of playing its tune. Six seconds that begin the
 # instant a shared
 # appetite falls below the interested floor and is zeroed. It is the only place in the
 # piece where a body stops wanting something, and the only place a male sings anything
@@ -7,7 +9,7 @@
 # (logic35_systems: Logic_male.ino, Logic_fem.ino, act_sound.ino.)
 
 0 The appetite they shared is set to zero outright - not lowered, zeroed - and both of them enter the moment together. This much is built: six seconds, both bodies still, neither appetite touched, and then both go back to what they were doing.
-1.5 Everything from here to the end of the moment is TJ's and is *not* built. The male sings. Fifteen notes: a low knocking to open with, 80 and 160 and 551 and 926 Hz, then a bright alternation between 2300 and 3700 Hz for the rest.
+1.5 The male sings. Fifteen notes: a low knocking to open with, 80 and 160 and 551 and 926 Hz, then a bright alternation between 2300 and 3700 Hz for the rest. Here he keys his own single pitch to the same fifteen lengths - the shape of it without the tune, until a body can choose a note.
 4.5 The two males sing the same notes at different lengths. Male 1 taps them out evenly and holds the last three - half a second, one second, one and a half. Male 2 swings them, long-short-long-short, and holds only the last. Both melodies come to exactly six seconds, the length of the moment.
 0 The female sings nothing. She plays the same rhythm as light instead: each note of her partner's melody is a slow brightening from dark to full, in the colour of the appetite they shared - orange for O, greenish for P - across her whole body.
 0 So the two of them are in step without either following the other: she uses his note lengths, and which male it was decides the rhythm both of them keep.

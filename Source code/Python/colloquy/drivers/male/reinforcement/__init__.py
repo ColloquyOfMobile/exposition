@@ -184,11 +184,16 @@ class Reinforcement(BaseThread):
                 f"{self._rounds} rounds."
             )
             self.sing.stop()
+            # His own rhythm, and the only sound he makes that is not a
+            # message - drivers/satisfaction/.
+            self.male.satisfaction.about(self.male.name, self.drive_name)
+            self.male.satisfaction.start(started_by=self)
 
     def setdown(self):
         # Must not raise - BaseThread calls this from a finally block.
         for what, action in (
             ("singing", self.sing.stop),
+            ("his moment", self.male.satisfaction.stop),
             ("the ring", self.male.ring.off),
         ):
             try:
