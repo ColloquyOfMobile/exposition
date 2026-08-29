@@ -205,3 +205,36 @@ def test_an_empty_window_says_so_rather_than_drawing_a_line_to_nowhere():
     view = graph(points=[(0.0, 1.0)])
 
     assert "nothing in this window" in view.svg()
+
+
+# --- the pair on the installation's page ----------------------------------
+
+
+def test_both_demos_draw_the_same_numbers():
+    """`test graph zoom` is uPlot and `test graph without script` is this,
+    side by side. The comparison is only worth anything if the data is
+    identical, so there is one place it comes from."""
+    from colloquy.tests.test_graph_zoom import dummy_data_frame, dummy_points
+
+    frame = dummy_data_frame()
+    points = dummy_points()
+
+    assert len(points) == len(frame)
+    first_column = [c for c in frame.columns if c != "seconds"][0]
+    assert points[0] == (frame["seconds"][0], frame[first_column][0])
+
+
+def test_the_shared_data_is_still_deterministic():
+    from colloquy.tests.test_graph_zoom import dummy_points
+
+    assert dummy_points() == dummy_points()
+
+
+def test_the_no_script_view_can_take_that_data():
+    from colloquy.tests.test_graph_zoom import dummy_points
+
+    view = graph(points=dummy_points(), name="test graph without script")
+
+    assert view.name == "test graph without script"
+    assert len(view.drawn()) == DEFAULT_POINTS
+    assert "<script" not in view.svg()

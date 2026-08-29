@@ -11,7 +11,8 @@ from .test_reinforcement import TestReinforcement
 from .test_search import TestSearch
 from .test_female_search import TestFemaleSearch
 from .test_movements import TestMovements
-from .test_graph_zoom import TestGraphZoom
+from colloquy.ui.graph_view import GraphView
+from .test_graph_zoom import TestGraphZoom, dummy_points
 from .test_neopixels import TestNeopixels
 from .test_sensors import TestSensors
 from .test_audio_subsystem import TestAudioSubsystem
@@ -51,6 +52,14 @@ class Tests(Base):
         )
         self.test_movements = TestMovements(owner=self, result_folder=result_folder)
         self.test_graph_zoom = TestGraphZoom(owner=self)
+        # The same numbers, drawn with no JavaScript at all: every control
+        # is an href and the server decides the density. Beside the uPlot
+        # one on purpose - the pair is the comparison. See ui/graph_view.py.
+        self.test_graph_without_script = GraphView(
+            owner=self,
+            points=dummy_points(),
+            name="test graph without script",
+        )
         self.test_neopixels = TestNeopixels(owner=self, result_folder=result_folder)
         self.test_sensors = TestSensors(owner=self, result_folder=result_folder)
         self.test_audio_subsystem = TestAudioSubsystem(
@@ -117,5 +126,8 @@ class Tests(Base):
                 continue
             children[test.name] = test
         children[self.test_graph_zoom.name] = self.test_graph_zoom
+        children[self.test_graph_without_script.name] = (
+            self.test_graph_without_script
+        )
         return children
 
