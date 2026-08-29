@@ -125,13 +125,32 @@ DEFAULTS = {
         "male1": 17,
         "male2": 17,
     },
-    # One per female, on the servos between them. Nothing drives them yet,
-    # and nobody has measured how far one can turn before it fouls - hence
-    # a range of zero, which means "stays where it is" rather than "turns
-    # freely". Measure it at the rig and type it in here.
-    "mirror1": {"dxl origin": 0, "motion range": 0.0},
-    "mirror2": {"dxl origin": 0, "motion range": 0.0},
-    "mirror3": {"dxl origin": 0, "motion range": 0.0},
+    # One per female, on the servos between them.
+    #
+    # **The range is TJ's, and it did not need measuring.** His OpenCM
+    # servo controller drove these, and every one of the ten deployed
+    # versions of it carries the same two lines
+    # (`local/Code/Code/Servos/deploy*_fem_OCM`):
+    #
+    #     goal_position_mirror_MAX = (1023 + 512) - 50   //512==45
+    #     goal_position_mirror_MIN = (1023 - 512) + 50
+    #
+    # 924 units end to end, and his own comment fixes the scale: 512 units
+    # is 45 degrees, which is 4096 to a turn - the same convention as
+    # `angle/conversion.py`, and `ticks_to_degrees(512, 1)` here returns
+    # exactly 45.0. A mirror turns with its own servo (no reduction), so
+    # 924 units is **81.211 degrees**, or 40.6 either side of centre. His
+    # wiggle sweeps the whole of it, flipping when the *present* position
+    # reaches a limit.
+    #
+    # **The origin is not his and cannot be.** His centre is 1023 because
+    # that is where his servo sat in his mechanism; `dxl origin` here is
+    # the reading a mirror gives when it points where it should, and that
+    # is a fact about this installation. It still has to be measured at
+    # the rig - the range no longer does.
+    "mirror1": {"dxl origin": 0, "motion range": 81.211},
+    "mirror2": {"dxl origin": 0, "motion range": 81.211},
+    "mirror3": {"dxl origin": 0, "motion range": 81.211},
 }
 
 
