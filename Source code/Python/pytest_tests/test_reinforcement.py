@@ -341,3 +341,61 @@ def test_an_appetite_he_no_longer_wants_is_not_an_answer():
     )
 
     assert Male._answered_by(fake) is None
+
+
+# --- one round per burst, not one per tick -------------------------------
+
+
+def test_a_burst_counts_once_however_often_the_loop_asks():
+    """The defect the simulator found.
+
+    The loop runs every few milliseconds and a burst sounds for two
+    seconds. Counting every yes took a full appetite to nothing in four
+    seconds; TJ counts a *match*, and his receiver produces one per
+    pattern.
+    """
+    node = female_reinforcement()
+    FemaleReinforcement.setup(node)
+    him = body("male1", FakeSing(transmitting=True, bits=pattern("male1", None)))
+    node.female.sing.is_transmitting = False
+    node.female.drivers.hearing = hearing(node.female, him)
+
+    for _ in range(50):
+        FemaleReinforcement.loop(node)
+
+    assert node.rounds == 1
+    assert node.drive.decreases == 1
+
+
+def test_the_next_burst_counts_again():
+    """The silence between bursts is what separates two messages - which
+    is the same thing it does on the light channel."""
+    node = female_reinforcement()
+    FemaleReinforcement.setup(node)
+    him = body("male1", FakeSing(transmitting=True, bits=pattern("male1", None)))
+    node.female.sing.is_transmitting = False
+    node.female.drivers.hearing = hearing(node.female, him)
+
+    for _ in range(20):
+        FemaleReinforcement.loop(node)
+    him.sing.is_transmitting = False          # his 2.35s of silence
+    for _ in range(20):
+        FemaleReinforcement.loop(node)
+    him.sing.is_transmitting = True           # and the next burst
+    for _ in range(20):
+        FemaleReinforcement.loop(node)
+
+    assert node.rounds == 2
+
+
+def test_his_half_counts_bursts_the_same_way():
+    node = male_reinforcement()
+    MaleReinforcement.setup(node)
+    her = body("female1", FakeSing(transmitting=True, bits=pattern("male1", "O")))
+    node.male.sing.is_transmitting = False
+    node.male.drivers.hearing = hearing(node.male, her)
+
+    for _ in range(50):
+        MaleReinforcement.loop(node)
+
+    assert node.rounds == 1

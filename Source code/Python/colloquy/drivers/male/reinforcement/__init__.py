@@ -49,6 +49,7 @@ class Reinforcement(BaseThread):
         self._last_heard = None
         self._satisfied_at = None
         self._rounds = 0
+        self._in_burst = False
 
     @property
     def name(self):
@@ -114,6 +115,7 @@ class Reinforcement(BaseThread):
         self._last_heard = time()
         self._satisfied_at = None
         self._rounds = 0
+        self._in_burst = False
 
         self.male.turn_to_origin()
 
@@ -131,8 +133,11 @@ class Reinforcement(BaseThread):
                 self.stop()
             return
 
-        if self.hearing.hears(self.male, self.female_name, self.answer):
+        heard = self.hearing.hears(self.male, self.female_name, self.answer)
+        if self._count_this_burst(heard):
             self._reinforce()
+            return
+        if heard:
             return
 
         if time() - self._last_heard > self.PATIENCE:
@@ -141,6 +146,29 @@ class Reinforcement(BaseThread):
                 "going back to calling."
             )
             self.stop()
+
+    def _count_this_burst(self, hearing_it):
+        """One round per burst, not one per tick.
+
+        The loop runs every few milliseconds and a burst sounds for two
+        seconds, so asking "can I hear it now" and acting on every yes
+        takes the appetite down hundreds of times per message. TJ counts
+        a *match*: his receiver produces one per pattern, and
+        `timer_reinforce` is reset by the match rather than by the sound
+        still being there. So this counts the rising edge - the first tick
+        of a burst - and nothing again until the silence that frames it
+        has come and gone.
+
+        Found by running it on the simulator: a pair went from a full
+        appetite to nothing in four seconds.
+        """
+        if not hearing_it:
+            self._in_burst = False
+            return False
+        if self._in_burst:
+            return False
+        self._in_burst = True
+        return True
 
     def _reinforce(self):
         self._last_heard = time()
