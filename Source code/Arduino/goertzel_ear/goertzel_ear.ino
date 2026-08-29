@@ -11,6 +11,21 @@
 // plugged in, and a failure is either the air between them or the board,
 // with no cable in between to blame.
 //
+// A SQUARE WAVE IS FINE HERE - BETTER THAN A SINE
+// ----------------------------------------------
+// The tone this makes is a square, and that is not a compromise. Its
+// fundamental is 4/pi of its peak, 2.1 dB louder than a sine of the same
+// peak, and the rail is what limits an amplifier - so a square puts more
+// energy into exactly the bin being measured. Its harmonics fall in other
+// bins and are ignored, where an MSGEQ7's octave-wide bands catch them.
+//
+// Two things to know. Harmonics above Nyquist fold back, and a microphone
+// specified 100 Hz to 10 kHz does most of that filtering acoustically -
+// an RC before the ADC removes the doubt for two parts. And a clipped
+// tone is audibly a buzz rather than a note, which is a decision about
+// the piece rather than about this board. See `one board per body`,
+// "And a square wave suits it better than a sine".
+//
 // WHY GOERTZEL AND NOT AN MSGEQ7
 // ------------------------------
 // The MSGEQ7 answers with seven fixed, octave-wide bands, and the five

@@ -222,6 +222,56 @@ Three things it needs, and the third is a real design point:
   cheaper, since the body's own processor decides when it does both and
   can simply not listen while it is writing light.
 
+### And a square wave suits it better than a sine
+
+The question this raises, and the answer is not the one the current
+design is built around. **A Goertzel ear would rather be sent a clipped
+square wave than a clean sine**, for two independent reasons:
+
+- **A square's fundamental is 4/π of its peak — 2.1 dB louder than a sine
+  of the same peak swing.** The rail is what limits a class-D amplifier,
+  so for the same supply a square puts more energy into exactly the bin
+  being measured. That is free level, at the one frequency that matters.
+- **Its harmonics land in other bins and are ignored.** A bin 37 Hz wide
+  centred on the tone does not see 3f, 5f, 7f. An MSGEQ7's octave-wide
+  bands very much do: 160 Hz's third harmonic is 480 Hz, which is inside
+  the analyser's 400 Hz band — that is *male2's* band, and it is exactly
+  what would corrupt "which band rose says who is speaking".
+
+**Which means the low-pass filter exists only to serve the MSGEQ7.** With
+the listening done in software the filter, its ten passives per channel,
+the divider and the whole level problem behind them stop being needed:
+drive the amplifier straight off the tone pin the way TJ did, take back
+most of the 24 dB the divider throws away (`dirty rework` section 0), and
+still tell five bodies apart. It deletes the analyser and the filter in
+one move, and answers "why is it so much quieter than TJ's" at the same
+time.
+
+**Three things to design around, and they are checkable rather than
+matters of taste.** Every odd harmonic of all five pitches was walked
+against every other pitch's bin at 512 samples and about 19.2 kSPS:
+
+- **One real in-band collision.** 160 Hz × 3 = 480 Hz sits 2.1 bins from
+  male2's 400 Hz at −9.5 dB. That is the only strong one, and it is a
+  consequence of choosing two pitches 2.5:1 apart. The pitches are free in
+  this design, so choose them not to be. (160 × 39 = 6240 Hz is 0.3 bins
+  from female3's 6250, but at −32 dB.)
+- **Aliasing, which the acoustic path mostly handles.** Harmonics above
+  9.6 kHz fold back — 6250 × 3 = 18750 folds to 480 Hz. In practice a
+  MAX9814 is specified 100 Hz to 10 kHz and a small loudspeaker rolls off
+  as well, so the high ones never reach the ADC. **Fit an RC before the
+  ADC anyway**: it costs two parts and removes the argument.
+- **Leakage from a loud neighbour.** The Goertzel above uses a
+  rectangular window, whose first sidelobe is −13 dB. If a collision ever
+  matters, a Hann window over the block cuts that to −31 dB for a wider
+  main lobe, which this has room for.
+
+**A clipped tone is a buzz, not a note**, and that is not a technical
+question. The harmonics are radiated into the room as real sound; TJ's
+piece buzzed, and Thomas's filter is why this one would not. Whether the
+piece should sing or buzz is the artist's to decide — what changes here
+is that it is now a *choice* rather than something the analyser forces.
+
 **The pitch stops being a table.** `drivers/audio.py` exists because five
 tones must come out of one chip: a pitch belongs to its timer, Thomas's
 OCR values are indexed by timer, and 6250 Hz sits on T2 because T2 is the
