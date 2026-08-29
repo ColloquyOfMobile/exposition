@@ -1,0 +1,18 @@
+# Reinforcement test
+# The exchange on its own, with nothing in front of it. It stages a pair and hands the
+# partner straight to her reinforcement - no search, no blinking, no light decode - so a
+# run that fails here has failed in the exchange itself.
+# The hearing is emulated (drivers/hearing/), so the loop closes whether or not any sound
+# reaches a microphone. What the real analysers saw is written into the results file
+# alongside, which is the column that replaces the emulation when the ears are trusted.
+# Nothing else on the piece moves for the whole run.
+
+0 The bar carries the chosen male to his meeting point with the chosen female, and both bodies turn back to their own origins. Nothing is sounding and nothing is lit yet.
+30 Both bodies come to rest facing each other. How long this takes is the bar's travel, and from the far end it is most of half a minute.
+0 The exchange begins with the find already made. She starts singing his pattern back at him at her own pitch; he lights his ring to a steady full white and answers with his keep-going pattern at his.
+2 Two voices, two seconds each, alternating. The pitches are chosen a band apart, so from across the room the two are plainly different notes rather than one.
+4.35 A round lands every four and a third seconds, each one taking a fifth off the appetite the two of them share. The page counts them separately for each body; the file records both, and what her analyser saw at that instant.
+20 After four or five rounds one of the two runs out of appetite first. It is zeroed outright and that body stands in its satisfaction moment for six seconds, silent.
+0 The other one is left part-way down and stops hearing anything, because its partner has gone quiet.
+10.25 Ten and a quarter seconds later it gives up and the run ends. That asymmetry is the original's and not a fault: the two bodies count down at their own rates and one finishes first.
+0 The whole thing is over in about a minute. If it is not, the run stops itself at ninety seconds and says so.

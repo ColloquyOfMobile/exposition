@@ -4,7 +4,8 @@
 # front of her only for a few seconds at a time. It is the same question asked in the room
 # rather than on a bench, and it is the only one of the two that can tell you she *missed*
 # somebody - a lit male plainly in front of her, and nothing read.
-# Nothing is answered, nothing is satisfied and no sound is made: this only watches.
+# This only watches. The answering that follows a find is a separate thing - see
+# an-answer-in-sound, and the reinforcement hardware test for it on its own.
 # Set the appetites before you press start, or nothing will move.
 
 0 Before starting, set what each body is asking for. Two buttons on the test page do the usual pair of settings: "males asking O, females wanting P" is the one to use for measuring reading, because no female wants what any male is offering and so none of them ever stops to answer one. "every drive to full" makes everyone want everything, which is the one to use if you want to watch a female actually recognise somebody.
@@ -19,7 +20,7 @@
 0 One caution on the "expected" column. The burst she decoded was sent up to four and a third seconds before she reported it, and in that time the bar has moved. So on a fast crossing the male named as being in view may not be the male she actually heard. A wrong reading right at the edge of a crossing is more likely to be this than a bad decode.
 0 When a female has a lit male in front of her for nearly nine seconds and reads nothing at all, that is written down as a miss. Nine seconds is two whole send cycles - long enough that she cannot have simply arrived in the gap between two bursts. This is the number the test exists for: the other reading test can never produce it, because it holds the pair still until she succeeds.
 0 A run of misses on one female and not the others points at that female - her aiming, her sensor, or her resting direction. Misses spread evenly across all three point at the room: the light level, or the males being too far away at the far end of the rail.
-0 If you set every drive to full, a female will sooner or later recognise a male asking for something she is short of, and her search will end itself. The test writes that down as a find and immediately starts her looking again, because what would normally follow a find is the answering, and that is not built. So the piece never gets past recognition here, on purpose.
+0 If you set every drive to full, a female will sooner or later recognise a male asking for something she is short of, and her search will end itself. The test writes that down as a find and immediately starts her looking again rather than letting the answering follow: what is being measured here is recognition, and an exchange that stopped both bodies for half a minute would measure something else. So the piece never gets past recognition here, on purpose.
 0 The page keeps a running count - read correctly, read wrong, missed, found - and beneath it the last few minutes of events newest first, with the ones that were not clean reads tallied by what they said. That tally is the thing to read: one sentence coming back over and over is systematic, and a scatter of different ones is a poor view.
 0 Warning: this test moves everything, so do not run it while the installation itself is running, and do not run it alongside the other reading test - that one carefully lines up one pair and this one will slide the bar straight out from under it.
 0 Pressing stop ends it: every male stops calling, every female stops looking, the bar stops wherever it happens to be, and all three heads go out. The bodies are left where they stand rather than being sent home.

@@ -6,6 +6,7 @@ from .test_drive_light_values import TestDriveLightValues
 from .test_male_patterns import TestMalePatterns
 from .test_light_sensor_values import TestLightSensorValues
 from .test_read_pattern import TestReadPattern
+from .test_reinforcement import TestReinforcement
 from .test_search import TestSearch
 from .test_female_search import TestFemaleSearch
 from .test_movements import TestMovements
@@ -37,6 +38,9 @@ class Tests(Base):
         self.test_read_pattern = TestReadPattern(
             owner=self, result_folder=result_folder
         )
+        self.test_reinforcement = TestReinforcement(
+            owner=self, result_folder=result_folder
+        )
         self.test_search = TestSearch(owner=self, result_folder=result_folder)
         self.test_female_search = TestFemaleSearch(
             owner=self, result_folder=result_folder
@@ -59,6 +63,7 @@ class Tests(Base):
             self.test_male_patterns,
             self.test_light_sensor_values,
             self.test_read_pattern,
+            self.test_reinforcement,
             self.test_search,
             self.test_female_search,
             self.test_movements,

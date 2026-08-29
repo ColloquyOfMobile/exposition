@@ -1,27 +1,27 @@
 # An answer in sound
-# None of this is built here. It is the second half of the interaction as TJ's firmware
-# runs it: what happens between a female recognising a male and the two of them going back
-# to what they were doing. In this port a female recognises a male and then stops, because
-# the answer she is meant to give is a sound and there is no sound.
-# Read it as the shape the sound system has to fit. Times are TJ's, off his 50ms clock
+# The second half of the interaction: what happens between a female recognising a male and
+# the two of them going back to what they were doing. Built on 2026-08-29 and running -
+# drivers/sing/, drivers/female/reinforcement/, drivers/male/reinforcement/.
+# Two things in it are not real yet and are marked where they fall: the ears are emulated,
+# because the microphones are not in service, and nothing wiggles a mirror - so the male
+# listens where TJ's counted light. Times are TJ's, off his 50ms clock
 # (logic35_systems: Logic_fem.ino, Logic_male.ino, act_sound.ino, sense_sound.ino).
 # Start counting from the end of one of the male's bursts.
 
 0 The male has just sent his two seconds of flashing and gone dark. He is now listening, and stays listening until his next burst is due - about two and a half seconds.
-0 The female, facing him, has just recognised the pattern. She does three things in the same instant: she stops turning, she starts her mirror wiggling, and she begins to sing.
-2 She sings his pattern back to him. The same ten bits, the same fifth of a second each, two seconds in all - but as tone rather than light. It is not a message of her own: it is his identity with one appetite named, the one of his two she also wants. Each body has its own pitch, from female 1 at 2637 Hz down to male 2 at 1760 Hz, so which body is singing is audible as well as decodable.
-0 He recognises it before she has finished - he is matching the last two seconds of sound against his own patterns several times a second, the same way she matches light.
-0 He accepts it only if it is his own identity naming an appetite he is still short of. A reply meant for the other male, or naming something he no longer wants, he ignores completely and carries on calling.
+0 The female, facing him, has just recognised the pattern. She stops turning and begins to sing. (In TJ's she also starts her mirror wiggling; nothing drives a mirror here, so she does not.)
+2 She sings his pattern back to him. The same ten bits, the same fifth of a second each, two seconds in all - but as tone rather than light. It is not a message of her own: it is his identity with one appetite named, the one of his two she also wants.
+0 Each body sings at its own pitch, and they are chosen so that each lands in a different band of the analyser: male 1 at 160 Hz, male 2 at 400, female 1 at 1000, female 2 at 2500, female 3 at 6250. So which body is singing is audible as well as decodable. The males have the low voices.
+0 He recognises it before she has finished. He accepts it only if it is his own identity naming an appetite he is still short of - a reply meant for the other male, or naming something he no longer wants, he ignores completely and carries on calling.
 0 On accepting: he stops moving, stops blinking, and turns his ring to a steady full white - the energy lamp. Both bodies are now still and facing each other. Neither is searching any more.
-4 Her mirror wiggles his own lamp light back onto the sensors above and below his ring. For four seconds he counts how many ticks caught light brighter than the room around him. This is the exchange itself: sound carries the agreement, but what is actually passed between them is his light, returned by her mirror.
-0 If he collected enough - twenty ticks out of the eighty - he takes the collected light off his own appetite, ten units a tick, and sings his "keep going" pattern.
-2 The keep-going pattern is a seventh and eighth message beyond the six a male sends as light: one per male, called R in his code. It is the only thing a male ever sings.
-0 She hears it, takes a fixed amount off the appetite they share - 1200 for females 1 and 3, 600 for female 2, on a scale where 4800 is a full appetite - and resets her patience.
-6 And it repeats: four seconds of him collecting light, two seconds of him singing, for as long as both keep getting what they need. Roughly one round every six seconds, each one lowering the shared appetite.
-0 It ends in one of three ways. If he does not collect enough light in his four seconds - she has stopped wiggling, or drifted, or the room is too bright - he ends it at once and goes back to calling.
-0 If she goes ten and a quarter seconds without hearing his keep-going pattern, she gives up, stops the mirror, and goes back to looking.
+2 He sings his "keep going" pattern back at her - a seventh and eighth message beyond the six a male sends as light, one per male, called R in his code. It is the only thing a male ever sings.
+0 Each of them takes a fixed amount off the appetite they share every time they hear the other, and only once per burst: the silence between bursts is what separates one message from the next, exactly as it does on the light channel.
+4.35 And it repeats, one round every four and a third seconds - the same cycle the male's ring keeps - each round lowering the shared appetite by a fifth of its full scale. Both appetites go on climbing between rounds, so the exchange has to outrun them.
+0 In TJ's firmware the male's half of this is not sound at all: her mirror returns his own lamp light onto the sensors above and below his ring, and he counts how many ticks caught light brighter than the room - twenty out of eighty and the round counts. Sound carries the agreement; what is actually passed between them is his light. Until a mirror is driven here, he listens instead.
+0 It ends in one of three ways. If a body stops getting what it needs it ends at once and goes back to what it was doing.
+10.25 If ten and a quarter seconds pass without the other one being heard, that body gives up. In practice one of the two is usually satisfied first, goes quiet, and the other times out here a few seconds later with its appetite part-way down.
 0 Or the appetite they share falls below the interested floor. Then it is set to nothing at all and a satisfaction moment begins - the only moment in the whole piece where a body has what it wanted.
 -> the-satisfaction-moment : the pair that just finished
-6 Six seconds later the moment is over. Both of them start moving again, both forget the partner, and their appetites resume climbing from wherever they now stand - his lowered by the light he collected, hers by the fixed amounts she subtracted.
+6 Six seconds later the moment is over. Both of them start moving again, both forget the partner, and their appetites resume climbing from wherever they now stand.
 0 He goes straight back to calling, and his search timer is set so that the next burst leaves immediately rather than waiting out a cycle.
-0 What is worth noticing about the whole exchange: it is not symmetrical. She names the appetite and keeps the time; he decides whether it is working, by measuring light. She never measures anything but sound; he never listens for anything but her one reply.
+0 What is worth noticing about the whole exchange: it is not symmetrical in the original. She names the appetite and keeps the time; he decides whether it is working, by measuring light. She never measures anything but sound. Here, with no mirror moving, both of them measure sound - which is the one divergence in the whole sequence.
