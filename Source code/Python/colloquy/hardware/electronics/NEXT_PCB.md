@@ -13,11 +13,10 @@ Three decisions are taken, and one constraint is given:
 2. **The amplifier moves to the body.** The board sends line level down
    the harness and the amplifier sits next to its loudspeaker. This was
    section 3's open question in the previous draft; it is answered below.
-3. **The amplifiers run from +12 V**, and the module is specified by its
-   supply range (4.5–15 V) rather than by a rail — so male2, which this
-   board cannot feed on either rail, runs the same module from its own
-   local supply. Section 5's open question in the previous draft; it is
-   answered there.
+3. **The amplifiers run from +12 V**, all five on the same rail and the
+   same module. Section 5's open question in the previous draft; it is
+   answered there, and the `harness` boards are what closed it — male2
+   is fed through `center`, not from `B-J4`.
 4. **The DSUB connectors and the harness behind them are fixed** — a
    supplier constraint, not a design choice. Four DSUB-15s, the pinout
    `as built` records, no new conductors. Everything below is specified
@@ -347,13 +346,20 @@ than a fault to correct:
   signal on `B-J4`, supply on `A-J3`. Keep the audio return on `B-J4` 2
   paired with `B-J4`'s shell rather than reaching across to `A-J3` 1, so
   the signal's return stays in the cable the signal is in.
-- **male2 has no supply from this board at all**, and its NeoPixels run
-  today — so its 5 V comes from somewhere off these files. **Find where
-  before hanging an amplifier on it**, and check what headroom is left on
-  it. This does **not** block the board: `B-J4` has one spare conductor
-  and GND only on its shell, so male2's amplifier is fed locally whatever
-  rail this board offers, and the rail is decided without it. See
-  *Which rail the amplifier runs from*, below.
+- **male2 has no supply on `B-J4`, and does have one — through
+  `center`.** This was written as the one open item that could block the
+  build, on the grounds that male2's 5 V came "from somewhere off these
+  files". It does not. It comes off `A-J3` pin 9, and the board that
+  splits it three ways is `center`, which hands male 1 and male 2 a
+  DSUB-15 each with `+5V` on pin 9 and `+12V` on pin 2. See
+  `harness` — the pinouts there are read out of the KiCad files.
+
+  So the conductor male2 shares is the one this section already names,
+  and the number to check before hanging an amplifier on it is the same
+  number: **one +5 V conductor, three bodies, three NeoPixel strips and
+  now three amplifiers.** That is a current question rather than a
+  missing-wire question, and it is answered by *Which rail the amplifier
+  runs from*, below — on +12 V it stops being one.
 
 The same finding corrects `dirty rework` section 5, which is being worked
 from right now: it says to power each MAX9814 "from the DSUB, which
@@ -367,15 +373,12 @@ rail.** This waited on male2's supply in the previous draft. It should
 not have: male2 cannot take an amplifier supply from this board on
 *either* rail, so its answer decides nothing about the other four.
 
-**Why male2 is not a rail question.** `B-J4` carries **one** spare
-conductor — pin 7, `centre/spare1` — and GND only on its shell. An
-amplifier needs a supply *and* a return. Spending that single spare on
-the supply still leaves the return on a cable screen, which is the last
-copper class-D switching current should go home through, and it leaves
-male2 with no spare at all for the shutdown line section 4 reserves. So
-male2's amplifier is fed **locally**, from whatever already runs its
-NeoPixels, whichever rail this board offers. That is a finding, not an
-open item: it follows from the connector, and the connector is fixed.
+**male2 is fed through `center`, not from `B-J4`.** The rack's own
+`B-J4` carries no power at all — one spare conductor, pin 7, and GND only
+on its shell. What feeds male2 is `A-J3` pin 9, split three ways by the
+`center` board, which gives male 1 and male 2 a DSUB-15 each carrying
+both rails (`harness`). So male2 is on exactly the rail this board
+chooses, like the other four, and the choice is free.
 
 **So the four that can be fed decide it on the merits, and the merits say
 +12 V:**
@@ -401,21 +404,17 @@ open item: it follows from the connector, and the connector is fixed.
   module is for. It is a supply disturbance with local energy behind it,
   which is a far easier thing than a shared conductor sagging.
 
-**One part number, kept by specifying a range.** Choose a class-D module
-rated across the whole span — **nominally 4.5 V to 15 V** — so the same
-assembly runs from +12 V in four bodies and from male2's local supply in
-the fifth. The consequence is worth knowing before it is heard: acoustic
-power goes as the square of the supply, so **male2 on 5 V is markedly
-quieter than the other four**. Two ways out, neither of which blocks this
-board: bring +12 V to male2 whenever the harness is next rebuilt
-(section 8), or raise male2's local supply. Until one of them happens,
-male2's level is a commissioning problem rather than a design one.
+**One part number, and now one rail for all five.** `center` carries
++12 V to every body it feeds, so the same class-D module runs from the
+same rail in all five — no wide-input requirement, no body quieter than
+the others, and one part to buy and to keep a spare of. Specify it for
++12 V and be done.
 
-**What is still to be measured, and it is not a rail:** what male2's
-local supply actually is — its voltage and what headroom is left on it
-once an amplifier is added. That is answered by looking at the piece, not
-at the CAD, and it decides male2's module setting rather than this
-board's copper.
+**What is still to be measured, and it is not a rail:** what three
+amplifiers, three NeoPixel strips and three bodies actually draw through
+the one `A-J3` pin 9 conductor — which is the number this section has
+called the one to check before ordering anything, and which choosing
++12 V is precisely what shrinks. Measure it with the piece running.
 
 ### Current budget
 

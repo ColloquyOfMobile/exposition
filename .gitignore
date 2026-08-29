@@ -174,5 +174,7 @@ cython_debug/
 /local
 *.MP4
 docs/~$questions.xlsx
-/CAD/KiCad/electronic box/electronic box-backups
+# KiCad writes an autosave zip on every save; the projects are tracked
+# and their backup folders are not.
+/CAD/KiCad/*/*-backups
 *.lck

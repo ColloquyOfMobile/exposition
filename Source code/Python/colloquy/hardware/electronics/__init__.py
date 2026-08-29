@@ -17,6 +17,15 @@ that get confused with each other the moment they share a page:
   rework's findings folded in. It exists so that the dirty version is a
   prototype of something rather than a detour.
 
+And beside them, generated rather than written:
+
+- **harness** - the four small PCBs on the far side of the box's
+  connectors (`center`, `female static`, `female base`, `male static`).
+  Nothing but connectors and copper, and the thing all three documents
+  above describe themselves against. Read out of their KiCad files every
+  time it is opened, since a second copy of a pinout is a pinout that can
+  be wrong.
+
 **Why here and not under `drivers`.** The 2026-08-21 rename drew the line
 and this is on the far side of it: a servo's goal position would not be
 true with the software switched off, and which pin a track lands on
@@ -115,12 +124,27 @@ def _mechanical():
     return mechanical_markdown()
 
 
-class Electronics(Base):
-    """The three documents, in the order they are wanted.
+def _harness():
+    from .harness import markdown
 
-    Three, not six: what `next pcb` generates hangs under `next pcb`. The
-    split between written and generated is visible on the page anyway,
-    because a generated one has no `edit` - see `GeneratedDocument`.
+    return markdown()
+
+
+class Electronics(Base):
+    """The three written documents, and the harness beside them.
+
+    Three written, because they answer three questions that get confused
+    the moment they share a page. What `next pcb` generates hangs under
+    `next pcb` rather than beside it. The split between written and
+    generated is visible on the page anyway, since a generated one has no
+    `edit` - see `GeneratedDocument`.
+
+    **`harness` is here rather than under any of them** because it is not
+    about the board in the rack at all: it is the four small PCBs on the
+    far side of its connectors, and all three of the others describe
+    themselves against it. Generated for the usual reason - the pinouts
+    are in four KiCad files, and a second copy of a pinout is a pinout
+    that can be wrong.
     """
 
     def __init__(self, owner):
@@ -130,6 +154,11 @@ class Electronics(Base):
             DirtyRework(owner=self),
             NextPCB(owner=self),
         ]
+        # Not written to disk: nothing generates a file for it, and the
+        # KiCad projects it reads are the copy anybody would want open.
+        self._harness = GeneratedDocument(
+            owner=self, document_name="harness", source=_harness,
+        )
 
     @property
     def name(self):
@@ -141,8 +170,16 @@ class Electronics(Base):
 
     @property
     def documents(self):
+        """The written ones. `harness` is not among them - it has no file
+        to edit and no `edit` to offer."""
         return list(self._documents)
 
     @property
+    def harness(self):
+        return self._harness
+
+    @property
     def snapshot_children(self):
-        return {document.name: document for document in self._documents}
+        children = {document.name: document for document in self._documents}
+        children[self._harness.name] = self._harness
+        return children
