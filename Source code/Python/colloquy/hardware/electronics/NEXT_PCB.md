@@ -4,7 +4,7 @@
 while the dirty rework was being planned, so that the rework is a
 prototype of this rather than a detour — every pin it moves, this keeps.
 
-Two decisions are taken, and one constraint is given:
+Three decisions are taken, and one constraint is given:
 
 1. **Absorb Thomas's filter board and analyser array onto the main PCB.**
    One board, no daughterboards, no patch wires. More work to lay out,
@@ -13,7 +13,12 @@ Two decisions are taken, and one constraint is given:
 2. **The amplifier moves to the body.** The board sends line level down
    the harness and the amplifier sits next to its loudspeaker. This was
    section 3's open question in the previous draft; it is answered below.
-3. **The DSUB connectors and the harness behind them are fixed** — a
+3. **The amplifiers run from +12 V**, and the module is specified by its
+   supply range (4.5–15 V) rather than by a rail — so male2, which this
+   board cannot feed on either rail, runs the same module from its own
+   local supply. Section 5's open question in the previous draft; it is
+   answered there.
+4. **The DSUB connectors and the harness behind them are fixed** — a
    supplier constraint, not a design choice. Four DSUB-15s, the pinout
    `as built` records, no new conductors. Everything below is specified
    against that. **Section 8 keeps the case for redrawing them**, because
@@ -48,6 +53,14 @@ support network (the analyser array is five ready-made modules today and
 nobody here has drawn the chip) and whatever is fitted across `J11`/`J12`
 for each light sensor. A plausible-looking number passing for a known one
 is how a board comes back wrong.
+
+**Nothing above the copper is waiting on anything.** Every decision this
+board needs is taken. What is left is three measurements, and none of
+them changes a track: what is fitted across `J11`/`J12` (a value for the
+BOM), what male2's local supply is (a module setting — section 5), and
+whether 2.5 Vpp survives a full-length body cable with its NeoPixels
+running (section 3, and the one to do first, because a bad answer is
+found at the two ends rather than in the layout).
 
 ---
 
@@ -194,7 +207,7 @@ puts there:
 
 | Part | Note |
 |---|---|
-| amplifier module | class-D; supply rail is a decision, see section 5 |
+| amplifier module | class-D, rated **4.5–15 V**; +12 V in four bodies and male2's local supply in the fifth — section 5 |
 | 22K / 3K3 divider | at the amplifier input, sized for volume at maximum |
 | 470 µF reservoir | across the amplifier's supply and GND, **at the module** |
 | loudspeaker | short leads, in the body, as now |
@@ -336,9 +349,11 @@ than a fault to correct:
   the signal's return stays in the cable the signal is in.
 - **male2 has no supply from this board at all**, and its NeoPixels run
   today — so its 5 V comes from somewhere off these files. **Find where
-  before hanging an amplifier on it.** This is the one open item that can
-  block the build, and it is answered by looking at the piece, not at the
-  CAD.
+  before hanging an amplifier on it**, and check what headroom is left on
+  it. This does **not** block the board: `B-J4` has one spare conductor
+  and GND only on its shell, so male2's amplifier is fed locally whatever
+  rail this board offers, and the rail is decided without it. See
+  *Which rail the amplifier runs from*, below.
 
 The same finding corrects `dirty rework` section 5, which is being worked
 from right now: it says to power each MAX9814 "from the DSUB, which
@@ -347,27 +362,72 @@ and of neither male.
 
 ### Which rail the amplifier runs from
 
-**Not yet decided, and the fixed harness makes it the deciding spec of
-the module.** Every body's connector that carries power carries **+12 V**
-as well as +5 V:
+**+12 V, and the module is specified by its supply range rather than by a
+rail.** This waited on male2's supply in the previous draft. It should
+not have: male2 cannot take an amplifier supply from this board on
+*either* rail, so its answer decides nothing about the other four.
 
-- **On +5 V**, three bodies share one conductor with three NeoPixel
-  strips, and male2 has no conductor at all.
-- **On +12 V**, the same acoustic power costs roughly 40% of the current,
-  on a conductor the NeoPixels do not touch. The cost is that +12 V also
-  feeds the Dynamixels, whose current steps when a servo starts — so the
-  local reservoir and the module's own decoupling are doing real work.
+**Why male2 is not a rail question.** `B-J4` carries **one** spare
+conductor — pin 7, `centre/spare1` — and GND only on its shell. An
+amplifier needs a supply *and* a return. Spending that single spare on
+the supply still leaves the return on a cable screen, which is the last
+copper class-D switching current should go home through, and it leaves
+male2 with no spare at all for the shutdown line section 4 reserves. So
+male2's amplifier is fed **locally**, from whatever already runs its
+NeoPixels, whichever rail this board offers. That is a finding, not an
+open item: it follows from the connector, and the connector is fixed.
 
-Neither rail reaches male2. **Choose the module once male2's supply is
-found**, because that answer may decide it.
+**So the four that can be fed decide it on the merits, and the merits say
++12 V:**
+
+- The same acoustic power costs roughly **40% of the current** (5 V/12 V),
+  which is the whole of the volt-drop problem in several metres of thin
+  conductor.
+- The +12 V conductor carries **no NeoPixel current**. The +5 V one
+  carries three strips, and for female3 and male1 it is one shared
+  conductor — so on +5 V an amplifier's peaks and a strip's peaks are on
+  the same wire.
+- **The field has now shown what that sharing costs.** On 2026-08-28 the
+  reworked board had its sound side taken from the Mega's own 5 V, and it
+  browned out and re-enumerated in the middle of a command
+  (`docs/errors/2026-08-28-01.txt`; `dirty rework` section 0). This board
+  already designs that exact failure out at the rack, by keeping
+  `MEGA_5V` off the `+5V` rail — but the same mistake is available one
+  level down, at the far end of a body cable, and putting the amplifiers
+  on the rail the lights are not on is that lesson applied at the body
+  end.
+- The cost, stated plainly: **+12 V also feeds the Dynamixels**, whose
+  current steps when a servo starts. That is what the 470 µF at the
+  module is for. It is a supply disturbance with local energy behind it,
+  which is a far easier thing than a shared conductor sagging.
+
+**One part number, kept by specifying a range.** Choose a class-D module
+rated across the whole span — **nominally 4.5 V to 15 V** — so the same
+assembly runs from +12 V in four bodies and from male2's local supply in
+the fifth. The consequence is worth knowing before it is heard: acoustic
+power goes as the square of the supply, so **male2 on 5 V is markedly
+quieter than the other four**. Two ways out, neither of which blocks this
+board: bring +12 V to male2 whenever the harness is next rebuilt
+(section 8), or raise male2's local supply. Until one of them happens,
+male2's level is a commissioning problem rather than a design one.
+
+**What is still to be measured, and it is not a rail:** what male2's
+local supply actually is — its voltage and what headroom is left on it
+once an amplifier is added. That is answered by looking at the piece, not
+at the CAD, and it decides male2's module setting rather than this
+board's copper.
 
 ### Current budget
 
-Budget **0.5 A of peak amplifier current per body** at 5 V and confirm it
-against the module actually chosen — a TPA2005D1 delivering 1.4 W into
-8 Ω is roughly that. That is on top of the NeoPixels, it is peak rather
-than average, and for female3 and male1 it is on a shared conductor. The
-local 470 µF is what keeps it from being seen at the board at all.
+Budget **0.25 A of peak amplifier current per body at +12 V**, and
+confirm it against the module actually chosen — it is the 0.5 A that a
+TPA2005D1 delivering 1.4 W into 8 Ω costs at 5 V, scaled by the rail. It
+is peak rather than average, and it is no longer on top of the NeoPixels:
+that is the point of choosing this rail.
+
+**male2 keeps the 0.5 A figure**, at 5 V, on its own local supply — which
+is the number to check that supply against before hanging an amplifier on
+it, since it is already running a NeoPixel strip.
 
 ### Grounding, since it now matters
 
@@ -456,8 +516,8 @@ signals and its own spares.** No body's supply passes through another
 body's cable, and no connector carries two bodies. Three things it fixes,
 all of them things sections 4, 5 and 7 have to work around:
 
-- male2 gets a supply of its own, and the question that can block this
-  build stops existing.
+- male2 gets a supply of its own, on conductors of its own, and stops
+  being the one body whose amplifier this board cannot feed.
 - female3, male1 and male2 stop sharing one +5 V conductor.
 - every body gets spares, so a mute line — or anything else that next
   needs a wire — is available to all five rather than to two.

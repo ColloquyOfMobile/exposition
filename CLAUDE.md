@@ -198,6 +198,8 @@ deliberately absent and kept in their own BOM section: the MSGEQ7's
 support network and whatever is fitted across `J11`/`J12`, neither of
 which is recorded anywhere in this repo.
 
+**The board's own decisions are all taken** (2026-08-29). The last one open was which rail the amplifiers run from, and it had been left waiting on male2's supply — wrongly, because `B-J4` carries one spare conductor and GND only on its shell, so male2's amplifier is fed locally whichever rail the board offers and cannot decide anything for the other four. So: **+12 V**, for 40% of the current on a conductor the NeoPixels do not touch, with the module specified by its supply *range* (4.5–15 V) so one part number covers male2's local 5 V too. The 2026-08-28 brown-out is the field evidence for it — that was the same mistake one level up, and `MEGA_5V` being a separate net from `+5V` is the rack-end half of the same lesson. What remains is three measurements, none of which moves a track: the `J11`/`J12` fitment, male2's local supply, and whether 2.5 Vpp survives a full-length body cable.
+
 Two findings in `as built` are why the rework is small, and both are worth knowing before touching the board:
 
 - **`J4`, `J8` and `J10` are a straight 1:1 breakout of D0–D21.** The shield pads run down one column at x = 191.96 mm and the header pins down another at x = 200.85 mm, joined by one 1 mm front-copper track each with nothing else touching the pad. So every disconnection is one scalpel stroke in that 8.89 mm gap, with a solderable pad on each side — which is what makes the whole rework five cuts and fourteen wires on the board.

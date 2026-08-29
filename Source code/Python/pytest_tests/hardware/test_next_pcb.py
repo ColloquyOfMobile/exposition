@@ -179,13 +179,46 @@ def test_the_connector_with_no_power_says_so_on_the_silkscreen(design):
 
 
 def test_every_body_that_can_be_powered_from_its_own_connector_is(design):
-    """Three of the five. The other two are why NEXT_PCB.md section 5 has
-    an open item that can block the build."""
+    """Three connectors, four bodies - female3 and male1 share A-J3. The
+    fifth is male2, and NEXT_PCB.md section 5 decides the rail without
+    waiting for it."""
     powered = [
         ref for ref, pins in next_pcb._CONNECTORS.items()
         if "+5V" in pins.values()
     ]
     assert sorted(powered) == ["A-J3", "J1", "J5"]
+
+
+def test_both_rails_reach_every_connector_that_has_either(design):
+    """The rail decision (+12 V, section 5) is only free to be made if
+    every body that can be fed at all can be fed either way. A connector
+    with +5 V and no +12 V would have decided it by default."""
+    for ref, pins in next_pcb._CONNECTORS.items():
+        values = set(pins.values())
+        assert ("+5V" in values) == ("+12V" in values), ref
+
+
+def test_male2s_connector_cannot_carry_an_amplifier_supply(design):
+    """The finding section 5 rests on, and the reason male2 stopped being
+    an open item that blocks the build.
+
+    An amplifier needs a supply *and* a return. `B-J4` has one spare
+    conductor and GND only on its shell, so even spending that spare on
+    the supply leaves the return on a cable screen - which is the last
+    copper class-D switching current should go home through - and leaves
+    male2 no spare for the shutdown line section 4 reserves. So male2's
+    amplifier is fed locally whatever rail this board offers, and its
+    supply decides male2's module setting rather than this board's
+    copper.
+    """
+    pins = next_pcb._CONNECTORS["B-J4"]
+
+    spares = [net for net in pins.values() if "spare" in net]
+    assert len(spares) == 1, spares
+
+    # Pin 0 is the shell. Nothing else on it is a ground conductor.
+    grounds = [pin for pin, net in pins.items() if net == "GND"]
+    assert grounds == [0], grounds
 
 
 # --- the mute line is reserved, not wired --------------------------------
