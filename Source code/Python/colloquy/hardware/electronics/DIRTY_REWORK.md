@@ -594,10 +594,49 @@ of that for you, in those words, and names the pin and the connector.
 
 ## 7. What this rework does not answer
 
+- **Whether it is loud enough at all, which it will not be by TJ's
+  standard.** The drop is designed in and it is large. TJ drove a
+  SparkFun TPA2005D1 breakout straight off a logic pin: **5 Vpp of square
+  wave** into an amplifier whose gain is 2 (`R1` = `R2` = 150 K on that
+  board, `R1A`/`R2A` not fitted, and the datasheet's gain is
+  2 x 150 K / `RI`). Twice five volts is more than a bridged output on a
+  5 V rail can swing, so it ran **hard into the rails** - a full-scale
+  square at the chip's 1.4 W into 8 ohms.
+
+  Thomas's chain ends at **330 mVpp** into the GF1002, because the
+  22K/3K3 divider is sized so that the module's *volume at maximum* is
+  its maximum clean input. In his words: exceeding it "would go into
+  clipping which results in a square wave output on the loudspeaker",
+  which "would render the filter stage useless".
+
+  So the drive is **5 Vpp against 0.33 Vpp - about 24 dB** - before
+  either amplifier's own gain, and TJ's was clipping on top of that. The
+  memory of his being far louder is correct, and there is **no headroom
+  in the pot** to make it up: turning it past maximum is the one thing
+  the divider exists to prevent, and a clipped output puts the harmonics
+  back into other analyser bands, which is the whole thing the filter is
+  for.
+
+  Three levers, and only the first is already decided. **+12 V** rather
+  than +5 V for the amplifier (`next pcb` section 5) buys about 2.4x the
+  output swing, near enough 7.6 dB, which is most of the deficit. A
+  module with more gain would need the divider re-sized with it, since
+  the product of the two is what must stay under the rail. And the
+  loudspeakers are the third - see below.
+
+  **What it actually has to be, though, is not "as loud as TJ's".** It
+  has to be detectable by a MAX9814 with 40 to 60 dB of AGC a metre or
+  two away, with a clean enough spectrum that the tone lands in one
+  analyser band. That is a far weaker requirement than filling a room,
+  and it is the one to measure against.
+
 - **Whether the loudspeakers are up to it.** They sit in an open frame,
   close to an acoustic short circuit, and have never been shown to be
-  flat from 160 Hz to 6.25 kHz. Test the two lowest tones for sound
-  pressure first.
+  flat from 160 Hz to 6.25 kHz. Thomas says the same and says to test it.
+  Note that the 2026-08-27 change made this **worse**: the two lowest
+  tones are now the males', and an open-frame speaker at 160 Hz is where
+  this arrangement is least efficient. Test the two lowest tones for
+  sound pressure first.
 - **Whether an MSGEQ7 can hear a body across a gallery full of
   visitors.** The hearing side inherits a fixed absolute threshold, which
   is already the weakest part of the light side (CODE_DOCUMENTATION 8.2)

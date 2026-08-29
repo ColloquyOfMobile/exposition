@@ -52,7 +52,7 @@ and a hearing side that TJ did not have.
 | processor | one Mega 2560, in the rack | **five Pro Minis, one in each body**, plus a bridge in the rack |
 | low-pass filter | five channels on the main board | **one in each body**, cut for that body's pitch |
 | 22K/3K3 divider | on the main board | **in the body**, at its amplifier |
-| MSGEQ7 analyser | five on the main board, one commoned strobe | **one in each body**, its own strobe |
+| MSGEQ7 analyser | five on the main board, one commoned strobe | **none** - the body's own processor does it in software (section 4) |
 | MAX9814 microphone | in the body | in the body — unchanged |
 | amplifier | in the body | in the body — unchanged |
 | loudspeaker | in the body | in the body — unchanged |
@@ -165,7 +165,7 @@ it does now.
 |---|---|
 | Arduino Pro Mini, 5 V / 16 MHz | ATmega328P; TJ's board |
 | MAX3485 or equivalent | RS-485 transceiver, with DE/RE on one pin |
-| MSGEQ7 + its support network | one per body; its own strobe and reset, no commoning |
+| the listening | **in software on the Pro Mini** - a Goertzel bin per pitch, no analyser chip at all. See below; an MSGEQ7 per body is the fallback if it is ever wanted |
 | second-order low-pass | **cut for this body's pitch only** — one R/C pair, not five |
 | 22K / 3K3 divider | at the amplifier input |
 | amplifier module + 470 µF | as `next pcb` section 3, unchanged |
@@ -176,6 +176,51 @@ up-ring is on the bar rather than in the body, so it may be easier to
 drive from the rack even here. Both are possible; the conductors exist
 either way. Decide it when the mechanical arrangement of the up-ring is
 in front of somebody.
+
+### The MSGEQ7 can go too
+
+**A Pro Mini can do the listening in software, and better.** The chip
+under it is an ATmega328P at 16 MHz, and detecting whether one known
+frequency is present is what the **Goertzel** algorithm is for: one
+multiply-accumulate per sample per frequency, no buffer, no FFT.
+
+The arithmetic, so it is a decision rather than a hope:
+
+| | |
+|---|---|
+| ADC clock | 16 MHz / 64 = 250 kHz, 13 clocks a conversion |
+| sample rate | **19.2 kSPS** - above Nyquist for 6250 Hz with room over |
+| resolution | 8 to 9 bits usable, since 250 kHz is over the datasheet's 200 kHz for a full ten |
+| cost per bin | ~25 cycles a sample in integer Q15 (the AVR has a hardware `MUL`) |
+| five bins | ~2.4 M cycles a second of 16 M - about **15% of the processor** |
+| window | 25 ms is 480 samples; bin width 40 Hz, against tones 160 Hz apart at the closest |
+
+**It is better than the MSGEQ7 at this particular job**, which is worth
+saying plainly because the MSGEQ7 is the more serious-looking part. Its
+seven bands are fixed, octave-spaced and wide-skirted: the five pitches
+were *chosen* to land one per band, and two of them still sit in adjacent
+bands with the skirts overlapping. A Goertzel bin is centred exactly on
+the tone and is as narrow as the window makes it, which rejects the room
+far better than a band an octave wide.
+
+**And it deletes a part.** No analyser chip, no commoned strobe, no
+reset, no support network - which is one of the only two groups of values
+in `next pcb`'s bill of materials that nobody in this repository has been
+able to fill in.
+
+Three things it needs, and the third is a real design point:
+
+- the microphone signal biased to mid-rail and AC coupled, which a
+  MAX9814 already gives (about 1.25 V);
+- comparison between bins rather than absolute level, since the AGC makes
+  absolute level meaningless - which is what `test_audio_bringup`'s
+  diagnosis already does with its per-band rise;
+- **the NeoPixels.** `show()` disables interrupts for roughly 30 us a
+  pixel, so a 50-pixel strip is 1.5 ms deaf. Sampling through a write
+  loses samples. It is the same collision CODE_DOCUMENTATION 9.13 raised
+  about tones, answered there by hardware timers - here the answer is
+  cheaper, since the body's own processor decides when it does both and
+  can simply not listen while it is writing light.
 
 **The pitch stops being a table.** `drivers/audio.py` exists because five
 tones must come out of one chip: a pitch belongs to its timer, Thomas's
