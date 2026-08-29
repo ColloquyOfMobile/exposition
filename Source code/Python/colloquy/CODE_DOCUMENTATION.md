@@ -369,11 +369,22 @@ simulator is too clean to produce an ambiguous one.
 
 ---
 
-## 9. The sound channel (designed and wired, not built)
+## 9. The sound channel (built 2026-08-29, with two gaps)
 
-Sound is the half of the interaction this port has never had, and §8.6 is
-only the one-line version of it. This section is the detail, for building
-it.
+Sound was the half of the interaction this port never had, and §8.6 is
+only the one-line version of it. This section is the detail. Most of it
+is now built - `drivers/sing/`, `drivers/hearing/`, and a `Reinforcement`
+on each sex - and the table below says which rows are and are not.
+
+**Two things are still missing and they are named in the rows: the
+mirror (9.6) and the satisfaction moment's music (9.9).** The first is
+the more serious, because it is the physical medium of the whole
+exchange: in the original what actually passes between the two bodies is
+the male's own lamp light, returned by her wiggling mirror, and the sound
+only agrees to start and keeps confirming. Here nothing drives a mirror,
+so the male listens where he should be counting light. **And the ears are
+emulated** (`drivers/hearing/`) until the microphones are in service, so
+none of this has yet been done by a microphone.
 
 It carries less than you would expect. Who a body is, what it wants, and
 whether an exchange is working all travel as **light**. Sound carries
