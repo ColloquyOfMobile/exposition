@@ -10,6 +10,7 @@ from .test import Test
 from .bodies import Bodies
 from .all_neopixels import AllNeopixels
 from .all_audio import AllAudio
+from .hearing import Hearing
 
 
 class Drivers(BaseThread):
@@ -51,6 +52,11 @@ class Drivers(BaseThread):
         # so a body cannot own a speaker the installation does not know
         # about.
         self._audio = AllAudio(owner=self, bodies=self._bodies)
+        # Emulated, because the microphones are not in service - see
+        # drivers/hearing/. It hangs here rather than on a body
+        # because no body can answer 'what can I hear' on its own:
+        # the answer is what everybody else is singing.
+        self._hearing = Hearing(owner=self, bodies=self._bodies)
         self._speakers = self._audio.speakers
         self._microphones = self._audio.microphones
 
@@ -124,6 +130,10 @@ class Drivers(BaseThread):
     @property
     def mirrors(self):
         return self._mirrors
+
+    @property
+    def hearing(self):
+        return self._hearing
 
     @property
     def audio(self):
@@ -248,6 +258,7 @@ class Drivers(BaseThread):
         # analysers share a strobe, so five separate reads are five
         # different moments.
         children[self._audio.name] = self._audio
+        children[self._hearing.name] = self._hearing
         children["bodies"] = self.bodies
         for body in self.bodies:
             children[body.name] = body

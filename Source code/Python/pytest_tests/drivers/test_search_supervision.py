@@ -43,6 +43,11 @@ def make_male(satisfied, searching):
         search=search,
         is_satisfied=lambda: satisfied,
         log=lambda *args, **kwargs: None,
+        # He now also checks whether anybody is singing his call back
+        # before deciding to keep calling - see Male._answered_by. Nobody
+        # is, in every test here: this file is about the search half.
+        reinforcement=FakeSearch(),
+        _answered_by=lambda: None,
     )
 
 

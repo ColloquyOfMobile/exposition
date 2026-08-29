@@ -9,6 +9,7 @@ from ..angle.conversion import REDUCTIONS
 from ..dxl_origin import DXLOrigin
 from ..mirror import Mirror
 from .search import Search
+from ..sing import Sing
 from .reinforcement import Reinforcement
 from ..turn_back_and_forth import TurnBackAndForth
 from .test import Test
@@ -40,6 +41,7 @@ class Female(BaseThread):
         self._mirror = Mirror(owner=self, id_number=id_number)
         self._drives = Drives(owner=self)
         self._search = Search(owner=self)
+        self._sing = Sing(owner=self)
         self._reinforcement = Reinforcement(owner=self)
         self.turn_back_and_forth = TurnBackAndForth(owner=self)
 
@@ -90,6 +92,10 @@ class Female(BaseThread):
     @property
     def reinforcement(self):
         return self._reinforcement
+
+    @property
+    def sing(self):
+        return self._sing
 
     @property
     def speaker(self):
@@ -224,14 +230,6 @@ class Female(BaseThread):
         while they last.
         """
         if self.search.is_started or self.reinforcement.is_started:
-            return
-
-        if self.reinforcement.thread_errors:
-            # Reinforcement is a placeholder that fails on its first tick,
-            # and BaseThread refuses to restart a thread that has errored.
-            # Going quiet here is the honest outcome until it is written:
-            # retrying would spin, and would bury the error that says why
-            # she stopped under a new one every tick.
             return
 
         partner = self.search.take_partner()

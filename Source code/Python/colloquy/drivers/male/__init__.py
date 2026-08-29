@@ -8,6 +8,8 @@ from ..microphone import Microphone
 from ..speaker import Speaker
 from ..angle.conversion import REDUCTIONS
 from ..dxl_origin import DXLOrigin
+from ..sing import Sing
+from .reinforcement import Reinforcement
 from .search import Search
 from ..turn_back_and_forth import TurnBackAndForth
 
@@ -43,6 +45,8 @@ class Male(BaseThread):
 
         self._drives = Drives(owner=self)
         self._search = Search(owner=self)
+        self._sing = Sing(owner=self)
+        self._reinforcement = Reinforcement(owner=self)
         self.turn_back_and_forth = TurnBackAndForth(owner=self)
 
         self._neopixels = Neopixels(owner=self)
@@ -88,6 +92,14 @@ class Male(BaseThread):
     @property
     def ring(self):
         return self.neopixels.ring
+
+    @property
+    def sing(self):
+        return self._sing
+
+    @property
+    def reinforcement(self):
+        return self._reinforcement
 
     @property
     def search(self):
@@ -216,14 +228,45 @@ class Male(BaseThread):
         now, and the bar watches these flags to decide whether to keep
         wandering (`Bar.loop()`).
         """
+        if self.reinforcement.is_started:
+            # The exchange owns him while it lasts.
+            return
+
         if self.is_satisfied():
             if self.search.is_started:
                 self.log(f"{self.name} wants nothing now - stopping his search.")
                 self.search.stop()
             return
 
+        answer = self._answered_by()
+        if answer is not None:
+            # A female is singing his own call back at him, naming an
+            # appetite he is still short of. He stops calling and answers.
+            self.search.stop()
+            self.reinforcement.partner = answer
+            self.reinforcement.start(started_by=self)
+            return
+
         if not self.search.is_started:
             self.search.start(started_by=self)
+
+    def _answered_by(self):
+        """(female name, drive) if somebody is singing his call back.
+
+        His own identity, naming one of the appetites he is short of -
+        which is the whole of TJ's test. A reply meant for the other male,
+        or naming something he no longer wants, is not an answer
+        (Logic_male.ino). Silence is the ordinary case and comes back None.
+        """
+        heard = self.drivers.hearing.heard_by(self)
+        if heard is None:
+            return None
+
+        singer, bits = heard
+        for drive in self.drives.which_is_frustated():
+            if bits == self.colloquy.light_patterns[self.name][(drive,)]:
+                return singer, drive
+        return None
 
     def setup(self):
         self.dxl.init_hardware()
@@ -232,6 +275,7 @@ class Male(BaseThread):
     def setdown(self):
         self.drives.stop()
         self.search.stop()
+        self.reinforcement.stop()
 
     @property
     def snapshot_children(self):

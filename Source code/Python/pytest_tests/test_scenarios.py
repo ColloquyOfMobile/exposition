@@ -75,7 +75,6 @@ def thread_classes():
 WITHOUT_SCENARIOS = {
     "colloquy.exposition.Exposition",
     "colloquy.drivers.female.light_sensor.LightSensor",
-    "colloquy.drivers.female.reinforcement.Reinforcement",
     "colloquy.drivers.female.search.read_pattern.ReadPattern",
     "colloquy.drivers.male.search.blink.Blink",
     "colloquy.drivers.bar.turn_back_and_forth.TurnBackAndForth",

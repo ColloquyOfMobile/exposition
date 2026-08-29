@@ -85,13 +85,14 @@ def test_she_does_not_go_back_to_searching_before_reinforcing():
     assert "search" not in fake.started
 
 
-def test_a_failed_reinforcement_stops_her_rather_than_spinning():
-    # Reinforcement is a placeholder that errors on its first tick, and
-    # BaseThread refuses to restart an errored thread - retrying would
-    # raise inside her own loop every tick and bury the original error.
-    fake = make_female(satisfied=False, partner=("male1", "O"),
-                       reinforcement_errors=True)
+def test_a_find_now_reaches_a_reinforcement_that_runs():
+    """It used to reach a placeholder that raised on its first tick, and
+    her loop had a branch for going quiet afterwards. Reinforcement is
+    written now (`female/reinforcement/`), so the find is handed over and
+    the exchange starts."""
+    fake = make_female(satisfied=False, partner=("male1", "O"))
 
     Female.loop(fake)
 
-    assert fake.started == []
+    assert fake.started == ["reinforcement"]
+    assert fake.reinforcement.partner == ("male1", "O")
