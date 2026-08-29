@@ -54,6 +54,11 @@ class Part:
         # datasheet or off the existing board before anything is ordered.
         self.confirm = confirm
 
+    @property
+    def footprint(self):
+        """What KiCad should place for it. See FOOTPRINTS."""
+        return FOOTPRINTS[(self.kind, self.value)]
+
     def __repr__(self):
         return f"Part({self.ref} {self.value})"
 
@@ -71,6 +76,97 @@ class Net:
 
     def __repr__(self):
         return f"Net({self.name}, {len(self.terminals)} terminals)"
+
+
+# --- what KiCad places for each of them -----------------------------------
+
+# **Lifted from the board that exists wherever one exists**, which is the
+# same trick `next_pcb_mechanical.py` uses for the envelope and for the
+# same reason: the connectors, the shield and the jack are fixed parts in
+# a fixed panel, and their footprints are facts rather than choices. Every
+# name here was checked against the libraries actually installed - see
+# `next_pcb_kicad.audit`, which refuses to let this drift.
+#
+# The board that exists is entirely through-hole, so this one is too. That
+# is not nostalgia: it is hand-built, hand-repaired in a gallery, and the
+# five parts that leave (the amplifier breakouts and their pots) are the
+# only surface-mount things on it.
+_V1 = {
+    "shield": "PCM_arduino-library:Arduino_Mega2560_R3_Shield",
+    "u2d2": "custom1:u2d2_mounting",
+    "dsub": (
+        "Connector_Dsub:DSUB-15_Pins_Horizontal_P2.77x2.84mm"
+        "_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm"
+    ),
+    "jack": "custom1:PJ-082BH jack 10A",
+    "bridge": "custom1:screw brigde",
+    "jst": "Connector_JST:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical",
+    "resistor": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+    "electrolytic": "Capacitor_THT:CP_Radial_D13.0mm_P5.00mm",
+}
+
+# One footprint for every film and ceramic capacitor on the board, and it
+# takes **either** lead pitch - 5.00 mm and 7.50 mm pads both. That is
+# deliberate: the filter values run from 33 pF to 470 nF, the part that
+# ends up being bought for 470 nF is a good deal bigger than the one for
+# 33 pF, and a footprint that accepts both means buying the capacitors
+# does not have to happen before the board is laid out. Area is the thing
+# this board has most of, now that five amplifier breakouts and five pots
+# have left it.
+_FILM = "Capacitor_THT:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm"
+
+# Socketed, because an MSGEQ7 is not a part to solder twice and the array
+# is five ready-made modules today - the chips would be lifted from them.
+_MSGEQ7 = "Package_DIP:DIP-8_W7.62mm_Socket"
+
+# Big enough to clip a probe onto rather than touch one to.
+_TEST_PAD = "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm"
+
+FOOTPRINTS = {
+    ("board", "Arduino Mega 2560"): _V1["shield"],
+    ("board", "U2D2"): _V1["u2d2"],
+    ("analyser", "MSGEQ7"): _MSGEQ7,
+    ("connector", "DSUB-15"): _V1["dsub"],
+    ("connector", "DC jack"): _V1["jack"],
+    ("connector", "screw bridge"): _V1["bridge"],
+    ("connector", "JST EH 3"): _V1["jst"],
+    ("connector", "1x6 header"): (
+        "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical"
+    ),
+    ("connector", "1x1 pad"): (
+        "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical"
+    ),
+    ("capacitor", "470uF"): _V1["electrolytic"],
+    ("test point", "test pad"): _TEST_PAD,
+}
+
+# Everything else is a resistor or a capacitor, and takes the one
+# footprint its kind uses. A 0R link is a resistor with a value of zero,
+# and is fitted and unfitted like one.
+_BY_KIND = {
+    "resistor": _V1["resistor"],
+    "link": _V1["resistor"],
+    "capacitor": _FILM,
+}
+
+
+class _Footprints(dict):
+    """FOOTPRINTS, falling back to the part's kind.
+
+    A dict rather than a function so that it reads as a table, and so that
+    a missing kind is a KeyError naming the part that has no footprint
+    rather than a None that reaches the netlist.
+    """
+
+    def __missing__(self, key):
+        kind, value = key
+        try:
+            return _BY_KIND[kind]
+        except KeyError:
+            raise KeyError(f"no footprint for a {kind} of {value!r}") from None
+
+
+FOOTPRINTS = _Footprints(FOOTPRINTS)
 
 
 # --- the fixed facts ------------------------------------------------------

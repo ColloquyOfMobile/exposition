@@ -177,8 +177,22 @@ That is also why `Colloquy` has no `attach_server`/`request_stop`: they existed 
 **The next board's wiring is generated, not written.** `NEXT_PCB.md` is
 the specification and the reasoning; `colloquy/hardware/electronics/next_pcb.py`
 is the board as data - every part, every net, every terminal - and
-`py next_pcb.py` at the repo root writes `NETLIST.md`, `BOM.md` and
-`MECHANICAL.md` into `CAD/KiCad/electronic box v2/`. The mechanical one
+`py next_pcb.py` at the repo root writes `NETLIST.md`, `BOM.md`,
+`MECHANICAL.md` and **`next_pcb.net`** into
+`CAD/KiCad/electronic box v2/` - the last being the same wiring in
+the form Pcbnew imports (File > Import Netlist), so 113 footprints
+arrive with a ratsnest that came out of `drivers/audio.py`.
+**Placement and routing are deliberately not generated**: one analogue
+ground region under the filters joined to power ground at a single
+point, with class-D and NeoPixel current kept out of it, is judgement
+on a physical thing. `next_pcb_kicad.py` also holds the pad map - the
+design names terminals and a footprint numbers pads, and the MSGEQ7's
+stay named, so its five chips are placed and left unwired rather than
+having numbers invented for them - plus `audit()`, which reads this
+machine's own footprint libraries and reports any footprint it cannot
+find and any pad the netlist names that does not exist. Footprints are
+**lifted from the board that exists** wherever it has one, the same
+way the envelope is. The mechanical one
 is read out of the *old* board's `.kicad_pcb`
 (`next_pcb_mechanical.py`) rather than restated, because the enclosure
 was cut for that board: outline (A4, 210x297, 5 mm corners), the seven
