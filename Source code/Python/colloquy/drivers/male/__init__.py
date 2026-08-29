@@ -217,6 +217,23 @@ class Male(BaseThread):
             self.turn_to_max_position()
             return
 
+    @property
+    def is_in_satisfaction_moment(self):
+        """Is this body standing in the one moment it has what it wanted?
+
+        Read by its own `Drive`s, which stop climbing while it is true -
+        see drive/__init__.py. Guarded on `is_started` as well, because
+        `Reinforcement` keeps the flag after the thread has ended and a
+        body would otherwise never be hungry again.
+        """
+        reinforcement = self.reinforcement
+        return reinforcement.is_started and reinforcement.is_satisfied_moment
+
+    @property
+    def reinforcement_decrement(self):
+        """How much one round takes off the appetite this body shares."""
+        return self.params["reinforcement decrement"][self.name]
+
     def loop(self):
         """Search while he wants something, and stop when he stops.
 

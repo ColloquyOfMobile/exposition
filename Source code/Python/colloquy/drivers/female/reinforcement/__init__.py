@@ -185,7 +185,7 @@ class Reinforcement(BaseThread):
         """One round: take the agreed amount off the shared appetite."""
         self._last_heard = time()
         self._rounds += 1
-        self.shared_drive.decrease()
+        self.shared_drive.decrease(self.female.reinforcement_decrement)
 
         if self.shared_drive.is_satisfied:
             self._begin_satisfaction()

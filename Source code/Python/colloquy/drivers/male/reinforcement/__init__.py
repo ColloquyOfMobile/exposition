@@ -173,7 +173,7 @@ class Reinforcement(BaseThread):
     def _reinforce(self):
         self._last_heard = time()
         self._rounds += 1
-        self.shared_drive.decrease()
+        self.shared_drive.decrease(self.male.reinforcement_decrement)
 
         if self.shared_drive.is_satisfied:
             with self.shared_drive.lock:

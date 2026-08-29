@@ -104,6 +104,27 @@ DEFAULTS = {
     },
     "male1": {"dxl origin": 0, "motion range": 58.594},
     "male2": {"dxl origin": 0, "motion range": 58.594},
+    # How much one round of reinforcement takes off the appetite a pair
+    # shares, per body, on this port's 0-100 scale.
+    #
+    # The three females are TJ's, converted: `FEMALE_reinforcement_decrement`
+    # is 1200, 600 and 1200 on his 0-4800 scale (UNIT.ino), so 25, 12.5 and
+    # 25 here. They are *not* all the same on purpose - female2 takes half
+    # what her sisters do, so she needs twice as many rounds and holds a
+    # partner twice as long.
+    #
+    # The two males are a **stand-in**. His is not a fixed number at all:
+    # it is `sense_light_reinforce_sum * 10`, the light he actually
+    # collected off her mirror that round, which at the 80-tick maximum is
+    # about 17 here (CODE_DOCUMENTATION 9.7). Nothing drives a mirror yet,
+    # so 17 stands for "he collected all of it" until one does.
+    "reinforcement decrement": {
+        "female1": 25,
+        "female2": 12.5,
+        "female3": 25,
+        "male1": 17,
+        "male2": 17,
+    },
     # One per female, on the servos between them. Nothing drives them yet,
     # and nobody has measured how far one can turn before it fouls - hence
     # a range of zero, which means "stays where it is" rather than "turns

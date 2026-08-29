@@ -59,13 +59,15 @@ class FakeDrive:
     def __init__(self, value=100):
         self.value = value
         self.decreases = 0
+        self.last_amount = None
         import contextlib
 
         self.lock = contextlib.nullcontext()
 
-    def decrease(self):
+    def decrease(self, amount=None):
         self.decreases += 1
-        self.value = max(0, self.value - 20)
+        self.last_amount = amount
+        self.value = max(0, self.value - (20 if amount is None else amount))
 
     @property
     def is_satisfied(self):
@@ -147,6 +149,8 @@ def female_reinforcement(partner=("male1", "O"), drive_value=100):
         drives=SimpleNamespace(o_drive=drive, p_drive=FakeDrive(100)),
         colloquy=SimpleNamespace(light_patterns=PATTERNS),
         drivers=SimpleNamespace(hearing=None),
+        # TJ gives each female her own decrement - see params.
+        reinforcement_decrement=25,
     )
     node._log = lambda *args, **kwargs: None
     node.drive = drive
@@ -261,6 +265,8 @@ def male_reinforcement(partner=("female1", "O")):
         drives=SimpleNamespace(o_drive=drive, p_drive=FakeDrive(100)),
         colloquy=SimpleNamespace(light_patterns=PATTERNS),
         drivers=SimpleNamespace(hearing=None),
+        # A stand-in for the light he would have collected - see params.
+        reinforcement_decrement=17,
     )
     node._log = lambda *args, **kwargs: None
     node.drive = drive
@@ -399,3 +405,110 @@ def test_his_half_counts_bursts_the_same_way():
         MaleReinforcement.loop(node)
 
     assert node.rounds == 1
+
+
+# --- what a round is worth, and when appetites stand still ---------------
+
+
+def test_each_female_takes_her_own_amount_off():
+    """TJ's `FEMALE_reinforcement_decrement` is 1200, 600 and 1200 on his
+    0-4800 scale, so 25, 12.5 and 25 here. Not all the same on purpose:
+    female2 needs twice as many rounds and holds a partner twice as
+    long."""
+    node = female_reinforcement()
+    node.female.reinforcement_decrement = 12.5
+    FemaleReinforcement.setup(node)
+    him = body("male1", FakeSing(transmitting=True, bits=pattern("male1", None)))
+    node.female.sing.is_transmitting = False
+    node.female.drivers.hearing = hearing(node.female, him)
+
+    FemaleReinforcement.loop(node)
+
+    assert node.drive.last_amount == 12.5
+    assert node.drive.value == 87.5
+
+
+def test_the_male_uses_his_own_figure_too():
+    node = male_reinforcement()
+    MaleReinforcement.setup(node)
+    her = body("female1", FakeSing(transmitting=True, bits=pattern("male1", "O")))
+    node.male.sing.is_transmitting = False
+    node.male.drivers.hearing = hearing(node.male, her)
+
+    MaleReinforcement.loop(node)
+
+    assert node.drive.last_amount == 17
+
+
+def test_the_five_decrements_are_in_params():
+    """One table, and the two males are marked in it as a stand-in for the
+    light they would have collected."""
+    from colloquy.params import DEFAULTS
+
+    decrements = DEFAULTS["reinforcement decrement"]
+
+    assert decrements["female1"] == 25
+    assert decrements["female2"] == 12.5
+    assert decrements["female3"] == 25
+    assert set(decrements) == {"female1", "female2", "female3", "male1", "male2"}
+
+
+class FakeReinforcementState:
+    def __init__(self, is_started, is_satisfied_moment):
+        self.is_started = is_started
+        self.is_satisfied_moment = is_satisfied_moment
+
+
+def body_in(is_started, moment):
+    from colloquy.drivers.female import Female
+
+    fake = SimpleNamespace(reinforcement=FakeReinforcementState(is_started, moment))
+    return Female.is_in_satisfaction_moment.fget(fake)
+
+
+def test_a_body_in_its_moment_says_so():
+    assert body_in(True, True) is True
+
+
+def test_a_body_merely_reinforcing_is_not_in_the_moment():
+    assert body_in(True, False) is False
+
+
+def test_the_flag_does_not_outlive_the_thread():
+    """Reinforcement keeps `_satisfied_at` after it ends, so without the
+    `is_started` half a body would never be hungry again."""
+    assert body_in(False, True) is False
+
+
+def test_an_appetite_stands_still_during_the_moment():
+    """TJ calls incrementInternalDrives() only in the *else* of
+    `if (internal_satisfaction)` - so for those six seconds a body is not
+    getting hungry again, and the moment is not being undone while it is
+    still being shown."""
+    from colloquy.drivers.drive import Drive
+
+    climbed = []
+    fake = SimpleNamespace(
+        body=SimpleNamespace(is_in_satisfaction_moment=True),
+        increment=lambda: climbed.append(1),
+        _update_interval=0.0,
+    )
+
+    Drive.loop(fake)
+
+    assert climbed == []
+
+
+def test_an_appetite_climbs_the_rest_of_the_time():
+    from colloquy.drivers.drive import Drive
+
+    climbed = []
+    fake = SimpleNamespace(
+        body=SimpleNamespace(is_in_satisfaction_moment=False),
+        increment=lambda: climbed.append(1),
+        _update_interval=0.0,
+    )
+
+    Drive.loop(fake)
+
+    assert climbed == [1]

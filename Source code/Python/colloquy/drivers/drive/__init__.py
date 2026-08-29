@@ -129,9 +129,20 @@ class Drive(BaseThread):
             self._value = self._max
         self.owner.update()
 
-    def decrease(self):
+    def decrease(self, amount=None):
+        """Take one round of reinforcement off this appetite.
+
+        `amount` comes from the body rather than from here, because it is
+        not the same for every body: TJ gives each female her own
+        `FEMALE_reinforcement_decrement`, and a male's is however much
+        light he collected that round. See params' "reinforcement
+        decrement". The old flat 20 is the default only so that anything
+        calling this by hand still does something sensible.
+        """
+        if amount is None:
+            amount = 20
         with self.lock:
-            self._value -= 20 * self._step
+            self._value -= amount * self._step
             if self._value < 0:
                 self._value = 0
         self.owner.update()
@@ -145,7 +156,14 @@ class Drive(BaseThread):
         self.owner.update()
 
     def loop(self):
-        self.increment()
+        # Appetites stand still during a satisfaction moment. TJ calls
+        # `incrementInternalDrives()` only in the *else* of
+        # `if (internal_satisfaction)` - Logic_fem.ino:79,
+        # Logic_male.ino:66 - so for those six seconds a body is not
+        # getting hungry again. Without this the moment is already being
+        # undone while it is still being shown.
+        if not self.body.is_in_satisfaction_moment:
+            self.increment()
         sleep(self._update_interval)
 
     def setup(self):
