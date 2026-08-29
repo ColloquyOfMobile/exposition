@@ -6,6 +6,7 @@ from .test_drive_light_values import TestDriveLightValues
 from .test_male_patterns import TestMalePatterns
 from .test_light_sensor_values import TestLightSensorValues
 from .test_read_pattern import TestReadPattern
+from .test_goertzel_ear import TestGoertzelEar
 from .test_reinforcement import TestReinforcement
 from .test_search import TestSearch
 from .test_female_search import TestFemaleSearch
@@ -38,6 +39,9 @@ class Tests(Base):
         self.test_read_pattern = TestReadPattern(
             owner=self, result_folder=result_folder
         )
+        self.test_goertzel_ear = TestGoertzelEar(
+            owner=self, result_folder=result_folder
+        )
         self.test_reinforcement = TestReinforcement(
             owner=self, result_folder=result_folder
         )
@@ -64,6 +68,7 @@ class Tests(Base):
             self.test_light_sensor_values,
             self.test_read_pattern,
             self.test_reinforcement,
+            self.test_goertzel_ear,
             self.test_search,
             self.test_female_search,
             self.test_movements,
@@ -102,7 +107,10 @@ class Tests(Base):
     def snapshot_children(self):
         children = {}
         for test in self._threaded_tests:
-            if test is self.test_audio_subsystem and not self.is_simulated:
+            if (
+                test in (self.test_audio_subsystem, self.test_goertzel_ear)
+                and not self.is_simulated
+            ):
                 # Thomas's boards are on a desk in an office and the
                 # installation will never have them. Offering a bench test
                 # in the gallery is offering a run that can only refuse.

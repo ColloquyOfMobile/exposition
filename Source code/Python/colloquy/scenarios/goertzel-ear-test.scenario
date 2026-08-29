@@ -1,0 +1,18 @@
+# Goertzel ear test
+# A bench experiment, and nothing on the installation moves for it. One Mega with a speaker
+# and a microphone on it makes a tone and says whether it heard it - no analyser chip, one
+# Goertzel bin per frequency, arithmetic on the samples.
+# It is the experiment behind `one board per body` section 4: if a processor can do this,
+# the next board does not need an analyser array.
+# Sketch: Source code/Arduino/goertzel_ear/. Wiring: hardware setup, "Hearing a tone
+# without an MSGEQ7".
+
+0 Nothing on the piece moves, lights or sounds. Everything below happens on one board on a desk.
+0 For each of the installation's five pitches in turn - 160, 400, 1000, 2500 and 6250 Hz - the board does the same three things.
+0.06 It silences the tone and waits a moment for the microphone's automatic gain to settle, then captures 512 samples and measures that one frequency. This is the floor: the room, and the board's own noise, at exactly the frequency about to be played.
+0.12 It plays the tone out of D11 and waits again, longer, because the gain control has to settle the other way.
+0.03 It captures another 512 samples - about 27 milliseconds - and measures the same frequency again.
+0 The difference between the two is the only number worth believing. An electret microphone with automatic gain has no meaningful absolute level; what it can say is that this frequency is louder than it was a moment ago.
+0 A tone that does not rise over its own silence is not being heard, and this cannot say which half is at fault. Hold it by hand from the page and listen: if it is in the room, the microphone is the problem; if it is not, the speaker or the amplifier is.
+1.5 All five take about a second and a half in total, and the run ends by itself.
+0 What it cannot say anything about: a body's amplifier, a body's loudspeaker, or a metre of harness. There is no cable in this test to blame - which is what makes a failure here mean the board or the air, and nothing else.

@@ -398,7 +398,9 @@ def test_the_audio_port_picker_offers_real_leads_on_the_bench(monkeypatch, stub_
 
     set_hostname(monkeypatch, "DESKTOP-MRSLS88")
     monkeypatch.setattr(
-        "colloquy.tests.test_audio_subsystem.list_ports.comports",
+        # The picker moved onto the shared bench base - see
+        # colloquy/tests/bench_com_port.py, which both bench boards use.
+        "colloquy.tests.bench_com_port.list_ports.comports",
         lambda: [SimpleNamespace(device="COM3"), SimpleNamespace(device="COM7")],
     )
     picker = AudioComPort(owner=stub_factory())

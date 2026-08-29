@@ -2,68 +2,30 @@
 # Source code/Python/colloquy/tests/test_audio_subsystem/__init__.py
 
 import serial
-import serial.tools.list_ports as list_ports
 
 from datetime import datetime
 from functools import partial
 from time import time
 
 from colloquy.base_thread import BaseThread
-from colloquy.drivers.com_port import ComPort
 from colloquy.ui import leaves
+
+from ..bench_com_port import BenchComPort
 
 from . import protocol
 from .setup_document import HardwareSetup
 
 
-class AudioComPort(ComPort):
+class AudioComPort(BenchComPort):
     """Which port Thomas's board is on. Its own, not the installation's:
     this is a second Mega on a second USB lead, and picking the wrong one
-    of the two is the first thing that goes wrong at a bench."""
+    of the two is the first thing that goes wrong at a bench.
 
-    def __init__(self, owner, value=None):
-        super().__init__(owner=owner, value=None)
+    Everything but the params key is `BenchComPort` - see it for why a
+    bench picker cannot be the piece's."""
 
-    def set(self, com_port, *args, **kwargs):
-        self.owner.port_handler.port = com_port
-        self.owner.params["audio subsystem"]["communication port"] = com_port
-        self._value = com_port
-
-    @property
-    def ports(self):
-        """What this machine really has, which is not what the others do.
-
-        The base ComPort answers with the *piece's* simulated ports, and
-        that is the wrong question here: the bench has real serial ports
-        and no installation, so on it this lists the actual leads. Off the
-        bench there is one stand-in and nothing else - offering the U2D2's
-        and the Arduino's port names on this picker only ever invited
-        somebody to choose one.
-        """
-        for name in self._ports:
-            self._dict.pop(name)
-
-        if self.is_bench:
-            self._ports = [port.device for port in list_ports.comports()]
-        else:
-            self._ports = ["simulated audio port"]
-
-        for name in self._ports:
-            self[name] = partial(self.set, com_port=name)
-
-        return self._ports
-
-    @property
-    def snapshot_children(self):
-        """The ports to choose from, as one command each.
-
-        The base ComPort does not answer this at all - the installation's
-        Arduino and U2D2 are reached through path dispatch and never drawn
-        as nodes, so nobody had needed it. This test is meant to be used
-        from the page by somebody at a bench, and picking the right one of
-        three USB leads is the first thing they have to do.
-        """
-        return {name: self[name] for name in self.ports}
+    params_section = "audio subsystem"
+    stand_in = "simulated audio port"
 
 
 class TestAudioSubsystem(BaseThread):

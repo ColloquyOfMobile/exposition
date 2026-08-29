@@ -104,6 +104,11 @@ DEFAULTS = {
     },
     "male1": {"dxl origin": 0, "motion range": 58.594},
     "male2": {"dxl origin": 0, "motion range": 58.594},
+    # The bench's Goertzel ear board - `Source code/Arduino/goertzel_ear/`
+    # and `colloquy/tests/test_goertzel_ear/`. Its own section because it
+    # is its own Mega on its own lead, the same way Thomas's board has
+    # one: a port remembered for one board opens nothing for the other.
+    "goertzel ear": {"baudrate": 115200, "communication port": None},
     # How much one round of reinforcement takes off the appetite a pair
     # shares, per body, on this port's 0-100 scale.
     #

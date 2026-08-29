@@ -419,3 +419,73 @@ answers the same menu but has no room in it — no air, no distance, no
 microphone that can be deaf. A green run there says the test drives the
 menu correctly and nothing whatever about anybody's wiring, which is why
 the page says which board it is talking to before it says anything else.
+
+---
+
+## 8. Hearing a tone without an MSGEQ7
+
+**A second bench board, and a much smaller one.** Everything above is
+Thomas's five-channel subsystem. This is one Mega that makes a tone and
+says whether it heard it — no analyser chip, no strobe, no support
+network. One Goertzel bin per frequency, arithmetic on the samples.
+
+It is the experiment behind `hardware > electronics > one board per body`
+section 4: if a processor can do the listening in software, the next
+board does not need an analyser array at all, and the MSGEQ7's support
+network — one of only two groups of values in that BOM nobody here can
+fill in — stops being a question.
+
+**What to build.** Three wires and two things you already have:
+
+| From | To |
+|---|---|
+| Mega `D11` (OC1A) | amplifier in — through the same 22K/3K3 divider §3 uses, if the module wants one |
+| Mega `A0` | microphone module out — a MAX9814's `AOUT`, or any line sitting near mid-rail |
+| Mega `GND` | common with both |
+
+`D11` is not a choice: it is the pin Timer 1 toggles, and the tone is made
+by the timer in hardware rather than by `tone()`, so that generating it
+cannot disturb the sampling. `A0` is a choice, and matches the
+installation only so that one number means one thing in both places.
+
+**Flash `Source code/Arduino/goertzel_ear/`** and open it at 115200. It
+greets with its firmware, its pins and the sample rate it measured for
+itself. Commands, one a line:
+
+| | |
+|---|---|
+| `f <hz>` | set the frequency to make and to listen for |
+| `t 0` / `t 1` | tone off / on |
+| `m` | measure once |
+| `s` | self test — floor with the tone off, level with it on, verdict |
+| `w` | sweep the installation's five pitches, self-testing each |
+| `?` | what it is set to, and the measured sample rate |
+
+**Or drive it from the page**: `tests > test goertzel ear`, which picks
+the lead, runs the sweep, writes a results file and shows a line per
+pitch. `hold 1000 Hz` and `silence` are there for the one thing no
+reading can settle — whether a tone that was not heard was in the room at
+all.
+
+**How to read what comes back.** Only the *rise* means anything. A
+MAX9814 has automatic gain control, so its absolute level says nothing;
+what it can say is that this frequency is louder than it was a moment
+ago, at the same gain. The board measures the floor at the frequency it
+is about to play, then plays it, then measures again.
+
+```
+test hz=1000 bin=1003.9 floor=1.20 tone=41.80 rise=40.60 heard=1 fs=19230
+```
+
+`bin` is the frequency actually measured, which is the nearest whole
+number of cycles in the 512-sample window and so within about 37 Hz of
+what was asked for — the closest two pitches this piece uses are 160 Hz
+apart, so that is not a difficulty. `fs` is the sample rate the board
+timed for itself rather than assumed; at about 19 kSPS the highest pitch
+is comfortably under Nyquist.
+
+**What it cannot tell you.** Which half is at fault when nothing rises —
+hold the tone and listen, exactly as `test audio bringup` asks. And
+anything at all about a body's amplifier, a body's loudspeaker, or a
+metre of harness: there is no cable in this test, which is what makes a
+failure here mean the board or the air between the two and nothing else.
