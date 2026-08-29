@@ -637,6 +637,38 @@ of that for you, in those words, and names the pin and the connector.
   tones are now the males', and an open-frame speaker at 160 Hz is where
   this arrangement is least efficient. Test the two lowest tones for
   sound pressure first.
+- **Every one of the five pitches sits on the mains grid, and the two
+  males' sit where the energy is.** 400, 1000, 2500 and 6250 Hz are exact
+  multiples of 50 Hz - 8, 20, 50 and 125 - and 160 Hz is a quarter of a
+  bin from the third harmonic at 150. That is not bad luck: they are round
+  numbers, and round numbers in the audio range are nearly all multiples
+  of 50.
+
+  It matters unevenly. Harmonic energy falls with order, so 50x20 and
+  50x125 are unlikely to carry anything; **50x3 and 50x8 are another
+  matter** in a room with dimmers, LED drivers and switching supplies in
+  it. So male1 and male2 are the exposed pair - and they are also the two
+  lowest tones, which is where an open-frame loudspeaker is least
+  efficient. Worst signal and worst noise on the same two bodies.
+
+  **This is measurable now and worth measuring before anything is
+  rebuilt.** `tests > test goertzel ear` reads the floor at each pitch
+  with nothing sounding. A floor that is high at 160 and 400 and low at
+  1000, 2500 and 6250, with the room powered up, is mains - and the cure
+  is cheap, because it is only a number: move the two low tones off the
+  grid (175 Hz and 430 Hz, say). Both stay inside the same MSGEQ7 band,
+  both are new OCR values in the sketch, and no wire changes. The filter
+  corner for the 160 channel is 154 Hz, so moving the tone up costs about
+  a decibel of it - worth having if the noise floor falls further.
+
+  **Being frequency-based is what protects it, not what exposes it.** A
+  37 Hz bin out of 9.6 kHz throws away about 24 dB of broadband noise
+  that an amplitude threshold swallows whole - which is why the *light*
+  side's fixed absolute threshold, not the sound side, is the largest
+  remaining weakness (CODE_DOCUMENTATION 8.2). Narrow detection only
+  fails to help when the interference sits *on* the tone, and mains
+  harmonics are exactly that case.
+
 - **Whether an MSGEQ7 can hear a body across a gallery full of
   visitors.** The hearing side inherits a fixed absolute threshold, which
   is already the weakest part of the light side (CODE_DOCUMENTATION 8.2)
