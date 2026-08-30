@@ -21,6 +21,11 @@ that get confused with each other the moment they share a page:
   Same fixed harness, five Arduino Pro Minis instead of one Mega, and the
   filters and analysers moved out of the rack and into the bodies. It
   ends by comparing itself with `next pcb` and saying which to build.
+- **opencm and pro minis** - the third, and the shortest: the second one
+  with the U2D2 and the bridge collapsed into a single OpenCM 9.04, which
+  is a programmable controller where those two are an adapter and a
+  relay. One USB lead out of the rack instead of two, and an emergency
+  stop that does not need the computer.
 
 And beside them, generated rather than written:
 
@@ -76,6 +81,19 @@ class OneBoardPerBody(_ElectronicsDocument):
 
     file_name = "ONE_BOARD_PER_BODY.md"
     document_name = "one board per body"
+
+
+class OpenCMAndProMinis(_ElectronicsDocument):
+    """The third solution, and a sibling of the other two.
+
+    Not a third architecture: it is `one board per body` with the rack
+    tidied - the U2D2 and the bridge collapsed into one OpenCM, which is
+    a controller where those two are an adapter and a relay. Everything
+    about the bodies is that document's and is not repeated here.
+    """
+
+    file_name = "OPENCM_AND_PRO_MINIS.md"
+    document_name = "opencm and pro minis"
 
 
 class NextPCB(_ElectronicsDocument):
@@ -152,9 +170,9 @@ def _harness():
 class Electronics(Base):
     """The written documents, and the harness beside them.
 
-    Four written: three that answer questions about the board in the rack
-    and get confused the moment they share a page, and a fourth that is a
-    whole second answer to the third. What `next pcb` generates hangs under
+    Five written: three that answer questions about the board in the rack
+    and get confused the moment they share a page, and two more that are
+    whole second and third answers to the third of those. What `next pcb` generates hangs under
     `next pcb` rather than beside it. The split between written and
     generated is visible on the page anyway, since a generated one has no
     `edit` - see `GeneratedDocument`.
@@ -174,6 +192,7 @@ class Electronics(Base):
             DirtyRework(owner=self),
             NextPCB(owner=self),
             OneBoardPerBody(owner=self),
+            OpenCMAndProMinis(owner=self),
         ]
         # Not written to disk: nothing generates a file for it, and the
         # KiCad projects it reads are the copy anybody would want open.

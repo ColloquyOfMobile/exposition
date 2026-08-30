@@ -42,18 +42,25 @@ def test_the_section_offers_the_written_documents_not_the_generated_ones():
     anybody edits."""
     names = [document.name for document in _electronics().documents]
 
-    assert names == ["as built", "dirty rework", "next pcb", "one board per body"]
+    assert names == [
+        "as built",
+        "dirty rework",
+        "next pcb",
+        "one board per body",
+        "opencm and pro minis",
+    ]
 
 
-def test_the_two_solutions_are_siblings():
-    """`one board per body` is not a variation on `next pcb` - it is a
-    second complete answer to the same question, against the same fixed
-    harness, and it sits beside it rather than under it."""
+def test_the_three_solutions_are_siblings():
+    """The second and third are not variations on `next pcb` - they are
+    complete answers to the same question, against the same fixed
+    harness, and they sit beside it rather than under it."""
     children = _electronics().snapshot_children
 
-    assert "next pcb" in children
-    assert "one board per body" in children
-    assert "one board per body" not in children["next pcb"].snapshot_children
+    for name in ("next pcb", "one board per body", "opencm and pro minis"):
+        assert name in children, name
+    for name in ("one board per body", "opencm and pro minis"):
+        assert name not in children["next pcb"].snapshot_children, name
 
 
 def test_what_next_pcb_generates_hangs_under_next_pcb():
