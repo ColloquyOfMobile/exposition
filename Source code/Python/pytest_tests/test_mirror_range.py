@@ -60,3 +60,65 @@ def test_the_origin_is_still_nobody_else_s():
     points where it should, and that is measured at the rig."""
     for name in MIRRORS:
         assert DEFAULTS[name]["dxl origin"] == 0, name
+
+
+# --- and getting it onto an installation that already has a file ---------
+
+
+def migrated(**mirror_overrides):
+    """A v4 file put through the migration."""
+    from colloquy.params import migrate
+
+    data = {
+        "params version": 4,
+        "mirror1": {"dxl origin": 0, "motion range": 0.0},
+        "mirror2": {"dxl origin": 0, "motion range": 0.0},
+        "mirror3": {"dxl origin": 0, "motion range": 0.0},
+    }
+    for name, mirror in mirror_overrides.items():
+        data[name] = mirror
+    return migrate(data)
+
+
+def test_an_unmeasured_range_becomes_his():
+    """`_fill_missing` only adds keys a file predates, so a file that
+    already says 0.0 would never have seen the new default - which is
+    every installation, since they all have one."""
+    data = migrated()
+
+    for name in MIRRORS:
+        assert data[name]["motion range"] == 81.211, name
+
+
+def test_a_range_somebody_measured_is_left_alone():
+    """It is a fact about this installation and outranks a number read
+    off somebody else's firmware - the same rule v4 applied to a
+    deliberately-typed baud rate."""
+    data = migrated(mirror2={"dxl origin": 0, "motion range": 62.5})
+
+    assert data["mirror2"]["motion range"] == 62.5
+    assert data["mirror1"]["motion range"] == 81.211
+
+
+def test_the_origins_are_not_touched():
+    """His centre is 1023 because that is where his servo sat in his
+    mechanism. Ours is still a person at the rig."""
+    data = migrated(mirror3={"dxl origin": 2048, "motion range": 0.0})
+
+    assert data["mirror3"]["dxl origin"] == 2048
+    assert data["mirror3"]["motion range"] == 81.211
+
+
+def test_the_file_says_it_has_been_migrated():
+    from colloquy.params import PARAMS_VERSION
+
+    assert migrated()["params version"] == PARAMS_VERSION == 5
+
+
+def test_migrating_twice_changes_nothing_more():
+    from colloquy.params import migrate
+
+    once = migrated()
+    twice = migrate(dict(once))
+
+    assert twice == once

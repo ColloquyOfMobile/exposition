@@ -3,7 +3,7 @@ from pathlib import Path
 
 # Bumped whenever the shape or the units of this file change, so an older
 # file can be recognised and converted rather than misread. See migrate().
-PARAMS_VERSION = 4
+PARAMS_VERSION = 5
 
 DEFAULTS = {
     "params version": PARAMS_VERSION,
@@ -252,6 +252,42 @@ def _to_v4(data):
     return data
 
 
+# What a mirror's range said before anybody looked: not a measurement but
+# a placeholder, and one chosen so that a mirror nobody had calibrated
+# would stay where it is rather than sweep into whatever it fouls.
+_V4_MIRROR_RANGE = 0.0
+_MIRRORS = ("mirror1", "mirror2", "mirror3")
+
+
+def _to_v5(data):
+    """v4 left every mirror's motion range at zero, meaning "unmeasured".
+
+    It did not need measuring. TJ's OpenCM sketch drove these, and all ten
+    deployed versions of it carry the same limits - 924 servo units end to
+    end, and his own comment fixes the scale at 512 units to 45 degrees,
+    which is this repository's convention too. A mirror turns with its own
+    servo, so that is 81.211 degrees. See `DEFAULTS` below, and
+    `pytest_tests/test_mirror_range.py`.
+
+    **Only a zero moves.** A range somebody measured at the rig and typed
+    in is a fact about this installation and outranks a number read off
+    somebody else's firmware, exactly as v3's baud rate left a
+    deliberately-typed value alone.
+
+    **And `dxl origin` is not touched at all.** His centre is 1023 because
+    that is where his servo sat in his mechanism; ours is the reading a
+    mirror gives when it points where it should, and no amount of reading
+    his source produces it.
+    """
+    for name in _MIRRORS:
+        mirror = data.get(name)
+        if mirror and mirror.get("motion range") == _V4_MIRROR_RANGE:
+            mirror["motion range"] = DEFAULTS[name]["motion range"]
+
+    data["params version"] = 5
+    return data
+
+
 def _fill_missing(data, defaults):
     """Add any key the defaults have and this file doesn't.
 
@@ -277,6 +313,8 @@ def migrate(data):
         data = _to_v3(data)
     if data["params version"] < 4:
         data = _to_v4(data)
+    if data["params version"] < 5:
+        data = _to_v5(data)
     return _fill_missing(data, DEFAULTS)
 
 
