@@ -318,6 +318,30 @@ class Colloquy(BaseThread):
         u2d2 = self._drivers.u2d2
         return bool(u2d2.port_name) and u2d2.ever_opened
 
+    @property
+    def servos_can_be_commanded(self):
+        """Is there anything on the bus to command *right now*?
+
+        Two ways for the answer to be no, and they are different facts,
+        which is why this is not folded into `servos_were_opened`:
+
+        - the bus was never opened this run - the main PCB is out, or the
+          motors were already noted unplugged at startup, or it simply
+          would not open;
+        - the bus was opened and working, and then somebody pressed
+          `hardware > motors > unplug the motors`, which walked everything
+          home and cut torque before the chain came off.
+
+        The second is the one this property was added for. Without it a
+        `/shutdown` after an unplug spends HOMING_TIMEOUT - ninety seconds
+        - writing goal positions to servos lying on a bench, and then
+        warns that the bar may have lost its turn count, when walking it
+        home is exactly what the unplug did.
+        """
+        if not self.servos_were_opened:
+            return False
+        return not self._hardware.motors.were_unplugged_this_run
+
     def shutdown_neopixels(self):
         """Every light off, and never raising.
 
@@ -377,16 +401,22 @@ class Colloquy(BaseThread):
         with room in it, and a returned answer that the caller is
         expected to pass on.
         """
-        if not self.servos_were_opened:
+        if not self.servos_can_be_commanded:
             # Nothing to bring home, which is not the same as having
             # failed to bring it home - and the difference is the whole
             # meaning of the answer. Returning False here would print the
             # warning about a bar that has lost its turn count, about a
             # bar that was never powered this run.
-            self.log(
-                "The servo bus was never opened this run, so nothing was "
-                "homed. Its calibration is exactly as the last run left it."
-            )
+            if self.servos_were_opened:
+                self.log(
+                    "The motors were unplugged during this run, and were sent "
+                    "home before they were. Nothing to home."
+                )
+            else:
+                self.log(
+                    "The servo bus was never opened this run, so nothing was "
+                    "homed. Its calibration is exactly as the last run left it."
+                )
             return True
 
         try:
@@ -436,8 +466,11 @@ class Colloquy(BaseThread):
         it would be survived nine times, once per servo, each with the
         same paragraph in the log. One fact deserves one line.
         """
-        if not self.servos_were_opened:
-            self.log("The servo bus was never opened this run - no torque to cut.")
+        if not self.servos_can_be_commanded:
+            if self.servos_were_opened:
+                self.log("The motors were unplugged this run - no torque to cut.")
+            else:
+                self.log("The servo bus was never opened this run - no torque to cut.")
             return
         self._drivers.disable_torque()
 

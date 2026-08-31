@@ -41,11 +41,17 @@ class _Recorder(Startup):
         pass
 
 
-def make_colloquy(u2d2_raises=None, arduino_raises=None, dxl_raises=()):
+def make_colloquy(
+    u2d2_raises=None, arduino_raises=None, dxl_raises=(), motors_plugged_in=True
+):
     """A Colloquy-shaped double for open_the_hardware().
 
     `dxl_raises` names the bodies whose `init_hardware()` should fail, so
     a test can have exactly one servo refuse while the other five answer.
+
+    `motors_plugged_in` is the note `hardware/motors/` writes. False is
+    the case where the Dynamixel chain has been taken off - see
+    test_the_servo_bus_is_not_opened_when_the_motors_are_unplugged.
     """
     done = []
 
@@ -80,7 +86,14 @@ def make_colloquy(u2d2_raises=None, arduino_raises=None, dxl_raises=()):
             turn_all_off=lambda: done.append("lights off"),
         ),
     )
-    return SimpleNamespace(drivers=drivers, startup=_Recorder(), done=done)
+    hardware = SimpleNamespace(
+        motors=SimpleNamespace(
+            is_plugged_in=motors_plugged_in, unplugged_at="2026-08-31T10:00:00"
+        )
+    )
+    return SimpleNamespace(
+        drivers=drivers, startup=_Recorder(), hardware=hardware, done=done
+    )
 
 
 @pytest.fixture(autouse=True)
@@ -241,3 +254,48 @@ def test_the_node_draws_a_line_per_part_of_every_problem():
     # tree; the servo one is a plain reading.
     assert "html" in states["arduino firmware: what to do"]
     assert "value" in states["servo bar: what to do"]
+
+
+# --- the motors coming off -----------------------------------------------
+
+
+def test_the_servo_bus_is_not_opened_when_the_motors_are_unplugged():
+    """Not merely "it survives it" - it must not reach for the bus at all.
+
+    The U2D2 is a USB adapter and its bridge chip enumerates with nothing
+    behind it, so the port would open perfectly happily and then all six
+    servos would fail to answer, filling the startup page with six
+    reports of one fact. Leaving the port name unset is also what keeps
+    `Colloquy.servos_were_opened` False, which is what every homing and
+    torque guard downstream already reads.
+    """
+    fake = make_colloquy(motors_plugged_in=False)
+
+    entrypoint.open_the_hardware(fake)
+
+    assert not any(step.startswith("port ") for step in fake.done)
+    assert "u2d2 open" not in fake.done
+    assert not any(step.startswith("init ") for step in fake.done)
+
+
+def test_unplugged_motors_do_not_cost_the_arduino_or_the_lights():
+    """The whole reason the chain comes off is usually to power something
+    else and go on testing it from the same page."""
+    fake = make_colloquy(motors_plugged_in=False)
+
+    entrypoint.open_the_hardware(fake)
+
+    assert "arduino open" in fake.done
+    assert "lights on" in fake.done
+    assert "lights off" in fake.done
+
+
+def test_unplugged_motors_are_not_reported_as_a_startup_problem():
+    """It is a deliberate press on the page, not a fault. The startup
+    section is the alarm - its appearing on the front page *is* the
+    signal - so a state somebody chose must not set it off."""
+    fake = make_colloquy(motors_plugged_in=False)
+
+    entrypoint.open_the_hardware(fake)
+
+    assert fake.startup.problems == []

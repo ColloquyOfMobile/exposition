@@ -37,7 +37,10 @@ def open_the_hardware(colloquy):
     """Open both serial links and wake every servo, and come up either way.
 
     Split out of colloquy1() so that the "main PCB unmounted" case can
-    skip the whole of it rather than each line being guarded.
+    skip the whole of it rather than each line being guarded. The
+    "motors unplugged" case skips only the servo bus, since the Arduino
+    is on its own lead and a bench with no chain on it still wants its
+    lights and its sound.
 
     **Nothing in here may stop the server starting.** It used to: every
     call was unguarded, so a board carrying last month's sketch, or one
@@ -52,15 +55,36 @@ def open_the_hardware(colloquy):
     cost the servos, a dead servo bus must not cost the lights, and one
     servo that does not answer must not cost the other five.
     """
-    colloquy.drivers.u2d2.com_port.set("COM4")
+    if colloquy.hardware.motors.is_plugged_in:
+        colloquy.drivers.u2d2.com_port.set("COM4")
 
-    try:
-        colloquy.drivers.u2d2.open()
-    except Exception as error:
-        colloquy.startup.servo_bus_failed(error)
-        servos_are_open = False
+        try:
+            colloquy.drivers.u2d2.open()
+        except Exception as error:
+            colloquy.startup.servo_bus_failed(error)
+            servos_are_open = False
+        else:
+            servos_are_open = True
     else:
-        servos_are_open = True
+        # The Dynamixel chain has been taken off (colloquy/hardware/motors/),
+        # usually because something else wanted the U2D2's 12 V. The port
+        # itself would open perfectly well - the U2D2 is a USB adapter and
+        # enumerates with nothing behind it - and then all six servos would
+        # fail to answer, one at a time, filling the startup page with six
+        # reports of one fact. Say the one fact here instead.
+        #
+        # Not opening it at all is also what leaves
+        # Colloquy.servos_were_opened False, so every homing and torque
+        # guard downstream is already right with no extra condition in it.
+        since = colloquy.hardware.motors.unplugged_at or "unknown"
+        print(
+            f"The motors are noted as UNPLUGGED (since {since}).\n"
+            "The servo bus has not been opened, so nothing can move. The "
+            "Arduino, the lights and every bench test are unaffected.\n"
+            "When the chain is back: /app/hardware/motors -> "
+            "'the motors are back', then restart."
+        )
+        servos_are_open = False
 
     try:
         colloquy.drivers.arduino.open()

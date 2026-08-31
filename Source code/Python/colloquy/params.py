@@ -26,6 +26,15 @@ DEFAULTS = {
     # until somebody says it is back, because the alternative is an
     # installation that quietly decides it has hardware when it has not.
     "main pcb": {"mounted": True, "unmounted at": ""},
+    # Whether the Dynamixel chain is plugged into the U2D2. Written by
+    # hardware/motors/, read by main.py, which then does not open the
+    # servo bus at all - which is what leaves Colloquy.servos_were_opened
+    # False and every homing guard downstream already correct.
+    #
+    # It needs no version bump, for "main pcb"'s reason: migrate() ends in
+    # _fill_missing(data, DEFAULTS), which recurses into nested dicts, so
+    # an existing params.json grows the key on its next load.
+    "motors": {"plugged in": True, "unplugged at": ""},
     # The installation's own Arduino. The baud rate is not a
     # calibration and never was - it is a copy of a number that lives in
     # the sketch (SERIAL_BAUDRATE in colloquy_of_mobiles.ino), kept here

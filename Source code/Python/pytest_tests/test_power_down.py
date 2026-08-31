@@ -24,7 +24,7 @@ import pytest
 from colloquy import HOMING_TIMEOUT, Colloquy
 
 
-def make_colloquy(arrived=True, port_name="COM4"):
+def make_colloquy(arrived=True, port_name="COM4", motors_unplugged=False):
     """A double recording the order of the power-down steps.
 
     `port_name` is the U2D2's, and it is the double's way of saying
@@ -56,6 +56,12 @@ def make_colloquy(arrived=True, port_name="COM4"):
 
     fake = SimpleNamespace(
         _drivers=drivers,
+        # What `servos_can_be_commanded` asks after `servos_were_opened`:
+        # whether this run already walked the chain home and cut torque on
+        # the way to it being unplugged. See hardware/motors/.
+        _hardware=SimpleNamespace(
+            motors=SimpleNamespace(were_unplugged_this_run=motors_unplugged)
+        ),
         shutdown=lambda: done.append("threads down"),
         join_all=lambda: done.append("joined"),
         log=lambda *a, **k: done.append("logged"),
@@ -63,6 +69,7 @@ def make_colloquy(arrived=True, port_name="COM4"):
     fake.shutdown_neopixels = lambda: Colloquy.shutdown_neopixels(fake)
     fake.silence_speakers = lambda: Colloquy.silence_speakers(fake)
     fake.servos_were_opened = Colloquy.servos_were_opened.fget(fake)
+    fake.servos_can_be_commanded = Colloquy.servos_can_be_commanded.fget(fake)
     fake.move_to_origin = lambda: Colloquy.move_to_origin(fake)
     fake.disable_torque = lambda: Colloquy.disable_torque(fake)
     fake.done = done
@@ -157,6 +164,7 @@ def test_an_emergency_stop_never_commands_a_move():
         shutdown=lambda: done.append("threads down"),
     )
     fake.servos_were_opened = True
+    fake.servos_can_be_commanded = True
     fake.disable_torque = lambda: Colloquy.disable_torque(fake)
     fake.silence_speakers = lambda: Colloquy.silence_speakers(fake)
 
@@ -202,7 +210,11 @@ def emergency_double(port_name="COM4", disable_torque=None):
         log=lambda *a, **k: done.append("logged"),
     )
     fake.done = done
+    fake._hardware = SimpleNamespace(
+        motors=SimpleNamespace(were_unplugged_this_run=False)
+    )
     fake.servos_were_opened = Colloquy.servos_were_opened.fget(fake)
+    fake.servos_can_be_commanded = Colloquy.servos_can_be_commanded.fget(fake)
     fake.disable_torque = lambda: Colloquy.disable_torque(fake)
     fake.silence_speakers = lambda: Colloquy.silence_speakers(fake)
     return fake
@@ -353,3 +365,57 @@ def test_a_light_that_will_not_go_out_does_not_stop_the_shutdown():
     Colloquy.shutdown_neopixels(fake)
 
     assert done == ["logged"]
+
+
+# --- after the motors have been unplugged --------------------------------
+#
+# `hardware/motors/unplug the motors` walks everything home, cuts torque
+# and leaves the server running, so a /shutdown later in the same session
+# meets a bus whose servos are on a bench. See colloquy/hardware/motors/.
+
+
+def test_a_shutdown_after_an_unplug_does_not_command_the_absent_servos():
+    """The ninety seconds is the point. HOMING_TIMEOUT is sized for the
+    worst real case - the bar at the far end of a 293 degree travel - and
+    spending it writing goal positions to servos in a box is the one
+    outcome nobody would read as anything but a hang."""
+    fake = make_colloquy(motors_unplugged=True)
+
+    Colloquy.power_down(fake)
+
+    assert "bodies home" not in fake.done
+    assert "bar home" not in fake.done
+    assert "waited" not in fake.done
+
+
+def test_a_shutdown_after_an_unplug_does_not_warn_about_the_turn_count():
+    """It returns True, and the difference is the whole meaning of the
+    answer: the chain was walked home *before* it came off, so the
+    calibration is intact. Returning False would print the warning about
+    a bar that has lost its turn count about a bar that has not."""
+    fake = make_colloquy(motors_unplugged=True)
+
+    assert Colloquy.move_to_origin(fake) is True
+
+
+def test_an_unplug_does_not_cost_the_lights_or_the_speakers():
+    """Only the servo half of the sequence knows about the chain. A body
+    left humming is still worth silencing, and the Arduino is on its own
+    lead and entirely unaffected."""
+    fake = make_colloquy(motors_unplugged=True)
+
+    Colloquy.power_down(fake)
+
+    assert "lights off" in fake.done
+    assert "speakers silent" in fake.done
+
+
+def test_the_bus_being_open_is_still_not_enough_on_its_own():
+    """servos_were_opened and servos_can_be_commanded are two different
+    facts, which is why they are two properties. The first stays True
+    here - the bus really was opened this run - and only the second goes
+    False."""
+    fake = make_colloquy(motors_unplugged=True)
+
+    assert fake.servos_were_opened is True
+    assert fake.servos_can_be_commanded is False
