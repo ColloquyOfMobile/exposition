@@ -1,0 +1,31 @@
+# Test: how much louder is 12 V?
+# A bench test, and a manual one - it comes in two halves with a screwdriver between them.
+# Nothing on the piece moves, lights or sounds: this is Thomas's Mega, his five speakers and
+# his five microphones on a desk. What it measures is one of the three open measurements in
+# `next pcb` section 5 - not whether the amplifiers should run from +12 V, which is decided,
+# but how much it actually buys.
+# Read "supply setup", beside this scenario, before touching anything. It is the one document
+# in this tree whose mistakes cost hardware rather than a bad number.
+
+0 Before any of it: press `hardware > motors > unplug the motors`. The 12 V comes off the Dynamixel supply, so a connector that normally carries the servo chain is about to carry something else. The command walks every body and the bar home and cuts torque, so nothing loses the turn count that lives in its volatile memory.
+0 On a bench with no piece attached there is nothing to home and it says so. Press it anyway - the button is in the same place on both machines, and the habit is what saves the installation.
+0 You pick the board's port. It is the same lead and the same remembered choice as `test audio subsystem`, because it is the same board.
+0 First pass, at whatever the amplifiers run from now. Press `measure at 5 V`. Opening the port resets the board and it answers with its welcome banner; if that does not come back within eight seconds the test refuses and says what it got instead.
+0 Everything goes quiet - all five timers off. If anything is still sounding at this point, that is a timer the firmware does not think is on.
+1.5 It reads all five analyser modules for three seconds with nothing playing. The floor every later reading is measured against, so be quiet in the room while it happens.
+3 Then the five tones in turn, lowest to highest: 160 Hz on D11, 400 Hz on D5, 1 kHz on D6, 2.5 kHz on D46, 6.25 kHz on D10. Three seconds each, silence between, and a settle of a second and a half before each one counts - longer than the sibling test's, because the microphone's automatic gain has to settle as well as the analyser's peak detector.
+0 Listen while it climbs. This is the pass you are comparing against, so it is worth knowing what it sounds like before anything changes.
+22 The first pass ends and says so: how many of the five were heard, and that it is now waiting for the other supply.
+0 Now the manual half, and the reason this is not an automatic test. Power everything down. Change the amplifiers' supply lead. Turn the volume pot down before you power up again - the divider was sized for the amp's maximum input at the old rail, and the same input gives more output at a higher one.
+0 Everything you need to not destroy is in "supply setup" section 4. The short version: join the grounds first and part them last, fuse the +12 V lead, never put a scope's ground clip on a class-D output, and keep 12 V physically away from the microphones and the analyser array, which are 5 V parts.
+0 Press `measure at 12 V`. Exactly the same sweep, the same three seconds a tone, under the other label.
+22 Both passes are in, and the comparison appears - one row per tone rather than the sibling test's twenty-five, because the question here is about five amplifiers on one rail and not about which module hears which body.
+0 Each row carries two numbers, and the second one is there because of the microphone. "rise" is the tone's own band over its own silence, and the automatic gain control flattens it on purpose - the AGC exists to hold its output constant against exactly this change.
+0 "share" is that band as a fraction of all seven added up, and it largely survives the gain control: the AGC holds the total near constant, so a tone that is genuinely louder takes a larger slice of it while the room noise in the other six bands is turned down with it.
+0 So a share that climbs while the rise does not is the expected result and a pass - a working amplifier behind a gain control doing its job. A row saying "no change this bench can resolve" is an invitation to listen, not a verdict.
+0 A row saying "not heard at either supply" is almost always a channel nobody has wired yet. An unwired analyser input is a floating ADC pin, and a floating pin does not read silence.
+0 A row saying "QUIETER" wants the wiring checked before it is believed. At a higher rail that is usually clipping, which turns the tone from a note into a buzz and throws away everything the filter board did.
+0 The run always leaves the board silent, including when you stop it half way or when it refuses - five tones sounding while somebody has a screwdriver on a supply is the one state not to walk away from.
+0 The real instrument is your ear. `hold 160 Hz on` leaves one tone sounding for as long as you like, so you can change the supply underneath it and hear the difference directly. Neither number on the page is a sound pressure measurement and neither should be written down as one.
+0 `forget both passes` throws them away. Use it whenever anything else has moved between the two - a microphone nudged ten centimetres between passes gives a beautifully convincing result about a supply.
+0 Run against the stand-in it produces two passes that differ by nothing, which looks exactly like a real bench where 12 V bought you nothing. The page says which board answered before it says any number, and that is why.

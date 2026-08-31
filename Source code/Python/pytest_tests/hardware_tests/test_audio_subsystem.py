@@ -364,21 +364,30 @@ def test_the_page_says_which_of_the_two_it_is():
     assert AudioSubsystemTest.board_is_real.fget(off_bench) is False
 
 
-def test_the_installation_is_not_offered_a_bench_test():
-    """It will never have Thomas's boards - they are in an office.
+def test_the_installation_is_not_offered_a_bench_test(monkeypatch, stub_factory):
+    """It will never have Thomas's boards - they are in an office, and
+    offering a run that can only refuse is worse than offering nothing.
 
-    Checked on the source of Tests.snapshot_children rather than by
-    building it: the real thing needs the whole hardware graph (see
-    conftest).
+    This used to be checked by reading the source of
+    Tests.snapshot_children, because building the real thing needs the
+    whole hardware graph (see conftest). Since the gate moved down to
+    TestGroup - a plain Base with nothing behind it - the behaviour
+    itself can be built and asked, which is worth more than a substring.
     """
-    import inspect
+    from colloquy.tests.group import TestGroup
 
-    from colloquy.tests import Tests
+    bench = stub_factory(name="test audio subsystem", is_started=False)
+    ordinary = stub_factory(name="test search", is_started=False)
 
-    source = inspect.getsource(Tests.snapshot_children.fget)
+    group = TestGroup(
+        owner=stub_factory(), name="autotests", summary="..."
+    ).fill(tests=(ordinary, bench), bench_only=(bench.name,))
 
-    assert "test_audio_subsystem" in source
-    assert "is_simulated" in source
+    set_hostname(monkeypatch, "Colloquy-Laptop")
+    assert list(group.snapshot_children) == ["test search"]
+
+    set_hostname(monkeypatch, "DESKTOP-MRSLS88")
+    assert list(group.snapshot_children) == ["test search", "test audio subsystem"]
 
 
 def test_the_audio_port_picker_offers_the_stand_in_off_the_bench(monkeypatch, stub_factory):
