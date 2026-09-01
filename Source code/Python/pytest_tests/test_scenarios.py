@@ -60,11 +60,14 @@ def thread_classes():
 # for the next forty minutes is exactly the kind of thing somebody
 # standing in front of the installation needs told.
 #
-# Of the seven left, three are deliberate and will stay: read_pattern and
+# Of the eight left, four are deliberate and will stay: read_pattern and
 # blink have no appearance of their own in the room - what they do is
 # described inside their parent's scenario, since a female reading and a
-# female swaying are one thing to watch - and the repository watch does
-# nothing in the room at all, being a git fetch every five minutes. The
+# female swaying are one thing to watch - and neither the repository
+# watch nor the exposition schedule does anything in the room at all -
+# one is a git fetch every five minutes, the other a look at the clock
+# every twenty seconds. What happens when the schedule starts the piece
+# is `switching-on`, which is written and hangs off Colloquy itself. The
 # other four are a real backlog: the exposition thread, a female's light
 # sensor and her reinforcement, and the bar's own plain back-and-forth.
 #
@@ -79,6 +82,7 @@ WITHOUT_SCENARIOS = {
     "colloquy.drivers.male.search.blink.Blink",
     "colloquy.drivers.bar.turn_back_and_forth.TurnBackAndForth",
     "colloquy.repository.Repository",
+    "colloquy.exposition.schedule.ExpositionSchedule",
     "colloquy.drivers.arduino.flasher.Flasher",
 }
 

@@ -284,7 +284,30 @@ class WSGI2(Base):
                         ".scenario-activity .scenario-marker { color: #08a; } "
                         ".scenario-problem .scenario-marker, .scenario-problem .scenario-desc "
                         "{ color: #d02; font-weight: bold; } "
-                        ".scenario-desc { flex: 1; }"
+                        ".scenario-desc { flex: 1; } "
+                        # The solved exposition schedule: one row per date
+                        # of the run. Same shape as a scenario row, and the
+                        # colour says *why* a day reads as it does - an
+                        # exception is nearly always what somebody has
+                        # opened this page to check.
+                        ".schedule-summary { margin: 0.25rem 0; opacity: 0.85; } "
+                        ".schedule-empty { margin: 0.25rem 0; opacity: 0.7; } "
+                        ".schedule-problem { margin: 0.25rem 0; color: #d02; "
+                        "font-weight: bold; } "
+                        ".schedule { display: flex; flex-direction: column; } "
+                        ".schedule-row { display: flex; gap: 1ch; padding: 0.25rem 0; "
+                        "border-bottom: 1px solid #8883; align-items: baseline; } "
+                        ".schedule-date { flex: 0 0 11ch; font-family: monospace; "
+                        "font-size: 0.8rem; } "
+                        ".schedule-weekday { flex: 0 0 10ch; opacity: 0.6; "
+                        "font-size: 0.8rem; } "
+                        ".schedule-hours { flex: 0 0 26ch; font-family: monospace; "
+                        "font-size: 0.8rem; } "
+                        ".schedule-reason { flex: 1; opacity: 0.6; font-size: 0.8rem; } "
+                        ".schedule-standby .schedule-hours { opacity: 0.45; } "
+                        ".schedule-running .schedule-hours { color: #08a; } "
+                        ".schedule-exception .schedule-reason { color: #d08; "
+                        "opacity: 1; font-weight: bold; }"
                     )
 
             with tag(

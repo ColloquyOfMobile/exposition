@@ -147,6 +147,13 @@ def colloquy1(*args):
     # pulling stays a link on the page.
     colloquy.repository.start()
 
+    # And watch the clock, but only if somebody has switched a schedule
+    # on. The note lives in params.json so it survives a restart; with no
+    # schedule written this does nothing and the exposition is started by
+    # hand from the page, as it always has been.
+    if colloquy.exposition.schedule.start_if_enabled():
+        print("The exposition schedule is enabled and is now watching the clock.")
+
     Server2(colloquy=colloquy)
 
 

@@ -1,5 +1,7 @@
 from colloquy.base_thread import BaseThread
 
+from .schedule import ExpositionSchedule
+
 
 class Exposition(BaseThread):
     def __init__(self, owner):
@@ -7,6 +9,11 @@ class Exposition(BaseThread):
         self._drivers = self.owner.drivers
 
         self._thread = None
+
+        # When the piece runs itself. Empty and switched off unless
+        # somebody has written one, so by default this changes nothing
+        # at all and the exposition is started by hand from this page.
+        self._schedule = ExpositionSchedule(owner=self)
 
     @property
     def is_started(self):
@@ -49,6 +56,10 @@ class Exposition(BaseThread):
         self.drivers.stop()
 
     @property
+    def schedule(self):
+        return self._schedule
+
+    @property
     def snapshot_children(self):
-        children = {}
+        children = {self._schedule.name: self._schedule}
         return children

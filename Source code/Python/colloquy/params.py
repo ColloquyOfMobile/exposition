@@ -35,6 +35,36 @@ DEFAULTS = {
     # _fill_missing(data, DEFAULTS), which recurses into nested dicts, so
     # an existing params.json grows the key on its next load.
     "motors": {"plugged in": True, "unplugged at": ""},
+    # When the exposition runs itself. Empty and switched off by default,
+    # which is exactly the behaviour this repo has always had: somebody
+    # opens the page and presses start. See colloquy/exposition/schedule/,
+    # which owns every key under here.
+    #
+    # "starts on"/"ends on" are the run of the exhibition, YYYY-MM-DD.
+    # "weekly" is one list of "HH:MM-HH:MM" per weekday - an empty list is
+    # a closing day. The two exception maps are the days that break the
+    # week: one that runs though its weekday says not, and one that does
+    # not run though its weekday says it should.
+    #
+    # No version bump, for "main pcb"'s reason: migrate() ends in
+    # _fill_missing(data, DEFAULTS), which recurses into nested dicts, so
+    # an existing params.json grows all of this on its next load.
+    "exposition schedule": {
+        "enabled": False,
+        "starts on": "",
+        "ends on": "",
+        "weekly": {
+            "monday": [],
+            "tuesday": [],
+            "wednesday": [],
+            "thursday": [],
+            "friday": [],
+            "saturday": [],
+            "sunday": [],
+        },
+        "exceptional running": {},
+        "exceptional standby": [],
+    },
     # The installation's own Arduino. The baud rate is not a
     # calibration and never was - it is a copy of a number that lives in
     # the sketch (SERIAL_BAUDRATE in colloquy_of_mobiles.ino), kept here

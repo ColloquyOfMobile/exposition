@@ -48,6 +48,14 @@ files = [
     # is the part of flashing worth being sure about, and none of it
     # needs a board.
     "Source code/Python/colloquy/drivers/arduino/flasher/toolchain.py",
+    # The exposition schedule: dates and clock times in, days and a
+    # yes/no out. Exactly the shape this list is for - a date is not a
+    # datetime, a minute of the day is not a minute of an hour, and an
+    # unset end date is a None that decides whether the piece may run at
+    # all. The node itself (schedule/__init__.py) stays off, being an
+    # ordinary tree node.
+    "Source code/Python/colloquy/exposition/schedule/rules.py",
+    "Source code/Python/colloquy/exposition/schedule/solver.py",
 ]
 mypy_path = "Source code/Python"
 
