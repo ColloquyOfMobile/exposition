@@ -1,0 +1,74 @@
+# A GF1002 amplifier module was destroyed instantly by +12 V.
+# The wiring was correct. The document was wrong.
+
+WHAT HAPPENED
+
+test audio at 12v -> measure at 12 V, on the bench (DESKTOP-MRSLS88),
+with Thomas's audio subsystem on the desk. The +12 V was brought to one
+GF1002 amplifier module's VDD/GND screw terminal, as SUPPLY_SETUP.md
+section 3 instructs. The module died the instant the rail came up.
+
+Nothing else was damaged. The Mega, the filter board, the MSGEQ7
+analyser array and the MAX9814 microphones all still answer.
+
+
+WHAT WAS WRONG
+
+Not the wiring, and not the person. A number with no source.
+
+  SUPPLY_SETUP.md:57  "The amplifier module is specified 4.5-15 V, so
+                       any of the three is safe for *it*"
+  NEXT_PCB.md:209     "amplifier module | class-D, rated **4.5-15 V**"
+
+Neither had a citation. `git log -S` puts the claim in 93b4e98 ("Decide
+the amplifier rail"), copied into the supply document by 3629eb3
+("Measure what 12 V buys"). There is no datasheet for the GF1002 in this
+repository, no part marking recorded, and no measurement behind the
+range. Every other hard number here is traceable to a source - the baud
+rate to a #define in the sketch, the mirror range to TJ's OpenCM
+firmware, every pinout to the KiCad copper. This one was asserted.
+
+
+THE DEFECT WORTH REMEMBERING
+
+The two sentences above are not the same claim, and the slide between
+them is what put 12 V on the board.
+
+In NEXT_PCB.md section 5 the range is a **specification for a module
+still to be bought** - the section even ends "confirm it against the
+module actually chosen". SUPPLY_SETUP.md then reused it as a **statement
+of fact about the modules already on the bench**. A specification for a
+part you intend to buy and a description of the part in your hand read
+identically and are opposite in kind: one is a requirement you impose,
+the other is a property you have to go and check.
+
+The GF1002's actual rating is still not known here. What the bench has
+now established is that it is a 5 V-class part.
+
+
+WHAT WAS CHANGED
+
+- params > audio gained "amplifier module" and "amplifier max supply
+  volts" (GF1002, 5.0). 5.0 is NOT a datasheet maximum - it is the rail
+  the module has always run on and survived, and the comment in
+  params.py says so.
+- test audio at 12v now refuses any pass above the recorded rating,
+  instantly, reading only that number. `measure at 5 V` still runs;
+  `measure at 12 V` refuses and says why. Raising the number is a
+  deliberate press against a datasheet, never against another document
+  in this repo.
+- Both false claims are struck from SUPPLY_SETUP.md and NEXT_PCB.md.
+- NEXT_PCB.md section 5's rail decision is reopened. Its reasoning about
+  current is untouched by this, but it was written assuming the existing
+  amplifiers could be carried over to the rail, and they cannot.
+
+
+WHAT IS STILL UNKNOWN
+
+- The GF1002's real supply range. Read it off the module or its
+  listing before anything else is decided about it.
+- Whether the failure was short or open, and in which direction. If it
+  failed short from VDD to its input, the Mega timer pin behind the
+  22K/3K3 divider saw 12 V through 22K. The Mega answers, so this is
+  very likely fine - but the pin that was driving that channel is worth
+  metering before it is trusted for a measurement.

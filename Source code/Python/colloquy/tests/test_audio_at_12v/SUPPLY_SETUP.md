@@ -3,12 +3,47 @@
 What this test measures, how to wire it, and the seven ways to destroy
 something doing so. Read the second half before the first.
 
-`hardware > electronics > next pcb` section 5 has already decided that
-all five amplifiers run from **+12 V**: the same acoustic power at about
+## 0. Read this first — 2026-09-01, one module destroyed
+
+> **This document told somebody to do something that broke the hardware,
+> and `measure at 12 V` is refused until that cannot happen again.**
+>
+> On 2026-09-01 the +12 V was brought to one GF1002's VDD/GND terminal,
+> exactly as section 3 below instructs. The module died the instant the
+> rail came up. Nothing else was damaged — Mega, filter board, analyser
+> array and microphones all still answer.
+>
+> **The wiring was right. The number was wrong.** This document used to
+> say the amplifier module was "specified 4.5–15 V". It had no source:
+> `git log -S` puts the claim in the commit that *decided the rail for
+> the next board*, where it was a **specification for a module still to
+> be bought**, and it was then copied here as a **statement of fact about
+> the modules already on this bench**. Those two sentences read alike and
+> are opposite in kind — one is a requirement you impose, the other is a
+> property you have to go and check. The GF1002's real rating is still
+> not recorded anywhere in this repository. What the bench has
+> established is that it is a 5 V-class part.
+>
+> `docs/errors/2026-09-01-01.txt` is the report.
+>
+> **What now stops it.** The rating is a recorded fact about the module
+> in your hand — `params > audio > amplifier module` and
+> `amplifier max supply volts`, which ship as `GF1002` and `5.0`. Any
+> pass above that is refused instantly. `measure at 5 V` still runs.
+> Raising the number is a deliberate press **against a datasheet or a
+> part marking**, never against another document in this repository —
+> which is the whole of the mistake above.
+
+---
+
+`hardware > electronics > next pcb` section 5 reasons that the
+amplifiers should run from **+12 V**: the same acoustic power at about
 40% of the current, on a conductor the NeoPixels never touch. That
-decision is not what this bench is for. What is still open is *how much
-louder, in fact* — one of the three measurements that document names as
-outstanding — and that is answered with a screwdriver and an ear.
+reasoning is about current and is untouched by the failure above — but
+the section was written assuming the amplifiers already in hand could be
+carried over to that rail, and they cannot, so the decision is reopened
+there. What this bench was built to answer is *how much louder, in
+fact*, and it can answer it only for a module rated for the rail.
 
 ---
 
@@ -54,9 +89,15 @@ Two things to measure before anything else:
 
 - **What is the supply actually?** The SMPS shipped with Dynamixel kits
   is commonly 12 V, but 11.1 V and 14.8 V units exist for the XM/XH
-  series. Meter the jack. The amplifier module is specified 4.5–15 V, so
-  any of the three is safe for *it* — but you are about to write a number
-  down, and "12 V" should be a measurement.
+  series. Meter the jack — you are about to write a number down, and
+  "12 V" should be a measurement.
+
+  ~~The amplifier module is specified 4.5–15 V, so any of the three is
+  safe for *it*.~~ **This was false and it cost a module** — see section
+  0. Nothing in this repository knows the GF1002's supply range. Whatever
+  is on that jack, the only thing that makes it safe for an amplifier is
+  a rating you have read off **that amplifier**, and the only place that
+  belongs is `params > audio > amplifier max supply volts`.
 - **Which pin is which**, on the housing you are actually holding.
 
 ---
@@ -96,6 +137,11 @@ on an ADC input, and that pin — usually that chip — is gone.
 
 **Route the supply lead down the other side of the bench from the
 analyser board.** Physical distance is worth more here than care.
+
+**And the amplifier is a 5 V part too until proven otherwise.** That is
+the lesson of section 0: the one thing on this bench that was *supposed*
+to take 12 V is the one thing that died of it. A module's rating is not
+something another document can tell you.
 
 ### 4.2 Grounds not joined — join them first, part them last
 
@@ -172,6 +218,12 @@ and look at something else.
 
 ## 5. Five checks before you power up
 
+0. **The module in your hand is rated for the rail**, read off the module
+   or its listing — not off this document, and not off `next pcb`. It is
+   recorded in `params > audio > amplifier module`, and the test refuses
+   the pass if it is not. This check is numbered zero because it is the
+   one that was skipped on 2026-09-01, and no other check on this list
+   would have caught it.
 1. Meter reads the supply you expect at the hub jack.
 2. Meter reads that same voltage between the amplifier's VDD and GND
    terminals **with the amplifier unplugged** — right polarity, right pins.

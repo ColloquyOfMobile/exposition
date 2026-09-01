@@ -292,3 +292,104 @@ def test_the_supply_picker_shares_the_subsystems_params_key():
 
     assert SupplyComPort.params_section == AudioComPort.params_section
     assert SupplyComPort.stand_in == AudioComPort.stand_in
+
+
+# --- the pass that broke a module ----------------------------------------
+
+
+def amplifier_double(module="GF1002", rated=5.0):
+    """Only what `_why_not_measure` and `_measure` touch.
+
+    `amplifier` is set outright rather than left to the property: a
+    SimpleNamespace does not inherit one. What the property itself reads
+    is pinned separately below, against the shipped defaults.
+    """
+    return SimpleNamespace(
+        amplifier=(module, rated),
+        is_started=False,
+        _outcome=None,
+        _supply=None,
+        log=lambda *args, **kwargs: None,
+        start=lambda **kwargs: (_ for _ in ()).throw(
+            AssertionError("started a pass that should have been refused")
+        ),
+    )
+
+
+def why_not(double, supply):
+    return SupplyTest._why_not_measure(double, supply)
+
+
+def test_a_pass_above_the_recorded_rating_is_refused():
+    """2026-09-01: `measure at 12 V` was pressed with Thomas's GF1002s
+    fitted and one died the instant the rail came up. The wiring was this
+    test's own document's; what was wrong was a number nobody had a
+    source for. docs/errors/2026-09-01-01.txt."""
+    double = amplifier_double()
+
+    refusal = why_not(double, "12 V")
+
+    assert refusal is not None
+    assert "GF1002" in refusal
+    assert "5 V" in refusal and "12 V" in refusal
+
+
+def test_the_pass_at_the_rail_it_survives_still_runs():
+    """Refusing both would make the test dead rather than safe. It is
+    exactly as runnable as the hardware allows."""
+    assert why_not(amplifier_double(), "5 V") is None
+
+
+def test_a_module_rated_for_the_rail_unblocks_it():
+    """Which is the way back: fit one and record it. Never by editing a
+    document."""
+    wide = amplifier_double(module="something rated for it", rated=15.0)
+
+    assert why_not(wide, "5 V") is None
+    assert why_not(wide, "12 V") is None
+
+
+def test_the_refusal_stops_the_pass_rather_than_only_reporting_it():
+    """The double's `start` raises, so a refusal that fell through to it
+    fails here rather than in a comment."""
+    double = amplifier_double()
+    double._why_not_measure = lambda supply: SupplyTest._why_not_measure(
+        double, supply
+    )
+
+    outcome = SupplyTest._measure(double, "12 V")
+
+    assert outcome.startswith("refused: ")
+    assert double._outcome == outcome
+    assert double._supply is None
+
+
+def test_the_rating_is_read_out_of_params():
+    """Instant, like the flasher's refusals: it runs on a page load, from
+    the params entry alone, and touches no hardware to decide."""
+    double = SimpleNamespace(
+        params={"audio": {"amplifier module": "GF1002", "amplifier max supply volts": 5}}
+    )
+
+    assert SupplyTest.amplifier.fget(double) == ("GF1002", 5.0)
+
+
+def test_every_supply_the_page_offers_has_a_voltage():
+    """`SUPPLIES` is the labels and `SUPPLY_VOLTS` is what the refusal
+    compares. A label without a voltage would be a pass nothing checks."""
+    from colloquy.tests.test_audio_at_12v import SUPPLY_VOLTS
+
+    assert set(SUPPLIES) == set(SUPPLY_VOLTS)
+
+
+def test_the_shipped_default_refuses_the_twelve_volt_pass():
+    """What a fresh params.json does, which is the whole of the
+    protection: the number ships at the rail the module is known to
+    survive, not at the one somebody hoped for."""
+    from colloquy.params import DEFAULTS
+
+    shipped = SimpleNamespace(params={"audio": DEFAULTS["audio"]})
+    double = amplifier_double(*SupplyTest.amplifier.fget(shipped))
+
+    assert why_not(double, "12 V") is not None
+    assert why_not(double, "5 V") is None

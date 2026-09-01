@@ -106,6 +106,20 @@ DEFAULTS = {
     # already decided for all five in drivers/audio.py.
     "audio": {
         "wired bodies": ["female1", "male1"],
+        # The amplifier module actually fitted, and the highest supply it
+        # is known to survive. `test_audio_at_12v` refuses any pass above
+        # this, which is the whole of what stops that test destroying the
+        # thing it measures.
+        #
+        # **5.0 is not a datasheet maximum and must not be read as one.**
+        # It is the rail the GF1002 has always run on and survived. Its
+        # real rating is not recorded anywhere in this repository, and on
+        # 2026-09-01 one was destroyed instantly at 12 V - see
+        # docs/errors/2026-09-01-01.txt. Raise this only from a datasheet
+        # or a part marking for the module in your hand, never from
+        # another document in this repo.
+        "amplifier module": "GF1002",
+        "amplifier max supply volts": 5.0,
     },
     # "dxl origin" is in servo units: it is the raw reading a body gives
     # when it is pointing where it should. Everything else here is in

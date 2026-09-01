@@ -206,7 +206,7 @@ puts there:
 
 | Part | Note |
 |---|---|
-| amplifier module | class-D, rated **4.5–15 V**; +12 V in four bodies and male2's local supply in the fifth — section 5 |
+| amplifier module | class-D, **to be selected, and the rail is reopened — section 5**. The GF1002s on the bench cannot be carried over: one was destroyed instantly by +12 V on 2026-09-01 (`docs/errors/2026-09-01-01.txt`). Five modules to buy either way, and the rating is read off the part, not off this table |
 | 22K / 3K3 divider | at the amplifier input, sized for volume at maximum |
 | 470 µF reservoir | across the amplifier's supply and GND, **at the module** |
 | loudspeaker | short leads, in the body, as now |
@@ -368,10 +368,37 @@ and of neither male.
 
 ### Which rail the amplifier runs from
 
-**+12 V, and the module is specified by its supply range rather than by a
-rail.** This waited on male2's supply in the previous draft. It should
-not have: male2 cannot take an amplifier supply from this board on
-*either* rail, so its answer decides nothing about the other four.
+> **Reopened 2026-09-01.** This section read "+12 V, and the module is
+> specified by its supply range rather than by a rail", and it carried a
+> range — 4.5–15 V — that nothing in this repository had a source for.
+> `test audio at 12v` then took that number as a fact about the GF1002s
+> already on the bench and one was destroyed the instant the rail came
+> up (`docs/errors/2026-09-01-01.txt`).
+>
+> **What survives, and what does not.** The current reasoning below is
+> untouched — 40% of the current for the same acoustic power, on a
+> conductor the NeoPixels never touch, with the 2026-08-28 brown-out as
+> field evidence for what sharing costs. None of that depended on the
+> rating. What does not survive is the quiet assumption underneath it:
+> that the amplifiers already in hand could be carried over to whichever
+> rail this section chose. They cannot, so the choice is no longer free
+> — it is a purchase, and it should be made with a module in front of
+> you rather than a range in a table.
+>
+> **What decides it now:** the supply range of the class-D module
+> actually selected, read off its datasheet. Both rails reach every body
+> that `center` feeds (`harness`), so no copper depends on the answer and
+> this can stay open until the part is chosen. Note also that the
+> body-end assembly in section 3 lists a **470 µF reservoir sized for
+> +12 V**; a 5 V module changes that value, not the topology.
+>
+> The rest of this section is the argument as it stood, and it is still
+> the argument — for a module that can take the rail.
+
+**male2's supply decides nothing.** This waited on male2's supply in an
+earlier draft. It should not have: male2 cannot take an amplifier supply
+from this board on *either* rail, so its answer decides nothing about the
+other four.
 
 **male2 is fed through `center`, not from `B-J4`.** The rack's own
 `B-J4` carries no power at all — one spare conductor, pin 7, and GND only
@@ -380,8 +407,8 @@ on its shell. What feeds male2 is `A-J3` pin 9, split three ways by the
 both rails (`harness`). So male2 is on exactly the rail this board
 chooses, like the other four, and the choice is free.
 
-**So the four that can be fed decide it on the merits, and the merits say
-+12 V:**
+**So the four that can be fed decide it on the merits, and the merits
+point at +12 V — for a module that is rated for it:**
 
 - The same acoustic power costs roughly **40% of the current** (5 V/12 V),
   which is the whole of the volt-drop problem in several metres of thin
@@ -404,11 +431,15 @@ chooses, like the other four, and the choice is free.
   module is for. It is a supply disturbance with local energy behind it,
   which is a far easier thing than a shared conductor sagging.
 
-**One part number, and now one rail for all five.** `center` carries
-+12 V to every body it feeds, so the same class-D module runs from the
-same rail in all five — no wide-input requirement, no body quieter than
-the others, and one part to buy and to keep a spare of. Specify it for
-+12 V and be done.
+**One part number, and one rail for all five.** `center` carries both
+rails to every body it feeds, so whichever is chosen, the same class-D
+module runs from the same rail in all five — no wide-input requirement,
+no body quieter than the others, and one part to buy and to keep a spare
+of. That much is settled whatever the rail turns out to be.
+
+~~Specify it for +12 V and be done.~~ **Not until a part is in front of
+you.** That sentence is what the supply document turned into a fact
+about hardware nobody had checked.
 
 **What is still to be measured, and it is not a rail:** what three
 amplifiers, three NeoPixel strips and three bodies actually draw through

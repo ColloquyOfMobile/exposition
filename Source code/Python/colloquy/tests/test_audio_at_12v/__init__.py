@@ -81,10 +81,13 @@ class SupplyComPort(BenchComPort):
     stand_in = "simulated audio port"
 
 
-# The two supplies, and the order the page lists them in. Named rather
-# than numbered because they are labels on a run, not volts to compute
-# with - what is actually on the rail is whatever you wired.
+# The two supplies, and the order the page lists them in. The label is
+# what a pass is filed under - what is actually on the rail is whatever
+# you wired - but the volts are needed too, because a pass is now refused
+# when the module fitted is not known to survive it. See `_why_not_measure`
+# and docs/errors/2026-09-01-01.txt.
 SUPPLIES = ("5 V", "12 V")
+SUPPLY_VOLTS = {"5 V": 5.0, "12 V": 12.0}
 
 
 class TestAudioAt12V(BenchBoardLink, BaseThread):
@@ -261,10 +264,52 @@ class TestAudioAt12V(BenchBoardLink, BaseThread):
 
     # --- the two passes ---------------------------------------------------
 
+    @property
+    def amplifier(self):
+        """The module recorded as fitted, and the rail it survives."""
+        audio = self.params["audio"]
+        return audio["amplifier module"], float(audio["amplifier max supply volts"])
+
+    def _why_not_measure(self, supply):
+        """Why this pass would destroy something, or None.
+
+        **This test used to be able to break the hardware it measures**,
+        and on 2026-09-01 it did: `measure at 12 V` was pressed with
+        Thomas's GF1002s fitted and one died the instant the rail came
+        up. It was not a wiring mistake - the wiring was this document's
+        own - it was a number nobody had a source for. `SUPPLY_SETUP.md`
+        said the module was "specified 4.5-15 V", having taken that from
+        `next pcb` section 5, where it was a *specification for a module
+        still to be bought* rather than a fact about the ones on the
+        bench. The two claims read alike and are not the same sentence.
+
+        So the rating is now a recorded fact about the module in your
+        hand (`params > audio`), the refusal is instant and reads only
+        that, and raising it is a deliberate press against a datasheet
+        rather than against another document in this repository.
+        """
+        module, rated = self.amplifier
+        volts = SUPPLY_VOLTS[supply]
+        if volts > rated:
+            return (
+                f"the amplifier module recorded as fitted is a {module}, known "
+                f"to survive {rated:g} V, and this pass needs {volts:g} V. A "
+                "GF1002 was destroyed instantly at 12 V on 2026-09-01 "
+                "(docs/errors/2026-09-01-01.txt) - the 4.5-15 V this test used "
+                "to claim was never sourced. Fit a module rated for the rail "
+                "and record it under params > audio > amplifier module."
+            )
+        return None
+
     def _measure(self, supply, request=None):
         """Run one pass, under the label of the supply now on the rail."""
         if self.is_started:
             self._outcome = "a pass is already running - let it finish or stop it"
+            return self._outcome
+        refusal = self._why_not_measure(supply)
+        if refusal is not None:
+            self._outcome = f"refused: {refusal}"
+            self.log(self._outcome)
             return self._outcome
         self._supply = supply
         self.start(started_by=None)
@@ -553,6 +598,17 @@ class TestAudioAt12V(BenchBoardLink, BaseThread):
             "real, on this machine" if self.board_is_real else "simulated stand-in",
         )
         into("port", self.params["audio subsystem"]["communication port"])
+
+        # Said before any number, like `board` above and for the same
+        # kind of reason: the pass somebody is about to press is refused
+        # or not on the strength of this one line.
+        module, rated = self.amplifier
+        into("amplifier fitted", f"{module}, known to survive {rated:g} V")
+        blocked = [
+            supply for supply in SUPPLIES if self._why_not_measure(supply) is not None
+        ]
+        if blocked:
+            into("refusing", f"{', '.join(blocked)} - see this node's setup document")
         into(
             "passes recorded",
             ", ".join(supply for supply in SUPPLIES if supply in self._results)
