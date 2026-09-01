@@ -16,7 +16,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from colloquy.tests.test_audio_subsystem import protocol
+from colloquy.tests.bench_board import BenchBoardLink
+from colloquy.tests.test_audio_subsystem import AudioComPort, protocol
 # Aliased: pytest tries to collect any imported name starting "Test".
 from colloquy.tests.test_audio_subsystem import (
     TestAudioSubsystem as AudioSubsystemTest,
@@ -313,55 +314,157 @@ def set_hostname(monkeypatch, name):
     monkeypatch.setattr("colloquy.machines.socket.gethostname", lambda: name)
 
 
-def audio_test_double(is_bench):
+def audio_test_double(chosen):
     """TestAudioSubsystem's port_handler against a double - the real thing
-    does filesystem I/O at construction (see conftest)."""
-    virtual = SimpleNamespace(port=None, name="the stand-in")
+    does filesystem I/O at construction (see conftest).
+
+    `chosen` is the *lead*, which is the whole of the question now: no
+    hostname goes into this double at all.
+    """
+    virtual = SimpleNamespace(port=None, is_open=False, name="the stand-in")
+    com_port = SimpleNamespace(
+        chosen=chosen,
+        stand_in="simulated audio port",
+        is_using_the_stand_in=chosen == "simulated audio port",
+    )
     return SimpleNamespace(
         _port_handler=None,
-        is_bench=is_bench,
-        is_simulated=True,
+        _com_port=com_port,
         baudrate=9600,
-        params={"audio subsystem": {"communication port": "COM7", "baudrate": 9600}},
-        colloquy=SimpleNamespace(
-            virtual_drivers=SimpleNamespace(audio_serial_port=virtual)
-        ),
+        # What BenchBoardLink.stand_in_handler resolves to on the real
+        # object; pinned separately below, since a SimpleNamespace does
+        # not inherit the mixin's properties.
+        stand_in_handler=virtual,
+        SERIAL_TIMEOUT=AudioSubsystemTest.SERIAL_TIMEOUT,
     ), virtual
 
 
-def test_the_bench_talks_to_a_real_serial_port(monkeypatch):
-    """The bug this pins.
+def test_the_stand_in_is_the_virtual_audio_serial_port():
+    virtual = SimpleNamespace(port=None)
+    double = SimpleNamespace(
+        colloquy=SimpleNamespace(
+            virtual_drivers=SimpleNamespace(audio_serial_port=virtual)
+        )
+    )
 
-    The board is on an office desk, and that machine is `is_simulated` -
-    it has none of the piece on it. Choosing the port handler on
-    is_simulated therefore sent the test at the stand-in while the real
-    Mega sat on the desk beside it, and a stand-in run passes all
-    twenty-five. It asks is_bench.
-    """
+    assert AudioSubsystemTest.stand_in_handler.fget(double) is virtual
+
+
+@pytest.fixture
+def no_real_serial(monkeypatch):
+    """A serial.Serial that records rather than opening anything."""
     opened = []
     monkeypatch.setattr(
-        "colloquy.tests.test_audio_subsystem.serial.Serial",
-        lambda **kwargs: SimpleNamespace(port=None, opened=opened.append(kwargs)),
+        "colloquy.tests.bench_board.serial.Serial",
+        lambda **kwargs: SimpleNamespace(port=None, is_open=False, opened=opened.append(kwargs)),
     )
-    double, virtual = audio_test_double(is_bench=True)
-
-    handler = AudioSubsystemTest.port_handler.fget(double)
-
-    assert handler is not virtual
+    return opened
 
 
-def test_everywhere_else_talks_to_the_stand_in():
-    double, virtual = audio_test_double(is_bench=False)
+def test_a_real_lead_gets_a_real_serial_port(no_real_serial):
+    """The bug this pins, in its second form.
+
+    First time round the handler was chosen on `is_simulated`, which sent
+    the test at the stand-in while the real Mega sat on the bench beside
+    it. The fix was `is_bench`, and it was the same mistake spelled
+    differently: the board gets carried to the installation's laptop to be
+    run at 12 V beside the piece, and there `is_bench` is False. A board
+    is on a lead, not on a hostname.
+    """
+    double, virtual = audio_test_double(chosen="COM7")
+
+    assert AudioSubsystemTest.port_handler.fget(double) is not virtual
+
+
+def test_the_stand_in_gets_the_virtual_port():
+    double, virtual = audio_test_double(chosen="simulated audio port")
+
+    assert AudioSubsystemTest.port_handler.fget(double) is virtual
+
+
+def test_a_real_lead_is_opened_even_on_the_installation(monkeypatch, no_real_serial):
+    """The machine this was hidden on is the one it is wanted on."""
+    set_hostname(monkeypatch, "Colloquy-Laptop")
+    double, virtual = audio_test_double(chosen="COM7")
+
+    assert AudioSubsystemTest.port_handler.fget(double) is not virtual
+
+
+def test_the_stand_in_is_the_stand_in_even_on_the_bench(monkeypatch):
+    set_hostname(monkeypatch, "DESKTOP-MRSLS88")
+    double, virtual = audio_test_double(chosen="simulated audio port")
 
     assert AudioSubsystemTest.port_handler.fget(double) is virtual
 
 
 def test_the_page_says_which_of_the_two_it_is():
-    on_bench, _ = audio_test_double(is_bench=True)
-    off_bench, _ = audio_test_double(is_bench=False)
+    real, _ = audio_test_double(chosen="COM7")
+    stand_in, _ = audio_test_double(chosen="simulated audio port")
 
-    assert AudioSubsystemTest.board_is_real.fget(on_bench) is True
-    assert AudioSubsystemTest.board_is_real.fget(off_bench) is False
+    assert AudioSubsystemTest.board_is_real.fget(real) is True
+    assert AudioSubsystemTest.board_is_real.fget(stand_in) is False
+
+
+class LinkUnderTest(BenchBoardLink):
+    """The mixin with the two things it wants and nothing else.
+
+    A real object rather than a SimpleNamespace, because `use_port` goes
+    back through `port_handler` and a namespace does not inherit the
+    mixin's properties - which would make the test pass on plumbing it
+    had built itself.
+    """
+
+    baudrate = 9600
+
+    def __init__(self, com_port, virtual):
+        self._port_handler = None
+        self._com_port = com_port
+        self._virtual = virtual
+
+    @property
+    def stand_in_handler(self):
+        return self._virtual
+
+
+def test_moving_between_the_two_replaces_the_handler(no_real_serial):
+    """A name written onto the wrong object opens nothing.
+
+    The stand-in and a `serial.Serial` are different objects, so changing
+    the choice cannot be a matter of writing a new port name onto the
+    handler already in hand. Straight out of `Arduino.use_port`, and this
+    is the path a click on the picker actually takes.
+    """
+    virtual = SimpleNamespace(port=None, is_open=False)
+    com_port = SimpleNamespace(
+        chosen="simulated audio port",
+        stand_in="simulated audio port",
+        is_using_the_stand_in=True,
+    )
+    link = LinkUnderTest(com_port, virtual)
+    assert link.port_handler is virtual
+
+    # As BenchComPort.set does it: params first, then the owner re-points.
+    com_port.chosen = "COM7"
+    com_port.is_using_the_stand_in = False
+    link.use_port("COM7")
+
+    assert link._port_handler is not virtual
+    assert link._port_handler.port == "COM7"
+
+
+def test_moving_back_to_the_stand_in_replaces_it_again(no_real_serial):
+    virtual = SimpleNamespace(port=None, is_open=False)
+    com_port = SimpleNamespace(
+        chosen="COM7", stand_in="simulated audio port", is_using_the_stand_in=False
+    )
+    link = LinkUnderTest(com_port, virtual)
+    assert link.port_handler is not virtual
+
+    com_port.chosen = "simulated audio port"
+    com_port.is_using_the_stand_in = True
+    link.use_port("simulated audio port")
+
+    assert link._port_handler is virtual
 
 
 def test_the_installation_is_not_offered_a_bench_test(monkeypatch, stub_factory):
@@ -390,31 +493,97 @@ def test_the_installation_is_not_offered_a_bench_test(monkeypatch, stub_factory)
     assert list(group.snapshot_children) == ["test search", "test audio subsystem"]
 
 
-def test_the_audio_port_picker_offers_the_stand_in_off_the_bench(monkeypatch, stub_factory):
-    from colloquy.tests.test_audio_subsystem import AudioComPort
+def fake_leads(monkeypatch, *devices):
+    """What `boards.detect()` finds, without a USB bus.
 
+    The picker names a lead by the chip bridging it to USB - see
+    boards.py - so a Board, not a bare device name.
+    """
+    from colloquy.drivers.arduino.boards import Board
+
+    monkeypatch.setattr(
+        # The picker moved onto the shared bench base - see
+        # colloquy/tests/bench_com_port.py, which both bench boards use.
+        "colloquy.tests.bench_com_port.boards.detect",
+        lambda: [
+            Board(
+                device=device,
+                name="Arduino Mega 2560 (R3)",
+                is_arduino=True,
+                vid=0x2341,
+                pid=0x0042,
+                serial_number=None,
+            )
+            for device in devices
+        ],
+    )
+
+
+def test_the_audio_port_picker_offers_the_stand_in_where_there_is_no_board(
+    monkeypatch, stub_factory
+):
     set_hostname(monkeypatch, "some-laptop")
+    fake_leads(monkeypatch)
     picker = AudioComPort(owner=stub_factory())
 
     assert picker.ports == ["simulated audio port"]
 
 
 def test_the_audio_port_picker_offers_real_leads_on_the_bench(monkeypatch, stub_factory):
-    # And only real ones: the U2D2's and the Arduino's simulated names
-    # used to be on this picker, which only ever invited somebody to pick
-    # one of them by mistake.
-    from colloquy.tests.test_audio_subsystem import AudioComPort
-
     set_hostname(monkeypatch, "DESKTOP-MRSLS88")
-    monkeypatch.setattr(
-        # The picker moved onto the shared bench base - see
-        # colloquy/tests/bench_com_port.py, which both bench boards use.
-        "colloquy.tests.bench_com_port.list_ports.comports",
-        lambda: [SimpleNamespace(device="COM3"), SimpleNamespace(device="COM7")],
-    )
+    fake_leads(monkeypatch, "COM3", "COM7")
     picker = AudioComPort(owner=stub_factory())
 
-    assert picker.ports == ["COM3", "COM7"]
+    # The stand-in comes last: on a machine with a board plugged into it,
+    # the board is the answer. The bench is `is_simulated`, so it is
+    # offered - it is what you pick to rehearse the run without the board.
+    assert picker.ports == ["COM3", "COM7", "simulated audio port"]
+
+
+def test_the_audio_port_picker_offers_real_leads_on_the_installation(
+    monkeypatch, stub_factory
+):
+    """The afternoon this whole change is for.
+
+    Thomas's board is carried to the installation's laptop so the 12 V
+    pass can be run beside the piece. Asking `is_bench` here listed one
+    stand-in and nothing else, and two passes against a simulator differ
+    by nothing - which reads exactly like a rail change that bought you
+    nothing. There is no stand-in on this machine: `is_simulated` is
+    False, so the only thing offered is the board actually plugged in.
+    """
+    set_hostname(monkeypatch, "Colloquy-Laptop")
+    fake_leads(monkeypatch, "COM9")
+    picker = AudioComPort(owner=stub_factory())
+
+    assert picker.ports == ["COM9"]
+
+
+def test_the_picker_draws_the_chip_and_stores_the_com_number(monkeypatch, stub_factory):
+    """Which COM number Windows handed out this week is not a fact worth
+    carrying in anybody's head; which board it is, is. So the label is
+    what the page draws and the device is what gets stored."""
+    set_hostname(monkeypatch, "Colloquy-Laptop")
+    fake_leads(monkeypatch, "COM9")
+    picker = AudioComPort(owner=stub_factory())
+
+    drawn = list(picker.snapshot_children)
+
+    assert drawn == ["COM9 - Arduino Mega 2560 (R3)"]
+    assert picker.ports == ["COM9"]
+
+
+def test_the_stand_in_is_named_by_the_lead_not_the_machine(monkeypatch, stub_factory):
+    """`is_using_the_stand_in` is one property and it reads params."""
+    set_hostname(monkeypatch, "DESKTOP-MRSLS88")
+    owner = stub_factory()
+    owner.params = {"audio subsystem": {"communication port": "simulated audio port"}}
+    picker = AudioComPort(owner=owner)
+
+    assert picker.is_using_the_stand_in is True
+
+    owner.params["audio subsystem"]["communication port"] = "COM7"
+    assert picker.is_using_the_stand_in is False
 
 
 def test_a_port_remembered_from_another_machine_is_refused(monkeypatch):

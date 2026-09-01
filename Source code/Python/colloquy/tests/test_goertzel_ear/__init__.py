@@ -123,6 +123,18 @@ class TestGoertzelEar(BaseThread):
             ]["communication port"]
         return self._port_handler
 
+    def use_port(self, com_port):
+        """Point the link at a newly chosen lead.
+
+        There is only one kind of handler here - no stand-in, on purpose;
+        see `port_handler` - so this is a name change rather than the
+        swap `BenchBoardLink` has to make. It exists because
+        `BenchComPort` asks its owner to re-point rather than reaching
+        into the handler itself, which is what lets the two audio tests
+        move between a real lead and the simulator at all.
+        """
+        self.port_handler.port = com_port
+
     # --- the line ---------------------------------------------------------
 
     def _why_not_open(self):

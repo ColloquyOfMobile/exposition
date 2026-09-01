@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 # Source code/Python/colloquy/tests/test_audio_subsystem/__init__.py
 
-import serial
-
 from datetime import datetime
 from functools import partial
 from time import time
@@ -10,6 +8,7 @@ from time import time
 from colloquy.base_thread import BaseThread
 from colloquy.ui import leaves
 
+from ..bench_board import BenchBoardLink
 from ..bench_com_port import BenchComPort
 
 from . import protocol
@@ -28,7 +27,7 @@ class AudioComPort(BenchComPort):
     stand_in = "simulated audio port"
 
 
-class TestAudioSubsystem(BaseThread):
+class TestAudioSubsystem(BenchBoardLink, BaseThread):
     """A bench test for Thomas's audio subsystem, driven through his own
     tester firmware.
 
@@ -147,29 +146,10 @@ class TestAudioSubsystem(BaseThread):
     def baudrate(self):
         return self.params["audio subsystem"]["baudrate"]
 
-    @property
-    def board_is_real(self):
-        """Shown on the page, because a wrong answer here is otherwise
-        silent: a run against the stand-in passes all twenty-five and
-        looks exactly like a run against a working bench."""
-        return self.is_bench
-
-    @property
-    def port_handler(self):
-        if self._port_handler is None:
-            # is_bench, not is_simulated. The bench is simulated as far as
-            # the piece goes - it has no servos and no Arduino - and its
-            # audio board is as real as hardware gets.
-            if self.is_bench:
-                self._port_handler = serial.Serial(
-                    baudrate=self.baudrate, timeout=0.05
-                )
-            else:
-                self._port_handler = self.colloquy.virtual_drivers.audio_serial_port
-            self._port_handler.port = self.params["audio subsystem"][
-                "communication port"
-            ]
-        return self._port_handler
+    # `board_is_real`, `port_handler` and `use_port` come from
+    # BenchBoardLink: they were a verbatim copy of `test audio at 12v`'s,
+    # and both copies asked `is_bench` when the question is which lead was
+    # chosen. See bench_board.py.
 
     # --- the line, one exchange at a time ---------------------------------
 

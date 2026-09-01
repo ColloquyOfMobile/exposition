@@ -139,7 +139,14 @@ class Tests(Base):
                 self.test_sensors,
                 self.test_audio_at_12v,
             ),
-            bench_only=(self.test_audio_at_12v.name,),
+            # Nothing bench-only here, and `test audio at 12v` is why it
+            # stopped being so. The supply it measures is the piece's, so
+            # the board gets carried *to* the installation and run beside
+            # it - a gate on the hostname hid the test on the one machine
+            # somebody would be standing at with a screwdriver. Whether
+            # it is talking to a board or the stand-in is a question
+            # about the chosen lead now, asked and answered on its own
+            # page (`board is real`). See bench_board.py.
         )
 
         self[auto.name] = auto

@@ -245,3 +245,50 @@ def test_forgetting_clears_both_passes():
 
     assert fake._results == {}
     assert SupplyTest._comparison(fake) is None
+
+
+# --- which machine it can be run on --------------------------------------
+
+
+def test_the_installation_is_offered_this_one(monkeypatch, stub_factory):
+    """The gate this test lost, and why.
+
+    Every other bench test is hidden on the installation because the
+    board it needs is in an office and always will be. This one is the
+    exception: the supply it measures is the *piece's*, so the board is
+    carried to the installation and run beside it. Gating it on the
+    hostname hid it on the one machine somebody would be standing at
+    with a screwdriver, and typing the URL got you a picker offering a
+    stand-in - two passes that differ by nothing, which reads exactly
+    like a rail change that bought you nothing.
+
+    Whether it is talking to a board is a question about the lead now,
+    asked on its own page (`board is real`), not about the computer.
+    """
+    from colloquy.tests.group import TestGroup
+
+    supply = stub_factory(name="test audio at 12v", is_started=False)
+    group = TestGroup(
+        owner=stub_factory(), name="manual tests", summary="..."
+    ).fill(tests=(supply,))
+
+    monkeypatch.setattr(
+        "colloquy.machines.socket.gethostname", lambda: "Colloquy-Laptop"
+    )
+    assert list(group.snapshot_children) == ["test audio at 12v"]
+
+    monkeypatch.setattr(
+        "colloquy.machines.socket.gethostname", lambda: "DESKTOP-MRSLS88"
+    )
+    assert list(group.snapshot_children) == ["test audio at 12v"]
+
+
+def test_the_supply_picker_shares_the_subsystems_params_key():
+    """The same board on the same lead. Having chosen it once on one page
+    only to be asked again on the next is the kind of small lie about the
+    hardware this tree is meant not to tell."""
+    from colloquy.tests.test_audio_at_12v import SupplyComPort
+    from colloquy.tests.test_audio_subsystem import AudioComPort
+
+    assert SupplyComPort.params_section == AudioComPort.params_section
+    assert SupplyComPort.stand_in == AudioComPort.stand_in

@@ -54,8 +54,6 @@ in the room" - and which module that was is the sibling test's business.
 """
 import math
 
-import serial
-
 from datetime import datetime
 from functools import partial
 from time import time
@@ -63,6 +61,7 @@ from time import time
 from colloquy.base_thread import BaseThread
 from colloquy.ui import leaves
 
+from ..bench_board import BenchBoardLink
 from ..bench_com_port import BenchComPort
 from ..test_audio_subsystem import protocol
 
@@ -88,7 +87,7 @@ class SupplyComPort(BenchComPort):
 SUPPLIES = ("5 V", "12 V")
 
 
-class TestAudioAt12V(BaseThread):
+class TestAudioAt12V(BenchBoardLink, BaseThread):
     """Two passes over Thomas's five tones, one per amplifier supply."""
 
     scenario_names = ("audio-supply-test",)
@@ -189,29 +188,13 @@ class TestAudioAt12V(BaseThread):
     def baudrate(self):
         return self.params["audio subsystem"]["baudrate"]
 
-    @property
-    def board_is_real(self):
-        """Shown on the page. A run against the stand-in produces two
-        passes that differ by nothing, which looks exactly like a real
-        bench where 12 V bought you nothing - so which board answered has
-        to be said before any number is."""
-        return self.is_bench
-
-    @property
-    def port_handler(self):
-        if self._port_handler is None:
-            # is_bench, not is_simulated: the bench is simulated as far as
-            # the piece goes and its audio board is as real as it gets.
-            if self.is_bench:
-                self._port_handler = serial.Serial(
-                    baudrate=self.baudrate, timeout=0.05
-                )
-            else:
-                self._port_handler = self.colloquy.virtual_drivers.audio_serial_port
-            self._port_handler.port = self.params["audio subsystem"][
-                "communication port"
-            ]
-        return self._port_handler
+    # `board_is_real`, `port_handler` and `use_port` come from
+    # BenchBoardLink. They asked `is_bench`, which is the one machine this
+    # test is least likely to be run on: the supply being changed is the
+    # piece's, so the board comes to the installation's laptop. A run
+    # against the stand-in produces two passes that differ by nothing,
+    # which reads exactly like a bench where 12 V bought you nothing - so
+    # which board answered is said on the page before any number is.
 
     # --- the line ---------------------------------------------------------
 
