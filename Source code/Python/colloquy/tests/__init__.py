@@ -15,6 +15,7 @@ from colloquy.ui.graph_view import GraphView
 from .test_graph_zoom import TestGraphZoom, dummy_points
 from .test_neopixels import TestNeopixels
 from .test_sensors import TestSensors
+from .test_microphone_signal import TestMicrophoneSignal
 from .test_audio_subsystem import TestAudioSubsystem
 from .test_audio_at_12v import TestAudioAt12V
 from .test_audio_loop import TestAudioLoop
@@ -107,6 +108,11 @@ class Tests(Base):
         self.test_male_patterns = TestMalePatterns(owner=manual)
         self.test_neopixels = TestNeopixels(owner=manual, result_folder=result_folder)
         self.test_sensors = TestSensors(owner=manual, result_folder=result_folder)
+        # No result folder: half of what this one measures is a trace
+        # in the Arduino IDE's plotter, on a port this process is
+        # deliberately not holding, so a file of the other half would
+        # record only the half that was never in doubt.
+        self.test_microphone_signal = TestMicrophoneSignal(owner=manual)
         self.test_audio_at_12v = TestAudioAt12V(
             owner=manual, result_folder=result_folder
         )
@@ -137,6 +143,7 @@ class Tests(Base):
                 self.test_male_patterns,
                 self.test_neopixels,
                 self.test_sensors,
+                self.test_microphone_signal,
                 self.test_audio_at_12v,
             ),
             # Nothing bench-only here, and `test audio at 12v` is why it
