@@ -142,7 +142,17 @@ class Drive(BaseThread):
         if amount is None:
             amount = 20
         with self.lock:
-            self._value -= amount * self._step
+            # int() for the same reason commit() does it: an appetite is a
+            # whole number everywhere else - _step is 1, _max is 100, and
+            # the drives' gamma table is a tuple this value indexes. A
+            # decrement is the one number here that comes out of params
+            # rather than out of this file, and female2's is 12.5, so a
+            # single round of her reinforcement turned her drive into a
+            # float and the next update() died on
+            # `tuple indices must be integers`. That killed her
+            # reinforcement thread, which stopped `drivers`, which stopped
+            # the whole exposition about a minute into a run.
+            self._value = int(self._value - amount * self._step)
             if self._value < 0:
                 self._value = 0
         self.owner.update()

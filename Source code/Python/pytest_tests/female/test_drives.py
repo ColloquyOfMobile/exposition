@@ -13,6 +13,8 @@ against a `stub_factory`-built female stub (exposing `.name` and
 `build_map_to_compensate_brightness_to_human_eye()` is a pure module-level
 function (no I/O at all) and is tested directly.
 """
+from types import SimpleNamespace
+
 from colloquy.drivers.female.drives import (
     Drives,
     build_map_to_compensate_brightness_to_human_eye,
@@ -124,3 +126,63 @@ def test_snapshot_children_keys_and_values(stub_factory):
     assert children[drives.o_drive.name] is drives.o_drive
     assert children[drives.p_drive.name] is drives.p_drive
     assert children["scenarios"].names == ("female-appetite-lights",)
+
+
+# --- an appetite stays a whole number ------------------------------------
+
+
+def lit_female(stub_factory, name="female1"):
+    """Her drives, with just enough of a body behind them that
+    `Drives.update()` - which every change to an appetite calls - can
+    write the brightnesses it wants to write."""
+
+    def group():
+        return SimpleNamespace(
+            brightness=SimpleNamespace(value=None), color=None, on=lambda: None
+        )
+
+    owner = stub_factory(
+        name=name,
+        params={"drive start values": {name: {"O": 44, "P": 44}}},
+        neopixels=SimpleNamespace(
+            head=group(), body_o=group(), body_p=group(), feet=group()
+        ),
+    )
+    return Drives(owner=owner)
+
+
+def test_a_fractional_decrement_leaves_the_drive_an_integer(stub_factory):
+    """params' "reinforcement decrement" is female2's 12.5, and it is the
+    one number in a drive that does not come out of drive/__init__.py.
+
+    `commit()` has always run its value through int(); `decrease()` did
+    not, so one round of female2's reinforcement made her appetite a float
+    and the `update()` at the end of that very call indexed the gamma
+    table with it. It raised `tuple indices must be integers`, which
+    killed her reinforcement thread, stopped `drivers` and ended the whole
+    exposition about a minute into a run.
+    """
+    drives = lit_female(stub_factory)
+
+    drives.o_drive.decrease(12.5)
+
+    assert drives.o_drive.value == 31
+    assert isinstance(drives.o_drive.value, int)
+
+
+def test_a_fractional_decrement_does_not_break_the_body_lights(stub_factory):
+    drives = lit_female(stub_factory)
+    the_map = build_map_to_compensate_brightness_to_human_eye()
+
+    drives.p_drive.decrease(12.5)
+
+    # The brightness the update() inside decrease() actually wrote.
+    assert drives.owner.neopixels.body_p.brightness.value == the_map[31]
+
+
+def test_a_decrement_never_takes_an_appetite_below_zero(stub_factory):
+    drives = lit_female(stub_factory)
+
+    drives.o_drive.decrease(99.5)
+
+    assert drives.o_drive.value == 0
