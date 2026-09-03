@@ -22,6 +22,8 @@ whole of what distinguishes them:
   machine somebody is holding a scalpel over is likely to be the other
   one.
 """
+from pathlib import Path
+
 import pytest
 
 from colloquy.code_documentation import CodeDocumentation
@@ -234,25 +236,46 @@ def test_a_lone_carriage_return_is_a_line_break_too(local):
     assert local.file_path.read_bytes() == b"one\ntwo\nthree\n"
 
 
-# --- the hardware setup's own images -------------------------------------
+# --- the images the documents link to -------------------------------------
+
+# Which documents carry pictures, and what breaks if one goes missing.
+# A broken link shows as a little empty box on the page, which nobody
+# notices until they are standing at a bench trying to identify a board.
+ILLUSTRATED = {
+    # Photographs out of Thomas's PDF, labels and all.
+    HardwareSetup: "photographs",
+    # The board itself, exported from the KiCad file by
+    # export_pcb_layout.py at the repository root.
+    AsBuilt: "board drawings",
+}
 
 
-def test_the_hardware_setup_photographs_are_where_it_says_they_are():
-    """Every image the setup document links to is on disk and served.
-
-    They are photographs out of Thomas's PDF, and a broken one shows as a
-    little empty box on the page - which nobody notices until they are
-    standing at a bench trying to identify a board.
-    """
+def _image_sources(document_class):
     import re
 
+    document = document_class.__new__(document_class)
+    markdown_text = document.file_path.read_text(encoding="utf-8")
+    return re.findall(r"!\[[^\]]*\]\((/static/[^)]+)\)", markdown_text)
+
+
+@pytest.mark.parametrize(
+    "document_class, what",
+    list(ILLUSTRATED.items()),
+    ids=lambda value: value if isinstance(value, str) else value.__name__,
+)
+def test_every_image_a_document_links_to_is_on_disk_and_served(
+    document_class, what
+):
+    """On disk, and with a content type the browser will *show*.
+
+    The second half is the one that bites: without a type the browser is
+    handed application/octet-stream and offers to save the file instead
+    of drawing it, which for an SVG looks exactly like a broken image.
+    """
     from colloquy.server2.wsgi2 import _STATIC_CONTENT_TYPES, _STATIC_ROOTS
 
-    document = HardwareSetup.__new__(HardwareSetup)
-    markdown_text = document.file_path.read_text(encoding="utf-8")
-
-    sources = re.findall(r"!\[[^\]]*\]\((/static/[^)]+)\)", markdown_text)
-    assert sources, "the setup document has lost its photographs"
+    sources = _image_sources(document_class)
+    assert sources, f"{document_class.__name__} has lost its {what}"
 
     for source in sources:
         relative = source[len("/static/") :]
@@ -261,3 +284,33 @@ def test_the_hardware_setup_photographs_are_where_it_says_they_are():
         assert path.suffix in _STATIC_CONTENT_TYPES, (
             f"{source} would be served as a download, not shown"
         )
+
+
+def test_the_board_drawings_are_the_board_in_the_kicad_file():
+    """The drawings are generated, so the thing that can rot is the
+    generator's idea of where the board is - not the SVGs themselves.
+
+    Loaded from its path rather than imported by name: the script lives
+    at the repository root, which is deliberately not on pythonpath (only
+    `Source code/Python` is), and its own paths are relative to that root
+    the way `extract_hardware_photos.py`'s are. So the root is worked out
+    from this file, exactly as the sibling test finds the plotter sketch.
+    """
+    import importlib.util
+
+    root = Path(__file__).resolve().parents[3]
+    script = root / "export_pcb_layout.py"
+    assert script.is_file()
+
+    spec = importlib.util.spec_from_file_location("export_pcb_layout", script)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    assert (root / module.BOARD).is_file()
+    # Both views the document shows, and nothing else claiming to be one.
+    assert set(module.VIEWS) == {
+        "electronic-box-layout",
+        "electronic-box-layout-back",
+    }
+    for name in module.VIEWS:
+        assert (root / module.FOLDER / f"{name}.svg").is_file()
