@@ -28,6 +28,7 @@ from colloquy.drivers import audio
 from colloquy.tests.test_microphone_signal import (
     TestMicrophoneSignal as MicrophoneTest,
 )
+from colloquy.tests.test_microphone_signal import plotter_sketch
 from colloquy.tests.test_microphone_signal.plotter_document import (
     MicrophonePlotter,
 )
@@ -240,3 +241,129 @@ def _raising(error):
         raise error
 
     return raise_it
+
+
+# --- putting the piece's own firmware back --------------------------------
+
+
+class FakeFlasher:
+    """`drivers > arduino > flash firmware`, as far as this test sees it."""
+
+    def __init__(self, answer="flashing - refresh in a moment"):
+        self.answer = answer
+        self.presses = 0
+        self.is_started = False
+        self.outcome = None
+
+    def flash(self, request=None):
+        self.presses += 1
+        return self.answer
+
+
+def with_flasher(flasher):
+    return SimpleNamespace(flasher=flasher)
+
+
+def test_the_flasher_it_uses_is_the_arduinos_own():
+    """One flasher in the tree, reached through `drivers`, never a
+    second one built here. Called unbound against a double, per
+    conftest - a real owner chain would have to be the whole hardware
+    graph."""
+    the_flasher = object()
+    fake = SimpleNamespace(
+        drivers=SimpleNamespace(arduino=SimpleNamespace(flasher=the_flasher))
+    )
+
+    assert MicrophoneTest.flasher.fget(fake) is the_flasher
+
+
+def test_the_flash_back_is_offered_on_this_test(node):
+    """Both routes that borrow the installation's own Mega leave the
+    plotter sketch on it, and until firmware 4 is back the driver will
+    not open the link at all. The press that undoes that belongs on the
+    page that asked for it, not three levels away."""
+    assert (
+        node.snapshot_children["flash colloquy firmware back"]
+        == node.flash_firmware_back
+    )
+    # Registered as well as drawn: drawing is the link, registering is
+    # what makes it reachable by path.
+    assert node["flash colloquy firmware back"] == node.flash_firmware_back
+
+
+def test_the_flash_back_delegates_to_the_one_flasher():
+    """It decides nothing for itself. The flasher already knows every
+    reason not to flash - an unmounted PCB, an unchosen port, a port that
+    is not a plausible Arduino, anything under drivers or tests still
+    running - and only it knows what is on the USB bus."""
+    flasher = FakeFlasher()
+    fake = with_flasher(flasher)
+
+    answer = MicrophoneTest.flash_firmware_back(fake)
+
+    assert flasher.presses == 1
+    assert answer == "flashing - refresh in a moment"
+
+
+def test_a_refused_flash_comes_back_as_the_flashers_own_sentence():
+    """Not swallowed and not re-worded. A refusal is instant and reads
+    last-known state, so the person who pressed is told why in the same
+    request."""
+    flasher = FakeFlasher(answer="refused: no port chosen - pick the board first")
+    fake = with_flasher(flasher)
+
+    answer = MicrophoneTest.flash_firmware_back(fake)
+
+    assert answer.startswith("refused: ")
+    assert "no port chosen" in answer
+
+
+# --- the pin the sketch will actually sample ------------------------------
+
+
+def test_the_plotter_sketch_is_read_out_of_the_sketch():
+    """The pin the clip is on and the pin the sketch reads have to be the
+    same pin, and nothing says so when they are not - a sketch left on A5
+    from route C plots a floating pin, which section 7 lists as a failure
+    shape in its own right. So the page reads the .ino rather than
+    restating it."""
+    assert plotter_sketch.SKETCH_PATH.is_file()
+    assert plotter_sketch.mic_pin() == "A0"
+    assert plotter_sketch.mode() == "ENVELOPE"
+
+
+def test_the_plot_baudrate_is_not_the_installations():
+    """A window full of rubbish is always these two numbers disagreeing,
+    which is worth being able to read off the page while looking at the
+    rubbish."""
+    from colloquy.drivers.arduino import firmware
+
+    assert plotter_sketch.plot_baudrate() == 115200
+    assert plotter_sketch.plot_baudrate() != firmware.sketch_baudrate()
+
+
+def test_describe_names_pin_mode_and_rate():
+    assert plotter_sketch.describe() == "reads A0 in envelope mode at 115200 baud"
+
+
+def test_an_unreadable_define_is_named_rather_than_guessed():
+    with pytest.raises(RuntimeError, match="NO_SUCH_DEFINE"):
+        plotter_sketch._define("NO_SUCH_DEFINE")
+
+
+# --- the route that has no second half ------------------------------------
+
+
+def test_the_A0_route_is_the_one_with_no_analyser_half(node):
+    """Route B runs with the array out of the rack, so there are no
+    analysers to strobe and nothing to read against the plot. The
+    document has to say which routes those are, because the last two rows
+    of the failure table do not apply on them."""
+    document = node._document.read()
+
+    assert "Route B - the microphone straight onto `A0`" in document
+    assert "flash colloquy firmware back" in document
+    # The hazard that is specific to this route: A0 is analyser module
+    # 0's output, so the microphone has to come off before the array
+    # goes back on.
+    assert "Do not leave the microphone on `A0`" in document

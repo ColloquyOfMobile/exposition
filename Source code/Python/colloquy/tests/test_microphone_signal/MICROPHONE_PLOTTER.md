@@ -31,9 +31,6 @@ looks at.
 
 ## 1. What you need
 
-- **A second Arduino** - any 5 V board. An Uno, a Nano, a spare Mega.
-  This is the recommended route and it touches nothing on the
-  installation.
 - The **Arduino IDE, version 2.x** (`Tools > Serial Plotter`).
 - The sketch: `Source code/Arduino/microphone_plotter/`.
 - A phone, and something to play through it with a broad spectrum and
@@ -41,14 +38,29 @@ looks at.
   worst possible test signal here, because a steady tone and a steady
   fault look the same.
 - Two clip leads.
-
-If you have no second board, section 3 does it with the installation's
-own Mega instead. It is more invasive, it costs you the analyser half of
-this test, and it should be the second choice.
+- For route A only: **a second Arduino** - any 5 V board. An Uno, a
+  Nano, a spare Mega.
 
 ---
 
-## 2. Route A - a second Arduino as a probe (recommended)
+## 1a. Which of the three routes
+
+One question decides it: **is the analyser array in the rack?**
+
+| | analyser array | second board | route |
+|---|---|---|---|
+| **A** | in | yes | probe it with the second board. Touches nothing. Keeps the analyser half. |
+| **B** | **out** | no | **the microphone straight onto `A0`.** Nothing to unsolder, nothing to edit. No analyser half - there are no analysers. |
+| **C** | in | no | borrow a female's photosensor on the installation's own Mega. The invasive one, and the last choice. |
+
+Routes B and C both put `microphone_plotter` onto the installation's own
+Mega. `tests > manual tests > test microphone signal` carries
+**`flash colloquy firmware back`** for putting firmware 4 on again
+afterwards, in one press - see "Putting it back".
+
+---
+
+## 2. Route A - a second Arduino as a probe (best, when the array is in)
 
 Nothing on the installation is unplugged, unsoldered, reflashed or
 reconfigured. The piece keeps its port and its firmware, and the run on
@@ -100,10 +112,70 @@ there is nothing to edit.
 
 ---
 
-## 3. Route B - the installation's own Mega
+## 3. Route B - the microphone straight onto `A0`
 
-Only when there is no second board. It costs the analyser half of this
-test outright: while the plotter sketch is on that Mega, the strobe and
+**Only while the analyser array is out of the rack.** That is what makes
+this route possible and it is the whole of its precondition: `A0`-`A4`
+are the five analyser outputs, and with no analysers plugged in they are
+five ADC pins on the installation's own Mega with nothing driving them.
+
+It is the cheapest route this test has: nothing to unsolder, nothing to
+lift off `J11`, no photosensor borrowed, and **nothing to edit in the
+sketch** - `microphone_plotter` already ships with `#define MIC_PIN A0`.
+The page reads that `#define` out of the .ino and shows it, so if
+somebody has left the sketch on `A5` from route C the page says `A5` and
+not `A0`.
+
+### 3a. Wire it
+
+1. **Ground first**, and off last. `J9` pin 1 is the Mega's own ground
+   and the easiest to reach.
+2. **The microphone's `AOUT` to `A0`.** Either at the Mega's own header
+   or at `J11` pin 2, which is the same net.
+3. **The microphone's supply.** A MAX9814 wants 5 V and its own ground.
+   Take them from the rack, not from a bench supply sitting at a
+   different potential to the Mega.
+4. Keep the lead short, and keep it away from the NeoPixel lines. There
+   is no MSGEQ7 input network on this node any more to load the pickup
+   down, so a long lead here picks up more than it used to, not less.
+
+> **Do not leave the microphone on `A0` when the analyser array goes
+> back in.** `A0` is analyser module 0's output. With both connected,
+> an MSGEQ7 output and a MAX9814 output are driving the same node
+> against each other, and neither part is expecting company. Unplug the
+> microphone *before* the array is refitted - it is the first line of
+> "Putting it back" for that reason.
+
+### 3b. Flash and plot
+
+1. Open `microphone_plotter.ino`, pick the installation's Mega and its
+   port, upload. Nothing to edit: it reads `A0` already.
+2. `Tools > Serial Plotter`, corner set to **115200** - not the
+   installation's 1 Mbaud. A window full of rubbish is always these two
+   numbers disagreeing.
+3. Play music into the body, 20-30 cm away, at a level you would talk
+   over.
+4. Read it with section 6. **There is no analyser half on this route**,
+   so the last two rows of section 7's table do not apply: the plot is
+   the whole measurement. Starting the run on the page will simply say
+   it cannot read the analysers and stop, which is correct rather than a
+   fault.
+
+**One thing to watch out for on this route.** If you clip the microphone
+onto `A0` while firmware 4 is still on the board and start the run, the
+`female1` row *will* move with sound - and it means nothing. What it is
+showing is the MSGEQ7 read routine strobing a pin that now has a raw
+microphone on it, so those seven numbers are seven samples of an
+envelope rather than seven bands. Flash the plotter sketch and read the
+plot; do not read that row.
+
+---
+
+## 4. Route C - the installation's own Mega, borrowing a photosensor
+
+Only when the analyser array is **in** the rack and there is no second
+board - if the array is out, route B is this route without any of the
+unsoldering. It costs the analyser half of this test outright: while the plotter sketch is on that Mega, the strobe and
 reset lines are not being driven, so the MSGEQ7s are not being clocked
 and the run on the page has nothing to read. It will say so and stop.
 
@@ -122,26 +194,46 @@ photosensor.
 3. Jumper the body's microphone pin (`J11` 1, 3, 5, 7 or 9, per the
    table above) to **`J11` pin 12**.
 4. In the sketch, `#define MIC_PIN A5`. Upload it to the installation's
-   Mega.
+   Mega. **Set it back to `A0` afterwards** - it is what every other
+   route expects, and the page shows which pin the sketch is on so you
+   can see that it is.
 5. Plot as in 2b. `test microphone signal` will not be able to read the
    analysers; that is expected on this route.
 
-### Putting it back
+---
 
-1. `drivers > arduino > flash firmware` puts firmware 4 back on the
-   board in one press, and ends by reopening the port - so the outcome
+## 4a. Putting it back
+
+After route B or route C. The order matters in one place only, and it is
+the first line.
+
+1. **Unplug the microphone before anything else** - off `A0` on route B,
+   or off the jumper on route C. On route B this is the step that keeps
+   an MSGEQ7 output and a MAX9814 output from being refitted onto the
+   same node.
+2. **`tests > manual tests > test microphone signal >
+   flash colloquy firmware back`.** One press. It is the same flasher as
+   `drivers > arduino > flash firmware` and it refuses for the same
+   reasons - it is on this page because this is the page that told you
+   to reflash the board. It ends by reopening the port, so the outcome
    line is the board saying in its own words which firmware it is now
    running.
-2. Confirm on `drivers > arduino`: **in sync: yes**, and *board says:
-   firmware 4 at 1000000 baud*.
-3. Remove the jumper and refit what you took off `J11` 11-12.
-4. Check female1's photosensor is reading again -
+3. Read **board says** on this test: *firmware 4 at 1000000 baud*.
+   Confirm on `drivers > arduino` that **in sync** is yes.
+4. Route C only: remove the jumper, refit what you took off `J11` 11-12,
+   and set the sketch back to `#define MIC_PIN A0`.
+5. Route C only: check female1's photosensor is reading again -
    `tests > manual tests > test sensors`, hand over the sensor, watch the
    number fall.
 
+> If the flash is refused because something is still running, stop it and
+> press again. The board spends twenty seconds in its bootloader
+> answering nothing, which is why the flasher will not do it underneath a
+> running piece or a running test.
+
 ---
 
-## 4. The four traces
+## 5. The four traces
 
 The plotter draws four series per window of 20 ms:
 
@@ -174,7 +266,7 @@ them look nothing like each other. It is the mode for "there is
 
 ---
 
-## 5. What a working microphone looks like
+## 6. What a working microphone looks like
 
 - **Quiet room, nothing playing.** `mean` sits on 256. `min` and `max`
   hug it, and over a second or two they drift *apart* rather than
@@ -194,7 +286,7 @@ them look nothing like each other. It is the mode for "there is
 
 ---
 
-## 6. What each failure shape means
+## 7. What each failure shape means
 
 | the plot | what it is |
 |---|---|
@@ -206,10 +298,11 @@ them look nothing like each other. It is the mode for "there is
 | fast noise unrelated to the music | picked up off the wire rather than out of the air. Shorten the probe lead, and try again with the NeoPixels off. Wave mode tells the two apart. |
 | **the plot moves, the analyser bands do not** | **the fault is between the microphone wire and the MSGEQ7** - its input network, its supply, or the strobe on D4. This is the row this test exists for. |
 | the plot moves and the bands move | this microphone is fine. Go to `tests > autotests > test audio bringup`, which takes the rest of the chain apart. |
+| the plot moves and there are no bands | routes B and C, where there is no analyser half to compare against. The microphone is fine and that is all this run can tell you; the rest of the chain waits for the array to go back in. |
 
 ---
 
-## 7. What this cannot tell you
+## 8. What this cannot tell you
 
 - **Whether the analyser's support network is right.** It can only tell
   you that the fault is on that side of the cut. What is fitted around

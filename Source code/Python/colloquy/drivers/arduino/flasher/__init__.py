@@ -112,6 +112,18 @@ class Flasher(BaseThread):
         not."""
         return toolchain.find(self.override)
 
+    @property
+    def outcome(self):
+        """What the last job came to, or None if none has run.
+
+        Public because `test microphone signal` draws it. That test is
+        the one place where reflashing this board is part of following
+        the instructions rather than a repair, so it offers the flash
+        back on its own page - which would be worth nothing if the
+        answer only appeared on this one.
+        """
+        return self._outcome
+
     # --- the refusals -----------------------------------------------------
 
     def _why_not_flash(self):

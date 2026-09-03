@@ -4,8 +4,10 @@
 # every speaker goes quiet and stays quiet - what you are listening for is music from a
 # phone held at one body's microphone, and the piece singing over it would drown the
 # very reading being taken.
-# Read "plotter setup", beside this scenario, before clipping anything on. One of the two
-# ways of wiring it pulls something off J11, and there is an order to do that in.
+# Read "plotter setup", beside this scenario, before clipping anything on. It carries three
+# ways of wiring it: a second board that touches nothing, the microphone straight onto A0
+# while the analyser array is out, and borrowing a female's photosensor. Two of the three
+# reflash this installation's own board, and there is an order to put that back in.
 # It never ends on its own - press stop when you are done.
 
 0 Every speaker is silenced, in one command, before anything is read. If a body was singing it stops now. If the link cannot carry that command the run says so and stops rather than reading five modules in a room full of its own tones.
@@ -16,9 +18,10 @@
 0 Now the half the software cannot see. Play music into one body from a phone, 20 to 30 centimetres from its microphone, at a level you would talk over. Music with a beat, not a steady tone - a steady tone and a steady fault look identical on this plot.
 0 On the plotter, `min` and `max` should open away from each other in time with the music and close again, with `mean` sitting still on the flat reference line at 256. That line is 1.25 volts, which is where the microphone module rests when it hears nothing.
 0 In a quiet room, watch the band between `min` and `max` slowly widen rather than narrow. That is the gain control winding up towards its 40 dB strap because it has nothing to hear, and it is a sign of life rather than of noise.
+0 With the analyser array out of the rack there is no second half at all - no module to strobe, nothing to read against the plot - and the page says so instead of promising bands that cannot come. On that route the trace is the whole measurement, and starting this run only tells you the analysers cannot be read.
 0 Read the two halves together, because that is the whole point of the test. The plot moving and the bands moving means this microphone and its whole chain are fine, and the next question is `test audio bringup`.
 0 The plot moving and the bands staying flat means the fault is between the microphone wire and the MSGEQ7 - its input network, its supply, or the strobe. Nothing that reads the analyser could have told you that, which is why this test exists.
 0 Both flat means the microphone, its supply, or the wire back to the body. Section 6 of "plotter setup" has a row for each shape the trace can take, including the ones that look like a signal and are not.
 0 Walk the five bodies by moving the probe from one J11 odd pin to the next. Ground goes on first and comes off last, every time, and never onto an even pin - those are the analyser outputs, which is the thing this test exists to stop trusting.
 0 Nothing is written to a file. Half of this measurement is on a screen this process cannot see, and a record of the other half alone would be a record of the half that was never in doubt.
-0 Nothing is put back when you stop, because nothing was changed - except that the speakers are left silent, which is where they should be. If you took the second route and flashed the plotter sketch onto the installation's own board, putting firmware 4 back is `drivers > arduino > flash firmware`, and that page then says in the board's own words which firmware is on it.
+0 Nothing is put back when you stop, because nothing was changed - except that the speakers are left silent, which is where they should be. If you flashed the plotter sketch onto the installation's own board, `flash colloquy firmware back` is on this test and puts firmware 4 on in one press, and the `board says` reading is then the board's own words for which firmware is on it. Take the microphone off A0 first: that pin is analyser module 0's output, and the two must never be refitted onto it together.

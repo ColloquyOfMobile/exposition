@@ -28,6 +28,32 @@ board rather than about testing in general:
   thing to be wrong and the least likely thing to be caught by anything
   reading its output.
 
+**Where the clip goes now: straight onto `A0`.** With the analyser
+array out of the rack (`hardware > electronics`, and the reason the
+audio subsystem came off at all), `A0`-`A4` are five ADC pins on the
+installation's own Mega with nothing driving them. So the microphone
+goes directly onto `A0` and there is nothing to unsolder, no shunt to
+lift off `J11` and no photosensor to borrow - and `microphone_plotter`
+already ships reading `A0`, so there is nothing to edit in the sketch
+either. It is the cheapest route this test has ever had, and it exists
+only because the array is out; put the array back with a microphone
+still on `A0` and an MSGEQ7 output is driving the same node as a
+MAX9814 output. `plotter setup` opens on that.
+
+**What it costs is this run's own half**, and for a blunter reason than
+before. The photosensor route lost it because the plotter sketch drives
+neither strobe nor reset; this one loses it twice over, because there
+are no analysers plugged in to be strobed. So on this route the table
+below has one row - the plot moves or it does not - and the run on the
+page is there to say so rather than to be read.
+
+**And it reflashes the installation's own Mega**, which is why
+`flash colloquy firmware back` is on this node. Putting firmware 4 back
+was a paragraph in a document pointing at a page three levels away; it
+is one press from here now, and it ends by reopening the port, so the
+outcome line is the board saying in its own words which firmware it is
+running.
+
 **The instrument is your eyes on the Arduino IDE's Serial Plotter**, and
 that is why this is a manual test rather than an autotest. Music from a
 phone played into a body paints a shape anybody recognises in a second;
@@ -57,8 +83,10 @@ from time import time
 
 from colloquy.base_thread import BaseThread
 from colloquy.drivers import audio
+from colloquy.drivers.arduino import firmware
 from colloquy.ui import leaves
 
+from . import plotter_sketch
 from .plotter_document import MicrophonePlotter
 
 
@@ -87,9 +115,27 @@ class TestMicrophoneSignal(BaseThread):
         self._outcome = None
         self._last_read_at = 0.0
 
+        # Registered as well as drawn: registering is what makes it
+        # reachable by path, snapshot_children is what draws it.
+        self["flash colloquy firmware back"] = self.flash_firmware_back
+
     @property
     def name(self):
         return "test microphone signal"
+
+    @property
+    def flasher(self):
+        return self.drivers.arduino.flasher
+
+    @property
+    def plotter_sketch(self):
+        """What `microphone_plotter` would sample if flashed now.
+
+        Read out of the .ino rather than restated, because the pin the
+        clip is on and the pin the sketch reads have to be the same pin
+        and nothing says so when they are not - see plotter_sketch.py.
+        """
+        return plotter_sketch
 
     @property
     def wired_bodies(self):
@@ -140,10 +186,16 @@ class TestMicrophoneSignal(BaseThread):
             # Almost always one thing, and it is worth naming rather than
             # letting it arrive as a traceback: the installation's own
             # Mega is running the plotter sketch instead of firmware 4,
-            # which is what the second of the two wiring routes does to
-            # it. That route gives up this half of the test by
-            # construction - see `plotter setup`.
-            self._refuse(f"could not read the analysers: {error}")
+            # which is what both of the routes that borrow that board do
+            # to it. Either gives up this half of the test by
+            # construction - see `plotter setup` - so this is a
+            # documented way to use this test rather than a fault, and
+            # the sentence says which press undoes it.
+            self._refuse(
+                f"could not read the analysers: {error}. If the plotter "
+                "sketch is on the board, that is expected on this route - "
+                "'flash colloquy firmware back' puts firmware 4 on it."
+            )
             return
 
         self._last = readings
@@ -172,6 +224,34 @@ class TestMicrophoneSignal(BaseThread):
         self._peaks = {}
         return "peaks forgotten"
 
+    def flash_firmware_back(self, request=None):
+        """Put the piece's own firmware back on the installation's Mega.
+
+        The one press this test owes anybody who followed it. Both of the
+        routes that use the installation's own board leave
+        `microphone_plotter` on it, and until firmware 4 is back the
+        driver will not open the link at all - so the page that carries
+        the fix used to be three levels away from the page that told you
+        to break it.
+
+        **It delegates rather than deciding.** `drivers > arduino >
+        flash firmware` already knows every reason not to flash - an
+        unmounted PCB, an unchosen port, a port this machine does not
+        have, a port that is not a plausible Arduino, anything under
+        `drivers` or `tests` still running - and every one of those
+        refusals is instant and reads last-known state. Re-stating any of
+        them here would be a second copy to drift, and a weaker one: only
+        the flasher knows what is on the USB bus. So this returns the
+        flasher's own sentence, whichever it is.
+
+        The last of those refusals catches this very test if it is still
+        running, which is right rather than awkward: the board spends
+        twenty seconds in its bootloader answering nothing. On the `A0`
+        route it will have stopped itself already, because a run that
+        cannot read the analysers says so and stops.
+        """
+        return self.flasher.flash()
+
     # --- the page ---------------------------------------------------------
 
     @property
@@ -180,6 +260,12 @@ class TestMicrophoneSignal(BaseThread):
             {
                 self._document.name: self._document,
                 "forget the peaks": self.forget_the_peaks,
+                # Always offered, never hidden behind a check of its own.
+                # The flasher answers a press it will not act on with the
+                # reason, in the same request; a link that vanished
+                # exactly when the board was in the state this test puts
+                # it in would be the wrong way round.
+                "flash colloquy firmware back": self.flash_firmware_back,
             }
         )
 
@@ -207,13 +293,43 @@ class TestMicrophoneSignal(BaseThread):
                 "rather than silence, so ignore those rows",
             )
 
-        leaf(
-            "the other half",
-            "the trace in the Arduino IDE's Serial Plotter. Bands that move "
-            "with the music say the whole chain works; bands that stay flat "
-            "while the plotter moves put the fault between the microphone "
-            "wire and the MSGEQ7. See 'plotter setup'.",
-        )
+        # The pin the sketch will sample, out of the sketch. On the `A0`
+        # route this is the whole of the wiring instruction, and a sketch
+        # still set to `A5` from the photosensor route plots a floating
+        # pin - which section 6 lists as a failure shape in its own right.
+        try:
+            leaf("plotter sketch", plotter_sketch.describe())
+        except (OSError, RuntimeError) as error:
+            leaf("plotter sketch", f"could not be read: {error}")
+
+        if wired:
+            leaf(
+                "the other half",
+                "the trace in the Arduino IDE's Serial Plotter. Bands that "
+                "move with the music say the whole chain works; bands that "
+                "stay flat while the plotter moves put the fault between the "
+                "microphone wire and the MSGEQ7. See 'plotter setup'.",
+            )
+        else:
+            # Which is the state the `A0` route is run in: no analysers in
+            # the rack at all. Promising a second half that cannot exist
+            # would have somebody waiting for bands to move.
+            leaf(
+                "the other half",
+                "none on this route - with no analyser wired there is "
+                "nothing to read against the plot, so the trace in the "
+                "Serial Plotter is the whole measurement. See "
+                "'plotter setup'.",
+            )
+
+        # What the board on the other end says it is. This is how you
+        # know the flash back worked, and it is the same sentence the
+        # flasher ends on, from the same place.
+        leaf("board says", firmware.describe(self.drivers.arduino.greeting))
+        if self.flasher.is_started:
+            leaf("flashing", "in progress - refresh in a moment")
+        if self.flasher.outcome is not None:
+            leaf("last flash", self.flasher.outcome)
 
         if self._outcome is not None:
             leaf("outcome", self._outcome)
