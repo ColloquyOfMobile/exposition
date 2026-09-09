@@ -25,7 +25,6 @@ belongs in `pytest_tests` against the real classes, or in a hardware
 test under `colloquy/tests/`.
 """
 import io
-import json
 from threading import Event
 
 from colloquy.base import Base
@@ -185,17 +184,6 @@ class Pictures(Base):
             '<svg width="200" height="60" xmlns="http://www.w3.org/2000/svg">'
             '<rect width="200" height="60" fill="#8884"/>'
             '<text x="10" y="35" font-size="16">an image</text></svg>',
-        )
-        states["a graph"] = leaves.chart(
-            path,
-            "a graph",
-            json.dumps(
-                {
-                    "data": [[0, 1, 2, 3, 4], [0, 1, 4, 9, 16], [0, 2, 4, 6, 8]],
-                    "labels": ["squares", "doubles"],
-                    "colors": ["#1f77b4", "#ff7f0e"],
-                }
-            ),
         )
         return states
 

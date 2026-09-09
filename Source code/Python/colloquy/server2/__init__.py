@@ -26,9 +26,10 @@ class ThreadingWSGIServer(ThreadingMixIn, WSGIServer):
     not go through the tree at all (see wsgi2._parse), so it is now
     answerable while something else is mid-command.
 
-    It also stops the four static assets every page pulls (uPlot's css
-    and js, uplot_chart.js, svg_zoom.js) from queueing behind one another
-    - wsgiref speaks HTTP/1.0, so each is its own connection.
+    It also stops the static assets a page pulls (svg_zoom.js, and any
+    picture beside it) from queueing behind one another - wsgiref speaks
+    HTTP/1.0, so each is its own connection. There were four until uPlot
+    was retired on 2026-09-09.
 
     What this deliberately does NOT do is let two commands run at once:
     serving serially was an accidental lock around the whole application,

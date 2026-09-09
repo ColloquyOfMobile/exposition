@@ -29,11 +29,12 @@ touches, and it is deliberately not about whether the code happens to
 open a results file. It is about who does the perceiving. That is the
 distinction that changes what you do next, and none of the others do.
 
-**Two things stay outside both groups**, as direct children of `tests`:
-the uPlot demo and `test graph without script`. They are not tests of
-the piece at all - they draw the same dummy numbers two ways so the two
-ways can be compared - and filing them under either heading would make
-the heading mean less. See tests/__init__.py.
+**One thing stays outside both groups**, as a direct child of `tests`:
+`test graph`, which is the graph tool itself on dummy data. It is not a
+test of the piece at all, and filing it under either heading would make
+the heading mean less. (There were two until uPlot was retired on
+2026-09-09 and the comparison it was half of went with it.) See
+tests/__init__.py.
 """
 from colloquy.base import Base
 from colloquy.ui import leaves

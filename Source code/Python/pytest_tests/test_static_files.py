@@ -18,8 +18,8 @@ store it and check first. The check is a conditional request answered
 with a 304 and no body, to a server on the same machine, which is what
 the max-age was ever saving.
 
-Both UIs serve their own static/ and vendor/, so both are tested: this is
-one of the fixes that has to be made twice (see CLAUDE.md).
+Both UIs serve their own static/, so both are tested: this is one of the
+fixes that has to be made twice (see CLAUDE.md).
 """
 import pytest
 

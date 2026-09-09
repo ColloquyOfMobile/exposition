@@ -58,7 +58,6 @@ def test_a_leaf_is_its_path_its_name_and_its_kind():
 
 def test_the_key_names_the_kind():
     assert "html" in leaves.html(PATH, "rendered", "<p>hi</p>")
-    assert "chart" in leaves.chart(PATH, "graph", "{}")
     assert "svg" in leaves.svg(PATH, "picture", "<svg/>")
     assert "image" in leaves.image(PATH, "picture", "<svg/>")
     assert "pre" in leaves.pre(PATH, "log", "a line")
@@ -68,8 +67,8 @@ def test_the_key_names_the_kind():
 def test_every_constructor_names_the_leaf_after_its_key():
     # The page shows the dict key, so a name that disagrees with it only
     # ever misleads whoever reads the snapshot. One node did disagree.
-    for build in (leaves.value, leaves.html, leaves.chart, leaves.svg,
-                  leaves.image, leaves.pre):
+    for build in (leaves.value, leaves.html, leaves.svg, leaves.image,
+                  leaves.pre):
         leaf = build(PATH, "some key", "payload")
         assert leaf["name"] == "some key"
         assert leaf["path"] == PATH + ("some key",)
@@ -144,11 +143,13 @@ def test_an_image_is_inlined_with_no_handle_at_all(render):
     assert "scroll to zoom" not in html
 
 
-def test_a_chart_ships_its_data_to_the_browser(render):
-    html = render({"graph": leaves.chart(PATH, "graph", '{"data": [[1], [2]]}')})
-
-    assert "colloquyRenderChart" in html
-    assert '{"data": [[1], [2]]}' in html
+def test_there_is_no_chart_kind_any_more(render):
+    """uPlot went on 2026-09-09 and the `chart` leaf went with it: a graph
+    is a `GraphView` node now, drawn here as an `image`. Anything still
+    writing one should fail where it is written, not in the browser."""
+    assert not hasattr(leaves, "chart")
+    with pytest.raises(AssertionError):
+        leaves.leaf(PATH, "graph", "chart", "{}")
 
 
 def test_an_editor_is_a_textarea_posting_to_the_nodes_save(render):
@@ -166,8 +167,7 @@ def test_the_renderer_draws_every_kind_the_vocabulary_offers(kind, render):
     # being a kind. Anything unhandled falls through to the node branch,
     # which reads value["path"] and draws an open-arrow for something
     # that cannot be opened.
-    payload = "{}" if kind == "chart" else "payload"
-    html = render({"some key": leaves.leaf(PATH, "some key", kind, payload)})
+    html = render({"some key": leaves.leaf(PATH, "some key", kind, "payload")})
 
     assert "some key" in html or "payload" in html
     # The give-away of the fall-through: an open link for a leaf.

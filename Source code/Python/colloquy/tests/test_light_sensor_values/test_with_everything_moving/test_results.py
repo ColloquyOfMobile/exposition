@@ -11,7 +11,7 @@ from ..utils import (
     plot_counts_as_svg,
 )
 from colloquy.ui import leaves
-from colloquy.ui.graph_view import GraphView
+from colloquy.ui.graph_view import Columns, GraphView
 
 
 class TestResults(Base):
@@ -26,12 +26,15 @@ class TestResults(Base):
         self._post_process()
 
         # The run's raw reading, drawn by the server. A node rather than
-        # a leaf because it has controls - the density, the window and
-        # the scroll are commands on it, and that is how the tree draws a
-        # thing you can act on. See colloquy/ui/graph_view.py.
+        # a leaf because it has controls - the density, the page size and
+        # which page - and that is how the tree draws a thing you can act
+        # on. `Columns` is a view over the dataframe's own arrays, not a
+        # copy of them: a forty-minute run is a hundred thousand rows and
+        # there is no reason to hold it twice to draw four hundred of it.
+        # See colloquy/ui/graph_view.py.
         self._graph = GraphView(
             owner=self,
-            series=[(column, self._column_points(column)) for column in FEMALE_COLUMNS],
+            series=[(column, self._column_view(column)) for column in FEMALE_COLUMNS],
             name="full measurement",
         )
 
@@ -48,14 +51,12 @@ class TestResults(Base):
             df[f"{prefix} logic"] = logic
             self._results[column] = {"durations": durations, "counts": counts}
 
-    def _column_points(self, column):
-        """One female's reading as (seconds, value) pairs."""
+    def _column_view(self, column):
+        """One female's reading as (seconds, value) pairs, unmaterialised."""
         df = self._data_frame
-        return list(
-            zip(
-                df["seconds"].astype(float).tolist(),
-                df[column].astype(float).tolist(),
-            )
+        return Columns(
+            df["seconds"].to_numpy(dtype=float, copy=False),
+            df[column].to_numpy(dtype=float, copy=False),
         )
 
     def counts_as_svg(self, column):

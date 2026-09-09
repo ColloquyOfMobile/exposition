@@ -31,7 +31,7 @@ and the constructors are for one-offs:
 # Every payload key the renderer knows how to draw, in the order it tries
 # them. A kind not in here is a leaf nothing can render - the page shows
 # the dict's own repr, which is how missing kinds have shown up before.
-KINDS = ("value", "editor", "html", "chart", "pre", "svg", "image")
+KINDS = ("value", "editor", "html", "pre", "svg", "image")
 
 
 def leaf(path, key, kind, payload):
@@ -55,11 +55,10 @@ def html(path, key, markup):
     return leaf(path, key, "html", markup)
 
 
-def chart(path, key, data):
-    """An interactive chart: JSON in uPlot's aligned-data shape (see
-    `tests/test_light_sensor_values/utils.py`'s dataframe_to_chart_json).
-    Zoomable and pannable in the browser, unlike `svg` below."""
-    return leaf(path, key, "chart", data)
+# There was a `chart` kind here - JSON in uPlot's aligned-data shape, for
+# a graph the browser drew. It was retired on 2026-09-09: `ui/graph_view.py`
+# does the same job with the data kept on this side of the wire, and it is
+# a *node* rather than a leaf, since its controls are commands.
 
 
 def svg(path, key, markup):

@@ -85,10 +85,10 @@ polish the day-to-day experience.
   page showing every body's position, torque state, and light-sensor
   reading, plus any `thread_errors`, at a glance would cut diagnosis time
   a lot during setup and rehearsal.
-- **Put the chart tooling built this refactor to real use** (the uPlot
-  integration, `test_graph_zoom`, `test_sensors`) - wire up light-sensor
-  and position logging during rehearsal runs so behavior can be reviewed
-  afterward, not only watched live.
+- **Put the chart tooling built this refactor to real use**
+  (`ui/graph_view.py`, `tests > test graph`, `test_sensors`) - wire up
+  light-sensor and position logging during rehearsal runs so behavior can
+  be reviewed afterward, not only watched live.
 - **Stop wiping logs on every restart.** `colloquy/logger.py` clears
   `local/logs/` on process start - if something crashes overnight
   unattended, the log explaining why is gone before anyone looks.
@@ -114,5 +114,5 @@ polish the day-to-day experience.
   `tests/test_neopixels/commands/close.py` reference an undefined
   `HTML`/`Action` from an already-commented-out import.
 - Once real rehearsal data exists (see "chart tooling" above), invest in
-  presenting it well - the vendored uPlot charts already support zoom/
-  pan, this is mostly a matter of pointing them at real logged data.
+  presenting it well - the server-drawn graph already pages and thins, so
+  this is mostly a matter of pointing it at real logged data.

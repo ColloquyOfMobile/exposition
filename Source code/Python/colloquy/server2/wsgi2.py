@@ -1,6 +1,4 @@
 from email.utils import formatdate
-import json
-import re
 from yattag import Doc, indent
 from urllib.parse import unquote, parse_qs
 from pathlib import Path
@@ -15,13 +13,14 @@ from wsgiref.simple_server import WSGIRequestHandler
 
 WSGIRequestHandler.log_message = lambda *args, **kwargs: None
 
-# Served as real external requests via /static/... and /vendor/... (see
-# _parse_static below) - not inlined into the HTML. Still entirely local
-# (same server, same machine), so this works fine offline at the
-# exhibition; it just isn't embedded in every page response anymore.
+# Served as real external requests via /static/... (see _parse_static
+# below) - not inlined into the HTML. Still entirely local (same server,
+# same machine), so this works fine offline at the exhibition; it just
+# isn't embedded in every page response anymore. There was a /vendor/
+# root beside it until uPlot was retired on 2026-09-09 and left nothing
+# vendored; the table is a dict so putting one back is one line.
 _STATIC_ROOTS = {
     "static": Path(__file__).parent / "static",
-    "vendor": Path(__file__).parent / "vendor",
 }
 _STATIC_CONTENT_TYPES = {
     ".js": "application/javascript; charset=utf-8",
@@ -124,7 +123,7 @@ class WSGI2(Base):
         return status, headers, b""
 
     def _parse_static(self, root, *parts):
-        """Serve a file from a static asset root (static/ or vendor/) as a
+        """Serve a file from a static asset root (static/) as a
         real external resource - entirely local (same server, same
         machine), so this still works offline at the exhibition, it just
         isn't inlined into every HTML response anymore."""
@@ -254,9 +253,6 @@ class WSGI2(Base):
         doc.asis("<!DOCTYPE html>")
         with tag("html", style=export_style(css_style)):
             with tag("head"):
-                doc.stag(
-                    "link", rel="stylesheet", href="/vendor/uplot/uPlot.min.css"
-                )
                 with tag("style"):
                     doc.asis(
                         ".md-content table { border-collapse: collapse; margin: 0.5rem 0; } "
@@ -314,15 +310,6 @@ class WSGI2(Base):
                 "body",
                 style="flex:1; display: flex; flex-direction: column; overflow: auto;",
             ):
-                # Must come before _html_recursion()'s output below: it
-                # emits inline <script> calls to colloquyRenderChart() for
-                # each chart, which needs uPlot and colloquyRenderChart
-                # itself to already be defined by the time those run.
-                with tag("script", src="/vendor/uplot/uPlot.iife.min.js"):
-                    pass
-                with tag("script", src="/static/uplot_chart.js"):
-                    pass
-
                 with tag(
                     "div", name="server commands", style="display: flex; gap: 1ch;"
                 ):
@@ -668,48 +655,6 @@ class WSGI2(Base):
                     }
                     with tag("div", name=key, klass="md-content", style=export_style(style)):
                         doc.asis(value["html"])
-                    continue
-
-                if "chart" in value:
-                    container_id = "chart-" + re.sub(
-                        r"[^a-zA-Z0-9_-]+", "-", "-".join(value["path"])
-                    )
-                    with tag("div", name=key):
-                        with tag(
-                            "div",
-                            style="font-size: 0.75rem; opacity: 0.7;",
-                        ):
-                            text(
-                                "scroll to zoom - shift+scroll x only - alt+scroll y only - "
-                                "drag to pan - drag an axis to rescale it - double-click to reset"
-                            )
-                        with tag(
-                            "div", style="display: flex; gap: 1ch; margin: 0.25rem 0;"
-                        ):
-                            for label, action in (
-                                ("zoom in", "in"),
-                                ("zoom out", "out"),
-                                ("zoom in x", "in-x"),
-                                ("zoom out x", "out-x"),
-                                ("zoom in y", "in-y"),
-                                ("zoom out y", "out-y"),
-                                ("reset zoom", "reset"),
-                            ):
-                                onclick = f"colloquyZoomChart({json.dumps(container_id)}, {json.dumps(action)})"
-                                with tag(
-                                    "button", type="button", onclick=onclick
-                                ):
-                                    text(label)
-                        with tag(
-                            "div",
-                            id=container_id,
-                            style="width: 100%; max-width: 900px;",
-                        ):
-                            pass
-                        with tag("script"):
-                            doc.asis(
-                                f"colloquyRenderChart({json.dumps(container_id)}, {value['chart']});"
-                            )
                     continue
 
                 if "pre" in value:

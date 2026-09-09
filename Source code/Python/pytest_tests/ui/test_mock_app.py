@@ -105,10 +105,11 @@ def test_the_document_page_carries_both_formatted_kinds(app):
 
 
 def test_the_pictures_page_carries_both_drawn_kinds(app):
+    """`svg`, which the browser may zoom, and `image`, which it may not."""
     _status, html = request("/app/pictures", app=app)
 
     assert "an svg" in html
-    assert "colloquyRenderChart" in html
+    assert "an image" in html
 
 
 def test_an_editor_saves_what_is_posted_to_it(app):

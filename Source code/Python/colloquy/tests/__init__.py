@@ -11,8 +11,7 @@ from .test_reinforcement import TestReinforcement
 from .test_search import TestSearch
 from .test_female_search import TestFemaleSearch
 from .test_movements import TestMovements
-from colloquy.ui.graph_view import GraphView
-from .test_graph_zoom import TestGraphZoom, dummy_points
+from colloquy.ui.graph_view import GraphView, dummy_series
 from .test_neopixels import TestNeopixels
 from .test_sensors import TestSensors
 from .test_microphone_signal import TestMicrophoneSignal
@@ -165,18 +164,21 @@ class Tests(Base):
         self[auto.name] = auto
         self[manual.name] = manual
 
-        # Neither a test of the piece nor startable hardware: the same
-        # dummy numbers drawn two ways, so the two ways can be compared.
-        # Filing them under either heading would make the heading mean
-        # less, so they stay direct children of `tests`. See group.py.
-        self.test_graph_zoom = TestGraphZoom(owner=self)
-        self.test_graph_without_script = GraphView(
+        # Not a test of the piece and not startable hardware: the graph
+        # tool itself, on dummy data, so it can be paged around without
+        # waiting on a several-minute run. Filing it under either heading
+        # would make the heading mean less, so it stays a direct child of
+        # `tests`. See group.py. Three lines because that is the shape a
+        # real run has.
+        self.test_graph = GraphView(
             owner=self,
-            points=dummy_points(),
-            name="test graph without script",
+            series=[
+                (name, dummy_series(seed=seed))
+                for name, seed in (("female1", 7), ("female2", 8), ("female3", 9))
+            ],
+            name="test graph",
         )
-        self[self.test_graph_zoom.name] = self.test_graph_zoom
-        self[self.test_graph_without_script.name] = self.test_graph_without_script
+        self[self.test_graph.name] = self.test_graph
 
         self._threaded_tests = set(auto.tests) | set(manual.tests)
 
@@ -217,6 +219,5 @@ class Tests(Base):
         return {
             self._autotests.name: self._autotests,
             self._manual_tests.name: self._manual_tests,
-            self.test_graph_zoom.name: self.test_graph_zoom,
-            self.test_graph_without_script.name: self.test_graph_without_script,
+            self.test_graph.name: self.test_graph,
         }

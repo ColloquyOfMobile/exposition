@@ -25,7 +25,7 @@ from colloquy.tests.test_light_sensor_values.utils import FEMALE_COLUMNS
 from colloquy.tests.test_light_sensor_values.test_with_everything_moving.test_results import (
     TestResults as LightSensorResults,
 )
-from colloquy.ui.graph_view import GraphView
+from colloquy.ui.graph_view import Columns, GraphView
 
 
 ROWS = [
@@ -60,9 +60,30 @@ def test_every_female_is_on_it_under_her_own_name(results):
     assert [label for label, _ in graph.series] == list(FEMALE_COLUMNS)
 
 
+def test_it_looks_at_the_dataframe_rather_than_copying_it(results):
+    """A forty-minute run is a hundred thousand rows and the graph draws
+    four hundred of them; holding the log twice to do that is the thing
+    `Columns` exists to avoid."""
+    graph = results.snapshot_children["full measurement"]
+
+    assert all(isinstance(points, Columns) for _label, points in graph.series)
+
+
+def test_it_pages_through_the_run(results):
+    graph = results.snapshot_children["full measurement"]
+    assert graph.page_count == 1              # opens on the whole of it
+
+    graph.smaller_page()
+    assert graph.page_count > 1
+    first = graph.x_window
+
+    graph.next_page()
+    assert graph.x_window[0] > first[0]
+
+
 def test_it_holds_every_sample_the_run_recorded(results):
-    """The point of drawing it here: nothing is thinned until a window
-    asks for it, and the whole log stays on this side of the wire."""
+    """The point of drawing it here: nothing is thinned until a page asks
+    for it, and the whole log stays on this side of the wire."""
     graph = results.snapshot_children["full measurement"]
 
     assert graph.held == len(ROWS) * len(FEMALE_COLUMNS)
