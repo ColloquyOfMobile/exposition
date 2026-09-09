@@ -1,18 +1,25 @@
 # Goertzel ear test
-# A bench experiment, and nothing on the installation moves for it. One Mega with a speaker
-# and a microphone on it makes a tone and says whether it heard it - no analyser chip, one
-# Goertzel bin per frequency, arithmetic on the samples.
-# It is the experiment behind `one board per body` section 4: if a processor can do this,
-# the next board does not need an analyser array.
-# Sketch: Source code/Arduino/goertzel_ear/. Wiring: hardware setup, "Hearing a tone
-# without an MSGEQ7".
+# A manual test, and the instrument is your own ears. Nothing on the installation moves,
+# lights or sounds - all of this happens at a desk, with one Mega, a microphone on A0 and
+# this computer's own speakers.
+# The tone comes out of the computer. The board only samples. The arithmetic - one
+# Goertzel bin per frequency - runs here, over the samples as they arrive.
+# Sketch: Source code/Arduino/microphone_sampler/. Wiring: hardware setup, "Hearing a tone
+# without an MSGEQ7" - two connections, A0 and a ground.
+# It never ends on its own - press stop when you are done.
 
-0 Nothing on the piece moves, lights or sounds. Everything below happens on one board on a desk.
-0 For each of the installation's five pitches in turn - 160, 400, 1000, 2500 and 6250 Hz - the board does the same three things.
-0.06 It silences the tone and waits a moment for the microphone's automatic gain to settle, then captures 512 samples and measures that one frequency. This is the floor: the room, and the board's own noise, at exactly the frequency about to be played.
-0.12 It plays the tone out of D11 and waits again, longer, because the gain control has to settle the other way.
-0.03 It captures another 512 samples - about 27 milliseconds - and measures the same frequency again.
-0 The difference between the two is the only number worth believing. An electret microphone with automatic gain has no meaningful absolute level; what it can say is that this frequency is louder than it was a moment ago.
-0 A tone that does not rise over its own silence is not being heard, and this cannot say which half is at fault. Hold it by hand from the page and listen: if it is in the room, the microphone is the problem; if it is not, the speaker or the amplifier is.
-1.5 All five take about a second and a half in total, and the run ends by itself.
-0 What it cannot say anything about: a body's amplifier, a body's loudspeaker, or a metre of harness. There is no cable in this test to blame - which is what makes a failure here mean the board or the air, and nothing else.
+0 Nothing on the piece moves, lights or sounds. No servo is commanded, no NeoPixel changes, no body sings. If the installation is running at all, this run does not touch it.
+0 The chosen lead is opened and the board reboots, as an Arduino does whenever a port opens. It greets on the way up with its firmware, the pin it samples and the sample rate it timed for itself, and the page shows that sentence verbatim. If nothing greets, the run stops and says so rather than reading a port with nothing on it.
+0.25 Four times a second, from here on: one line to the board, one block of 512 samples back. The board captures at about 19 thousand samples a second, which is a window of 27 milliseconds, and sends the numbers themselves - not a verdict.
+0 Every block is measured at all five of the installation's pitches at once - 160, 400, 1000, 2500 and 6250 Hz. That is five passes over 512 numbers, so the five readings are of the same instant, which is the only way to say that one bin rose and the room did not.
+0 While nothing is playing, each block sets the floor: what that frequency reads with the room as it is. The page shows the live level and the floor beside it, per pitch, and a `signal span` - if that is zero there is nothing on the pin, and if it is pinned near 1023 the input is clipping.
+0 Now press a pitch. A sine of that frequency starts out of this computer's speakers and keeps sounding until you stop it. It is a whole number of cycles long and repeats seamlessly, so there is no click - a click is broadband and would lift every bin at once.
+0.4 Nothing is scored for the first four tenths of a second. The sound has to be in the room and the microphone's automatic gain has to stop moving; a floor or a rise taken while the tone is fading up has the tone in it.
+0 Then that pitch's row starts showing a rise - its level above its own floor - and the best rise seen since the tone started is kept. Above four, it is called heard.
+0 **Listen while it plays.** This is the whole reason a person has to be here. The tone crosses a room, and whether it was ever in the room is not something the software can know - a muted output, an output on the wrong device, a volume at nothing, all read exactly like a microphone that cannot hear. If you cannot hear it either, the fault is on this side and no reading below means anything.
+0 Press `silence` when you have listened. The floors are taken again from the next block, so the next pitch is measured against the room as it is now rather than as it was.
+0 Walk the five pitches in whatever order you like. A pitch nobody has played is left saying "not played yet" rather than being counted as a failure, and the outcome line names only the ones actually tried.
+0 If a rise comes at one pitch and not at another, that is worth more than either alone: the microphone, the lead and the board are plainly working, and what has failed is at that frequency. Low ones failing usually means the microphone module's own high-pass; high ones failing usually means the room, or the speakers.
+0 `forget the floors` throws away every floor and every best rise and starts again. Press it after anything that changes the room - a window shut, a fan off, the microphone moved, the volume changed.
+0 Nothing is written to a file. Half of this measurement is a sound in the air that no file can hold, and a record of the bins alone would be a record of the half that was never in doubt.
+0 Nothing is put back when you stop, because nothing was changed - except that the tone is silenced and the port is closed. The installation is exactly as it was.

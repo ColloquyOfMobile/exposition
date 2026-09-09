@@ -425,67 +425,89 @@ the page says which board it is talking to before it says anything else.
 ## 8. Hearing a tone without an MSGEQ7
 
 **A second bench board, and a much smaller one.** Everything above is
-Thomas's five-channel subsystem. This is one Mega that makes a tone and
-says whether it heard it — no analyser chip, no strobe, no support
-network. One Goertzel bin per frequency, arithmetic on the samples.
+Thomas's five-channel subsystem. This is one Mega with a microphone on it
+and nothing else — no analyser chip, no strobe, no support network, no
+speaker and no amplifier. The tone comes out of the computer's own
+speakers and the arithmetic runs on the computer. One Goertzel bin per
+frequency, over the samples.
 
 It is the experiment behind `hardware > electronics > one board per body`
-section 4: if a processor can do the listening in software, the next
-board does not need an analyser array at all, and the MSGEQ7's support
-network — one of only two groups of values in that BOM nobody here can
-fill in — stops being a question.
+section 4 — if the listening can be done in software, the next board does
+not need an analyser array, and the MSGEQ7's support network stops being
+one of only two groups of values in that BOM nobody here can fill in.
+With one qualification worth stating plainly: this proves the *method*,
+not that an AVR can run it in time. That second question is a fact about
+a processor rather than about a microphone, and
+`Source code/Arduino/goertzel_ear/` is still there as the measurement of
+it — one board that makes its own tone and runs the bin over its own
+samples between two serial replies.
 
-**What to build.** Three wires and two things you already have:
+**What to build. Two wires.**
 
 | From | To |
 |---|---|
-| Mega `D11` (OC1A) | amplifier in — through the same 22K/3K3 divider §3 uses, if the module wants one |
 | Mega `A0` | microphone module out — a MAX9814's `AOUT`, or any line sitting near mid-rail |
-| Mega `GND` | common with both |
+| Mega `GND` | the microphone module's ground |
 
-`D11` is not a choice: it is the pin Timer 1 toggles, and the tone is made
-by the timer in hardware rather than by `tone()`, so that generating it
-cannot disturb the sampling. `A0` is a choice, and matches the
-installation only so that one number means one thing in both places.
+That is the whole of it. `A0` is a choice, and matches the installation
+only so that one number means one thing in both places. There is nothing
+to wire for the tone: it is in the air, out of the speakers already
+attached to the machine you are reading this on.
 
-**Flash `Source code/Arduino/goertzel_ear/`** and open it at 115200. It
-greets with its firmware, its pins and the sample rate it measured for
-itself. Commands, one a line:
+**Flash `Source code/Arduino/microphone_sampler/`** and open it at
+**1 Mbaud** — the rate is up there because a block is 512 numbers of
+text, which at 115200 would take 180 ms to cross a wire that should be
+idle. It greets with its firmware, the pin it samples and the sample rate
+it timed for itself. Two commands, one a line:
 
 | | |
 |---|---|
-| `f <hz>` | set the frequency to make and to listen for |
-| `t 0` / `t 1` | tone off / on |
-| `m` | measure once |
-| `s` | self test — floor with the tone off, level with it on, verdict |
-| `w` | sweep the installation's five pitches, self-testing each |
-| `?` | what it is set to, and the measured sample rate |
+| `b` | capture a block and send it |
+| `?` | what it is set to, and the rate it last measured |
 
-**Or drive it from the page**: `tests > test goertzel ear`, which picks
-the lead, runs the sweep, writes a results file and shows a line per
-pitch. `hold 1000 Hz` and `silence` are there for the one thing no
-reading can settle — whether a tone that was not heard was in the room at
-all.
+**Drive it from the page**: `tests > manual tests > test goertzel ear`.
+It picks the lead, presses `start` to begin reading blocks four times a
+second, and offers a link per pitch — `play 160 Hz` through
+`play 6250 Hz`, and `silence`. Every block is measured at all five
+pitches at once, because a Goertzel is one pass per frequency over
+samples already in hand, so the five readings are of the same instant.
+
+**It is a manual test, and that is the important part.** Press a pitch
+and *listen*. The tone crosses a room, and whether it was ever in the
+room at all is not something the software can know: a muted output, an
+output routed to the wrong device, a volume at nothing — every one of
+those reads exactly like a microphone that cannot hear. If you cannot
+hear it either, the fault is on the computer's side and no reading below
+it means anything. That is why the old arrangement could be walked away
+from and this one cannot: it had a speaker and a microphone six inches
+apart on one board with nothing else plugged in.
 
 **How to read what comes back.** Only the *rise* means anything. A
 MAX9814 has automatic gain control, so its absolute level says nothing;
 what it can say is that this frequency is louder than it was a moment
-ago, at the same gain. The board measures the floor at the frequency it
-is about to play, then plays it, then measures again.
+ago, at a gain that has not had time to follow. So each pitch carries a
+floor — its level taken while nothing was playing — and each row reads:
 
 ```
-test hz=1000 bin=1003.9 floor=1.20 tone=41.80 rise=40.60 heard=1 fs=19230
+1000 Hz    now 41.80, floor 1.20, best rise +40.60 - heard
 ```
 
-`bin` is the frequency actually measured, which is the nearest whole
-number of cycles in the 512-sample window and so within about 37 Hz of
-what was asked for — the closest two pitches this piece uses are 160 Hz
-apart, so that is not a difficulty. `fs` is the sample rate the board
-timed for itself rather than assumed; at about 19 kSPS the highest pitch
-is comfortably under Nyquist.
+Press `silence` between pitches: floors are taken from every silent
+block, so the next pitch is measured against the room as it is now.
+`forget the floors` throws every floor and every best rise away, and is
+what to press after anything that changes the room — a window shut, a fan
+off, the microphone moved, the volume changed.
+
+Two readings on the page are not levels and are worth a glance first.
+`capture` gives the window and the bin width — about 512 samples at
+19 kSPS, so a bin near 37 Hz, where the closest two pitches this piece
+uses are 160 Hz apart. `signal span` is peak to peak in ADC counts: zero
+means nothing is on the pin, and a span pinned near 1023 means the input
+is clipping. Both read as a perfectly ordinary bin level otherwise.
 
 **What it cannot tell you.** Which half is at fault when nothing rises —
-hold the tone and listen, exactly as `test audio bringup` asks. And
+which is what listening settles, and why there is a person here. And
 anything at all about a body's amplifier, a body's loudspeaker, or a
 metre of harness: there is no cable in this test, which is what makes a
-failure here mean the board or the air between the two and nothing else.
+failure here mean the microphone, the board, or the air between the
+speakers and it, and nothing else.

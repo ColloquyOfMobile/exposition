@@ -1,5 +1,20 @@
 // goertzel_ear.ino - one board that makes a tone and says whether it hears it.
 //
+// NOTHING IN THIS REPOSITORY DRIVES THIS SKETCH ANY MORE, AND IT IS KEPT
+// ON PURPOSE. `tests > test goertzel ear` used to: it opened this board,
+// asked for a sweep and read back five verdicts. It now plays the tone
+// out of the PC's own sound card and runs the Goertzel in Python over
+// blocks of samples from `Source code/Arduino/microphone_sampler/`,
+// which is a Mega that only samples. That sketch's header says why.
+//
+// What this one still answers, and the other arrangement cannot, is the
+// question `hardware > electronics > one board per body` section 4 turns
+// on: **can a small AVR run the listening itself, in time, with no
+// analyser chip?** That is a fact about a processor rather than about a
+// microphone, and this is the measurement of it - 512 samples captured
+// and one Goertzel bin run over them, on the board, between two
+// serial replies. Deleting it would delete the evidence.
+//
 // For an Arduino Mega 2560. A bench instrument, not part of the
 // installation: it answers the one question the installation's own
 // hearing side cannot yet be trusted on - *is a tone of this frequency

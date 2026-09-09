@@ -289,6 +289,41 @@ def test_migrate_from_v1_arrives_at_the_current_baudrate():
     assert migrated["arduino"]["baudrate"] == DEFAULTS["arduino"]["baudrate"]
 
 
+# A params file as it stood while the Goertzel ear's board ran the
+# arithmetic itself and answered one short verdict line per pitch.
+V5_EAR = {
+    "params version": 5,
+    "goertzel ear": {"baudrate": 115200, "communication port": "COM7"},
+}
+
+
+def test_migrate_moves_the_ear_baudrate_with_its_sketch():
+    # The board changed job rather than merely getting faster: it was
+    # `goertzel_ear.ino` answering a forty-byte verdict, and it is now
+    # `microphone_sampler.ino` sending two thousand bytes of samples a
+    # block. Same reasoning as v4's - a copy of what the firmware sets.
+    migrated = migrate(json.loads(json.dumps(V5_EAR)))
+
+    assert migrated["goertzel ear"]["baudrate"] == 1000000
+    assert migrated["goertzel ear"]["communication port"] == "COM7"
+
+
+def test_migrate_does_not_overrule_an_ear_baudrate_somebody_typed():
+    hand_set = json.loads(json.dumps(V5_EAR))
+    hand_set["goertzel ear"]["baudrate"] = 250000
+
+    assert migrate(hand_set)["goertzel ear"]["baudrate"] == 250000
+
+
+def test_a_file_that_never_had_an_ear_section_gains_one():
+    # _fill_missing recurses, so this needed no branch of its own - the
+    # same reason "main pcb" needed no version bump.
+    migrated = migrate(json.loads(json.dumps(V1)))
+
+    assert migrated["goertzel ear"]["baudrate"] == 1000000
+    assert migrated["goertzel ear"]["communication port"] is None
+
+
 def test_the_default_baudrate_is_the_one_the_sketch_sets():
     # The whole reason for the version bump. If these two ever part, the
     # port is opened at a rate the board is not talking at, and every

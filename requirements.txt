@@ -1,3 +1,10 @@
 yattag
 dynamixel_sdk
 markdown
+# The tone `tests > manual tests > test goertzel ear` plays out of
+# this machine's speakers. It was winsound out of the standard
+# library first: that cannot loop a sound held in memory at all
+# (CPython refuses SND_MEMORY | SND_ASYNC) and is Windows only,
+# which is a platform gate on a test whose question is acoustic.
+# No numpy needed - the stream is fed raw int16.
+sounddevice

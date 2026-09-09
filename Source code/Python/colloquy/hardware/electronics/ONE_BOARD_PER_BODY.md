@@ -208,6 +208,23 @@ reset, no support network - which is one of the only two groups of values
 in `next pcb`'s bill of materials that nobody in this repository has been
 able to fill in.
 
+**Where the evidence for all of this lives, and a distinction to keep.**
+Two questions hide in "can a Pro Mini do the listening", and only one of
+them is about arithmetic:
+
+- *Does a Goertzel bin actually pick one of these pitches out of a real
+  microphone?* `tests > manual tests > test goertzel ear` answers that,
+  and answers it better since the arithmetic moved off the board onto the
+  PC - the bin can be checked against a signal generated in a unit test,
+  which it never could on an AVR.
+- *Can an ATmega328P run five of them in time, between its other work?*
+  That is the row of arithmetic above, and it is a fact about a
+  **processor**. `Source code/Arduino/goertzel_ear/` is the measurement
+  of it and is kept for exactly this: one board capturing 512 samples and
+  running a bin over them itself. Do not read a green run of the test
+  node as evidence for this second question - it is not running anything
+  on the board at all.
+
 Three things it needs, and the third is a real design point:
 
 - the microphone signal biased to mid-rail and AC coupled, which a
@@ -237,6 +254,15 @@ square wave than a clean sine**, for two independent reasons:
   bands very much do: 160 Hz's third harmonic is 480 Hz, which is inside
   the analyser's 400 Hz band — that is *male2's* band, and it is exactly
   what would corrupt "which band rose says who is speaking".
+
+**Both reasons are about a body's amplifier, and neither carries over to
+the bench.** `test goertzel ear` plays a sine out of a sound card, where
+there is no rail to be limited by - so the 2.1 dB is not free there, it
+is bought with a harsher sound. And the second reason inverts: with no
+anti-alias filter in front of the sampler's ADC at 19.2 kSPS, a 6250 Hz
+square's third harmonic at 18750 Hz folds back to about 480 Hz, which is
+another one of the five bins. A tone would appear in a pitch nobody
+played. See `tests/test_goertzel_ear/tone.py`.
 
 **Which means the low-pass filter exists only to serve the MSGEQ7.** With
 the listening done in software the filter, its ten passives per channel,

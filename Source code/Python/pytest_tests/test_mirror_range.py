@@ -110,9 +110,17 @@ def test_the_origins_are_not_touched():
 
 
 def test_the_file_says_it_has_been_migrated():
+    """It comes out at whatever the current version is, not at 5.
+
+    What this file is about is that a v4 file gets the mirror ranges; that
+    it then keeps going through every later step is the migration chain's
+    business, and pinning the number here made a later bump fail a test
+    about mirrors.
+    """
     from colloquy.params import PARAMS_VERSION
 
-    assert migrated()["params version"] == PARAMS_VERSION == 5
+    assert PARAMS_VERSION >= 5
+    assert migrated()["params version"] == PARAMS_VERSION
 
 
 def test_migrating_twice_changes_nothing_more():

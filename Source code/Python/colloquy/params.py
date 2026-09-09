@@ -3,7 +3,7 @@ from pathlib import Path
 
 # Bumped whenever the shape or the units of this file change, so an older
 # file can be recognised and converted rather than misread. See migrate().
-PARAMS_VERSION = 5
+PARAMS_VERSION = 6
 
 DEFAULTS = {
     "params version": PARAMS_VERSION,
@@ -157,11 +157,18 @@ DEFAULTS = {
     },
     "male1": {"dxl origin": 0, "motion range": 58.594},
     "male2": {"dxl origin": 0, "motion range": 58.594},
-    # The bench's Goertzel ear board - `Source code/Arduino/goertzel_ear/`
-    # and `colloquy/tests/test_goertzel_ear/`. Its own section because it
-    # is its own Mega on its own lead, the same way Thomas's board has
-    # one: a port remembered for one board opens nothing for the other.
-    "goertzel ear": {"baudrate": 115200, "communication port": None},
+    # The Goertzel ear's sampler board -
+    # `Source code/Arduino/microphone_sampler/` and
+    # `colloquy/tests/test_goertzel_ear/`. Its own section because it is
+    # its own Mega on its own lead, the same way Thomas's board has one: a
+    # port remembered for one board opens nothing for the other.
+    #
+    # 1 Mbaud because that board now sends 512 raw samples a block rather
+    # than a verdict - about 2 kB of text, which is 180 ms at 115200 and
+    # 20 at this. A copy of what the sketch sets, like `arduino.baudrate`,
+    # kept here only so the port can be opened before the board has said
+    # anything.
+    "goertzel ear": {"baudrate": 1000000, "communication port": None},
     # How much one round of reinforcement takes off the appetite a pair
     # shares, per body, on this port's 0-100 scale.
     #
@@ -358,6 +365,35 @@ def _fill_missing(data, defaults):
     return data
 
 
+# What the ear board's lead was opened at while the board itself ran the
+# Goertzel and answered one short verdict line per pitch.
+_V5_EAR_BAUDRATE = 115200
+
+
+def _to_v6(data):
+    """v5 opened the Goertzel ear's board at 115200; it now runs at 1 Mbaud.
+
+    The board changed job. It was `goertzel_ear.ino`, which made a tone,
+    measured it and sent back a sentence; it is now
+    `microphone_sampler.ino`, which sends 512 raw samples a block and
+    leaves every judgement to `colloquy/tests/test_goertzel_ear/`. A
+    verdict is forty bytes and a block is two thousand, so the rate moved
+    with the sketch.
+
+    Like v4's, this is not a calibration - it is a copy of what the
+    firmware sets, kept only so the port can be opened before the board
+    has said anything - so it moves when the firmware moves. Left alone
+    otherwise: a file saying something other than the old 115200 was typed
+    that way for a reason.
+    """
+    ear = data.get("goertzel ear")
+    if ear and ear.get("baudrate") == _V5_EAR_BAUDRATE:
+        ear["baudrate"] = DEFAULTS["goertzel ear"]["baudrate"]
+
+    data["params version"] = 6
+    return data
+
+
 def migrate(data):
     """Bring a file read off disk up to the current shape."""
     if data.get("params version", 1) < 2:
@@ -368,6 +404,8 @@ def migrate(data):
         data = _to_v4(data)
     if data["params version"] < 5:
         data = _to_v5(data)
+    if data["params version"] < 6:
+        data = _to_v6(data)
     return _fill_missing(data, DEFAULTS)
 
 

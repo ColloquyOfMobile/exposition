@@ -56,6 +56,13 @@ files = [
     # ordinary tree node.
     "Source code/Python/colloquy/exposition/schedule/rules.py",
     "Source code/Python/colloquy/exposition/schedule/solver.py",
+    # The Goertzel: samples in, a level out. It moved off an AVR to here,
+    # and this list is half of what that move bought - the arithmetic can
+    # now be both checked and type-checked. Its confusions are the ones
+    # this list is for: a frequency in hertz, an index into the bins, a
+    # count of samples and a sample rate all read as "about a thousand"
+    # and mean four different things.
+    "Source code/Python/colloquy/tests/test_goertzel_ear/goertzel.py",
 ]
 mypy_path = "Source code/Python"
 

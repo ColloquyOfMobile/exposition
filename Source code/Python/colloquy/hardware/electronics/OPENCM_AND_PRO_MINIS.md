@@ -76,8 +76,13 @@ OpenCM's; and the rack has no sensor, no pixel and no tone of its own.
 **What would make one needed** is one thing only: if a Pro Mini turns out
 unable to sample while it writes NeoPixels — the interrupt blanking in
 section 4 — and the listening has to move off the body. That is a
-measurement (`tests > test goertzel ear` and a strip on the same board),
-not a guess, and it is worth making before this is committed to.
+measurement, not a guess, and it is worth making before this is committed
+to. The board to make it on is `Source code/Arduino/goertzel_ear/`, with
+a strip on the same board: that sketch samples *and* runs the bin itself,
+which is the whole of what is being asked. Not
+`tests > manual tests > test goertzel ear` - that one samples on the
+board and does the arithmetic on the PC, so it would pass on a processor
+with no time to spare.
 
 ---
 

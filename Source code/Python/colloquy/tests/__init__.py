@@ -83,9 +83,6 @@ class Tests(Base):
         self.test_read_pattern = TestReadPattern(
             owner=auto, result_folder=result_folder
         )
-        self.test_goertzel_ear = TestGoertzelEar(
-            owner=auto, result_folder=result_folder
-        )
         self.test_reinforcement = TestReinforcement(
             owner=auto, result_folder=result_folder
         )
@@ -113,6 +110,14 @@ class Tests(Base):
         # deliberately not holding, so a file of the other half would
         # record only the half that was never in doubt.
         self.test_microphone_signal = TestMicrophoneSignal(owner=manual)
+        # No result folder either, and for a sharper version of the same
+        # reason. What it measures is a tone crossing a room from this
+        # computer's speakers to a microphone, and whether that tone was
+        # ever in the room is something only a person in it can say. A
+        # file of the bins alone would record the half that was never in
+        # doubt. It was an autotest while the board made its own tone six
+        # inches from its own microphone; see its module docstring.
+        self.test_goertzel_ear = TestGoertzelEar(owner=manual)
         self.test_audio_at_12v = TestAudioAt12V(
             owner=manual, result_folder=result_folder
         )
@@ -121,7 +126,6 @@ class Tests(Base):
             tests=(
                 self.test_light_sensor_values,
                 self.test_read_pattern,
-                self.test_goertzel_ear,
                 self.test_reinforcement,
                 self.test_search,
                 self.test_female_search,
@@ -130,12 +134,13 @@ class Tests(Base):
                 self.test_audio_loop,
                 self.test_audio_bringup,
             ),
-            # Thomas's boards and the Goertzel ear board are on an office
-            # desk and the installation will never have them.
-            bench_only=(
-                self.test_audio_subsystem.name,
-                self.test_goertzel_ear.name,
-            ),
+            # Thomas's boards live on an office desk and the installation
+            # will never have them. Only his, now: the Goertzel ear went
+            # to `manual tests` and stopped being gated at the same time,
+            # for `test_audio_at_12v`'s reason - it is one Mega on one
+            # lead and it travels, so the question is which lead, asked
+            # and answered on its own page.
+            bench_only=(self.test_audio_subsystem.name,),
         )
         manual.fill(
             tests=(
@@ -144,6 +149,7 @@ class Tests(Base):
                 self.test_neopixels,
                 self.test_sensors,
                 self.test_microphone_signal,
+                self.test_goertzel_ear,
                 self.test_audio_at_12v,
             ),
             # Nothing bench-only here, and `test audio at 12v` is why it

@@ -1,51 +1,84 @@
 # -*- coding: utf-8 -*-
 # Source code/Python/colloquy/tests/test_goertzel_ear/__init__.py
 
-"""One board that makes a tone and says whether it hears it.
+"""Does a microphone hear a tone? Play one and watch the bin.
 
-The bench answer to the question the installation's own hearing side
-cannot yet be trusted on: **is a tone of this frequency actually arriving
-at this microphone?** `Source code/Arduino/goertzel_ear/` is the sketch,
-for a Mega with a speaker and a microphone on it and nothing else.
+The narrowest question in the sound channel, and the one every other test
+of it has to assume the answer to. `test_audio_subsystem` asks whether
+Thomas's five MSGEQ7 channels work; `test_audio_loop` asks whether the
+bodies are wired into the piece the right way round; `test_audio_bringup`
+takes a nine-link chain apart. All three judge hearing by seven band
+values out of an analyser chip. This one has no analyser chip in it at
+all - one Goertzel bin per frequency, arithmetic on the samples - so it
+can be pointed at *any* frequency rather than the seven bands an MSGEQ7
+happens to have.
 
-**Why this is not `test audio subsystem`.** That one drives Thomas's
-boards over his own serial menu and asks whether five MSGEQ7 channels
-work. This asks a narrower question with no analyser chip in it at all -
-one frequency, one Goertzel bin, arithmetic on the samples - and it
-answers it about *any* frequency rather than the seven bands an MSGEQ7
-happens to have. It is the experiment behind `one board per body` section
-4: if a Pro Mini can do this, the analyser array is a part the next board
-does not need.
+**Three parts, and only one of them is on a board.**
 
-**It closes the loop on one board on purpose.** A speaker and a
-microphone on the same Mega means the whole thing sits on a desk with
-nothing else plugged in, and a failure is either the air between them or
-the board - there is no cable in the middle to blame. That is also its
-limit: it says nothing about a body's amplifier, a body's speaker, or a
-metre of harness.
+- The **tone** comes out of this computer's own speakers. One link per
+  pitch and one to silence it. See `tone.py`, which also says why it is a
+  sine here where the board's was a square.
+- The **samples** come from a Mega running
+  `Source code/Arduino/microphone_sampler/`, which does nothing else. A
+  microphone on `A0`, a common ground, and no other wire.
+- The **arithmetic** runs here, in `goertzel.py`, over blocks as they
+  arrive.
 
-**What a run does.** Sweeps the installation's five pitches. For each: it
-silences the tone and measures the bin (the floor), plays the tone and
-measures again, and records the rise. A tone that does not rise over its
-own silence is not being heard, and which of the two halves is at fault
-is the one thing this cannot tell you - hold the tone by hand and listen.
+It used to be one board doing all three (`Source code/Arduino/goertzel_ear/`,
+still there and still worth having - see its header). Moving two of the
+three off it is not tidying: a sound card makes a cleaner tone than a
+timer can, one capture can be measured at all five pitches at once
+because the samples are in hand on a machine with memory to spare, and a
+sampler that only samples cannot be wrong about a frequency.
+
+**Why this is a manual test where the board version was an autotest.**
+The old arrangement was a closed loop on one board - a speaker and a
+microphone six inches apart, nothing else plugged in - so it could sweep
+five pitches, write a file, and be walked away from. This one is open,
+and what it is open across is a room with a volume knob in it. Whether
+the speakers are on, whether the output is muted, whether the level is
+anywhere near what a microphone across a desk can hear, whether
+something else in the room is making a noise: none of that is knowable
+from here, and a "not heard" is at least as likely to be a muted laptop
+as a deaf microphone. The one thing that settles it is somebody hearing
+the tone come out of the speakers, and no file can hold that. So: press
+a pitch, *listen*, and watch its row.
+
+**Only the rise means anything.** A MAX9814 has automatic gain control,
+so its absolute level says nothing - the gain moves to keep the output
+where it likes it. What it can say is that this frequency is louder than
+it was a moment ago, at a gain that has not had time to follow. So every
+pitch carries a floor - its level while nothing was playing - and the
+reading to watch is the difference.
+
+**The link is the lead, not the machine.** There is no `is_bench` here
+any more. This is one Mega on one USB lead with a microphone on it, it
+travels to whichever desk somebody is working at, and the only questions
+worth asking are whether a port has been chosen and whether this machine
+has it. That is the lesson `Arduino.is_using_the_stand_in` and
+`BenchComPort` both learned, travelling in opposite directions.
+
+**And there is no stand-in, on purpose.** Every other simulated thing in
+this repository stands in for something the installation has, and a run
+against one is a rehearsal. This exists to say whether a microphone hears
+a tone; a stand-in that answered "yes" would be the one kind of false
+confidence it is against.
 """
-from datetime import datetime
 from time import time
 
 import serial
 
 from colloquy.base_thread import BaseThread
-from colloquy.drivers import audio
 from colloquy.ui import leaves
 
 from ..bench_com_port import BenchComPort
-from . import protocol
+from . import goertzel, protocol
+from .tone import Tone
 
 
 class EarComPort(BenchComPort):
-    """Which lead the ear board is on. See `BenchComPort` - the params key
-    is the only thing that differs from Thomas's picker."""
+    """Which lead the sampler board is on. See `BenchComPort` - the params
+    key is the only thing that differs from Thomas's picker."""
 
     params_section = "goertzel ear"
     stand_in = "simulated ear port"
@@ -54,32 +87,48 @@ class EarComPort(BenchComPort):
 class TestGoertzelEar(BaseThread):
     scenario_names = ("goertzel-ear-test",)
 
-    # The board answers a sweep line per pitch, and a self test is two
-    # captures plus two settles - about a third of a second each.
-    REPLY_TIMEOUT = 4.0
+    # A block is 512 numbers of text - about 20 ms on the wire at 1 Mbaud,
+    # after 27 ms of capture. Four a second leaves the link mostly idle and
+    # redraws faster than anybody can move a microphone.
+    READ_INTERVAL = 0.25
 
-    def __init__(self, owner, result_folder):
+    # Long enough to cover a capture, a 2 kB reply and a board that is
+    # thinking about it; short enough that a dead lead is reported rather
+    # than sat on.
+    REPLY_TIMEOUT = 2.0
+
+    # A tone has to be sounding before the block meant to show it is
+    # captured, and the microphone's gain control has to have stopped
+    # moving. Blocks inside this window are read and drawn, but scored as
+    # neither floor nor rise.
+    SETTLE = 0.4
+
+    def __init__(self, owner):
         super().__init__(owner=owner)
 
         self._com_port = EarComPort(owner=self)
         self[self._com_port.name] = self._com_port
         self._port_handler = None
 
-        self._manual = {"silence": self._silence, "read once": self._read_once}
+        self._tone = Tone()
+
+        self._commands = {}
         for hz in protocol.PITCHES:
-            self._manual[f"hold {hz} Hz"] = self._holder(hz)
-        for key, command in self._manual.items():
+            self._commands[f"play {hz} Hz"] = self._player(hz)
+        self._commands["silence"] = self._silence
+        self._commands["forget the floors"] = self._forget_floors
+        for key, command in self._commands.items():
             self[key] = command
 
-        self._dir_path = result_folder / self.name
-        if not self._dir_path.exists():
-            self._dir_path.mkdir()
-
-        self._file = None
-        self._readings = []
-        self._outcome = None
-        self._last_line = None
+        self._block = None
+        self._levels = {}      # hz -> its level in the last block
+        self._floors = {}      # hz -> its level while nothing was playing
+        self._best = {}        # hz -> the (floor, level) of its best rise
+        self._blocks_read = 0
         self._greeting = None
+        self._outcome = None
+        self._playing_since = None
+        self._last_read_at = 0.0
 
     @property
     def name(self):
@@ -98,26 +147,20 @@ class TestGoertzelEar(BaseThread):
         return self.params[EarComPort.params_section]["baudrate"]
 
     @property
-    def board_is_real(self):
-        """Shown on the page, because a wrong answer here is otherwise
-        silent - the same lesson as `test audio subsystem`."""
-        return self.is_bench
+    def tone(self):
+        return self._tone
 
     @property
     def port_handler(self):
-        """A real serial port or nothing at all.
+        """A real serial port, or none at all - there is no stand-in here.
 
-        There is deliberately no stand-in. Every other simulated thing in
-        this repository stands in for something the installation has, and
-        a run against one is a rehearsal; this board exists to answer
-        whether a microphone hears a tone, and a stand-in that answered
-        "yes" would be the one kind of false confidence this test is
-        against. Off the bench it refuses instead - see `_why_not_open`.
+        See the module docstring. Where there is no board this refuses
+        instead, in `_why_not_open`.
         """
         if self._port_handler is None:
-            # is_bench, not is_simulated: the bench is simulated as far as
-            # the piece goes and its boards are as real as hardware gets.
-            self._port_handler = serial.Serial(baudrate=self.baudrate, timeout=0.2)
+            self._port_handler = serial.Serial(
+                baudrate=self.baudrate, timeout=self.REPLY_TIMEOUT
+            )
             self._port_handler.port = self.params[
                 EarComPort.params_section
             ]["communication port"]
@@ -126,35 +169,26 @@ class TestGoertzelEar(BaseThread):
     def use_port(self, com_port):
         """Point the link at a newly chosen lead.
 
-        There is only one kind of handler here - no stand-in, on purpose;
-        see `port_handler` - so this is a name change rather than the
-        swap `BenchBoardLink` has to make. It exists because
-        `BenchComPort` asks its owner to re-point rather than reaching
-        into the handler itself, which is what lets the two audio tests
-        move between a real lead and the simulator at all.
+        There is only one kind of handler here - no stand-in, on purpose -
+        so this is a name change rather than the swap `BenchBoardLink` has
+        to make. It exists because `BenchComPort` asks its owner to
+        re-point rather than reaching into the handler itself.
         """
         self.port_handler.port = com_port
 
     # --- the line ---------------------------------------------------------
 
     def _why_not_open(self):
-        """Why talking to it would fail, or None.
+        """Why talking to the board would fail, or None.
 
-        The same check `test audio subsystem` makes, and for the same
-        reason: the chosen port is remembered in params and outlives the
-        machine that chose it, so a name from another desk opens nothing
-        and fails with a pyserial error about a port nobody recognises.
+        Two questions, both about the lead. The chosen port is remembered
+        in params and outlives the machine that chose it, so a name from
+        another desk opens nothing and fails with a pyserial error about a
+        port nobody recognises.
         """
-        if not self.is_bench:
-            return (
-                "this is not the bench - the ear board is a Mega on a desk "
-                "with a speaker and a microphone on it, and there is no "
-                "stand-in for it on purpose"
-            )
-
         chosen = self.params[EarComPort.params_section]["communication port"]
         if chosen is None:
-            return "no port chosen - pick the ear board under 'com port'"
+            return "no port chosen - pick the sampler board under 'com port'"
 
         available = self.com_port.ports
         if chosen not in available:
@@ -165,59 +199,21 @@ class TestGoertzelEar(BaseThread):
             )
         return None
 
-    def _command(self, text, expect=1):
-        """Send one line and collect the replies it produces."""
-        handler = self.port_handler
-        handler.reset_input_buffer()
-        handler.write((text + "\n").encode("ascii"))
+    def _why_no_sound(self):
+        """Why playing a tone would fail, or None.
 
-        lines = []
-        deadline = time() + self.REPLY_TIMEOUT
-        while time() < deadline and len(lines) < expect:
-            if self._stop_event.is_set():
-                break
-            raw = handler.readline()
-            if not raw:
-                continue
-            line = raw.decode("ascii", "replace").strip()
-            if line:
-                lines.append(line)
-                self._last_line = line
-        return lines
-
-    # --- what the page offers ---------------------------------------------
-
-    def _holder(self, hz):
-        def hold(request=None):
-            refusal = self._why_not_open()
-            if refusal is not None:
-                return f"refused: {refusal}"
-            self._open_if_needed()
-            self._command(f"f {hz}")
-            self._command("t 1")
+        Asked separately from the lead, because the two failures look
+        identical from the readings: a machine that cannot make a sound
+        reports five flat bins, which is exactly what a deaf microphone
+        reports.
+        """
+        if not self._tone.is_available:
             return (
-                f"{hz} Hz sounding on the ear board's D11. Listen for it, "
-                "and press 'silence' when you have."
+                "this machine cannot play a sound - no `sounddevice` (pip "
+                "install sounddevice) or no output device. There is "
+                "deliberately no silent fallback"
             )
-
-        return hold
-
-    def _silence(self, request=None):
-        refusal = self._why_not_open()
-        if refusal is not None:
-            return f"refused: {refusal}"
-        self._open_if_needed()
-        self._command("t 0")
-        return "quiet"
-
-    def _read_once(self, request=None):
-        refusal = self._why_not_open()
-        if refusal is not None:
-            return f"refused: {refusal}"
-        self._open_if_needed()
-        lines = self._command("m")
-        self._last_line = lines[0] if lines else "no reply"
-        return self._last_line
+        return None
 
     def _open_if_needed(self):
         if not self.port_handler.is_open:
@@ -227,25 +223,73 @@ class TestGoertzelEar(BaseThread):
             deadline = time() + 4.0
             while time() < deadline and self._greeting is None:
                 raw = self.port_handler.readline()
-                if raw and raw.startswith(b"goertzel_ear"):
+                if raw and raw.startswith(b"microphone_sampler"):
                     self._greeting = raw.decode("ascii", "replace").strip()
+
+    def _read_block(self):
+        """Ask for one capture and read it back, or None."""
+        handler = self.port_handler
+        handler.reset_input_buffer()
+        handler.write(b"b\n")
+
+        deadline = time() + self.REPLY_TIMEOUT
+        while time() < deadline:
+            if self._stop_event.is_set():
+                return None
+            raw = handler.readline()
+            if not raw:
+                continue
+            block = protocol.parse_block(raw.decode("ascii", "replace").strip())
+            if block is not None:
+                return block
+        return None
+
+    # --- what the page offers ---------------------------------------------
+
+    def _player(self, hz):
+        def play(request=None):
+            refusal = self._why_no_sound()
+            if refusal is not None:
+                return f"refused: {refusal}"
+            played = self._tone.play(hz)
+            self._playing_since = time()
+            return (
+                f"{hz} Hz sounding out of this computer's speakers "
+                f"(actually {played:.1f} Hz - snapped to a whole number of "
+                "cycles so the loop does not click). Listen for it, and "
+                "watch its row."
+            )
+
+        return play
+
+    def _silence(self, request=None):
+        self._tone.stop()
+        self._playing_since = None
+        return "quiet"
+
+    def _forget_floors(self, request=None):
+        """Throw the silent levels away and take them again.
+
+        The command `test_microphone_signal` has for its peaks, and for
+        the same reason: a floor taken before somebody moved the
+        microphone, shut a window or turned a fan off quietly makes every
+        rise measured against it wrong.
+        """
+        self._floors = {}
+        self._best = {}
+        self._outcome = None
+        return "floors forgotten - taken again on the next silent block"
 
     # --- the run ----------------------------------------------------------
 
-    def run(self):
-        now = datetime.now()
-        path = (
-            self._dir_path
-            / f"{now.year}_{now.month:02}_{now.day:02}_{now.hour:02}h_"
-            f"{now.minute:02}min_{now.second:02}s.csv"
-        )
-        run_with = self._file = path.open("a")
-        super().run(run_with=run_with)
-
     def setup(self):
-        self._readings = []
+        self._block = None
+        self._levels = {}
+        self._floors = {}
+        self._best = {}
+        self._blocks_read = 0
         self._outcome = None
-        self._file.write("hz, bin hz, floor, tone, rise, heard, sample rate\n")
+        self._last_read_at = 0.0
 
         refusal = self._why_not_open()
         if refusal is not None:
@@ -255,58 +299,128 @@ class TestGoertzelEar(BaseThread):
         self._open_if_needed()
         if self._greeting is None:
             self._refuse(
-                "no ear board on that port - it did not greet. Is "
-                "goertzel_ear.ino flashed onto it?"
+                "no sampler board on that port - it did not greet. Is "
+                "microphone_sampler.ino flashed onto it, and is the baud "
+                f"rate right? Opened at {self.baudrate}."
             )
             return
 
-        # One self test per pitch, in one command, so the board keeps its
-        # own timing between silence and tone rather than waiting on a
-        # round trip for each.
-        for line in self._command("w", expect=len(protocol.PITCHES) + 1):
-            reading = protocol.parse_test(line)
-            if reading is None:
-                continue
-            self._readings.append(reading)
-            self._file.write(
-                f"{reading.hz}, {reading.bin_hz}, {reading.floor}, "
-                f"{reading.tone}, {reading.rise}, "
-                f"{1 if reading.heard else 0}, {reading.sample_rate}\n"
+        sound = self._why_no_sound()
+        if sound is not None:
+            # Not a refusal. The reading half is worth having on its own -
+            # somebody with a signal generator, or a phone, can make the
+            # sound another way - and the page says the tone links will not
+            # work rather than leaving them to fail one at a time.
+            self._outcome = (
+                f"reading, but nothing here can play a tone - {sound}. Make "
+                "the sound some other way."
             )
-        self._file.flush()
-        self._finish()
-        self.stop()
 
     def loop(self):
-        pass
+        now = time()
+        if (now - self._last_read_at) < self.READ_INTERVAL:
+            return
+        self._last_read_at = now
 
-    def _finish(self):
-        heard = [r for r in self._readings if r.heard]
-        self._outcome = protocol.summarise(self._readings)
-        self.log(f"{len(heard)}/{len(self._readings)} heard - {self._outcome}")
+        block = self._read_block()
+        if block is None:
+            self._refuse(
+                "the board stopped answering - it greeted, so the lead was "
+                "right; check it is still plugged in"
+            )
+            return
+
+        self._block = block
+        self._blocks_read += 1
+        self._levels = goertzel.magnitudes(
+            block.samples, protocol.PITCHES, block.sample_rate
+        )
+        self._score(now)
+
+    def _score(self, now):
+        """File this block's levels as floors, or as a rise, or as neither.
+
+        Which of the three depends on one thing: is a tone sounding, and
+        has it been sounding long enough for the gain control to stop
+        moving. A block caught in between is still read and still drawn -
+        the page stays live - and scored as neither, because a floor taken
+        while a tone is fading up is a floor with the tone in it.
+        """
+        sounding = self._tone.hz
+        if sounding is None:
+            self._floors = dict(self._levels)
+            return
+
+        if self._playing_since is None:
+            return
+        if (now - self._playing_since) < self.SETTLE:
+            return
+
+        floor = self._floors.get(sounding)
+        if floor is None:
+            # Nothing silent has been measured yet, so there is nothing to
+            # measure a rise against. Press `silence` first.
+            return
+
+        level = self._levels[sounding]
+        best = self._best.get(sounding)
+        if best is None or (level - floor) > (best[1] - best[0]):
+            self._best[sounding] = (floor, level)
+
+        self._outcome = protocol.summarise(self.readings)
+
+    def setdown(self):
+        # The room must not be left making a noise by a run that has ended.
+        self._tone.stop()
+        self._playing_since = None
+        try:
+            if self._port_handler is not None and self._port_handler.is_open:
+                self._port_handler.close()
+        except Exception as error:  # noqa: BLE001 - a quiet board, not a crash
+            self.log(f"Could not close the sampler board's port: {error}")
 
     def _refuse(self, reason):
         self._outcome = f"refused: {reason}"
         self.log(f"Refusing to run: {reason}")
         self.stop()
 
-    def setdown(self):
-        try:
-            if self._port_handler is not None and self._port_handler.is_open:
-                self._command("t 0")
-                self._port_handler.close()
-        except Exception as error:  # noqa: BLE001 - a quiet board, not a crash
-            self.log(f"Could not silence the ear board: {error}")
-        finally:
-            if self._file is not None:
-                self._file.close()
+    # --- what has been found ----------------------------------------------
+
+    @property
+    def readings(self):
+        """One Reading per pitch that has actually been played.
+
+        Not one per pitch: a single tone sounds at a time and the links
+        are pressed in whatever order somebody likes, so a pitch nobody
+        has played yet is an open question rather than a failure.
+        """
+        rate = self._block.sample_rate if self._block is not None else 0.0
+        count = self._block.count if self._block is not None else 0
+
+        found = []
+        for hz in protocol.PITCHES:
+            best = self._best.get(hz)
+            if best is None:
+                continue
+            floor, level = best
+            found.append(
+                protocol.Reading(
+                    hz=hz,
+                    bin_hz=goertzel.bin_hz(hz, rate, count),
+                    floor=floor,
+                    level=level,
+                    heard=goertzel.is_heard(level, floor),
+                    sample_rate=rate,
+                )
+            )
+        return found
 
     # --- the page ---------------------------------------------------------
 
     @property
     def snapshot_children(self):
         children = {self._com_port.name: self._com_port}
-        children.update(self._manual)
+        children.update(self._commands)
         return self._with_scenarios(children)
 
     def _snapshot_if_opened(self, path):
@@ -314,27 +428,63 @@ class TestGoertzelEar(BaseThread):
         leaf = leaves.into(states, path)
 
         leaf(
-            "board",
-            "the real ear board" if self.board_is_real else "a stand-in - "
-            "this is not the bench, so nothing here is measuring anything",
+            "port",
+            self.params[EarComPort.params_section]["communication port"]
+            or "not set",
         )
-        leaf("port", self.params[EarComPort.params_section]["communication port"]
-             or "not set")
-        leaf("sketch", "Source code/Arduino/goertzel_ear/")
+        leaf("sketch", "Source code/Arduino/microphone_sampler/")
         if self._greeting:
-            leaf("greeting", self._greeting)
+            leaf("board says", self._greeting)
 
         refusal = self._why_not_open()
-        leaf("can run", "yes" if refusal is None else f"no - {refusal}")
+        leaf("can read", "yes" if refusal is None else f"no - {refusal}")
+
+        sound = self._why_no_sound()
+        leaf("can play", "yes" if sound is None else f"no - {sound}")
+
+        if self._tone.hz is None:
+            leaf("sounding", "nothing")
+        else:
+            leaf(
+                "sounding",
+                f"{self._tone.hz} Hz (actually {self._tone.played_hz:.1f} Hz)",
+            )
+
+        if self._block is not None:
+            width = goertzel.bin_width(self._block.sample_rate, self._block.count)
+            leaf(
+                "capture",
+                f"{self._block.count} samples at "
+                f"{self._block.sample_rate:.0f} a second, so a bin "
+                f"{width:.1f} Hz wide",
+            )
+            # Not a measurement of anything, and it catches the two things
+            # that read as an ordinary bin level otherwise: nothing on the
+            # pin at all, and an input being clipped.
+            leaf("signal span", f"{self._block.span} of 1023 ADC counts")
+            leaf("blocks read", self._blocks_read)
+
         if self._outcome is not None:
             leaf("outcome", self._outcome)
-        for reading in self._readings:
-            leaf(
-                f"{reading.hz} Hz",
-                f"floor {reading.floor}, tone {reading.tone}, "
-                f"rise {reading.rise} - "
-                f"{'heard' if reading.heard else 'NOT heard'}",
-            )
-        if self._last_line:
-            leaf("last reply", self._last_line)
+
+        for hz in protocol.PITCHES:
+            level = self._levels.get(hz)
+            if level is None:
+                continue
+            parts = [f"now {level:.2f}"]
+            floor = self._floors.get(hz)
+            if floor is not None:
+                parts.append(f"floor {floor:.2f}")
+            best = self._best.get(hz)
+            if best is None:
+                parts.append("not played yet")
+            else:
+                best_floor, best_level = best
+                heard = goertzel.is_heard(best_level, best_floor)
+                parts.append(
+                    f"best rise +{best_level - best_floor:.2f} - "
+                    f"{'heard' if heard else 'NOT heard'}"
+                )
+            leaf(f"{hz} Hz", ", ".join(parts))
+
         return states

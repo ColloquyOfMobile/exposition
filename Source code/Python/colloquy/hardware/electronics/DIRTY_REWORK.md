@@ -652,8 +652,10 @@ of that for you, in those words, and names the pin and the connector.
   efficient. Worst signal and worst noise on the same two bodies.
 
   **This is measurable now and worth measuring before anything is
-  rebuilt.** `tests > test goertzel ear` reads the floor at each pitch
-  with nothing sounding. A floor that is high at 160 and 400 and low at
+  rebuilt.** `tests > manual tests > test goertzel ear` reads the floor
+  at each pitch with nothing sounding — all five at once, off the same
+  block of samples, so the five floors are of the same instant rather
+  than of five different ones. A floor that is high at 160 and 400 and low at
   1000, 2500 and 6250, with the room powered up, is mains - and the cure
   is cheap, because it is only a number: move the two low tones off the
   grid (175 Hz and 430 Hz, say). Both stay inside the same MSGEQ7 band,
