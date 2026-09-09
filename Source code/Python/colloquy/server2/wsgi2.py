@@ -747,6 +747,19 @@ class WSGI2(Base):
                             doc.asis(value["svg"])
                     continue
 
+                # A picture and nothing else. No zoom handle, so
+                # svg_zoom.js never finds it and never binds a wheel, a
+                # drag or a double-click to it - which is the whole of
+                # what `image` means where `svg` above does not.
+                if "image" in value:
+                    with tag("div", name=key):
+                        with tag(
+                            "div",
+                            style=export_style({"border": "1px solid #8888"}),
+                        ):
+                            doc.asis(value["image"])
+                    continue
+
                 # print(f"{value=}")
                 if value.get("opened", False):
                     if value:

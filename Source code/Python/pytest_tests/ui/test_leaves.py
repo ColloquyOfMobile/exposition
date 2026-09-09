@@ -60,6 +60,7 @@ def test_the_key_names_the_kind():
     assert "html" in leaves.html(PATH, "rendered", "<p>hi</p>")
     assert "chart" in leaves.chart(PATH, "graph", "{}")
     assert "svg" in leaves.svg(PATH, "picture", "<svg/>")
+    assert "image" in leaves.image(PATH, "picture", "<svg/>")
     assert "pre" in leaves.pre(PATH, "log", "a line")
     assert "editor" in leaves.editor(PATH, "editor", "text")
 
@@ -67,7 +68,8 @@ def test_the_key_names_the_kind():
 def test_every_constructor_names_the_leaf_after_its_key():
     # The page shows the dict key, so a name that disagrees with it only
     # ever misleads whoever reads the snapshot. One node did disagree.
-    for build in (leaves.value, leaves.html, leaves.chart, leaves.svg, leaves.pre):
+    for build in (leaves.value, leaves.html, leaves.chart, leaves.svg,
+                  leaves.image, leaves.pre):
         leaf = build(PATH, "some key", "payload")
         assert leaf["name"] == "some key"
         assert leaf["path"] == PATH + ("some key",)
@@ -127,6 +129,19 @@ def test_svg_is_inlined_with_its_pan_and_zoom_handle(render):
 
     assert "<svg id='x'/>" in html
     assert "data-svg-zoom" in html
+
+
+def test_an_image_is_inlined_with_no_handle_at_all(render):
+    """The difference from `svg` above, and the whole reason the kind
+    exists: svg_zoom.js binds to `[data-svg-zoom]` and finds nothing
+    here, so a view that moves itself by links is not also dragged about
+    underneath (see ui/graph_view.py)."""
+    html = render({"picture": leaves.image(PATH, "picture", "<svg id='x'/>")})
+
+    assert "<svg id='x'/>" in html
+    assert "data-svg-zoom" not in html
+    # And no invitation to try: the hint line belongs to the other kind.
+    assert "scroll to zoom" not in html
 
 
 def test_a_chart_ships_its_data_to_the_browser(render):

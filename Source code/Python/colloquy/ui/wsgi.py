@@ -557,6 +557,13 @@ class MockWSGI(Base):
                             doc.asis(value["svg"])
                     continue
 
+                # No zoom handle, so svg_zoom.js never binds anything to
+                # it - see leaves.image.
+                if "image" in value:
+                    with tag("div", name=key):
+                        doc.asis(value["image"])
+                    continue
+
                 # print(f"{value=}")
                 if value.get("opened", False):
                     if value:

@@ -31,7 +31,7 @@ and the constructors are for one-offs:
 # Every payload key the renderer knows how to draw, in the order it tries
 # them. A kind not in here is a leaf nothing can render - the page shows
 # the dict's own repr, which is how missing kinds have shown up before.
-KINDS = ("value", "editor", "html", "chart", "pre", "svg")
+KINDS = ("value", "editor", "html", "chart", "pre", "svg", "image")
 
 
 def leaf(path, key, kind, payload):
@@ -66,6 +66,21 @@ def svg(path, key, markup):
     """A picture already drawn, inlined - what matplotlib wrote. The page
     gives it scroll-to-zoom and drag-to-pan, but the pixels are fixed."""
     return leaf(path, key, "svg", markup)
+
+
+def image(path, key, markup):
+    """The same markup with nothing on it: no handle, no listeners, no
+    hint line - a picture, drawn.
+
+    The difference from `svg` above is who moves the view. A matplotlib
+    plot is all the server will ever send, so the browser is the only
+    thing that can zoom it and `svg` hands it the means. A view that
+    zooms *itself* - `ui/graph_view.py`, whose every control is an href
+    and which re-draws against the data - must not also be dragged about
+    underneath, or the picture on screen stops being the window the
+    reading beside it names.
+    """
+    return leaf(path, key, "image", markup)
 
 
 def pre(path, key, text):

@@ -27,6 +27,16 @@ node's, not the URL's, which is what the tree's `call` convention already
 gives - a command mutates, `update()` re-renders, and the picture that
 comes back is the new one.
 
+**And nothing else can move it.** The picture goes out as `leaves.image`
+rather than `leaves.svg`, so it gets no `data-svg-zoom` handle and
+`svg_zoom.js` binds no wheel, drag or double-click to it. That is not
+only for the no-script claim: browser-side zoom would scale the *picture*
+while the window stayed where it was, so the reading beside it - drawing
+n of m in this window - would name a window the reader was no longer
+looking at, and the thinned samples would be stretched instead of
+re-drawn. One of the two has to be in charge of the view, and here it is
+the server.
+
 **The data is dummy and deterministic** - a slow sweep with pulses on it
 and a little noise, from a fixed seed, shaped like the light-sensor logs
 the real charts draw. It is generated once and held, so paging around it
@@ -333,5 +343,11 @@ class GraphView(Base):
         )
         leaf("x", f"{x0:.1f}s to {x1:.1f}s  (zoom x{self._x_zoom:g})")
         leaf("y", f"{y0:.0f} to {y1:.0f}  (zoom x{self._y_zoom:g})")
-        states["graph"] = leaves.svg(path, "graph", self.svg())
+        # `image`, not `svg`: the page must not hang a wheel-zoom and a
+        # drag-pan on this one. Those would move the picture without
+        # moving the window, so the readings above - which say what the
+        # window is and how much of it is drawn - would describe
+        # something other than what is on screen. The links are the
+        # only way this view moves.
+        states["graph"] = leaves.image(path, "graph", self.svg())
         return states

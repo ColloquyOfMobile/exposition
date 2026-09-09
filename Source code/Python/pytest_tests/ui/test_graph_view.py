@@ -10,8 +10,13 @@ data. What is worth pinning is exactly that: that the number of points
 sent is the server's decision and follows the window, and that no control
 needs anything but an `href`.
 """
+from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
+
+from colloquy.server2.wsgi2 import WSGI2
+from colloquy.ui.wsgi import MockWSGI
 from colloquy.ui.graph_view import (
     DEFAULT_POINTS,
     POINT_CHOICES,
@@ -20,8 +25,29 @@ from colloquy.ui.graph_view import (
 )
 
 
+PATH = ("tests", "test graph without script")
+
+
 def graph(**kwargs):
     return GraphView(owner=SimpleNamespace(owner=None, owners=[]), **kwargs)
+
+
+@pytest.fixture(params=(WSGI2, MockWSGI), ids=("installation", "mock"))
+def renderer(request):
+    """The markup one of the two pages draws for this node, built the way
+    pytest_tests/ui/test_leaves.py builds it - through __new__, since the
+    renderer only ever reads dicts and none of a request is wanted."""
+    renderer_class = request.param
+
+    def render(states):
+        page = renderer_class.__new__(renderer_class)
+        page._base_path = Path("tests")
+        page._root = Path("app")
+        return page._html_recursion(
+            {"path": PATH, "name": "graph", "opened": True, **states}
+        )
+
+    return render
 
 
 # --- the data ------------------------------------------------------------
@@ -199,6 +225,24 @@ def test_it_says_how_many_of_how_many_it_is_showing():
     reading = states["values"]["points"] if "values" in states else None
     assert reading is None or "of" in str(reading)
     assert "graph" in states
+
+
+def test_the_page_hangs_nothing_on_the_picture(renderer):
+    """`image`, not `svg`. The other kind carries a `data-svg-zoom`
+    handle that svg_zoom.js binds a wheel, a drag and a double-click to,
+    and this view is moved by its links alone: browser-side zoom would
+    scale the picture while the window stayed put, so the reading that
+    says which window is drawn would name one nobody was looking at."""
+    view = graph()
+    states = view._snapshot_if_opened(PATH)
+
+    assert "image" in states["graph"]
+    assert "svg" not in states["graph"]
+
+    html = renderer(states)
+    assert "data-svg-zoom" not in html
+    assert "scroll to zoom" not in html
+    assert "<script" not in html
 
 
 def test_an_empty_window_says_so_rather_than_drawing_a_line_to_nowhere():
