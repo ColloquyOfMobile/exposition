@@ -216,7 +216,7 @@ class Branch(Base):
         return states
 
 
-from colloquy.ui.graph_view import GraphView, dummy_series
+from colloquy.ui.graph_view import GraphView, dummy_marks, dummy_series
 
 
 class MockApp(Base):
@@ -248,6 +248,9 @@ class MockApp(Base):
                 (name, dummy_series(seed=seed))
                 for name, seed in (("female1", 7), ("female2", 8), ("female3", 9))
             ],
+            # One on each of the dummy pulses, so the `go to` links and
+            # `next mark` have something to arrive at.
+            marks=dummy_marks(),
         )
         self.called = []
 

@@ -34,6 +34,21 @@ closely at a pulse without asking a browser to hold, or a request to
 carry, a hundred thousand points to do it. That is the whole reason the
 page size is a control rather than a constant.
 
+**Marks are moments worth coming back to**, drawn as a dashed rule across
+the picture with its name at the top - `marks=` is `(seconds, label)`
+pairs. They are how you find something in a run rather than paging past
+it: `next mark` and `previous mark` step from the edge of this page to
+the next one either way, and a `marks` child node carries one link per
+mark that turns straight to its page. That listing is its own node
+because a run can carry a great many, and the controls somebody presses
+on every view must not be lost in the middle of a list of moments they
+press once. A mark is a time and a page is a range of rows, so `_row_at`
+bisects to turn one into the other - a linear search would read the run
+to find a mark, which is the cost all of this exists to avoid. Only the
+marks on the page are drawn; a label that would sit on top of the one
+beside it is dropped and its line kept, since an unreadable name is worse
+than none and the line is the half that says where it is.
+
 **Nothing is copied, and only the page is materialised.** A series is any
 sequence of `(x, y)` - a list, or `Columns`, which is a lazy view over two
 columns that are already in memory somewhere else (a dataframe, say). The
@@ -81,6 +96,7 @@ real graphs draw. Generated once and held, so paging around it is paging
 around one dataset rather than a new one each time.
 """
 import math
+from functools import partial
 from html import escape
 from random import Random
 
@@ -122,6 +138,12 @@ DEFAULT_PAGE = None
 # few presses and fine enough not to overshoot what you were looking at.
 ZOOM_STEP = 2.0
 MAX_ZOOM = 4096.0
+
+# Two mark labels closer together than this on screen: the second is
+# dropped and only its line drawn. A mark whose label is unreadable under
+# the one beside it is worse than a mark with no label, and the line is
+# the half that says where it is.
+MARK_LABEL_GAP = 10
 
 # Colours for a graph with more than one line. Matplotlib's tab10, which
 # is what `test_light_sensor_values/utils.py` already draws its SVGs in,
@@ -184,13 +206,71 @@ def dummy_series(samples=SAMPLES, span=SPAN_SECONDS, seed=7):
     return points
 
 
+def dummy_marks(span=SPAN_SECONDS, every=47.0):
+    """One mark on each of the dummy data's pulses.
+
+    The pulses are what there is to find in it, so marking them gives the
+    `go to` links something to actually arrive at - and they are every 47
+    seconds, which is often enough to page between and rare enough that
+    the labels are not a wall.
+    """
+    count = int(span // every) + 1
+    return [(every * index, f"pulse {index + 1}") for index in range(count)]
+
+
+class Marks(Base):
+    """One link per mark: press it and the graph pages to it.
+
+    Their own node rather than commands on the graph itself, because a
+    run can carry a great many and the controls somebody presses on every
+    view - the page size, the next page - must not be lost in the middle
+    of a list of moments they press once. `next mark` and `previous mark`
+    stay on the graph, since those are the ones you press repeatedly.
+    """
+
+    def __init__(self, owner):
+        super().__init__(owner=owner)
+        self._graph = owner
+        for key, command in self._entries().items():
+            self[key] = command
+
+    @property
+    def name(self):
+        return "marks"
+
+    def _entries(self):
+        entries = {}
+        for index, (seconds, label) in enumerate(self._graph.marks):
+            key = self._key(seconds, label)
+            if key in entries:
+                # Two marks at the same moment with the same name: one
+                # key would hide the other, and the page would offer a
+                # link that went to the wrong one.
+                key = f"{key} ({index})"
+            entries[key] = partial(self._graph.go_to_mark, index)
+        return entries
+
+    @staticmethod
+    def _key(seconds, label):
+        # The key is a path segment, and the tree splits a request on
+        # "/": a label carrying one would route to a child that is not
+        # there. The time goes in front because it is what tells two
+        # marks of the same kind apart.
+        return f"{seconds:.1f}s {str(label).replace('/', '-')}"
+
+    @property
+    def snapshot_children(self):
+        return dict(self._entries())
+
+
 class GraphView(Base):
     """One or more lines, drawn as SVG, paged through with links."""
 
-    def __init__(self, owner, points=None, series=None, name="graph"):
+    def __init__(self, owner, points=None, series=None, marks=None, name="graph"):
         super().__init__(owner=owner)
         self._name = name
         self._series = self._as_series(points, series)
+        self._marks = sorted(marks or (), key=lambda mark: mark[0])
         self._full_y = None       # scanned once, on first draw
 
         self._wanted = DEFAULT_POINTS
@@ -201,6 +281,13 @@ class GraphView(Base):
 
         for key, command in self._commands().items():
             self[key] = command
+
+        # Only when there are any: a `marks` node listing nothing is a
+        # link that opens an empty page, and the two commands beside it
+        # would be controls that can never move.
+        self._marks_node = Marks(owner=self) if self._marks else None
+        if self._marks_node is not None:
+            self[self._marks_node.name] = self._marks_node
 
     @staticmethod
     def _as_series(points, series):
@@ -226,6 +313,16 @@ class GraphView(Base):
         """Each line as (label, sequence). The label is None for the
         one-line case, which is what leaves it in `currentColor`."""
         return list(self._series)
+
+    @property
+    def marks(self):
+        """Moments worth jumping to, as (seconds, label), in time order."""
+        return list(self._marks)
+
+    def marks_on_page(self):
+        """The ones inside the window, which are the ones drawn."""
+        low, high = self.x_window
+        return [mark for mark in self._marks if low <= mark[0] <= high]
 
     @property
     def held(self):
@@ -402,7 +499,7 @@ class GraphView(Base):
     # --- one link, one action ------------------------------------------------
 
     def _commands(self):
-        return {
+        commands = {
             "more points": self.more_points,
             "fewer points": self.fewer_points,
             "smaller page": self.smaller_page,
@@ -411,10 +508,16 @@ class GraphView(Base):
             "previous page": self.previous_page,
             "next page": self.next_page,
             "last page": self.last_page,
-            "zoom in y": self.zoom_in_y,
-            "zoom out y": self.zoom_out_y,
-            "reset": self.reset,
         }
+        if self._marks:
+            # Beside the page turns, since walking between marks is the
+            # other way of moving along x and gets pressed as often.
+            commands["previous mark"] = self.previous_mark
+            commands["next mark"] = self.next_mark
+        commands["zoom in y"] = self.zoom_in_y
+        commands["zoom out y"] = self.zoom_out_y
+        commands["reset"] = self.reset
+        return commands
 
     def more_points(self, request=None):
         bigger = [n for n in POINT_CHOICES if n > self._wanted]
@@ -456,6 +559,63 @@ class GraphView(Base):
 
     def bigger_page(self, request=None):
         self._resize_page(+1)
+
+    def _row_at(self, seconds):
+        """The row nearest that moment, by bisection.
+
+        A mark is a time and a page is a range of rows, so something has
+        to turn one into the other. Bisection rather than a scan because
+        the whole arrangement here is that nothing reads rows it is not
+        going to draw - a linear search for a mark would read the run to
+        find it, which is the cost the paging exists to avoid.
+        """
+        points = self._longest()
+        low, high = 0, len(points)
+        while low < high:
+            middle = (low + high) // 2
+            if points[middle][0] < seconds:
+                low = middle + 1
+            else:
+                high = middle
+        return max(0, min(low, len(points) - 1))
+
+    def _longest(self):
+        """The line the pages are counted against - see `length`."""
+        if not self._series:
+            return []
+        return max((points for _label, points in self._series), key=len)
+
+    def go_to(self, seconds, request=None):
+        """Turn to the page holding that moment.
+
+        Nothing to do when the whole run is on one page: it is already on
+        screen. The page says so rather than leaving a link that quietly
+        does nothing.
+        """
+        if self._page_size is None or not self.length:
+            return
+        row = self._row_at(seconds)
+        self._page = max(0, min(row // self._page_size, self.page_count - 1))
+
+    def go_to_mark(self, index, request=None):
+        if 0 <= index < len(self._marks):
+            self.go_to(self._marks[index][0])
+
+    def next_mark(self, request=None):
+        """The first mark past the right-hand edge of this page."""
+        _start, end = self.x_window
+        for index, (seconds, _label) in enumerate(self._marks):
+            if seconds > end:
+                self.go_to_mark(index)
+                return
+
+    def previous_mark(self, request=None):
+        """The last mark before the left-hand edge of this page."""
+        start, _end = self.x_window
+        for index in reversed(range(len(self._marks))):
+            if self._marks[index][0] < start:
+                self.go_to_mark(index)
+                return
 
     def first_page(self, request=None):
         self._page = 0
@@ -516,6 +676,39 @@ class GraphView(Base):
         if len(self._series) == 1 and label is None:
             return "currentColor"
         return SERIES_COLOURS[index % len(SERIES_COLOURS)]
+
+    def _mark_lines(self, place, x_window, y_bottom):
+        """A dashed rule at each mark on this page, labelled where there
+        is room.
+
+        `currentColor` at half opacity rather than a colour of its own:
+        the coloured strokes are the lines, and a mark is a note about
+        where you are, not another reading to compare them with.
+        """
+        low, high = x_window
+        parts = []
+        last_label_end = None
+        for seconds, label in self._marks:
+            if not low <= seconds <= high:
+                continue
+            x, _ = place(seconds, y_bottom)
+            parts.append(
+                f'<line x1="{x:.1f}" y1="{TOP}" x2="{x:.1f}" '
+                f'y2="{TOP + PLOT_HEIGHT}" stroke="currentColor" '
+                f'stroke-opacity="0.5" stroke-dasharray="4 3"/>'
+            )
+            text = escape(str(label))
+            # 6 units a character is monospace at this font size.
+            width = 6 * len(text)
+            start = x - width / 2
+            if last_label_end is not None and start < last_label_end + MARK_LABEL_GAP:
+                continue
+            last_label_end = x + width / 2
+            parts.append(
+                f'<text x="{x:.1f}" y="{TOP + 10}" text-anchor="middle" '
+                f'fill="currentColor" fill-opacity="0.75">{text}</text>'
+            )
+        return parts
 
     def _legend(self):
         """Which line is which, along the top. Nothing at all when there
@@ -585,6 +778,9 @@ class GraphView(Base):
                 f'fill="currentColor" fill-opacity="0.7">{seconds:.1f}s</text>'
             )
 
+        # Before the lines, so a reading is never hidden under a note
+        # about where it is.
+        parts.extend(self._mark_lines(place, (x0, x1), y0))
         parts.extend(self._legend())
 
         for index, (_label, points) in enumerate(drawn):
@@ -614,7 +810,10 @@ class GraphView(Base):
 
     @property
     def snapshot_children(self):
-        return dict(self._commands())
+        children = dict(self._commands())
+        if self._marks_node is not None:
+            children[self._marks_node.name] = self._marks_node
+        return children
 
     def _page_reading(self):
         if self._page_size is None:
@@ -652,6 +851,19 @@ class GraphView(Base):
             # Worth saying outright: this is the state the page size is a
             # control for, and it is not obvious from two numbers matching.
             leaf("density", "every sample on this page is drawn")
+        if self._marks:
+            here = len(self.marks_on_page())
+            if self._page_size is None:
+                # Nothing to jump to when it is all on screen already, and
+                # saying which press changes that beats a link that looks
+                # broken.
+                leaf(
+                    "marks",
+                    f"{len(self._marks)}, all on this page - "
+                    f'press "smaller page" to walk between them',
+                )
+            else:
+                leaf("marks", f"{here} on this page, {len(self._marks)} in all")
         leaf("x", f"{x0:.1f}s to {x1:.1f}s")
         leaf("y", f"{y0:.0f} to {y1:.0f}  (zoom x{self._y_zoom:g})")
         # `image`, not `svg`: the page must not hang a wheel-zoom and a

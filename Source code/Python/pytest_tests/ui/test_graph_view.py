@@ -29,6 +29,7 @@ from colloquy.ui.graph_view import (
     POINT_CHOICES,
     Columns,
     GraphView,
+    dummy_marks,
     dummy_series,
 )
 
@@ -316,6 +317,200 @@ def test_zooming_y_narrows_the_values_and_stops_at_the_whole_range():
     for _ in range(10):
         view.zoom_out_y()
     assert view.y_window == view.full_y
+
+
+# --- marks ----------------------------------------------------------------
+
+
+def marked(**kwargs):
+    """A run with a mark every hundred rows, an even second apart."""
+    points = [(float(i), 100.0 + i % 50) for i in range(1000)]
+    marks = [(float(i), f"pulse {i // 100 + 1}") for i in range(0, 1000, 100)]
+    return graph(points=points, marks=marks, **kwargs)
+
+
+def test_a_mark_is_drawn_as_a_rule_across_the_picture():
+    view = marked()
+
+    assert "stroke-dasharray" in view.svg()
+    assert "pulse 1" in view.svg()
+
+
+def test_only_the_marks_on_this_page_are_drawn():
+    """The rest are on other pages, and a rule at the edge for something
+    off it would be a lie about where it is."""
+    view = marked()
+    view.smaller_page()
+
+    on_page = view.marks_on_page()
+    assert 0 < len(on_page) < len(view.marks)
+    assert view.svg().count("stroke-dasharray") == len(on_page)
+
+
+def test_a_label_that_would_collide_is_dropped_and_its_line_kept():
+    """A mark whose name is unreadable under the one beside it is worse
+    than a mark with no name; the line is the half that says where it
+    is."""
+    crowded = graph(
+        points=[(float(i), 1.0 + i % 7) for i in range(1000)],
+        marks=[(float(i), "a crowded label") for i in range(500, 510)],
+    )
+    markup = crowded.svg()
+
+    assert markup.count("stroke-dasharray") == 10
+    assert markup.count("a crowded label") < 10
+
+
+# --- and moving to one ----------------------------------------------------
+
+
+def test_going_to_a_mark_turns_to_the_page_holding_it():
+    view = marked()
+    view.smaller_page()
+    view.first_page()
+
+    view.go_to_mark(len(view.marks) - 1)
+
+    low, high = view.x_window
+    assert low <= view.marks[-1][0] <= high
+
+
+def test_next_mark_steps_past_the_edge_of_this_page():
+    view = marked()
+    view.smaller_page()
+    _start, end = view.x_window
+
+    view.next_mark()
+
+    low, high = view.x_window
+    assert low > 0
+    # It landed on the first mark that was off the right of the old page.
+    assert any(end < seconds <= high for seconds, _label in view.marks_on_page())
+
+
+def test_previous_mark_steps_back_the_same_way():
+    view = marked()
+    view.smaller_page()
+    view.last_page()
+    start, _end = view.x_window
+
+    view.previous_mark()
+
+    assert view.x_window[0] < start
+
+
+def test_walking_past_the_last_mark_stays_where_it_is():
+    """A control at the end of its travel does nothing, rather than
+    wrapping round to the other end of the run."""
+    view = marked()
+    view.smaller_page()
+    view.last_page()
+    where = view.page
+
+    view.next_mark()
+    assert view.page == where
+
+    view.first_page()
+    view.previous_mark()
+    assert view.page == 0
+
+
+def test_a_mark_is_found_by_bisection_rather_than_by_reading_the_run():
+    """The whole arrangement here is that nothing reads rows it will not
+    draw; a linear search for a mark would read the run to find it."""
+    counted = Counting([(float(i), 1.0) for i in range(4096)])
+    view = graph(series=[("counted", counted)], marks=[(4000.0, "late")])
+    view.smaller_page()
+    view.svg()                      # let the value axis be scanned
+    counted.reads = 0
+
+    view.go_to_mark(0)
+
+    assert counted.reads < 20       # log2(4096) is 12
+
+
+def test_with_the_whole_run_on_one_page_there_is_nowhere_to_go():
+    """It is already on screen. The reading says which press changes
+    that, rather than leaving a link that looks broken."""
+    view = marked()
+    assert view.page_size is None
+
+    view.go_to_mark(len(view.marks) - 1)
+
+    assert view.page == 0
+    reading = view._snapshot_if_opened(PATH)["marks"]["value"]
+    assert "all on this page" in reading
+    assert "smaller page" in reading
+
+
+def test_the_reading_counts_this_page_and_the_run():
+    view = marked()
+    view.smaller_page()
+    states = view._snapshot_if_opened(PATH)
+
+    assert states["marks"]["value"] == (
+        f"{len(view.marks_on_page())} on this page, {len(view.marks)} in all"
+    )
+
+
+# --- the marks node -------------------------------------------------------
+
+
+def test_there_is_one_link_per_mark():
+    view = marked()
+
+    entries = view.snapshot_children["marks"].snapshot_children
+    assert len(entries) == len(view.marks)
+    assert all(callable(command) for command in entries.values())
+
+
+def test_a_link_is_named_by_its_moment_and_its_label():
+    """The time goes in front because it is what tells two marks of the
+    same kind apart."""
+    view = marked()
+
+    assert "0.0s pulse 1" in view.snapshot_children["marks"].snapshot_children
+
+
+def test_a_label_carrying_a_slash_does_not_become_a_path():
+    """The tree splits a request on "/", so one in a key would route to a
+    child that is not there."""
+    view = graph(
+        points=dummy_series(samples=100),
+        marks=[(1.0, "male1/found")],
+    )
+
+    key, = view.snapshot_children["marks"].snapshot_children
+    assert "/" not in key
+
+
+def test_two_marks_at_the_same_moment_keep_separate_links():
+    """One key would hide the other, and the page would offer a link that
+    went to the wrong one."""
+    view = graph(
+        points=dummy_series(samples=100),
+        marks=[(1.0, "same"), (1.0, "same")],
+    )
+
+    assert len(view.snapshot_children["marks"].snapshot_children) == 2
+
+
+def test_a_graph_with_no_marks_offers_none_of_it():
+    """A `marks` node listing nothing is a link to an empty page, and the
+    two commands beside it could never move."""
+    view = graph()
+
+    assert "marks" not in view.snapshot_children
+    assert "next mark" not in view.snapshot_children
+    assert "previous mark" not in view.snapshot_children
+    assert "marks" not in view._snapshot_if_opened(PATH)
+
+
+def test_the_demos_marks_land_on_the_dummy_pulses():
+    marks = dummy_marks()
+
+    assert marks[0] == (0.0, "pulse 1")
+    assert all(b[0] - a[0] == 47.0 for a, b in zip(marks, marks[1:]))
 
 
 # --- more than one line ---------------------------------------------------
