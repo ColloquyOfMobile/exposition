@@ -8,10 +8,10 @@ from colloquy.base import Base
 from ..utils import (
     FEMALE_COLUMNS,
     compute_pulses,
-    dataframe_to_chart_json,
     plot_counts_as_svg,
 )
 from colloquy.ui import leaves
+from colloquy.ui.graph_view import GraphView
 
 
 class TestResults(Base):
@@ -24,6 +24,16 @@ class TestResults(Base):
 
         self._results = {}
         self._post_process()
+
+        # The run's raw reading, drawn by the server. A node rather than
+        # a leaf because it has controls - the density, the window and
+        # the scroll are commands on it, and that is how the tree draws a
+        # thing you can act on. See colloquy/ui/graph_view.py.
+        self._graph = GraphView(
+            owner=self,
+            series=[(column, self._column_points(column)) for column in FEMALE_COLUMNS],
+            name="full measurement",
+        )
 
     @property
     def name(self):
@@ -38,9 +48,14 @@ class TestResults(Base):
             df[f"{prefix} logic"] = logic
             self._results[column] = {"durations": durations, "counts": counts}
 
-    def full_measurement_as_chart(self):
-        return dataframe_to_chart_json(
-            self._data_frame, x_column="seconds", y_columns=FEMALE_COLUMNS
+    def _column_points(self, column):
+        """One female's reading as (seconds, value) pairs."""
+        df = self._data_frame
+        return list(
+            zip(
+                df["seconds"].astype(float).tolist(),
+                df[column].astype(float).tolist(),
+            )
         )
 
     def counts_as_svg(self, column):
@@ -54,11 +69,6 @@ class TestResults(Base):
 
     def _snapshot_if_opened(self, path):
         states = {}
-        states["full measurement"] = leaves.chart(
-            path,
-            "full measurement",
-            self.full_measurement_as_chart(),
-        )
         for column in FEMALE_COLUMNS:
             if len(self._results[column]["counts"]) == 0:
                 continue
@@ -68,4 +78,4 @@ class TestResults(Base):
 
     @property
     def snapshot_children(self):
-        return {}
+        return {self._graph.name: self._graph}

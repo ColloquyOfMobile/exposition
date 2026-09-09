@@ -177,6 +177,15 @@ class Pictures(Base):
             '<rect width="200" height="60" fill="#8884"/>'
             '<text x="10" y="35" font-size="16">an svg</text></svg>',
         )
+        # The other picture kind: same markup, no zoom handle on it, for
+        # a view that moves itself. See leaves.image and ui/graph_view.py.
+        states["a picture"] = leaves.image(
+            path,
+            "a picture",
+            '<svg width="200" height="60" xmlns="http://www.w3.org/2000/svg">'
+            '<rect width="200" height="60" fill="#8884"/>'
+            '<text x="10" y="35" font-size="16">an image</text></svg>',
+        )
         states["a graph"] = leaves.chart(
             path,
             "a graph",
@@ -219,7 +228,7 @@ class Branch(Base):
         return states
 
 
-from colloquy.ui.graph_view import GraphView
+from colloquy.ui.graph_view import GraphView, dummy_series
 
 
 class MockApp(Base):
@@ -241,8 +250,17 @@ class MockApp(Base):
         self._pictures = Pictures(owner=self)
         self._deep = Branch(owner=self, name="deep", depth=2)
         # A chart that needs no script: every control is an href and
-        # the server redraws. See ui/graph_view.py.
-        self._graph = GraphView(owner=self)
+        # the server redraws. See ui/graph_view.py. Three lines rather
+        # than one, because that is the shape the page has to style - a
+        # legend and coloured strokes - and the installation's own
+        # `test graph without script` already shows the single-line one.
+        self._graph = GraphView(
+            owner=self,
+            series=[
+                (name, dummy_series(seed=seed))
+                for name, seed in (("female1", 7), ("female2", 8), ("female3", 9))
+            ],
+        )
         self.called = []
 
     @property

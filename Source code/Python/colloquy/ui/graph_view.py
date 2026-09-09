@@ -37,12 +37,31 @@ looking at, and the thinned samples would be stretched instead of
 re-drawn. One of the two has to be in charge of the view, and here it is
 the server.
 
+**One line or several.** `points=` is one unlabelled line, drawn in
+`currentColor` so it follows whatever theme the page is in - the picture
+this drew before it could hold more. `series=` is label-to-points, and
+those get colours off matplotlib's tab10 with a legend along the top,
+because once there are three lines on a graph "which is which" is the
+first thing to know. The colours are the ones the matplotlib SVGs and
+uPlot were already handed, so a female is the same colour in every
+picture of her. **`wanted` is a density per line**, not a budget split
+between them: three lines at four hundred points each is three readable
+lines, where three at a hundred and thirty is none.
+
+**This is the graph the app draws with.** `test_with_everything_moving`'s
+`full measurement` - three females' light sensors over a several-minute
+run, and the only real chart in the tree - comes through here rather than
+being serialised into the page for uPlot. It hangs there as a child
+*node* rather than a leaf, because it has commands on it and that is how
+the tree draws a thing you can act on.
+
 **The data is dummy and deterministic** - a slow sweep with pulses on it
 and a little noise, from a fixed seed, shaped like the light-sensor logs
 the real charts draw. It is generated once and held, so paging around it
 is paging around one dataset rather than a new one each time.
 """
 import math
+from html import escape
 from random import Random
 
 from colloquy.base import Base
@@ -54,7 +73,7 @@ WIDTH = 720
 HEIGHT = 340
 LEFT = 54          # room for the y labels
 BOTTOM = 28        # room for the x labels
-TOP = 12
+TOP = 18           # room for the legend, when there is more than one line
 RIGHT = 12
 
 PLOT_WIDTH = WIDTH - LEFT - RIGHT
@@ -82,6 +101,16 @@ MAX_ZOOM = 4096.0
 # window: an overlap is what lets the eye carry across the join.
 SCROLL_FRACTION = 0.4
 
+# Colours for a graph with more than one line. Matplotlib's tab10, which
+# is what `test_light_sensor_values/utils.py` already draws its SVGs in
+# and (as FEMALE_HEX_COLORS) what uPlot was handed - so female2 is the
+# same orange whichever of the pictures you happen to be looking at.
+# A single unlabelled line is drawn in `currentColor` instead and follows
+# the page's own theme, which is what it did before there were several.
+SERIES_COLOURS = (
+    "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b",
+)
+
 
 def dummy_series(samples=SAMPLES, span=SPAN_SECONDS, seed=7):
     """Something with structure at more than one scale.
@@ -106,10 +135,10 @@ def dummy_series(samples=SAMPLES, span=SPAN_SECONDS, seed=7):
 class GraphView(Base):
     """One series, drawn as SVG, moved about with links."""
 
-    def __init__(self, owner, points=None, name="graph"):
+    def __init__(self, owner, points=None, series=None, name="graph"):
         super().__init__(owner=owner)
         self._name = name
-        self._points = points if points is not None else dummy_series()
+        self._series = self._as_series(points, series)
 
         self._wanted = DEFAULT_POINTS
         self._x_zoom = 1.0
@@ -120,9 +149,36 @@ class GraphView(Base):
         for key, command in self._commands().items():
             self[key] = command
 
+    @staticmethod
+    def _as_series(points, series):
+        """One line or several, held as (label, points) pairs either way.
+
+        `points=` is the one-line case and stays *unlabelled*, which is
+        what keeps it drawing in `currentColor` with no legend over it -
+        the picture this view has always drawn. `series=` takes a mapping
+        (or pairs) of label to points and those get colours, because the
+        moment there is more than one line, which is which is the first
+        thing anybody needs to know.
+        """
+        if series is not None:
+            items = series.items() if hasattr(series, "items") else series
+            return [(label, list(points)) for label, points in items]
+        return [(None, list(points if points is not None else dummy_series()))]
+
     @property
     def name(self):
         return self._name
+
+    @property
+    def series(self):
+        """Each line as (label, points). The label is None for the
+        one-line case, which is what leaves it in `currentColor`."""
+        return list(self._series)
+
+    @property
+    def held(self):
+        """Every sample behind the window, across every line."""
+        return sum(len(points) for _, points in self._series)
 
     # --- what the reader is looking at ------------------------------------
 
@@ -135,14 +191,20 @@ class GraphView(Base):
         recorded a single sample is, and the sort of thing that happens
         to a real one before it happens to a demo.
         """
-        low, high = self._points[0][0], self._points[-1][0]
+        edges = [(points[0][0], points[-1][0]) for _, points in self._series if points]
+        if not edges:
+            return 0.0, 1.0
+        low = min(start for start, _ in edges)
+        high = max(end for _, end in edges)
         if high == low:
             high = low + 1.0
         return low, high
 
     @property
     def full_y(self):
-        values = [value for _, value in self._points]
+        values = [value for _, points in self._series for _, value in points]
+        if not values:
+            return 0.0, 1.0
         low, high = min(values), max(values)
         if high == low:
             high = low + 1.0
@@ -167,12 +229,19 @@ class GraphView(Base):
 
     # --- the decimation, which is the whole point -------------------------
 
-    def visible(self):
-        """The points inside the window, before thinning."""
+    def visible_series(self):
+        """Each line's points inside the window, before thinning."""
         start, end = self.x_window
-        return [p for p in self._points if start <= p[0] <= end]
+        return [
+            (label, [p for p in points if start <= p[0] <= end])
+            for label, points in self._series
+        ]
 
-    def drawn(self):
+    def visible(self):
+        """Every line's visible points together - what the count counts."""
+        return [p for _, points in self.visible_series() for p in points]
+
+    def _thin(self, inside):
         """At most `wanted` of them, evenly spaced.
 
         Every one is a real sample rather than an average: a mean would
@@ -180,11 +249,19 @@ class GraphView(Base):
         instead of averaging is a choice, and it is the honest one for a
         view that says how many of how many it is showing.
         """
-        inside = self.visible()
         if len(inside) <= self._wanted:
             return inside
         step = len(inside) / float(self._wanted)
         return [inside[int(index * step)] for index in range(self._wanted)]
+
+    def drawn_series(self):
+        """`wanted` is a density *per line*, not a budget split between
+        them: three lines at four hundred points each is three readable
+        lines, where three at a hundred and thirty is none."""
+        return [(label, self._thin(points)) for label, points in self.visible_series()]
+
+    def drawn(self):
+        return [p for _, points in self.drawn_series() for p in points]
 
     # --- one link, one action ---------------------------------------------
 
@@ -263,11 +340,49 @@ class GraphView(Base):
     def _ticks(low, high, count=5):
         return [low + (high - low) * i / count for i in range(count + 1)]
 
+    def _colour(self, index):
+        """One line and no label is the page's own colour - a graph that
+        follows the theme it is drawn in, which is what this was before
+        it could hold several."""
+        label, _ = self._series[index]
+        if len(self._series) == 1 and label is None:
+            return "currentColor"
+        return SERIES_COLOURS[index % len(SERIES_COLOURS)]
+
+    def _legend(self):
+        """Which line is which, along the top. Nothing at all when there
+        is only the one, since naming it says no more than the node's own
+        title already does."""
+        labelled = [
+            (index, label)
+            for index, (label, _) in enumerate(self._series)
+            if label is not None
+        ]
+        if not labelled:
+            return []
+
+        parts = []
+        x = LEFT
+        for index, label in labelled:
+            colour = self._colour(index)
+            parts.append(
+                f'<line x1="{x:.1f}" y1="{TOP - 7}" x2="{x + 10:.1f}" '
+                f'y2="{TOP - 7}" stroke="{colour}" stroke-width="2"/>'
+            )
+            parts.append(
+                f'<text x="{x + 14:.1f}" y="{TOP - 4}" fill="currentColor" '
+                f'fill-opacity="0.8">{escape(str(label))}</text>'
+            )
+            # 6 units a character is monospace at this font size, near
+            # enough to keep entries apart without measuring text.
+            x += 14 + 6 * len(str(label)) + 12
+        return parts
+
     def svg(self):
         """The whole picture, as markup, with no script anywhere in it."""
         x0, x1 = self.x_window
         y0, y1 = self.y_window
-        drawn = self.drawn()
+        drawn = self.drawn_series()
 
         parts = [
             f'<svg viewBox="0 0 {WIDTH} {HEIGHT}" width="100%" '
@@ -301,15 +416,22 @@ class GraphView(Base):
                 f'fill="currentColor" fill-opacity="0.7">{seconds:.1f}s</text>'
             )
 
-        if len(drawn) >= 2:
+        parts.extend(self._legend())
+
+        for index, (_label, points) in enumerate(drawn):
+            if len(points) < 2:
+                continue
             steps = " ".join(
-                f"{x:.1f},{y:.1f}" for x, y in (self._place(s, v) for s, v in drawn)
+                f"{x:.1f},{y:.1f}"
+                for x, y in (self._place(s, v) for s, v in points)
             )
             parts.append(
-                f'<polyline points="{steps}" fill="none" stroke="currentColor" '
+                f'<polyline points="{steps}" fill="none" '
+                f'stroke="{self._colour(index)}" '
                 f'stroke-width="1.2" stroke-linejoin="round"/>'
             )
-        else:
+
+        if not any(len(points) >= 2 for _, points in drawn):
             parts.append(
                 f'<text x="{LEFT + PLOT_WIDTH / 2}" y="{TOP + PLOT_HEIGHT / 2}" '
                 f'text-anchor="middle" fill="currentColor">nothing in this '
@@ -335,11 +457,17 @@ class GraphView(Base):
         inside = len(self.visible())
         shown = len(self.drawn())
 
-        # The number this exists to keep hold of, said out loud.
+        # The number this exists to keep hold of, said out loud. Said
+        # per line where there is more than one, because `wanted` is a
+        # density rather than a budget and a total would read as though
+        # the lines were sharing it out.
+        lines = len(self._series)
+        prefix = f"{lines} lines: " if lines > 1 else ""
+        per_line = " a line" if lines > 1 else ""
         leaf(
             "points",
-            f"drawing {shown} of {inside} in this window, out of "
-            f"{len(self._points)} held - asked for {self._wanted}",
+            f"{prefix}drawing {shown} of {inside} in this window, out of "
+            f"{self.held} held - asked for {self._wanted}{per_line}",
         )
         leaf("x", f"{x0:.1f}s to {x1:.1f}s  (zoom x{self._x_zoom:g})")
         leaf("y", f"{y0:.0f} to {y1:.0f}  (zoom x{self._y_zoom:g})")

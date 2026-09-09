@@ -183,6 +183,78 @@ def test_zoom_xy_moves_both_and_reset_puts_it_all_back():
     assert len(view.drawn()) == DEFAULT_POINTS
 
 
+# --- more than one line ---------------------------------------------------
+
+
+def two_lines():
+    return graph(series=[
+        ("female1", [(float(i), 300.0 + i) for i in range(1000)]),
+        ("female2", [(float(i), 900.0 - i) for i in range(1000)]),
+    ])
+
+
+def test_the_window_spans_every_line_rather_than_the_first():
+    view = two_lines()
+
+    assert view.full_x == (0.0, 999.0)
+    low, high = view.full_y
+    assert low < 300.0 and high > 900.0
+
+
+def test_the_density_asked_for_is_a_density_per_line():
+    """Not a budget split between them: three lines at four hundred
+    points each is three readable lines, where three at a hundred and
+    thirty is none."""
+    view = two_lines()
+    view.fewer_points()          # 200
+
+    assert [len(points) for _, points in view.drawn_series()] == [200, 200]
+    assert len(view.drawn()) == 400
+
+
+def test_each_line_is_drawn_in_its_own_colour_and_named():
+    markup = two_lines().svg()
+
+    assert markup.count("<polyline") == 2
+    assert "#1f77b4" in markup and "#ff7f0e" in markup
+    # A legend, since with two lines which is which is the first thing
+    # anybody needs to know.
+    assert "female1" in markup and "female2" in markup
+
+
+def test_one_unlabelled_line_keeps_the_pages_own_colour():
+    """What this drew before it could hold several - and the reason a
+    single line follows the theme it is drawn in rather than being told
+    it is blue."""
+    markup = graph().svg()
+
+    assert 'stroke="currentColor"' in markup
+    assert "#1f77b4" not in markup
+
+
+def test_a_line_with_nothing_in_the_window_is_simply_not_drawn():
+    """One female whose log stops early must not take the other two off
+    the picture with her."""
+    view = graph(series=[
+        ("early", [(float(i), 1.0) for i in range(10)]),
+        ("late", [(float(i), 2.0) for i in range(500, 1000)]),
+    ])
+    for _ in range(4):
+        view.zoom_in_x()
+
+    assert "nothing in this window" not in view.svg()
+    assert view.svg().count("<polyline") == 1
+
+
+def test_it_says_how_many_lines_it_is_drawing():
+    view = two_lines()
+    states = view._snapshot_if_opened(PATH)
+
+    reading = str(states["points"]["value"])
+    assert reading.startswith("2 lines:")
+    assert "a line" in reading          # the density is per line
+
+
 # --- and the markup -------------------------------------------------------
 
 
