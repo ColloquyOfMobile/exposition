@@ -51,6 +51,20 @@ it was a moment ago, at a gain that has not had time to follow. So every
 pitch carries a floor - its level while nothing was playing - and the
 reading to watch is the difference.
 
+**Which is why the run is recorded and drawn.** A rise is a comparison
+between two moments and the readings beside the links are one moment, so
+the numbers can only ever show half of it. `recording.py` keeps a row per
+block - the seconds, and each pitch's level - and writes down every
+moment somebody pressed one of these links: `160 Hz on`, `silence`,
+`floors forgotten`. When the run stops, that becomes a `recording` graph
+with those moments drawn across it as dashed rules, so the claim of the
+whole test is a shape rather than a pair of numbers: one line lifts at
+the rule marked with its own pitch, and the other four do not. It is
+built at the end rather than while blocks arrive because a graph is a
+thing you read, and one repaginating four times a second under a reader
+is not one. Nothing is written to disk - see `recording.py` on why this
+test still has no results file.
+
 **The link is the lead, not the machine.** There is no `is_bench` here
 any more. This is one Mega on one USB lead with a microphone on it, it
 travels to whichever desk somebody is working at, and the only questions
@@ -70,9 +84,11 @@ import serial
 
 from colloquy.base_thread import BaseThread
 from colloquy.ui import leaves
+from colloquy.ui.graph_view import GraphView
 
 from ..bench_com_port import BenchComPort
 from . import goertzel, protocol
+from .recording import Recording
 from .tone import Tone
 
 
@@ -124,6 +140,8 @@ class TestGoertzelEar(BaseThread):
         self._levels = {}      # hz -> its level in the last block
         self._floors = {}      # hz -> its level while nothing was playing
         self._best = {}        # hz -> the (floor, level) of its best rise
+        self._recording = Recording(protocol.PITCHES)
+        self._graph = None     # built from the recording when the run ends
         self._blocks_read = 0
         self._greeting = None
         self._outcome = None
@@ -149,6 +167,10 @@ class TestGoertzelEar(BaseThread):
     @property
     def tone(self):
         return self._tone
+
+    @property
+    def recording(self):
+        return self._recording
 
     @property
     def port_handler(self):
@@ -252,7 +274,13 @@ class TestGoertzelEar(BaseThread):
             if refusal is not None:
                 return f"refused: {refusal}"
             played = self._tone.play(hz)
-            self._playing_since = time()
+            now = time()
+            self._playing_since = now
+            # Written down here rather than worked out from the numbers
+            # later: this end is what started the sound, so the moment is
+            # known exactly, and knowing it is what makes the graph an
+            # answer rather than another thing to interpret.
+            self._recording.mark(now, f"{hz} Hz on")
             return (
                 f"{hz} Hz sounding out of this computer's speakers "
                 f"(actually {played:.1f} Hz - snapped to a whole number of "
@@ -265,6 +293,7 @@ class TestGoertzelEar(BaseThread):
     def _silence(self, request=None):
         self._tone.stop()
         self._playing_since = None
+        self._recording.mark(time(), "silence")
         return "quiet"
 
     def _forget_floors(self, request=None):
@@ -278,6 +307,11 @@ class TestGoertzelEar(BaseThread):
         self._floors = {}
         self._best = {}
         self._outcome = None
+        # A mark too, because it changes what every rise after it is
+        # measured against: two halves of one graph either side of this
+        # rule are not comparable, and nothing in the levels themselves
+        # would say so.
+        self._recording.mark(time(), "floors forgotten")
         return "floors forgotten - taken again on the next silent block"
 
     # --- the run ----------------------------------------------------------
@@ -290,6 +324,11 @@ class TestGoertzelEar(BaseThread):
         self._blocks_read = 0
         self._outcome = None
         self._last_read_at = 0.0
+        # The last run's picture goes with the last run's numbers. Keeping
+        # it would leave a graph on the page whose marks belong to a
+        # session that ended, beside live readings that do not.
+        self._recording.start(time())
+        self._graph = None
 
         refusal = self._why_not_open()
         if refusal is not None:
@@ -335,6 +374,7 @@ class TestGoertzelEar(BaseThread):
         self._levels = goertzel.magnitudes(
             block.samples, protocol.PITCHES, block.sample_rate
         )
+        self._recording.add(now, self._levels)
         self._score(now)
 
     def _score(self, now):
@@ -373,11 +413,35 @@ class TestGoertzelEar(BaseThread):
         # The room must not be left making a noise by a run that has ended.
         self._tone.stop()
         self._playing_since = None
+        self._draw_the_recording()
         try:
             if self._port_handler is not None and self._port_handler.is_open:
                 self._port_handler.close()
         except Exception as error:  # noqa: BLE001 - a quiet board, not a crash
             self.log(f"Could not close the sampler board's port: {error}")
+
+    def _draw_the_recording(self):
+        """Turn the run that has just ended into a graph, if it held one.
+
+        Built here rather than as blocks arrive, for two reasons that both
+        come down to a graph being a thing somebody reads. `GraphView`
+        takes its marks once, when it is made, so one built at the first
+        block would carry none of the presses that came after it - and it
+        keeps which page you are on, which would be worth nothing in a
+        view repaginating four times a second under a reader.
+
+        A run that read nothing - a refusal, or a lead pulled before the
+        first block - leaves no node at all rather than an empty picture
+        with controls that cannot move.
+        """
+        if not len(self._recording):
+            return
+        self._graph = GraphView(
+            owner=self,
+            series=self._recording.series(),
+            marks=self._recording.marks,
+            name="recording",
+        )
 
     def _refuse(self, reason):
         self._outcome = f"refused: {reason}"
@@ -421,6 +485,8 @@ class TestGoertzelEar(BaseThread):
     def snapshot_children(self):
         children = {self._com_port.name: self._com_port}
         children.update(self._commands)
+        if self._graph is not None:
+            children[self._graph.name] = self._graph
         return self._with_scenarios(children)
 
     def _snapshot_if_opened(self, path):
@@ -463,6 +529,20 @@ class TestGoertzelEar(BaseThread):
             # pin at all, and an input being clipped.
             leaf("signal span", f"{self._block.span} of 1023 ADC counts")
             leaf("blocks read", self._blocks_read)
+
+        if len(self._recording):
+            recorded = (
+                f"{len(self._recording)} blocks and "
+                f"{len(self._recording.marks)} marks over "
+                f"{self._recording.span:.0f}s"
+            )
+            if self._graph is None:
+                # Said rather than left to be noticed: somebody watching
+                # the rows go by has no way of knowing the run is being
+                # kept, and would stop it expecting to lose it.
+                leaf("recorded", f"{recorded} - drawn when the run stops")
+            else:
+                leaf("recorded", f"{recorded} - open 'recording'")
 
         if self._outcome is not None:
             leaf("outcome", self._outcome)

@@ -315,3 +315,139 @@ def test_it_refuses_to_play_where_it_cannot_make_a_sound():
 
     assert "cannot play a sound" in refusal
     assert "no silent fallback" in refusal
+
+
+# --- the run, recorded and drawn -----------------------------------------
+
+
+def recorded(marks=(), blocks=40, hz=1000, rise_from=20):
+    """A run: `blocks` blocks of levels, with `marks` pressed along the way.
+
+    One pitch lifts partway through and the other four do not, which is
+    the shape the whole test exists to produce. Times are handed in, so
+    this needs no clock and no board.
+    """
+    from colloquy.tests.test_goertzel_ear.recording import Recording
+
+    recording = Recording(protocol.PITCHES)
+    recording.start(1000.0)
+    pressed = list(marks)
+    for index in range(blocks):
+        now = 1000.0 + index * 0.25
+        while pressed and pressed[0][0] <= index:
+            _, label = pressed.pop(0)
+            recording.mark(now, label)
+        levels = {pitch: 1.0 for pitch in protocol.PITCHES}
+        if index >= rise_from:
+            levels[hz] = 30.0
+        recording.add(now, levels)
+    return recording
+
+
+def test_a_block_is_kept_with_the_seconds_it_arrived_at():
+    """The x axis is seconds since the run began, so the recording holds
+    the offset rather than the wall clock - a run started at lunchtime
+    would otherwise be drawn from 1.7 billion to 1.7 billion."""
+    recording = recorded(blocks=3)
+
+    assert len(recording) == 3
+    assert recording.seconds == [0.0, 0.25, 0.5]
+    assert recording.span == 0.5
+
+
+def test_every_pitch_is_a_line_even_the_ones_nobody_played():
+    """A flat line under a rule marked `1000 Hz on` is the evidence that
+    the tone went where it was meant to and nowhere else. Dropping it
+    would take away the half of the picture that says so."""
+    lines = dict(recorded().series())
+
+    assert list(lines) == [f"{hz} Hz" for hz in protocol.PITCHES]
+    assert [value for _, value in lines["1000 Hz"]][-1] == 30.0
+    assert set(value for _, value in lines["160 Hz"]) == {1.0}
+
+
+def test_a_line_is_a_view_of_the_two_lists_and_not_a_copy_of_them():
+    """`Columns`, for the reason `test_with_everything_moving` hands one
+    over its dataframe: the graph reads the few hundred rows it draws and
+    no pair is built for the rest."""
+    from colloquy.ui.graph_view import Columns
+
+    line = recorded().line(1000)
+
+    assert isinstance(line, Columns)
+    assert line[0] == (0.0, 1.0)
+
+
+def test_a_mark_lands_at_the_moment_the_link_was_pressed():
+    """Known here rather than worked out from the numbers later - this end
+    is what started the sound. That is what makes the graph an answer
+    rather than another thing to interpret."""
+    recording = recorded(marks=[(20, "1000 Hz on")])
+
+    assert recording.marks == [(5.0, "1000 Hz on")]
+
+
+def test_marks_before_the_run_are_dropped_rather_than_given_a_time():
+    """The play links work whether the test is running or not, and a tone
+    pressed with it stopped is somebody checking their speakers."""
+    from colloquy.tests.test_goertzel_ear.recording import Recording
+
+    recording = Recording(protocol.PITCHES)
+    recording.mark(500.0, "1000 Hz on")
+    recording.add(500.0, {hz: 1.0 for hz in protocol.PITCHES})
+
+    assert recording.marks == []
+    assert len(recording) == 0
+
+
+def test_starting_a_run_throws_the_last_one_away():
+    """A graph whose marks belong to a session that ended, beside live
+    readings that do not, is worse than no graph."""
+    recording = recorded(marks=[(1, "1000 Hz on")])
+    recording.start(2000.0)
+
+    assert len(recording) == 0
+    assert recording.marks == []
+
+
+def ear_with(recording):
+    """`_draw_the_recording` against a double, called unbound.
+
+    The real node builds a port picker and a tone; what is under test is
+    one method that turns a finished recording into a graph node.
+    """
+    from colloquy.tests.test_goertzel_ear import TestGoertzelEar
+
+    fake = SimpleNamespace(
+        _recording=recording, _graph=None, owner=None, owners=[]
+    )
+    TestGoertzelEar._draw_the_recording(fake)
+    return fake._graph
+
+
+def test_the_graph_is_drawn_when_the_run_ends_and_carries_its_marks():
+    """Built at the end rather than as blocks arrive: `GraphView` takes
+    its marks once, so one built at the first block would carry none of
+    the presses that came after it."""
+    graph = ear_with(recorded(marks=[(20, "1000 Hz on"), (30, "silence")]))
+
+    assert graph.name == "recording"
+    assert graph.marks == [(5.0, "1000 Hz on"), (7.5, "silence")]
+    assert [label for label, _ in graph.series] == [
+        f"{hz} Hz" for hz in protocol.PITCHES
+    ]
+
+
+def test_the_marks_are_offered_as_links_to_turn_to():
+    """A run is pressed a few times and each press is a moment worth
+    coming back to, which is what `GraphView`'s marks node is for."""
+    graph = ear_with(recorded(marks=[(20, "1000 Hz on")]))
+
+    assert "marks" in graph.snapshot_children
+    assert list(graph["marks"].snapshot_children) == ["5.0s 1000 Hz on"]
+
+
+def test_a_run_that_read_nothing_leaves_no_graph_at_all():
+    """A refusal, or a lead pulled before the first block. An empty
+    picture with controls that cannot move is not worth a node."""
+    assert ear_with(recorded(blocks=0)) is None

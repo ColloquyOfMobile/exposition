@@ -338,6 +338,31 @@ Both B and C leave `microphone_plotter` on the installation's Mega, and until fi
 
 **It moved to `manual tests` in the same change, and the reason is the room.** The old loop was closed on one board, a speaker and a microphone six inches apart with nothing else plugged in — walk away, read the CSV. This one is open across a room with a volume knob in it, and a muted output, a wrong default device or a volume at nothing all read exactly like a deaf microphone. Somebody hearing the tone is the measurement, and no file holds it — so there is no results file, and `is_bench` is gone (it is one Mega on one lead and it travels; the question is which lead, `test_audio_at_12v`'s lesson again). Still **no stand-in**: one that answered "yes" is the precise false confidence it exists against. **`Source code/Arduino/goertzel_ear/` is kept** and is not dead code — it answers the *other* question, whether an AVR can run five bins in time, which is `one board per body` §4 and is a fact about a processor. A green run of the node is not evidence for it. The tone needs **`sounddevice`** (now in `requirements.txt`): `winsound` cannot loop from memory at all (CPython refuses `SND_MEMORY | SND_ASYNC`) and is Windows-only, which is a platform gate on an acoustic question.
 
+**The run is recorded and drawn, and the marks are what make it worth
+drawing** (2026-09-09). A rise is a comparison between two moments and the
+readings beside the links are one moment, so the numbers alone can only
+ever show half of it. `recording.py` keeps a row per block - the seconds
+since the run began, and each of the five pitches' levels - and writes
+down every moment somebody pressed one of these links (`160 Hz on`,
+`silence`, `floors forgotten`), which is known exactly here rather than
+inferred from the numbers, because this end is what started the sound.
+When the run stops that becomes a `recording` `GraphView` with those
+moments as dashed rules across it, so the claim of the whole test is a
+shape: one line lifts at the rule carrying its own pitch and the other
+four do not. All five pitches are drawn including any nobody played - a
+flat line under a rule is the evidence that the tone went where it was
+meant to and nowhere else. Built at the end rather than as blocks arrive,
+for two reasons that are both about a graph being a thing somebody reads:
+`GraphView` takes its marks **once**, when it is constructed, so one built
+at the first block would carry none of the presses that came after it, and
+it holds which page you are on, which is worth nothing in a view
+repaginating four times a second. **Still no results file** - the reason
+was never that the levels are not worth keeping, it is that the half of
+the measurement that matters is somebody hearing the tone, and a file
+holding the other half would look like a record of a measurement while
+missing the only part that was ever in doubt. This is a way of looking at
+the run that just happened, not a verdict kept after it.
+
 **`params["audio"]["wired bodies"]` is read by both installation tests**, and it is not a convenience: an unwired analyser input is a floating ADC pin, and a floating pin does not read silence — it reads garbage. A five-channel sweep on a two-channel board reports twenty-one fictional failures with the two real answers buried among them. Add a body to the list the moment its amplifier and its analyser are in; nothing else changes, since the pitch, the pin and the module are already decided for all five.
 
 **How `test_audio_bringup/diagnosis.py` takes a nine-link chain apart.** Not by measuring harder — by arranging for the faults to have different *shapes*. Every ear hears every voice, so a tone heard by nobody is a speaking fault while an ear that hears nothing when another hears everything is a hearing fault; and a tone lands in a *band*, which is frequency rather than geometry, so it survives a bench where everything is 30 cm apart. Two rules keep the report usable: **the most specific finding returns outright and silences the general ones** (a crossed pair makes every pair in the grid read silent, so listing symptoms opens with two walls of "scope this pin" and buries the one sentence that explains them), and **a voice that peaked in any band is never sent to a scope** — it is plainly being generated, and only its band mapping is wrong. Both of those were found by injecting the faults into the simulator and reading what came out, not by reasoning about the code.
