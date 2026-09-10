@@ -131,6 +131,24 @@ class TestGoertzelEar(BaseThread):
     # neither floor nor rise.
     SETTLE = 0.4
 
+    # How long a press sounds for before it stops itself.
+    #
+    # Ten seconds is about forty blocks, thirty-eight of them scored, which
+    # is plenty to see through a gain control still settling - and short
+    # enough to walk all five pitches inside a minute, which matters when
+    # somebody has to stand here and listen to every one of them.
+    #
+    # **Stopping is the half that was missing.** Held tones ran back to
+    # back in the first real run, so a floor was only ever taken before the
+    # first press and after the last: every rise after the first was
+    # measured against a silence from minutes earlier, through a gain
+    # control that had moved in between. A tone that stops leaves silence
+    # behind it, and `_score` retakes the floor from it, so each pitch is
+    # now measured against the room as it was moments before. It also makes
+    # two runs comparable - every window is the same length, so a weaker
+    # reading is a weaker reading and not a shorter press.
+    PLAY_SECONDS = 10.0
+
     def __init__(self, owner, result_folder):
         super().__init__(owner=owner)
 
@@ -164,6 +182,7 @@ class TestGoertzelEar(BaseThread):
         self._greeting = None
         self._outcome = None
         self._playing_since = None
+        self._play_until = None
         self._last_read_at = 0.0
 
     @property
@@ -298,6 +317,7 @@ class TestGoertzelEar(BaseThread):
             played = self._tone.play(hz)
             now = time()
             self._playing_since = now
+            self._play_until = now + self.PLAY_SECONDS
             # Written down here rather than worked out from the numbers
             # later: this end is what started the sound, so the moment is
             # known exactly, and knowing it is what makes the graph an
@@ -306,15 +326,20 @@ class TestGoertzelEar(BaseThread):
             return (
                 f"{hz} Hz sounding out of this computer's speakers "
                 f"(actually {played:.1f} Hz - snapped to a whole number of "
-                "cycles so the loop does not click). Listen for it, and "
-                "watch its row."
+                f"cycles so the loop does not click), for "
+                f"{self.PLAY_SECONDS:.0f} seconds and then quiet again. "
+                "Listen for it, and watch its row."
             )
 
         return play
 
     def _silence(self, request=None):
+        """Stop early. The press that ends a tone before its ten seconds
+        are up, and the one to reach for if the room is not what you
+        expected."""
         self._tone.stop()
         self._playing_since = None
+        self._play_until = None
         self._recording.mark(time(), "silence")
         return "quiet"
 
@@ -352,6 +377,7 @@ class TestGoertzelEar(BaseThread):
         self._recording.start(time())
         self._graph = None
         self._written_to = None
+        self._play_until = None
 
         refusal = self._why_not_open()
         if refusal is not None:
@@ -380,6 +406,13 @@ class TestGoertzelEar(BaseThread):
 
     def loop(self):
         now = time()
+
+        # Before the read interval, not after it: a tone must stop when its
+        # ten seconds are up rather than at the next block, which would
+        # stretch every window by up to a quarter of a second and by a
+        # different amount each time.
+        self._stop_if_played_out(now)
+
         if (now - self._last_read_at) < self.READ_INTERVAL:
             return
         self._last_read_at = now
@@ -399,6 +432,46 @@ class TestGoertzelEar(BaseThread):
         )
         self._recording.add(now, self._levels)
         self._score(now)
+
+    def _border_case(self):
+        """Which pitches sit close enough to light each other up.
+
+        Said where the readings are, because a neighbour lifted by leakage
+        reads exactly like a second tone and there is nothing in its own
+        row to tell the two apart. A bin belongs to the capture, so this is
+        asked of the block in hand rather than answered once.
+        """
+        rate = self._block.sample_rate
+        count = self._block.count
+
+        spilling = protocol.neighbours(rate, count)
+        if not spilling:
+            return "none - every pitch keeps to its own bin in this window"
+
+        return "; ".join(
+            f"{hz} Hz puts {100 * fraction:.0f}% of itself in the {other} Hz "
+            f"bin ({goertzel.bins_apart(hz, other, rate, count)} bin(s) away)"
+            for hz, others in spilling.items()
+            for other, fraction in others
+        )
+
+    def _stop_if_played_out(self, now):
+        """End a tone that has had its ten seconds.
+
+        Marked `<hz> Hz off` rather than `silence`, which is kept for the
+        press: the graph then carries the start and the end of every window
+        by name, and the silence between two pitches is visibly the gap
+        that the next floor is taken from.
+        """
+        if self._play_until is None or now < self._play_until:
+            return
+
+        hz = self._tone.hz
+        self._tone.stop()
+        self._playing_since = None
+        self._play_until = None
+        if hz is not None:
+            self._recording.mark(now, f"{hz} Hz off")
 
     def _score(self, now):
         """File this block's levels as floors, or as a rise, or as neither.
@@ -436,6 +509,7 @@ class TestGoertzelEar(BaseThread):
         # The room must not be left making a noise by a run that has ended.
         self._tone.stop()
         self._playing_since = None
+        self._play_until = None
         self._draw_the_recording()
         self._write_the_recording()
         try:
@@ -567,9 +641,12 @@ class TestGoertzelEar(BaseThread):
         if self._tone.hz is None:
             leaf("sounding", "nothing")
         else:
+            left = (self._play_until or 0.0) - time()
             leaf(
                 "sounding",
-                f"{self._tone.hz} Hz (actually {self._tone.played_hz:.1f} Hz)",
+                f"{self._tone.hz} Hz (actually {self._tone.played_hz:.1f} Hz)"
+                f", {max(0.0, left):.0f}s left of "
+                f"{self.PLAY_SECONDS:.0f}",
             )
 
         if self._block is not None:
@@ -585,6 +662,11 @@ class TestGoertzelEar(BaseThread):
             # pin at all, and an input being clipped.
             leaf("signal span", f"{self._block.span} of 1023 ADC counts")
             leaf("blocks read", self._blocks_read)
+
+            # Said where the readings are, because a neighbour lit by
+            # leakage reads exactly like a second tone and there is
+            # nothing in its own row to tell them apart.
+            leaf("border case", self._border_case())
 
         if len(self._recording):
             recorded = (

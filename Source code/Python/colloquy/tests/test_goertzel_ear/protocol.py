@@ -23,11 +23,55 @@ board used to send a verdict and now sends the evidence.
 """
 from typing import NamedTuple
 
-# The installation's five, which is what the page offers a link for. Not
-# imported from `drivers/audio.py`: this is a bench instrument and can be
-# pointed at any frequency, and the day those five change is not a day
-# this stops meaning anything.
-PITCHES = (160, 400, 1000, 2500, 6250)
+# Five pitches gathered around 1000 Hz, which is not the installation's
+# five and deliberately so. This has always been free to point anywhere -
+# it is a bench instrument, and it does not import `drivers/audio.py` for
+# exactly that reason - and the first real run showed why it should.
+#
+# Spread from 160 Hz to 6250 Hz, most of what it measured was the
+# **speakers**: 160 Hz came back sixteen times weaker than 6250 Hz and
+# block by block it overlapped its own silence, because a laptop driver
+# cannot move air at 160 Hz. That is a fact about the laptop, and this
+# test exists to ask about the microphone. From 750 Hz to 1500 Hz both
+# ends of the room are flat, so the five readings are comparable with each
+# other and a weak one means something.
+#
+# **1000 and 1050 are one bin apart on purpose** - the border case. A bin
+# is `sample_rate / count`, about 37.6 Hz here, so those two are as close
+# as this arrangement can put two tones and still call them separate
+# frequencies. Everything else is five bins clear or more. Playing either
+# of the pair *will* lift the other, and that is the finding rather than a
+# fault: leakage between neighbouring bins is a fixed fraction of the
+# tone, so it is a question about how close two voices may sit, and it is
+# a question only the room can answer. `neighbours()` below is what the
+# page uses to say so before somebody reads it as a second tone.
+PITCHES = (750, 1000, 1050, 1250, 1500)
+
+def neighbours(sample_rate, count):
+    """Which pitches will light each other up, and by how much.
+
+    A dict of pitch to `(other, fraction)` pairs, over `goertzel.LEAK_LIMIT`
+    and worst first; a pitch that spills into nothing is absent.
+
+    **Not "which are close together"**, which is the obvious question and
+    the wrong one - see `goertzel.leakage`. It is asked of the sample rate
+    and block length in hand rather than answered once, because a bin
+    belongs to the capture: the same two frequencies smear into each other
+    in a short window and stand apart in a long one.
+    """
+    from . import goertzel
+
+    found = {}
+    for hz in PITCHES:
+        spill = [
+            (other, goertzel.leakage(hz, other, sample_rate, count))
+            for other in PITCHES
+            if other != hz
+        ]
+        over = [pair for pair in spill if pair[1] >= goertzel.LEAK_LIMIT]
+        if over:
+            found[hz] = tuple(sorted(over, key=lambda pair: -pair[1]))
+    return found
 
 
 class Block(NamedTuple):

@@ -44,19 +44,34 @@ def sine(hz, count=COUNT, sample_rate=SAMPLE_RATE, amplitude=100, offset=512):
 # --- the arithmetic ------------------------------------------------------
 
 
-def test_a_tone_lands_in_its_own_bin_and_not_in_the_others():
+def clear_of(hz):
+    """The pitches this one does not spill into."""
+    spilled_into = {
+        other for other, _fraction in
+        protocol.neighbours(SAMPLE_RATE, COUNT).get(hz, ())
+    }
+    return [
+        other
+        for other in protocol.PITCHES
+        if other != hz and other not in spilled_into
+    ]
+
+
+def test_a_tone_lands_in_its_own_bin_and_not_in_the_ones_clear_of_it():
     """The whole claim of the test, checked against a signal we made.
 
-    The five pitches were chosen so that each is its own bin here; a tone
-    at one of them must lift that bin far above the four it is not.
+    "Not in the others" is not quite the claim any more, and the change is
+    deliberate: 1000 and 1050 Hz are one bin apart on purpose, so a tone at
+    one of them lifts the other. Everything else is far enough away to stay
+    down, which is what a reading is worth anything against.
     """
     levels = goertzel.magnitudes(sine(1000), protocol.PITCHES, SAMPLE_RATE)
 
     # A sine of amplitude 100 reads about 50 in these units, less what
     # scalloping takes: 1000 Hz is not exactly a basis frequency of a
-    # 512-sample window at this rate, so the bin sits 2.5 Hz off it.
+    # 512-sample window at this rate, so the bin sits 14 Hz off it.
     assert 30 < levels[1000] < 55
-    for hz in (160, 400, 2500, 6250):
+    for hz in clear_of(1000):
         assert levels[hz] < levels[1000] / 10
 
 
@@ -98,14 +113,95 @@ def test_the_bin_is_the_nearest_whole_number_of_cycles_in_the_window():
     assert measured != 1000
 
 
-def test_the_bin_is_narrow_enough_to_separate_the_pitches():
-    """512 samples at the rate a Mega's ADC gives is about 37 Hz, and the
-    closest two pitches the piece uses are 160 Hz apart."""
-    width = goertzel.bin_width(SAMPLE_RATE, COUNT)
+def test_the_bin_is_about_thirty_seven_hertz_wide():
+    """512 samples at the rate a Mega's ADC gives. Everything below is a
+    consequence of this one number."""
+    assert 30 < goertzel.bin_width(SAMPLE_RATE, COUNT) < 45
 
-    assert 30 < width < 45
-    closest = min(b - a for a, b in zip(protocol.PITCHES, protocol.PITCHES[1:]))
-    assert closest > width * 3
+
+# --- the border case -----------------------------------------------------
+#
+# How close two tones may sit before the ear stops calling them two. The
+# arithmetic of it is here, measured against signals generated in this
+# file; whether a *room* manages it is what the hardware test is for, which
+# is why the pair is on the page rather than only in these assertions.
+
+
+def measured_leak(hz, into, amplitude=100):
+    """What actually lands in another bin, from a signal made right here.
+
+    The check the analytic `leakage` is worth having beside: one is a
+    formula and the other is a Goertzel over real samples, and they have
+    to agree or the page is warning about the wrong pairs.
+    """
+    samples = sine(hz, amplitude=amplitude)
+    return (
+        goertzel.magnitude(samples, into, SAMPLE_RATE)
+        / goertzel.magnitude(samples, hz, SAMPLE_RATE)
+    )
+
+
+def test_the_leak_formula_agrees_with_a_signal_we_made():
+    """Analytic because the page asks it of every pair on every view, and
+    synthesising a sine to answer would be absurd - but it has to be the
+    same answer."""
+    for hz, into in ((1000, 1050), (1050, 1000), (1000, 750), (1250, 1500)):
+        predicted = goertzel.leakage(hz, into, SAMPLE_RATE, COUNT)
+
+        assert abs(predicted - measured_leak(hz, into)) < 0.015
+
+
+def test_the_offset_from_a_bin_centre_is_what_smears_a_tone():
+    """The finding that shaped all of this, and the reason `leakage` takes
+    two frequencies rather than a distance. A rectangular window is exactly
+    orthogonal at its own basis frequencies, so a tone **on** a bin centre
+    goes nowhere else and one half a bin off goes everywhere."""
+    width = goertzel.bin_width(SAMPLE_RATE, COUNT)
+    centre = 27 * width
+
+    on_centre = measured_leak(centre, centre + 5 * width)
+    half_off = measured_leak(centre + 0.5 * width, centre + 5.5 * width)
+
+    assert on_centre < 0.01
+    assert half_off > 0.05
+    # An order of magnitude between them, at the same separation.
+    assert half_off > on_centre * 10
+
+
+def test_distance_alone_does_not_say_whether_two_pitches_are_clear():
+    """The obvious rule, shown wrong on the pitch list itself: 1000 Hz
+    spills more into a pitch seven bins away than 1050 Hz does into one
+    five bins away, because 1000 sits off a bin centre and 1050 sits on
+    one."""
+    far = goertzel.leakage(1000, 750, SAMPLE_RATE, COUNT)
+    near = goertzel.leakage(1050, 1250, SAMPLE_RATE, COUNT)
+
+    assert goertzel.bins_apart(1000, 750, SAMPLE_RATE, COUNT) > goertzel.bins_apart(
+        1050, 1250, SAMPLE_RATE, COUNT
+    )
+    assert far > near * 5
+
+
+def test_the_border_pair_is_the_one_the_page_warns_about():
+    """The border case has to be pressable, so it lives in the pitch list
+    rather than only in a test - only a room can say whether two tones a
+    bin apart are two tones. Nothing else is over the limit, or an ordinary
+    reading would never be worth anything."""
+    spilling = protocol.neighbours(SAMPLE_RATE, COUNT)
+
+    assert set(spilling) == {1000}
+    assert spilling[1000] == ((1050, pytest.approx(0.273, abs=0.01)),)
+    assert goertzel.bins_apart(1000, 1050, SAMPLE_RATE, COUNT) == 1
+
+
+def test_the_leak_limit_is_the_two_verdict_constants_and_not_a_third():
+    """A tone at LOUD_TONE puts exactly HEARD_RATIO into a bin taking
+    LEAK_LIMIT of it - which is what stops the warning and the verdict
+    drifting apart when either is retuned."""
+    spill = goertzel.LEAK_LIMIT * goertzel.LOUD_TONE * goertzel.QUIET_FLOOR
+
+    assert goertzel.is_heard(spill, floor=goertzel.QUIET_FLOOR)
+    assert goertzel.LEAK_LIMIT == goertzel.HEARD_RATIO / goertzel.LOUD_TONE
 
 
 def test_the_rise_is_what_decides_and_not_the_level():
@@ -186,8 +282,15 @@ def test_the_loudest_silence_of_that_run_is_not_heard():
     assert LOUDEST_SILENCE / goertzel.QUIET_FLOOR < goertzel.HEARD_RATIO
 
 
-def test_the_five_pitches_are_the_installations():
-    assert protocol.PITCHES == (160, 400, 1000, 2500, 6250)
+def test_the_pitches_are_gathered_around_a_kilohertz():
+    """Not the installation's five any more, and never imported from
+    `drivers/audio.py`: this is a bench instrument. Spread from 160 Hz to
+    6250 Hz most of what it measured was the laptop's speakers - 160 Hz
+    came back sixteen times weaker than 6250 and overlapped its own
+    silence. Between 750 and 1500 Hz both ends of the room are flat, so a
+    weak reading is a fact about the microphone."""
+    assert protocol.PITCHES == (750, 1000, 1050, 1250, 1500)
+    assert all(750 <= hz <= 1500 for hz in protocol.PITCHES)
 
 
 # --- reading what the board sends ----------------------------------------
@@ -444,7 +547,7 @@ def test_every_pitch_is_a_line_even_the_ones_nobody_played():
 
     assert list(lines) == [f"{hz} Hz" for hz in protocol.PITCHES]
     assert [value for _, value in lines["1000 Hz"]][-1] == 30.0
-    assert set(value for _, value in lines["160 Hz"]) == {1.0}
+    assert set(value for _, value in lines["1500 Hz"]) == {1.0}
 
 
 def test_a_line_is_a_view_of_the_two_lists_and_not_a_copy_of_them():

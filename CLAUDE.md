@@ -391,6 +391,52 @@ floor is a bigger number to be a multiple of - and a verdict here was
 never the measurement anyway: somebody hearing the tone is, which is why
 this is a manual test.
 
+**The pitches moved to sit around a kilohertz, and one pair is a border
+case on purpose** (2026-09-10). `PITCHES` is `(750, 1000, 1050, 1250,
+1500)`, which is not the installation's five and never was obliged to be -
+this does not import `drivers/audio.py`, because it is a bench instrument
+and can be pointed anywhere. Spread from 160 Hz to 6250 Hz, most of what
+it measured was the **laptop's speakers**: 160 Hz came back sixteen times
+weaker than 6250 Hz and block by block overlapped its own silence, because
+a small driver cannot move air at 160 Hz. Between 750 and 1500 Hz both
+ends of the room are flat, so the five readings are comparable with each
+other and a weak one is a fact about the microphone. **1000 and 1050 are
+one bin apart** - a bin is `sample_rate / count`, about 37.6 Hz - so a
+press on either lifts the other, and that is the finding rather than a
+fault. It lives in the pitch list rather than only in a unit test because
+only a room can say whether two tones that close are two tones.
+
+**What the border case turned out to be about is not distance.**
+`goertzel.leakage(hz, into_hz, ...)` is the Dirichlet kernel of the
+window, and the measurement it encodes is that a rectangular window is
+orthogonal only at its own basis frequencies: a tone sitting **on** a bin
+centre puts nothing anywhere else, and one half a bin off smears into
+every bin there is. So 1000 Hz, which lands 0.38 of a bin below centre
+here, spills 5.7% into a pitch **seven** bins away, while 1050 Hz, which
+lands almost exactly on a centre, spills 0.9% into one five bins away.
+Counting bins is the obvious rule and it is wrong; the offset is what
+decides. The page's `border case` reading is computed from this on the
+block in hand - a bin belongs to the capture, not to the pair - and
+`LEAK_LIMIT` falls out of the two verdict constants rather than being a
+third (`HEARD_RATIO / LOUD_TONE`, so a tone at the loudest measured puts
+exactly the heard threshold into a bin at the limit). Analytic because the
+page asks it of every pair on every view; `pytest_tests` checks it against
+a generated signal, where the two agree to about a point.
+
+**A press sounds for ten seconds and then stops itself**
+(`PLAY_SECONDS`), which was the half that was missing. Held tones ran back
+to back in the first real run, so a floor was taken only before the first
+press and after the last: every rise after the first was measured against
+a silence from minutes earlier, through a gain control that had moved in
+between. A tone that stops leaves silence behind it and `_score` retakes
+the floor from it, so each pitch is measured against the room as it was
+moments before. It also makes two runs comparable - every window is the
+same length, so a weaker reading is a weaker reading and not a shorter
+press. The timer is checked at the top of `loop()`, before the read
+interval, or a window would stretch by up to a quarter of a second and by
+a different amount each time; the end is marked `<hz> Hz off`, with
+`silence` kept for the press that stops one early.
+
 **It moved to `manual tests` in the same change, and the reason is the room.** The old loop was closed on one board, a speaker and a microphone six inches apart with nothing else plugged in — walk away, read the CSV. This one is open across a room with a volume knob in it, and a muted output, a wrong default device or a volume at nothing all read exactly like a deaf microphone. Somebody hearing the tone is the measurement, and no file holds it — which is why it kept nothing at all until 2026-09-10, and why the file it keeps now says on every run what is not in it (see below); `is_bench` is gone (it is one Mega on one lead and it travels; the question is which lead, `test_audio_at_12v`'s lesson again). Still **no stand-in**: one that answered "yes" is the precise false confidence it exists against. **`Source code/Arduino/goertzel_ear/` is kept** and is not dead code — it answers the *other* question, whether an AVR can run five bins in time, which is `one board per body` §4 and is a fact about a processor. A green run of the node is not evidence for it. The tone needs **`sounddevice`** (now in `requirements.txt`): `winsound` cannot loop from memory at all (CPython refuses `SND_MEMORY | SND_ASYNC`) and is Windows-only, which is a platform gate on an acoustic question.
 
 **The run is recorded and drawn, and the marks are what make it worth
@@ -398,7 +444,7 @@ drawing** (2026-09-09). A rise is a comparison between two moments and the
 readings beside the links are one moment, so the numbers alone can only
 ever show half of it. `recording.py` keeps a row per block - the seconds
 since the run began, and each of the five pitches' levels - and writes
-down every moment somebody pressed one of these links (`160 Hz on`,
+down every moment somebody pressed one of these links (`1000 Hz on`,
 `silence`, `floors forgotten`), which is known exactly here rather than
 inferred from the numbers, because this end is what started the sound.
 When the run stops that becomes a `recording` `GraphView` with those
@@ -422,7 +468,7 @@ somebody hearing the tone - is not a thing a file can hold; that is still
 true, and what changed is that there is now something worth filing. While
 a run held one best-rise number per pitch there was nothing to compare;
 a few hundred rows with the presses marked on them answer the questions
-actually asked *between* runs - is the 6250 Hz bin always the weak one,
+actually asked *between* runs - is the 1500 Hz bin always the weak one,
 did moving the microphone help, is it worse than last week - and none of
 those can be answered from the one run that happens to be in memory,
 which is all there ever was (`setup()` clears the recording, and a restart

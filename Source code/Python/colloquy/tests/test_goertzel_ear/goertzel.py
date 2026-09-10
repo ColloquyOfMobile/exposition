@@ -36,7 +36,7 @@ a microphone, and this is a room. A level means the same thing in both;
 what a level has to reach to be believed is a property of the
 arrangement, not of the arithmetic.
 """
-from math import cos, pi, sqrt
+from math import cos, pi, sin, sqrt
 from typing import Iterable, Sequence
 
 # How much a bin has to rise over its own silence before the tone is
@@ -74,6 +74,20 @@ HEARD_RATIO = 8.0
 # another measurement.
 QUIET_FLOOR = 0.01
 
+# The loudest a tone has actually been measured at, as a multiple of its
+# own floor: 160x, at 6250 Hz, in the run of 2026-09-10. Rounded down to
+# 120 because the number is wanted as "about how loud a tone gets", and it
+# is used for one thing - deciding how much of a tone may spill into a
+# neighbouring bin before that neighbour reads as a tone of its own.
+LOUD_TONE = 120.0
+
+# So: a pitch that takes this fraction of another's tone is a pitch that
+# will be called heard when only its neighbour was played. It falls out of
+# the two constants above rather than being chosen - at 8/120 a tone at
+# LOUD_TONE puts exactly HEARD_RATIO into it - which is what keeps the
+# warning and the verdict from drifting apart.
+LEAK_LIMIT = HEARD_RATIO / LOUD_TONE
+
 
 def bin_index(hz: float, sample_rate: float, count: int) -> int:
     """Which basis frequency of a `count`-sample window is nearest `hz`.
@@ -108,6 +122,70 @@ def bin_width(sample_rate: float, count: int) -> float:
     if count <= 0:
         return 0.0
     return sample_rate / count
+
+
+def bins_apart(first: float, second: float, sample_rate: float,
+               count: int) -> int:
+    """How many bins separate two pitches in a window this long.
+
+    The number that says whether two tones can be told apart, and it is a
+    property of the *capture* rather than of the pair: the same two
+    frequencies are neighbours in a short window and separate in a long
+    one. A rectangular window's sidelobes fall off slowly - a tone one bin
+    away still puts about a quarter of itself in its neighbour, and even
+    eight bins away it leaves a few percent - so this is a sliding scale
+    and not a threshold. `pytest_tests` measures the whole curve against a
+    generated signal.
+    """
+    return abs(
+        bin_index(first, sample_rate, count)
+        - bin_index(second, sample_rate, count)
+    )
+
+
+def leakage(hz: float, into_hz: float, sample_rate: float,
+            count: int) -> float:
+    """How much of a tone at `hz` shows up in the bin `into_hz` belongs to.
+
+    A fraction of the tone's own bin, so 0.27 means a quarter of it lands
+    somewhere it was not played.
+
+    **This, not the distance between them, is what decides whether two
+    pitches can be told apart** - which is the opposite of what counting
+    bins suggests, and worth stating because counting bins is the obvious
+    thing to do. A rectangular window is exactly orthogonal only at its own
+    basis frequencies: a tone sitting **on** a bin centre puts nothing
+    anywhere else, and one sitting half a bin off smears into every bin
+    there is. So 1000 Hz, which lands 0.38 of a bin below centre here, puts
+    5.7% into a pitch seven bins away, while 1050 Hz, which lands almost
+    exactly on one, puts 0.9% into a pitch five bins away. Distance barely
+    enters into it; the offset does.
+
+    It is the Dirichlet kernel of that window - `sin(pi d) / sin(pi d / N)`
+    at a distance `d` in bins - rather than a measurement, because the page
+    asks it of every pair on every view and synthesising a sine to find out
+    would be absurd. `pytest_tests` checks it against a generated signal,
+    where it agrees to about a point.
+    """
+    if sample_rate <= 0 or count <= 0:
+        return 0.0
+
+    exact = count * hz / sample_rate
+    own = round(exact)
+    other = bin_index(into_hz, sample_rate, count)
+    if other == own:
+        return 1.0
+
+    def response(index: int) -> float:
+        distance = exact - index
+        if abs(distance) < 1e-12:
+            return float(count)
+        return abs(sin(pi * distance)) / abs(sin(pi * distance / count))
+
+    strength = response(own)
+    if strength <= 0.0:
+        return 0.0
+    return response(other) / strength
 
 
 def magnitude(samples: Sequence[int], hz: float, sample_rate: float) -> float:
