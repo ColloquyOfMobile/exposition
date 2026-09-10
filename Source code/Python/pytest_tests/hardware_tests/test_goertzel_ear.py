@@ -25,6 +25,8 @@ below are its own output format verbatim.
 from math import pi, sin
 from types import SimpleNamespace
 
+import pytest
+
 from colloquy.tests.test_goertzel_ear import goertzel, protocol, tone
 
 SAMPLE_RATE = 19230.8
@@ -108,10 +110,80 @@ def test_the_bin_is_narrow_enough_to_separate_the_pitches():
 
 def test_the_rise_is_what_decides_and_not_the_level():
     """A MAX9814's gain control makes the absolute level meaningless, so
-    a loud floor with a louder tone over it is heard and a quiet one that
-    did not move is not."""
-    assert goertzel.is_heard(level=48.0, floor=40.0)
-    assert not goertzel.is_heard(level=48.0, floor=47.0)
+    what decides is the rise over this bin's own silence a moment ago -
+    and as a multiple of it, not a difference from it."""
+    assert goertzel.is_heard(level=1.0, floor=0.1)
+    assert not goertzel.is_heard(level=1.0, floor=0.5)
+
+
+def test_a_difference_that_is_not_a_multiple_is_not_heard():
+    """The change of 2026-09-10. A rise of 8 on a floor of 40 passed the
+    old absolute margin of 4 and is a 20% change: on an AGC'd microphone
+    that is the room getting slightly louder, not a tone arriving."""
+    assert not goertzel.is_heard(level=48.0, floor=40.0)
+
+
+def test_a_silence_near_zero_cannot_be_divided_into_a_pass():
+    """A floor of nothing makes any multiple reachable by noise, so the
+    floor is clamped up to QUIET_FLOOR before the ratio is taken. 0.004
+    is eight times a floor of 0.0005 and is still silence."""
+    assert not goertzel.is_heard(level=0.004, floor=0.0005)
+    assert goertzel.is_heard(level=goertzel.QUIET_FLOOR * goertzel.HEARD_RATIO,
+                             floor=0.0005)
+
+
+def test_the_page_shows_the_number_the_verdict_was_made_on():
+    """A difference printed beside a ratio verdict is an invitation to
+    argue with the answer using the wrong arithmetic."""
+    assert goertzel.times_its_floor(level=1.2, floor=0.01) == pytest.approx(120.0)
+    # Clamped, so the printed multiple is the one that was tested.
+    assert goertzel.times_its_floor(level=1.2, floor=0.0001) == pytest.approx(120.0)
+
+
+# The first real run of the whole chain - this computer's speakers, a room,
+# the microphone, the Mega, the Goertzel here. Every tone landed in its own
+# bin and nowhere else, 0.3-0.5s after its own mark, and the absolute margin
+# of 4.0 called all five unheard. Best level and the floor it was measured
+# against, straight out of 2026_09_10_11h_52min_31s.csv.
+MEASURED = {
+    160: (0.0055, 0.1198),
+    400: (0.0109, 0.4061),
+    1000: (0.0045, 1.2038),
+    2500: (0.0038, 1.2683),
+    6250: (0.0120, 1.9237),
+}
+
+# The loudest single reading of any bin during the 44 silent blocks of
+# that run - the noise the threshold has to stay above.
+LOUDEST_SILENCE = 0.0635
+
+
+@pytest.mark.parametrize("hz", sorted(MEASURED))
+def test_every_tone_of_the_first_real_run_is_heard(hz):
+    """The evidence the threshold was set from, kept where it can fail.
+
+    A change to HEARD_RATIO or QUIET_FLOOR that stops calling these heard
+    is a change that would have failed on a run somebody stood through and
+    watched work.
+    """
+    floor, level = MEASURED[hz]
+
+    assert goertzel.is_heard(level, floor)
+
+
+def test_the_old_absolute_margin_would_have_failed_every_one_of_them():
+    """Why it changed at all: the largest rise in that run was 1.9 where
+    an absolute 4.0 was wanted, so a working chain reported five failures.
+    Six inches from a speaker is not a room."""
+    assert max(level - floor for floor, level in MEASURED.values()) < 4.0
+
+
+def test_the_loudest_silence_of_that_run_is_not_heard():
+    """The other side of it. The threshold has to sit above the room as
+    well as below the tone, and in that run it does with the nearest real
+    tone half as far again above it as the worst noise is below."""
+    assert not goertzel.is_heard(LOUDEST_SILENCE, floor=0.0)
+    assert LOUDEST_SILENCE / goertzel.QUIET_FLOOR < goertzel.HEARD_RATIO
 
 
 def test_the_five_pitches_are_the_installations():
@@ -176,9 +248,18 @@ def test_fields_reads_name_value_pairs():
 
 
 def readings(*specs):
+    """One Reading per (hz, multiple of its floor).
+
+    A floor of 1.0, well clear of QUIET_FLOOR, so the multiple asked for
+    is the multiple tested - and judged by `is_heard` rather than by a
+    number restated here, which is what let this helper go on believing
+    in the absolute margin after it was gone.
+    """
     return [
-        protocol.Reading(hz, 0.0, 1.0, 1.0 + rise, rise >= 4.0, SAMPLE_RATE)
-        for hz, rise in specs
+        protocol.Reading(
+            hz, 0.0, 1.0, times, goertzel.is_heard(times, 1.0), SAMPLE_RATE
+        )
+        for hz, times in specs
     ]
 
 
@@ -189,7 +270,7 @@ def test_a_clean_walk_names_the_weakest():
 
     assert "all 3 heard" in summary
     assert "1000 Hz" in summary
-    assert "+9.0" in summary
+    assert "x9.0" in summary
 
 
 def test_a_partial_walk_names_what_was_missing():

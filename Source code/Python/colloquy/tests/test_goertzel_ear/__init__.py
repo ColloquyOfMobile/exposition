@@ -623,9 +623,11 @@ class TestGoertzelEar(BaseThread):
             else:
                 best_floor, best_level = best
                 heard = goertzel.is_heard(best_level, best_floor)
+                # The multiple rather than the difference, because the
+                # multiple is what the verdict was made on.
                 parts.append(
-                    f"best rise +{best_level - best_floor:.2f} - "
-                    f"{'heard' if heard else 'NOT heard'}"
+                    f"best x{goertzel.times_its_floor(best_level, best_floor):.1f}"
+                    f" its floor - {'heard' if heard else 'NOT heard'}"
                 )
             leaf(f"{hz} Hz", ", ".join(parts))
 

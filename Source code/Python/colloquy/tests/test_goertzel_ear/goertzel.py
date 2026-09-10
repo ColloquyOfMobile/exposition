@@ -27,14 +27,52 @@ comparable with a level printed by the other. That is deliberate: the
 board's numbers are in `HARDWARE_SETUP.md` and in this repository's
 history, and a rewrite that quietly rescaled them would make every one of
 them a lie.
+
+**The two now judge differently, and the levels are why they still
+agree.** The sketch calls a tone heard on an absolute rise of 4.0; this
+calls it heard on a *multiple* of its own silence (see `is_heard`). That
+is not drift - the sketch is a closed loop with a speaker six inches from
+a microphone, and this is a room. A level means the same thing in both;
+what a level has to reach to be believed is a property of the
+arrangement, not of the arithmetic.
 """
 from math import cos, pi, sqrt
 from typing import Iterable, Sequence
 
 # How much a bin has to rise over its own silence before the tone is
-# called heard. Blunt on purpose, and the same number the board uses, in
-# the same units - see the module docstring on why the two scales match.
-HEARD_MARGIN = 4.0
+# called heard, as a **multiple** of that silence rather than a difference
+# from it.
+#
+# It was an absolute 4.0, carried over from the board, and on the first
+# real run across a room it called every one of five plainly audible tones
+# unheard: the loudest rise measured was 1.9 where 4.0 was wanted
+# (2026_09_10_11h_52min_31s, still in `local/test results/`). Nothing else
+# in that run was out of place - each tone landed in its own bin and
+# nowhere else, 0.3 to 0.5s after its own mark - so the threshold was the
+# whole of the fault. Six inches from a speaker is not a room, and the
+# absolute number was a fact about the first arrangement being read as a
+# fact about the second.
+#
+# A multiple is also the right shape for the question. The MAX9814's gain
+# control moves the whole scale, and the floor differed by three times
+# between pitches in that one run, so "louder than the room" is a ratio
+# and never was a difference. In that run the five tones reached 12x to
+# 160x their own floors, and the loudest silent block reached 6.3x, so 8
+# sits between the two with the nearest real tone half as far again above
+# it as the worst noise is below.
+HEARD_RATIO = 8.0
+
+# A silence quieter than this is not a reference worth dividing by: a
+# floor near zero makes any multiple reachable by noise alone. So the
+# floor is clamped up to it before the ratio is taken.
+#
+# 0.01 is the **median** silent reading of that same run (220 readings
+# over 44 silent blocks: 0.0005 low, 0.0107 median, 0.0635 high). It is
+# therefore a description of one measured room on one microphone, not a
+# figure with a datasheet behind it - the distinction `SUPPLY_SETUP.md`
+# was written the hard way. Raising it is a deliberate press against
+# another measurement.
+QUIET_FLOOR = 0.01
 
 
 def bin_index(hz: float, sample_rate: float, count: int) -> int:
@@ -118,12 +156,39 @@ def magnitudes(
     return {hz: magnitude(samples, hz, sample_rate) for hz in pitches}
 
 
-def is_heard(level: float, floor: float, margin: float = HEARD_MARGIN) -> bool:
+def effective_floor(floor: float, quiet_floor: float = QUIET_FLOOR) -> float:
+    """The silence a rise is measured against, never quieter than
+    `quiet_floor` - see that constant on why a near-zero one cannot be
+    divided by."""
+    return max(floor, quiet_floor)
+
+
+def times_its_floor(level: float, floor: float,
+                    quiet_floor: float = QUIET_FLOOR) -> float:
+    """How many times its own silence this bin is reading.
+
+    The number the verdict is made on, so it is the number the page shows:
+    a difference beside a ratio verdict would be an invitation to argue
+    with the answer using the wrong arithmetic.
+    """
+    return level / effective_floor(floor, quiet_floor)
+
+
+def is_heard(level: float, floor: float, ratio: float = HEARD_RATIO,
+             quiet_floor: float = QUIET_FLOOR) -> bool:
     """Did this bin rise over its own silence by enough to believe?
 
-    The rise is the only number worth believing. A MAX9814 has automatic
-    gain control, so its absolute level says nothing; what it can say is
-    that this frequency is louder than it was a moment ago, at a gain
-    that has not had time to move.
+    The rise is the only number worth believing, and it is a *multiple*.
+    A MAX9814 has automatic gain control, so an absolute level says
+    nothing; what it can say is that this frequency is some number of
+    times louder than it was a moment ago, at a gain that has not had time
+    to move.
+
+    **Where this is weakest is a loud room**, and it is worth knowing
+    before trusting a "not heard": a noisy floor is a bigger number to be
+    a multiple of, so the same tone reaches a smaller ratio. The run this
+    was set from was a quiet one. A verdict here is never the measurement
+    anyway - somebody hearing the tone is, which is why this is a manual
+    test.
     """
-    return (level - floor) >= margin
+    return level >= effective_floor(floor, quiet_floor) * ratio

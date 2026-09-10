@@ -364,6 +364,33 @@ Both B and C leave `microphone_plotter` on the installation's Mega, and until fi
 
 **`test_goertzel_ear` is the sixth, it has no analyser chip in it, and as of 2026-09-09 it is split across three places** — the tone comes out of **this computer's speakers**, the samples come from a **Mega that only samples** (`Source code/Arduino/microphone_sampler/`, `A0` and a ground, nothing else), and the **Goertzel runs in Python** (`tests/test_goertzel_ear/goertzel.py`, which is on mypy's `files`). It was one board doing all three; moving two of them off it is not tidying. A sound card makes a *sine*, where a compare output can only toggle — and a square's third harmonic at 6250 Hz folds back off an unfiltered 19.2 kSPS ADC onto ~480 Hz, which is another of the five bins, so a tone would appear at a pitch nobody played (`tone.py`; `one board per body`'s "a square wave suits it better" is about a body's *amplifier* and reaches the opposite conclusion for reasons that do not apply here). One capture is measured at **all five pitches at once**, so the five readings are of the same instant. And the arithmetic can finally be checked — against a signal generated in a unit test, which it never could on an AVR.
 
+**A tone is heard on a *multiple* of its own silence, not on a difference
+from it** (2026-09-10, `goertzel.HEARD_RATIO` = 8, clamped by
+`QUIET_FLOOR` = 0.01). The first real run of the whole chain across a room
+called five plainly audible tones unheard: every one landed in its own bin
+and nowhere else, 0.3-0.5s after its own mark, and the largest rise
+measured was 1.9 where the absolute margin carried over from the board
+wanted 4.0. Six inches from a speaker is not a room, and that number was a
+fact about the first arrangement being read as a fact about the second -
+`SUPPLY_SETUP.md`'s lesson in a cheaper place. A multiple is also the
+right shape for the question: the MAX9814's gain control moves the whole
+scale, and in that one run the floor differed by three times between
+pitches, so "louder than the room" is a ratio and never was a difference.
+The five tones reached 12x to 160x their floors and the loudest silent
+block reached 6.3x, so 8 sits between them. The clamp is the median silent
+reading of that run and is a description of one measured room on one
+microphone, not a datasheet figure. **The sketch still judges on an
+absolute 4.0 and that is not drift** - it is a closed loop with the
+speaker six inches from the microphone; a level means the same thing in
+both, and what a level must reach to be believed is a property of the
+arrangement. The run itself is pinned in
+`pytest_tests/hardware_tests/test_goertzel_ear.py`, so a later change to
+either constant has to fail against a run somebody stood through and
+watched work. **Where the ratio is weakest is a loud room** - a noisy
+floor is a bigger number to be a multiple of - and a verdict here was
+never the measurement anyway: somebody hearing the tone is, which is why
+this is a manual test.
+
 **It moved to `manual tests` in the same change, and the reason is the room.** The old loop was closed on one board, a speaker and a microphone six inches apart with nothing else plugged in — walk away, read the CSV. This one is open across a room with a volume knob in it, and a muted output, a wrong default device or a volume at nothing all read exactly like a deaf microphone. Somebody hearing the tone is the measurement, and no file holds it — which is why it kept nothing at all until 2026-09-10, and why the file it keeps now says on every run what is not in it (see below); `is_bench` is gone (it is one Mega on one lead and it travels; the question is which lead, `test_audio_at_12v`'s lesson again). Still **no stand-in**: one that answered "yes" is the precise false confidence it exists against. **`Source code/Arduino/goertzel_ear/` is kept** and is not dead code — it answers the *other* question, whether an AVR can run five bins in time, which is `one board per body` §4 and is a fact about a processor. A green run of the node is not evidence for it. The tone needs **`sounddevice`** (now in `requirements.txt`): `winsound` cannot loop from memory at all (CPython refuses `SND_MEMORY | SND_ASYNC`) and is Windows-only, which is a platform gate on an acoustic question.
 
 **The run is recorded and drawn, and the marks are what make it worth

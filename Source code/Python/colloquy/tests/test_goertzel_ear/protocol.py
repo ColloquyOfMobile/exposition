@@ -124,7 +124,17 @@ class Reading(NamedTuple):
 
     @property
     def rise(self) -> float:
+        """The bare difference. Kept because it is what a level over a
+        level *is*, and not what the verdict is made on - see `times`."""
         return self.level - self.floor
+
+    @property
+    def times(self) -> float:
+        """How many times its own silence this bin reached, which is what
+        `goertzel.is_heard` decides on."""
+        from . import goertzel
+
+        return goertzel.times_its_floor(self.level, self.floor)
 
     @property
     def verdict(self) -> str:
@@ -147,10 +157,10 @@ def summarise(readings):
     if not heard:
         return f"nothing heard at any of the {len(readings)} pitches"
     if len(heard) == len(readings):
-        weakest = min(readings, key=lambda r: r.rise)
+        weakest = min(readings, key=lambda r: r.times)
         return (
             f"all {len(readings)} heard - weakest {weakest.hz} Hz "
-            f"at +{weakest.rise:.1f}"
+            f"at x{weakest.times:.1f} its floor"
         )
 
     missing = ", ".join(f"{r.hz} Hz" for r in readings if not r.heard)
