@@ -23,7 +23,7 @@ styles this page loads can change without touching the installation's.
 
 from email.utils import formatdate
 from yattag import Doc, indent
-from urllib.parse import unquote, parse_qs
+from urllib.parse import quote, unquote, parse_qs
 from pathlib import Path
 from colloquy.base import Base
 from colloquy.ui.tree import CommandFailed
@@ -120,6 +120,9 @@ class MockWSGI(Base):
         if key == "shutdown":
             return self._parse_shutdown(*leftovers)
 
+        if key == "virtual-panel":
+            return self._parse_virtual_panel(*leftovers)
+
         if key == "restart":
             return self._parse_restart(*leftovers)
 
@@ -133,6 +136,49 @@ class MockWSGI(Base):
         status = "404 Not found"
         headers = [("Content-Type", content_type)]
         return status, headers, b""
+
+    def _parse_virtual_panel(self, *args):
+        """Put the simulated-state column away, or bring it back.
+
+        The installation's own (`server2/wsgi2.py`) carries the reasoning:
+        the panel is page furniture drawn beside every node, so its
+        control cannot be a command on any one of them, and the answer is
+        a 303 back to the page it was pressed on.
+
+        Kept in step here although `ui/mock.py` answers `is_simulated`
+        False and so draws no panel at all - the fork carries the panel's
+        markup for the day something simulated is put behind it, and a
+        route missing from one of the two is exactly the drift the pair
+        are checked against.
+        """
+        if not self.colloquy.is_simulated:
+            return self._parse_not_found(
+                ("virtual-panel",) + args,
+                NotImplementedError("nothing is simulated here"),
+            )
+
+        if not args:
+            return self._parse_not_found(
+                ("virtual-panel",),
+                NotImplementedError("virtual-panel expects show or hide"),
+            )
+
+        action, *back = args
+        if action == "hide":
+            self.colloquy.virtual_drivers.close_panel()
+        elif action == "show":
+            self.colloquy.virtual_drivers.open_panel()
+        else:
+            return self._parse_not_found(
+                ("virtual-panel",) + args,
+                NotImplementedError(f"{action!r} is not show or hide"),
+            )
+
+        # Quoted, unlike the hrefs on the page: a node name with a
+        # space in it ("main pcb") is fine in a link the browser encodes
+        # for us and malformed in a header value.
+        location = quote("/" + "/".join(back or (self._root.name,)), safe="/")
+        return "303 See Other", [("Location", location)], b""
 
     def _parse_static(self, root, *parts):
         """Serve a file from a static asset root (static/) as a
@@ -272,6 +318,13 @@ class MockWSGI(Base):
                         with tag("a", href=f"/{path.as_posix()}"):
                             text("refresh")
 
+                    # Beside the other page furniture rather than on the
+                    # panel, because it has to be pressable when the
+                    # panel is not there to carry it.
+                    if self.colloquy.is_simulated:
+                        with tag("div"):
+                            doc.asis(self._html_virtual_panel_link())
+
                 doc.asis(self._html_navigation(to_render=to_render))
 
                 with tag("div", name="thread count"):
@@ -286,7 +339,10 @@ class MockWSGI(Base):
                     with tag("div", name="commands"):
                         doc.asis(self._html_recursion(obj=to_render))
 
-                    if self.colloquy.is_simulated:
+                    if (
+                        self.colloquy.is_simulated
+                        and self.colloquy.virtual_drivers.panel_is_open
+                    ):
                         doc.asis(self._html_virtual_panel())
 
                 with tag("script", src="/static/svg_zoom.js"):
@@ -319,6 +375,25 @@ class MockWSGI(Base):
                             text(key)
                         with tag("div"):
                             text(str(value))
+
+        return doc.getvalue()
+
+    def _html_virtual_panel_link(self):
+        """The one control: hide it, or bring it back.
+
+        The href carries the page it was pressed on, so it lands back
+        here. `_base_path` is the focus's own path rather than whatever
+        /call/... led here, exactly as `refresh` above, so putting the
+        panel away never re-runs a command.
+        """
+        doc, tag, text = Doc().tagtext()
+
+        is_open = self.colloquy.virtual_drivers.panel_is_open
+        action = "hide" if is_open else "show"
+        back = (self._root / self._base_path).as_posix()
+
+        with tag("a", href=f"/virtual-panel/{action}/{back}"):
+            text(f"{action} virtual drivers")
 
         return doc.getvalue()
 

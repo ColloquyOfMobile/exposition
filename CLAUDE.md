@@ -112,6 +112,34 @@ The limit is unchanged and load-bearing: `NotImplementedError` is still the rout
 
 The root application declares what the page may offer it: `is_simulated` gates the `virtual drivers` panel, and the same test gates the **code documentation** node — `colloquy/CODE_DOCUMENTATION.md`, rendered and editable straight from the front page, but only off the installation's own machine. `colloquy/ui/mock.py` answers False, so neither is drawn there.
 
+**The panel can be put away, and its control is a route rather than a
+tree command** (2026-09-10). It is 38ch down the side of *every* page and
+was permanently there: `is_simulated` decided whether it existed and
+nothing decided whether it was in the way. `VirtualDrivers.panel_is_open`
+is that state, with `open_panel`/`close_panel`, and it is deliberately
+**not** `Base._is_opened` - the node's own open and shut is its listing in
+the tree, and sharing one flag would mean opening the node moved a column
+of the page while putting the column away closed a node somebody was
+reading. In memory, like every other open and shut in this tree.
+
+`/virtual-panel/<show|hide>/<the app path to come back to>` is the route,
+answering a 303 to that path. It cannot be a command in the tree because
+the walk answers with a re-render of the node the command hangs on, so
+the link could only have lived on one node's page - and this one is drawn
+beside every page and has to come back to the one it was pressed on. It
+is page furniture, and it sits with `refresh` and `restart` in
+`server commands` rather than on the panel, because it has to be
+pressable when the panel is not there to carry it. Two verbs rather than
+one toggle, so a stale link does what it says. Gated on `is_simulated`
+like the panel, and it matters more on the route: `Colloquy.virtual_drivers`
+*builds* the simulation on first access, so an installation answering it
+at all would construct nine fake servos to be told about a column it
+never draws. The `Location` header is percent-encoded, unlike the hrefs
+the page emits - a space is fine in a link the browser encodes and
+malformed in a header value. Made in **both** UIs, and
+`pytest_tests/test_virtual_panel.py` runs the route and the link through
+each.
+
 Markdown documents on the page share one node, `colloquy/markdown_document.py`: a rendered read view, `edit` for a textarea, `save` to write it back. There are two, and where each **hangs** is the whole of what separates them. `CodeDocumentation` is on the root and gated as above. `HardwareSetup` (`colloquy/tests/test_audio_subsystem/HARDWARE_SETUP.md`) hangs off the audio bench test and is **not** gated — it says how to wire the one thing that test measures, and a bench is exactly where it is wanted. Its photographs and its schematic are served from `server2/static/hardware/`; both UIs know image content types, and `pytest_tests/test_documents.py` walks every image link in it to check the file is there and that the server will serve rather than download it. **The four board photographs are rendered page regions of Thomas's PDF, not the images embedded in it** — his pin labels (`IN: 160 400 1K 2K5 6K25`, `GND / VDD / AOUT`, `ROUT+ / ROUT-`) are text drawn *over* the photographs, so pulling the embedded raster gets the board and loses the one thing that says which pin is which. `extract_hardware_photos.py` at the repo root regenerates them (needs `pip install pymupdf`, a dev dependency of that script alone) and carries the clip boxes.
 
 ## Scenarios (`colloquy/scenarios/`, `colloquy/scenario_browser/`)
