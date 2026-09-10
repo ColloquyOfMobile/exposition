@@ -25,13 +25,33 @@ dashed rule with a name on it. What you then look for is one line lifting
 at one rule and the other four not, which is the claim of the whole test
 in a shape an eye reads in a second.
 
-**Nothing is written to disk, and that is the same decision as before.**
-This test has no results file because the half of it that matters -
-somebody hearing the tone come out of the speakers - is not a thing a
-file can hold, and a file holding the other half would look like a
-record of the measurement while missing the only part that was ever in
-doubt. A graph beside the live readings is a way of looking at the run
-that is going on, not a verdict kept after it.
+**A run is written down, and what a file cannot hold is still not in
+it.** This test kept nothing for a while, on the grounds that the half of
+the measurement that matters - somebody hearing the tone come out of the
+speakers - is not a thing a file can hold. That is still true and the
+page still says so; what changed is that there is now something worth
+filing. While a run held one best-rise number per pitch there was nothing
+to compare; a few hundred rows with the presses marked on them answer the
+questions actually asked between runs - is the 6250 Hz bin always the
+weak one, did moving the microphone help, is it worse than it was last
+week - and none of those can be answered from the one run that happens to
+be in memory. Same arrangement as `test_reinforcement`'s analyser
+columns: a measurement is worth recording before it is worth acting on.
+
+**The file's shape.** One row per block - the seconds, then a level per
+pitch - and **a mark gets a row of its own**, with the level columns empty
+and its name in the last one. That is because a mark's whole value is
+that its time is exact: it is known here, at the moment the link was
+pressed, rather than inferred from the numbers, and hanging it on the next
+block instead would blur it by up to a quarter of a second, which is the
+distance being looked at. Rows are in time order, so the two kinds
+interleave and the file reads the way the run went.
+
+No commas in a mark's name, for `test_search`'s reason - it is the last
+column of a CSV, and `test_read_pattern` already lost a column to a tuple
+once. The header names the pitches, so a file written before they changed
+still reads back as the pitches it actually holds rather than as whatever
+`protocol.PITCHES` says today.
 
 Pure on purpose, like `goertzel.py` beside it: lists and floats in, lists
 and floats out, no port, no thread and no clock of its own - every time
@@ -39,6 +59,11 @@ is handed in. That is what lets `pytest_tests/hardware_tests/` check the
 marks land where the presses were without a board or a speaker.
 """
 from colloquy.ui.graph_view import Columns
+
+# The columns either end of the file. The pitches sit between them, named
+# by the header rather than assumed on the way back in.
+TIME_COLUMN = "seconds"
+MARK_COLUMN = "mark"
 
 
 class Recording:
@@ -137,3 +162,113 @@ class Recording:
         half of the picture that says so.
         """
         return [(f"{hz} Hz", self.line(hz)) for hz in self._pitches]
+
+    # --- the file ---------------------------------------------------------
+
+    @property
+    def labels(self):
+        """The pitch columns, in file order."""
+        return [f"{hz} Hz" for hz in self._pitches]
+
+    def rows(self):
+        """Every line of the file, in time order, blocks and marks alike.
+
+        Built here rather than written straight out, so the one thing a
+        reader of the file relies on - the ordering - can be checked
+        without a filesystem. A mark and a block never share a row: see
+        the module docstring on why a mark keeps its own exact time.
+        """
+        blanks = [""] * len(self._pitches)
+        entries = [
+            (
+                moment,
+                0,
+                [f"{self._levels[hz][index]:.4f}" for hz in self._pitches],
+                "",
+            )
+            for index, moment in enumerate(self._seconds)
+        ]
+        entries += [(moment, 1, blanks, label) for moment, label in self._marks]
+        # By time, and a mark at the same instant as a block goes after
+        # it: the press is what caused the block, not the other way round.
+        entries.sort(key=lambda entry: (entry[0], entry[1]))
+
+        return [
+            [f"{moment:.3f}"] + values + [label]
+            for moment, _kind, values, label in entries
+        ]
+
+    def write(self, path):
+        """The run, as one CSV. The path, or None if it held nothing.
+
+        Nothing rather than an empty file: a run that read no blocks is a
+        refusal or a pulled lead, and `results` would list it as a graph
+        with no picture in it.
+        """
+        if not len(self._seconds):
+            return None
+
+        header = [TIME_COLUMN] + self.labels + [MARK_COLUMN]
+        with path.open("w", encoding="utf-8", newline="") as handle:
+            handle.write(", ".join(header) + "\n")
+            for row in self.rows():
+                handle.write(", ".join(row) + "\n")
+        return path
+
+
+def read(path):
+    """One recorded run back: its lines and its marks.
+
+    Returns what `GraphView` takes - `series` as (label, points) pairs and
+    `marks` as (seconds, label) - so a run off the disk draws through
+    exactly the same view as the one still in memory, `Columns` and all.
+
+    The pitches come out of the **header**, not out of `protocol.PITCHES`:
+    a file is a record of the run that made it, and a pitch list that
+    moved afterwards must not quietly relabel somebody else's
+    measurement.
+
+    A row is a block or a mark and never both, so a name in the last
+    column is what tells the two apart.
+    """
+    seconds = []
+    levels = {}
+    marks = []
+    labels = []
+
+    with path.open(encoding="utf-8") as handle:
+        for line in handle:
+            cells = [cell.strip() for cell in line.strip().split(",")]
+            if len(cells) < 3:
+                continue
+
+            if not labels:
+                labels = cells[1:-1]
+                levels = {label: [] for label in labels}
+                continue
+
+            try:
+                moment = float(cells[0])
+            except ValueError:
+                # A half-written last line, or a header met twice. Skipped
+                # rather than raised on: this reads old runs to look at
+                # them, and one bad row must not cost the rest of a file.
+                continue
+
+            if cells[-1]:
+                marks.append((moment, cells[-1]))
+                continue
+
+            try:
+                values = [float(cell) for cell in cells[1:len(labels) + 1]]
+            except ValueError:
+                continue
+            if len(values) != len(labels):
+                continue
+
+            seconds.append(moment)
+            for label, value in zip(labels, values):
+                levels[label].append(value)
+
+    series = [(label, Columns(seconds, levels[label])) for label in labels]
+    return series, marks

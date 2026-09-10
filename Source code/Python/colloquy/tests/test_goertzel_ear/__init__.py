@@ -62,8 +62,18 @@ whole test is a shape rather than a pair of numbers: one line lifts at
 the rule marked with its own pitch, and the other four do not. It is
 built at the end rather than while blocks arrive because a graph is a
 thing you read, and one repaginating four times a second under a reader
-is not one. Nothing is written to disk - see `recording.py` on why this
-test still has no results file.
+is not one.
+
+**And the run is kept.** One CSV per run under
+`local/test results/test goertzel ear/`, with every press in it as a row
+of its own, and `results` lists them newest first and draws any of them
+through the same graph. That is the want the live picture cannot serve:
+`setup()` clears the recording and a restart takes it anyway, so
+comparing this run with last week's needed a file. What a file still
+cannot hold is unchanged - whether anybody heard the tone come out of the
+speakers - and every run says so on its own page rather than leaving a
+later reader to assume the numbers were the whole measurement. See
+`recording.py` for the format and `results.py` for the listing.
 
 **The link is the lead, not the machine.** There is no `is_bench` here
 any more. This is one Mega on one USB lead with a microphone on it, it
@@ -78,6 +88,7 @@ against one is a rehearsal. This exists to say whether a microphone hears
 a tone; a stand-in that answered "yes" would be the one kind of false
 confidence it is against.
 """
+from datetime import datetime
 from time import time
 
 import serial
@@ -89,6 +100,7 @@ from colloquy.ui.graph_view import GraphView
 from ..bench_com_port import BenchComPort
 from . import goertzel, protocol
 from .recording import Recording
+from .results import Results
 from .tone import Tone
 
 
@@ -119,8 +131,13 @@ class TestGoertzelEar(BaseThread):
     # neither floor nor rise.
     SETTLE = 0.4
 
-    def __init__(self, owner):
+    def __init__(self, owner, result_folder):
         super().__init__(owner=owner)
+
+        self._dir_path = result_folder / self.name
+        if not self._dir_path.exists():
+            self._dir_path.mkdir()
+        self._results = Results(owner=self, dir_path=self._dir_path)
 
         self._com_port = EarComPort(owner=self)
         self[self._com_port.name] = self._com_port
@@ -142,6 +159,7 @@ class TestGoertzelEar(BaseThread):
         self._best = {}        # hz -> the (floor, level) of its best rise
         self._recording = Recording(protocol.PITCHES)
         self._graph = None     # built from the recording when the run ends
+        self._written_to = None
         self._blocks_read = 0
         self._greeting = None
         self._outcome = None
@@ -171,6 +189,10 @@ class TestGoertzelEar(BaseThread):
     @property
     def recording(self):
         return self._recording
+
+    @property
+    def results(self):
+        return self._results
 
     @property
     def port_handler(self):
@@ -329,6 +351,7 @@ class TestGoertzelEar(BaseThread):
         # session that ended, beside live readings that do not.
         self._recording.start(time())
         self._graph = None
+        self._written_to = None
 
         refusal = self._why_not_open()
         if refusal is not None:
@@ -414,6 +437,7 @@ class TestGoertzelEar(BaseThread):
         self._tone.stop()
         self._playing_since = None
         self._draw_the_recording()
+        self._write_the_recording()
         try:
             if self._port_handler is not None and self._port_handler.is_open:
                 self._port_handler.close()
@@ -442,6 +466,34 @@ class TestGoertzelEar(BaseThread):
             marks=self._recording.marks,
             name="recording",
         )
+
+    def _write_the_recording(self):
+        """Put the run on the disk, beside every other one.
+
+        Named for when it happened, like every other test here. Written
+        at the end from what is in memory rather than a row at a time as
+        blocks arrive: a press comes in on the request thread while the
+        blocks are read on the loop thread, and two threads on one file
+        handle is a real hazard where losing the last quarter-second of a
+        killed run is not - `setdown` runs in `_run_in_context`'s
+        `finally`, so an error, a refusal and a stop all reach here.
+
+        Failing to write must not be what ends a run: the numbers are
+        already on the page, and a full disk or a folder somebody has
+        moved is worth a line in the log rather than a traceback out of
+        `setdown`.
+        """
+        now = datetime.now()
+        path = (
+            self._dir_path
+            / f"{now.year}_{now.month:02}_{now.day:02}_{now.hour:02}h"
+            f"_{now.minute:02}min_{now.second:02}s.csv"
+        )
+        try:
+            self._written_to = self._recording.write(path)
+        except OSError as error:  # noqa: BLE001 - a disk, not a fault
+            self.log(f"Could not write the run to {path}: {error}")
+            self._written_to = None
 
     def _refuse(self, reason):
         self._outcome = f"refused: {reason}"
@@ -487,6 +539,10 @@ class TestGoertzelEar(BaseThread):
         children.update(self._commands)
         if self._graph is not None:
             children[self._graph.name] = self._graph
+        # Always, unlike the graph: the runs on the disk are there to be
+        # compared with, and the reason to look at them is usually before
+        # doing another one rather than after.
+        children[self._results.name] = self._results
         return self._with_scenarios(children)
 
     def _snapshot_if_opened(self, path):
@@ -540,9 +596,15 @@ class TestGoertzelEar(BaseThread):
                 # Said rather than left to be noticed: somebody watching
                 # the rows go by has no way of knowing the run is being
                 # kept, and would stop it expecting to lose it.
-                leaf("recorded", f"{recorded} - drawn when the run stops")
+                leaf(
+                    "recorded",
+                    f"{recorded} - drawn and written down when the run stops",
+                )
             else:
                 leaf("recorded", f"{recorded} - open 'recording'")
+
+        if self._written_to is not None:
+            leaf("written to", self._written_to.name)
 
         if self._outcome is not None:
             leaf("outcome", self._outcome)

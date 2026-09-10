@@ -364,7 +364,7 @@ Both B and C leave `microphone_plotter` on the installation's Mega, and until fi
 
 **`test_goertzel_ear` is the sixth, it has no analyser chip in it, and as of 2026-09-09 it is split across three places** — the tone comes out of **this computer's speakers**, the samples come from a **Mega that only samples** (`Source code/Arduino/microphone_sampler/`, `A0` and a ground, nothing else), and the **Goertzel runs in Python** (`tests/test_goertzel_ear/goertzel.py`, which is on mypy's `files`). It was one board doing all three; moving two of them off it is not tidying. A sound card makes a *sine*, where a compare output can only toggle — and a square's third harmonic at 6250 Hz folds back off an unfiltered 19.2 kSPS ADC onto ~480 Hz, which is another of the five bins, so a tone would appear at a pitch nobody played (`tone.py`; `one board per body`'s "a square wave suits it better" is about a body's *amplifier* and reaches the opposite conclusion for reasons that do not apply here). One capture is measured at **all five pitches at once**, so the five readings are of the same instant. And the arithmetic can finally be checked — against a signal generated in a unit test, which it never could on an AVR.
 
-**It moved to `manual tests` in the same change, and the reason is the room.** The old loop was closed on one board, a speaker and a microphone six inches apart with nothing else plugged in — walk away, read the CSV. This one is open across a room with a volume knob in it, and a muted output, a wrong default device or a volume at nothing all read exactly like a deaf microphone. Somebody hearing the tone is the measurement, and no file holds it — so there is no results file, and `is_bench` is gone (it is one Mega on one lead and it travels; the question is which lead, `test_audio_at_12v`'s lesson again). Still **no stand-in**: one that answered "yes" is the precise false confidence it exists against. **`Source code/Arduino/goertzel_ear/` is kept** and is not dead code — it answers the *other* question, whether an AVR can run five bins in time, which is `one board per body` §4 and is a fact about a processor. A green run of the node is not evidence for it. The tone needs **`sounddevice`** (now in `requirements.txt`): `winsound` cannot loop from memory at all (CPython refuses `SND_MEMORY | SND_ASYNC`) and is Windows-only, which is a platform gate on an acoustic question.
+**It moved to `manual tests` in the same change, and the reason is the room.** The old loop was closed on one board, a speaker and a microphone six inches apart with nothing else plugged in — walk away, read the CSV. This one is open across a room with a volume knob in it, and a muted output, a wrong default device or a volume at nothing all read exactly like a deaf microphone. Somebody hearing the tone is the measurement, and no file holds it — which is why it kept nothing at all until 2026-09-10, and why the file it keeps now says on every run what is not in it (see below); `is_bench` is gone (it is one Mega on one lead and it travels; the question is which lead, `test_audio_at_12v`'s lesson again). Still **no stand-in**: one that answered "yes" is the precise false confidence it exists against. **`Source code/Arduino/goertzel_ear/` is kept** and is not dead code — it answers the *other* question, whether an AVR can run five bins in time, which is `one board per body` §4 and is a fact about a processor. A green run of the node is not evidence for it. The tone needs **`sounddevice`** (now in `requirements.txt`): `winsound` cannot loop from memory at all (CPython refuses `SND_MEMORY | SND_ASYNC`) and is Windows-only, which is a platform gate on an acoustic question.
 
 **The run is recorded and drawn, and the marks are what make it worth
 drawing** (2026-09-09). A rise is a comparison between two moments and the
@@ -384,12 +384,45 @@ for two reasons that are both about a graph being a thing somebody reads:
 `GraphView` takes its marks **once**, when it is constructed, so one built
 at the first block would carry none of the presses that came after it, and
 it holds which page you are on, which is worth nothing in a view
-repaginating four times a second. **Still no results file** - the reason
-was never that the levels are not worth keeping, it is that the half of
-the measurement that matters is somebody hearing the tone, and a file
-holding the other half would look like a record of a measurement while
-missing the only part that was ever in doubt. This is a way of looking at
-the run that just happened, not a verdict kept after it.
+repaginating four times a second.
+
+**And the run is kept** (2026-09-10). One CSV per run under
+`local/test results/test goertzel ear/`, written at `setdown` from what is
+in memory, and a `results` node listing them newest first that draws any
+of them through the same `GraphView`. It kept nothing for a day and a
+half on the grounds that the half of the measurement that matters -
+somebody hearing the tone - is not a thing a file can hold; that is still
+true, and what changed is that there is now something worth filing. While
+a run held one best-rise number per pitch there was nothing to compare;
+a few hundred rows with the presses marked on them answer the questions
+actually asked *between* runs - is the 6250 Hz bin always the weak one,
+did moving the microphone help, is it worse than last week - and none of
+those can be answered from the one run that happens to be in memory,
+which is all there ever was (`setup()` clears the recording, and a restart
+takes it anyway). Same arrangement as `test_reinforcement`'s analyser
+columns: worth recording before it is worth acting on. **What a file
+cannot hold is still not in it, and each run says so** - a
+`not in this file` reading naming the thing, because a file outlives the
+person who knows how it was made.
+
+Two things about the format, both in `recording.py`. **A mark gets a row
+of its own**, with the level columns empty and its name in the last one:
+a mark's whole value is that its time is exact - known at the press
+rather than inferred from the numbers - and hanging it on the next block
+would blur it by up to a quarter of a second, which is the distance being
+looked at. Rows are in time order, so the two kinds interleave and the
+file reads the way the run went. And **the pitches come out of the header
+on the way back in**, not out of `protocol.PITCHES`, so a pitch list that
+moves later cannot relabel an old measurement. A run's graph is built from
+its file only when the run is opened, and kept once built, because a
+`GraphView` holds which page the reader is on.
+Written at the end rather than a row at a time as blocks arrive, for a
+threading reason: a press lands on the request thread while blocks are
+read on the loop thread, and two threads on one file handle is a real
+hazard where losing the last quarter-second of a killed run is not -
+`setdown` runs in `_run_in_context`'s `finally`, so a stop, an error and a
+refusal all reach it. `pytest_tests/hardware_tests/test_goertzel_ear_results.py`
+pins the file's shape and the listing.
 
 **`params["audio"]["wired bodies"]` is read by both installation tests**, and it is not a convenience: an unwired analyser input is a floating ADC pin, and a floating pin does not read silence — it reads garbage. A five-channel sweep on a two-channel board reports twenty-one fictional failures with the two real answers buried among them. Add a body to the list the moment its amplifier and its analyser are in; nothing else changes, since the pitch, the pin and the module are already decided for all five.
 
@@ -481,7 +514,7 @@ There are two separate things called tests here, and they do not overlap.
 **They are filed in two groups, and the rule is not what it first looks like** (`colloquy/tests/group.py`). A flat list of fourteen said the only thing worth knowing about a test was its name; the first thing anybody actually wants to know, standing at the rack with twenty minutes, is *whether they have to stay for it*. So:
 
 - **`autotests`** reach their answer on their own and write it down — a CSV, an SVG, a grid of verdicts, a diagnosis. `test_light_sensor_values`, `test_read_pattern`, `test_reinforcement`, `test_search`, `test_female_search`, `test_movements`, `test_audio_subsystem`, `test_audio_loop`, `test_audio_bringup`.
-- **`manual tests`** produce nothing a file could hold: light, sound, movement, and the instrument that records it is somebody’s eye, ear or hand. `test_drive_light_values`, `test_male_patterns`, `test_neopixels`, `test_sensors`, `test_microphone_signal`, `test_goertzel_ear`, `test_audio_at_12v`.
+- **`manual tests`** turn on a person: light, sound, movement, and the instrument that records the answer is somebody’s eye, ear or hand. Some of them still write a file (`test_goertzel_ear`'s bins over time, `test_audio_at_12v`'s two passes) - what no file holds is the *perceiving*, which is the whole of the distinction below. `test_drive_light_values`, `test_male_patterns`, `test_neopixels`, `test_sensors`, `test_microphone_signal`, `test_goertzel_ear`, `test_audio_at_12v`.
 
 The line is deliberately **not** how long a run takes, how much hardware it touches, or whether the code happens to open a results file — it is **who does the perceiving**, because that is the one distinction that changes what you do next. The two graph demos stay outside both groups as direct children of `tests`: they are not tests of the piece at all, and filing them under either heading would make the heading mean less.
 

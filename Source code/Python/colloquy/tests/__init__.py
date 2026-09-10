@@ -109,14 +109,16 @@ class Tests(Base):
         # deliberately not holding, so a file of the other half would
         # record only the half that was never in doubt.
         self.test_microphone_signal = TestMicrophoneSignal(owner=manual)
-        # No result folder either, and for a sharper version of the same
-        # reason. What it measures is a tone crossing a room from this
-        # computer's speakers to a microphone, and whether that tone was
-        # ever in the room is something only a person in it can say. A
-        # file of the bins alone would record the half that was never in
-        # doubt. It was an autotest while the board made its own tone six
-        # inches from its own microphone; see its module docstring.
-        self.test_goertzel_ear = TestGoertzelEar(owner=manual)
+        # It does keep a file, unlike the one above, and stays a manual
+        # test all the same: what a run records is five bins over time
+        # with every press marked on them, which is worth comparing with
+        # last week's, while whether the tone was ever in the room is
+        # still something only a person in it can say. The distinction
+        # `group.py` files by is who does the perceiving, not whether
+        # anything gets written down.
+        self.test_goertzel_ear = TestGoertzelEar(
+            owner=manual, result_folder=result_folder
+        )
         self.test_audio_at_12v = TestAudioAt12V(
             owner=manual, result_folder=result_folder
         )
