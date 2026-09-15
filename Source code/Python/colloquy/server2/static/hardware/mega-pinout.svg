@@ -1,0 +1,565 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1431 1344" width="1431" height="1344" role="img" aria-label="The Arduino Mega on the electronic box, to scale, with the signal on every header pin around it written beside the pin.">
+<rect width="1431" height="1344" fill="white"/>
+<text x="40.0" y="44.0" font-family="system-ui, 'Segoe UI', sans-serif" font-size="22" font-weight="700" fill="#222" text-anchor="start">The Mega, and what reaches each of its pins</text>
+<text x="40.0" y="70.0" font-family="system-ui, 'Segoe UI', sans-serif" font-size="13" font-weight="400" fill="#444" text-anchor="start">Electronic box, as built. Seen from the front of the board, the Mega's USB socket at the top, drawn to scale.</text>
+<text x="40.0" y="90.0" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="400" fill="#777" text-anchor="start">Read out of electronic box.kicad_pcb by mega_pinout.py - regenerate with py export_mega_pinout.py.</text>
+<circle cx="45" cy="118" r="5" fill="white" stroke="#c2185b" stroke-width="2"/>
+<text x="56.0" y="122.0" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="400" fill="#c2185b" text-anchor="start">microphone</text>
+<circle cx="145.0" cy="118" r="5" fill="white" stroke="#b26a00" stroke-width="2"/>
+<text x="156.0" y="122.0" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="400" fill="#b26a00" text-anchor="start">light sensor</text>
+<circle cx="258.2" cy="118" r="5" fill="white" stroke="#1565c0" stroke-width="2"/>
+<text x="269.2" y="122.0" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="400" fill="#1565c0" text-anchor="start">tone out</text>
+<circle cx="345.0" cy="118" r="5" fill="white" stroke="#2e7d32" stroke-width="2"/>
+<text x="356.0" y="122.0" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="400" fill="#2e7d32" text-anchor="start">NeoPixels</text>
+<circle cx="438.4" cy="118" r="5" fill="white" stroke="#6d4c41" stroke-width="2"/>
+<text x="449.4" y="122.0" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="400" fill="#6d4c41" text-anchor="start">power</text>
+<circle cx="505.4" cy="118" r="5" fill="white" stroke="#9e9e9e" stroke-width="2"/>
+<text x="516.4" y="122.0" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="400" fill="#9e9e9e" text-anchor="start">free</text>
+<path d="M 560.8 113.0 L 570.8 123.0 M 560.8 123.0 L 570.8 113.0" stroke="#d32f2f" stroke-width="2.2"/>
+<text x="578.8" y="122.0" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="400" fill="#d32f2f" text-anchor="start">track cut in the dirty rework</text>
+<line x1="798.2" y1="118" x2="820.2" y2="118" stroke="#222" stroke-width="1.6" stroke-dasharray="3 3"/>
+<text x="828.2" y="122.0" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="400" fill="#222" text-anchor="start">not joined in the copper</text>
+<line x1="436.1" y1="215.2" x2="436.1" y2="908.7" stroke="#4a6b4a" stroke-width="1.4"/>
+<line x1="436.1" y1="908.7" x2="445.0" y2="908.7" stroke="#4a6b4a" stroke-width="1.4"/>
+<line x1="445.0" y1="908.7" x2="462.8" y2="926.4" stroke="#4a6b4a" stroke-width="1.4"/>
+<line x1="462.8" y1="926.4" x2="702.8" y2="926.4" stroke="#4a6b4a" stroke-width="1.4"/>
+<line x1="702.8" y1="926.4" x2="720.6" y2="908.7" stroke="#4a6b4a" stroke-width="1.4"/>
+<line x1="720.6" y1="908.7" x2="798.8" y2="908.7" stroke="#4a6b4a" stroke-width="1.4"/>
+<line x1="809.5" y1="215.2" x2="436.1" y2="215.2" stroke="#4a6b4a" stroke-width="1.4"/>
+<line x1="809.5" y1="215.2" x2="809.5" y2="898.0" stroke="#4a6b4a" stroke-width="1.4"/>
+<line x1="809.5" y1="898.0" x2="798.8" y2="908.7" stroke="#4a6b4a" stroke-width="1.4"/>
+<line x1="459.2" y1="203.5" x2="459.2" y2="297.9" stroke="#4a6b4a" stroke-width="1.4"/>
+<line x1="522.2" y1="203.5" x2="459.2" y2="203.5" stroke="#4a6b4a" stroke-width="1.4"/>
+<line x1="522.2" y1="203.5" x2="522.2" y2="297.9" stroke="#4a6b4a" stroke-width="1.4"/>
+<line x1="522.2" y1="297.9" x2="459.2" y2="297.9" stroke="#4a6b4a" stroke-width="1.4"/>
+<line x1="661.5" y1="170.9" x2="661.5" y2="281.1" stroke="#4a6b4a" stroke-width="1.4"/>
+<line x1="661.5" y1="170.9" x2="744.1" y2="170.9" stroke="#4a6b4a" stroke-width="1.4"/>
+<line x1="661.5" y1="281.1" x2="744.1" y2="281.1" stroke="#4a6b4a" stroke-width="1.4"/>
+<line x1="744.1" y1="170.9" x2="744.1" y2="281.1" stroke="#4a6b4a" stroke-width="1.4"/>
+<rect x="445.0" y="401.9" width="17.8" height="142.2" fill="none" stroke="#9bb59b" stroke-width="1"/>
+<rect x="445.0" y="561.9" width="17.8" height="142.2" fill="none" stroke="#9bb59b" stroke-width="1"/>
+<rect x="445.0" y="722.0" width="17.8" height="142.2" fill="none" stroke="#9bb59b" stroke-width="1"/>
+<rect x="605.0" y="651.7" width="53.3" height="35.6" fill="none" stroke="#9bb59b" stroke-width="1"/>
+<rect x="782.8" y="337.9" width="17.8" height="177.8" fill="none" stroke="#9bb59b" stroke-width="1"/>
+<rect x="782.8" y="526.4" width="17.8" height="142.2" fill="none" stroke="#9bb59b" stroke-width="1"/>
+<rect x="782.8" y="686.4" width="17.8" height="142.2" fill="none" stroke="#9bb59b" stroke-width="1"/>
+<rect x="480.6" y="864.2" width="320.0" height="35.6" fill="none" stroke="#9bb59b" stroke-width="1"/>
+<text x="702.8" y="230.0" font-family="system-ui, 'Segoe UI', sans-serif" font-size="10" font-weight="400" fill="#4a6b4a" text-anchor="middle">USB</text>
+<text x="490.7" y="254.7" font-family="system-ui, 'Segoe UI', sans-serif" font-size="10" font-weight="400" fill="#4a6b4a" text-anchor="middle">Barrel Jack</text>
+<text x="622.8" y="578.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="15" font-weight="700" fill="#4a6b4a" text-anchor="middle">Arduino Mega 2560</text>
+<text x="622.8" y="596.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="11" font-weight="400" fill="#4a6b4a" text-anchor="middle">A1</text>
+<line x1="382.8" y1="428.6" x2="453.9" y2="428.6" stroke="#6d4c41" stroke-width="1.6" opacity="0.7"/>
+<line x1="382.8" y1="446.4" x2="453.9" y2="446.4" stroke="#6d4c41" stroke-width="1.6" opacity="0.7"/>
+<line x1="382.8" y1="464.2" x2="453.9" y2="464.2" stroke="#6d4c41" stroke-width="1.6" opacity="0.7"/>
+<line x1="382.8" y1="481.9" x2="453.9" y2="481.9" stroke="#6d4c41" stroke-width="1.6" opacity="0.7"/>
+<line x1="382.8" y1="535.3" x2="453.9" y2="535.3" stroke="#6d4c41" stroke-width="1.6" opacity="0.7"/>
+<line x1="391.7" y1="570.8" x2="453.9" y2="570.8" stroke="#c2185b" stroke-width="1.6" opacity="0.7"/>
+<line x1="391.7" y1="588.6" x2="453.9" y2="588.6" stroke="#c2185b" stroke-width="1.6" opacity="0.7"/>
+<line x1="391.7" y1="606.4" x2="453.9" y2="606.4" stroke="#c2185b" stroke-width="1.6" opacity="0.7"/>
+<line x1="391.7" y1="624.2" x2="453.9" y2="624.2" stroke="#c2185b" stroke-width="1.6" opacity="0.7"/>
+<line x1="391.7" y1="642.0" x2="453.9" y2="642.0" stroke="#c2185b" stroke-width="1.6" opacity="0.7"/>
+<line x1="391.7" y1="659.7" x2="453.9" y2="659.7" stroke="#b26a00" stroke-width="1.6" opacity="0.7"/>
+<line x1="391.7" y1="677.5" x2="453.9" y2="677.5" stroke="#b26a00" stroke-width="1.6" opacity="0.7"/>
+<line x1="391.7" y1="695.3" x2="453.9" y2="695.3" stroke="#b26a00" stroke-width="1.6" opacity="0.7"/>
+<line x1="391.7" y1="730.9" x2="453.9" y2="730.9" stroke="#b26a00" stroke-width="1.6" opacity="0.7"/>
+<line x1="391.7" y1="748.6" x2="453.9" y2="748.6" stroke="#b26a00" stroke-width="1.6" opacity="0.7"/>
+<line x1="391.7" y1="766.4" x2="453.9" y2="766.4" stroke="#b26a00" stroke-width="1.6" opacity="0.7"/>
+<line x1="391.7" y1="784.2" x2="453.9" y2="784.2" stroke="#b26a00" stroke-width="1.6" opacity="0.7"/>
+<line x1="391.7" y1="802.0" x2="453.9" y2="802.0" stroke="#b26a00" stroke-width="1.6" opacity="0.7"/>
+<line x1="391.7" y1="819.8" x2="453.9" y2="819.8" stroke="#b26a00" stroke-width="1.6" opacity="0.7"/>
+<line x1="391.7" y1="837.5" x2="453.9" y2="837.5" stroke="#b26a00" stroke-width="1.6" opacity="0.7"/>
+<line x1="391.7" y1="855.3" x2="453.9" y2="855.3" stroke="#b26a00" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="346.8" x2="791.7" y2="346.8" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="364.6" x2="791.7" y2="364.6" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="382.4" x2="791.7" y2="382.4" stroke="#6d4c41" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="417.9" x2="791.7" y2="417.9" stroke="#1565c0" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="435.7" x2="791.7" y2="435.7" stroke="#1565c0" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="453.5" x2="791.7" y2="453.5" stroke="#1565c0" stroke-width="1.6" opacity="0.7"/>
+<path d="M 817.8 448.5 L 827.8 458.5 M 817.8 458.5 L 827.8 448.5" stroke="#d32f2f" stroke-width="2.2"/>
+<line x1="853.9" y1="471.3" x2="791.7" y2="471.3" stroke="#2e7d32" stroke-width="1.6" opacity="0.7"/>
+<path d="M 817.8 466.3 L 827.8 476.3 M 817.8 476.3 L 827.8 466.3" stroke="#d32f2f" stroke-width="2.2"/>
+<line x1="853.9" y1="489.1" x2="791.7" y2="489.1" stroke="#2e7d32" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="506.8" x2="791.7" y2="506.8" stroke="#2e7d32" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="535.3" x2="791.7" y2="535.3" stroke="#2e7d32" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="553.1" x2="791.7" y2="553.1" stroke="#2e7d32" stroke-width="1.6" opacity="0.7"/>
+<path d="M 817.8 548.1 L 827.8 558.1 M 817.8 558.1 L 827.8 548.1" stroke="#d32f2f" stroke-width="2.2"/>
+<line x1="853.9" y1="570.8" x2="791.7" y2="570.8" stroke="#2e7d32" stroke-width="1.6" opacity="0.7"/>
+<path d="M 817.8 565.8 L 827.8 575.8 M 817.8 575.8 L 827.8 565.8" stroke="#d32f2f" stroke-width="2.2"/>
+<line x1="853.9" y1="588.6" x2="791.7" y2="588.6" stroke="#2e7d32" stroke-width="1.6" opacity="0.7"/>
+<path d="M 817.8 583.6 L 827.8 593.6 M 817.8 593.6 L 827.8 583.6" stroke="#d32f2f" stroke-width="2.2"/>
+<line x1="853.9" y1="606.4" x2="791.7" y2="606.4" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="624.2" x2="791.7" y2="624.2" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="642.0" x2="791.7" y2="642.0" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="659.7" x2="791.7" y2="659.7" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="695.3" x2="791.7" y2="695.3" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="713.1" x2="791.7" y2="713.1" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="730.9" x2="791.7" y2="730.9" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="748.6" x2="791.7" y2="748.6" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="766.4" x2="791.7" y2="766.4" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="784.2" x2="791.7" y2="784.2" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="802.0" x2="791.7" y2="802.0" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="853.9" y1="819.8" x2="791.7" y2="819.8" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="507.2" y1="970.9" x2="507.2" y2="873.1" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="507.2" y1="953.1" x2="507.2" y2="890.9" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="525.0" y1="970.9" x2="525.0" y2="873.1" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="525.0" y1="953.1" x2="525.0" y2="890.9" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="542.8" y1="970.9" x2="542.8" y2="873.1" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="542.8" y1="953.1" x2="542.8" y2="890.9" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="560.6" y1="970.9" x2="560.6" y2="873.1" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="560.6" y1="953.1" x2="560.6" y2="890.9" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="578.4" y1="970.9" x2="578.4" y2="873.1" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="578.4" y1="953.1" x2="578.4" y2="890.9" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="596.1" y1="970.9" x2="596.1" y2="873.1" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="596.1" y1="953.1" x2="596.1" y2="890.9" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="613.9" y1="970.9" x2="613.9" y2="873.1" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="613.9" y1="953.1" x2="613.9" y2="890.9" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="631.7" y1="970.9" x2="631.7" y2="873.1" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="631.7" y1="953.1" x2="631.7" y2="890.9" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="649.5" y1="970.9" x2="649.5" y2="873.1" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="649.5" y1="953.1" x2="649.5" y2="890.9" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="667.3" y1="970.9" x2="667.3" y2="873.1" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="667.3" y1="953.1" x2="667.3" y2="890.9" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="685.0" y1="970.9" x2="685.0" y2="873.1" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="685.0" y1="953.1" x2="685.0" y2="890.9" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="702.8" y1="970.9" x2="702.8" y2="873.1" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="702.8" y1="953.1" x2="702.8" y2="890.9" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="720.6" y1="970.9" x2="720.6" y2="873.1" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="720.6" y1="953.1" x2="720.6" y2="890.9" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="738.4" y1="970.9" x2="738.4" y2="873.1" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="738.4" y1="953.1" x2="738.4" y2="890.9" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="756.2" y1="970.9" x2="756.2" y2="873.1" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="756.2" y1="953.1" x2="756.2" y2="890.9" stroke="#9e9e9e" stroke-width="1.6" opacity="0.7"/>
+<line x1="773.9" y1="970.9" x2="773.9" y2="873.1" stroke="#1565c0" stroke-width="1.6" opacity="0.7"/>
+<line x1="773.9" y1="953.1" x2="773.9" y2="890.9" stroke="#1565c0" stroke-width="1.6" opacity="0.7"/>
+<line x1="791.7" y1="970.9" x2="791.7" y2="873.1" stroke="#6d4c41" stroke-width="1.6" opacity="0.7"/>
+<line x1="791.7" y1="953.1" x2="791.7" y2="890.9" stroke="#6d4c41" stroke-width="1.6" opacity="0.7"/>
+<line x1="373.9" y1="570.8" x2="391.7" y2="570.8" stroke="#c2185b" stroke-width="1.6" stroke-dasharray="2 2.5"/>
+<line x1="373.9" y1="588.6" x2="391.7" y2="588.6" stroke="#c2185b" stroke-width="1.6" stroke-dasharray="2 2.5"/>
+<line x1="373.9" y1="606.4" x2="391.7" y2="606.4" stroke="#c2185b" stroke-width="1.6" stroke-dasharray="2 2.5"/>
+<line x1="373.9" y1="624.2" x2="391.7" y2="624.2" stroke="#c2185b" stroke-width="1.6" stroke-dasharray="2 2.5"/>
+<line x1="373.9" y1="642.0" x2="391.7" y2="642.0" stroke="#c2185b" stroke-width="1.6" stroke-dasharray="2 2.5"/>
+<line x1="373.9" y1="659.7" x2="391.7" y2="659.7" stroke="#b26a00" stroke-width="1.6" stroke-dasharray="2 2.5"/>
+<line x1="373.9" y1="677.5" x2="391.7" y2="677.5" stroke="#b26a00" stroke-width="1.6" stroke-dasharray="2 2.5"/>
+<line x1="373.9" y1="695.3" x2="391.7" y2="695.3" stroke="#b26a00" stroke-width="1.6" stroke-dasharray="2 2.5"/>
+<line x1="373.9" y1="730.9" x2="391.7" y2="730.9" stroke="#b26a00" stroke-width="1.6" stroke-dasharray="2 2.5"/>
+<line x1="373.9" y1="748.6" x2="391.7" y2="748.6" stroke="#b26a00" stroke-width="1.6" stroke-dasharray="2 2.5"/>
+<line x1="373.9" y1="766.4" x2="391.7" y2="766.4" stroke="#b26a00" stroke-width="1.6" stroke-dasharray="2 2.5"/>
+<line x1="373.9" y1="784.2" x2="391.7" y2="784.2" stroke="#b26a00" stroke-width="1.6" stroke-dasharray="2 2.5"/>
+<line x1="373.9" y1="802.0" x2="391.7" y2="802.0" stroke="#b26a00" stroke-width="1.6" stroke-dasharray="2 2.5"/>
+<line x1="373.9" y1="819.8" x2="391.7" y2="819.8" stroke="#b26a00" stroke-width="1.6" stroke-dasharray="2 2.5"/>
+<line x1="373.9" y1="837.5" x2="391.7" y2="837.5" stroke="#b26a00" stroke-width="1.6" stroke-dasharray="2 2.5"/>
+<line x1="373.9" y1="855.3" x2="391.7" y2="855.3" stroke="#b26a00" stroke-width="1.6" stroke-dasharray="2 2.5"/>
+<rect x="379.6" y="407.6" width="6.4" height="6.4" fill="white" stroke="#bdbdbd" stroke-width="1.6"/>
+<circle cx="382.8" cy="428.6" r="3.2" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="382.8" cy="446.4" r="3.2" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="382.8" cy="464.2" r="3.2" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="382.8" cy="481.9" r="3.2" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="382.8" cy="499.7" r="3.2" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="382.8" cy="517.5" r="3.2" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="382.8" cy="535.3" r="3.2" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<rect x="370.7" y="567.6" width="6.4" height="6.4" fill="white" stroke="#c2185b" stroke-width="1.6"/>
+<circle cx="391.7" cy="570.8" r="3.2" fill="white" stroke="#c2185b" stroke-width="1.6"/>
+<circle cx="373.9" cy="588.6" r="3.2" fill="white" stroke="#c2185b" stroke-width="1.6"/>
+<circle cx="391.7" cy="588.6" r="3.2" fill="white" stroke="#c2185b" stroke-width="1.6"/>
+<circle cx="373.9" cy="606.4" r="3.2" fill="white" stroke="#c2185b" stroke-width="1.6"/>
+<circle cx="391.7" cy="606.4" r="3.2" fill="white" stroke="#c2185b" stroke-width="1.6"/>
+<circle cx="373.9" cy="624.2" r="3.2" fill="white" stroke="#c2185b" stroke-width="1.6"/>
+<circle cx="391.7" cy="624.2" r="3.2" fill="white" stroke="#c2185b" stroke-width="1.6"/>
+<circle cx="373.9" cy="642.0" r="3.2" fill="white" stroke="#c2185b" stroke-width="1.6"/>
+<circle cx="391.7" cy="642.0" r="3.2" fill="white" stroke="#c2185b" stroke-width="1.6"/>
+<circle cx="373.9" cy="659.7" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="391.7" cy="659.7" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="373.9" cy="677.5" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="391.7" cy="677.5" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="373.9" cy="695.3" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="391.7" cy="695.3" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<rect x="370.7" y="727.7" width="6.4" height="6.4" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="391.7" cy="730.9" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="373.9" cy="748.6" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="391.7" cy="748.6" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="373.9" cy="766.4" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="391.7" cy="766.4" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="373.9" cy="784.2" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="391.7" cy="784.2" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="373.9" cy="802.0" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="391.7" cy="802.0" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="373.9" cy="819.8" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="391.7" cy="819.8" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="373.9" cy="837.5" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="391.7" cy="837.5" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="373.9" cy="855.3" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="391.7" cy="855.3" r="3.2" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<rect x="850.7" y="343.6" width="6.4" height="6.4" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="853.9" cy="364.6" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="853.9" cy="382.4" r="3.2" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="853.9" cy="400.2" r="3.2" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="853.9" cy="417.9" r="3.2" fill="white" stroke="#1565c0" stroke-width="1.6"/>
+<circle cx="853.9" cy="435.7" r="3.2" fill="white" stroke="#1565c0" stroke-width="1.6"/>
+<circle cx="853.9" cy="453.5" r="3.2" fill="white" stroke="#1565c0" stroke-width="1.6"/>
+<circle cx="853.9" cy="471.3" r="3.2" fill="white" stroke="#2e7d32" stroke-width="1.6"/>
+<circle cx="853.9" cy="489.1" r="3.2" fill="white" stroke="#2e7d32" stroke-width="1.6"/>
+<circle cx="853.9" cy="506.8" r="3.2" fill="white" stroke="#2e7d32" stroke-width="1.6"/>
+<rect x="850.7" y="532.1" width="6.4" height="6.4" fill="white" stroke="#2e7d32" stroke-width="1.6"/>
+<circle cx="853.9" cy="553.1" r="3.2" fill="white" stroke="#2e7d32" stroke-width="1.6"/>
+<circle cx="853.9" cy="570.8" r="3.2" fill="white" stroke="#2e7d32" stroke-width="1.6"/>
+<circle cx="853.9" cy="588.6" r="3.2" fill="white" stroke="#2e7d32" stroke-width="1.6"/>
+<circle cx="853.9" cy="606.4" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="853.9" cy="624.2" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="853.9" cy="642.0" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="853.9" cy="659.7" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<rect x="850.7" y="692.1" width="6.4" height="6.4" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="853.9" cy="713.1" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="853.9" cy="730.9" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="853.9" cy="748.6" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="853.9" cy="766.4" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="853.9" cy="784.2" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="853.9" cy="802.0" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="853.9" cy="819.8" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<rect x="486.3" y="967.7" width="6.4" height="6.4" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="489.5" cy="953.1" r="3.2" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="507.2" cy="970.9" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="507.2" cy="953.1" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="525.0" cy="970.9" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="525.0" cy="953.1" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="542.8" cy="970.9" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="542.8" cy="953.1" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="560.6" cy="970.9" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="560.6" cy="953.1" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="578.4" cy="970.9" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="578.4" cy="953.1" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="596.1" cy="970.9" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="596.1" cy="953.1" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="613.9" cy="970.9" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="613.9" cy="953.1" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="631.7" cy="970.9" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="631.7" cy="953.1" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="649.5" cy="970.9" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="649.5" cy="953.1" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="667.3" cy="970.9" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="667.3" cy="953.1" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="685.0" cy="970.9" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="685.0" cy="953.1" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="702.8" cy="970.9" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="702.8" cy="953.1" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="720.6" cy="970.9" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="720.6" cy="953.1" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="738.4" cy="970.9" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="738.4" cy="953.1" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="756.2" cy="970.9" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="756.2" cy="953.1" r="3.2" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="773.9" cy="970.9" r="3.2" fill="white" stroke="#1565c0" stroke-width="1.6"/>
+<circle cx="773.9" cy="953.1" r="3.2" fill="white" stroke="#1565c0" stroke-width="1.6"/>
+<circle cx="791.7" cy="970.9" r="3.2" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="791.7" cy="953.1" r="3.2" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="453.9" cy="464.2" r="2.6" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="453.9" cy="481.9" r="2.6" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="791.7" cy="873.1" r="2.6" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="791.7" cy="890.9" r="2.6" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="453.9" cy="570.8" r="2.6" fill="white" stroke="#c2185b" stroke-width="1.6"/>
+<circle cx="453.9" cy="588.6" r="2.6" fill="white" stroke="#c2185b" stroke-width="1.6"/>
+<circle cx="453.9" cy="606.4" r="2.6" fill="white" stroke="#c2185b" stroke-width="1.6"/>
+<circle cx="453.9" cy="624.2" r="2.6" fill="white" stroke="#c2185b" stroke-width="1.6"/>
+<circle cx="453.9" cy="642.0" r="2.6" fill="white" stroke="#c2185b" stroke-width="1.6"/>
+<circle cx="453.9" cy="659.7" r="2.6" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="453.9" cy="677.5" r="2.6" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="453.9" cy="695.3" r="2.6" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="453.9" cy="730.9" r="2.6" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="453.9" cy="748.6" r="2.6" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="453.9" cy="766.4" r="2.6" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="453.9" cy="784.2" r="2.6" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="453.9" cy="802.0" r="2.6" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="453.9" cy="819.8" r="2.6" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="453.9" cy="837.5" r="2.6" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="453.9" cy="855.3" r="2.6" fill="white" stroke="#b26a00" stroke-width="1.6"/>
+<circle cx="791.7" cy="382.4" r="2.6" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="791.7" cy="659.7" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="791.7" cy="642.0" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="791.7" cy="624.2" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="791.7" cy="606.4" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="791.7" cy="588.6" r="2.6" fill="white" stroke="#2e7d32" stroke-width="1.6"/>
+<circle cx="791.7" cy="570.8" r="2.6" fill="white" stroke="#2e7d32" stroke-width="1.6"/>
+<circle cx="791.7" cy="553.1" r="2.6" fill="white" stroke="#2e7d32" stroke-width="1.6"/>
+<circle cx="791.7" cy="535.3" r="2.6" fill="white" stroke="#2e7d32" stroke-width="1.6"/>
+<circle cx="791.7" cy="506.8" r="2.6" fill="white" stroke="#2e7d32" stroke-width="1.6"/>
+<circle cx="791.7" cy="489.1" r="2.6" fill="white" stroke="#2e7d32" stroke-width="1.6"/>
+<circle cx="791.7" cy="471.3" r="2.6" fill="white" stroke="#2e7d32" stroke-width="1.6"/>
+<circle cx="791.7" cy="453.5" r="2.6" fill="white" stroke="#1565c0" stroke-width="1.6"/>
+<circle cx="791.7" cy="435.7" r="2.6" fill="white" stroke="#1565c0" stroke-width="1.6"/>
+<circle cx="791.7" cy="417.9" r="2.6" fill="white" stroke="#1565c0" stroke-width="1.6"/>
+<circle cx="791.7" cy="695.3" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="791.7" cy="713.1" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="791.7" cy="730.9" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="791.7" cy="748.6" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="791.7" cy="766.4" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="791.7" cy="784.2" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="791.7" cy="802.0" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="791.7" cy="819.8" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="773.9" cy="873.1" r="2.6" fill="white" stroke="#1565c0" stroke-width="1.6"/>
+<circle cx="773.9" cy="890.9" r="2.6" fill="white" stroke="#1565c0" stroke-width="1.6"/>
+<circle cx="756.2" cy="873.1" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="756.2" cy="890.9" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="738.4" cy="873.1" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="738.4" cy="890.9" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="720.6" cy="873.1" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="720.6" cy="890.9" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="702.8" cy="873.1" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="702.8" cy="890.9" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="685.0" cy="873.1" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="685.0" cy="890.9" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="667.3" cy="873.1" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="667.3" cy="890.9" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="649.5" cy="873.1" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="649.5" cy="890.9" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="631.7" cy="873.1" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="631.7" cy="890.9" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="613.9" cy="873.1" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="613.9" cy="890.9" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="596.1" cy="873.1" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="596.1" cy="890.9" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="578.4" cy="873.1" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="578.4" cy="890.9" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="560.6" cy="873.1" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="560.6" cy="890.9" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="542.8" cy="873.1" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="542.8" cy="890.9" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="525.0" cy="873.1" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="525.0" cy="890.9" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="507.2" cy="873.1" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="507.2" cy="890.9" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="791.7" cy="400.2" r="2.6" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="453.9" cy="499.7" r="2.6" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="453.9" cy="517.5" r="2.6" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="489.5" cy="873.1" r="2.6" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="489.5" cy="890.9" r="2.6" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="453.9" cy="428.6" r="2.6" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="453.9" cy="446.4" r="2.6" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<circle cx="791.7" cy="346.8" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="791.7" cy="364.6" r="2.6" fill="white" stroke="#9e9e9e" stroke-width="1.6"/>
+<circle cx="453.9" cy="535.3" r="2.6" fill="white" stroke="#6d4c41" stroke-width="1.6"/>
+<text x="460.9" y="467.7" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#6d4c41" text-anchor="start">3V3</text>
+<text x="460.9" y="485.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#6d4c41" text-anchor="start">5V1</text>
+<text x="460.9" y="574.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#c2185b" text-anchor="start">A0</text>
+<text x="460.9" y="592.1" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#c2185b" text-anchor="start">A1</text>
+<text x="460.9" y="609.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#c2185b" text-anchor="start">A2</text>
+<text x="460.9" y="627.7" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#c2185b" text-anchor="start">A3</text>
+<text x="460.9" y="645.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#c2185b" text-anchor="start">A4</text>
+<text x="460.9" y="663.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#b26a00" text-anchor="start">A5</text>
+<text x="460.9" y="681.0" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#b26a00" text-anchor="start">A6</text>
+<text x="460.9" y="698.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#b26a00" text-anchor="start">A7</text>
+<text x="460.9" y="734.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#b26a00" text-anchor="start">A8</text>
+<text x="460.9" y="752.1" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#b26a00" text-anchor="start">A9</text>
+<text x="460.9" y="769.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#b26a00" text-anchor="start">A10</text>
+<text x="460.9" y="787.7" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#b26a00" text-anchor="start">A11</text>
+<text x="460.9" y="805.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#b26a00" text-anchor="start">A12</text>
+<text x="460.9" y="823.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#b26a00" text-anchor="start">A13</text>
+<text x="460.9" y="841.0" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#b26a00" text-anchor="start">A14</text>
+<text x="460.9" y="858.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#b26a00" text-anchor="start">A15</text>
+<text x="784.7" y="385.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#6d4c41" text-anchor="end">AREF</text>
+<text x="784.7" y="663.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="end">D0</text>
+<text x="784.7" y="645.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="end">D1</text>
+<text x="784.7" y="627.7" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="end">D2</text>
+<text x="784.7" y="609.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="end">D3</text>
+<text x="784.7" y="592.1" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#2e7d32" text-anchor="end">D4</text>
+<text x="784.7" y="574.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#2e7d32" text-anchor="end">D5</text>
+<text x="784.7" y="556.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#2e7d32" text-anchor="end">D6</text>
+<text x="784.7" y="538.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#2e7d32" text-anchor="end">D7</text>
+<text x="784.7" y="510.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#2e7d32" text-anchor="end">D8</text>
+<text x="784.7" y="492.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#2e7d32" text-anchor="end">D9</text>
+<text x="784.7" y="474.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#2e7d32" text-anchor="end">D10</text>
+<text x="784.7" y="457.0" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#1565c0" text-anchor="end">D11</text>
+<text x="784.7" y="439.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#1565c0" text-anchor="end">D12</text>
+<text x="784.7" y="421.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#1565c0" text-anchor="end">D13</text>
+<text x="784.7" y="698.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="end">D14</text>
+<text x="784.7" y="716.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="end">D15</text>
+<text x="784.7" y="734.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="end">D16</text>
+<text x="784.7" y="752.1" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="end">D17</text>
+<text x="784.7" y="769.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="end">D18</text>
+<text x="784.7" y="787.7" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="end">D19</text>
+<text x="784.7" y="805.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="end">D20</text>
+<text x="784.7" y="823.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="end">D21</text>
+<text x="784.7" y="403.7" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#6d4c41" text-anchor="end">GND1</text>
+<text x="460.9" y="503.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#6d4c41" text-anchor="start">GND2</text>
+<text x="460.9" y="521.0" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#6d4c41" text-anchor="start">GND3</text>
+<text x="460.9" y="432.1" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#6d4c41" text-anchor="start">IORF</text>
+<text x="460.9" y="449.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#6d4c41" text-anchor="start">RST1</text>
+<text x="784.7" y="350.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="end">SCL</text>
+<text x="784.7" y="368.1" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="end">SDA</text>
+<text x="460.9" y="538.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#6d4c41" text-anchor="start">VIN</text>
+<path d="M 109.6 403.8 H 103.6 V 542.3 H 109.6" fill="none" stroke="#777" stroke-width="1.2"/>
+<text x="95.6" y="473.1" font-family="system-ui, 'Segoe UI', sans-serif" font-size="14" font-weight="700" fill="#222" text-anchor="end">J3</text>
+<text x="95.6" y="487.1" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9" font-weight="400" fill="#777" text-anchor="end">no name printed</text>
+<path d="M 109.6 563.8 H 103.6 V 702.3 H 109.6" fill="none" stroke="#777" stroke-width="1.2"/>
+<text x="95.6" y="633.1" font-family="system-ui, 'Segoe UI', sans-serif" font-size="14" font-weight="700" fill="#222" text-anchor="end">J11</text>
+<text x="95.6" y="647.1" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9" font-weight="400" fill="#777" text-anchor="end">name printed</text>
+<text x="396.7" y="565.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="8" font-weight="400" fill="#777" text-anchor="start">2</text>
+<text x="396.7" y="583.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="8" font-weight="400" fill="#777" text-anchor="start">4</text>
+<text x="396.7" y="601.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="8" font-weight="400" fill="#777" text-anchor="start">6</text>
+<text x="396.7" y="619.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="8" font-weight="400" fill="#777" text-anchor="start">8</text>
+<text x="396.7" y="637.0" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="8" font-weight="400" fill="#777" text-anchor="start">10</text>
+<text x="396.7" y="654.7" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="8" font-weight="400" fill="#777" text-anchor="start">12</text>
+<text x="396.7" y="672.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="8" font-weight="400" fill="#777" text-anchor="start">14</text>
+<text x="396.7" y="690.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="8" font-weight="400" fill="#777" text-anchor="start">16</text>
+<path d="M 109.6 723.9 H 103.6 V 862.3 H 109.6" fill="none" stroke="#777" stroke-width="1.2"/>
+<text x="95.6" y="793.1" font-family="system-ui, 'Segoe UI', sans-serif" font-size="14" font-weight="700" fill="#222" text-anchor="end">J12</text>
+<text x="95.6" y="807.1" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9" font-weight="400" fill="#777" text-anchor="end">name printed</text>
+<text x="396.7" y="725.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="8" font-weight="400" fill="#777" text-anchor="start">2</text>
+<text x="396.7" y="743.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="8" font-weight="400" fill="#777" text-anchor="start">4</text>
+<text x="396.7" y="761.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="8" font-weight="400" fill="#777" text-anchor="start">6</text>
+<text x="396.7" y="779.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="8" font-weight="400" fill="#777" text-anchor="start">8</text>
+<text x="396.7" y="797.0" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="8" font-weight="400" fill="#777" text-anchor="start">10</text>
+<text x="396.7" y="814.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="8" font-weight="400" fill="#777" text-anchor="start">12</text>
+<text x="396.7" y="832.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="8" font-weight="400" fill="#777" text-anchor="start">14</text>
+<text x="396.7" y="850.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="8" font-weight="400" fill="#777" text-anchor="start">16</text>
+<text x="335.4" y="414.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#bdbdbd" text-anchor="end">not connected</text>
+<text x="351.4" y="414.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">1</text>
+<text x="335.4" y="432.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#6d4c41" text-anchor="end">IOREF</text>
+<text x="351.4" y="432.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">2</text>
+<text x="335.4" y="450.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#6d4c41" text-anchor="end">RESET</text>
+<text x="351.4" y="450.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">3</text>
+<text x="335.4" y="468.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#6d4c41" text-anchor="end">3.3 V</text>
+<text x="351.4" y="468.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">4</text>
+<text x="335.4" y="485.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#6d4c41" text-anchor="end">Mega 5 V</text>
+<text x="351.4" y="485.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">5</text>
+<text x="335.4" y="503.7" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#6d4c41" text-anchor="end">GND</text>
+<text x="351.4" y="503.7" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">6</text>
+<text x="335.4" y="521.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#6d4c41" text-anchor="end">GND</text>
+<text x="351.4" y="521.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">7</text>
+<text x="335.4" y="539.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#6d4c41" text-anchor="end">VIN</text>
+<text x="351.4" y="539.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">8</text>
+<text x="335.4" y="574.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="700" fill="#c2185b" text-anchor="end">female1 microphone ← J5 pin 6</text>
+<text x="351.4" y="574.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">1</text>
+<text x="335.4" y="592.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="700" fill="#c2185b" text-anchor="end">female2 microphone ← J1 pin 6</text>
+<text x="351.4" y="592.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">3</text>
+<text x="335.4" y="610.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="700" fill="#c2185b" text-anchor="end">female3 microphone ← A-J3 pin 3</text>
+<text x="351.4" y="610.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">5</text>
+<text x="335.4" y="628.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="700" fill="#c2185b" text-anchor="end">male1 microphone ← A-J3 pin 13</text>
+<text x="351.4" y="628.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">7</text>
+<text x="335.4" y="646.0" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="700" fill="#c2185b" text-anchor="end">male2 microphone ← B-J4 pin 10</text>
+<text x="351.4" y="646.0" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">9</text>
+<text x="335.4" y="663.7" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#b26a00" text-anchor="end">female1 photosensor ← J5 pin 5</text>
+<text x="351.4" y="663.7" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">11</text>
+<text x="335.4" y="681.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#b26a00" text-anchor="end">female2 photosensor ← J1 pin 5</text>
+<text x="351.4" y="681.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">13</text>
+<text x="335.4" y="699.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#b26a00" text-anchor="end">female3 photosensor ← A-J3 pin 4</text>
+<text x="351.4" y="699.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">15</text>
+<text x="335.4" y="734.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#b26a00" text-anchor="end">male1 photosensor A ← A-J3 pin 14</text>
+<text x="351.4" y="734.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">1</text>
+<text x="335.4" y="752.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#b26a00" text-anchor="end">male1 photosensor B ← A-J3 pin 7</text>
+<text x="351.4" y="752.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">3</text>
+<text x="335.4" y="770.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#b26a00" text-anchor="end">male1 photosensor C ← A-J3 pin 15</text>
+<text x="351.4" y="770.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">5</text>
+<text x="335.4" y="788.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#b26a00" text-anchor="end">male1 photosensor D ← A-J3 pin 8</text>
+<text x="351.4" y="788.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">7</text>
+<text x="335.4" y="806.0" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#b26a00" text-anchor="end">male2 photosensor A ← B-J4 pin 11</text>
+<text x="351.4" y="806.0" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">9</text>
+<text x="335.4" y="823.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#b26a00" text-anchor="end">male2 photosensor B ← B-J4 pin 4</text>
+<text x="351.4" y="823.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">11</text>
+<text x="335.4" y="841.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#b26a00" text-anchor="end">male2 photosensor C ← B-J4 pin 12</text>
+<text x="351.4" y="841.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">13</text>
+<text x="335.4" y="859.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" font-weight="400" fill="#b26a00" text-anchor="end">male2 photosensor D ← B-J4 pin 5</text>
+<text x="351.4" y="859.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">15</text>
+<path d="M 1305.4 339.8 H 1311.4 V 513.8 H 1305.4" fill="none" stroke="#777" stroke-width="1.2"/>
+<text x="1319.4" y="426.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="14" font-weight="700" fill="#222" text-anchor="start">J4</text>
+<text x="1319.4" y="440.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9" font-weight="400" fill="#777" text-anchor="start">no name printed</text>
+<path d="M 1305.4 528.3 H 1311.4 V 666.7 H 1305.4" fill="none" stroke="#777" stroke-width="1.2"/>
+<text x="1319.4" y="597.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="14" font-weight="700" fill="#222" text-anchor="start">J8</text>
+<text x="1319.4" y="611.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9" font-weight="400" fill="#777" text-anchor="start">no name printed</text>
+<path d="M 1305.4 688.3 H 1311.4 V 826.8 H 1305.4" fill="none" stroke="#777" stroke-width="1.2"/>
+<text x="1319.4" y="757.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="14" font-weight="700" fill="#222" text-anchor="start">J10</text>
+<text x="1319.4" y="771.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9" font-weight="400" fill="#777" text-anchor="start">no name printed</text>
+<text x="892.0" y="350.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">1</text>
+<text x="902.0" y="350.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#9e9e9e" xml:space="preserve">SCL</text>
+<text x="892.0" y="368.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">2</text>
+<text x="902.0" y="368.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#9e9e9e" xml:space="preserve">SDA</text>
+<text x="892.0" y="386.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">3</text>
+<text x="902.0" y="386.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#6d4c41" xml:space="preserve">AREF</text>
+<text x="892.0" y="404.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">4</text>
+<text x="902.0" y="404.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#6d4c41" xml:space="preserve">GND</text>
+<text x="892.0" y="421.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">5</text>
+<text x="902.0" y="421.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#1565c0" xml:space="preserve">female3/audio  → female3/amp1 pin 6</text>
+<text x="892.0" y="439.7" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">6</text>
+<text x="902.0" y="439.7" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#1565c0" xml:space="preserve">female2/audio  → female2/amp1 pin 6</text>
+<text x="892.0" y="457.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">7</text>
+<text x="902.0" y="457.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#1565c0" xml:space="preserve">female1/audio  → female1/amp1 pin 6<tspan fill="#d32f2f" font-weight="700">   D11 cut in the rework</tspan></text>
+<text x="892.0" y="475.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">8</text>
+<text x="902.0" y="475.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#2e7d32" xml:space="preserve">male2/neopixel  → B-J4 pin 3<tspan fill="#d32f2f" font-weight="700">   D10 cut in the rework</tspan></text>
+<text x="892.0" y="493.1" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">9</text>
+<text x="902.0" y="493.1" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#2e7d32" xml:space="preserve">male1/neopixel  → A-J3 pin 6</text>
+<text x="892.0" y="510.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">10</text>
+<text x="902.0" y="510.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#2e7d32" xml:space="preserve">female3/neopixel  → A-J3 pin 11</text>
+<text x="892.0" y="539.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">1</text>
+<text x="902.0" y="539.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#2e7d32" xml:space="preserve">female2/neopixel  → J1 pin 13</text>
+<text x="892.0" y="557.1" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">2</text>
+<text x="902.0" y="557.1" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#2e7d32" xml:space="preserve">female1/neopixel  → J5 pin 13<tspan fill="#d32f2f" font-weight="700">   D6 cut in the rework</tspan></text>
+<text x="892.0" y="574.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">3</text>
+<text x="902.0" y="574.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#2e7d32" xml:space="preserve">male1/bar neopixel  → B-J4 pin 15<tspan fill="#d32f2f" font-weight="700">   D5 cut in the rework</tspan></text>
+<text x="892.0" y="592.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">4</text>
+<text x="902.0" y="592.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#2e7d32" xml:space="preserve">male2/bar neopixel  → B-J4 pin 8<tspan fill="#d32f2f" font-weight="700">   D4 cut in the rework</tspan></text>
+<text x="892.0" y="610.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">5</text>
+<text x="902.0" y="610.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#9e9e9e" xml:space="preserve">D3</text>
+<text x="892.0" y="628.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">6</text>
+<text x="902.0" y="628.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#9e9e9e" xml:space="preserve">D2</text>
+<text x="892.0" y="646.0" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">7</text>
+<text x="902.0" y="646.0" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#9e9e9e" xml:space="preserve">D1</text>
+<text x="892.0" y="663.7" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">8</text>
+<text x="902.0" y="663.7" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#9e9e9e" xml:space="preserve">D0</text>
+<text x="892.0" y="699.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">1</text>
+<text x="902.0" y="699.3" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#9e9e9e" xml:space="preserve">D14</text>
+<text x="892.0" y="717.1" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">2</text>
+<text x="902.0" y="717.1" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#9e9e9e" xml:space="preserve">D15</text>
+<text x="892.0" y="734.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">3</text>
+<text x="902.0" y="734.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#9e9e9e" xml:space="preserve">D16</text>
+<text x="892.0" y="752.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">4</text>
+<text x="902.0" y="752.6" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#9e9e9e" xml:space="preserve">D17</text>
+<text x="892.0" y="770.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">5</text>
+<text x="902.0" y="770.4" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#9e9e9e" xml:space="preserve">D18</text>
+<text x="892.0" y="788.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">6</text>
+<text x="902.0" y="788.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#9e9e9e" xml:space="preserve">D19</text>
+<text x="892.0" y="806.0" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">7</text>
+<text x="902.0" y="806.0" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#9e9e9e" xml:space="preserve">D20</text>
+<text x="892.0" y="823.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="10" font-weight="400" fill="#777" text-anchor="end">8</text>
+<text x="902.0" y="823.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="11" fill="#9e9e9e" xml:space="preserve">D21</text>
+<text x="481.0" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#6d4c41" text-anchor="start" transform="rotate(90 481.0 982.9)">1  GND</text>
+<text x="490.5" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#6d4c41" text-anchor="start" transform="rotate(90 490.5 982.9)">2  GND</text>
+<text x="498.7" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 498.7 982.9)">3  D52_SCK (D52)</text>
+<text x="508.2" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 508.2 982.9)">4  D53_CS (D53)</text>
+<text x="516.5" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 516.5 982.9)">5  D50_MISO (D50)</text>
+<text x="526.0" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 526.0 982.9)">6  D51_MOSI (D51)</text>
+<text x="534.3" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 534.3 982.9)">7  D48</text>
+<text x="543.8" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 543.8 982.9)">8  D49</text>
+<text x="552.1" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 552.1 982.9)">9  D46</text>
+<text x="561.6" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 561.6 982.9)">10  D47</text>
+<text x="569.9" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 569.9 982.9)">11  D44</text>
+<text x="579.4" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 579.4 982.9)">12  D45</text>
+<text x="587.6" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 587.6 982.9)">13  D42</text>
+<text x="597.1" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 597.1 982.9)">14  D43</text>
+<text x="605.4" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 605.4 982.9)">15  D40</text>
+<text x="614.9" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 614.9 982.9)">16  D41</text>
+<text x="623.2" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 623.2 982.9)">17  D38</text>
+<text x="632.7" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 632.7 982.9)">18  D39</text>
+<text x="641.0" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 641.0 982.9)">19  D36</text>
+<text x="650.5" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 650.5 982.9)">20  D37</text>
+<text x="658.8" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 658.8 982.9)">21  D34</text>
+<text x="668.3" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 668.3 982.9)">22  D35</text>
+<text x="676.5" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 676.5 982.9)">23  D32</text>
+<text x="686.0" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 686.0 982.9)">24  D33</text>
+<text x="694.3" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 694.3 982.9)">25  D30</text>
+<text x="703.8" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 703.8 982.9)">26  D31</text>
+<text x="712.1" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 712.1 982.9)">27  D28</text>
+<text x="721.6" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 721.6 982.9)">28  D29</text>
+<text x="729.9" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 729.9 982.9)">29  D26</text>
+<text x="739.4" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 739.4 982.9)">30  D27</text>
+<text x="747.7" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 747.7 982.9)">31  D24  → R3 pin 1</text>
+<text x="757.2" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#9e9e9e" text-anchor="start" transform="rotate(90 757.2 982.9)">32  D25  → R4 pin 1</text>
+<text x="765.4" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#1565c0" text-anchor="start" transform="rotate(90 765.4 982.9)">33  male1/audio (D22)  → male1/amp1 pin 6</text>
+<text x="774.9" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#1565c0" text-anchor="start" transform="rotate(90 774.9 982.9)">34  male2/audio (D23)  → male2/amp1 pin 6</text>
+<text x="783.2" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#6d4c41" text-anchor="start" transform="rotate(90 783.2 982.9)">35  Mega 5 V</text>
+<text x="792.7" y="982.9" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="400" fill="#6d4c41" text-anchor="start" transform="rotate(90 792.7 982.9)">36  Mega 5 V</text>
+<path d="M 479.5 944.9 V 974.9 H 473.5" fill="none" stroke="#777" stroke-width="1.2"/>
+<text x="467.5" y="962.9" font-family="system-ui, 'Segoe UI', sans-serif" font-size="14" font-weight="700" fill="#222" text-anchor="end">J9</text>
+<text x="467.5" y="976.9" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9" font-weight="400" fill="#777" text-anchor="end">no name printed</text>
+<text x="40.0" y="1244.3" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="400" fill="#444" text-anchor="start">J11 and J12 are break points, not headers. Each row is two nets: the odd pin is the wire from the body, the even pin is the Mega's analog input,</text>
+<text x="40.0" y="1264.3" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="400" fill="#444" text-anchor="start">joined only by what is physically fitted across the row (dashed). After the dirty rework, J11 rows 1-10 go through the analyser array instead.</text>
+<text x="40.0" y="1284.3" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="400" fill="#444" text-anchor="start">The names on J4, J8 and J10 are the copper's. A crossed-out track was cut in the rework, and that pad now carries a tone or the analyser strobe.</text>
+<text x="40.0" y="1304.3" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="400" fill="#444" text-anchor="start">See dirty rework, sections 3 and 4.</text>
+</svg>
