@@ -28,6 +28,15 @@ already says about itself.
 """
 from typing import NamedTuple
 
+# The firmware that knows `d`. A board on 1 has A0 and nothing else, and
+# it does not go quiet when asked for two channels - it answers
+# `error commands: b | ?`, which is a perfectly good reply to a question
+# it does not understand and parses here as "not a capture". Read as
+# silence, that sends somebody to check a lead that was never the problem.
+MINIMUM_FIRMWARE = 2
+
+REFUSAL = "error"
+
 
 class Pairs(NamedTuple):
     """One dual capture: two channels, and the rate each was taken at."""
@@ -97,3 +106,32 @@ def parse_pairs(line):
         tuple(numbers[offset :: len(names)]) for offset in range(len(names))
     )
     return Pairs(sample_rate=sample_rate, names=names, channels=channels)
+
+
+def firmware_of(line):
+    """The firmware version in a greeting or a status line, or None.
+
+    The greeting is the one place the board says what it is, and it says
+    it unprompted on every reboot - which is every time the port opens,
+    since opening toggles DTR. So this costs nothing and is known before
+    the first capture is asked for.
+    """
+    if not line:
+        return None
+    for piece in line.split():
+        name, _, value = piece.partition("=")
+        if name == "firmware":
+            try:
+                return int(value)
+            except ValueError:
+                return None
+    return None
+
+
+def is_refusal(line):
+    """Did the board answer that it does not know the command?
+
+    Its own word for it, and the one reply that must not be read as
+    silence: silence is a lead, a refusal is a sketch.
+    """
+    return bool(line) and line.startswith(REFUSAL)

@@ -365,7 +365,7 @@ class LoneScope(Scope):
     it, and what is being checked is only whether its entry survives.
     """
 
-    def __init__(self, graph=None, trace=None):
+    def __init__(self, graph=None, trace=None, firmware=2):
         self._owner = None
         self._owners = []
         self._dict = {}
@@ -380,6 +380,8 @@ class LoneScope(Scope):
         self._trace = trace if trace is not None else Trace()
         self._graph = graph
         self._greeting = None
+        self._firmware = firmware
+        self._refused_the_command = False
         self._outcome = None
         self._port_handler = None
         self._children = {"com port": lambda: None}
@@ -402,8 +404,10 @@ class LoneScope(Scope):
         return dict(self._children)
 
 
-def snapshot_of(graph=None, trace=None):
-    return LoneScope(graph=graph, trace=trace)._snapshot_if_opened(())
+def snapshot_of(graph=None, trace=None, firmware=2):
+    return LoneScope(
+        graph=graph, trace=trace, firmware=firmware
+    )._snapshot_if_opened(())
 
 
 def recorded():
@@ -449,3 +453,74 @@ def test_the_recording_line_says_where_the_picture_is():
 
     afterwards = snapshot_of(graph=object(), trace=recorded())
     assert "open 'trace'" in afterwards["recording"]["value"]
+
+
+# --- an old board, which is not a missing lead ---------------------------
+#
+# Firmware 1 knows A0 and nothing else. Asked for two channels it does not
+# go quiet - it answers `error commands: b | ?`, a perfectly good reply to
+# a question it does not understand. Read as silence, that sent somebody
+# to check a cable that was never the problem, while the board was
+# answering the whole time.
+
+
+def test_the_firmware_is_read_out_of_the_greeting():
+    from colloquy.tests.scope.protocol import firmware_of
+
+    greeting = "microphone_sampler firmware=2 mic_pin=A0 n=512 fs=19230.8"
+    assert firmware_of(greeting) == 2
+    assert firmware_of("microphone_sampler mic_pin=A0") is None
+    assert firmware_of("") is None
+
+
+def test_the_boards_own_refusal_is_recognised():
+    from colloquy.tests.scope.protocol import is_refusal
+
+    assert is_refusal("error commands: b | ?")
+    assert not is_refusal("pair n=1 fs=9615.4 pins=A0,A1 10 90")
+    assert not is_refusal("")
+
+
+def test_an_old_board_is_not_reported_as_a_missing_lead():
+    """The bug: one flat channel and a sentence about a cable."""
+    old = SimpleNamespace(_refused_the_command=True, _firmware=1)
+    said = Scope._why_nothing_came(old)
+    assert "firmware 1" in said
+    assert "Reflash" in said
+    assert "lead" not in said
+
+
+def test_a_silent_board_still_points_at_the_lead():
+    quiet = SimpleNamespace(_refused_the_command=False, _firmware=2)
+    assert "lead" in Scope._why_nothing_came(quiet)
+
+
+def test_an_old_board_is_refused_before_it_records_anything():
+    """Up front, or it answers every capture with a refusal and records
+    nothing for as long as somebody leaves it running."""
+    refusals = []
+    old = SimpleNamespace(
+        _outcome=None,
+        _graph=None,
+        _refused_the_command=False,
+        _trace=None,
+        _firmware=1,
+        _why_not_open=lambda: None,
+        _open_if_needed=lambda: None,
+        _greeting="microphone_sampler firmware=1 mic_pin=A0",
+        _refuse=refusals.append,
+    )
+    Scope.setup(old)
+    assert len(refusals) == 1
+    assert "firmware 1" in refusals[0]
+    assert "microphone_sampler" in refusals[0]
+
+
+def test_the_page_names_a_firmware_that_cannot_do_two_channels():
+    states = snapshot_of(graph=object(), trace=recorded(), firmware=1)
+    assert "too old" in states["firmware"]["value"]
+
+
+def test_the_page_says_when_the_firmware_is_good():
+    states = snapshot_of(graph=object(), trace=recorded(), firmware=2)
+    assert "knows both channels" in states["firmware"]["value"]

@@ -129,6 +129,8 @@ class Scope(BaseThread):
         self._graph = None
         self._started_at = None
         self._greeting = None
+        self._firmware = None
+        self._refused_the_command = False
         self._outcome = None
 
     @property
@@ -228,6 +230,7 @@ class Scope(BaseThread):
                 raw = self.port_handler.readline()
                 if raw and raw.startswith(b"microphone_sampler"):
                     self._greeting = raw.decode("ascii", "replace").strip()
+                    self._firmware = protocol.firmware_of(self._greeting)
 
     def _read_block(self):
         """Ask for one capture of both channels and read it back.
@@ -247,9 +250,16 @@ class Scope(BaseThread):
             raw = handler.readline()
             if not raw:
                 continue
-            pairs = protocol.parse_pairs(raw.decode("ascii", "replace").strip())
+            line = raw.decode("ascii", "replace").strip()
+            pairs = protocol.parse_pairs(line)
             if pairs is not None:
                 return asked_at, pairs
+            if protocol.is_refusal(line):
+                # The board understood the link perfectly and does not
+                # know the command. Kept, because the loop must not call
+                # that silence - see `_why_nothing_came`.
+                self._refused_the_command = True
+                return asked_at, None
         return asked_at, None
 
     # --- the run ----------------------------------------------------------
@@ -257,6 +267,7 @@ class Scope(BaseThread):
     def setup(self):
         self._outcome = None
         self._graph = None
+        self._refused_the_command = False
         # A fresh recording every time, and the old graph with it. A scope
         # shows what is on the pin now, and carrying the last run's
         # samples into this one would make a picture nobody could date.
@@ -271,6 +282,18 @@ class Scope(BaseThread):
             self._open_if_needed()
         except serial.SerialException as error:
             self._refuse(f"could not open the lead - {error}")
+            return
+
+        if self._firmware is not None and self._firmware < protocol.MINIMUM_FIRMWARE:
+            # Up front, because the board will otherwise answer every
+            # capture with a refusal and record nothing, for as long as
+            # somebody leaves it running.
+            self._refuse(
+                f"the board is on firmware {self._firmware} and the second "
+                f"channel needs {protocol.MINIMUM_FIRMWARE} - reflash "
+                "Source code/Arduino/microphone_sampler/ (firmware 1 knows "
+                "A0 only, and answers a two-channel request with an error)"
+            )
             return
 
         self._started_at = time()
@@ -303,13 +326,30 @@ class Scope(BaseThread):
 
         asked_at, pairs = self._read_block()
         if pairs is None:
-            self._refuse(
-                "the board stopped answering - check the lead is still "
-                "plugged in"
-            )
+            self._refuse(self._why_nothing_came())
             return
 
         self._trace.add(asked_at - self._started_at, pairs)
+
+    def _why_nothing_came(self):
+        """Which of the two faults it was, in the board's own words.
+
+        They are opposite in kind and the remedies are nowhere near each
+        other: a lead that has come out is silence, and a board that does
+        not know the command is a *reply*. Reading the reply as silence is
+        what sent somebody to check a cable that was never the problem -
+        the board was answering the whole time, in firmware 1, about a
+        command it has never had.
+        """
+        if self._refused_the_command:
+            version = self._firmware if self._firmware is not None else "1"
+            return (
+                f"the board answered that it does not know the two-channel "
+                f"command - it is on firmware {version}, and the second "
+                f"channel needs {protocol.MINIMUM_FIRMWARE}. Reflash "
+                "Source code/Arduino/microphone_sampler/"
+            )
+        return "the board stopped answering - check the lead is still plugged in"
 
     def setdown(self):
         self._draw_the_trace()
@@ -365,6 +405,22 @@ class Scope(BaseThread):
         leaf("sketch", "Source code/Arduino/microphone_sampler/")
         if self._greeting:
             leaf("board says", self._greeting)
+        # Named on its own line rather than left inside the greeting: it is
+        # what decides whether there is a second channel at all, and a
+        # recording with one flat line is exactly what an old board looks
+        # like from the graph.
+        leaf(
+            "firmware",
+            "not known yet - it is said when the port opens"
+            if self._firmware is None
+            else f"{self._firmware}"
+            + (
+                f" - too old, the second channel needs "
+                f"{protocol.MINIMUM_FIRMWARE}"
+                if self._firmware < protocol.MINIMUM_FIRMWARE
+                else " - knows both channels"
+            ),
+        )
 
         refusal = self._why_not_open()
         leaf("can record", "yes" if refusal is None else f"no - {refusal}")

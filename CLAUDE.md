@@ -545,6 +545,23 @@ matters more than for one channel: on an odd truncation the channels come
 apart and every A1 lands where an A0 belongs, which is a silently swapped
 pair of microphones - the exact fault this is used to find.
 
+**An old board is not a missing lead, and saying so cost a real hour.**
+Firmware 1 knows A0 and nothing else; asked for two channels it does not
+go quiet, it answers `error commands: b | ?` - a perfectly good reply to a
+question it has never had. That parses as "not a capture", which the loop
+read as silence and reported as *"the board stopped answering - check the
+lead is still plugged in"*: the wrong fault, pointing at a cable that was
+never the problem, while the board was answering the whole time. So the
+greeting's `firmware=` is read when the port opens and an old board is
+refused **before** it records anything (otherwise it answers every capture
+with a refusal, for as long as somebody leaves it running), the board's own
+refusal is recognised rather than counted as silence, and the version is a
+reading of its own on the page - because a recording with one flat line is
+exactly what an old board looks like from the graph, which is the other
+thing it can be mistaken for. `GraphView` needed nothing: it has drawn
+several labelled lines with a legend since it replaced uPlot, and a page
+carrying two says `2 lines:` in its `points` reading.
+
 `microphone_sampler` still *times* its own captures, so what arrives
 carries the rate it was really taken at. **Blocks, and the gaps between them**, are the
 whole of the design: the board will not sample and send at once (a UART
