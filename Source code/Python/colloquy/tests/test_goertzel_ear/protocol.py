@@ -12,9 +12,16 @@ The board is `Source code/Arduino/microphone_sampler/` and every reply is
 one line beginning with a keyword and then `name=value` pairs, so this
 does not have to know the prose:
 
-    microphone_sampler firmware=1 mic_pin=A0 n=512 fs=19230.8 baud=1000000
-    status firmware=1 mic_pin=A0 n=512 fs=19230.8
+    microphone_sampler firmware=2 mic_pin=A0 n=512 fs=19230.8 baud=1000000
+    status firmware=2 mic_pin=A0 n=512 fs=19230.8 pin_b=A1 pairs=256
     block n=512 fs=19230.8 512 511 514 509 ...
+
+The board grew a second channel in firmware 2, and none of it is here:
+`b` and its `block` reply are untouched to the last byte. A second
+channel interleaved into this one would leave all five bins computed over
+two microphones' samples alternating - which does not fail, it answers
+wrongly, about a frequency nobody played. The two-channel command is `d`
+and its reader is `colloquy/tests/scope/protocol.py`.
 
 **A block carries samples and nothing else.** It says nothing about which
 frequency, how loud, or whether anything was heard - those are questions

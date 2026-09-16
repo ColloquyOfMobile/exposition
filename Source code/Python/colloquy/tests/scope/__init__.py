@@ -1,12 +1,22 @@
 # -*- coding: utf-8 -*-
 # Source code/Python/colloquy/tests/scope/__init__.py
 
-"""An oscilloscope: press start, record A0, press stop, look at it.
+"""A two-channel oscilloscope: start, record A0 and A1, stop, look.
 
-Three links and no question of its own. It records what arrives on one
-ADC pin for as long as you leave it running, and when you stop it the
-recording becomes a graph that can be paged through and zoomed. What is
-on the pin, and what it means, is yours - this end has no opinion.
+Three links and no question of its own. It records what arrives on two
+ADC pins for as long as you leave it running, and when you stop it the
+recording becomes a graph of both, drawn against one clock, that can be
+paged through and zoomed. What is on the pins, and what it means, is
+yours - this end has no opinion.
+
+**Two channels because one trace cannot answer the question that gets
+asked of it.** A microphone producing nothing looks exactly like a quiet
+room, and a trace with a small wobble on it is either a dead capsule or a
+still afternoon - there is nothing in the picture to say which. Put a
+second microphone on A1 in the same room and the comparison makes itself:
+whatever the two are biased at, one swinging while the other does not is
+a fact about a microphone and not about the room. That is why `swing` is
+a reading of its own beside each channel.
 
 **Why it is not called `test_something`.** Every sibling here asks a
 question and reports an answer: is this microphone deaf, is this body
@@ -22,18 +32,32 @@ than in spite of it: what a run produces is a picture, and the instrument
 that reads a picture is somebody's eye. Nothing here writes down whether
 the trace was any good, because nothing here knows.
 
-**The board is `Source code/Arduino/microphone_sampler/`**, unchanged and
-with nothing to change - it already captures a block of samples and, more
-to the point, *times* the block, so what comes back carries the rate it
-was really taken at rather than one assumed at both ends. A pin, a ground
-and a lead is the whole of the hardware.
+**The board is `Source code/Arduino/microphone_sampler/`**, which times
+its own captures, so what comes back carries the rate it was really taken
+at rather than one assumed at both ends. Two pins, a common ground and a
+lead is the whole of the hardware.
+
+It gained a **`d`** command for this (firmware 2) rather than a second
+channel on `b`. `b` is what `test_goertzel_ear` asks for, and it runs five
+Goertzel bins over what comes back; handing that two interleaved
+microphones would not fail, it would answer wrongly about a frequency
+nobody played. So the single-channel reply is untouched to the last byte.
+`d` fills the same buffer with interleaved pairs - the same 512
+conversions, the same 27 ms window, the same reply size - and what is
+halved is how many each channel gets, about 9.6 kSPS apiece.
+
+**The two halves of a pair are one conversion apart**, about 52 us,
+rather than simultaneous: there is one converter behind a multiplexer, so
+simultaneous is not on offer at any price. It costs nothing for what this
+is for, and would matter to anything measuring phase between the two,
+which nothing here does.
 
 **Blocks, and the gaps between them.** The board captures 512 samples and
 then sends them, never both at once, because a UART write inside a
 capture would stretch the window and put a step in the very signal being
 looked at. So a recording is a row of 26.6 ms windows about 20 ms apart,
-and roughly half the wall clock is in it - `duty` on the page says how
-much, and `trace.py` says why the blocks are drawn where they fell rather
+and roughly a third of the wall clock is in it - `duty` on the page says
+how much, and `trace.py` says why the blocks are drawn where they fell rather
 than laid end to end. Inside a block the samples are contiguous and
 evenly spaced, which is what makes a waveform readable; across a boundary
 the line is joining two moments and means nothing.
@@ -54,7 +78,7 @@ from colloquy.ui import leaves
 from colloquy.ui.graph_view import GraphView
 
 from ..bench_com_port import BenchComPort
-from ..test_goertzel_ear import protocol
+from . import protocol
 from .trace import Trace
 
 
@@ -82,11 +106,12 @@ class Scope(BaseThread):
     # than sat on.
     REPLY_TIMEOUT = 2.0
 
-    # About ten megabytes of arrays, and a minute and a half of wall clock
-    # at the rate one lead can carry. A cap on samples rather than on
-    # duration because samples are what cost memory, and a slow link would
-    # otherwise buy itself a longer recording by having recorded less of
-    # it.
+    # Pairs, not samples - so it is twelve bytes each (a double of clock
+    # and two counts) and about twelve megabytes, which at 9.6 kSPS a
+    # channel and a third of the clock spent sending is two or three
+    # minutes. A cap on samples rather than on duration because samples
+    # are what cost memory, and a slow link would otherwise buy itself a
+    # longer recording by having recorded less of it.
     #
     # It stops and says so rather than dropping the oldest, which would
     # quietly turn a recording somebody believed was whole into its last
@@ -205,15 +230,15 @@ class Scope(BaseThread):
                     self._greeting = raw.decode("ascii", "replace").strip()
 
     def _read_block(self):
-        """Ask for one capture and read it back.
+        """Ask for one capture of both channels and read it back.
 
-        Returns the moment it was *asked for* along with the block, which
+        Returns the moment it was *asked for* along with the pairs, which
         is what `Trace` places the samples at - see there.
         """
         handler = self.port_handler
         handler.reset_input_buffer()
         asked_at = time()
-        handler.write(b"b\n")
+        handler.write(b"d\n")
 
         deadline = asked_at + self.REPLY_TIMEOUT
         while time() < deadline:
@@ -222,9 +247,9 @@ class Scope(BaseThread):
             raw = handler.readline()
             if not raw:
                 continue
-            block = protocol.parse_block(raw.decode("ascii", "replace").strip())
-            if block is not None:
-                return asked_at, block
+            pairs = protocol.parse_pairs(raw.decode("ascii", "replace").strip())
+            if pairs is not None:
+                return asked_at, pairs
         return asked_at, None
 
     # --- the run ----------------------------------------------------------
@@ -270,21 +295,21 @@ class Scope(BaseThread):
         """
         if len(self._trace) >= self.MAX_SAMPLES:
             self._outcome = (
-                f"stopped at {len(self._trace):,} samples, the most one "
+                f"stopped at {len(self._trace):,} samples a channel, the most one "
                 "recording holds - press start again for a new one"
             )
             self.stop()
             return
 
-        asked_at, block = self._read_block()
-        if block is None:
+        asked_at, pairs = self._read_block()
+        if pairs is None:
             self._refuse(
                 "the board stopped answering - check the lead is still "
                 "plugged in"
             )
             return
 
-        self._trace.add(asked_at - self._started_at, block)
+        self._trace.add(asked_at - self._started_at, pairs)
 
     def setdown(self):
         self._draw_the_trace()
@@ -310,7 +335,7 @@ class Scope(BaseThread):
             return
         self._graph = GraphView(
             owner=self,
-            points=self._trace.columns(),
+            series=self._trace.series(),
             name="trace",
         )
 
@@ -359,8 +384,9 @@ class Scope(BaseThread):
         # the link. Nothing here may be named after a child.
         leaf(
             "recording",
-            f"{len(trace):,} samples in {trace.blocks} blocks over "
-            f"{trace.span:.1f}s at {trace.sample_rate:.0f} a second"
+            f"{len(trace):,} samples per channel in {trace.captures} "
+            f"captures over {trace.span:.1f}s at {trace.sample_rate:.0f} a "
+            f"second each"
             + (
                 " - open 'trace'"
                 if self._graph is not None
@@ -376,25 +402,71 @@ class Scope(BaseThread):
             "the board cannot sample and send at once, so the line across "
             "a gap joins two moments and is not a signal",
         )
-        leaf("signal", self._describe_signal(trace))
+        for index, channel in enumerate(trace.names):
+            leaf(channel, self._describe_channel(trace, index))
+        leaf("compared", self._compare(trace))
         return self._with_outcome(leaf, states)
 
     @staticmethod
-    def _describe_signal(trace):
-        """The extent of the whole recording, and the two faults it tells.
+    def _describe_channel(trace, index):
+        """One channel's extent and swing, and the faults they tell.
 
-        Not a measurement of anything. A flat line is a pin with nothing
-        driving it and a line touching both rails is an input being
-        clipped, and both read as a perfectly ordinary trace until
-        somebody looks at the numbers.
+        Not a measurement of anything. Three things read as a perfectly
+        ordinary trace until somebody looks at the numbers: a flat line is
+        a pin with nothing driving it, a line touching both rails is an
+        input being clipped, and a pin with *nothing connected* does not
+        read silence at all - it wanders over most of the range, which
+        looks livelier than a working microphone in a quiet room.
         """
-        low, high = trace.y_extent
-        said = f"{low} to {high} of 1023 ADC counts"
+        low, high = trace.extent(index)
+        swing = trace.swing(index)
+        said = f"{low} to {high} of 1023, swing {swing}"
         if low == high:
             return f"{said} - flat, nothing is driving the pin"
         if low <= 0 and high >= 1023:
             return f"{said} - touching both rails, the input is clipping"
         return said
+
+    @staticmethod
+    def _compare(trace):
+        """The two channels against each other, which is the whole point.
+
+        A ratio and not a verdict. One microphone against another in the
+        same room is the only comparison available that the room cannot
+        spoil - a quiet afternoon halves both - so the number worth
+        printing is how many times one out-swung the other, with what that
+        might mean left where it belongs.
+
+        Deliberately not called a pass or a fail. The quiet one may be
+        dead, unplugged, unpowered, on a pin that is not connected, or
+        simply further from whatever is making the noise, and this end
+        cannot tell those apart. What it *can* do is say plainly when
+        there is nothing to compare.
+        """
+        swings = [trace.swing(index) for index in range(len(trace.names))]
+        loudest = max(swings)
+        if loudest == 0:
+            return "both flat - nothing is arriving on either pin"
+
+        quietest = min(swings)
+        loud = trace.names[swings.index(loudest)]
+        quiet = trace.names[swings.index(quietest)]
+        if quietest == 0:
+            return (
+                f"{quiet} is flat while {loud} swings {loudest} - the "
+                f"difference is in the microphone or its wiring, not the room"
+            )
+        ratio = loudest / quietest
+        if ratio < 1.5:
+            return (
+                f"{loud} and {quiet} swing within {ratio:.1f}x of each "
+                f"other - both are hearing the room"
+            )
+        return (
+            f"{loud} out-swings {quiet} by {ratio:.1f}x - too much to be "
+            f"the room, which reaches both. Swap the two leads: if the "
+            f"quiet one follows, it is the microphone"
+        )
 
     def _with_outcome(self, leaf, states):
         if self._outcome is not None:

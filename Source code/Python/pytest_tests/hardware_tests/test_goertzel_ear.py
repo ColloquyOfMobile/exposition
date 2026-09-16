@@ -315,8 +315,8 @@ def test_anything_that_is_not_a_block_is_skipped_rather_than_raised():
     """The reply arrives among the board's greeting and whatever half
     line was in the buffer when the port opened."""
     for line in (
-        "microphone_sampler firmware=1 mic_pin=A0 n=512 fs=19230.8 baud=1000000",
-        "status firmware=1 mic_pin=A0 n=512 fs=19230.8",
+        "microphone_sampler firmware=2 mic_pin=A0 n=512 fs=19230.8 baud=1000000",
+        "status firmware=2 mic_pin=A0 n=512 fs=19230.8 pin_b=A1 pairs=256",
         "error commands: b | ?",
         "",
     ):

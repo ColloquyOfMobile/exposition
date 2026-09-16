@@ -500,9 +500,10 @@ refusal all reach it. `pytest_tests/hardware_tests/test_goertzel_ear_results.py`
 pins the file's shape and the listing.
 
 **`scope` is the seventh, it asks nothing, and that is what it is for**
-(2026-09-16, `colloquy/tests/scope/`). Press start, it records A0 as fast
-as the lead will carry it; press stop and the recording becomes a
-`GraphView` to page through and zoom. Every sibling in `tests/` asks a
+(2026-09-16, `colloquy/tests/scope/`). Press start, it records **A0 and
+A1** as fast as the lead will carry them; press stop and the recording
+becomes a `GraphView` of both against one clock, to page through and
+zoom. Every sibling in `tests/` asks a
 question and reports an answer - is this microphone deaf, is this body
 wired to its own filter, can she read his pattern - and this one asks
 none, which is why it is not called `test_*`: naming it `test scope`
@@ -513,23 +514,57 @@ chosen its question is no use. It is a **manual test** by `group.py`'s own
 rule rather than in spite of it: what it makes is a picture, and the
 instrument that reads a picture is an eye.
 
-**No sketch was written for it.** `microphone_sampler` already captures a
-block and, more to the point, *times* it, so what arrives carries the rate
-it was really taken at. **Blocks, and the gaps between them**, are the
+**Two channels because one trace cannot answer the question that gets
+asked of it.** A microphone producing nothing looks exactly like a quiet
+room, and a trace with a small wobble is either a dead capsule or a still
+afternoon - nothing in the picture says which. A second microphone in the
+same room makes the comparison itself: whatever the two are biased at, one
+swinging while the other does not is a fact about a microphone and not
+about the room. So each channel carries its own extent and **`swing`**
+(peak to peak), and a `compared` line gives the *ratio* - never a verdict,
+because the quiet one may be dead, unplugged, unpowered, on a pin that is
+not connected, or simply further from the noise, and this end cannot tell
+those apart. What it does say is the one move that separates a dead
+microphone from a dead channel and which nobody here can make: swap the
+leads and see if the quiet one follows.
+
+**The sketch grew a command, not a channel** (firmware 2). `b` and its
+`block` reply are untouched to the last byte, because that is what
+`test_goertzel_ear` asks for and it runs five Goertzel bins over what comes
+back - interleaving a second microphone into it would not fail, it would
+answer *wrongly*, about a frequency nobody played. `d` fills the same
+buffer with interleaved pairs: the same 512 conversions, the same 27 ms
+window, the same reply size, and what is halved is how many each channel
+gets (about 9.6 kSPS apiece). Its reply has a keyword of its own, `pair`,
+so neither parser can accept the other's line. **The two halves of a pair
+are one conversion apart**, about 52 us - one converter behind a
+multiplexer, so simultaneous is not on offer at any price; it costs
+nothing here and would matter to anything measuring phase, which nothing
+does. A truncated reply is dropped rather than read short, and here that
+matters more than for one channel: on an odd truncation the channels come
+apart and every A1 lands where an A0 belongs, which is a silently swapped
+pair of microphones - the exact fault this is used to find.
+
+`microphone_sampler` still *times* its own captures, so what arrives
+carries the rate it was really taken at. **Blocks, and the gaps between them**, are the
 whole of the design: the board will not sample and send at once (a UART
 write inside a capture would stretch the window and put a step in the
 signal), so a recording is a row of 26.6 ms windows about 20 ms apart, and
-`trace.py` places each block at the moment it was **asked for** rather
-than laying them end to end. End to end is the tempting mistake and the
+`trace.py` places each capture at the moment it was **asked for** rather
+than laying them end to end. Both channels share one clock - carrying that
+52 us would mean a second array of doubles to move a line by a twentieth
+of a millisecond, on a picture whose x positions come from a `time()`
+taken on this end before the command went out. End to end is the tempting mistake and the
 one thing that must not be done - it would draw a continuous trace, be
 wrong about when everything after the first block happened, and at a
 steady tone show a phase jump at every boundary, a fault that is not in
 the wire. So the gaps are drawn, `duty` says what fraction of the clock is
 really in the recording, and the page says outright that the line across a
-gap joins two moments and is not a signal. Two `array`s (`d` for the clock,
-`h` for the counts - ten bytes a sample against a Python int's twenty-eight)
-handed to the graph as `Columns`, so nothing is copied and `MAX_SAMPLES`
-caps a run at about ten megabytes; it stops and says so rather than
+gap joins two moments and is not a signal. `array`s (`d` for the clock, one `h` of counts per
+channel - twelve bytes a pair against a Python int's twenty-eight each)
+handed to the graph as a labelled `series`, so the two lines get tab10
+colours and a legend, nothing is copied, and `MAX_SAMPLES` caps a run at
+about twelve megabytes; it stops and says so rather than
 dropping the oldest, which would turn a recording somebody believed was
 whole into its last minute. **It is independent of `test goertzel ear`**
 though the same board suits both - separate params section, so choosing a
