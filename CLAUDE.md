@@ -490,6 +490,33 @@ file reads the way the run went. And **the pitches come out of the header
 on the way back in**, not out of `protocol.PITCHES`, so a pitch list that
 moves later cannot relabel an old measurement. A run's graph is built from
 its file only when the run is opened, and kept once built, because a
+**And one block can be drawn as a shape** (2026-09-16,
+`test_goertzel_ear/waveform.py`). The recording is the whole run at one
+level per block; this is the *samples inside a single block*, against
+real time. Every other reading here is a number **about** the capture,
+and a number cannot be recognised: a bin level says a frequency is
+present whether what is on the pin is a clean sine, a square, a clipped
+mess or hum landing in the same bin. 512 samples at ~19.2 kSPS is a
+26.6 ms window, so 400 Hz is ten and a half cycles you can count.
+**No sketch change was needed** - `microphone_sampler` already sends the
+samples with the rate it measured, which is the whole of what an
+oscilloscope is; what it lacked was somewhere to draw them.
+`draw the waveform` freezes the block the loop thread has in hand
+(no port is touched - a second thread on one serial handle is the hazard
+`_write_the_recording` declines to take with a file) for
+`_draw_the_recording`'s reason and more sharply: blocks arrive four times
+a second and a `GraphView` holds the reader's page and zoom. This is
+`microphone_plotter`'s WAVE mode with its one limitation gone - the IDE's
+plotter has no time axis, so there the sample rate alone decides how many
+cycles are on screen and has to be tuned by hand to the tone
+(`WAVE_HZ`), while here the x axis is real milliseconds. Which is what
+`GraphView`'s **`x_unit`** is for: everything drawn in this tree was a run
+until now, so the axis said `s` outright and a 26.6 ms capture came out as
+six ticks all reading `0.0s`. Legibility has a ceiling the bins do not -
+under ~8 samples a cycle (about 2.4 kHz at this prescaler) the drawing is
+a wobble at a frequency nobody played, which looks exactly like a fault,
+so the reading says so while the bins go on being right on two.
+
 `GraphView` holds which page the reader is on.
 Written at the end rather than a row at a time as blocks arrive, for a
 threading reason: a press lands on the request thread while blocks are

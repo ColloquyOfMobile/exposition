@@ -690,3 +690,40 @@ def test_the_page_hangs_nothing_on_the_picture(renderer):
     assert "data-svg-zoom" not in html
     assert "scroll to zoom" not in html
     assert "<script" not in html
+
+
+# --- the x unit ----------------------------------------------------------
+#
+# Everything drawn here was a run until `test goertzel ear`'s waveform, so
+# the axis said "s" outright. A capture is 27 milliseconds, where six
+# ticks of `{:.1f}s` all read `0.0s` and the picture quietly stops saying
+# when anything happened.
+
+
+def test_the_axis_says_seconds_unless_told_otherwise():
+    drawn = graph(points=[(0.0, 1.0), (10.0, 2.0)]).svg()
+    assert "0.0s" in drawn
+
+
+def test_the_axis_can_be_told_what_the_numbers_are():
+    drawn = graph(points=[(0.0, 1.0), (26.6, 2.0)], x_unit=" ms").svg()
+    assert " ms<" in drawn
+    assert "0.0s" not in drawn
+
+
+def test_a_millisecond_axis_labels_the_span_it_was_given():
+    """The tick at the far end is the block's own length, not a rounding
+    of it to the nearest second."""
+    drawn = graph(points=[(0.0, 1.0), (26.6, 2.0)], x_unit=" ms").svg()
+    assert "26.6 ms" in drawn
+
+
+def test_marks_are_keyed_in_the_same_unit():
+    """A mark's key is what the link says, so a waveform's marks must not
+    be named in seconds while its axis is in milliseconds."""
+    view = graph(
+        points=[(0.0, 1.0), (26.6, 2.0)],
+        marks=[(13.3, "halfway")],
+        x_unit=" ms",
+    )
+    assert "13.3 ms halfway" in view.snapshot_children["marks"].snapshot_children

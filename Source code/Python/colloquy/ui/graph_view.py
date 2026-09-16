@@ -250,13 +250,15 @@ class Marks(Base):
             entries[key] = partial(self._graph.go_to_mark, index)
         return entries
 
-    @staticmethod
-    def _key(seconds, label):
+    def _key(self, seconds, label):
         # The key is a path segment, and the tree splits a request on
         # "/": a label carrying one would route to a child that is not
         # there. The time goes in front because it is what tells two
         # marks of the same kind apart.
-        return f"{seconds:.1f}s {str(label).replace('/', '-')}"
+        return (
+            f"{seconds:.1f}{self._graph.x_unit} "
+            f"{str(label).replace('/', '-')}"
+        )
 
     @property
     def snapshot_children(self):
@@ -266,9 +268,23 @@ class Marks(Base):
 class GraphView(Base):
     """One or more lines, drawn as SVG, paged through with links."""
 
-    def __init__(self, owner, points=None, series=None, marks=None, name="graph"):
+    def __init__(
+        self,
+        owner,
+        points=None,
+        series=None,
+        marks=None,
+        name="graph",
+        x_unit="s",
+    ):
         super().__init__(owner=owner)
         self._name = name
+        # What the x numbers are. Everything drawn here was a run until
+        # `test goertzel ear`'s waveform, so the axis said "s" outright
+        # and a 27 ms capture came out as six ticks all reading 0.0s. It
+        # is a suffix and nothing else - the numbers are whatever the
+        # caller put in the series, and this only says what they are.
+        self._x_unit = x_unit
         self._series = self._as_series(points, series)
         self._marks = sorted(marks or (), key=lambda mark: mark[0])
         self._full_y = None       # scanned once, on first draw
@@ -313,6 +329,11 @@ class GraphView(Base):
         """Each line as (label, sequence). The label is None for the
         one-line case, which is what leaves it in `currentColor`."""
         return list(self._series)
+
+    @property
+    def x_unit(self):
+        """What the x numbers are, as a suffix. See `__init__`."""
+        return self._x_unit
 
     @property
     def marks(self):
@@ -775,7 +796,8 @@ class GraphView(Base):
             )
             parts.append(
                 f'<text x="{x:.1f}" y="{HEIGHT - 10}" text-anchor="middle" '
-                f'fill="currentColor" fill-opacity="0.7">{seconds:.1f}s</text>'
+                f'fill="currentColor" fill-opacity="0.7">{seconds:.1f}'
+                f'{self._x_unit}</text>'
             )
 
         # Before the lines, so a reading is never hidden under a note
