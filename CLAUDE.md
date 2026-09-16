@@ -490,33 +490,6 @@ file reads the way the run went. And **the pitches come out of the header
 on the way back in**, not out of `protocol.PITCHES`, so a pitch list that
 moves later cannot relabel an old measurement. A run's graph is built from
 its file only when the run is opened, and kept once built, because a
-**And one block can be drawn as a shape** (2026-09-16,
-`test_goertzel_ear/waveform.py`). The recording is the whole run at one
-level per block; this is the *samples inside a single block*, against
-real time. Every other reading here is a number **about** the capture,
-and a number cannot be recognised: a bin level says a frequency is
-present whether what is on the pin is a clean sine, a square, a clipped
-mess or hum landing in the same bin. 512 samples at ~19.2 kSPS is a
-26.6 ms window, so 400 Hz is ten and a half cycles you can count.
-**No sketch change was needed** - `microphone_sampler` already sends the
-samples with the rate it measured, which is the whole of what an
-oscilloscope is; what it lacked was somewhere to draw them.
-`draw the waveform` freezes the block the loop thread has in hand
-(no port is touched - a second thread on one serial handle is the hazard
-`_write_the_recording` declines to take with a file) for
-`_draw_the_recording`'s reason and more sharply: blocks arrive four times
-a second and a `GraphView` holds the reader's page and zoom. This is
-`microphone_plotter`'s WAVE mode with its one limitation gone - the IDE's
-plotter has no time axis, so there the sample rate alone decides how many
-cycles are on screen and has to be tuned by hand to the tone
-(`WAVE_HZ`), while here the x axis is real milliseconds. Which is what
-`GraphView`'s **`x_unit`** is for: everything drawn in this tree was a run
-until now, so the axis said `s` outright and a 26.6 ms capture came out as
-six ticks all reading `0.0s`. Legibility has a ceiling the bins do not -
-under ~8 samples a cycle (about 2.4 kHz at this prescaler) the drawing is
-a wobble at a frequency nobody played, which looks exactly like a fault,
-so the reading says so while the bins go on being right on two.
-
 `GraphView` holds which page the reader is on.
 Written at the end rather than a row at a time as blocks arrive, for a
 threading reason: a press lands on the request thread while blocks are
@@ -525,6 +498,56 @@ hazard where losing the last quarter-second of a killed run is not -
 `setdown` runs in `_run_in_context`'s `finally`, so a stop, an error and a
 refusal all reach it. `pytest_tests/hardware_tests/test_goertzel_ear_results.py`
 pins the file's shape and the listing.
+
+**`scope` is the seventh, it asks nothing, and that is what it is for**
+(2026-09-16, `colloquy/tests/scope/`). Press start, it records A0 as fast
+as the lead will carry it; press stop and the recording becomes a
+`GraphView` to page through and zoom. Every sibling in `tests/` asks a
+question and reports an answer - is this microphone deaf, is this body
+wired to its own filter, can she read his pattern - and this one asks
+none, which is why it is not called `test_*`: naming it `test scope`
+would promise a verdict deliberately not here. It is an instrument in the
+sense a scope on a bench is, pointed at a wire *because* nobody yet knows
+what they are looking for, which is exactly where a test that has already
+chosen its question is no use. It is a **manual test** by `group.py`'s own
+rule rather than in spite of it: what it makes is a picture, and the
+instrument that reads a picture is an eye.
+
+**No sketch was written for it.** `microphone_sampler` already captures a
+block and, more to the point, *times* it, so what arrives carries the rate
+it was really taken at. **Blocks, and the gaps between them**, are the
+whole of the design: the board will not sample and send at once (a UART
+write inside a capture would stretch the window and put a step in the
+signal), so a recording is a row of 26.6 ms windows about 20 ms apart, and
+`trace.py` places each block at the moment it was **asked for** rather
+than laying them end to end. End to end is the tempting mistake and the
+one thing that must not be done - it would draw a continuous trace, be
+wrong about when everything after the first block happened, and at a
+steady tone show a phase jump at every boundary, a fault that is not in
+the wire. So the gaps are drawn, `duty` says what fraction of the clock is
+really in the recording, and the page says outright that the line across a
+gap joins two moments and is not a signal. Two `array`s (`d` for the clock,
+`h` for the counts - ten bytes a sample against a Python int's twenty-eight)
+handed to the graph as `Columns`, so nothing is copied and `MAX_SAMPLES`
+caps a run at about ten megabytes; it stops and says so rather than
+dropping the oldest, which would turn a recording somebody believed was
+whole into its last minute. **It is independent of `test goertzel ear`**
+though the same board suits both - separate params section, so choosing a
+lead for one cannot move the other's - and since only one may hold a port,
+starting it against a lead the other is reading is refused in a sentence
+naming which, rather than left to come back as a pyserial error.
+
+That is also what earned `GraphView` an **adaptive x axis**. It carried
+one decimal, right for a run and wrong the moment anybody pages *in*: at
+19 kSPS the smallest page is a few milliseconds, where six ticks of
+`{:.1f}s` all read `0.0s` and the axis has quietly stopped saying where
+you are. `_decimals` takes the fewest that tell the six ticks apart, so a
+wide view is unchanged. Paging in is what the page size is *for*, so an
+axis that stops working when you do it is the axis being wrong rather than
+the reader. `pytest_tests/hardware_tests/test_scope.py` pins where the
+samples land (the gaps hardest), the duty arithmetic and every refusal;
+`Scope` is on `WITHOUT_SCENARIOS` beside `Repository`, because listening
+to a pin changes nothing in the room.
 
 **`params["audio"]["wired bodies"]` is read by both installation tests**, and it is not a convenience: an unwired analyser input is a floating ADC pin, and a floating pin does not read silence — it reads garbage. A five-channel sweep on a two-channel board reports twenty-one fictional failures with the two real answers buried among them. Add a body to the list the moment its amplifier and its analyser are in; nothing else changes, since the pitch, the pin and the module are already decided for all five.
 
@@ -616,7 +639,7 @@ There are two separate things called tests here, and they do not overlap.
 **They are filed in two groups, and the rule is not what it first looks like** (`colloquy/tests/group.py`). A flat list of fourteen said the only thing worth knowing about a test was its name; the first thing anybody actually wants to know, standing at the rack with twenty minutes, is *whether they have to stay for it*. So:
 
 - **`autotests`** reach their answer on their own and write it down — a CSV, an SVG, a grid of verdicts, a diagnosis. `test_light_sensor_values`, `test_read_pattern`, `test_reinforcement`, `test_search`, `test_female_search`, `test_movements`, `test_audio_subsystem`, `test_audio_loop`, `test_audio_bringup`.
-- **`manual tests`** turn on a person: light, sound, movement, and the instrument that records the answer is somebody’s eye, ear or hand. Some of them still write a file (`test_goertzel_ear`'s bins over time, `test_audio_at_12v`'s two passes) - what no file holds is the *perceiving*, which is the whole of the distinction below. `test_drive_light_values`, `test_male_patterns`, `test_neopixels`, `test_sensors`, `test_microphone_signal`, `test_goertzel_ear`, `test_audio_at_12v`.
+- **`manual tests`** turn on a person: light, sound, movement, and the instrument that records the answer is somebody’s eye, ear or hand. Some of them still write a file (`test_goertzel_ear`'s bins over time, `test_audio_at_12v`'s two passes) - what no file holds is the *perceiving*, which is the whole of the distinction below. `test_drive_light_values`, `test_male_patterns`, `test_neopixels`, `test_sensors`, `test_microphone_signal`, `test_goertzel_ear`, `test_audio_at_12v`, `scope` (the one that is not a `test_*`, and says why).
 
 The line is deliberately **not** how long a run takes, how much hardware it touches, or whether the code happens to open a results file — it is **who does the perceiving**, because that is the one distinction that changes what you do next. The two graph demos stay outside both groups as direct children of `tests`: they are not tests of the piece at all, and filing them under either heading would make the heading mean less.
 

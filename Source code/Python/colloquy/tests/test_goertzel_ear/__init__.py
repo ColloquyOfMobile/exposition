@@ -98,7 +98,7 @@ from colloquy.ui import leaves
 from colloquy.ui.graph_view import GraphView
 
 from ..bench_com_port import BenchComPort
-from . import goertzel, protocol, waveform
+from . import goertzel, protocol
 from .recording import Recording
 from .results import Results
 from .tone import Tone
@@ -168,7 +168,6 @@ class TestGoertzelEar(BaseThread):
             self._commands[f"play {hz} Hz"] = self._player(hz)
         self._commands["silence"] = self._silence
         self._commands["forget the floors"] = self._forget_floors
-        self._commands["draw the waveform"] = self._draw_the_waveform
         for key, command in self._commands.items():
             self[key] = command
 
@@ -178,8 +177,6 @@ class TestGoertzelEar(BaseThread):
         self._best = {}        # hz -> the (floor, level) of its best rise
         self._recording = Recording(protocol.PITCHES)
         self._graph = None     # built from the recording when the run ends
-        self._waveform = None  # one block, frozen, when somebody asks
-        self._waveform_of = None
         self._written_to = None
         self._blocks_read = 0
         self._greeting = None
@@ -335,45 +332,6 @@ class TestGoertzelEar(BaseThread):
             )
 
         return play
-
-    def _draw_the_waveform(self, request=None):
-        """Freeze the block in hand and draw it as a shape.
-
-        **The samples the bins were computed from, drawn against real
-        time.** Five numbers say a frequency is present; this says what
-        the microphone actually sent, and a sine you can count the cycles
-        of settles in one glance what no arrangement of bin levels
-        settles. See `waveform.py`.
-
-        A press rather than a picture that keeps up with the run, for
-        `_draw_the_recording`'s reason and more sharply: blocks arrive
-        four times a second and a `GraphView` holds which page and which
-        zoom the reader is on, so one rebuilt per block would throw away
-        the reader's place four times a second while they looked at it.
-        Freezing is also what makes it a *measurement* - it is this
-        capture, at this moment, and it stays there while somebody reads
-        it and presses a pitch to compare.
-
-        No port is touched. The loop thread owns the link and has a block
-        in hand already; asking for a fresh one here would put a second
-        thread on one serial handle, which is the hazard
-        `_write_the_recording` declines to take with a file.
-        """
-        if self._block is None:
-            return (
-                "refused: nothing captured yet - start the test, and give "
-                "it a moment to read its first block"
-            )
-
-        block = self._block
-        self._waveform = GraphView(
-            owner=self,
-            points=waveform.points(block),
-            name="waveform",
-            x_unit=" ms",
-        )
-        self._waveform_of = (block, self._tone.hz)
-        return f"drew {waveform.describe(block, self._tone.hz)}"
 
     def _silence(self, request=None):
         """Stop early. The press that ends a tone before its ten seconds
@@ -655,8 +613,6 @@ class TestGoertzelEar(BaseThread):
         children.update(self._commands)
         if self._graph is not None:
             children[self._graph.name] = self._graph
-        if self._waveform is not None:
-            children[self._waveform.name] = self._waveform
         # Always, unlike the graph: the runs on the disk are there to be
         # compared with, and the reason to look at them is usually before
         # doing another one rather than after.
@@ -711,23 +667,6 @@ class TestGoertzelEar(BaseThread):
             # leakage reads exactly like a second tone and there is
             # nothing in its own row to tell them apart.
             leaf("border case", self._border_case())
-
-        if self._waveform_of is None:
-            # Offered rather than left to be found: the shape is the one
-            # reading here that is not a number, and nobody presses a
-            # link they have no reason to expect anything from.
-            leaf(
-                "waveform",
-                "not drawn - press 'draw the waveform' to see the samples "
-                "the bins are computed from",
-            )
-        else:
-            drawn, of_hz = self._waveform_of
-            leaf(
-                "waveform",
-                f"open 'waveform' - {waveform.describe(drawn, of_hz)}"
-                + ("" if drawn is self._block else ", from an earlier block"),
-            )
 
         if len(self._recording):
             recorded = (

@@ -84,6 +84,11 @@ WITHOUT_SCENARIOS = {
     "colloquy.repository.Repository",
     "colloquy.exposition.schedule.ExpositionSchedule",
     "colloquy.drivers.arduino.flasher.Flasher",
+    # An instrument, not a behaviour. It listens to one ADC pin and
+    # draws what it heard; nothing about the room changes while it
+    # runs, so there is nothing to tell somebody standing in front of
+    # the piece. Repository's reason exactly.
+    "colloquy.tests.scope.Scope",
 }
 
 

@@ -16,6 +16,7 @@ Set the page at or below the points and nothing is thinned - full
 density, a few hundred points on the wire. That combination is the whole
 reason the page size is a control, and most of what is checked below.
 """
+import re
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -692,38 +693,39 @@ def test_the_page_hangs_nothing_on_the_picture(renderer):
     assert "<script" not in html
 
 
-# --- the x unit ----------------------------------------------------------
+# --- the x axis when you page in -----------------------------------------
 #
-# Everything drawn here was a run until `test goertzel ear`'s waveform, so
-# the axis said "s" outright. A capture is 27 milliseconds, where six
-# ticks of `{:.1f}s` all read `0.0s` and the picture quietly stops saying
-# when anything happened.
+# The axis carried one decimal, which is right for a run and wrong the
+# moment anybody pages in. `scope` records at 19 thousand samples a second,
+# so its smallest page is a few milliseconds - and paging in is what the
+# page size is for.
 
 
-def test_the_axis_says_seconds_unless_told_otherwise():
-    drawn = graph(points=[(0.0, 1.0), (10.0, 2.0)]).svg()
-    assert "0.0s" in drawn
+def test_a_wide_view_keeps_one_decimal():
+    """Nothing that was already readable grows a decimal place to pay for
+    a zoom nobody asked for."""
+    drawn = graph(points=[(0.0, 1.0), (600.0, 2.0)]).svg()
+    assert "120.0s" in drawn
+    assert "120.00s" not in drawn
 
 
-def test_the_axis_can_be_told_what_the_numbers_are():
-    drawn = graph(points=[(0.0, 1.0), (26.6, 2.0)], x_unit=" ms").svg()
-    assert " ms<" in drawn
-    assert "0.0s" not in drawn
+def test_a_narrow_page_gets_the_decimals_it_needs():
+    view = graph(points=[(seconds / 1000.0, 1.0) for seconds in range(1000)])
+    view.smaller_page()
+    while view.page_size and view.page_size > 100:
+        view.smaller_page()
+    drawn = view.svg()
+    labels = set(re.findall(r">([-\d.]+)s<", drawn))
+    assert len(labels) == 6, f"six ticks should read six numbers, got {labels}"
 
 
-def test_a_millisecond_axis_labels_the_span_it_was_given():
-    """The tick at the far end is the block's own length, not a rounding
-    of it to the nearest second."""
-    drawn = graph(points=[(0.0, 1.0), (26.6, 2.0)], x_unit=" ms").svg()
-    assert "26.6 ms" in drawn
+def test_the_ticks_are_only_as_long_as_they_have_to_be():
+    """Two decimals separate these six; a third would be noise."""
+    assert GraphView._decimals([0.0, 0.01, 0.02, 0.03, 0.04, 0.05]) == 2
 
 
-def test_marks_are_keyed_in_the_same_unit():
-    """A mark's key is what the link says, so a waveform's marks must not
-    be named in seconds while its axis is in milliseconds."""
-    view = graph(
-        points=[(0.0, 1.0), (26.6, 2.0)],
-        marks=[(13.3, "halfway")],
-        x_unit=" ms",
-    )
-    assert "13.3 ms halfway" in view.snapshot_children["marks"].snapshot_children
+def test_ticks_that_cannot_be_separated_do_not_grow_forever():
+    """A page one sample wide, or a line that never moves. Six identical
+    numbers are what they are - more decimals would not help, and a label
+    of `0.000000s` is worse than one of `0.0s`."""
+    assert GraphView._decimals([1.0] * 6) == 1

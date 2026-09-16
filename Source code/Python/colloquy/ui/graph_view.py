@@ -250,15 +250,13 @@ class Marks(Base):
             entries[key] = partial(self._graph.go_to_mark, index)
         return entries
 
-    def _key(self, seconds, label):
+    @staticmethod
+    def _key(seconds, label):
         # The key is a path segment, and the tree splits a request on
         # "/": a label carrying one would route to a child that is not
         # there. The time goes in front because it is what tells two
         # marks of the same kind apart.
-        return (
-            f"{seconds:.1f}{self._graph.x_unit} "
-            f"{str(label).replace('/', '-')}"
-        )
+        return f"{seconds:.1f}s {str(label).replace('/', '-')}"
 
     @property
     def snapshot_children(self):
@@ -268,23 +266,9 @@ class Marks(Base):
 class GraphView(Base):
     """One or more lines, drawn as SVG, paged through with links."""
 
-    def __init__(
-        self,
-        owner,
-        points=None,
-        series=None,
-        marks=None,
-        name="graph",
-        x_unit="s",
-    ):
+    def __init__(self, owner, points=None, series=None, marks=None, name="graph"):
         super().__init__(owner=owner)
         self._name = name
-        # What the x numbers are. Everything drawn here was a run until
-        # `test goertzel ear`'s waveform, so the axis said "s" outright
-        # and a 27 ms capture came out as six ticks all reading 0.0s. It
-        # is a suffix and nothing else - the numbers are whatever the
-        # caller put in the series, and this only says what they are.
-        self._x_unit = x_unit
         self._series = self._as_series(points, series)
         self._marks = sorted(marks or (), key=lambda mark: mark[0])
         self._full_y = None       # scanned once, on first draw
@@ -329,11 +313,6 @@ class GraphView(Base):
         """Each line as (label, sequence). The label is None for the
         one-line case, which is what leaves it in `currentColor`."""
         return list(self._series)
-
-    @property
-    def x_unit(self):
-        """What the x numbers are, as a suffix. See `__init__`."""
-        return self._x_unit
 
     @property
     def marks(self):
@@ -689,6 +668,31 @@ class GraphView(Base):
     def _ticks(low, high, count=5):
         return [low + (high - low) * i / count for i in range(count + 1)]
 
+    @staticmethod
+    def _decimals(ticks):
+        """Enough decimal places that no two tick labels read alike.
+
+        The axis carried one decimal, which is right for a run and wrong
+        the moment anybody pages *in*. `scope` records at 19 thousand
+        samples a second, so its smallest page is a few milliseconds -
+        six ticks of `{:.1f}s` all reading `0.0s`, an axis that has
+        quietly stopped saying where on the recording you are. Paging in
+        is what the page size is *for*, so an axis that stops working when
+        you do it is the axis being wrong rather than the reader.
+
+        The smallest number that separates them, so a wide view is
+        unchanged: labels stay as short as they can be, and a run of
+        hundreds of seconds does not grow four decimal places to pay for
+        a zoom nobody asked for.
+        """
+        for decimals in range(1, 7):
+            labels = [f"{value:.{decimals}f}" for value in ticks]
+            if len(set(labels)) == len(labels):
+                return decimals
+        # Every tick the same number: a page one sample wide, or a line
+        # that never moves. More decimals would not separate them.
+        return 1
+
     def _colour(self, index):
         """One line and no label is the page's own colour - a graph that
         follows the theme it is drawn in, which is what this was before
@@ -787,7 +791,9 @@ class GraphView(Base):
                 f'fill="currentColor" fill-opacity="0.7">{value:.0f}</text>'
             )
 
-        for seconds in self._ticks(x0, x1):
+        x_ticks = self._ticks(x0, x1)
+        decimals = self._decimals(x_ticks)
+        for seconds in x_ticks:
             x, _ = place(seconds, y0)
             parts.append(
                 f'<line x1="{x:.1f}" y1="{TOP}" x2="{x:.1f}" '
@@ -796,8 +802,7 @@ class GraphView(Base):
             )
             parts.append(
                 f'<text x="{x:.1f}" y="{HEIGHT - 10}" text-anchor="middle" '
-                f'fill="currentColor" fill-opacity="0.7">{seconds:.1f}'
-                f'{self._x_unit}</text>'
+                f'fill="currentColor" fill-opacity="0.7">{seconds:.{decimals}f}s</text>'
             )
 
         # Before the lines, so a reading is never hidden under a note

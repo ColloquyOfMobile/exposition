@@ -19,6 +19,7 @@ from .test_audio_subsystem import TestAudioSubsystem
 from .test_audio_at_12v import TestAudioAt12V
 from .test_audio_loop import TestAudioLoop
 from .test_audio_bringup import TestAudioBringup
+from .scope import Scope
 
 from .group import TestGroup
 
@@ -122,6 +123,13 @@ class Tests(Base):
         self.test_audio_at_12v = TestAudioAt12V(
             owner=manual, result_folder=result_folder
         )
+        # No result folder, and not because it produces nothing - it
+        # produces a great deal. A recording is a hundred thousand samples
+        # a run and the reason to take one is to look at it now, at a
+        # wire, with the probe still in your hand. Filing that would keep
+        # the half nobody wants and none of the half they do, which is
+        # what was on the screen.
+        self.scope = Scope(owner=manual)
 
         auto.fill(
             tests=(
@@ -152,6 +160,7 @@ class Tests(Base):
                 self.test_microphone_signal,
                 self.test_goertzel_ear,
                 self.test_audio_at_12v,
+                self.scope,
             ),
             # Nothing bench-only here, and `test audio at 12v` is why it
             # stopped being so. The supply it measures is the piece's, so
