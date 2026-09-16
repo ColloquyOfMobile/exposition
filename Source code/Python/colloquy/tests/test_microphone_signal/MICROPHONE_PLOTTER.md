@@ -264,6 +264,25 @@ from NeoPixel switching noise picked up off the wire; wave mode makes
 them look nothing like each other. It is the mode for "there is
 *something* there, but is it sound?".
 
+**Set `WAVE_HZ` to the tone you are playing.** This is the one setting
+wave mode needs, and the one that decides whether you see a sine or a
+wander. The plotter has no time axis - it draws one point per line and
+keeps a fixed number of the most recent ones, about fifty in IDE 2.x -
+so the sample rate alone decides how many cycles are on the screen.
+Sampled as fast as the converter goes, fifty points of a 400 Hz tone is
+**0.6 of a single cycle**: a slow wander, which is a perfectly correct
+drawing of a sine and no use whatever. The sketch takes `WAVE_HZ` and
+`WAVE_POINTS_PER_CYCLE` (twelve, so about four cycles across that
+window) and samples on that clock instead.
+
+Above about 2.7 kHz twelve points a cycle is more than the converter can
+do; lower `WAVE_POINTS_PER_CYCLE` rather than raising the rate. The
+piece's own five voices, for reference, are 160 Hz and 400 Hz (the
+males) and 1 kHz, 2.5 kHz and 6.25 kHz (the females) - so **400 Hz is a
+good tone to test with**: it is male2's own pitch, it is comfortably
+inside the MAX9814's 100 Hz-10 kHz specification, and any speaker you
+have to hand will really produce it, which is not true at 160 Hz.
+
 ---
 
 ## 6. What a working microphone looks like
