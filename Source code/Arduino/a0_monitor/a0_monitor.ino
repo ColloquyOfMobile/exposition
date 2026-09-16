@@ -1,10 +1,12 @@
-// A0, as numbers in the Serial Monitor.
+// A0, as numbers in the Serial Monitor and as a trace in the Serial Plotter.
 //
 // A diagnostic sketch, not part of the installation. It answers one
 // question with the multimeter still in your other hand: is the wire from
 // a body's JST really arriving on A0? `microphone_plotter` draws the
-// signal's shape; this prints it, ten lines a second, so a DC loopback
-// test reads as a number and a microphone reads as a number that moves.
+// signal's shape at fifty windows a second; this one runs slow enough to
+// read, so a DC loopback test reads as a number and a microphone reads as
+// a number that moves - and the same line, unchanged, draws in the IDE's
+// Serial Plotter (Tools > Serial Plotter, same port, same 115200).
 //
 // **It drives no pin**, for the plotter's reason: it is flashed onto the
 // installation's own Mega, where every other pin belongs to firmware 4.
@@ -21,9 +23,13 @@
 //   ~256, swing grows the MAX9814 - biased at 1.25 V, and min and max
 //     with sound      open apart when you talk or play music at it
 //
-// Volts are computed against 5.00 V, but the ADC's reference is the
-// Mega's own 5 V, which on USB is anywhere from 4.7 to 5.1 V. Trust the
-// counts; read the volts as approximate.
+// The volts column is gone, and the plotter is what took it. A line the
+// plotter can draw is `name:value` pairs and nothing else, so a "(2.50
+// V)" in the middle of it costs the whole trace; and the volts were
+// approximate anyway - the ADC's reference is the Mega's own 5 V, which
+// on USB is anywhere from 4.7 to 5.1 V, so the counts were always the
+// thing to trust. The three landmarks: 1023 is about 5 V, 512 about
+// 2.5 V, 256 about 1.25 V.
 //
 // Serial Monitor at 115200, not the installation's 1 Mbaud. When you are
 // done, put firmware 4 back with `tests > manual tests > test microphone
@@ -31,12 +37,21 @@
 
 #define PIN A0
 #define BAUDRATE 115200
+
+// How long each line looks at, and so how fast lines arrive: ten a
+// second. Deliberately slower than `microphone_plotter`'s 20 ms, because
+// this sketch has to be readable as text while it is being drawn -
+// fifty lines a second is a blur in the Monitor - and ten a second still
+// fills the plotter's fifty-point window with five seconds of history,
+// which is long enough to see a swing open and close as you talk.
 #define LINE_MS 100
 
 void setup() {
   Serial.begin(BAUDRATE);
-  Serial.println();
-  Serial.println("a0_monitor: last, min and max of A0 over each 100 ms");
+
+  // Nothing is announced. A banner is a line the plotter cannot parse,
+  // and the one it cannot parse is the first one it is given. The four
+  // names below label the traces on their own.
 }
 
 void loop() {
@@ -54,14 +69,17 @@ void loop() {
     if (last > highest) highest = last;
   }
 
-  Serial.print("A0 ");
+  // `name:value` pairs, comma separated, one line - the Serial Plotter's
+  // own format, and still a sentence in the Monitor. swing is drawn on
+  // the same 0..1023 axis as the rest, where it lies flat on the bottom
+  // and lifts off it the moment sound arrives: on a DC loopback test
+  // that flat line is the pass, and on a microphone it is the signal.
+  Serial.print("A0:");
   Serial.print(last);
-  Serial.print("  (");
-  Serial.print(last * 5.0 / 1023.0, 2);
-  Serial.print(" V)   min ");
+  Serial.print(",min:");
   Serial.print(lowest);
-  Serial.print("  max ");
+  Serial.print(",max:");
   Serial.print(highest);
-  Serial.print("  swing ");
+  Serial.print(",swing:");
   Serial.println(highest - lowest);
 }
