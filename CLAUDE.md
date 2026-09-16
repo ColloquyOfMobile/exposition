@@ -545,7 +545,20 @@ you are. `_decimals` takes the fewest that tell the six ticks apart, so a
 wide view is unchanged. Paging in is what the page size is *for*, so an
 axis that stops working when you do it is the axis being wrong rather than
 the reader. `pytest_tests/hardware_tests/test_scope.py` pins where the
-samples land (the gaps hardest), the duty arithmetic and every refusal;
+samples land (the gaps hardest), the duty arithmetic, every refusal,
+and one thing worth knowing before adding a reading to any node in
+this tree: **a leaf may not be named after a child**. Both are written
+into the same dict - `Base._snapshot_if_opened` fills it from
+`snapshot_children` and the override then adds leaves to it - so a
+`trace` leaf beside a `trace` node replaced the link with a sentence
+describing the link, reachable by URL and by nothing on the page. It
+is silent, because a reading in the right place saying the right thing
+is what a working page looks like. So the state of the picture is said
+on the `recording` line instead. Nothing else in the tree does it
+(168 files scanned), and no guard was added in `leaves.into`: it would
+have to raise inside a *render*, which is outside a command and so
+emergency-stops the installation.
+
 `Scope` is on `WITHOUT_SCENARIOS` beside `Repository`, because listening
 to a pin changes nothing in the room.
 

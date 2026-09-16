@@ -249,3 +249,104 @@ def test_nothing_recorded_leaves_no_graph():
     empty = SimpleNamespace(_trace=Trace(), _graph="untouched")
     Scope._draw_the_trace(empty)
     assert empty._graph == "untouched"
+
+
+# --- the page's own names ------------------------------------------------
+#
+# A leaf and a child node are written into the *same* dict, so a leaf named
+# after a child replaces it: the link becomes a sentence describing the
+# link, which is what it did. Silent, because a reading in the right place
+# saying the right thing is exactly what a working page looks like.
+
+
+class LoneScope(Scope):
+    """A real Scope with the tree taken out from under it.
+
+    A subclass rather than a duck-typed double, for once, because the
+    method under test opens with a zero-argument `super()` - that is the
+    call doing the merging, so standing next to it rather than in place of
+    it is the whole point.
+
+    The children are bare callables, which `Base._snapshot_if_opened`
+    passes through untouched. A real child node would need a tree behind
+    it, and what is being checked is only whether its entry survives.
+    """
+
+    def __init__(self, graph=None, trace=None):
+        self._owner = None
+        self._owners = []
+        self._dict = {}
+        self._path = None
+        self._is_opened = False
+        self._log = None
+        # What `BaseThread._snapshot_if_opened` reads to decide between a
+        # `start` link and a `stop` one. Never started here - see
+        # pytest_tests/conftest.py.
+        self._thread = None
+
+        self._trace = trace if trace is not None else Trace()
+        self._graph = graph
+        self._greeting = None
+        self._outcome = None
+        self._port_handler = None
+        self._children = {"com port": lambda: None}
+        if graph is not None:
+            self._children["trace"] = lambda: None
+
+    @property
+    def params(self):
+        return {"scope": {"communication port": "COM3"}}
+
+    @property
+    def com_port(self):
+        return SimpleNamespace(ports=["COM3"], chosen="COM3")
+
+    def _who_holds_the_lead(self, chosen):
+        return None
+
+    @property
+    def snapshot_children(self):
+        return dict(self._children)
+
+
+def snapshot_of(graph=None, trace=None):
+    return LoneScope(graph=graph, trace=trace)._snapshot_if_opened(())
+
+
+def test_the_trace_link_survives_the_readings_beside_it():
+    """The bug this pins: a `trace` leaf overwrote the `trace` node, so
+    the graph could be reached by its URL and by no link on the page.
+
+    With samples in it, because an empty recording returns before any of
+    the readings that could shadow anything - a version of this test
+    without them passed against the bug.
+    """
+    trace = Trace()
+    trace.add(0.0, block())
+    states = snapshot_of(graph=object(), trace=trace)
+    assert callable(states["trace"]), (
+        "the trace node was replaced by a reading of the same name"
+    )
+
+
+def test_no_reading_is_named_after_a_child():
+    """The general form, so the next reading added here cannot do it again
+    by picking the obvious name."""
+    trace = Trace()
+    trace.add(0.0, block())
+    states = snapshot_of(graph=object(), trace=trace)
+    for child in ("com port", "trace"):
+        assert callable(states[child]), f"a reading was drawn over {child!r}"
+
+
+def test_the_recording_line_says_where_the_picture_is():
+    """It has to be said somewhere, and it cannot be said on a line called
+    `trace` - so it is said on the line that counts the samples."""
+    trace = Trace()
+    trace.add(0.0, block())
+
+    while_running = snapshot_of(graph=None, trace=trace)
+    assert "drawn when you press stop" in while_running["recording"]["value"]
+
+    afterwards = snapshot_of(graph=object(), trace=trace)
+    assert "open 'trace'" in afterwards["recording"]["value"]

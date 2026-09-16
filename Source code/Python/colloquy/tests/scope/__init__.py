@@ -352,10 +352,20 @@ class Scope(BaseThread):
             )
             return self._with_outcome(leaf, states)
 
+        # The state of the picture goes on this line rather than on one of
+        # its own, and that is not tidiness. A leaf is written into the
+        # same dict the children are, so a leaf named `trace` *replaces*
+        # the `trace` node in it - the link becomes a sentence describing
+        # the link. Nothing here may be named after a child.
         leaf(
             "recording",
             f"{len(trace):,} samples in {trace.blocks} blocks over "
-            f"{trace.span:.1f}s at {trace.sample_rate:.0f} a second",
+            f"{trace.span:.1f}s at {trace.sample_rate:.0f} a second"
+            + (
+                " - open 'trace'"
+                if self._graph is not None
+                else " - drawn when you press stop"
+            ),
         )
         # What the gaps cost, said rather than left to be discovered by
         # somebody zooming into a boundary and finding a straight line
@@ -367,11 +377,6 @@ class Scope(BaseThread):
             "a gap joins two moments and is not a signal",
         )
         leaf("signal", self._describe_signal(trace))
-        leaf(
-            "trace",
-            "open 'trace'" if self._graph is not None
-            else "drawn when the recording stops",
-        )
         return self._with_outcome(leaf, states)
 
     @staticmethod
