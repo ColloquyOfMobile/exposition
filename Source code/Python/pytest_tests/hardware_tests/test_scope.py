@@ -382,9 +382,10 @@ class LoneScope(Scope):
         self._greeting = None
         self._firmware = firmware
         self._refused_the_command = False
+        self._written_to = None
         self._outcome = None
         self._port_handler = None
-        self._children = {"com port": lambda: None}
+        self._children = {"com port": lambda: None, "results": lambda: None}
         if graph is not None:
             self._children["trace"] = lambda: None
 
@@ -434,7 +435,7 @@ def test_no_reading_is_named_after_a_child():
     """The general form, so the next reading added here cannot do it again
     by picking the obvious name."""
     states = snapshot_of(graph=object(), trace=recorded())
-    for child in ("com port", "trace"):
+    for child in ("com port", "trace", "results"):
         assert callable(states[child]), f"a reading was drawn over {child!r}"
 
 
@@ -524,3 +525,91 @@ def test_the_page_names_a_firmware_that_cannot_do_two_channels():
 def test_the_page_says_when_the_firmware_is_good():
     states = snapshot_of(graph=object(), trace=recorded(), firmware=2)
     assert "knows both channels" in states["firmware"]["value"]
+
+
+# --- the run on the disk -------------------------------------------------
+#
+# It kept nothing at first, on the grounds that a scope trace is looked at
+# now, at a wire. That was wrong the moment two microphones were being
+# compared: every question then is *between* runs, and none of them can be
+# answered from the one that happens to be in memory.
+
+
+def test_a_run_writes_and_reads_back_whole(tmp_path):
+    from colloquy.tests.scope import recording
+
+    trace = Trace()
+    trace.add(0.0, pairs(a=range(COUNT), b=range(1000, 1000 + COUNT)))
+    path = recording.write(trace, tmp_path / "run.csv")
+
+    read = recording.read(path)
+    assert set(read) == {"A0", "A1"}
+    assert [value for _s, value in read["A0"]] == list(range(COUNT))
+    assert [value for _s, value in read["A1"]] == list(range(1000, 1000 + COUNT))
+
+
+def test_the_channel_names_come_out_of_the_header(tmp_path):
+    """Not out of the code. A channel list that changes later must not be
+    able to relabel a measurement somebody already took."""
+    from colloquy.tests.scope import recording
+
+    path = tmp_path / "old.csv"
+    path.write_text("seconds,MIC,REF\n0.000000,100,900\n", encoding="utf-8")
+    assert set(recording.read(path)) == {"MIC", "REF"}
+
+
+def test_the_clock_survives_the_round_trip(tmp_path):
+    """Six decimals, because samples are about 104 us apart - three would
+    put a whole run into eleven distinct timestamps and draw a staircase."""
+    from colloquy.tests.scope import recording
+
+    trace = Trace()
+    trace.add(0.0, pairs())
+    trace.add(1.0, pairs())
+    path = recording.write(trace, tmp_path / "run.csv")
+
+    read = recording.read(path)["A0"]
+    assert read[1][0] == pytest.approx(1.0 / SAMPLE_RATE, abs=1e-6)
+    assert read[COUNT][0] == pytest.approx(1.0, abs=1e-6)
+
+
+def test_the_gaps_are_in_the_file(tmp_path):
+    """A row is a moment and rows are not evenly spaced, which is why the
+    clock is a column rather than implied by the row number."""
+    from colloquy.tests.scope import recording
+
+    trace = Trace()
+    trace.add(0.0, pairs())
+    trace.add(1.0, pairs())
+    read = recording.read(recording.write(trace, tmp_path / "run.csv"))["A0"]
+    steps = {round(b[0] - a[0], 4) for a, b in zip(read, read[1:])}
+    assert len(steps) > 1, "the gap between captures was flattened"
+
+
+def test_a_half_written_row_is_skipped_rather_than_fatal(tmp_path):
+    """A run killed mid-write leaves a half line at the end, and losing it
+    is not worth losing the hour before it."""
+    from colloquy.tests.scope import recording
+
+    path = tmp_path / "cut.csv"
+    path.write_text("seconds,A0,A1\n0.000000,1,2\n0.000104,3\n", encoding="utf-8")
+    read = recording.read(path)
+    assert [value for _s, value in read["A0"]] == [1]
+
+
+def test_an_empty_file_reads_as_nothing(tmp_path):
+    from colloquy.tests.scope import recording
+
+    path = tmp_path / "empty.csv"
+    path.write_text("", encoding="utf-8")
+    assert recording.read(path) == {}
+
+
+def test_a_run_that_recorded_nothing_writes_no_file(tmp_path):
+    """A file of one header line is a run somebody would open."""
+    empty = SimpleNamespace(
+        _trace=Trace(), _dir_path=tmp_path, _written_to="untouched"
+    )
+    Scope._write_the_trace(empty)
+    assert list(tmp_path.iterdir()) == []
+    assert empty._written_to == "untouched"

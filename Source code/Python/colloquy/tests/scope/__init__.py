@@ -69,6 +69,7 @@ lead is chosen separately so that neither can move the other's - and only
 one of them can hold a port at a time, so starting this one while that is
 recording is refused in a sentence rather than left to pyserial.
 """
+from datetime import datetime
 from time import time
 
 import serial
@@ -78,7 +79,8 @@ from colloquy.ui import leaves
 from colloquy.ui.graph_view import GraphView
 
 from ..bench_com_port import BenchComPort
-from . import protocol
+from . import protocol, recording
+from .results import Results
 from .trace import Trace
 
 
@@ -118,8 +120,13 @@ class Scope(BaseThread):
     # minute.
     MAX_SAMPLES = 1_000_000
 
-    def __init__(self, owner):
+    def __init__(self, owner, result_folder):
         super().__init__(owner=owner)
+
+        self._dir_path = result_folder / self.name
+        if not self._dir_path.exists():
+            self._dir_path.mkdir()
+        self._results = Results(owner=self, dir_path=self._dir_path)
 
         self._com_port = ScopeComPort(owner=self)
         self[self._com_port.name] = self._com_port
@@ -131,6 +138,7 @@ class Scope(BaseThread):
         self._greeting = None
         self._firmware = None
         self._refused_the_command = False
+        self._written_to = None
         self._outcome = None
 
     @property
@@ -152,6 +160,10 @@ class Scope(BaseThread):
     @property
     def trace(self):
         return self._trace
+
+    @property
+    def results(self):
+        return self._results
 
     @property
     def port_handler(self):
@@ -268,6 +280,7 @@ class Scope(BaseThread):
         self._outcome = None
         self._graph = None
         self._refused_the_command = False
+        self._written_to = None
         # A fresh recording every time, and the old graph with it. A scope
         # shows what is on the pin now, and carrying the last run's
         # samples into this one would make a picture nobody could date.
@@ -353,6 +366,7 @@ class Scope(BaseThread):
 
     def setdown(self):
         self._draw_the_trace()
+        self._write_the_trace()
         try:
             if self._port_handler is not None and self._port_handler.is_open:
                 self._port_handler.close()
@@ -379,6 +393,32 @@ class Scope(BaseThread):
             name="trace",
         )
 
+    def _write_the_trace(self):
+        """Put the run beside every other one.
+
+        Named for when it happened, like every other test here. A run that
+        recorded nothing writes nothing - a file of one header line is a
+        run somebody would open.
+
+        Failing to write must not be what ends a run: the readings are
+        already on the page and the picture is already drawn, so a full
+        disk or a folder somebody has moved is worth a line in the log
+        rather than a traceback out of `setdown`.
+        """
+        if not len(self._trace):
+            return
+        now = datetime.now()
+        path = (
+            self._dir_path
+            / f"{now.year}_{now.month:02}_{now.day:02}_{now.hour:02}h"
+            f"_{now.minute:02}min_{now.second:02}s.csv"
+        )
+        try:
+            self._written_to = recording.write(self._trace, path)
+        except OSError as error:  # noqa: BLE001 - a disk, not a fault
+            self.log(f"Could not write the run to {path}: {error}")
+            self._written_to = None
+
     def _refuse(self, reason):
         self._outcome = f"refused: {reason}"
         self.log(f"Refusing to run: {reason}")
@@ -391,6 +431,10 @@ class Scope(BaseThread):
         children = {self._com_port.name: self._com_port}
         if self._graph is not None:
             children[self._graph.name] = self._graph
+        # Always, unlike the graph: the runs on the disk are there to be
+        # compared with, and the reason to look at them is usually before
+        # doing another one rather than after.
+        children[self._results.name] = self._results
         return self._with_scenarios(children)
 
     def _snapshot_if_opened(self, path):
@@ -461,6 +505,13 @@ class Scope(BaseThread):
         for index, channel in enumerate(trace.names):
             leaf(channel, self._describe_channel(trace, index))
         leaf("compared", self._compare(trace))
+        if self._written_to is not None:
+            leaf(
+                "written to",
+                f"{self._written_to.name} ({recording.describe(self._written_to)})"
+                " - under 'results', and it is the only way this run leaves "
+                "this machine",
+            )
         return self._with_outcome(leaf, states)
 
     @staticmethod

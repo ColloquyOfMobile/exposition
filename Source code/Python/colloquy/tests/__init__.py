@@ -123,13 +123,15 @@ class Tests(Base):
         self.test_audio_at_12v = TestAudioAt12V(
             owner=manual, result_folder=result_folder
         )
-        # No result folder, and not because it produces nothing - it
-        # produces a great deal. A recording is a hundred thousand samples
-        # a run and the reason to take one is to look at it now, at a
-        # wire, with the probe still in your hand. Filing that would keep
-        # the half nobody wants and none of the half they do, which is
-        # what was on the screen.
-        self.scope = Scope(owner=manual)
+        # It kept nothing at first, on the grounds that a scope trace is
+        # looked at now, at a wire, with the probe still in your hand.
+        # That was wrong in the same way the Goertzel ear's was: the
+        # moment two microphones are being compared, every question is
+        # *between* runs - is A1 still quiet after reseating it, did the
+        # difference follow the lead when the two were swapped - and none
+        # of them can be answered from the one run that happens to be in
+        # memory. It is also the only way a run leaves this machine.
+        self.scope = Scope(owner=manual, result_folder=result_folder)
 
         auto.fill(
             tests=(
