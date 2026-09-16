@@ -50,7 +50,8 @@
 // WAVE draws the samples themselves, in bursts, so a steady tone can be
 // looked at as a waveform. Use it to tell a real 1 kHz tone from mains
 // hum or from switching noise off a NeoPixel line, which look alike in
-// envelope and nothing like each other here.
+// envelope and nothing like each other here. It samples at a rate picked
+// from WAVE_HZ below, not as fast as the converter goes - see there.
 #define ENVELOPE 1
 #define WAVE 2
 #define MODE ENVELOPE
@@ -68,11 +69,35 @@
 // cannot be missed between two windows.
 #define WINDOW_MS 20
 
-// One burst of raw samples in WAVE mode. 400 at roughly 33 kSPS is 12 ms
-// of sound - two cycles of the lowest voice, seventy-five of the
-// highest - and 800 bytes of RAM, which even an Uno used as a probe has
-// to spare.
+// One burst of raw samples in WAVE mode. 800 bytes of RAM, which even an
+// Uno used as a probe has to spare, and at the rate below it is a
+// comfortable thirty cycles of whatever tone you are playing.
 #define WAVE_SAMPLES 400
+
+// The tone you are playing, in hertz, and how many samples you want
+// across each of its cycles.
+//
+// **This is what makes a sine look like a sine, and it is the setting
+// people come back to this sketch for.** Sampling as fast as the
+// converter goes sounds like the careful choice and is the wrong one:
+// the IDE's plotter has no time axis and draws one point per line, so
+// what you see is a fixed number of the most recent points - about fifty
+// in IDE 2.x, five hundred in 1.8 - and at 33 kSPS fifty points of a
+// 400 Hz tone is *0.6 of one cycle*. A single slow wander across the
+// screen, which is a correct drawing of a sine and no use at all.
+//
+// Twelve points per cycle puts about four cycles in IDE 2's window and
+// is plainly periodic; the ear-check for the number is that you can see
+// the tops repeating. Raise it if your window is wider.
+//
+// The ceiling is the converter's: at the prescaler set in setup() a
+// conversion takes about 30 us, so the highest rate available is around
+// 33 kSPS. Twelve points per cycle therefore runs out at about 2.7 kHz -
+// above that, lower WAVE_POINTS_PER_CYCLE rather than raising the rate,
+// and accept a coarser-looking wave. 6250 Hz can have five.
+#define WAVE_HZ 400
+#define WAVE_POINTS_PER_CYCLE 12
+#define WAVE_INTERVAL_US (1000000UL / ((uint32_t)WAVE_HZ * WAVE_POINTS_PER_CYCLE))
 
 // Where the MAX9814 sits when it is hearing nothing: its output is
 // biased at 1.25 V, and 1.25 V of a 5 V reference read to ten bits is
@@ -153,16 +178,30 @@ void plotEnvelope() {
 }
 #endif
 
-// A burst of raw samples, captured at full rate and printed afterwards.
+// A burst of raw samples, captured on a clock and printed afterwards.
 //
 // Captured first and printed second because printing is far slower than
-// sampling: 400 numbers take about a fifth of a second to leave the port
-// and 12 ms to collect. Sampling while printing would space the samples
-// unevenly and draw a waveform that is not the one in the wire.
+// sampling: 400 numbers take the best part of a second to leave the port
+// and a tenth of that to collect. Sampling while printing would space the
+// samples unevenly and draw a waveform that is not the one in the wire.
+//
+// The clock is micros() rather than a delay after each read, because a
+// conversion is about 30 us and a delay would add that to every interval
+// - the wave would come out slightly slower than the tone, which matters
+// the moment you try to count cycles against WAVE_HZ. Scheduling the next
+// sample from the last *due* time instead of from now keeps the burst on
+// the nominal rate however long a read takes.
 #if MODE == WAVE
 void plotWave() {
+  uint32_t due = micros();
   for (uint16_t index = 0; index < WAVE_SAMPLES; index++) {
+    while ((int32_t)(micros() - due) < 0) {
+      // Waiting for this sample's moment. The comparison is signed on
+      // purpose: micros() wraps every 71 minutes and an unsigned test
+      // would hang for the whole of one lap when it did.
+    }
     burst[index] = analogRead(MIC_PIN);
+    due += WAVE_INTERVAL_US;
   }
 
   for (uint16_t index = 0; index < WAVE_SAMPLES; index++) {
