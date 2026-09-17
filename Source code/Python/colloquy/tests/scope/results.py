@@ -102,8 +102,13 @@ class Run(Base):
         columns = [[value for _x, value in points] for _label, points in lines]
         seconds = [x for x, _value in lines[0][1]]
         names = tuple(str(label) for label, _points in lines)
+        flat = tuple(
+            name
+            for name, column in zip(names, columns)
+            if column and min(column) == max(column)
+        )
         return describe_coupling(
-            trace.coupling_of(columns[0], columns[1], seconds), names
+            trace.coupling_of(columns[0], columns[1], seconds), names, flat
         )
 
 

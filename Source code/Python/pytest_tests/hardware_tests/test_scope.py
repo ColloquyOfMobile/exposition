@@ -908,3 +908,33 @@ def test_an_inverted_reading_in_the_band_still_talks_about_geometry():
     said = describe_coupling(coupling_of(left, right, clock(6)), ("A0", "A1"))
     assert "half a wavelength" in said
     assert "unconnected pin" not in said
+
+
+def test_a_channel_tied_to_ground_is_not_reported_as_too_little_data():
+    """The two read alike out of `coupling_of` - both give None - and mean
+    opposite things. A channel that never moves cannot be correlated
+    however long the run goes on, and saying "not enough recorded yet"
+    about a pin somebody has deliberately tied down sends them back to
+    record more of nothing."""
+    said = describe_coupling(None, ("A0", "A1"), flat=("A0",))
+    assert "A0 never moves" in said
+    assert "tied to ground" in said
+    assert "not enough recorded" not in said
+
+
+def test_nothing_recorded_yet_still_says_so():
+    assert describe_coupling(None, ("A0", "A1")) == "not enough recorded yet to say"
+
+
+def test_a_grounded_pin_leaves_the_other_channel_readable():
+    """The point of grounding it: a low impedance discharges the sample
+    capacitor instead of holding a copy of the neighbour in it, so the
+    working channel is still the working channel."""
+    real = tone(256)
+    trace = Trace()
+    for capture in range(8):
+        trace.add(capture * 0.12, pairs(a=[0] * 256, b=real, count=256))
+
+    assert "nothing is driving the pin" in Scope._describe_channel(trace, 0)
+    assert trace.swing(1) > 100
+    assert "A0 never moves" in Scope._describe_coupling(trace)

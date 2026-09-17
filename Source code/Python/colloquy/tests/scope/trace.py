@@ -349,7 +349,7 @@ def ghost_of(found, names):
     return None
 
 
-def describe_coupling(found, names=("the first", "the second")):
+def describe_coupling(found, names=("the first", "the second"), flat=()):
     """Whether the two channels are telling you two things.
 
     The check that was missing, and the run that found it: with A1
@@ -365,6 +365,20 @@ def describe_coupling(found, names=("the first", "the second")):
     What it adds is the reading nobody would otherwise have doubted, and
     the test that settles it: unplug one and see whether the other changes.
     """
+    if flat:
+        # Distinguished from having nothing to work with, because they
+        # read alike and mean opposite things: a channel that never moves
+        # cannot be correlated however long the run goes on, and if it is
+        # flat at zero that is a pin somebody has tied down - which is the
+        # honest way to leave an unused channel, since a grounded pin
+        # discharges the sample capacitor instead of holding a copy of its
+        # neighbour in it.
+        which = " and ".join(flat)
+        return (
+            f"{which} never moves, so there is nothing to correlate - "
+            "which is what a pin tied to ground looks like, and the honest "
+            "way to leave a channel unused"
+        )
     if found is None:
         return "not enough recorded yet to say"
     r, shift = found

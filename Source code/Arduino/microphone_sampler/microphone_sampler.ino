@@ -38,9 +38,18 @@
 //   A0  <- microphone module out (a MAX9814's AOUT, or any line sitting
 //          near mid-rail)
 //   A1  <- a second microphone's out, for the `d` command. Leave it off
-//          and `b` is unaffected; a pin with nothing on it does not read
-//          silence, it wanders, so an empty A1 is visibly empty rather
-//          than quietly flat.
+//          and `b` is unaffected.
+//
+//          **If you are running one microphone, wire the unused pin to
+//          GND.** An open pin does not read silence and it does not
+//          wander either - it reads about 95% of whatever the other
+//          channel just read (see `captureDual`), which looks exactly
+//          like a second working microphone. A wire to ground discharges
+//          the sample capacitor instead, so the channel reads a flat 0
+//          that cannot be mistaken for anything, and the working channel
+//          is unaffected: it charges 14 pF from 0 V in nanoseconds
+//          against a microphone's output impedance. Take the wire off
+//          before plugging a microphone back in.
 //   GND <- common with both microphone modules
 // Nothing else. The tone is in the room, out of the computer's speakers,
 // and does not touch this board at all. See HARDWARE_SETUP.md, section 8.
