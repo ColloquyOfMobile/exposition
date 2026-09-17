@@ -808,3 +808,57 @@ def test_the_comparison_defers_to_it_rather_than_reassuring(tmp_path):
     said = Scope._compare(trace)
     assert "see 'independent'" in said
     assert "both are hearing the room" not in said
+
+
+# --- which channel is the copy -------------------------------------------
+#
+# Correlation cannot answer this: r is symmetric, so "A0 is a copy of A1"
+# and "A1 is a copy of A0" are one statement about the numbers. Order can,
+# because the converter cannot see the future - a pair runs A0, A1, A0, A1
+# in time, and a floating pin holds the charge of the conversion
+# immediately before it, so the copy is always the later of the two. Read
+# by hand off a real run, this is the part that came out backwards.
+
+from colloquy.tests.scope.trace import ghost_of  # noqa: E402
+
+
+def test_the_first_channel_floating_peaks_one_sample_back():
+    """A0 holds A1's *previous* sample, since A1[n] is converted just
+    before A0[n+1]."""
+    real = tone(256 * 6)
+    ghost = [real[0]] + real[:-1]          # A0[n+1] == A1[n]
+    found = coupling_of(ghost, real, clock(6))
+    assert found[1] == -1
+    assert ghost_of(found, ("A0", "A1")) == "A0"
+
+
+def test_the_second_channel_floating_peaks_in_line():
+    """A1 holds A0's sample from the same pair, converted just before."""
+    real = tone(256 * 6)
+    found = coupling_of(real, list(real), clock(6))
+    assert found[1] == 0
+    assert ghost_of(found, ("A0", "A1")) == "A1"
+
+
+def test_an_alignment_with_no_ghost_reading_is_not_guessed_at():
+    """Shift +1 would mean a pin copying a conversion that has not
+    happened. Left unnamed rather than blamed on a channel."""
+    assert ghost_of((0.99, 1), ("A0", "A1")) is None
+    assert ghost_of(None, ("A0", "A1")) is None
+
+
+def test_the_named_channel_is_said_in_the_reading():
+    real = tone(256 * 6)
+    ghost = [real[0]] + real[:-1]
+    said = describe_coupling(coupling_of(ghost, real, clock(6)), ("A0", "A1"))
+    assert "A0 is very likely an unconnected pin reporting a copy of A1" in said
+    assert "converted *after* it" in said
+
+
+def test_the_in_line_case_admits_it_is_the_weaker_one():
+    """Two microphones genuinely in phase peak at shift 0 too, so naming a
+    channel there has to carry the doubt with it."""
+    real = tone(256 * 6)
+    said = describe_coupling(coupling_of(real, list(real), clock(6)), ("A0", "A1"))
+    assert "A1 is very likely an unconnected pin" in said
+    assert "genuinely in phase would look the same" in said

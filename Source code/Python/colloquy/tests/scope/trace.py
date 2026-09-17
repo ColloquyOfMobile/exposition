@@ -297,7 +297,43 @@ def coupling_of(left, right, seconds, captures=COUPLING_CAPTURES):
     return best
 
 
-def describe_coupling(found):
+def ghost_of(found, names):
+    """Which channel is the copy, or None if the shift does not say.
+
+    **Correlation cannot answer this and order can.** r is symmetric - "A0
+    is a copy of A1" and "A1 is a copy of A0" are one statement about the
+    numbers - so the direction has to come from the clock. A pair is
+    converted first channel then second, so in time the samples run
+    `A0[0] A1[0] A0[1] A1[1]`, and a floating pin comes up holding the
+    charge of the conversion *immediately before it*. The copy is
+    therefore always the later of the two, because the converter cannot
+    see the future:
+
+      - the first channel floating holds the second's previous sample,
+        which peaks at shift -1;
+      - the second channel floating holds the first's sample from the same
+        pair, which peaks at shift 0.
+
+    Shift +1 has no ghost reading at all - nothing is converted in that
+    order - so it is left unnamed rather than guessed at.
+
+    Read straight off a real recording this says the first channel, which
+    is the answer somebody reading the correlation by hand got backwards.
+
+    The shift 0 case is the weak one and says so where it is used: two
+    microphones genuinely in phase peak there too.
+    """
+    if found is None:
+        return None
+    _r, shift = found
+    if shift == -1:
+        return names[0]
+    if shift == 0:
+        return names[1]
+    return None
+
+
+def describe_coupling(found, names=("the first", "the second")):
     """Whether the two channels are telling you two things.
 
     The check that was missing, and the run that found it: with A1
@@ -335,11 +371,23 @@ def describe_coupling(found):
             "and see whether the other changes"
         )
     if r > 0:
+        ghost = ghost_of(found, names)
+        if ghost is None:
+            which = "One channel is very likely an unconnected pin"
+        else:
+            other = names[1] if ghost == names[0] else names[0]
+            hedge = "" if shift == -1 else (
+                " - though at this alignment two microphones genuinely in "
+                "phase would look the same"
+            )
+            which = (
+                f"{ghost} is very likely an unconnected pin reporting a copy "
+                f"of {other}, because it is converted *after* it{hedge}"
+            )
         return (
-            f"{said} - NOT two readings. One channel is very likely an "
-            "unconnected pin reporting a copy of the other: the converter's "
-            "sample capacitor comes up holding the charge of the channel "
-            "before it. Unplug one lead and see whether the other changes"
+            f"{said} - NOT two readings. {which}: the converter's sample "
+            "capacitor comes up holding the charge of the channel before "
+            "it. Unplug the other lead and see whether this one changes"
         )
     return (
         f"{said} - NOT two readings, and inverted. One channel is appearing "

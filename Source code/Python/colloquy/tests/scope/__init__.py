@@ -538,7 +538,7 @@ class Scope(BaseThread):
     @staticmethod
     def _describe_coupling(trace):
         """Are the two channels telling you two things? See `trace.py`."""
-        return describe_coupling(trace.coupling())
+        return describe_coupling(trace.coupling(), trace.names)
 
     @staticmethod
     def _compare(trace):

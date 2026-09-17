@@ -101,8 +101,9 @@ class Run(Base):
             return "only one channel in this file"
         columns = [[value for _x, value in points] for _label, points in lines]
         seconds = [x for x, _value in lines[0][1]]
+        names = tuple(str(label) for label, _points in lines)
         return describe_coupling(
-            trace.coupling_of(columns[0], columns[1], seconds)
+            trace.coupling_of(columns[0], columns[1], seconds), names
         )
 
 

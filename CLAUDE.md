@@ -543,6 +543,18 @@ tone honestly reach 0.93, and two half a wavelength apart - 43 cm at
 400 Hz - are honestly near -1. The test that does settle it is in the
 text: unplug one lead and see whether the other changes.
 
+**Which channel is the copy is decided by order, and `ghost_of` is there
+because reading it by hand got it backwards.** r is symmetric - "A0 copies
+A1" and "A1 copies A0" are one statement about the numbers - so the
+direction has to come from the clock. A pair is converted first channel
+then second, so in time the samples run `A0[0] A1[0] A0[1] A1[1]`, and a
+floating pin holds the charge of the conversion *immediately before it*:
+the copy is always the **later** of the two, because the converter cannot
+see the future. So the first channel floating peaks at shift -1 and the
+second at shift 0, while shift +1 has no ghost reading at all and is left
+unnamed rather than guessed at. The shift 0 case says out loud that it is
+the weak one, since two microphones genuinely in phase peak there too.
+
 Two things decide whether that check works, they are separate, and each
 was found by getting it wrong on a real recording. **Within a capture,
 never across one** - stitching the flat arrays lets each capture's own DC
