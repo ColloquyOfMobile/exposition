@@ -368,16 +368,16 @@ def describe_coupling(found, names=("the first", "the second"), flat=()):
     if flat:
         # Distinguished from having nothing to work with, because they
         # read alike and mean opposite things: a channel that never moves
-        # cannot be correlated however long the run goes on, and if it is
-        # flat at zero that is a pin somebody has tied down - which is the
-        # honest way to leave an unused channel, since a grounded pin
-        # discharges the sample capacitor instead of holding a copy of its
-        # neighbour in it.
+        # cannot be correlated however long the run goes on. What the
+        # steady voltage *is* belongs to `Scope._describe_channel`, which
+        # tells a grounded pin from a rail somebody wired in to measure -
+        # this used to name ground as though it were the only way.
         which = " and ".join(flat)
         return (
-            f"{which} never moves, so there is nothing to correlate - "
-            "which is what a pin tied to ground looks like, and the honest "
-            "way to leave a channel unused"
+            f"{which} never moves, so there is nothing to correlate, and no "
+            "length of run will change that. A channel held at a steady "
+            "voltage - a pin tied to ground, or a rail wired in on purpose "
+            "to be measured - has nothing in it to compare"
         )
     if found is None:
         return "not enough recorded yet to say"

@@ -254,10 +254,16 @@ def test_two_flat_channels_say_there_is_nothing_to_compare():
     assert "nothing is arriving on either pin" in Scope._compare(trace)
 
 
-def test_a_flat_channel_is_named_as_a_dead_pin():
+def test_a_flat_channel_is_named_by_the_voltage_it_sits_at():
+    """Not "nothing is driving the pin", which is what this used to say
+    about every flat reading. A pin with nothing on it does not sit still
+    at all - it copies its neighbour - so a channel that really is steady
+    is being *held* at something, and which something is the whole of what
+    is worth saying about it."""
     trace = Trace()
     trace.add(0.0, pairs())
-    assert "nothing is driving the pin" in Scope._describe_channel(trace, 0)
+    said = Scope._describe_channel(trace, 0)
+    assert "steady 2.502 V" in said
 
 
 def test_touching_both_rails_is_named_as_clipping():
@@ -935,6 +941,51 @@ def test_a_grounded_pin_leaves_the_other_channel_readable():
     for capture in range(8):
         trace.add(capture * 0.12, pairs(a=[0] * 256, b=real, count=256))
 
-    assert "nothing is driving the pin" in Scope._describe_channel(trace, 0)
+    assert "tied to ground" in Scope._describe_channel(trace, 0)
     assert trace.swing(1) > 100
     assert "A0 never moves" in Scope._describe_coupling(trace)
+
+
+# --- the three ways of being flat ----------------------------------------
+#
+# They read alike and are not the same fact. This said "nothing is driving
+# the pin" about all of them, which was wrong about a supply rail somebody
+# had wired in to measure: that pin was driven hard, to the top of the
+# range.
+
+
+def flat_at(value):
+    trace = Trace()
+    trace.add(0.0, pairs(a=value, b=tone(COUNT)))
+    return Scope._describe_channel(trace, 0)
+
+
+def test_a_pin_at_full_scale_is_not_called_undriven():
+    said = flat_at(1023)
+    assert "pinned at full scale" in said
+    assert "5 V and 6 V read alike" in said
+    assert "nothing is driving" not in said
+
+
+def test_a_pin_at_zero_is_named_as_grounded():
+    assert "tied to ground" in flat_at(0)
+
+
+def test_a_steady_voltage_in_between_is_named_as_one():
+    """What a rail under 5 V looks like - and what an output that has died
+    with its bias stuck looks like."""
+    said = flat_at(152)
+    assert "steady 0.743 V" in said
+    assert "supply rail" in said
+
+
+def test_clipping_still_wins_over_all_three():
+    trace = Trace()
+    trace.add(0.0, pairs(a=(0, 1023), b=(500, 510), count=2))
+    assert "clipping" in Scope._describe_channel(trace, 0)
+
+
+def test_the_independence_reading_no_longer_assumes_ground():
+    said = describe_coupling(None, ("A0", "A1"), flat=("A1",))
+    assert "rail wired in on purpose" in said
+    assert "no length of run will change that" in said

@@ -62,6 +62,16 @@ than laid end to end. Inside a block the samples are contiguous and
 evenly spaced, which is what makes a waveform readable; across a boundary
 the line is joining two moments and means nothing.
 
+**The second channel need not be a second microphone.** It is two ADC
+pins and a clock, so anything within the converter's range can go on the
+other one - and the use that turned up first was a **supply rail**, wired
+in beside a microphone that was suspected of being underfed, which settled
+in one run what a meter would have settled in two hands. Watch what you
+read off it though: a rail at or above the converter's own 5 V reference
+pins at 1023, where 5 V and 6 V read alike, so that reading is a floor
+rather than a measurement. The page says so rather than calling a hard
+driven pin flat, which is what it used to do.
+
 **It is independent of `test goertzel ear` on purpose**, though the same
 board suits both. That one plays a tone, runs five Goertzel bins over
 what comes back and judges what it hears; this one judges nothing. The
@@ -529,11 +539,28 @@ class Scope(BaseThread):
         low, high = trace.extent(index)
         swing = trace.swing(index)
         said = f"{low} to {high} of 1023, swing {swing}"
-        if low == high:
-            return f"{said} - flat, nothing is driving the pin"
         if low <= 0 and high >= 1023:
             return f"{said} - touching both rails, the input is clipping"
-        return said
+        if swing:
+            return said
+
+        # Three ways to be flat, and they are not the same fact. This
+        # said "nothing is driving the pin" about all of them, which was
+        # wrong about a supply rail somebody had deliberately wired in to
+        # measure - it was driven hard, to the top of the range.
+        if high >= 1023:
+            return (
+                f"{said} - pinned at full scale. Whatever is on this pin is "
+                "at or above the converter's own 5 V reference, so this is a "
+                "floor and not a measurement: 5 V and 6 V read alike"
+            )
+        if low <= 0:
+            return f"{said} - flat at zero, which is a pin tied to ground"
+        return (
+            f"{said} - a steady {low * 5 / 1023:.3f} V with nothing moving "
+            "on it. A supply rail being measured looks like this, and so "
+            "does an output that has died with its bias stuck"
+        )
 
     @staticmethod
     def _describe_coupling(trace):
