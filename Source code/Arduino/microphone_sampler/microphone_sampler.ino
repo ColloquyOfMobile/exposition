@@ -153,9 +153,22 @@ void capture() {
 // combinationally and the sample is taken in the first cycles of the
 // conversion that follows, so the reading is of the pin just selected -
 // what a throwaway protects against is a *high impedance* source not
-// having charged the sample capacitor, and a MAX9814's output is a long
-// way from that. On a high impedance source, expect each channel to be
-// dragged towards the other's level.
+// having charged the sample capacitor. The sampling window here is 1.5
+// ADC clocks, 6 us, which settles to half a bit for any source under
+// about 56 kohm; a MAX9814's output is a long way below that, so a
+// connected microphone is read cleanly.
+//
+// **An open pin is another matter, and no amount of settling fixes it.**
+// The sample capacitor (about 14 pF) comes up holding the previous
+// conversion's charge and an unconnected pin has nothing to discharge it
+// into, so the reading is very nearly the *other* channel's. Measured on
+// this board across three runs, both pins, a strong source and a weak
+// one: **94 to 95 per cent** of the other channel's value - which implies
+// a pin capacitance of about 0.8 pF sharing with that 14 pF. A throwaway
+// would decay it by only 5 per cent a time, so it would take some fifty
+// of them; the fix is not here at all but in the driver, which compares
+// the two channels and says when one is only reporting the other (see
+// `colloquy/tests/scope/trace.py`).
 void captureDual() {
   unsigned long began = micros();
   for (int i = 0; i < PAIRS; i++) {

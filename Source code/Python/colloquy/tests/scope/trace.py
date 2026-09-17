@@ -272,6 +272,15 @@ def coupling_of(left, right, seconds, captures=COUPLING_CAPTURES):
     unmistakable. On that unplugged lead: +0.95 as sampled, **+0.998**
     shifted by one.
 
+    How much of a copy is measurable, and it is a capacitor rather than
+    anything to do with sound: fitting the open pin against its neighbour
+    over three runs - both pins, a strong microphone and a weak one - gives
+    **94 to 95 per cent** every time, which is the 14 pF sample-and-hold
+    sharing with about 0.8 pF of pin. A fixed fraction regardless of how
+    loud the source is, and a direction that follows the order of
+    conversion rather than the wiring, are what rule out crosstalk in the
+    leads.
+
     Not a verdict, and it must not become one - see `describe_coupling`.
     """
     found_bounds = capture_bounds(seconds)
