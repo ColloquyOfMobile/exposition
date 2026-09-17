@@ -200,6 +200,13 @@ COUPLED = 0.99
 # in a room - are honestly near -1. A real fault measured here sat at
 # -0.97, so this band cannot be read either way from the number alone:
 # what it gets is the ambiguity named and the one test that settles it.
+#
+# The band is not a formality. A pin that is out but whose neighbour is a
+# *weak* microphone lands in it - a ghost is a copy of its neighbour plus
+# the converter's own noise, so the correlation falls as the source does:
+# +0.998 on a strong tone, +0.984 on one four times weaker, both with a
+# lead plainly out. Which is why the reading in this band leans on the
+# shift rather than on the magnitude that has just failed.
 SUSPICIOUS = 0.9
 
 
@@ -358,6 +365,24 @@ def describe_coupling(found, names=("the first", "the second")):
     if abs(r) < SUSPICIOUS:
         return f"{said} - the two are reading different things"
     if abs(r) < COUPLED:
+        ghost = ghost_of(found, names)
+        if r > 0 and ghost is not None:
+            # The shift outlives the signal where the magnitude does not.
+            # A real run with a weak microphone on one pin and the other
+            # pin out reached only +0.984, under the threshold, and the
+            # geometry sentence below was wrong twice over about it: it
+            # offers two microphones close together, which peak at shift 0,
+            # to explain a reading peaking at -1.
+            other = names[1] if ghost == names[0] else names[0]
+            return (
+                f"{said} - close to a copy, and the alignment is a ghost's: "
+                f"if it is one, {ghost} is the unconnected pin, since it is "
+                f"converted after {other}. A ghost gets noisier as the "
+                "source gets weaker - measured +0.998 on a strong tone and "
+                "+0.984 on one four times weaker - so the number alone is "
+                f"not proof either way. Unplug {other} and see whether "
+                f"{ghost} changes"
+            )
         geometry = (
             "two microphones half a wavelength apart really are inverted - "
             "43 cm at 400 Hz"

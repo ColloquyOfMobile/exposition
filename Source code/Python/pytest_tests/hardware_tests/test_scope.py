@@ -862,3 +862,49 @@ def test_the_in_line_case_admits_it_is_the_weaker_one():
     said = describe_coupling(coupling_of(real, list(real), clock(6)), ("A0", "A1"))
     assert "A1 is very likely an unconnected pin" in said
     assert "genuinely in phase would look the same" in said
+
+
+def test_a_weak_source_puts_its_ghost_in_the_ambiguous_band():
+    """A ghost is a copy of its neighbour plus the converter's own noise,
+    so the correlation falls as the source does. Measured with a lead
+    plainly out: +0.998 on a strong tone, +0.984 on one four times weaker
+    - which is under the threshold, so the magnitude alone called an
+    unplugged pin "could be two microphones"."""
+    from random import Random
+
+    random = Random(13)
+    weak = [int(248 + 20 * sin(2 * pi * 400 * i / 8929.0)) for i in range(256 * 6)]
+    ghost = [weak[0]] + [value + int(random.uniform(-6, 6)) for value in weak[:-1]]
+
+    found = coupling_of(ghost, weak, clock(6))
+    assert COUPLED > abs(found[0]) >= 0.9, found
+
+
+def test_the_ambiguous_band_leans_on_the_shift_not_the_magnitude():
+    """Which is the half that survives a weak source. The sentence this
+    replaced offered two microphones close together - which peak at shift
+    0 - to explain a reading peaking at -1."""
+    from random import Random
+
+    random = Random(13)
+    weak = [int(248 + 20 * sin(2 * pi * 400 * i / 8929.0)) for i in range(256 * 6)]
+    ghost = [weak[0]] + [value + int(random.uniform(-6, 6)) for value in weak[:-1]]
+
+    said = describe_coupling(coupling_of(ghost, weak, clock(6)), ("A0", "A1"))
+    assert "A0 is the unconnected pin" in said
+    assert "converted after A1" in said
+    assert "not proof either way" in said
+    assert "close together" not in said
+
+
+def test_an_inverted_reading_in_the_band_still_talks_about_geometry():
+    """There is no ghost alignment that inverts - a retained charge is a
+    copy, not a mirror - so the room is the thing to weigh there."""
+    from random import Random
+
+    random = Random(5)
+    left = tone(256 * 6)
+    right = [int(-0.9 * (v - 248) + 248 + random.uniform(-20, 20)) for v in left]
+    said = describe_coupling(coupling_of(left, right, clock(6)), ("A0", "A1"))
+    assert "half a wavelength" in said
+    assert "unconnected pin" not in said
