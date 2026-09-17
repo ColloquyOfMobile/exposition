@@ -94,6 +94,7 @@ class Results(Base):
     def __init__(self, owner, dir_path):
         super().__init__(owner=owner)
         self._dir_path = dir_path
+        self._children = {}
 
     @property
     def name(self):
@@ -101,12 +102,31 @@ class Results(Base):
 
     @property
     def runs(self):
-        """Newest first. Rescanned every time, so a run that finished
-        while the page was open is simply there."""
+        """Newest first, and **the same objects as last request**.
+
+        Rescanned every time, so a run that finished while the page was
+        open is simply there - but a run already listed keeps the node it
+        had. That is not an optimisation. A `GraphView` holds which page
+        and which zoom the reader is on, so a node rebuilt on every
+        request means every press of `next page` mutates a graph that is
+        then thrown away and redrawn at page one: the links answer, the
+        readings change for one render, and the picture never moves.
+        Building fresh is the obvious way to write this and it is silently
+        wrong, which is why the same line is in
+        `test_goertzel_ear/results.py`.
+        """
         if not self._dir_path.exists():
+            self._children = {}
             return []
-        found = sorted(self._dir_path.glob("*.csv"), reverse=True)
-        return [Run(owner=self, csv_path=path) for path in found]
+
+        found = {}
+        for csv_path in sorted(self._dir_path.glob("*.csv"), reverse=True):
+            key = csv_path.stem
+            found[key] = self._children.get(key) or Run(
+                owner=self, csv_path=csv_path
+            )
+        self._children = found
+        return list(found.values())
 
     @property
     def snapshot_children(self):

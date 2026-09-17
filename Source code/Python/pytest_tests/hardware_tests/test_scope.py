@@ -613,3 +613,57 @@ def test_a_run_that_recorded_nothing_writes_no_file(tmp_path):
     Scope._write_the_trace(empty)
     assert list(tmp_path.iterdir()) == []
     assert empty._written_to == "untouched"
+
+
+# --- a run keeps its place -----------------------------------------------
+#
+# A GraphView holds which page and which zoom the reader is on. Rebuild the
+# node that carries it on every request and every press mutates a graph
+# that is then thrown away: the links answer, the readings change for one
+# render, and the picture never moves. Building fresh is the obvious way to
+# write a listing, and it is silently wrong.
+
+
+def written_run(tmp_path):
+    from colloquy.tests.scope import recording
+    from colloquy.tests.scope.results import Results
+
+    trace = Trace()
+    for capture in range(8):
+        trace.add(capture * 0.07, pairs(a=range(COUNT), b=range(COUNT)))
+    recording.write(trace, tmp_path / "2026_09_17_10h_00min_00s.csv")
+    return Results(owner=SimpleNamespace(owner=None, owners=[]), dir_path=tmp_path)
+
+
+def test_a_listed_run_is_the_same_node_next_request(tmp_path):
+    results = written_run(tmp_path)
+    first = results.snapshot_children["2026_09_17_10h_00min_00s"]
+    again = results.snapshot_children["2026_09_17_10h_00min_00s"]
+    assert first is again
+
+
+def test_paging_into_a_run_survives_the_next_click(tmp_path):
+    """The bug: press next page, and the picture came back at page one."""
+    results = written_run(tmp_path)
+    run = results.snapshot_children["2026_09_17_10h_00min_00s"]
+    graph = run.graph
+    graph.smaller_page()
+    graph.next_page()
+    moved_to = graph.page
+
+    later = results.snapshot_children["2026_09_17_10h_00min_00s"]
+    assert later.graph is graph
+    assert later.graph.page == moved_to
+
+
+def test_a_run_written_while_the_page_is_open_turns_up(tmp_path):
+    """The other half, and why the folder is rescanned at all."""
+    from colloquy.tests.scope import recording
+
+    results = written_run(tmp_path)
+    assert len(results.snapshot_children) == 1
+
+    trace = Trace()
+    trace.add(0.0, pairs())
+    recording.write(trace, tmp_path / "2026_09_17_11h_00min_00s.csv")
+    assert len(results.snapshot_children) == 2
