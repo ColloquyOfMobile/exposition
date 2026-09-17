@@ -81,7 +81,7 @@ from colloquy.ui.graph_view import GraphView
 from ..bench_com_port import BenchComPort
 from . import protocol, recording
 from .results import Results
-from .trace import Trace
+from .trace import COUPLED, Trace, describe_coupling
 
 
 class ScopeComPort(BenchComPort):
@@ -505,6 +505,7 @@ class Scope(BaseThread):
         for index, channel in enumerate(trace.names):
             leaf(channel, self._describe_channel(trace, index))
         leaf("compared", self._compare(trace))
+        leaf("independent", self._describe_coupling(trace))
         if self._written_to is not None:
             leaf(
                 "written to",
@@ -533,6 +534,11 @@ class Scope(BaseThread):
         if low <= 0 and high >= 1023:
             return f"{said} - touching both rails, the input is clipping"
         return said
+
+    @staticmethod
+    def _describe_coupling(trace):
+        """Are the two channels telling you two things? See `trace.py`."""
+        return describe_coupling(trace.coupling())
 
     @staticmethod
     def _compare(trace):
@@ -565,6 +571,16 @@ class Scope(BaseThread):
             )
         ratio = loudest / quietest
         if ratio < 1.5:
+            coupled = trace.coupling()
+            if coupled is not None and abs(coupled[0]) >= COUPLED:
+                # The reading that was dangerously wrong: with one lead
+                # unplugged the two swings match to a tenth, because one
+                # of them *is* the other. See `_describe_coupling`.
+                return (
+                    f"{loud} and {quiet} swing within {ratio:.1f}x of each "
+                    f"other, but see 'independent' - they are not two "
+                    f"readings, so this says nothing about two microphones"
+                )
             return (
                 f"{loud} and {quiet} swing within {ratio:.1f}x of each "
                 f"other - both are hearing the room"

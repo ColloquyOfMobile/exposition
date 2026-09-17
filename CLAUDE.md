@@ -528,6 +528,31 @@ those apart. What it does say is the one move that separates a dead
 microphone from a dead channel and which nobody here can make: swap the
 leads and see if the quiet one follows.
 
+**And an `independent` reading, because a copy of a working microphone
+looks exactly like a working microphone** (2026-09-17). An unconnected ADC
+pin does not read silence: its sample capacitor comes up holding the
+charge of the channel converted just before it, so it reports its
+neighbour. A real run with A1 physically unplugged came back with both
+channels showing the same 400 Hz tone at the same strength, and `compared`
+said *"both are hearing the room"*. `trace.coupling_of` is the check -
+correlation at the best of three one-sample alignments, since a ghost is
+its neighbour offset by one conversion (+0.95 as sampled, **+0.998**
+shifted). It is **named, not judged**, with a band between 0.9 and 0.99
+that says the number cannot settle it: two microphones 5 cm apart on one
+tone honestly reach 0.93, and two half a wavelength apart - 43 cm at
+400 Hz - are honestly near -1. The test that does settle it is in the
+text: unplug one lead and see whether the other changes.
+
+Two things decide whether that check works, they are separate, and each
+was found by getting it wrong on a real recording. **Within a capture,
+never across one** - stitching the flat arrays lets each capture's own DC
+level count as signal (-0.970 within, -0.852 stitched). **Spread along the
+run, not taken off the end** - a run whose tone was switched off before it
+was stopped ends in silence, and two channels with no signal cannot be
+correlated whatever is wired where (+0.998 spread, +0.821 over the last
+twenty captures). The second is the bigger error, and the one that would
+have called a disconnected microphone fine.
+
 **The sketch grew a command, not a channel** (firmware 2). `b` and its
 `block` reply are untouched to the last byte, because that is what
 `test_goertzel_ear` asks for and it runs five Goertzel bins over what comes

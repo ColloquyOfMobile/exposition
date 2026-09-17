@@ -667,3 +667,144 @@ def test_a_run_written_while_the_page_is_open_turns_up(tmp_path):
     trace.add(0.0, pairs())
     recording.write(trace, tmp_path / "2026_09_17_11h_00min_00s.csv")
     assert len(results.snapshot_children) == 2
+
+
+# --- are the two channels telling you two things -------------------------
+#
+# The check that was missing. With A1 physically unplugged, both channels
+# showed the same 400 Hz tone at the same strength and `compared` said
+# "both are hearing the room": an unconnected pin is not silent, it comes
+# up holding the charge of the channel converted just before it, so it
+# reports a copy of its neighbour - and a copy of a working microphone
+# looks exactly like a working microphone.
+
+from math import pi, sin  # noqa: E402 - beside the tests that use it
+
+from colloquy.tests.scope.trace import (  # noqa: E402
+    COUPLED,
+    capture_bounds,
+    coupling_of,
+    describe_coupling,
+)
+
+
+def tone(count, hz=400.0, rate=8929.0, amplitude=100, offset=248, phase=0.0):
+    return [
+        int(offset + amplitude * sin(2 * pi * hz * i / rate + phase))
+        for i in range(count)
+    ]
+
+
+def clock(captures, per=256, rate=8929.0, gap=0.092):
+    """A recording's seconds column: captures of `per` samples, far apart."""
+    seconds, start = [], 0.0
+    for _ in range(captures):
+        seconds.extend(start + i / rate for i in range(per))
+        start = seconds[-1] + gap
+    return seconds
+
+
+def test_captures_are_found_from_the_clock_alone():
+    """Nothing is written beside the rows to say where a capture ends; the
+    gap is 800 times the interval inside one, so the clock says it."""
+    assert len(capture_bounds(clock(5))) == 5
+    assert capture_bounds(clock(3))[1] == (256, 512)
+
+
+def test_an_unconnected_pin_reporting_its_neighbour_is_caught():
+    """One conversion behind, which is what the sample capacitor does."""
+    real = tone(256 * 6)
+    ghost = real[1:] + [real[-1]]
+    found = coupling_of(real, ghost, clock(6))
+    assert found is not None
+    assert abs(found[0]) >= COUPLED
+    assert "NOT two readings" in describe_coupling(found)
+
+
+def test_two_independent_microphones_are_not_flagged():
+    """Same tone, different rooms' worth of noise and a different level -
+    the ordinary case, which must not be called a fault."""
+    from random import Random
+
+    random = Random(4)
+    left = tone(256 * 6, amplitude=100)
+    right = [
+        int(0.4 * value + random.uniform(-40, 40) + 120) for value in left
+    ]
+    found = coupling_of(left, right, clock(6))
+    assert abs(found[0]) < COUPLED
+    assert "reading different things" in describe_coupling(found)
+
+
+def test_the_ambiguous_band_names_the_ambiguity_rather_than_a_verdict():
+    """Two microphones half a wavelength apart really are inverted - 43 cm
+    at 400 Hz, an ordinary distance in a room - so a number in this band
+    cannot be read either way on its own."""
+    from random import Random
+
+    random = Random(5)
+    left = tone(256 * 6)
+    right = [int(-0.9 * (v - 248) + 248 + random.uniform(-20, 20)) for v in left]
+    found = coupling_of(left, right, clock(6))
+    assert COUPLED > abs(found[0]) >= 0.9
+    said = describe_coupling(found)
+    assert "cannot say whether" in said
+    assert "Unplug one lead" in said
+
+
+def test_the_correlation_is_taken_within_captures_not_across_them():
+    """Stitching the captures end to end lets each one's DC level count as
+    signal. Measured on a real run: -0.970 within captures, -0.852
+    stitched.
+
+    Reproduced by letting each channel's DC wander on its own from capture
+    to capture, which is what a real pair does - the wander is
+    uncorrelated between the two, so stitched it reads as disagreement
+    that is not in the signal at all.
+    """
+    from random import Random
+
+    random = Random(11)
+    left, right = [], []
+    for _capture in range(8):
+        here, there = random.uniform(-60, 60), random.uniform(-60, 60)
+        piece = tone(256)
+        left.extend(int(value + here) for value in piece)
+        right.extend(int(-(value - 248) * 0.9 + 160 + there) for value in piece)
+
+    within = coupling_of(left, right, clock(8))[0]
+    flat = [index / 8929.0 for index in range(len(left))]
+    across = coupling_of(left, right, flat)[0]
+    assert abs(within) > 0.99 > abs(across), f"{within=} {across=}"
+
+
+def test_a_quiet_passage_cannot_decide_it():
+    """A run whose tone was switched off before it was stopped ends in
+    silence, and two channels with no signal cannot be correlated whatever
+    is wired where. Measured on the real run with a lead plainly
+    unplugged: +0.998 spread along it, +0.821 over its last twenty
+    captures alone - which would have said a disconnected microphone was
+    fine."""
+    real = tone(256 * 20) + [248] * (256 * 4)
+    ghost = real[1:] + [real[-1]]
+    found = coupling_of(real, ghost, clock(24))
+    assert abs(found[0]) >= COUPLED
+
+
+def test_a_recording_too_short_to_judge_says_so():
+    assert describe_coupling(coupling_of([1, 2], [1, 2], [0.0, 0.1])) == (
+        "not enough recorded yet to say"
+    )
+
+
+def test_the_comparison_defers_to_it_rather_than_reassuring(tmp_path):
+    """The reading that was dangerously wrong: with one lead unplugged the
+    two swings match to a tenth, because one of them *is* the other."""
+    trace = Trace()
+    real = tone(256)
+    ghost = real[1:] + [real[-1]]
+    for capture in range(6):
+        trace.add(capture * 0.12, pairs(a=real, b=ghost, count=256))
+    said = Scope._compare(trace)
+    assert "see 'independent'" in said
+    assert "both are hearing the room" not in said

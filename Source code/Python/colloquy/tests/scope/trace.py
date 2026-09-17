@@ -153,6 +153,12 @@ class Trace:
         found = self.extent(index)
         return 0 if found is None else found[1] - found[0]
 
+    def coupling(self):
+        """How much of one channel is the other one. See `coupling_of`."""
+        if len(self._y) < 2:
+            return None
+        return coupling_of(self._y[0], self._y[1], self._x)
+
     def series(self):
         """Label to points, one entry per channel, for the graph.
 
@@ -167,3 +173,200 @@ class Trace:
             name: Columns(self._x, column)
             for name, column in zip(self._names, self._y)
         }
+
+
+# How many captures the coupling check looks at, spread evenly along the
+# recording. Bounded because this is asked on every render while a run may
+# be a million pairs long - and *spread*, not taken off the end, which is
+# the mistake that cost the second attempt at this: a run whose tone was
+# switched off before it was stopped ends in silence, and two channels
+# with no signal on them cannot be correlated whatever is wired where.
+# Measured on that run: +0.998 across the whole of it, +0.82 over its last
+# twenty captures alone. Evenly spaced and taken as a median, a quiet
+# passage is outvoted instead of deciding it.
+COUPLING_CAPTURES = 20
+
+# Above this, at the best of three alignments, the two readings are not
+# two readings. Set from a measured unplugged lead (+0.998) and
+# deliberately above what a room can do: two microphones a few centimetres
+# apart on one pure tone reach about 0.93, and two half a wavelength apart
+# reach -1 honestly, so anything lower would be calling real geometry a
+# fault.
+COUPLED = 0.99
+
+# And below that, the band where it is genuinely ambiguous. Two
+# microphones a few centimetres apart on one pure tone reach about 0.93,
+# and two half a wavelength apart - 43 cm at 400 Hz, an ordinary distance
+# in a room - are honestly near -1. A real fault measured here sat at
+# -0.97, so this band cannot be read either way from the number alone:
+# what it gets is the ambiguity named and the one test that settles it.
+SUSPICIOUS = 0.9
+
+
+def capture_bounds(seconds):
+    """Where each capture starts and stops, as index ranges.
+
+    A recording is a row of 27 ms windows with a gap between each, and the
+    gap is far larger than the interval inside one - about 92 ms against
+    112 us on a real lead - so the clock says where the joins are without
+    anything having to be written down beside it. Taken off the clock
+    rather than remembered, so a run read back from a CSV splits the same
+    way as one in memory, from the same rows.
+
+    Five times the median step is the line: comfortably above jitter in
+    the sample interval, comfortably below any gap a transfer takes.
+    """
+    if len(seconds) < 2:
+        return [(0, len(seconds))] if len(seconds) else []
+
+    steps = sorted(
+        seconds[index + 1] - seconds[index] for index in range(len(seconds) - 1)
+    )
+    inner = steps[len(steps) // 2]
+    if inner <= 0:
+        return [(0, len(seconds))]
+
+    bounds, start = [], 0
+    for index in range(len(seconds) - 1):
+        if seconds[index + 1] - seconds[index] > inner * 5:
+            bounds.append((start, index + 1))
+            start = index + 1
+    bounds.append((start, len(seconds)))
+    return bounds
+
+
+def coupling_of(left, right, seconds, captures=COUPLING_CAPTURES):
+    """How much of one channel is the other one, as (r, shift) or None.
+
+    The correlation of two channels sample by sample, at the best of three
+    alignments: as sampled, and each shifted by one. Two things make it an
+    instrument rather than a curiosity, and both were learned the hard way.
+
+    Two things decide whether it works, they are separate, and each was
+    found by getting it wrong on a real run.
+
+    **Within a capture, never across one.** Correlating the flat arrays
+    end to end stitches over the 92 ms gaps - the very thing this module
+    refuses to do to the x axis - and each capture's own DC level then
+    counts as signal. Measured: a run whose channels correlate at -0.970
+    within captures reads -0.852 stitched.
+
+    **Spread along the run, not taken off the end.** A run whose tone was
+    switched off before it was stopped ends in silence, and two channels
+    with no signal cannot be correlated whatever is wired where. Measured
+    on the run with a lead plainly unplugged: +0.998 spread, +0.821 over
+    its last twenty captures. That one is the bigger error of the two, and
+    the one that would have said a disconnected microphone was fine.
+
+    **The shift.** An unconnected pin is not silent - its sample capacitor
+    comes up holding the charge of the channel converted just before it,
+    so it reports a copy of its neighbour offset by one conversion, which
+    at zero shift looks merely similar and at the right shift is
+    unmistakable. On that unplugged lead: +0.95 as sampled, **+0.998**
+    shifted by one.
+
+    Not a verdict, and it must not become one - see `describe_coupling`.
+    """
+    found_bounds = capture_bounds(seconds)
+    if len(found_bounds) > captures:
+        step = len(found_bounds) / float(captures)
+        bounds = [found_bounds[int(index * step)] for index in range(captures)]
+    else:
+        bounds = found_bounds
+
+    best = None
+    for shift in (-1, 0, 1):
+        found = []
+        for start, stop in bounds:
+            a, b = left[start:stop], right[start:stop]
+            if shift > 0:
+                a, b = a[:-shift], b[shift:]
+            elif shift < 0:
+                a, b = a[-shift:], b[:shift]
+            if len(a) < 64:
+                continue
+            value = _correlation(a, b)
+            if value is not None:
+                found.append(value)
+        if not found:
+            continue
+        found.sort()
+        median = found[len(found) // 2]
+        if best is None or abs(median) > abs(best[0]):
+            best = (median, shift)
+    return best
+
+
+def describe_coupling(found):
+    """Whether the two channels are telling you two things.
+
+    The check that was missing, and the run that found it: with A1
+    physically unplugged, both channels showed the same 400 Hz tone at the
+    same strength and `compared` said "both are hearing the room". A copy
+    of a working microphone looks exactly like a working microphone.
+
+    **Named, not judged.** Two microphones a few centimetres apart hearing
+    one pure tone are genuinely correlated - at 400 Hz a 5 cm spacing is 21
+    degrees, which is 0.93 - and two half a wavelength apart are genuinely
+    anti-correlated. So this says how independent the two readings are, and
+    leaves what that means to somebody who knows where the microphones are.
+    What it adds is the reading nobody would otherwise have doubted, and
+    the test that settles it: unplug one and see whether the other changes.
+    """
+    if found is None:
+        return "not enough recorded yet to say"
+    r, shift = found
+    aligned = "" if shift == 0 else f" (shifted by {shift:+d} sample)"
+    said = f"correlation {r:+.3f}{aligned}"
+
+    if abs(r) < SUSPICIOUS:
+        return f"{said} - the two are reading different things"
+    if abs(r) < COUPLED:
+        geometry = (
+            "two microphones half a wavelength apart really are inverted - "
+            "43 cm at 400 Hz"
+            if r < 0
+            else "two microphones close together on one tone really do "
+            "agree this well - 5 cm at 400 Hz is 0.93"
+        )
+        return (
+            f"{said} - very close, and this number alone cannot say whether "
+            f"that is the wiring or the room: {geometry}. Unplug one lead "
+            "and see whether the other changes"
+        )
+    if r > 0:
+        return (
+            f"{said} - NOT two readings. One channel is very likely an "
+            "unconnected pin reporting a copy of the other: the converter's "
+            "sample capacitor comes up holding the charge of the channel "
+            "before it. Unplug one lead and see whether the other changes"
+        )
+    return (
+        f"{said} - NOT two readings, and inverted. One channel is appearing "
+        "on the other with its sign turned over, which is what a shared "
+        "ground return does: the first channel's current moves the "
+        "reference the second is measured against. Check the two grounds go "
+        "separately to the board"
+    )
+
+
+def _correlation(left, right):
+    """Pearson's r over two equal-length sequences, or None if either is
+    flat - a channel that never moves has no correlation with anything,
+    and `_describe_channel` already names that fault on its own."""
+    count = min(len(left), len(right))
+    if count < 2:
+        return None
+    mean_left = sum(left[:count]) / count
+    mean_right = sum(right[:count]) / count
+
+    covariance = spread_left = spread_right = 0.0
+    for index in range(count):
+        a = left[index] - mean_left
+        b = right[index] - mean_right
+        covariance += a * b
+        spread_left += a * a
+        spread_right += b * b
+    if spread_left <= 0 or spread_right <= 0:
+        return None
+    return covariance / (spread_left * spread_right) ** 0.5

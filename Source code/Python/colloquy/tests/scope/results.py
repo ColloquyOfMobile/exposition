@@ -26,7 +26,8 @@ from colloquy.base import Base
 from colloquy.ui import leaves
 from colloquy.ui.graph_view import GraphView
 
-from . import recording
+from . import recording, trace
+from .trace import describe_coupling
 
 
 class Run(Base):
@@ -85,7 +86,24 @@ class Run(Base):
                 f"{min(values)} to {max(values)} of 1023, "
                 f"swing {max(values) - min(values)}",
             )
+        leaf("independent", self._coupling(lines))
         return states
+
+    @staticmethod
+    def _coupling(lines):
+        """The same check the live page makes, on a run read off the disk.
+
+        Computed from the rows rather than stored in the file: it is
+        arithmetic over the samples, and a number written into a CSV is a
+        number that can later disagree with the rows beneath it.
+        """
+        if len(lines) < 2:
+            return "only one channel in this file"
+        columns = [[value for _x, value in points] for _label, points in lines]
+        seconds = [x for x, _value in lines[0][1]]
+        return describe_coupling(
+            trace.coupling_of(columns[0], columns[1], seconds)
+        )
 
 
 class Results(Base):
