@@ -90,6 +90,7 @@ from colloquy.ui.graph_view import GraphView
 
 from ..bench_com_port import BenchComPort
 from . import protocol, recording
+from .diagnosis_document import DiagnosingAMicrophone
 from .results import Results
 from .trace import COUPLED, Trace, describe_coupling
 
@@ -137,6 +138,7 @@ class Scope(BaseThread):
         if not self._dir_path.exists():
             self._dir_path.mkdir()
         self._results = Results(owner=self, dir_path=self._dir_path)
+        self._diagnosis = DiagnosingAMicrophone(owner=self)
 
         self._com_port = ScopeComPort(owner=self)
         self[self._com_port.name] = self._com_port
@@ -445,6 +447,11 @@ class Scope(BaseThread):
         # compared with, and the reason to look at them is usually before
         # doing another one rather than after.
         children[self._results.name] = self._results
+        # Always, and beside the results rather than behind them: nobody
+        # goes looking for a document about diagnosing microphones until
+        # they are already standing at the bench with a quiet one, which
+        # is `HARDWARE_SETUP.md`'s reason for hanging where it does.
+        children[self._diagnosis.name] = self._diagnosis
         return self._with_scenarios(children)
 
     def _snapshot_if_opened(self, path):

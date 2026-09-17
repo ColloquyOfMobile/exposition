@@ -651,6 +651,22 @@ emergency-stops the installation.
 `Scope` is on `WITHOUT_SCENARIOS` beside `Repository`, because listening
 to a pin changes nothing in the room.
 
+**`diagnosing a microphone` hangs off it** (`DIAGNOSING_A_MICROPHONE.md`),
+for `HARDWARE_SETUP.md`'s reason: nobody goes looking for a document about
+diagnosing microphones until they are already at the bench with a quiet
+one, which is where the scope is. It is a method *and* the investigation
+that produced it, in that order - two MAX9814s over seven runs on
+2026-09-17, ending in a module that was powered at 5.000 V, driving its
+pin at a low impedance, and dead anyway: bias stuck 475 mV low, gain
+absent, AGC inert where the good module reached peak-to-peak 294 in
+silence. Every rule in it carries the run that earned it, because a number
+with no source is what this repository has been bitten by before. The
+three readings that were **wrong during it** are in there too - an
+unplugged channel called "both are hearing the room", a 5 V rail called
+"nothing is driving the pin", and page controls that answered while the
+node under them was rebuilt - since a page that has been confidently wrong
+is worth recording as carefully as one that was right.
+
 **`params["audio"]["wired bodies"]` is read by both installation tests**, and it is not a convenience: an unwired analyser input is a floating ADC pin, and a floating pin does not read silence — it reads garbage. A five-channel sweep on a two-channel board reports twenty-one fictional failures with the two real answers buried among them. Add a body to the list the moment its amplifier and its analyser are in; nothing else changes, since the pitch, the pin and the module are already decided for all five.
 
 **How `test_audio_bringup/diagnosis.py` takes a nine-link chain apart.** Not by measuring harder — by arranging for the faults to have different *shapes*. Every ear hears every voice, so a tone heard by nobody is a speaking fault while an ear that hears nothing when another hears everything is a hearing fault; and a tone lands in a *band*, which is frequency rather than geometry, so it survives a bench where everything is 30 cm apart. Two rules keep the report usable: **the most specific finding returns outright and silences the general ones** (a crossed pair makes every pair in the grid read silent, so listing symptoms opens with two walls of "scope this pin" and buries the one sentence that explains them), and **a voice that peaked in any band is never sent to a scope** — it is plainly being generated, and only its band mapping is wrong. Both of those were found by injecting the faults into the simulator and reading what came out, not by reasoning about the code.

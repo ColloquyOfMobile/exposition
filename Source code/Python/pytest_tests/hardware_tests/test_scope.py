@@ -989,3 +989,37 @@ def test_the_independence_reading_no_longer_assumes_ground():
     said = describe_coupling(None, ("A0", "A1"), flat=("A1",))
     assert "rail wired in on purpose" in said
     assert "no length of run will change that" in said
+
+
+# --- the document --------------------------------------------------------
+
+
+def test_the_diagnosis_document_is_on_the_disk_where_it_says():
+    from colloquy.tests.scope.diagnosis_document import DiagnosingAMicrophone
+
+    path = DiagnosingAMicrophone.folder / DiagnosingAMicrophone.file_name
+    assert path.exists(), f"{path} is missing"
+    assert "Diagnosing a microphone" in path.read_text(encoding="utf-8")
+
+
+def test_the_document_carries_the_measurements_its_advice_rests_on():
+    """A number with no source is what this repository has been bitten by
+    before - see SUPPLY_SETUP.md, and one destroyed amplifier - so the
+    figures travel with the advice rather than behind it."""
+    from colloquy.tests.scope.diagnosis_document import DiagnosingAMicrophone
+
+    text = (DiagnosingAMicrophone.folder / DiagnosingAMicrophone.file_name).read_text(
+        encoding="utf-8"
+    )
+    for measured in ("94 to 95 per cent", "248.4", "151.3", "5.000 V", "294"):
+        assert measured in text, f"{measured!r} is not in the document"
+
+
+def test_the_document_hangs_off_the_scope_and_not_beside_it():
+    """It is not a sibling of the test group's members. Somebody goes
+    looking for it while standing at the bench with a quiet microphone,
+    which is where the scope already is."""
+    from colloquy.tests.scope.diagnosis_document import DiagnosingAMicrophone
+
+    assert DiagnosingAMicrophone.document_name == "diagnosing a microphone"
+    assert DiagnosingAMicrophone.folder.name == "scope"
