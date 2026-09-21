@@ -83,6 +83,11 @@ WITHOUT_SCENARIOS = {
     "colloquy.drivers.bar.turn_back_and_forth.TurnBackAndForth",
     "colloquy.repository.Repository",
     "colloquy.exposition.schedule.ExpositionSchedule",
+    # Flashing is maintenance, not behaviour: nothing in the room is
+    # different afterwards except that the board is the one this repo
+    # describes. The base carries the rule for every board there is -
+    # the piece's own, and the bench sampler each test flashes itself.
+    "colloquy.drivers.arduino.flasher.base.SketchFlasher",
     "colloquy.drivers.arduino.flasher.Flasher",
     # An instrument, not a behaviour. It listens to one ADC pin and
     # draws what it heard; nothing about the room changes while it

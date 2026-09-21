@@ -45,9 +45,14 @@ def thread(path):
 def flasher(monkeypatch):
     """A Flasher double with everything clear: board mounted, a real Mega
     on the chosen port, nothing running."""
-    import colloquy.drivers.arduino.flasher as module
+    # Patched on the boards module itself rather than on whichever module
+    # happens to name it: the four refusals about a port moved down to
+    # `flasher.base` when the bench tests grew flashers of their own, and
+    # a patch aimed at one importer would have silently stopped reaching
+    # the code under test.
+    from colloquy.drivers.arduino import boards as boards_module
 
-    monkeypatch.setattr(module.boards, "detect", lambda ports=None: [MEGA, U2D2])
+    monkeypatch.setattr(boards_module, "detect", lambda ports=None: [MEGA, U2D2])
 
     fake = SimpleNamespace(
         colloquy=SimpleNamespace(
@@ -61,7 +66,11 @@ def flasher(monkeypatch):
         _detail=None,
     )
     # The real thing calls its own refusal check from three places, so the
-    # double has to be able to answer it as itself.
+    # double has to be able to answer it as itself. `_extra_refusals` is
+    # the hook the base leaves for whatever an owner knows that it does
+    # not, and this one's is the main PCB - bound the same way, so the
+    # test exercises the real override rather than a stand-in for it.
+    fake._extra_refusals = lambda: Flasher._extra_refusals(fake)
     fake._why_not_flash = lambda: Flasher._why_not_flash(fake)
     return fake
 
