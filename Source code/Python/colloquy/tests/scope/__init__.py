@@ -89,6 +89,7 @@ from colloquy.ui import leaves
 from colloquy.ui.graph_view import GraphView
 
 from ..bench_com_port import BenchComPort
+from ..sampler_board import SamplerBoard, SamplerFlasher
 from . import protocol, recording
 from .diagnosis_document import DiagnosingAMicrophone
 from .results import Results
@@ -107,7 +108,7 @@ class ScopeComPort(BenchComPort):
     stand_in = "simulated scope port"
 
 
-class Scope(BaseThread):
+class Scope(SamplerBoard, BaseThread):
     # Nothing in the room. It listens to a pin and draws what it heard,
     # so there is nothing for somebody standing in front of the
     # installation to be told will happen - the same reason `Repository`
@@ -131,6 +132,12 @@ class Scope(BaseThread):
     # minute.
     MAX_SAMPLES = 1_000_000
 
+    # What `SamplerBoard` measures the board's greeting against. Firmware
+    # 1 has `b` and nothing else; `d` and the second channel arrived in 2,
+    # and a board on 1 answers a two-channel request with a refusal.
+    MINIMUM_FIRMWARE = protocol.MINIMUM_FIRMWARE
+    FIRMWARE_NEEDED_FOR = "both channels"
+
     def __init__(self, owner, result_folder):
         super().__init__(owner=owner)
 
@@ -143,6 +150,14 @@ class Scope(BaseThread):
         self._com_port = ScopeComPort(owner=self)
         self[self._com_port.name] = self._com_port
         self._port_handler = None
+        # The other half of knowing what is on this lead: `ask the board`
+        # says what is there, this puts the right thing there. See
+        # sampler_board.py - a recording with one flat line is equally a
+        # dead microphone, a missing lead and an old sketch, and until
+        # both of these existed this page could only rule out the first.
+        self._flasher = SamplerFlasher(owner=self)
+        self[self._flasher.name] = self._flasher
+        self["ask the board"] = self.ask_the_board
 
         self._trace = Trace()
         self._graph = None
@@ -244,17 +259,9 @@ class Scope(BaseThread):
                 return test.name
         return None
 
-    def _open_if_needed(self):
-        if not self.port_handler.is_open:
-            self.port_handler.open()
-            # It reboots when the port opens and greets on the way up.
-            self._greeting = None
-            deadline = time() + 4.0
-            while time() < deadline and self._greeting is None:
-                raw = self.port_handler.readline()
-                if raw and raw.startswith(b"microphone_sampler"):
-                    self._greeting = raw.decode("ascii", "replace").strip()
-                    self._firmware = protocol.firmware_of(self._greeting)
+    # `_open_if_needed` and the greeting it reads are `SamplerBoard`'s:
+    # `test goertzel ear` had the same fifteen lines, and the two now
+    # share the board rather than a copy of how to greet it.
 
     def _read_block(self):
         """Ask for one capture of both channels and read it back.
@@ -440,7 +447,13 @@ class Scope(BaseThread):
 
     @property
     def snapshot_children(self):
-        children = {self._com_port.name: self._com_port}
+        children = {
+            self._com_port.name: self._com_port,
+            # Beside the picker, because they are the same question asked
+            # twice: which board is on this lead, and is it the right one.
+            self._flasher.name: self._flasher,
+            "ask the board": self.ask_the_board,
+        }
         if self._graph is not None:
             children[self._graph.name] = self._graph
         # Always, unlike the graph: the runs on the disk are there to be
@@ -464,24 +477,12 @@ class Scope(BaseThread):
             or "not set",
         )
         leaf("sketch", "Source code/Arduino/microphone_sampler/")
-        if self._greeting:
-            leaf("board says", self._greeting)
-        # Named on its own line rather than left inside the greeting: it is
-        # what decides whether there is a second channel at all, and a
-        # recording with one flat line is exactly what an old board looks
-        # like from the graph.
-        leaf(
-            "firmware",
-            "not known yet - it is said when the port opens"
-            if self._firmware is None
-            else f"{self._firmware}"
-            + (
-                f" - too old, the second channel needs "
-                f"{protocol.MINIMUM_FIRMWARE}"
-                if self._firmware < protocol.MINIMUM_FIRMWARE
-                else " - knows both channels"
-            ),
-        )
+        # `board says` and `firmware`, both from `SamplerBoard`. The
+        # version is on its own line rather than left inside the greeting
+        # because it is what decides whether there is a second channel at
+        # all, and a recording with one flat line is exactly what an old
+        # board looks like from the graph.
+        self._board_readings(leaf)
 
         refusal = self._why_not_open()
         leaf("can record", "yes" if refusal is None else f"no - {refusal}")

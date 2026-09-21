@@ -98,6 +98,7 @@ from colloquy.ui import leaves
 from colloquy.ui.graph_view import GraphView
 
 from ..bench_com_port import BenchComPort
+from ..sampler_board import SamplerBoard, SamplerFlasher
 from . import goertzel, protocol
 from .recording import Recording
 from .results import Results
@@ -112,7 +113,7 @@ class EarComPort(BenchComPort):
     stand_in = "simulated ear port"
 
 
-class TestGoertzelEar(BaseThread):
+class TestGoertzelEar(SamplerBoard, BaseThread):
     scenario_names = ("goertzel-ear-test",)
 
     # A block is 512 numbers of text - about 20 ms on the wire at 1 Mbaud,
@@ -160,6 +161,14 @@ class TestGoertzelEar(BaseThread):
         self._com_port = EarComPort(owner=self)
         self[self._com_port.name] = self._com_port
         self._port_handler = None
+        # What is on this lead, and putting the right thing on it. See
+        # sampler_board.py: five flat bins is what a deaf microphone
+        # looks like and also what an empty board looks like, and
+        # nothing on this page could tell the two apart until the port
+        # was already open and a run under way.
+        self._flasher = SamplerFlasher(owner=self)
+        self[self._flasher.name] = self._flasher
+        self["ask the board"] = self.ask_the_board
 
         self._tone = Tone()
 
@@ -180,6 +189,7 @@ class TestGoertzelEar(BaseThread):
         self._written_to = None
         self._blocks_read = 0
         self._greeting = None
+        self._firmware = None
         self._outcome = None
         self._playing_since = None
         self._play_until = None
@@ -278,16 +288,9 @@ class TestGoertzelEar(BaseThread):
             )
         return None
 
-    def _open_if_needed(self):
-        if not self.port_handler.is_open:
-            self.port_handler.open()
-            # It reboots when the port opens and greets on the way up.
-            self._greeting = None
-            deadline = time() + 4.0
-            while time() < deadline and self._greeting is None:
-                raw = self.port_handler.readline()
-                if raw and raw.startswith(b"microphone_sampler"):
-                    self._greeting = raw.decode("ascii", "replace").strip()
+    # `_open_if_needed` and the greeting it reads are `SamplerBoard`'s:
+    # `scope` had the same fifteen lines against the same board, and the
+    # two now share the board rather than a copy of how to greet it.
 
     def _read_block(self):
         """Ask for one capture and read it back, or None."""
@@ -609,7 +612,13 @@ class TestGoertzelEar(BaseThread):
 
     @property
     def snapshot_children(self):
-        children = {self._com_port.name: self._com_port}
+        children = {
+            self._com_port.name: self._com_port,
+            # Beside the picker, because they are the same question asked
+            # twice: which board is on this lead, and is it the right one.
+            self._flasher.name: self._flasher,
+            "ask the board": self.ask_the_board,
+        }
         children.update(self._commands)
         if self._graph is not None:
             children[self._graph.name] = self._graph
@@ -629,8 +638,10 @@ class TestGoertzelEar(BaseThread):
             or "not set",
         )
         leaf("sketch", "Source code/Arduino/microphone_sampler/")
-        if self._greeting:
-            leaf("board says", self._greeting)
+        # `board says` and `firmware`, both from `SamplerBoard`. Any
+        # sampler firmware will do here - `b` is unchanged since 1 - so
+        # the version is a fact rather than a gate, unlike on `scope`.
+        self._board_readings(leaf)
 
         refusal = self._why_not_open()
         leaf("can read", "yes" if refusal is None else f"no - {refusal}")

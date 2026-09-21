@@ -115,17 +115,16 @@ def firmware_of(line):
     it unprompted on every reboot - which is every time the port opens,
     since opening toggles DTR. So this costs nothing and is known before
     the first capture is asked for.
+
+    One line, because it is `sampler_sketch.firmware_in`: the same board
+    greets `test goertzel ear`, and reading a version out of its line is
+    not a scope question. Kept under this name because that is what this
+    file's readers call it, and because the version it finds is judged
+    here against `MINIMUM_FIRMWARE` above.
     """
-    if not line:
-        return None
-    for piece in line.split():
-        name, _, value = piece.partition("=")
-        if name == "firmware":
-            try:
-                return int(value)
-            except ValueError:
-                return None
-    return None
+    from ..sampler_sketch import firmware_in
+
+    return firmware_in(line)
 
 
 def is_refusal(line):
