@@ -36,6 +36,7 @@ from time import time
 from colloquy.base_thread import BaseThread
 from colloquy.drivers import audio
 from colloquy.ui import leaves
+from ..colloquy_firmware import NeedsColloquyFirmware
 
 # Long enough for a whole exchange and its ending, and short enough that
 # a run nobody is watching stops by itself: five rounds at 4.35s, the
@@ -46,7 +47,7 @@ RUN_LIMIT = 90.0
 HISTORY = 40
 
 
-class TestReinforcement(BaseThread):
+class TestReinforcement(NeedsColloquyFirmware, BaseThread):
     # What the room does while this runs.
     scenario_names = ("reinforcement-test",)
 
@@ -357,7 +358,7 @@ class TestReinforcement(BaseThread):
         children["her reinforcement"] = self.female.reinforcement
         children["his reinforcement"] = self.male.reinforcement
         children["hearing"] = self.drivers.hearing
-        return self._with_scenarios(children)
+        return self._with_firmware(self._with_scenarios(children))
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

@@ -1,9 +1,10 @@
 from colloquy.base_thread import BaseThread
 
 from time import time
+from ..colloquy_firmware import NeedsColloquyFirmware
 
 
-class TestMalePatterns(BaseThread):
+class TestMalePatterns(NeedsColloquyFirmware, BaseThread):
     # Two rings blinking side by side, out of step with each other,
     # and how to read that as expected rather than as a fault.
     scenario_names = ("male-patterns-test",)
@@ -51,4 +52,4 @@ class TestMalePatterns(BaseThread):
 
         for blink_handler in self._blink_handlers:
             children[blink_handler.name] = blink_handler
-        return self._with_scenarios(children)
+        return self._with_firmware(self._with_scenarios(children))

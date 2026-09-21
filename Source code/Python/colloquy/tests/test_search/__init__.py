@@ -44,6 +44,7 @@ from colloquy.base_thread import BaseThread
 from colloquy.ui import leaves
 
 from . import events
+from ..colloquy_firmware import NeedsColloquyFirmware
 
 # Test-only indicator colours, the same two test_read_pattern uses so
 # that a head means the same thing in both runs.
@@ -75,7 +76,7 @@ GEOMETRY_INTERVAL = 0.25
 EVENT_HISTORY = 80
 
 
-class TestSearch(BaseThread):
+class TestSearch(NeedsColloquyFirmware, BaseThread):
     # What this does to the room for as long as it runs.
     scenario_names = ("search-reading-test",)
 
@@ -489,7 +490,7 @@ class TestSearch(BaseThread):
             children[f"{body.name} drives"] = body.drives
             children[f"{body.name} search"] = body.search
         children["bar"] = self.drivers.bar
-        return self._with_scenarios(children)
+        return self._with_firmware(self._with_scenarios(children))
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

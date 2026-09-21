@@ -88,6 +88,7 @@ from colloquy.ui import leaves
 
 from . import plotter_sketch
 from .plotter_document import MicrophonePlotter
+from .plotter_flasher import PlotterFlasher
 
 
 class TestMicrophoneSignal(BaseThread):
@@ -114,6 +115,13 @@ class TestMicrophoneSignal(BaseThread):
         self._sweeps = 0
         self._outcome = None
         self._last_read_at = 0.0
+
+        # The other direction, and the one the document used to send
+        # somebody to the Arduino IDE for. Both routes that use the
+        # installation's own board need `microphone_plotter` put on it
+        # first; only the way back was ever on this page.
+        self._plotter_flasher = PlotterFlasher(owner=self)
+        self[self._plotter_flasher.name] = self._plotter_flasher
 
         # Registered as well as drawn: registering is what makes it
         # reachable by path, snapshot_children is what draws it.
@@ -259,6 +267,11 @@ class TestMicrophoneSignal(BaseThread):
         return self._with_scenarios(
             {
                 self._document.name: self._document,
+                # The two directions this board goes in, both on the page
+                # that asks for both. The plotter one is a node of its
+                # own because it carries a compile, a port and its own
+                # refusals; the way back is one press and delegates.
+                self._plotter_flasher.name: self._plotter_flasher,
                 "forget the peaks": self.forget_the_peaks,
                 # Always offered, never hidden behind a check of its own.
                 # The flasher answers a press it will not act on with the

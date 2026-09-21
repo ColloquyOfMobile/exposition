@@ -43,9 +43,10 @@ from colloquy.drivers import audio
 from colloquy.ui import leaves
 
 from . import diagnosis
+from ..colloquy_firmware import NeedsColloquyFirmware
 
 
-class TestAudioBringup(BaseThread):
+class TestAudioBringup(NeedsColloquyFirmware, BaseThread):
     scenario_names = ("audio-bringup-test",)
 
     # Long enough to hear it and place it in the room, short enough that
@@ -304,7 +305,7 @@ class TestAudioBringup(BaseThread):
             body = self._bodies[name]
             children[f"{name} speaker"] = body.speaker
             children[f"{name} microphone"] = body.microphone
-        return self._with_scenarios(children)
+        return self._with_firmware(self._with_scenarios(children))
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

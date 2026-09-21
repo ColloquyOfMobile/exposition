@@ -3,6 +3,7 @@ from time import time
 
 from colloquy.base_thread import BaseThread
 from colloquy.ui import leaves
+from ..colloquy_firmware import NeedsColloquyFirmware
 
 # Drive values that produce each drive state, via which_is_frustated()
 # (drivers/drive/__init__.py): both below the satisfied floor means she is
@@ -23,7 +24,7 @@ DRIVE_LABELS = {
 }
 
 
-class TestFemaleSearch(BaseThread):
+class TestFemaleSearch(NeedsColloquyFirmware, BaseThread):
     # The one test whose passing result can be nothing happening at
     # all, which is worth knowing before watching it.
     scenario_names = ("female-search-test",)
@@ -273,7 +274,7 @@ class TestFemaleSearch(BaseThread):
             # Every female's search is called just "search", so keying by
             # its own name would leave only the last one reachable here.
             children[f"{female.name}'s search"] = female.search
-        return self._with_scenarios(children)
+        return self._with_firmware(self._with_scenarios(children))
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

@@ -4,6 +4,7 @@ from time import time
 from colloquy.ui import leaves
 
 from . import readings
+from ..colloquy_firmware import NeedsColloquyFirmware
 
 # Test-only indicator colors (not part of the installation's own palette,
 # see Neopixel.orange/.puce for the drive colors used on the body segments).
@@ -23,7 +24,7 @@ INDICATOR_BRIGHTNESS = 100
 READING_HISTORY = 60
 
 
-class TestReadPattern(BaseThread):
+class TestReadPattern(NeedsColloquyFirmware, BaseThread):
     # What this test does to the room once it is started, so that what
     # the bodies are seen doing can be told from what has gone wrong.
     scenario_names = ("pattern-reading-test",)
@@ -362,7 +363,7 @@ class TestReadPattern(BaseThread):
             children[male.search.blink.name] = male.search.blink
         for female in self._females.values():
             children[female.search.read_pattern.name] = female.search.read_pattern
-        return self._with_scenarios(children)
+        return self._with_firmware(self._with_scenarios(children))
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

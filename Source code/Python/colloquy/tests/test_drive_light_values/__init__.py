@@ -3,9 +3,10 @@ from colloquy.utils import timelap_to_string
 
 from time import time
 from colloquy.ui import leaves
+from ..colloquy_firmware import NeedsColloquyFirmware
 
 
-class TestDriveLightValues(BaseThread):
+class TestDriveLightValues(NeedsColloquyFirmware, BaseThread):
     # Every light on at once and every appetite climbing - including
     # that it leaves all ten of them full when it ends.
     scenario_names = ("appetite-lights-test",)
@@ -48,7 +49,7 @@ class TestDriveLightValues(BaseThread):
         children = {}
         for drive in self.drivers.drives:
             children[drive.name] = drive
-        return self._with_scenarios(children)
+        return self._with_firmware(self._with_scenarios(children))
 
     def _snapshot_if_opened(self, path):
         # The elapsed time was built in snapshot_children off a name that

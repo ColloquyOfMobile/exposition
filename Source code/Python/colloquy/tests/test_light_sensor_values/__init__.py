@@ -12,9 +12,10 @@ from .test_with_everything_moving import TestWithEveryThingMoving
 from .test_for_false_positives import TestForFalsePositives
 from .test_seeing_male1_as_the_bar_turns import TestSeeingMale1AsTheBarTurns
 from colloquy.ui import leaves
+from ..colloquy_firmware import NeedsColloquyFirmware
 
 
-class TestLightSensorValues(BaseThread):
+class TestLightSensorValues(NeedsColloquyFirmware, BaseThread):
     # The sequence has no behaviour of its own: its scenario is the six
     # it runs, pulled in as sub-scenarios on one clock, which is what
     # the -> lines in it are for.
@@ -146,7 +147,7 @@ class TestLightSensorValues(BaseThread):
         children = {}
         for test in self._threaded_tests:
             children[test.name] = test
-        return self._with_scenarios(children)
+        return self._with_firmware(self._with_scenarios(children))
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

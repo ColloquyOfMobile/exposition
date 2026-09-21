@@ -2,9 +2,10 @@ from colloquy.base_thread import BaseThread
 from datetime import datetime
 from time import time
 from colloquy.ui import leaves
+from ..colloquy_firmware import NeedsColloquyFirmware
 
 
-class TestSensors(BaseThread):
+class TestSensors(NeedsColloquyFirmware, BaseThread):
     # Nothing moves and nothing lights up during this one, which is
     # worth saying out loud somewhere a reader will find it.
     scenario_names = ("sensors-test",)
@@ -77,7 +78,7 @@ class TestSensors(BaseThread):
 
     @property
     def snapshot_children(self):
-        return self._with_scenarios(dict(self._sensors))
+        return self._with_firmware(self._with_scenarios(dict(self._sensors)))
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

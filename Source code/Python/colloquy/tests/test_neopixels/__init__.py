@@ -2,6 +2,7 @@ from colloquy.base_thread import BaseThread
 from datetime import datetime
 from time import time
 from colloquy.ui import leaves
+from ..colloquy_firmware import NeedsColloquyFirmware
 
 COLORS = (
     ("red", dict(red=255, green=0, blue=0, white=0)),
@@ -11,7 +12,7 @@ COLORS = (
 )
 
 
-class TestNeopixels(BaseThread):
+class TestNeopixels(NeedsColloquyFirmware, BaseThread):
     # Twenty segments, four colours each, one at a time - what the room
     # looks like while it walks them, and what a dark one means.
     scenario_names = ("neopixels-test",)
@@ -114,7 +115,7 @@ class TestNeopixels(BaseThread):
 
     @property
     def snapshot_children(self):
-        return self._with_scenarios(dict(self._segments))
+        return self._with_firmware(self._with_scenarios(dict(self._segments)))
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)

@@ -41,9 +41,10 @@ from colloquy.drivers import audio
 from colloquy.ui import leaves
 
 from . import verdicts
+from ..colloquy_firmware import NeedsColloquyFirmware
 
 
-class TestAudioLoop(BaseThread):
+class TestAudioLoop(NeedsColloquyFirmware, BaseThread):
     scenario_names = ("audio-loop-test",)
 
     # How long each tone is held. Long enough for somebody to hear it and
@@ -272,7 +273,7 @@ class TestAudioLoop(BaseThread):
             body = self._bodies[name]
             children[f"{name} speaker"] = body.speaker
             children[f"{name} microphone"] = body.microphone
-        return self._with_scenarios(children)
+        return self._with_firmware(self._with_scenarios(children))
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
