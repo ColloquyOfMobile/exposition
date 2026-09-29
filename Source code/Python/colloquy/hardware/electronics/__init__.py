@@ -26,6 +26,10 @@ that get confused with each other the moment they share a page:
   is a programmable controller where those two are an adapter and a
   relay. One USB lead out of the rack instead of two, and an emergency
   stop that does not need the computer.
+- **sound options** - five ways to make the bodies' voices and hear them
+  (TJ's, Thomas's, AD9833s, a Teensy 4.1, a USB sound card), compared on
+  price, effort, board complexity and distance from TJ. About the sound
+  channel alone, which the three solutions above take as given.
 
 And beside them, generated rather than written:
 
@@ -94,6 +98,15 @@ class OpenCMAndProMinis(_ElectronicsDocument):
 
     file_name = "OPENCM_AND_PRO_MINIS.md"
     document_name = "opencm and pro minis"
+
+
+class SoundOptions(_ElectronicsDocument):
+    """A comparison, not a fourth solution: it is about the sound channel
+    alone, and asks what should make the voices once the pitches no
+    longer have to fit the analyser's bands."""
+
+    file_name = "SOUND_OPTIONS.md"
+    document_name = "sound options"
 
 
 class NextPCB(_ElectronicsDocument):
@@ -193,6 +206,7 @@ class Electronics(Base):
             NextPCB(owner=self),
             OneBoardPerBody(owner=self),
             OpenCMAndProMinis(owner=self),
+            SoundOptions(owner=self),
         ]
         # Not written to disk: nothing generates a file for it, and the
         # KiCad projects it reads are the copy anybody would want open.

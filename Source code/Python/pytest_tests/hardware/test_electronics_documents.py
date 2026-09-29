@@ -48,6 +48,7 @@ def test_the_section_offers_the_written_documents_not_the_generated_ones():
         "next pcb",
         "one board per body",
         "opencm and pro minis",
+        "sound options",
     ]
 
 
