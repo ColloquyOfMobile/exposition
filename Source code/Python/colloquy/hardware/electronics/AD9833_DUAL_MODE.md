@@ -46,6 +46,246 @@ node at the body.
 
 ## 1. The two modes at a glance
 
+**Drawn.** The same boards and the same harness in both modes; only what is plugged in, and which way the shunts sit, differs. Solid boxes work in that mode, dashed ones are fitted or socketed and idle. One body board stands for all five.
+
+<div style="overflow-x: auto; margin: 1rem 0;">
+<svg viewBox="0 0 1300 895" role="img" aria-label="Block diagram of the AD9833 dual-mode design in its two modes. Central mode: the laptop's Python program talks over USB to the Mega in the rack and to the U2D2. The Mega drives five AD9833 voice channels over SPI; their line-level outputs pass the rack mode jumpers set to C and go down the unchanged DSUB harness to each body board, where the body jumpers set to C send them to the line-level node, the 22K/3K3 divider, the amplifier and the speaker. Each body's MAX9814 microphone goes back up the harness to five MSGEQ7s in the rack, read by the Mega on A0 to A4, and the NeoPixels and photosensors are driven from the Mega directly. The body's Pro Mini socket, voice channel and RS-485 transceiver are idle. Distributed mode: the laptop, optional in step D2, talks over USB to an OpenCM 9.04 in the rack; the Mega, the rack voice channels and the MSGEQ7s are idle. The OpenCM's RS-485 body bus passes the rack jumpers set to D and travels on the same line-out pair to each body, where the jumpers set to D route it to the body's RS-485 transceiver and Pro Mini. The Pro Mini drives its own voice channel into the same line-level node, divider, amplifier and speaker, reads the microphone on A7, and drives the NeoPixels and photosensors. The U2D2 masters the servos in step D1; in step D2 that lead moves to the OpenCM.">
+<defs>
+<marker id="dm-ax" viewBox="0 0 10 8" refX="9" refY="4" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" orient="auto"><polygon points="0,0 10,4 0,8" fill="currentColor"></polygon></marker>
+</defs>
+<!-- ================= CENTRAL MODE ================= -->
+<g>
+<text x="20" y="30" font-family="'IBM Plex Mono', monospace" font-size="12" font-weight="600" letter-spacing="1.4" fill="currentColor" opacity="0.7">CENTRAL MODE &#183; this program, as it runs today</text>
+<!-- frames -->
+<rect x="20" y="150" width="130" height="110" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"></rect>
+<rect x="190" y="50" width="460" height="342" rx="6" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.7"></rect>
+<rect x="720" y="50" width="50" height="342" rx="3" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.6"></rect>
+<rect x="790" y="50" width="490" height="342" rx="6" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.7"></rect>
+<g font-family="'IBM Plex Mono', monospace" font-size="10" font-weight="600" letter-spacing="1.2" fill="currentColor" opacity="0.55">
+<text x="205" y="72">RACK BOARD</text>
+<text x="805" y="72">BODY BOARD &#215; 5</text>
+</g>
+<g font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">
+<text x="745" y="70">DSUB</text><text x="745" y="83">harness</text><text x="745" y="383">fixed</text>
+</g>
+<!-- wires (drawn before boxes) -->
+<g fill="none" stroke="currentColor">
+<path d="M150 175 H180 V140 H203" stroke-width="1.4" marker-end="url(#dm-ax)"></path>
+<path d="M150 235 H180 V360 H203" stroke-width="1.4" marker-end="url(#dm-ax)"></path>
+<path d="M335 120 H393" stroke-width="1.4" marker-end="url(#dm-ax)"></path>
+<path d="M565 120 H583" stroke-width="2.4" marker-end="url(#dm-ax)"></path>
+<path d="M635 120 H911" stroke-width="2.4"></path>
+<path d="M919 120 H933" stroke-width="2.4" marker-end="url(#dm-ax)"></path>
+<path d="M1025 120 H1043" stroke-width="2.4" marker-end="url(#dm-ax)"></path>
+<path d="M1135 120 H1153" stroke-width="2.4" marker-end="url(#dm-ax)"></path>
+<path d="M870 275 H567" stroke-width="2.4" marker-end="url(#dm-ax)"></path>
+<path d="M395 275 H300 V192" stroke-width="1.4" marker-end="url(#dm-ax)"></path>
+<path d="M870 320 H250 V190" stroke-width="1.4"></path>
+<path d="M335 360 H1148" stroke-width="1.4" marker-end="url(#dm-ax)"></path>
+<path d="M915 160 V124" stroke-width="1.4" stroke-dasharray="4 3" opacity="0.45"></path>
+</g>
+<circle cx="915" cy="120" r="4" fill="currentColor"></circle>
+<!-- boxes: working -->
+<g fill="none" stroke="currentColor" stroke-width="1.6">
+<rect x="205" y="90" width="130" height="100" rx="3"></rect>
+<rect x="401" y="89" width="170" height="50" rx="3" opacity="0.35"></rect>
+<rect x="395" y="95" width="170" height="50" rx="3"></rect>
+<rect x="585" y="95" width="50" height="50" rx="2"></rect>
+<rect x="401" y="244" width="170" height="50" rx="3" opacity="0.35"></rect>
+<rect x="395" y="250" width="170" height="50" rx="3"></rect>
+<rect x="205" y="340" width="130" height="40" rx="3"></rect>
+<rect x="805" y="95" width="40" height="245" rx="2"></rect>
+<rect x="935" y="100" width="90" height="40" rx="3"></rect>
+<rect x="1045" y="100" width="90" height="40" rx="3"></rect>
+<rect x="1155" y="100" width="90" height="40" rx="3"></rect>
+<rect x="870" y="260" width="100" height="30" rx="3"></rect>
+<rect x="870" y="305" width="100" height="30" rx="3"></rect>
+<rect x="1150" y="345" width="120" height="30" rx="3"></rect>
+</g>
+<!-- boxes: idle in this mode -->
+<g fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 4" opacity="0.5">
+<rect x="395" y="170" width="170" height="50" rx="3"></rect>
+<rect x="880" y="160" width="110" height="40" rx="3"></rect>
+<rect x="870" y="215" width="100" height="30" rx="3"></rect>
+<rect x="1010" y="160" width="120" height="175" rx="3"></rect>
+</g>
+<!-- titles -->
+<g font-family="Chivo, sans-serif" font-size="13" font-weight="600" fill="currentColor" text-anchor="middle">
+<text x="85" y="192" font-size="15">Laptop</text>
+<text x="270" y="134">Mega 2560</text>
+<text x="480" y="117">5 &#215; voice channel</text>
+<text x="610" y="127" font-size="18" font-weight="700">C</text>
+<text x="480" y="272">5 &#215; MSGEQ7</text>
+<text x="270" y="358">U2D2</text>
+<text x="825" y="202" font-size="18" font-weight="700">C</text>
+<text x="980" y="117" font-size="12.5">divider</text>
+<text x="1090" y="117" font-size="12.5">amplifier</text>
+<text x="1200" y="125" font-size="12.5">speaker</text>
+<text x="920" y="279" font-size="12">MAX9814 mic</text>
+<text x="1210" y="364" font-size="12">Dynamixel servo</text>
+</g>
+<g font-family="Chivo, sans-serif" font-size="12.5" font-weight="600" fill="currentColor" text-anchor="middle" opacity="0.6">
+<text x="480" y="191">OpenCM + RS-485</text>
+<text x="935" y="177" font-size="12">voice channel</text>
+<text x="1070" y="240">Pro Mini socket</text>
+</g>
+<!-- small print -->
+<g font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" opacity="0.62" text-anchor="middle">
+<text x="85" y="212">Python program</text>
+<text x="85" y="240">2 USB leads</text>
+<text x="270" y="152">firmware 5</text>
+<text x="270" y="168">JSON over USB</text>
+<text x="480" y="134">AD9833 + buffer</text>
+<text x="480" y="289">the ear, one band each</text>
+<text x="270" y="373">servo bus</text>
+<text x="980" y="132">22K / 3K3</text>
+<text x="1090" y="132">+ 470 &#181;F</text>
+<text x="920" y="324">pixels &#183; photos</text>
+</g>
+<g font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" opacity="0.5" text-anchor="middle">
+<text x="480" y="208">empty in this mode</text>
+<text x="935" y="192" font-size="9.5">AD9833 + buffer</text>
+<text x="920" y="234">RS-485 &#183; idle</text>
+<text x="1070" y="256">empty</text>
+</g>
+<!-- wire labels -->
+<g font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.75" text-anchor="middle">
+<text x="165" y="169">USB</text>
+<text x="165" y="229">USB</text>
+<text x="365" y="113">SPI</text>
+<text x="365" y="134">+ 5 CS</text>
+<text x="677" y="112">line out</text>
+<text x="677" y="136">2.5 Vpp</text>
+<text x="610" y="88">mode</text>
+<text x="825" y="219">mode</text>
+<text x="915" y="108">node</text>
+<text x="677" y="268">mic</text>
+<text x="345" y="268">A0&#8211;A4</text>
+<text x="480" y="313">NeoPixels &#183; photosensors</text>
+<text x="480" y="353">Dynamixel data</text>
+<text x="870" y="386" text-anchor="start">+5 V &#183; +12 V &#183; GND on every cable</text>
+</g>
+</g>
+<!-- ================= DISTRIBUTED MODE ================= -->
+<g transform="translate(0,440)">
+<text x="20" y="30" font-family="'IBM Plex Mono', monospace" font-size="12" font-weight="600" letter-spacing="1.4" fill="currentColor" opacity="0.7">DISTRIBUTED MODE &#183; a Pro Mini in every body, close to TJ's</text>
+<rect x="20" y="150" width="130" height="110" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"></rect>
+<rect x="190" y="50" width="460" height="342" rx="6" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.7"></rect>
+<rect x="720" y="50" width="50" height="342" rx="3" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.6"></rect>
+<rect x="790" y="50" width="490" height="342" rx="6" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.7"></rect>
+<g font-family="'IBM Plex Mono', monospace" font-size="10" font-weight="600" letter-spacing="1.2" fill="currentColor" opacity="0.55">
+<text x="205" y="72">RACK BOARD</text>
+<text x="805" y="72">BODY BOARD &#215; 5</text>
+</g>
+<g font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">
+<text x="745" y="70">DSUB</text><text x="745" y="83">harness</text><text x="745" y="383">fixed</text>
+</g>
+<g fill="none" stroke="currentColor">
+<path d="M150 205 H393" stroke-width="1.4" marker-end="url(#dm-ax)"></path>
+<path d="M150 240 H180 V360 H203" stroke-width="1.4" marker-end="url(#dm-ax)"></path>
+<path d="M565 195 H575 V120 H583" stroke-width="1.8" marker-end="url(#dm-ax)"></path>
+<path d="M635 120 H812 V230 H868" stroke-width="1.8" marker-end="url(#dm-ax)"></path>
+<path d="M970 230 H1010" stroke-width="1.8"></path>
+<path d="M970 275 H1008" stroke-width="2.4" marker-end="url(#dm-ax)"></path>
+<path d="M970 320 H1010" stroke-width="1.4"></path>
+<path d="M1010 180 H992" stroke-width="1.4" marker-end="url(#dm-ax)"></path>
+<path d="M915 160 V126" stroke-width="2.4" marker-end="url(#dm-ax)"></path>
+<path d="M919 120 H933" stroke-width="2.4" marker-end="url(#dm-ax)"></path>
+<path d="M1025 120 H1043" stroke-width="2.4" marker-end="url(#dm-ax)"></path>
+<path d="M1135 120 H1153" stroke-width="2.4" marker-end="url(#dm-ax)"></path>
+<path d="M335 360 H1148" stroke-width="1.4" marker-end="url(#dm-ax)"></path>
+</g>
+<circle cx="915" cy="120" r="4" fill="currentColor"></circle>
+<g fill="none" stroke="currentColor" stroke-width="1.6">
+<rect x="395" y="170" width="170" height="50" rx="3"></rect>
+<rect x="585" y="95" width="50" height="50" rx="2"></rect>
+<rect x="205" y="340" width="130" height="40" rx="3"></rect>
+<rect x="805" y="95" width="40" height="245" rx="2"></rect>
+<rect x="880" y="160" width="110" height="40" rx="3"></rect>
+<rect x="870" y="215" width="100" height="30" rx="3"></rect>
+<rect x="1010" y="160" width="120" height="175" rx="3"></rect>
+<rect x="935" y="100" width="90" height="40" rx="3"></rect>
+<rect x="1045" y="100" width="90" height="40" rx="3"></rect>
+<rect x="1155" y="100" width="90" height="40" rx="3"></rect>
+<rect x="870" y="260" width="100" height="30" rx="3"></rect>
+<rect x="870" y="305" width="100" height="30" rx="3"></rect>
+<rect x="1150" y="345" width="120" height="30" rx="3"></rect>
+</g>
+<g fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 4" opacity="0.5">
+<rect x="205" y="90" width="130" height="100" rx="3"></rect>
+<rect x="395" y="95" width="170" height="50" rx="3"></rect>
+<rect x="395" y="250" width="170" height="50" rx="3"></rect>
+</g>
+<g font-family="Chivo, sans-serif" font-size="13" font-weight="600" fill="currentColor" text-anchor="middle">
+<text x="85" y="192" font-size="15">Laptop</text>
+<text x="480" y="192">OpenCM 9.04</text>
+<text x="610" y="127" font-size="18" font-weight="700">D</text>
+<text x="270" y="358">U2D2</text>
+<text x="831" y="190" font-size="18" font-weight="700">D</text>
+<text x="935" y="177" font-size="12">voice channel</text>
+<text x="920" y="234" font-size="12">RS-485</text>
+<text x="1070" y="206" font-size="14">Pro Mini</text>
+<text x="980" y="117" font-size="12.5">divider</text>
+<text x="1090" y="117" font-size="12.5">amplifier</text>
+<text x="1200" y="125" font-size="12.5">speaker</text>
+<text x="920" y="279" font-size="12">MAX9814 mic</text>
+<text x="1210" y="364" font-size="12">Dynamixel servo</text>
+</g>
+<g font-family="Chivo, sans-serif" font-size="12.5" font-weight="600" fill="currentColor" text-anchor="middle" opacity="0.6">
+<text x="270" y="134">Mega 2560</text>
+<text x="480" y="117">5 &#215; voice channel</text>
+<text x="480" y="272">5 &#215; MSGEQ7</text>
+</g>
+<g font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" opacity="0.62" text-anchor="middle">
+<text x="85" y="212">Python program</text>
+<text x="85" y="240">optional in D2</text>
+<text x="480" y="209">+ RS-485 &#183; body bus</text>
+<text x="270" y="373">D1 only</text>
+<text x="935" y="192" font-size="9.5">AD9833 + buffer</text>
+<text x="1070" y="224" font-size="9.5">one sketch, UNIT_ID</text>
+<text x="1070" y="252" font-size="9.5">Goertzel ear on A7</text>
+<text x="1070" y="268" font-size="9.5">optional MSGEQ7</text>
+<text x="1070" y="296" font-size="9.5">lights, sensors,</text>
+<text x="1070" y="310" font-size="9.5">voice, ear</text>
+<text x="980" y="132">22K / 3K3</text>
+<text x="1090" y="132">+ 470 &#181;F</text>
+<text x="920" y="324">pixels &#183; photos</text>
+</g>
+<g font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" opacity="0.5" text-anchor="middle">
+<text x="270" y="152">unplugged</text>
+<text x="480" y="134">unused</text>
+<text x="480" y="289">unused</text>
+</g>
+<g font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.75" text-anchor="middle">
+<text x="165" y="198">USB</text>
+<text x="165" y="234">USB</text>
+<text x="677" y="112">RS-485</text>
+<text x="677" y="136">same pair</text>
+<text x="610" y="88">mode</text>
+<text x="831" y="206">mode</text>
+<text x="915" y="108">node</text>
+<text x="1001" y="173">SPI</text>
+<text x="480" y="353">Dynamixel data</text>
+<text x="480" y="386">D2: this lead moves to the OpenCM</text>
+<text x="870" y="386" text-anchor="start">+5 V &#183; +12 V &#183; GND on every cable</text>
+</g>
+</g>
+<!-- ================= LEGEND ================= -->
+<g font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" opacity="0.75">
+<rect x="20" y="862" width="28" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"></rect>
+<text x="56" y="874">working in this mode</text>
+<rect x="250" y="862" width="28" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 4" opacity="0.6"></rect>
+<text x="286" y="874">fitted or socketed, idle in this mode</text>
+<line x1="580" y1="870" x2="620" y2="870" stroke="currentColor" stroke-width="2.4"></line>
+<text x="628" y="874">audio</text>
+<line x1="700" y1="870" x2="740" y2="870" stroke="currentColor" stroke-width="1.8"></line>
+<text x="748" y="874">RS-485 body bus</text>
+<line x1="890" y1="870" x2="930" y2="870" stroke="currentColor" stroke-width="1.4"></line>
+<text x="938" y="874">digital, sensors, servo data</text>
+</g>
+</svg>
+</div>
+
 | | Central mode | Distributed mode |
 |---|---|---|
 | program | this repository, unchanged in shape | Pro Mini sketch per body, OpenCM sketch in the rack |
