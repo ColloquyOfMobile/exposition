@@ -31,6 +31,10 @@ that get confused with each other the moment they share a page:
   distributed (a Pro Mini per body and an OpenCM, close to TJ's), changed
   by plugging modules and moving jumpers. The same AD9833 voice channel
   sits in the rack for one and in each body for the other.
+- **cad boards** - an index of every board designed in CAD/: what it
+  is, where it sits, how many there are, and which document holds its
+  pinouts. The only document here that covers the TPA2005D1 breakout and
+  the v2 KiCad project.
 - **sound options** - five ways to make the bodies' voices and hear them
   (TJ's, Thomas's, AD9833s, a Teensy 4.1, a USB sound card), compared on
   price, effort, board complexity and distance from TJ. About the sound
@@ -116,6 +120,14 @@ ext pcb
 
     file_name = "AD9833_DUAL_MODE.md"
     document_name = "ad9833 dual mode"
+
+
+class CADBoards(_ElectronicsDocument):
+    """An index of the design files, not a fifth copy of their pinouts:
+    those stay in harness and s built, which read the copper."""
+
+    file_name = "CAD_BOARDS.md"
+    document_name = "cad boards"
 
 
 class SoundOptions(_ElectronicsDocument):
@@ -226,6 +238,7 @@ class Electronics(Base):
             OpenCMAndProMinis(owner=self),
             AD9833DualMode(owner=self),
             SoundOptions(owner=self),
+            CADBoards(owner=self),
         ]
         # Not written to disk: nothing generates a file for it, and the
         # KiCad projects it reads are the copy anybody would want open.

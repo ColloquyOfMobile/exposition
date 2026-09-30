@@ -50,6 +50,7 @@ def test_the_section_offers_the_written_documents_not_the_generated_ones():
         "opencm and pro minis",
         "ad9833 dual mode",
         "sound options",
+        "cad boards",
     ]
 
 

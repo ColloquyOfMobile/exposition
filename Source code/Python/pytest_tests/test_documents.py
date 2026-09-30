@@ -30,6 +30,7 @@ from colloquy.code_documentation import CodeDocumentation
 from colloquy.hardware.electronics import (
     AD9833DualMode,
     AsBuilt,
+    CADBoards,
     DirtyRework,
     NextPCB,
     OneBoardPerBody,
@@ -49,6 +50,7 @@ DOCUMENTS = (
     OpenCMAndProMinis,
     AD9833DualMode,
     SoundOptions,
+    CADBoards,
 )
 
 
@@ -86,6 +88,7 @@ def test_each_document_sits_beside_what_it_describes(document):
         "OPENCM_AND_PRO_MINIS.md": "electronics",
         "AD9833_DUAL_MODE.md": "electronics",
         "SOUND_OPTIONS.md": "electronics",
+        "CAD_BOARDS.md": "electronics",
     }
     assert document.file_path.parent.name == expected[document.file_name]
 
@@ -112,6 +115,7 @@ def test_no_two_documents_share_a_file(stub_factory):
         "OPENCM_AND_PRO_MINIS.md",
         "AD9833_DUAL_MODE.md",
         "SOUND_OPTIONS.md",
+        "CAD_BOARDS.md",
     }
 
 
@@ -134,6 +138,7 @@ def test_they_are_named_for_what_they_are(document):
         "opencm and pro minis",
         "ad9833 dual mode",
         "sound options",
+        "cad boards",
     }
     assert document.name == type(document).document_name
 
@@ -257,6 +262,8 @@ ILLUSTRATED = {
     # The board itself, exported from the KiCad file by
     # export_pcb_layout.py at the repository root.
     AsBuilt: "board drawings",
+    # 3D renders of the four harness boards, by `kicad-cli pcb render`.
+    CADBoards: "board renders",
 }
 
 
