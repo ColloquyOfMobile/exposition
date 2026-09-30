@@ -5,27 +5,45 @@ it is the installation as it runs today: one Mega in the rack, the U2D2
 on the servo bus, this repository's program driving everything over one
 JSON-line link. In **distributed mode** it is close to TJ's own
 arrangement: a Pro Mini in every body doing its own lights, sensors,
-voice and ear, and an OpenCM 9.04 in the rack. Going from one to the
-other is **plugging modules in or out and moving jumpers**: no board
-spin, no soldering, no change to the harness.
+voice and ear, with the same Mega relaying between the program and the
+bodies. **The U2D2 masters the servos in both.** Going from one to the
+other is **fitting the Pro Minis, moving jumpers and reflashing the
+Mega**: no board spin, no soldering, no change to the harness.
 
 Written 2026-09-30, after `sound options` compared five ways to make the
 voices and the artist chose the AD9833. It is a fourth solution beside
 `next pcb`, `one board per body` and `opencm and pro minis`, and it is
 built out of them: central mode is `next pcb` with its filter bank
-replaced, and distributed mode is `opencm and pro minis` with the voice
-made the same way as in central mode. Read those three for anything this
+replaced, and distributed mode is `one board per body` with the Mega as
+its bridge and the voice made the same way as in central mode. Read those three for anything this
 one does not repeat.
 
 **What is sourced and what is not.** Every conductor, pin and firmware
 fact below is read out of this repository (`next pcb` section 5,
 `harness`, `colloquy_of_mobiles.ino`, TJ's `logic35_systems`). What is
-said about the AD9833, the OpenCM 9.04 and the RS-485 transceivers comes
+said about the AD9833 and the RS-485 transceivers comes
 from general knowledge of those parts and **has not been checked against
 their datasheets or measured**. Every such figure is marked *check* where
 it matters. `next pcb` section 5 is the reason this matters here: a
 supply range copied into a document as a fact destroyed an amplifier on
 2026-09-01.
+
+> **Decided 2026-09-30: no OpenCM. The U2D2 stays the servo master in
+> both modes, and the Mega bridges the body bus.** This spec first had an
+> OpenCM 9.04 replacing the Mega and, in a second step, the U2D2. Two
+> findings ended that. The OpenCM 9.04 is out of stock at ROBOTIS and
+> listed as discontinued by retailers, with the OpenRB-150 offered in its
+> place. And the -C variant's servo connectors are the XL-320's, not the
+> JST EH this harness uses, so even a board found in stock would need
+> adapting.
+>
+> **What goes with it** is what `opencm and pro minis` section 4 claimed:
+> one USB lead out of the rack instead of two, a stop that does not need
+> the PC, and a piece that could run with the computer off. None of the
+> three exists today, so nothing that works is lost. **What it wins:**
+> nothing new to buy for the rack, no 3.3 V board among 5 V ones, the
+> same `drivers/u2d2/` in both modes, and a mode change that is a flash
+> from the page's existing `flash firmware` rather than a module swap.
 
 ---
 
@@ -49,7 +67,7 @@ node at the body.
 **Drawn.** The same boards and the same harness in both modes; only what is plugged in, and which way the shunts sit, differs. Solid boxes work in that mode, dashed ones are fitted or socketed and idle. One body board stands for all five.
 
 <div style="overflow-x: auto; margin: 1rem 0;">
-<svg viewBox="0 0 1300 895" role="img" aria-label="Block diagram of the AD9833 dual-mode design in its two modes. Central mode: the laptop's Python program talks over USB to the Mega in the rack and to the U2D2. The Mega drives five AD9833 voice channels over SPI; their line-level outputs pass the rack mode jumpers set to C and go down the unchanged DSUB harness to each body board, where the body jumpers set to C send them to the line-level node, the 22K/3K3 divider, the amplifier and the speaker. Each body's MAX9814 microphone goes back up the harness to five MSGEQ7s in the rack, read by the Mega on A0 to A4, and the NeoPixels and photosensors are driven from the Mega directly. The body's Pro Mini socket, voice channel and RS-485 transceiver are idle. Distributed mode: the laptop, optional in step D2, talks over USB to an OpenCM 9.04 in the rack; the Mega, the rack voice channels and the MSGEQ7s are idle. The OpenCM's RS-485 body bus passes the rack jumpers set to D and travels on the same line-out pair to each body, where the jumpers set to D route it to the body's RS-485 transceiver and Pro Mini. The Pro Mini drives its own voice channel into the same line-level node, divider, amplifier and speaker, reads the microphone on A7, and drives the NeoPixels and photosensors. The U2D2 masters the servos in step D1; in step D2 that lead moves to the OpenCM.">
+<svg viewBox="0 0 1300 895" role="img" aria-label="Block diagram of the AD9833 dual-mode design in its two modes. Central mode: the laptop's Python program talks over USB to the Mega in the rack and to the U2D2. The Mega drives five AD9833 voice channels over SPI; their line-level outputs pass the rack mode jumpers set to C and go down the unchanged DSUB harness to each body board, where the body jumpers set to C send them to the line-level node, the 22K/3K3 divider, the amplifier and the speaker. Each body's MAX9814 microphone goes back up the harness to five MSGEQ7s in the rack, read by the Mega on A0 to A4, and the NeoPixels and photosensors are driven from the Mega directly. The Mega's RS-485 transceiver, and the body's Pro Mini socket, voice channel and RS-485 transceiver, are idle. Distributed mode: the laptop talks over USB to the same Mega, now running a bridge sketch, and to the U2D2, which still masters the servos. The rack voice channels and the MSGEQ7s are idle. The Mega's RS-485 transceiver on Serial1 passes the rack jumpers set to D and travels on the same line-out pair to each body, where the jumpers set to D route it to the body's RS-485 transceiver and Pro Mini. The Pro Mini drives its own voice channel into the same line-level node, divider, amplifier and speaker, reads the microphone on A7, and drives the NeoPixels and photosensors.">
 <defs>
 <marker id="dm-ax" viewBox="0 0 10 8" refX="9" refY="4" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" orient="auto"><polygon points="0,0 10,4 0,8" fill="currentColor"></polygon></marker>
 </defs>
@@ -125,7 +143,7 @@ node at the body.
 <text x="1210" y="364" font-size="12">Dynamixel servo</text>
 </g>
 <g font-family="Chivo, sans-serif" font-size="12.5" font-weight="600" fill="currentColor" text-anchor="middle" opacity="0.6">
-<text x="480" y="191">OpenCM + RS-485</text>
+<text x="480" y="191">RS-485</text>
 <text x="935" y="177" font-size="12">voice channel</text>
 <text x="1070" y="240">Pro Mini socket</text>
 </g>
@@ -143,7 +161,7 @@ node at the body.
 <text x="920" y="324">pixels &#183; photos</text>
 </g>
 <g font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" opacity="0.5" text-anchor="middle">
-<text x="480" y="208">empty in this mode</text>
+<text x="480" y="208">idle in this mode</text>
 <text x="935" y="192" font-size="9.5">AD9833 + buffer</text>
 <text x="920" y="234">RS-485 &#183; idle</text>
 <text x="1070" y="256">empty</text>
@@ -181,7 +199,8 @@ node at the body.
 <text x="745" y="70">DSUB</text><text x="745" y="83">harness</text><text x="745" y="383">fixed</text>
 </g>
 <g fill="none" stroke="currentColor">
-<path d="M150 205 H393" stroke-width="1.4" marker-end="url(#dm-ax)"></path>
+<path d="M150 175 H180 V140 H203" stroke-width="1.4" marker-end="url(#dm-ax)"></path>
+<path d="M335 180 H365 V195 H393" stroke-width="1.4" marker-end="url(#dm-ax)"></path>
 <path d="M150 240 H180 V360 H203" stroke-width="1.4" marker-end="url(#dm-ax)"></path>
 <path d="M565 195 H575 V120 H583" stroke-width="1.8" marker-end="url(#dm-ax)"></path>
 <path d="M635 120 H812 V230 H868" stroke-width="1.8" marker-end="url(#dm-ax)"></path>
@@ -197,6 +216,7 @@ node at the body.
 </g>
 <circle cx="915" cy="120" r="4" fill="currentColor"></circle>
 <g fill="none" stroke="currentColor" stroke-width="1.6">
+<rect x="205" y="90" width="130" height="100" rx="3"></rect>
 <rect x="395" y="170" width="170" height="50" rx="3"></rect>
 <rect x="585" y="95" width="50" height="50" rx="2"></rect>
 <rect x="205" y="340" width="130" height="40" rx="3"></rect>
@@ -212,13 +232,13 @@ node at the body.
 <rect x="1150" y="345" width="120" height="30" rx="3"></rect>
 </g>
 <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 4" opacity="0.5">
-<rect x="205" y="90" width="130" height="100" rx="3"></rect>
 <rect x="395" y="95" width="170" height="50" rx="3"></rect>
 <rect x="395" y="250" width="170" height="50" rx="3"></rect>
 </g>
 <g font-family="Chivo, sans-serif" font-size="13" font-weight="600" fill="currentColor" text-anchor="middle">
 <text x="85" y="192" font-size="15">Laptop</text>
-<text x="480" y="192">OpenCM 9.04</text>
+<text x="270" y="134">Mega 2560</text>
+<text x="480" y="192">RS-485</text>
 <text x="610" y="127" font-size="18" font-weight="700">D</text>
 <text x="270" y="358">U2D2</text>
 <text x="831" y="190" font-size="18" font-weight="700">D</text>
@@ -232,15 +252,15 @@ node at the body.
 <text x="1210" y="364" font-size="12">Dynamixel servo</text>
 </g>
 <g font-family="Chivo, sans-serif" font-size="12.5" font-weight="600" fill="currentColor" text-anchor="middle" opacity="0.6">
-<text x="270" y="134">Mega 2560</text>
 <text x="480" y="117">5 &#215; voice channel</text>
 <text x="480" y="272">5 &#215; MSGEQ7</text>
 </g>
 <g font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" opacity="0.62" text-anchor="middle">
 <text x="85" y="212">Python program</text>
-<text x="85" y="240">optional in D2</text>
-<text x="480" y="209">+ RS-485 &#183; body bus</text>
-<text x="270" y="373">D1 only</text>
+<text x="85" y="240">2 USB leads</text>
+<text x="480" y="209">Serial1 &#183; D18 D19 D22</text>
+<text x="270" y="152">bridge sketch</text>
+<text x="270" y="373">servo bus</text>
 <text x="935" y="192" font-size="9.5">AD9833 + buffer</text>
 <text x="1070" y="224" font-size="9.5">one sketch, UNIT_ID</text>
 <text x="1070" y="252" font-size="9.5">Goertzel ear on A7</text>
@@ -252,12 +272,11 @@ node at the body.
 <text x="920" y="324">pixels &#183; photos</text>
 </g>
 <g font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" opacity="0.5" text-anchor="middle">
-<text x="270" y="152">unplugged</text>
 <text x="480" y="134">unused</text>
 <text x="480" y="289">unused</text>
 </g>
 <g font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.75" text-anchor="middle">
-<text x="165" y="198">USB</text>
+<text x="165" y="169">USB</text>
 <text x="165" y="234">USB</text>
 <text x="677" y="112">RS-485</text>
 <text x="677" y="136">same pair</text>
@@ -266,7 +285,6 @@ node at the body.
 <text x="915" y="108">node</text>
 <text x="1001" y="173">SPI</text>
 <text x="480" y="353">Dynamixel data</text>
-<text x="480" y="386">D2: this lead moves to the OpenCM</text>
 <text x="870" y="386" text-anchor="start">+5 V &#183; +12 V &#183; GND on every cable</text>
 </g>
 </g>
@@ -288,26 +306,21 @@ node at the body.
 
 | | Central mode | Distributed mode |
 |---|---|---|
-| program | this repository, unchanged in shape | Pro Mini sketch per body, OpenCM sketch in the rack |
-| rack processor | Mega 2560 (plugged in) | OpenCM 9.04 (plugged in); Mega unplugged |
-| servo bus master | U2D2 | U2D2 (step D1) or OpenCM (step D2) |
+| program | this repository, unchanged in shape | this repository, plus a Pro Mini sketch per body |
+| rack processor | Mega 2560, firmware 5 | the same Mega, flashed with its bridge sketch |
+| servo bus master | U2D2 | U2D2 |
 | voice | 5 rack voice channels, line level down the harness | the body's own voice channel |
 | ear | 5 MSGEQ7s in the rack, as today | on the body's Pro Mini: Goertzel, or an optional MSGEQ7 |
 | lights and sensors | driven from the rack, as today | driven by the body's Pro Mini |
 | the line-out pair | carries audio | carries RS-485 |
 | harness | unchanged | unchanged |
-| distance from TJ (0 to 5) | 2 | about 1 |
+| distance from TJ (0 to 5) | 2 | 1 to 2 |
 
-**Distributed mode comes in two steps**, and the first is worth having
-on its own:
-
-- **D1: bodies distributed, servos unchanged.** The OpenCM only bridges
-  the RS-485 body bus to USB; the U2D2 still masters the servos and
-  `drivers/u2d2/` does not change. This is `one board per body` with the
-  OpenCM as its bridge.
-- **D2: the OpenCM masters the servos too.** The U2D2 comes out, one USB
-  lead leaves the rack, and a stop that does not need the PC becomes
-  possible. This is `opencm and pro minis`.
+**The servos do not change mode.** The U2D2 masters them in both, so
+`drivers/u2d2/` and everything that moves the piece is the same code
+whichever mode the lights and voices are in. Distributed mode is a
+change to the sensing and sounding side only, which is exactly how
+`one board per body` section 1 describes itself.
 
 ---
 
@@ -390,17 +403,26 @@ the v2 project's `CIRCUIT_NOTES.md`), the commoned strobe and reset,
 `A0` to `A4`, the photosensor dividers, the Mega and U2D2 mounts, both
 power rails kept separate, and every connector position.
 
-### 3b. The OpenCM and the body bus
+### 3b. The body bus, bridged by the Mega
 
-For distributed mode the rack board also carries, unpopulated in central
-mode or simply unused:
+For distributed mode the rack board also carries, unused in central
+mode:
 
 | Part | Note |
 |---|---|
-| OpenCM 9.04 mount | on headers, so it plugs in and out like the Mega; *check* which variant carries the Dynamixel TTL connectors |
-| RS-485 transceiver, 3.3 V class (MAX3485 type) | on one of the OpenCM's spare serial ports, with one GPIO for driver enable |
+| RS-485 transceiver, 5 V class (MAX485 type) | on the Mega's **Serial1**: `D18` (TX1) to DI, `D19` (RX1) from RO, `D22` to DE and /RE together. All three are free in firmware 4 and unconnected on the v2 board |
 | fail-safe bias | pull-up on A, pull-down on B, about 680 R each, so an idle bus reads as a defined state |
 | no termination | see section 5 for why a star of short cables does not need it |
+
+**Why Serial1.** Serial2 (`D16`/`D17`) and Serial3 (`D14`/`D15`) are
+where four NeoPixel lines moved on 2026-08-27, when the tone pins took
+their old places. Serial1 is the only hardware port the Mega has left
+whole, and it is the one the bridge needs.
+
+**In distributed mode the Mega's other duties stop.** Its chip selects,
+NeoPixel pins, analyser inputs and photosensor inputs go unused, because
+each body does those itself and the jumpers leave those conductors open
+at both ends. The rack voice channels and MSGEQ7s stay fitted and idle.
 
 ### 3c. The mode jumpers
 
@@ -416,12 +438,8 @@ One block of 2.54 mm shunt headers at the rack, silkscreened **C** and
 from across the room, cannot be set wrong by software, and cannot fail
 half-way. A mode is changed a few times a year, by hand, at the rack.
 
-**The servo lead is a cable swap, not a jumper.** `J7` (GND / 12 V /
-Dynamixel data) goes to the U2D2 in central mode and D1, and to the
-OpenCM's Dynamixel port in D2. **Check before the first D2 power-up**:
-an OpenCM's Dynamixel ports are tied to its own supply input, and `J7`
-carries 12 V. A lead with only GND and data, or the OpenCM's own
-supply rating confirmed against 12 V, before anything is plugged in.
+**The servo lead does not move.** `J7` stays on the U2D2 in both modes,
+and nothing on the servo side is touched when the mode changes.
 
 ---
 
@@ -552,7 +570,7 @@ an improvement on it. It is a socket and a handful of passives, and the
 circuit is the one the v2 project already drew.
 
 **Still to measure in distributed mode**, and named in
-`opencm and pro minis` section 2: whether a Pro Mini can sample its
+`one board per body` section 4: whether a Pro Mini can sample its
 microphone while it writes a NeoPixel strip. The body's own processor
 can simply not listen while it writes light; whether that loses too much
 is a measurement on `Source code/Arduino/goertzel_ear/` with a strip on
@@ -577,30 +595,29 @@ the same board.
   audio tests, `flash firmware`, the page. The U2D2 and `drivers/u2d2/`
   are untouched.
 
-### D1: bodies distributed, servos unchanged
+### Distributed mode
 
 - **A Pro Mini sketch**, one source with `UNIT_ID` set at compile time
   as TJ's was, answering the same paths the Mega answers today (`f1/head`,
   `m2/light sensor/a`, `<body>/speaker`) over RS-485.
-- **An OpenCM sketch** that bridges USB JSON lines to the body bus,
-  keeping the driver's `send(path, **data)` and its greeting. So
-  `drivers/arduino/` keeps its shape and points at a different port.
+- **A bridge build of the Mega's sketch**, relaying the driver's JSON
+  lines to the body bus on Serial1 and keeping `send(path, **data)` and
+  the greeting. It goes on with the page's existing `flash firmware`, on
+  the lead the driver already uses, so changing mode is a flash and
+  `drivers/arduino/` keeps its port. The greeting must say which build
+  it is, or a Mega left in the wrong mode reads as a working board.
 - **The program itself does not change** as long as those paths are
-  answered. This is the point of D1: the Python behaviour drives the
-  distributed hardware before anything is moved down into it.
-- **Flashing**: six boards instead of one. The flasher's shape
-  (`flasher/base.py`) already takes any sketch on any lead; a Pro Mini
-  needs an FTDI adapter per flash until a bus bootloader exists.
+  answered, and `drivers/u2d2/` does not change at all. The Python
+  behaviour drives the distributed hardware before anything is moved
+  down into it, and it can stay that way.
+- **Flashing**: the Mega as today, and five Pro Minis through an FTDI
+  adapter each until a bus bootloader exists. The flasher's shape
+  (`flasher/base.py`) already takes any sketch on any lead.
 
-### D2: the OpenCM masters the servos
-
-- The OpenCM sketch adds the Dynamixel bus (`Dynamixel2Arduino`, as TJ's
-  six OpenCM sketches did), and `drivers/u2d2/` is replaced by commands
-  over the same JSON link. **This is the largest piece of new software in
-  the whole design**, and D1 can run for as long as it takes.
-- It is also where TJ's autonomy can come back: the bar's wander rule
-  was his (`opencm and pro minis` section 4), and a controller holding a
-  deadman can cut torque when the PC stops answering.
+**What stays as it is today:** the PC masters the servos and runs the
+behaviour, so the piece does not run with the computer off, and the
+emergency stop still goes through the U2D2. Those were the OpenCM's
+promises, dropped with it.
 
 ---
 
@@ -613,13 +630,14 @@ the same board.
 | amplifier enable on `D11` | amplifier shutdown on `D4` |
 | an MSGEQ7 in each body, band 4 only | Goertzel, or the optional MSGEQ7 |
 | four light sensors on the unit | the body's photosensors, as wired today |
-| six OpenCMs, one bus each | one OpenCM, one bus (D2), because this harness has one servo line |
-| Pro Mini to OpenCM over a few GPIO lines | over the RS-485 pair |
-| runs with no PC | possible in D2, not required |
+| six OpenCMs, one servo bus each | the U2D2, one servo bus, mastered from the PC |
+| Pro Mini to OpenCM over a few GPIO lines | Pro Mini to the Mega over the RS-485 pair |
+| runs with no PC | no: the PC still masters the servos and runs the behaviour |
 
-**Distance: about 1 on the scale `sound options` uses.** The body is
-his, down to the processor and the pin that is analogue-only. What
-differs is where the servos are mastered, how the processors talk, and
+**Distance: between 1 and 2 on the scale `sound options` uses.** The
+body is his, down to the processor and the pin that is analogue-only.
+What differs is where the servos are mastered (from the PC through the
+U2D2, where he had a controller per body), how the processors talk, and
 a cleaner voice than his by default, with his buzz one setting away.
 
 ---
@@ -628,17 +646,18 @@ a cleaner voice than his by default, with his buzz one setting away.
 
 **Central to distributed:**
 
-1. Stop the piece from the page, `hardware > motors > unplug the motors`
-   if the servo lead will move (D2), and power down.
-2. At the rack: unplug the Mega (and the U2D2 for D2), plug in the
-   OpenCM, move every row of the rack mode block to **D**, move the `J7`
-   lead if going to D2.
+1. Stop the piece from the page and power down.
+2. At the rack: move every row of the rack mode block to **D**. Nothing
+   is unplugged; the Mega and the U2D2 stay where they are.
 3. At each body: fit the Pro Mini, move every shunt to **D**.
-4. Power up with a current-limited supply, and check each body answers
-   on the bus before powering the servos.
+4. Power up with a current-limited supply, flash the Mega's bridge build
+   from `flash firmware`, and check each body answers on the bus before
+   running anything.
 
-**Distributed to central** is the same list backwards. Nothing is
-soldered in either direction.
+**Distributed to central** is the same list backwards, ending with
+firmware 5 on the Mega. The Pro Minis may stay in their sockets: with
+the shunts in **C** nothing reaches them. Nothing is soldered in either
+direction.
 
 **What a mismatch does.** A body left in C while the rack is in D puts
 the RS-485 signal (a few volts of square wave at 115200 baud) into the
@@ -679,7 +698,7 @@ Hobby-retail figures for 2026, to be checked before ordering.
 | | Per unit | Total |
 |---|---|---|
 | rack: 5 voice channels (modules, op-amps, passives) | about 5 to 10 EUR | 25 to 50 EUR |
-| rack: OpenCM 9.04 + transceiver + bias | about 25 to 35 EUR | 25 to 35 EUR |
+| rack: RS-485 transceiver + bias resistors | about 2 to 5 EUR | 2 to 5 EUR |
 | body board parts (Pro Mini, voice channel, transceiver, sockets, headers) | about 15 to 25 EUR | 75 to 125 EUR |
 | optional MSGEQ7 per body | about 5 to 10 EUR | 25 to 50 EUR |
 | amplifiers, microphones, speakers | as `next pcb` | as `next pcb` |
@@ -693,9 +712,8 @@ distributed parts bought later.
 ## 12. What is open
 
 - **The part checks** marked *check* above: the AD9833 module's clock,
-  output level and square amplitude; the OpenCM variant, its supply range
-  and what its Dynamixel ports do with 12 V; the transceivers'
-  common-mode range.
+  output level and square amplitude; the transceivers' common-mode
+  range.
 - **The RS-485 star at 115200 baud**, measured at the farthest body with
   its NeoPixels running (section 5).
 - **The line level down a full-length cable**, the measurement
@@ -705,8 +723,11 @@ distributed parts bought later.
 - **The amplifier module and its rail**, still open as in `next pcb`
   section 5. The body board carries whatever is chosen; nothing here
   depends on the rail.
+- **Which build the Mega is running**, said in its greeting, so the
+  driver refuses to talk to a bridge as if it were firmware 5 and the
+  other way round.
 - **The body-bus protocol**: addressing, a reply, a timeout, what the
-  OpenCM does when a body does not answer (`one board per body`
+  Mega does when a body does not answer (`one board per body`
   section 8).
 - **Where the FTDI header goes** in each body.
 - **Which pitches**, now that neither the timers nor the filters fix

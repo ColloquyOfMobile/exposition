@@ -150,6 +150,13 @@ five nodes are addressed by the path they already use (`f1/head`,
 `m2/light sensor/a`). Without the bridge, every one of those becomes a
 port to open and a firmware version to check.
 
+**The bridge is the Mega, and the U2D2 stays** (decided 2026-09-30, see
+`ad9833 dual mode`). The Mega is already on the rack board, its Serial1
+(`D18`/`D19`) is the one hardware port the NeoPixel moves left whole,
+and flashing it a bridge build uses the `flash firmware` the page
+already has. The OpenCM that `opencm and pro minis` put here instead
+is discontinued and has been dropped.
+
 ---
 
 ## 4. What each body board becomes

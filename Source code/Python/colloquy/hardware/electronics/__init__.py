@@ -21,17 +21,16 @@ that get confused with each other the moment they share a page:
   Same fixed harness, five Arduino Pro Minis instead of one Mega, and the
   filters and analysers moved out of the rack and into the bodies. It
   ends by comparing itself with `next pcb` and saying which to build.
-- **opencm and pro minis** - the third, and the shortest: the second one
-  with the U2D2 and the bridge collapsed into a single OpenCM 9.04, which
-  is a programmable controller where those two are an adapter and a
-  relay. One USB lead out of the rack instead of two, and an emergency
-  stop that does not need the computer.
+- **opencm and pro minis** - the third, **dropped 2026-09-30**: it put a
+  single OpenCM 9.04 in place of the U2D2 and the bridge, and the OpenCM
+  is discontinued. Kept as the record of why; the U2D2 stays.
 - **ad9833 dual mode** - the fourth, and the one chosen for the voices:
   one set of boards that runs centrally (Mega, U2D2, this program) or
-  distributed (a Pro Mini per body and an OpenCM, close to TJ's), changed
-  by plugging modules and moving jumpers. The same AD9833 voice channel
+  distributed (a Pro Mini per body, the Mega bridging them, the U2D2 still
+  on the servos; close to TJ's), changed by fitting the Pro Minis, moving
+  jumpers and reflashing the Mega. The same AD9833 voice channel
   sits in the rack for one and in each body for the other.
-- **cad boards** - an index of every board designed in CAD/: what it
+- **cad boards** - an index of every board designed in `CAD/`: what it
   is, where it sits, how many there are, and which document holds its
   pinouts. The only document here that covers the TPA2005D1 breakout and
   the v2 KiCad project.
@@ -97,7 +96,9 @@ class OneBoardPerBody(_ElectronicsDocument):
 
 
 class OpenCMAndProMinis(_ElectronicsDocument):
-    """The third solution, and a sibling of the other two.
+    """Dropped 2026-09-30 (the OpenCM is discontinued); kept as a record.
+
+    The third solution, and a sibling of the other two.
 
     Not a third architecture: it is `one board per body` with the rack
     tidied - the U2D2 and the bridge collapsed into one OpenCM, which is
@@ -112,10 +113,10 @@ class OpenCMAndProMinis(_ElectronicsDocument):
 class AD9833DualMode(_ElectronicsDocument):
     """The fourth solution, and a sibling of the other three.
 
-    Built out of them rather than beside them: central mode is 
-ext pcb
+    Built out of them rather than beside them: central mode is `next pcb`
     with its filter bank replaced by AD9833 voice channels, distributed
-    mode is opencm and pro minis with the voice made the same way.
+    mode is `one board per body` with the Mega as its bridge and the voice
+    made the same way. No OpenCM: the U2D2 masters the servos in both.
     """
 
     file_name = "AD9833_DUAL_MODE.md"
@@ -124,7 +125,7 @@ ext pcb
 
 class CADBoards(_ElectronicsDocument):
     """An index of the design files, not a fifth copy of their pinouts:
-    those stay in harness and s built, which read the copper."""
+    those stay in `harness` and `as built`, which read the copper."""
 
     file_name = "CAD_BOARDS.md"
     document_name = "cad boards"

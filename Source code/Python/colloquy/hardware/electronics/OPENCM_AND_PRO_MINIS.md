@@ -1,5 +1,29 @@
 # OpenCM and Pro Minis
 
+> **Dropped 2026-09-30. The U2D2 stays the servo master, and the Mega
+> bridges the body bus** (`ad9833 dual mode`, which is now the
+> distributed design). Two findings decided it:
+>
+> - **The part is going away.** The OpenCM 9.04 is out of stock at
+>   ROBOTIS ("temporarily out of stock due to the global supply chain
+>   issue") and listed as discontinued by retailers, and ROBOTIS offers
+>   the OpenRB-150 in its place. Section 5's "a single-source part, and
+>   one whose maker has moved on" turned out to be the whole story.
+> - **The -C variant does not fit this harness anyway.** Its servo
+>   connectors are the XL-320's, not the JST EH that `J7` and every body
+>   board use.
+>
+> **What goes with it** is what section 4 claimed: one USB lead instead
+> of two, a stop that does not need the PC, and a piece that could run
+> with the computer off. None of the three exists today, so nothing that
+> works is lost, and the U2D2 keeps `drivers/u2d2/` unchanged. The
+> OpenRB-150 was looked at and not taken up: the reason to prefer a
+> controller over the U2D2 was never the part, it was moving the servos
+> off the PC, and that is not wanted now.
+>
+> The document stays as the record of why, and because section 0's
+> account of TJ's six controllers is true whichever way this went.
+
 **The third full solution, and the shortest to describe: it is `one board
 per body` with two parts removed.** The U2D2 and the bridge collapse into
 one OpenCM 9.04, because that board is a programmable controller with USB

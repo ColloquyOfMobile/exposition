@@ -207,8 +207,8 @@ As read on 2026-09-30:
 **It is built for Thomas's chain, not for the AD9833.** Its five audio
 sheets are fixed-pitch filters feeding the body amplifiers.
 `ad9833 dual mode` section 3 says what changes: the filters give way to
-five AD9833 voice channels, and the OpenCM, the RS-485 transceiver and
-the mode jumpers are added. Everything else on it carries over.
+five AD9833 voice channels, and an RS-485 transceiver on the Mega's
+Serial1 and the mode jumpers are added. The U2D2 mount stays as it is. Everything else on it carries over.
 
 The older generated files beside it (`NETLIST.md`, `BOM.md`,
 `MECHANICAL.md`, `next_pcb.net`) come from `py next_pcb.py` and describe
