@@ -48,19 +48,23 @@ def test_the_section_offers_the_written_documents_not_the_generated_ones():
         "next pcb",
         "one board per body",
         "opencm and pro minis",
+        "ad9833 dual mode",
         "sound options",
     ]
 
 
-def test_the_three_solutions_are_siblings():
-    """The second and third are not variations on `next pcb` - they are
+def test_the_four_solutions_are_siblings():
+    """The second, third and fourth are not variations on `next pcb` - they are
     complete answers to the same question, against the same fixed
     harness, and they sit beside it rather than under it."""
     children = _electronics().snapshot_children
 
-    for name in ("next pcb", "one board per body", "opencm and pro minis"):
+    for name in (
+        "next pcb", "one board per body", "opencm and pro minis",
+        "ad9833 dual mode",
+    ):
         assert name in children, name
-    for name in ("one board per body", "opencm and pro minis"):
+    for name in ("one board per body", "opencm and pro minis", "ad9833 dual mode"):
         assert name not in children["next pcb"].snapshot_children, name
 
 

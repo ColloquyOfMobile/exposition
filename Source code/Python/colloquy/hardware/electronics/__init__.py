@@ -26,6 +26,11 @@ that get confused with each other the moment they share a page:
   is a programmable controller where those two are an adapter and a
   relay. One USB lead out of the rack instead of two, and an emergency
   stop that does not need the computer.
+- **ad9833 dual mode** - the fourth, and the one chosen for the voices:
+  one set of boards that runs centrally (Mega, U2D2, this program) or
+  distributed (a Pro Mini per body and an OpenCM, close to TJ's), changed
+  by plugging modules and moving jumpers. The same AD9833 voice channel
+  sits in the rack for one and in each body for the other.
 - **sound options** - five ways to make the bodies' voices and hear them
   (TJ's, Thomas's, AD9833s, a Teensy 4.1, a USB sound card), compared on
   price, effort, board complexity and distance from TJ. About the sound
@@ -98,6 +103,19 @@ class OpenCMAndProMinis(_ElectronicsDocument):
 
     file_name = "OPENCM_AND_PRO_MINIS.md"
     document_name = "opencm and pro minis"
+
+
+class AD9833DualMode(_ElectronicsDocument):
+    """The fourth solution, and a sibling of the other three.
+
+    Built out of them rather than beside them: central mode is 
+ext pcb
+    with its filter bank replaced by AD9833 voice channels, distributed
+    mode is opencm and pro minis with the voice made the same way.
+    """
+
+    file_name = "AD9833_DUAL_MODE.md"
+    document_name = "ad9833 dual mode"
 
 
 class SoundOptions(_ElectronicsDocument):
@@ -206,6 +224,7 @@ class Electronics(Base):
             NextPCB(owner=self),
             OneBoardPerBody(owner=self),
             OpenCMAndProMinis(owner=self),
+            AD9833DualMode(owner=self),
             SoundOptions(owner=self),
         ]
         # Not written to disk: nothing generates a file for it, and the

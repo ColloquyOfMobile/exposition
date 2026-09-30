@@ -28,6 +28,7 @@ import pytest
 
 from colloquy.code_documentation import CodeDocumentation
 from colloquy.hardware.electronics import (
+    AD9833DualMode,
     AsBuilt,
     DirtyRework,
     NextPCB,
@@ -46,6 +47,7 @@ DOCUMENTS = (
     NextPCB,
     OneBoardPerBody,
     OpenCMAndProMinis,
+    AD9833DualMode,
     SoundOptions,
 )
 
@@ -82,6 +84,7 @@ def test_each_document_sits_beside_what_it_describes(document):
         "NEXT_PCB.md": "electronics",
         "ONE_BOARD_PER_BODY.md": "electronics",
         "OPENCM_AND_PRO_MINIS.md": "electronics",
+        "AD9833_DUAL_MODE.md": "electronics",
         "SOUND_OPTIONS.md": "electronics",
     }
     assert document.file_path.parent.name == expected[document.file_name]
@@ -107,6 +110,7 @@ def test_no_two_documents_share_a_file(stub_factory):
         "NEXT_PCB.md",
         "ONE_BOARD_PER_BODY.md",
         "OPENCM_AND_PRO_MINIS.md",
+        "AD9833_DUAL_MODE.md",
         "SOUND_OPTIONS.md",
     }
 
@@ -128,6 +132,7 @@ def test_they_are_named_for_what_they_are(document):
         "next pcb",
         "one board per body",
         "opencm and pro minis",
+        "ad9833 dual mode",
         "sound options",
     }
     assert document.name == type(document).document_name
