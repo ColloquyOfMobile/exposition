@@ -1,0 +1,59 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-09-30T15:59:37+0200",
+    "kicad_version": "9.0.7",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a",
+            "violations": []
+        },
+        {
+            "path": "/Power, reference bond and service points/",
+            "uuid_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/367400da-9614-5471-a502-3c4554914ba7",
+            "violations": []
+        },
+        {
+            "path": "/Arduino Mega 2560: firmware 4 pin assignment/",
+            "uuid_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/b6cc0e8d-0d85-554f-979c-6d2abfa1af32",
+            "violations": []
+        },
+        {
+            "path": "/Fixed enclosure connectors and spare conductors/",
+            "uuid_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/51dcdde4-8381-5958-833c-45b54326f5ea",
+            "violations": []
+        },
+        {
+            "path": "/Pixel damping, spare controls and photosensor dividers/",
+            "uuid_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+            "violations": []
+        },
+        {
+            "path": "/male1: 160 Hz voice / A3 receiver/",
+            "uuid_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+            "violations": []
+        },
+        {
+            "path": "/male2: 400 Hz voice / A4 receiver/",
+            "uuid_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+            "violations": []
+        },
+        {
+            "path": "/female1: 1000 Hz voice / A0 receiver/",
+            "uuid_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+            "violations": []
+        },
+        {
+            "path": "/female2: 2500 Hz voice / A1 receiver/",
+            "uuid_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+            "violations": []
+        },
+        {
+            "path": "/female3: 6250 Hz voice / A2 receiver/",
+            "uuid_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+            "violations": []
+        }
+    ],
+    "source": "colloquy-control-v2.kicad_sch"
+}

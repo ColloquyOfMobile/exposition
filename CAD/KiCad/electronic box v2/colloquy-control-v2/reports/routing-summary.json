@@ -1,0 +1,48 @@
+{
+  "checkpoint": "completed routing before ground zones and schematic net-name normalization",
+  "board_sha256": "d785cb8857449004cf2b92962963dfb2213a1e25a61fbdb2b247de9877e3ff12",
+  "kicad_version": "9.0.7",
+  "router": "Freerouting 2.4.1, perimeter-power stage followed by fixed-power signal stage",
+  "repairs": "Four J5 connector escape routes completed with local two-layer A* search; two 0.3 mm segments reduced to 0.28 mm to remove DSN rounded-pad clearance approximation errors. No DRC exclusions.",
+  "drc": {
+    "date": "2026-09-30T11:04:38+0200",
+    "violations": 0,
+    "unconnected_items": 0,
+    "schematic_parity_checked": false
+  },
+  "routing": {
+    "track_segments": 1235,
+    "vias": 59
+  },
+  "minimum_track_width_mm": 0.28,
+  "minimum_via_drill_mm": 0.4,
+  "analog_rectangle_mm": {
+    "left": 72,
+    "top": 171,
+    "right": 230,
+    "bottom": 292
+  },
+  "power": {
+    "+5V": {
+      "track_segments": 31,
+      "vias": 0,
+      "length_mm": 514.395,
+      "unlocked_items": 0,
+      "copper_crossings_of_analog_rectangle": 0
+    },
+    "+12V": {
+      "track_segments": 16,
+      "vias": 0,
+      "length_mm": 395.644,
+      "unlocked_items": 0,
+      "copper_crossings_of_analog_rectangle": 0
+    },
+    "GND": {
+      "track_segments": 60,
+      "vias": 0,
+      "length_mm": 792.823,
+      "unlocked_items": 0,
+      "copper_crossings_of_analog_rectangle": 0
+    }
+  }
+}

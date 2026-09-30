@@ -1,0 +1,3572 @@
+{
+  "project": "colloquy-control-v2",
+  "revision": "A-prototype",
+  "root_uuid": "dc84e149-f060-5120-be86-5f91bfb1e61a",
+  "source": "../next_pcb.net plus reviewed MSGEQ7 support and power corrections",
+  "components": [
+    {
+      "ref": "A1",
+      "value": "Arduino Mega 2560",
+      "footprint": "PCM_arduino-library:Arduino_Mega2560_R3_Shield",
+      "description": "carried as a shield, as now",
+      "pins": {
+        "GND1": "GND",
+        "5V1": "MEGA_5V",
+        "A5": "female1/photosensor",
+        "A6": "female2/photosensor",
+        "A7": "female3/photosensor",
+        "A9": "male1/photosensor/B",
+        "A11": "male1/photosensor/D",
+        "A8": "male1/photosensor/A",
+        "A10": "male1/photosensor/C",
+        "A13": "male2/photosensor/B",
+        "A15": "male2/photosensor/D",
+        "A12": "male2/photosensor/A",
+        "A14": "male2/photosensor/C",
+        "D6": "female1/tone",
+        "D46": "female2/tone",
+        "D10": "female3/tone",
+        "D11": "male1/tone",
+        "D5": "male2/tone",
+        "D4": "analyser/strobe",
+        "D3": "analyser/reset",
+        "A0": "female1/analyser out",
+        "A1": "female2/analyser out",
+        "A2": "female3/analyser out",
+        "A3": "male1/analyser out",
+        "A4": "male2/analyser out",
+        "D14": "female1/neopixel/driven",
+        "D7": "female2/neopixel/driven",
+        "D8": "female3/neopixel/driven",
+        "D9": "male1/neopixel/driven",
+        "D15": "male2/neopixel/driven",
+        "D16": "male1/bar neopixel/driven",
+        "D17": "male2/bar neopixel/driven",
+        "D2": "amp shutdown",
+        "D24": "male1/aux driven",
+        "D25": "male2/aux driven",
+        "3V3": null,
+        "5V2": "MEGA_5V",
+        "5V3": "MEGA_5V",
+        "5V4": "MEGA_5V",
+        "AREF": null,
+        "D0": null,
+        "D1": null,
+        "D12": null,
+        "D13": null,
+        "D18": null,
+        "D19": null,
+        "D20": null,
+        "D21": null,
+        "D22": null,
+        "D23": null,
+        "D26": null,
+        "D27": null,
+        "D28": null,
+        "D29": null,
+        "D30": null,
+        "D31": null,
+        "D32": null,
+        "D33": null,
+        "D34": null,
+        "D35": null,
+        "D36": null,
+        "D37": null,
+        "D38": null,
+        "D39": null,
+        "D40": null,
+        "D41": null,
+        "D42": null,
+        "D43": null,
+        "D44": null,
+        "D45": null,
+        "D47": null,
+        "D48": null,
+        "D49": null,
+        "D50": null,
+        "D51": null,
+        "D52": null,
+        "D53": null,
+        "GND2": "GND",
+        "GND3": "GND",
+        "GND4": "GND",
+        "GND5": "GND",
+        "GND6": "GND",
+        "IORF": null,
+        "MISO": null,
+        "MOSI": null,
+        "RST1": null,
+        "RST2": null,
+        "SCK": null,
+        "SCL": null,
+        "SDA": null,
+        "VIN": null
+      },
+      "sheet": "controller",
+      "uuid": "941f6f63-60de-5d56-aa10-ff217040abe9",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/b6cc0e8d-0d85-554f-979c-6d2abfa1af32",
+      "pin_names": {
+        "GND1": "GND1",
+        "5V1": "5V1",
+        "A5": "A5",
+        "A6": "A6",
+        "A7": "A7",
+        "A9": "A9",
+        "A11": "A11",
+        "A8": "A8",
+        "A10": "A10",
+        "A13": "A13",
+        "A15": "A15",
+        "A12": "A12",
+        "A14": "A14",
+        "D6": "D6",
+        "D46": "D46",
+        "D10": "D10",
+        "D11": "D11",
+        "D5": "D5",
+        "D4": "D4",
+        "D3": "D3",
+        "A0": "A0",
+        "A1": "A1",
+        "A2": "A2",
+        "A3": "A3",
+        "A4": "A4",
+        "D14": "D14",
+        "D7": "D7",
+        "D8": "D8",
+        "D9": "D9",
+        "D15": "D15",
+        "D16": "D16",
+        "D17": "D17",
+        "D2": "D2",
+        "D24": "D24",
+        "D25": "D25",
+        "3V3": "3V3",
+        "5V2": "5V2",
+        "5V3": "5V3",
+        "5V4": "5V4",
+        "AREF": "AREF",
+        "D0": "D0",
+        "D1": "D1",
+        "D12": "D12",
+        "D13": "D13",
+        "D18": "D18",
+        "D19": "D19",
+        "D20": "D20",
+        "D21": "D21",
+        "D22": "D22",
+        "D23": "D23",
+        "D26": "D26",
+        "D27": "D27",
+        "D28": "D28",
+        "D29": "D29",
+        "D30": "D30",
+        "D31": "D31",
+        "D32": "D32",
+        "D33": "D33",
+        "D34": "D34",
+        "D35": "D35",
+        "D36": "D36",
+        "D37": "D37",
+        "D38": "D38",
+        "D39": "D39",
+        "D40": "D40",
+        "D41": "D41",
+        "D42": "D42",
+        "D43": "D43",
+        "D44": "D44",
+        "D45": "D45",
+        "D47": "D47",
+        "D48": "D48",
+        "D49": "D49",
+        "D50": "D50",
+        "D51": "D51",
+        "D52": "D52",
+        "D53": "D53",
+        "GND2": "GND2",
+        "GND3": "GND3",
+        "GND4": "GND4",
+        "GND5": "GND5",
+        "GND6": "GND6",
+        "IORF": "IORF",
+        "MISO": "MISO",
+        "MOSI": "MOSI",
+        "RST1": "RST1",
+        "RST2": "RST2",
+        "SCK": "SCK",
+        "SCL": "SCL",
+        "SDA": "SDA",
+        "VIN": "VIN"
+      },
+      "pin_types": {
+        "GND1": "power_in",
+        "5V1": "power_out",
+        "A5": "input",
+        "A6": "input",
+        "A7": "input",
+        "A9": "input",
+        "A11": "input",
+        "A8": "input",
+        "A10": "input",
+        "A13": "input",
+        "A15": "input",
+        "A12": "input",
+        "A14": "input",
+        "D6": "output",
+        "D46": "output",
+        "D10": "output",
+        "D11": "output",
+        "D5": "output",
+        "D4": "output",
+        "D3": "output",
+        "A0": "input",
+        "A1": "input",
+        "A2": "input",
+        "A3": "input",
+        "A4": "input",
+        "D14": "output",
+        "D7": "output",
+        "D8": "output",
+        "D9": "output",
+        "D15": "output",
+        "D16": "output",
+        "D17": "output",
+        "D2": "bidirectional",
+        "D24": "output",
+        "D25": "output",
+        "3V3": "passive",
+        "5V2": "passive",
+        "5V3": "passive",
+        "5V4": "passive",
+        "AREF": "passive",
+        "D0": "passive",
+        "D1": "passive",
+        "D12": "passive",
+        "D13": "passive",
+        "D18": "passive",
+        "D19": "passive",
+        "D20": "passive",
+        "D21": "passive",
+        "D22": "passive",
+        "D23": "passive",
+        "D26": "passive",
+        "D27": "passive",
+        "D28": "passive",
+        "D29": "passive",
+        "D30": "passive",
+        "D31": "passive",
+        "D32": "passive",
+        "D33": "passive",
+        "D34": "passive",
+        "D35": "passive",
+        "D36": "passive",
+        "D37": "passive",
+        "D38": "passive",
+        "D39": "passive",
+        "D40": "passive",
+        "D41": "passive",
+        "D42": "passive",
+        "D43": "passive",
+        "D44": "passive",
+        "D45": "passive",
+        "D47": "passive",
+        "D48": "passive",
+        "D49": "passive",
+        "D50": "passive",
+        "D51": "passive",
+        "D52": "passive",
+        "D53": "passive",
+        "GND2": "power_in",
+        "GND3": "power_in",
+        "GND4": "power_in",
+        "GND5": "power_in",
+        "GND6": "power_in",
+        "IORF": "passive",
+        "MISO": "passive",
+        "MOSI": "passive",
+        "RST1": "passive",
+        "RST2": "passive",
+        "SCK": "passive",
+        "SCL": "passive",
+        "SDA": "passive",
+        "VIN": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "M1",
+      "value": "U2D2",
+      "footprint": "custom1:u2d2_mounting",
+      "description": "on its own mount; only the Dynamixel data line touches it",
+      "pins": {},
+      "sheet": "power",
+      "uuid": "5b710baa-dbb5-57da-b2e4-acd0dca64c15",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/367400da-9614-5471-a502-3c4554914ba7",
+      "pin_names": {},
+      "pin_types": {},
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "J2",
+      "value": "DC jack",
+      "footprint": "custom1:PJ-082BH jack 10A",
+      "description": "supply in",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "uuid": "ffbbe1fe-ed91-53b3-9fa5-004f09abea0e",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/367400da-9614-5471-a502-3c4554914ba7",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "J6",
+      "value": "screw bridge",
+      "footprint": "custom1:screw brigde",
+      "description": "jack onto the board rail",
+      "pins": {
+        "1": "GND",
+        "2": "GND",
+        "3": "+5V",
+        "4": "GND",
+        "5": "+5V",
+        "6": "+5V"
+      },
+      "sheet": "power",
+      "uuid": "ff719b23-99d5-5665-8675-7fe5ad44ba4d",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/367400da-9614-5471-a502-3c4554914ba7",
+      "pin_names": {
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "J7",
+      "value": "JST EH 3",
+      "footprint": "Connector_JST:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical",
+      "description": "GND, +12V and the servo bus in",
+      "pins": {
+        "3": "dxl_data",
+        "1": "GND",
+        "2": "+12V"
+      },
+      "sheet": "power",
+      "uuid": "e39fc88f-2de5-5d6b-b28f-4bd2851a71cb",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/367400da-9614-5471-a502-3c4554914ba7",
+      "pin_names": {
+        "3": "3",
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "3": "passive",
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C1",
+      "value": "470uF 16V",
+      "footprint": "Capacitor_THT:CP_Radial_D13.0mm_P5.00mm",
+      "description": "bulk, on the board's own +5V",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "uuid": "8e9fd70c-2403-584f-8bd2-dd99d401cf44",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/367400da-9614-5471-a502-3c4554914ba7",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C2",
+      "value": "100nF",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "description": "decoupling, on the board's own +5V",
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "uuid": "59b40318-61ad-5609-a3a1-331b41d53227",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/367400da-9614-5471-a502-3c4554914ba7",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "JP1",
+      "value": "0R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "the single point where analogue ground meets power ground",
+      "pins": {
+        "2": "GND",
+        "1": "AGND"
+      },
+      "sheet": "power",
+      "uuid": "fd353dce-f90f-547c-a81e-54ba61c47aa1",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/367400da-9614-5471-a502-3c4554914ba7",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "J5",
+      "value": "DSUB-15",
+      "footprint": "Connector_Dsub:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm",
+      "description": "DSUB-15, fixed by the supplier",
+      "pins": {
+        "14": "dxl_data",
+        "15": "+5V",
+        "0": "GND",
+        "8": "GND",
+        "7": "+12V",
+        "1": "female1/spare1",
+        "2": "female1/spare2",
+        "3": "female1/spare3",
+        "4": "female1/audio return",
+        "5": "female1/photosensor",
+        "6": "female1/microphone",
+        "9": "female1/spare4",
+        "10": "female1/spare5",
+        "11": "female1/spare6",
+        "12": "female1/line out",
+        "13": "female1/neopixel"
+      },
+      "sheet": "harness",
+      "uuid": "a3b7aca1-1f9d-5230-b14b-f02911803142",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/51dcdde4-8381-5958-833c-45b54326f5ea",
+      "pin_names": {
+        "14": "14",
+        "15": "15",
+        "0": "0",
+        "8": "8",
+        "7": "7",
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6",
+        "9": "9",
+        "10": "10",
+        "11": "11",
+        "12": "12",
+        "13": "13"
+      },
+      "pin_types": {
+        "14": "passive",
+        "15": "passive",
+        "0": "passive",
+        "8": "passive",
+        "7": "passive",
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive",
+        "9": "passive",
+        "10": "passive",
+        "11": "passive",
+        "12": "passive",
+        "13": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "J1",
+      "value": "DSUB-15",
+      "footprint": "Connector_Dsub:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm",
+      "description": "DSUB-15, fixed by the supplier",
+      "pins": {
+        "14": "dxl_data",
+        "15": "+5V",
+        "0": "GND",
+        "8": "GND",
+        "7": "+12V",
+        "1": "female2/spare1",
+        "2": "female2/spare2",
+        "3": "female2/spare3",
+        "4": "female2/audio return",
+        "5": "female2/photosensor",
+        "6": "female2/microphone",
+        "9": "female2/spare4",
+        "10": "female2/spare5",
+        "11": "female2/spare6",
+        "12": "female2/line out",
+        "13": "female2/neopixel"
+      },
+      "sheet": "harness",
+      "uuid": "52c175cb-840b-5fc4-b54b-6ad3b0a4f5fb",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/51dcdde4-8381-5958-833c-45b54326f5ea",
+      "pin_names": {
+        "14": "14",
+        "15": "15",
+        "0": "0",
+        "8": "8",
+        "7": "7",
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6",
+        "9": "9",
+        "10": "10",
+        "11": "11",
+        "12": "12",
+        "13": "13"
+      },
+      "pin_types": {
+        "14": "passive",
+        "15": "passive",
+        "0": "passive",
+        "8": "passive",
+        "7": "passive",
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive",
+        "9": "passive",
+        "10": "passive",
+        "11": "passive",
+        "12": "passive",
+        "13": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "A-J3",
+      "value": "DSUB-15",
+      "footprint": "Connector_Dsub:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm",
+      "description": "DSUB-15, fixed by the supplier",
+      "pins": {
+        "10": "dxl_data",
+        "9": "+5V",
+        "0": "GND",
+        "1": "GND",
+        "2": "+12V",
+        "3": "female3/microphone",
+        "4": "female3/photosensor",
+        "5": "female3/audio return",
+        "6": "male1/neopixel",
+        "7": "male1/photosensor/B",
+        "8": "male1/photosensor/D",
+        "11": "female3/neopixel",
+        "12": "female3/line out",
+        "13": "male1/microphone",
+        "14": "male1/photosensor/A",
+        "15": "male1/photosensor/C"
+      },
+      "sheet": "harness",
+      "uuid": "4aa69e85-91b5-5689-a831-bccbf567dc9b",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/51dcdde4-8381-5958-833c-45b54326f5ea",
+      "pin_names": {
+        "10": "10",
+        "9": "9",
+        "0": "0",
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6",
+        "7": "7",
+        "8": "8",
+        "11": "11",
+        "12": "12",
+        "13": "13",
+        "14": "14",
+        "15": "15"
+      },
+      "pin_types": {
+        "10": "passive",
+        "9": "passive",
+        "0": "passive",
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive",
+        "7": "passive",
+        "8": "passive",
+        "11": "passive",
+        "12": "passive",
+        "13": "passive",
+        "14": "passive",
+        "15": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "B-J4",
+      "value": "DSUB-15",
+      "footprint": "Connector_Dsub:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm",
+      "description": "DSUB-15, fixed by the supplier - CARRIES NO POWER, silkscreen it",
+      "pins": {
+        "0": "GND",
+        "1": "male1/aux",
+        "2": "male1/audio return",
+        "3": "male2/neopixel",
+        "4": "male2/photosensor/B",
+        "5": "male2/photosensor/D",
+        "6": "male2/line out",
+        "7": "centre/spare1",
+        "8": "male2/bar neopixel",
+        "9": "male1/line out",
+        "10": "male2/microphone",
+        "11": "male2/photosensor/A",
+        "12": "male2/photosensor/C",
+        "13": "male2/aux",
+        "14": "male2/audio return",
+        "15": "male1/bar neopixel"
+      },
+      "sheet": "harness",
+      "uuid": "33722122-4ef4-5d4a-8d5e-8742c1725d6f",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/51dcdde4-8381-5958-833c-45b54326f5ea",
+      "pin_names": {
+        "0": "0",
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6",
+        "7": "7",
+        "8": "8",
+        "9": "9",
+        "10": "10",
+        "11": "11",
+        "12": "12",
+        "13": "13",
+        "14": "14",
+        "15": "15"
+      },
+      "pin_types": {
+        "0": "passive",
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive",
+        "7": "passive",
+        "8": "passive",
+        "9": "passive",
+        "10": "passive",
+        "11": "passive",
+        "12": "passive",
+        "13": "passive",
+        "14": "passive",
+        "15": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "Extra2",
+      "value": "1x6 header",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical",
+      "description": "female1's six spare conductors",
+      "pins": {
+        "1": "female1/spare1",
+        "2": "female1/spare2",
+        "3": "female1/spare3",
+        "4": "female1/spare4",
+        "5": "female1/spare5",
+        "6": "female1/spare6"
+      },
+      "sheet": "harness",
+      "uuid": "1686cb27-90db-5251-b555-1522937b6f4c",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/51dcdde4-8381-5958-833c-45b54326f5ea",
+      "pin_names": {
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "Extra1",
+      "value": "1x6 header",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical",
+      "description": "female2's six spare conductors",
+      "pins": {
+        "1": "female2/spare1",
+        "2": "female2/spare2",
+        "3": "female2/spare3",
+        "4": "female2/spare4",
+        "5": "female2/spare5",
+        "6": "female2/spare6"
+      },
+      "sheet": "harness",
+      "uuid": "d642f5ff-e2f5-504d-ab51-b9ec4ab3dcce",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/51dcdde4-8381-5958-833c-45b54326f5ea",
+      "pin_names": {
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "Extra3",
+      "value": "1x1 pad",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical",
+      "description": "B-J4's single spare conductor - the males have no others",
+      "pins": {
+        "1": "centre/spare1"
+      },
+      "sheet": "harness",
+      "uuid": "e4ab4acf-c11f-556d-8d4e-9cf770eed94e",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/51dcdde4-8381-5958-833c-45b54326f5ea",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R301",
+      "value": "1K2",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "1000 Hz low-pass, first stage",
+      "pins": {
+        "1": "female1/tone",
+        "2": "female1/filter mid"
+      },
+      "sheet": "audio3",
+      "uuid": "ef304436-5be2-5c77-a2ca-2eb2671fa2aa",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R302",
+      "value": "1K2",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "1000 Hz low-pass, second stage",
+      "pins": {
+        "1": "female1/filter mid",
+        "2": "female1/filter out"
+      },
+      "sheet": "audio3",
+      "uuid": "a9833034-583e-5be1-b307-464e74c2b939",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C301",
+      "value": "150nF",
+      "footprint": "Capacitor_THT:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm",
+      "description": "1000 Hz low-pass, first stage",
+      "pins": {
+        "2": "AGND",
+        "1": "female1/filter mid"
+      },
+      "sheet": "audio3",
+      "uuid": "aa875d68-7dce-58ce-8f9f-a72b09fd9326",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C302",
+      "value": "150nF",
+      "footprint": "Capacitor_THT:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm",
+      "description": "1000 Hz low-pass, second stage",
+      "pins": {
+        "2": "AGND",
+        "1": "female1/filter out"
+      },
+      "sheet": "audio3",
+      "uuid": "dea602dd-84a9-5f3c-9463-1cbb662818b3",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R303",
+      "value": "100R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "female1 build-out into the harness",
+      "pins": {
+        "2": "female1/line out",
+        "1": "female1/filter out"
+      },
+      "sheet": "audio3",
+      "uuid": "4bd90333-2eda-5425-9c91-88fe7bdd7f21",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "TP3",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "female1 filter output, 1000 Hz",
+      "pins": {
+        "1": "female1/filter out"
+      },
+      "sheet": "audio3",
+      "uuid": "2d5e184e-9334-566a-8871-42d275a5c7ee",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "JP4",
+      "value": "0R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "female1 audio return onto analogue ground",
+      "pins": {
+        "2": "AGND",
+        "1": "female1/audio return"
+      },
+      "sheet": "audio3",
+      "uuid": "7a21bd2a-722c-5a41-b54f-39103523f242",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R401",
+      "value": "1K8",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "2500 Hz low-pass, first stage",
+      "pins": {
+        "1": "female2/tone",
+        "2": "female2/filter mid"
+      },
+      "sheet": "audio4",
+      "uuid": "20e9720c-aeb7-5956-a42f-c93bb8dd415c",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R402",
+      "value": "1K8",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "2500 Hz low-pass, second stage",
+      "pins": {
+        "1": "female2/filter mid",
+        "2": "female2/filter out"
+      },
+      "sheet": "audio4",
+      "uuid": "2d79b5fe-c204-5262-a31b-63e89ff18b2b",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C401",
+      "value": "47nF",
+      "footprint": "Capacitor_THT:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm",
+      "description": "2500 Hz low-pass, first stage",
+      "pins": {
+        "2": "AGND",
+        "1": "female2/filter mid"
+      },
+      "sheet": "audio4",
+      "uuid": "dce967bf-6222-538f-9604-7207f38a3e11",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C402",
+      "value": "47nF",
+      "footprint": "Capacitor_THT:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm",
+      "description": "2500 Hz low-pass, second stage",
+      "pins": {
+        "2": "AGND",
+        "1": "female2/filter out"
+      },
+      "sheet": "audio4",
+      "uuid": "a8e6bb80-a810-5093-a141-6e5c729a6dcc",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R403",
+      "value": "100R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "female2 build-out into the harness",
+      "pins": {
+        "2": "female2/line out",
+        "1": "female2/filter out"
+      },
+      "sheet": "audio4",
+      "uuid": "e4a9418f-6f3b-5c0f-b324-fb7e4862b77c",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "TP4",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "female2 filter output, 2500 Hz",
+      "pins": {
+        "1": "female2/filter out"
+      },
+      "sheet": "audio4",
+      "uuid": "21810285-b0e5-58a8-864c-48dd6d21037c",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "JP5",
+      "value": "0R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "female2 audio return onto analogue ground",
+      "pins": {
+        "2": "AGND",
+        "1": "female2/audio return"
+      },
+      "sheet": "audio4",
+      "uuid": "e8b1dabc-e6c2-54f8-a731-a9636c2f7e0e",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R501",
+      "value": "2K2",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "6250 Hz low-pass, first stage",
+      "pins": {
+        "1": "female3/tone",
+        "2": "female3/filter mid"
+      },
+      "sheet": "audio5",
+      "uuid": "0fd053fd-d8c1-5a5f-bab5-261808104610",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R502",
+      "value": "2K2",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "6250 Hz low-pass, second stage",
+      "pins": {
+        "1": "female3/filter mid",
+        "2": "female3/filter out"
+      },
+      "sheet": "audio5",
+      "uuid": "cfc334ae-61c9-5731-8d34-62a80245e91a",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C501",
+      "value": "10nF",
+      "footprint": "Capacitor_THT:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm",
+      "description": "6250 Hz low-pass, first stage",
+      "pins": {
+        "2": "AGND",
+        "1": "female3/filter mid"
+      },
+      "sheet": "audio5",
+      "uuid": "4619f118-7f7d-5212-bfa3-60dd89483d88",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C502",
+      "value": "10nF",
+      "footprint": "Capacitor_THT:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm",
+      "description": "6250 Hz low-pass, second stage",
+      "pins": {
+        "2": "AGND",
+        "1": "female3/filter out"
+      },
+      "sheet": "audio5",
+      "uuid": "ef114a64-35b7-5325-a599-c3c209a8ee64",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R503",
+      "value": "100R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "female3 build-out into the harness",
+      "pins": {
+        "2": "female3/line out",
+        "1": "female3/filter out"
+      },
+      "sheet": "audio5",
+      "uuid": "17d48164-48da-54f6-95c9-d409e5a02745",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "TP5",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "female3 filter output, 6250 Hz",
+      "pins": {
+        "1": "female3/filter out"
+      },
+      "sheet": "audio5",
+      "uuid": "2d66cd5d-4396-5372-9c16-a4c35f2fba89",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "JP6",
+      "value": "0R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "female3 audio return onto analogue ground",
+      "pins": {
+        "2": "AGND",
+        "1": "female3/audio return"
+      },
+      "sheet": "audio5",
+      "uuid": "bac7ba23-d959-5bfa-a9ed-c61b44bbe90e",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R101",
+      "value": "2K2",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "160 Hz low-pass, first stage",
+      "pins": {
+        "1": "male1/tone",
+        "2": "male1/filter mid"
+      },
+      "sheet": "audio1",
+      "uuid": "02888657-3353-56c4-97c9-74c2478356b1",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R102",
+      "value": "2K2",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "160 Hz low-pass, second stage",
+      "pins": {
+        "1": "male1/filter mid",
+        "2": "male1/filter out"
+      },
+      "sheet": "audio1",
+      "uuid": "af4ded5e-b5c1-5eaa-b82a-71dc4265eec1",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C101",
+      "value": "470nF",
+      "footprint": "Capacitor_THT:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm",
+      "description": "160 Hz low-pass, first stage",
+      "pins": {
+        "2": "AGND",
+        "1": "male1/filter mid"
+      },
+      "sheet": "audio1",
+      "uuid": "5efdde7c-4c46-50f4-be2a-dd120fdd1e5f",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C102",
+      "value": "470nF",
+      "footprint": "Capacitor_THT:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm",
+      "description": "160 Hz low-pass, second stage",
+      "pins": {
+        "2": "AGND",
+        "1": "male1/filter out"
+      },
+      "sheet": "audio1",
+      "uuid": "bdef3012-c8f7-5a90-8e20-bc33579504c9",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R103",
+      "value": "100R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "male1 build-out into the harness",
+      "pins": {
+        "2": "male1/line out",
+        "1": "male1/filter out"
+      },
+      "sheet": "audio1",
+      "uuid": "8d227975-e157-5ba5-af86-13ff1a5a758c",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "TP1",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "male1 filter output, 160 Hz",
+      "pins": {
+        "1": "male1/filter out"
+      },
+      "sheet": "audio1",
+      "uuid": "d02d046a-5e85-56d7-805c-73a12bcbf6c0",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "JP2",
+      "value": "0R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "male1 audio return onto analogue ground",
+      "pins": {
+        "2": "AGND",
+        "1": "male1/audio return"
+      },
+      "sheet": "audio1",
+      "uuid": "36d168a8-8eb8-5abd-8804-a51285bc7dec",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R201",
+      "value": "2K",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "400 Hz low-pass, first stage",
+      "pins": {
+        "1": "male2/tone",
+        "2": "male2/filter mid"
+      },
+      "sheet": "audio2",
+      "uuid": "3fd46dd2-8170-5474-a867-ae03ea242ba9",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R202",
+      "value": "2K",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "400 Hz low-pass, second stage",
+      "pins": {
+        "1": "male2/filter mid",
+        "2": "male2/filter out"
+      },
+      "sheet": "audio2",
+      "uuid": "14670bfc-f326-51fe-a8a9-b5ecae5ddf9c",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C201",
+      "value": "220nF",
+      "footprint": "Capacitor_THT:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm",
+      "description": "400 Hz low-pass, first stage",
+      "pins": {
+        "2": "AGND",
+        "1": "male2/filter mid"
+      },
+      "sheet": "audio2",
+      "uuid": "89f76315-1dbd-50c4-8d84-b4ba9fac30f1",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C202",
+      "value": "220nF",
+      "footprint": "Capacitor_THT:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm",
+      "description": "400 Hz low-pass, second stage",
+      "pins": {
+        "2": "AGND",
+        "1": "male2/filter out"
+      },
+      "sheet": "audio2",
+      "uuid": "85c83c0e-b275-56d0-a0fe-d1d65919e097",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R203",
+      "value": "100R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "male2 build-out into the harness",
+      "pins": {
+        "2": "male2/line out",
+        "1": "male2/filter out"
+      },
+      "sheet": "audio2",
+      "uuid": "7af8264d-395b-59bf-ba7f-e965847eae40",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "TP2",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "male2 filter output, 400 Hz",
+      "pins": {
+        "1": "male2/filter out"
+      },
+      "sheet": "audio2",
+      "uuid": "a8fcae10-93fc-5ad7-b311-9dad14494a40",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "JP3",
+      "value": "0R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "male2 audio return onto analogue ground",
+      "pins": {
+        "2": "AGND",
+        "1": "male2/audio return"
+      },
+      "sheet": "audio2",
+      "uuid": "a6f31392-71a9-5063-b497-f9d19a895c58",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "U3",
+      "value": "MSGEQ7",
+      "footprint": "Package_DIP:DIP-8_W7.62mm_Socket",
+      "description": "female1 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "AGND",
+        "3": "female1/analyser out",
+        "4": "analyser/strobe",
+        "5": "female1/msgeq input",
+        "6": "female1/internal reference",
+        "7": "analyser/reset",
+        "8": "female1/oscillator"
+      },
+      "sheet": "audio3",
+      "uuid": "234bce4d-86c8-56bb-8c64-1e64574e0d9d",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "1": "VDD",
+        "2": "VSS",
+        "3": "OUT",
+        "4": "STROBE",
+        "5": "IN",
+        "6": "GND_REF",
+        "7": "RESET",
+        "8": "CKIN"
+      },
+      "pin_types": {
+        "1": "power_in",
+        "2": "power_in",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "power_out",
+        "7": "input",
+        "8": "input"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "TP13",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "female1 analyser output, module 0",
+      "pins": {
+        "1": "female1/analyser out"
+      },
+      "sheet": "audio3",
+      "uuid": "93e47223-c5aa-5b8a-80bf-2162b81814c8",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "R311",
+      "value": "47K",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Microphone attenuator series: default 0.126 gain with 6K8 shunt",
+      "pins": {
+        "1": "female1/microphone",
+        "2": "female1/mic attenuated"
+      },
+      "sheet": "audio3",
+      "uuid": "11ec172d-b4fb-5cf6-bfa0-ece3f7e0309c",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C312",
+      "value": "100nF",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "description": "AC input coupling; passes 63Hz and above with internal 1Mohm bias",
+      "pins": {
+        "1": "female1/mic attenuated",
+        "2": "female1/msgeq input"
+      },
+      "sheet": "audio3",
+      "uuid": "2fd04244-231d-5edf-8954-d193321439dc",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R313",
+      "value": "200K 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "MSGEQ7 clock resistor; keep adjacent to pin8",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "female1/oscillator"
+      },
+      "sheet": "audio3",
+      "uuid": "b8987ef7-4053-51f6-a475-63e328c00c1a",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C314",
+      "value": "33pF C0G",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "description": "MSGEQ7 clock capacitor; 33pF includes stray capacitance",
+      "pins": {
+        "1": "female1/oscillator",
+        "2": "AGND"
+      },
+      "sheet": "audio3",
+      "uuid": "ff4451fd-e100-5277-aeba-5f594e6cb132",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C315",
+      "value": "100nF",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "description": "Local MSGEQ7 supply bypass, close to pins1 and2",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "AGND"
+      },
+      "sheet": "audio3",
+      "uuid": "ebdf0411-faf8-5d50-b9a1-3a26e606ea5f",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "U4",
+      "value": "MSGEQ7",
+      "footprint": "Package_DIP:DIP-8_W7.62mm_Socket",
+      "description": "female2 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "AGND",
+        "3": "female2/analyser out",
+        "4": "analyser/strobe",
+        "5": "female2/msgeq input",
+        "6": "female2/internal reference",
+        "7": "analyser/reset",
+        "8": "female2/oscillator"
+      },
+      "sheet": "audio4",
+      "uuid": "b21ae84f-cb82-51c1-bc18-699e2c372bd6",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "1": "VDD",
+        "2": "VSS",
+        "3": "OUT",
+        "4": "STROBE",
+        "5": "IN",
+        "6": "GND_REF",
+        "7": "RESET",
+        "8": "CKIN"
+      },
+      "pin_types": {
+        "1": "power_in",
+        "2": "power_in",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "power_out",
+        "7": "input",
+        "8": "input"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "TP14",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "female2 analyser output, module 1",
+      "pins": {
+        "1": "female2/analyser out"
+      },
+      "sheet": "audio4",
+      "uuid": "a2e5042d-9032-5279-aa6f-551be5e9a4b9",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "R411",
+      "value": "47K",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Microphone attenuator series: default 0.126 gain with 6K8 shunt",
+      "pins": {
+        "1": "female2/microphone",
+        "2": "female2/mic attenuated"
+      },
+      "sheet": "audio4",
+      "uuid": "626e7c1c-b535-5974-b2fe-1e39d066de50",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C412",
+      "value": "100nF",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "description": "AC input coupling; passes 63Hz and above with internal 1Mohm bias",
+      "pins": {
+        "1": "female2/mic attenuated",
+        "2": "female2/msgeq input"
+      },
+      "sheet": "audio4",
+      "uuid": "b98b9b76-49c5-54b5-9803-6f599c18e099",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R413",
+      "value": "200K 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "MSGEQ7 clock resistor; keep adjacent to pin8",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "female2/oscillator"
+      },
+      "sheet": "audio4",
+      "uuid": "b35be5ab-e4a8-58fa-869b-7b83c71d706f",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C414",
+      "value": "33pF C0G",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "description": "MSGEQ7 clock capacitor; 33pF includes stray capacitance",
+      "pins": {
+        "1": "female2/oscillator",
+        "2": "AGND"
+      },
+      "sheet": "audio4",
+      "uuid": "06442c06-d03e-5521-b545-54a4189d7ca0",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C415",
+      "value": "100nF",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "description": "Local MSGEQ7 supply bypass, close to pins1 and2",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "AGND"
+      },
+      "sheet": "audio4",
+      "uuid": "eba0c6d2-86d6-5c3d-a339-00c5a338b06c",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "U5",
+      "value": "MSGEQ7",
+      "footprint": "Package_DIP:DIP-8_W7.62mm_Socket",
+      "description": "female3 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "AGND",
+        "3": "female3/analyser out",
+        "4": "analyser/strobe",
+        "5": "female3/msgeq input",
+        "6": "female3/internal reference",
+        "7": "analyser/reset",
+        "8": "female3/oscillator"
+      },
+      "sheet": "audio5",
+      "uuid": "d4e3ec96-7e9e-5df9-a015-4fa9de7cc096",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "1": "VDD",
+        "2": "VSS",
+        "3": "OUT",
+        "4": "STROBE",
+        "5": "IN",
+        "6": "GND_REF",
+        "7": "RESET",
+        "8": "CKIN"
+      },
+      "pin_types": {
+        "1": "power_in",
+        "2": "power_in",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "power_out",
+        "7": "input",
+        "8": "input"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "TP15",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "female3 analyser output, module 2",
+      "pins": {
+        "1": "female3/analyser out"
+      },
+      "sheet": "audio5",
+      "uuid": "19814af3-5b5e-5419-b236-8ce1d2c15562",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "R511",
+      "value": "47K",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Microphone attenuator series: default 0.126 gain with 6K8 shunt",
+      "pins": {
+        "1": "female3/microphone",
+        "2": "female3/mic attenuated"
+      },
+      "sheet": "audio5",
+      "uuid": "80930a08-72b6-5235-ab7c-d88e0a929220",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C512",
+      "value": "100nF",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "description": "AC input coupling; passes 63Hz and above with internal 1Mohm bias",
+      "pins": {
+        "1": "female3/mic attenuated",
+        "2": "female3/msgeq input"
+      },
+      "sheet": "audio5",
+      "uuid": "c633b233-e743-56a8-84d6-2a29f79ee034",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R513",
+      "value": "200K 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "MSGEQ7 clock resistor; keep adjacent to pin8",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "female3/oscillator"
+      },
+      "sheet": "audio5",
+      "uuid": "41851e4c-64de-5055-9160-41b9655ae8b2",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C514",
+      "value": "33pF C0G",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "description": "MSGEQ7 clock capacitor; 33pF includes stray capacitance",
+      "pins": {
+        "1": "female3/oscillator",
+        "2": "AGND"
+      },
+      "sheet": "audio5",
+      "uuid": "381c9487-336d-504b-aebd-20459903764a",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C515",
+      "value": "100nF",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "description": "Local MSGEQ7 supply bypass, close to pins1 and2",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "AGND"
+      },
+      "sheet": "audio5",
+      "uuid": "03b98df7-6504-5dbc-a70c-351ffc7cf4fb",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "U1",
+      "value": "MSGEQ7",
+      "footprint": "Package_DIP:DIP-8_W7.62mm_Socket",
+      "description": "male1 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "AGND",
+        "3": "male1/analyser out",
+        "4": "analyser/strobe",
+        "5": "male1/msgeq input",
+        "6": "male1/internal reference",
+        "7": "analyser/reset",
+        "8": "male1/oscillator"
+      },
+      "sheet": "audio1",
+      "uuid": "f41aeb8b-a304-5260-a4ab-6d43d98fb255",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "1": "VDD",
+        "2": "VSS",
+        "3": "OUT",
+        "4": "STROBE",
+        "5": "IN",
+        "6": "GND_REF",
+        "7": "RESET",
+        "8": "CKIN"
+      },
+      "pin_types": {
+        "1": "power_in",
+        "2": "power_in",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "power_out",
+        "7": "input",
+        "8": "input"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "TP11",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "male1 analyser output, module 3",
+      "pins": {
+        "1": "male1/analyser out"
+      },
+      "sheet": "audio1",
+      "uuid": "ab10c46f-0b6e-5fc3-aa66-29a2eff7e4e7",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "R111",
+      "value": "47K",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Microphone attenuator series: default 0.126 gain with 6K8 shunt",
+      "pins": {
+        "1": "male1/microphone",
+        "2": "male1/mic attenuated"
+      },
+      "sheet": "audio1",
+      "uuid": "2fce2ad1-43bb-5b02-a0ec-f30aa2e86884",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C112",
+      "value": "100nF",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "description": "AC input coupling; passes 63Hz and above with internal 1Mohm bias",
+      "pins": {
+        "1": "male1/mic attenuated",
+        "2": "male1/msgeq input"
+      },
+      "sheet": "audio1",
+      "uuid": "1a24f449-ef4c-5e99-ad57-e8c18b0e8fd4",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R113",
+      "value": "200K 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "MSGEQ7 clock resistor; keep adjacent to pin8",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "male1/oscillator"
+      },
+      "sheet": "audio1",
+      "uuid": "4d5d05e0-2ed3-58a3-a478-9b5336ae66b9",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C114",
+      "value": "33pF C0G",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "description": "MSGEQ7 clock capacitor; 33pF includes stray capacitance",
+      "pins": {
+        "1": "male1/oscillator",
+        "2": "AGND"
+      },
+      "sheet": "audio1",
+      "uuid": "60bc29bc-da5d-573d-b1ee-4d3cef14feed",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C115",
+      "value": "100nF",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "description": "Local MSGEQ7 supply bypass, close to pins1 and2",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "AGND"
+      },
+      "sheet": "audio1",
+      "uuid": "a0744268-8e4b-5802-a49f-91aaaa07c845",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "U2",
+      "value": "MSGEQ7",
+      "footprint": "Package_DIP:DIP-8_W7.62mm_Socket",
+      "description": "male2 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "AGND",
+        "3": "male2/analyser out",
+        "4": "analyser/strobe",
+        "5": "male2/msgeq input",
+        "6": "male2/internal reference",
+        "7": "analyser/reset",
+        "8": "male2/oscillator"
+      },
+      "sheet": "audio2",
+      "uuid": "94e658d4-53ae-5371-8c50-688813bc4079",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "1": "VDD",
+        "2": "VSS",
+        "3": "OUT",
+        "4": "STROBE",
+        "5": "IN",
+        "6": "GND_REF",
+        "7": "RESET",
+        "8": "CKIN"
+      },
+      "pin_types": {
+        "1": "power_in",
+        "2": "power_in",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "power_out",
+        "7": "input",
+        "8": "input"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "TP12",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "male2 analyser output, module 4",
+      "pins": {
+        "1": "male2/analyser out"
+      },
+      "sheet": "audio2",
+      "uuid": "68b93e86-c363-5d54-a361-984bf37aebde",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "R211",
+      "value": "47K",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Microphone attenuator series: default 0.126 gain with 6K8 shunt",
+      "pins": {
+        "1": "male2/microphone",
+        "2": "male2/mic attenuated"
+      },
+      "sheet": "audio2",
+      "uuid": "773e4abb-de10-5a1d-8480-bf8ef4ec2d60",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C212",
+      "value": "100nF",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "description": "AC input coupling; passes 63Hz and above with internal 1Mohm bias",
+      "pins": {
+        "1": "male2/mic attenuated",
+        "2": "male2/msgeq input"
+      },
+      "sheet": "audio2",
+      "uuid": "6abe728d-46f9-5f61-869a-7b43cb3a334e",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R213",
+      "value": "200K 1%",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "MSGEQ7 clock resistor; keep adjacent to pin8",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "male2/oscillator"
+      },
+      "sheet": "audio2",
+      "uuid": "618cbc32-6047-5015-bc23-5997ba9dd9b1",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C214",
+      "value": "33pF C0G",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "description": "MSGEQ7 clock capacitor; 33pF includes stray capacitance",
+      "pins": {
+        "1": "male2/oscillator",
+        "2": "AGND"
+      },
+      "sheet": "audio2",
+      "uuid": "96367e1c-91e7-5ffd-a608-97e7068a12a2",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "C215",
+      "value": "100nF",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "description": "Local MSGEQ7 supply bypass, close to pins1 and2",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "AGND"
+      },
+      "sheet": "audio2",
+      "uuid": "843baf05-a4bf-5acb-805c-781deba1f271",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "TP20",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "STROBE - a strobe that never pulses and nothing arriving read alike, and this is what tells them apart",
+      "pins": {
+        "1": "analyser/strobe"
+      },
+      "sheet": "io",
+      "uuid": "2c364bb1-89da-58a7-af93-23e50d39e494",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "TP21",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "RESET - a strobe that never pulses and nothing arriving read alike, and this is what tells them apart",
+      "pins": {
+        "1": "analyser/reset"
+      },
+      "sheet": "io",
+      "uuid": "98383ba2-b6bc-5233-9e93-3076f7a86cbd",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "RN1",
+      "value": "330R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "series on female1/neopixel",
+      "pins": {
+        "2": "female1/neopixel",
+        "1": "female1/neopixel/driven"
+      },
+      "sheet": "io",
+      "uuid": "110e391f-12fa-5870-a306-2260792f58a5",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "RN2",
+      "value": "330R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "series on female2/neopixel",
+      "pins": {
+        "2": "female2/neopixel",
+        "1": "female2/neopixel/driven"
+      },
+      "sheet": "io",
+      "uuid": "d4a37e09-71aa-527a-ab42-ae44c3862a3d",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "RN3",
+      "value": "330R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "series on female3/neopixel",
+      "pins": {
+        "2": "female3/neopixel",
+        "1": "female3/neopixel/driven"
+      },
+      "sheet": "io",
+      "uuid": "886d8e7b-004a-5069-9095-55ff48183a66",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "RN4",
+      "value": "330R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "series on male1/neopixel",
+      "pins": {
+        "2": "male1/neopixel",
+        "1": "male1/neopixel/driven"
+      },
+      "sheet": "io",
+      "uuid": "762cc63b-26a3-56ef-9bea-7d0645d403ed",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "RN5",
+      "value": "330R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "series on male2/neopixel",
+      "pins": {
+        "2": "male2/neopixel",
+        "1": "male2/neopixel/driven"
+      },
+      "sheet": "io",
+      "uuid": "c33f74f5-c60e-5034-9e2a-f194a9824d53",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "RN6",
+      "value": "330R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "series on male1/bar neopixel",
+      "pins": {
+        "2": "male1/bar neopixel",
+        "1": "male1/bar neopixel/driven"
+      },
+      "sheet": "io",
+      "uuid": "8e9c8eaa-b8cb-5310-8e1b-017a765a7f92",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "RN7",
+      "value": "330R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "series on male2/bar neopixel",
+      "pins": {
+        "2": "male2/bar neopixel",
+        "1": "male2/bar neopixel/driven"
+      },
+      "sheet": "io",
+      "uuid": "631501b8-4860-5dcf-86dd-821323c44525",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "RP1",
+      "value": "10K provisional",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Provisional photosensor shunt; replace with measured calibration value before deployment",
+      "pins": {
+        "2": "AGND",
+        "1": "female1/photosensor"
+      },
+      "sheet": "io",
+      "uuid": "69d1c44d-5362-549b-a66c-6e3af85e42b4",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "provisional_10k_calibrate",
+      "include_bom": true
+    },
+    {
+      "ref": "RP2",
+      "value": "10K provisional",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Provisional photosensor shunt; replace with measured calibration value before deployment",
+      "pins": {
+        "2": "AGND",
+        "1": "female2/photosensor"
+      },
+      "sheet": "io",
+      "uuid": "8e59d854-191c-52d8-9964-59e976f2bbca",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "provisional_10k_calibrate",
+      "include_bom": true
+    },
+    {
+      "ref": "RP3",
+      "value": "10K provisional",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Provisional photosensor shunt; replace with measured calibration value before deployment",
+      "pins": {
+        "2": "AGND",
+        "1": "female3/photosensor"
+      },
+      "sheet": "io",
+      "uuid": "f5207518-3698-5cc6-9428-403bbb6636e3",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "provisional_10k_calibrate",
+      "include_bom": true
+    },
+    {
+      "ref": "RP4",
+      "value": "10K provisional",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Provisional photosensor shunt; replace with measured calibration value before deployment",
+      "pins": {
+        "2": "AGND",
+        "1": "male1/photosensor/A"
+      },
+      "sheet": "io",
+      "uuid": "18e39f72-da62-5329-961a-82ca986c0bcd",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "provisional_10k_calibrate",
+      "include_bom": true
+    },
+    {
+      "ref": "RP5",
+      "value": "10K provisional",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Provisional photosensor shunt; replace with measured calibration value before deployment",
+      "pins": {
+        "2": "AGND",
+        "1": "male1/photosensor/B"
+      },
+      "sheet": "io",
+      "uuid": "102a260e-a74a-5177-983c-ac9c85fa7305",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "provisional_10k_calibrate",
+      "include_bom": true
+    },
+    {
+      "ref": "RP6",
+      "value": "10K provisional",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Provisional photosensor shunt; replace with measured calibration value before deployment",
+      "pins": {
+        "2": "AGND",
+        "1": "male1/photosensor/C"
+      },
+      "sheet": "io",
+      "uuid": "a173648d-4b70-5de3-a0c3-304390988b0e",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "provisional_10k_calibrate",
+      "include_bom": true
+    },
+    {
+      "ref": "RP7",
+      "value": "10K provisional",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Provisional photosensor shunt; replace with measured calibration value before deployment",
+      "pins": {
+        "2": "AGND",
+        "1": "male1/photosensor/D"
+      },
+      "sheet": "io",
+      "uuid": "254f83ad-8d63-5ed1-8dcb-f6b90a0bd3bb",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "provisional_10k_calibrate",
+      "include_bom": true
+    },
+    {
+      "ref": "RP8",
+      "value": "10K provisional",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Provisional photosensor shunt; replace with measured calibration value before deployment",
+      "pins": {
+        "2": "AGND",
+        "1": "male2/photosensor/A"
+      },
+      "sheet": "io",
+      "uuid": "82328ab7-f74d-5f09-9a4b-07c355d2b4ae",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "provisional_10k_calibrate",
+      "include_bom": true
+    },
+    {
+      "ref": "RP9",
+      "value": "10K provisional",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Provisional photosensor shunt; replace with measured calibration value before deployment",
+      "pins": {
+        "2": "AGND",
+        "1": "male2/photosensor/B"
+      },
+      "sheet": "io",
+      "uuid": "2bc53b47-4726-5e84-91c8-cf650879747d",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "provisional_10k_calibrate",
+      "include_bom": true
+    },
+    {
+      "ref": "RP10",
+      "value": "10K provisional",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Provisional photosensor shunt; replace with measured calibration value before deployment",
+      "pins": {
+        "2": "AGND",
+        "1": "male2/photosensor/C"
+      },
+      "sheet": "io",
+      "uuid": "af64996b-e701-5289-9ba4-5e3b696289ee",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "provisional_10k_calibrate",
+      "include_bom": true
+    },
+    {
+      "ref": "RP11",
+      "value": "10K provisional",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Provisional photosensor shunt; replace with measured calibration value before deployment",
+      "pins": {
+        "2": "AGND",
+        "1": "male2/photosensor/D"
+      },
+      "sheet": "io",
+      "uuid": "c8059302-6e4d-5a59-9afe-a77ab066ce06",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "provisional_10k_calibrate",
+      "include_bom": true
+    },
+    {
+      "ref": "RS1",
+      "value": "10K",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "Reserved D2 pullup to logic rail; prevents external +5V back-powering Mega",
+      "pins": {
+        "2": "MEGA_5V",
+        "1": "amp shutdown"
+      },
+      "sheet": "power",
+      "uuid": "bda97a16-016c-55a5-8462-18f06d8ef633",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/367400da-9614-5471-a502-3c4554914ba7",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "TP30",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "amplifier shutdown - reserved, and where it gets wired from",
+      "pins": {
+        "1": "amp shutdown"
+      },
+      "sheet": "power",
+      "uuid": "4fd75b8b-d758-59af-b516-1ec2f42c8c21",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/367400da-9614-5471-a502-3c4554914ba7",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "RA1",
+      "value": "330R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "male1 aux conductor - state LED or mute",
+      "pins": {
+        "2": "male1/aux",
+        "1": "male1/aux driven"
+      },
+      "sheet": "io",
+      "uuid": "d3b66747-a874-555c-9c27-815b355a4a0c",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "RA2",
+      "value": "330R",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "description": "male2 aux conductor - state LED or mute",
+      "pins": {
+        "2": "male2/aux",
+        "1": "male2/aux driven"
+      },
+      "sheet": "io",
+      "uuid": "4d9de325-f0dd-5d38-bc08-4c44a33e4324",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/44b57f61-5b93-5d31-8e7f-5c8da6155ebe",
+      "pin_names": {
+        "2": "2",
+        "1": "1"
+      },
+      "pin_types": {
+        "2": "passive",
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "TP31",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "+5V rail",
+      "pins": {
+        "1": "+5V"
+      },
+      "sheet": "power",
+      "uuid": "b14746dd-209b-5277-b4cb-4a86fa4d7a94",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/367400da-9614-5471-a502-3c4554914ba7",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "TP32",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "MEGA_5V rail",
+      "pins": {
+        "1": "MEGA_5V"
+      },
+      "sheet": "power",
+      "uuid": "9b5204ee-d495-558a-b6d5-2ae50d8dad4b",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/367400da-9614-5471-a502-3c4554914ba7",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "TP33",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "GND rail",
+      "pins": {
+        "1": "GND"
+      },
+      "sheet": "power",
+      "uuid": "3587b73f-7554-5ec4-8564-474141e5e808",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/367400da-9614-5471-a502-3c4554914ba7",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "TP34",
+      "value": "test pad",
+      "footprint": "TestPoint:TestPoint_THTPad_1.5x1.5mm_Drill0.7mm",
+      "description": "AGND rail",
+      "pins": {
+        "1": "AGND"
+      },
+      "sheet": "power",
+      "uuid": "f6a059bf-9311-5b5a-b9f8-4f18dd4d0450",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/367400da-9614-5471-a502-3c4554914ba7",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false
+    },
+    {
+      "ref": "C116",
+      "value": "100nF",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "male1/internal reference",
+        "2": "AGND"
+      },
+      "description": "Pin6 internal reference bypass; not a connection to board ground",
+      "sheet": "audio1",
+      "uuid": "11bc1ea0-60a3-5b26-8298-e197906ef197",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R116",
+      "value": "6K8",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "male1/mic attenuated",
+        "2": "AGND"
+      },
+      "description": "Microphone attenuator shunt; >=5K load even when bypass selected",
+      "sheet": "audio1",
+      "uuid": "3051ded2-77db-5a99-b0dc-55b06b414b8a",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "JS1",
+      "value": "ATTEN BYPASS (OPEN)",
+      "footprint": "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm",
+      "pins": {
+        "1": "male1/microphone",
+        "2": "male1/mic attenuated"
+      },
+      "description": "Default OPEN. Bridge only for weak microphone output after measuring ADC headroom",
+      "sheet": "audio1",
+      "uuid": "f1fb0675-a60b-5e91-a21f-e249228ff42b",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/9913754b-c633-5ef1-a96c-a0bdf229594c",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "open",
+      "include_bom": false
+    },
+    {
+      "ref": "C216",
+      "value": "100nF",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "male2/internal reference",
+        "2": "AGND"
+      },
+      "description": "Pin6 internal reference bypass; not a connection to board ground",
+      "sheet": "audio2",
+      "uuid": "97a43dfb-176c-551b-9ffa-064a9f51cfbd",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R216",
+      "value": "6K8",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "male2/mic attenuated",
+        "2": "AGND"
+      },
+      "description": "Microphone attenuator shunt; >=5K load even when bypass selected",
+      "sheet": "audio2",
+      "uuid": "63377c90-b361-5fb4-a8c5-004a9e48e35f",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "JS2",
+      "value": "ATTEN BYPASS (OPEN)",
+      "footprint": "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm",
+      "pins": {
+        "1": "male2/microphone",
+        "2": "male2/mic attenuated"
+      },
+      "description": "Default OPEN. Bridge only for weak microphone output after measuring ADC headroom",
+      "sheet": "audio2",
+      "uuid": "96b8d467-4532-54d3-b646-418536b52f3a",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/48b32ca7-e29f-5efb-8727-51e906e9223d",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "open",
+      "include_bom": false
+    },
+    {
+      "ref": "C316",
+      "value": "100nF",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "female1/internal reference",
+        "2": "AGND"
+      },
+      "description": "Pin6 internal reference bypass; not a connection to board ground",
+      "sheet": "audio3",
+      "uuid": "e5c54ad6-1d33-5dd8-a7c4-c2bd0dd660de",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R316",
+      "value": "6K8",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "female1/mic attenuated",
+        "2": "AGND"
+      },
+      "description": "Microphone attenuator shunt; >=5K load even when bypass selected",
+      "sheet": "audio3",
+      "uuid": "58ac412c-25b2-5a15-8312-f8367c0ae4ee",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "JS3",
+      "value": "ATTEN BYPASS (OPEN)",
+      "footprint": "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm",
+      "pins": {
+        "1": "female1/microphone",
+        "2": "female1/mic attenuated"
+      },
+      "description": "Default OPEN. Bridge only for weak microphone output after measuring ADC headroom",
+      "sheet": "audio3",
+      "uuid": "97013d91-9f8f-5c35-96a7-fc1085f7c37d",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/569ad374-e78b-5e41-8dbc-ef7a35ca7bc8",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "open",
+      "include_bom": false
+    },
+    {
+      "ref": "C416",
+      "value": "100nF",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "female2/internal reference",
+        "2": "AGND"
+      },
+      "description": "Pin6 internal reference bypass; not a connection to board ground",
+      "sheet": "audio4",
+      "uuid": "c0079de6-10f9-5c61-906c-f5543e589e7f",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R416",
+      "value": "6K8",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "female2/mic attenuated",
+        "2": "AGND"
+      },
+      "description": "Microphone attenuator shunt; >=5K load even when bypass selected",
+      "sheet": "audio4",
+      "uuid": "0253caff-605c-502c-99c1-0e01854442fb",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "JS4",
+      "value": "ATTEN BYPASS (OPEN)",
+      "footprint": "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm",
+      "pins": {
+        "1": "female2/microphone",
+        "2": "female2/mic attenuated"
+      },
+      "description": "Default OPEN. Bridge only for weak microphone output after measuring ADC headroom",
+      "sheet": "audio4",
+      "uuid": "5f80ac5a-bef7-5fb3-8c43-76f9b8732926",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/1b784b31-6556-5291-b5f4-b77518c60bbb",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "open",
+      "include_bom": false
+    },
+    {
+      "ref": "C516",
+      "value": "100nF",
+      "footprint": "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
+      "pins": {
+        "1": "female3/internal reference",
+        "2": "AGND"
+      },
+      "description": "Pin6 internal reference bypass; not a connection to board ground",
+      "sheet": "audio5",
+      "uuid": "242032d0-8698-53dc-9891-3e7fbfff1b78",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "R516",
+      "value": "6K8",
+      "footprint": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal",
+      "pins": {
+        "1": "female3/mic attenuated",
+        "2": "AGND"
+      },
+      "description": "Microphone attenuator shunt; >=5K load even when bypass selected",
+      "sheet": "audio5",
+      "uuid": "a43e58ce-0704-5ac0-b404-7f9b7a3a5876",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true
+    },
+    {
+      "ref": "JS5",
+      "value": "ATTEN BYPASS (OPEN)",
+      "footprint": "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm",
+      "pins": {
+        "1": "female3/microphone",
+        "2": "female3/mic attenuated"
+      },
+      "description": "Default OPEN. Bridge only for weak microphone output after measuring ADC headroom",
+      "sheet": "audio5",
+      "uuid": "ac78a554-78fe-56b6-8456-c69ebe6cdaa2",
+      "sheet_path": "/dc84e149-f060-5120-be86-5f91bfb1e61a/e63f02c1-98ef-5747-9346-be39a6ea1340",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "open",
+      "include_bom": false
+    }
+  ],
+  "nets": [
+    "+12V",
+    "+5V",
+    "AGND",
+    "GND",
+    "MEGA_5V",
+    "amp shutdown",
+    "analyser/reset",
+    "analyser/strobe",
+    "centre/spare1",
+    "dxl_data",
+    "female1/analyser out",
+    "female1/audio return",
+    "female1/filter mid",
+    "female1/filter out",
+    "female1/internal reference",
+    "female1/line out",
+    "female1/mic attenuated",
+    "female1/microphone",
+    "female1/msgeq input",
+    "female1/neopixel",
+    "female1/neopixel/driven",
+    "female1/oscillator",
+    "female1/photosensor",
+    "female1/spare1",
+    "female1/spare2",
+    "female1/spare3",
+    "female1/spare4",
+    "female1/spare5",
+    "female1/spare6",
+    "female1/tone",
+    "female2/analyser out",
+    "female2/audio return",
+    "female2/filter mid",
+    "female2/filter out",
+    "female2/internal reference",
+    "female2/line out",
+    "female2/mic attenuated",
+    "female2/microphone",
+    "female2/msgeq input",
+    "female2/neopixel",
+    "female2/neopixel/driven",
+    "female2/oscillator",
+    "female2/photosensor",
+    "female2/spare1",
+    "female2/spare2",
+    "female2/spare3",
+    "female2/spare4",
+    "female2/spare5",
+    "female2/spare6",
+    "female2/tone",
+    "female3/analyser out",
+    "female3/audio return",
+    "female3/filter mid",
+    "female3/filter out",
+    "female3/internal reference",
+    "female3/line out",
+    "female3/mic attenuated",
+    "female3/microphone",
+    "female3/msgeq input",
+    "female3/neopixel",
+    "female3/neopixel/driven",
+    "female3/oscillator",
+    "female3/photosensor",
+    "female3/tone",
+    "male1/analyser out",
+    "male1/audio return",
+    "male1/aux",
+    "male1/aux driven",
+    "male1/bar neopixel",
+    "male1/bar neopixel/driven",
+    "male1/filter mid",
+    "male1/filter out",
+    "male1/internal reference",
+    "male1/line out",
+    "male1/mic attenuated",
+    "male1/microphone",
+    "male1/msgeq input",
+    "male1/neopixel",
+    "male1/neopixel/driven",
+    "male1/oscillator",
+    "male1/photosensor/A",
+    "male1/photosensor/B",
+    "male1/photosensor/C",
+    "male1/photosensor/D",
+    "male1/tone",
+    "male2/analyser out",
+    "male2/audio return",
+    "male2/aux",
+    "male2/aux driven",
+    "male2/bar neopixel",
+    "male2/bar neopixel/driven",
+    "male2/filter mid",
+    "male2/filter out",
+    "male2/internal reference",
+    "male2/line out",
+    "male2/mic attenuated",
+    "male2/microphone",
+    "male2/msgeq input",
+    "male2/neopixel",
+    "male2/neopixel/driven",
+    "male2/oscillator",
+    "male2/photosensor/A",
+    "male2/photosensor/B",
+    "male2/photosensor/C",
+    "male2/photosensor/D",
+    "male2/tone"
+  ],
+  "assumptions": [
+    "RP1..RP11: 10K provisional, verify fitted old divider resistance and calibrate",
+    "JS1..JS5 default open: 47K/6K8 microphone attenuation, 0.126 gain",
+    "External +5V is separate from MEGA_5V; D2 pullup uses MEGA_5V",
+    "Four-connector fixed harness and original Mega footprint retained",
+    "Body amplifier and MAX9814 boards are off-board assemblies"
+  ],
+  "datasheets": [
+    "https://mix-sig.com/images/datasheets/MSGEQ7.pdf",
+    "https://www.analog.com/media/en/technical-documentation/data-sheets/MAX9814.pdf"
+  ]
+}

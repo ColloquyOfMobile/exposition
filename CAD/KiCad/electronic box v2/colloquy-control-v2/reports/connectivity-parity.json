@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "components": 128,
+  "connected_pads": 376,
+  "connected_nets": 106,
+  "intentional_nc_pads": 48,
+  "problems": [],
+  "board_components_checked": 128,
+  "board_connected_pads": 376
+}

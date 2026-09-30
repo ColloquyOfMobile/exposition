@@ -1,0 +1,107 @@
+﻿Reference,Value,Footprint,Assembly,Notes
+A1,Arduino Mega 2560,Colloquy:Arduino_Mega2560_R3_Shield,fit,"carried as a shield, as now"
+M1,U2D2,Colloquy:u2d2_mounting,fit,on its own mount; only the Dynamixel data line touches it
+J2,DC jack,Colloquy:PJ-082BH_jack_10A,fit,supply in
+J6,screw bridge,Colloquy:screw_brigde,fit,jack onto the board rail
+J7,JST EH 3,Colloquy:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical,fit,"GND, +12V and the servo bus in"
+C1,470uF 16V,Colloquy:CP_Radial_D13.0mm_P5.00mm,fit,"bulk, on the board's own +5V"
+C2,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,"decoupling, on the board's own +5V"
+JP1,0R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,the single point where analogue ground meets power ground
+J5,DSUB-15,Colloquy:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm,fit,"DSUB-15, fixed by the supplier"
+J1,DSUB-15,Colloquy:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm,fit,"DSUB-15, fixed by the supplier"
+A-J3,DSUB-15,Colloquy:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm,fit,"DSUB-15, fixed by the supplier"
+B-J4,DSUB-15,Colloquy:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm,fit,"DSUB-15, fixed by the supplier - CARRIES NO POWER, silkscreen it"
+Extra2,1x6 header,Colloquy:PinHeader_1x06_P2.54mm_Vertical,fit,female1's six spare conductors
+Extra1,1x6 header,Colloquy:PinHeader_1x06_P2.54mm_Vertical,fit,female2's six spare conductors
+Extra3,1x1 pad,Colloquy:PinHeader_1x01_P2.54mm_Vertical,fit,B-J4's single spare conductor - the males have no others
+R301,1K2,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,"1000 Hz low-pass, first stage"
+R302,1K2,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,"1000 Hz low-pass, second stage"
+C301,150nF,Colloquy:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm,fit,"1000 Hz low-pass, first stage"
+C302,150nF,Colloquy:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm,fit,"1000 Hz low-pass, second stage"
+R303,100R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,female1 build-out into the harness
+JP4,0R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,female1 audio return onto analogue ground
+R401,1K8,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,"2500 Hz low-pass, first stage"
+R402,1K8,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,"2500 Hz low-pass, second stage"
+C401,47nF,Colloquy:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm,fit,"2500 Hz low-pass, first stage"
+C402,47nF,Colloquy:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm,fit,"2500 Hz low-pass, second stage"
+R403,100R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,female2 build-out into the harness
+JP5,0R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,female2 audio return onto analogue ground
+R501,2K2,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,"6250 Hz low-pass, first stage"
+R502,2K2,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,"6250 Hz low-pass, second stage"
+C501,10nF,Colloquy:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm,fit,"6250 Hz low-pass, first stage"
+C502,10nF,Colloquy:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm,fit,"6250 Hz low-pass, second stage"
+R503,100R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,female3 build-out into the harness
+JP6,0R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,female3 audio return onto analogue ground
+R101,2K2,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,"160 Hz low-pass, first stage"
+R102,2K2,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,"160 Hz low-pass, second stage"
+C101,470nF,Colloquy:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm,fit,"160 Hz low-pass, first stage"
+C102,470nF,Colloquy:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm,fit,"160 Hz low-pass, second stage"
+R103,100R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,male1 build-out into the harness
+JP2,0R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,male1 audio return onto analogue ground
+R201,2K,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,"400 Hz low-pass, first stage"
+R202,2K,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,"400 Hz low-pass, second stage"
+C201,220nF,Colloquy:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm,fit,"400 Hz low-pass, first stage"
+C202,220nF,Colloquy:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm,fit,"400 Hz low-pass, second stage"
+R203,100R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,male2 build-out into the harness
+JP3,0R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,male2 audio return onto analogue ground
+U3,MSGEQ7,Colloquy:DIP-8_W7.62mm_Socket,fit,"female1 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly"
+R311,47K,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,Microphone attenuator series: default 0.126 gain with 6K8 shunt
+C312,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,AC input coupling; passes 63Hz and above with internal 1Mohm bias
+R313,200K 1%,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,MSGEQ7 clock resistor; keep adjacent to pin8
+C314,33pF C0G,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,MSGEQ7 clock capacitor; 33pF includes stray capacitance
+C315,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,"Local MSGEQ7 supply bypass, close to pins1 and2"
+U4,MSGEQ7,Colloquy:DIP-8_W7.62mm_Socket,fit,"female2 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly"
+R411,47K,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,Microphone attenuator series: default 0.126 gain with 6K8 shunt
+C412,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,AC input coupling; passes 63Hz and above with internal 1Mohm bias
+R413,200K 1%,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,MSGEQ7 clock resistor; keep adjacent to pin8
+C414,33pF C0G,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,MSGEQ7 clock capacitor; 33pF includes stray capacitance
+C415,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,"Local MSGEQ7 supply bypass, close to pins1 and2"
+U5,MSGEQ7,Colloquy:DIP-8_W7.62mm_Socket,fit,"female3 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly"
+R511,47K,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,Microphone attenuator series: default 0.126 gain with 6K8 shunt
+C512,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,AC input coupling; passes 63Hz and above with internal 1Mohm bias
+R513,200K 1%,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,MSGEQ7 clock resistor; keep adjacent to pin8
+C514,33pF C0G,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,MSGEQ7 clock capacitor; 33pF includes stray capacitance
+C515,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,"Local MSGEQ7 supply bypass, close to pins1 and2"
+U1,MSGEQ7,Colloquy:DIP-8_W7.62mm_Socket,fit,"male1 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly"
+R111,47K,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,Microphone attenuator series: default 0.126 gain with 6K8 shunt
+C112,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,AC input coupling; passes 63Hz and above with internal 1Mohm bias
+R113,200K 1%,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,MSGEQ7 clock resistor; keep adjacent to pin8
+C114,33pF C0G,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,MSGEQ7 clock capacitor; 33pF includes stray capacitance
+C115,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,"Local MSGEQ7 supply bypass, close to pins1 and2"
+U2,MSGEQ7,Colloquy:DIP-8_W7.62mm_Socket,fit,"male2 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly"
+R211,47K,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,Microphone attenuator series: default 0.126 gain with 6K8 shunt
+C212,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,AC input coupling; passes 63Hz and above with internal 1Mohm bias
+R213,200K 1%,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,MSGEQ7 clock resistor; keep adjacent to pin8
+C214,33pF C0G,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,MSGEQ7 clock capacitor; 33pF includes stray capacitance
+C215,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,"Local MSGEQ7 supply bypass, close to pins1 and2"
+RN1,330R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,series on female1/neopixel
+RN2,330R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,series on female2/neopixel
+RN3,330R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,series on female3/neopixel
+RN4,330R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,series on male1/neopixel
+RN5,330R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,series on male2/neopixel
+RN6,330R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,series on male1/bar neopixel
+RN7,330R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,series on male2/bar neopixel
+RP1,10K provisional,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,provisional_10k_calibrate,Provisional photosensor shunt; replace with measured calibration value before deployment
+RP2,10K provisional,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,provisional_10k_calibrate,Provisional photosensor shunt; replace with measured calibration value before deployment
+RP3,10K provisional,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,provisional_10k_calibrate,Provisional photosensor shunt; replace with measured calibration value before deployment
+RP4,10K provisional,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,provisional_10k_calibrate,Provisional photosensor shunt; replace with measured calibration value before deployment
+RP5,10K provisional,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,provisional_10k_calibrate,Provisional photosensor shunt; replace with measured calibration value before deployment
+RP6,10K provisional,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,provisional_10k_calibrate,Provisional photosensor shunt; replace with measured calibration value before deployment
+RP7,10K provisional,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,provisional_10k_calibrate,Provisional photosensor shunt; replace with measured calibration value before deployment
+RP8,10K provisional,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,provisional_10k_calibrate,Provisional photosensor shunt; replace with measured calibration value before deployment
+RP9,10K provisional,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,provisional_10k_calibrate,Provisional photosensor shunt; replace with measured calibration value before deployment
+RP10,10K provisional,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,provisional_10k_calibrate,Provisional photosensor shunt; replace with measured calibration value before deployment
+RP11,10K provisional,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,provisional_10k_calibrate,Provisional photosensor shunt; replace with measured calibration value before deployment
+RS1,10K,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,Reserved D2 pullup to logic rail; prevents external +5V back-powering Mega
+RA1,330R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,male1 aux conductor - state LED or mute
+RA2,330R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,male2 aux conductor - state LED or mute
+C116,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,Pin6 internal reference bypass; not a connection to board ground
+R116,6K8,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,Microphone attenuator shunt; >=5K load even when bypass selected
+C216,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,Pin6 internal reference bypass; not a connection to board ground
+R216,6K8,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,Microphone attenuator shunt; >=5K load even when bypass selected
+C316,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,Pin6 internal reference bypass; not a connection to board ground
+R316,6K8,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,Microphone attenuator shunt; >=5K load even when bypass selected
+C416,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,Pin6 internal reference bypass; not a connection to board ground
+R416,6K8,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,Microphone attenuator shunt; >=5K load even when bypass selected
+C516,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit,Pin6 internal reference bypass; not a connection to board ground
+R516,6K8,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit,Microphone attenuator shunt; >=5K load even when bypass selected

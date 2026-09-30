@@ -1,0 +1,30 @@
+﻿Quantity,References,Value,Footprint,Assembly
+1,A1,Arduino Mega 2560,Colloquy:Arduino_Mega2560_R3_Shield,fit
+1,M1,U2D2,Colloquy:u2d2_mounting,fit
+1,J2,DC jack,Colloquy:PJ-082BH_jack_10A,fit
+1,J6,screw bridge,Colloquy:screw_brigde,fit
+1,J7,JST EH 3,Colloquy:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical,fit
+1,C1,470uF 16V,Colloquy:CP_Radial_D13.0mm_P5.00mm,fit
+16,C2 C312 C315 C412 C415 C512 C515 C112 C115 C212 C215 C116 C216 C316 C416 C516,100nF,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit
+6,JP1 JP4 JP5 JP6 JP2 JP3,0R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit
+4,J5 J1 A-J3 B-J4,DSUB-15,Colloquy:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm,fit
+2,Extra2 Extra1,1x6 header,Colloquy:PinHeader_1x06_P2.54mm_Vertical,fit
+1,Extra3,1x1 pad,Colloquy:PinHeader_1x01_P2.54mm_Vertical,fit
+2,R301 R302,1K2,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit
+2,C301 C302,150nF,Colloquy:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm,fit
+5,R303 R403 R503 R103 R203,100R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit
+2,R401 R402,1K8,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit
+2,C401 C402,47nF,Colloquy:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm,fit
+4,R501 R502 R101 R102,2K2,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit
+2,C501 C502,10nF,Colloquy:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm,fit
+2,C101 C102,470nF,Colloquy:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm,fit
+2,R201 R202,2K,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit
+2,C201 C202,220nF,Colloquy:C_Rect_L10.0mm_W5.0mm_P5.00mm_P7.50mm,fit
+5,U3 U4 U5 U1 U2,MSGEQ7,Colloquy:DIP-8_W7.62mm_Socket,fit
+5,R311 R411 R511 R111 R211,47K,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit
+5,R313 R413 R513 R113 R213,200K 1%,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit
+5,C314 C414 C514 C114 C214,33pF C0G,Colloquy:C_Disc_D5.0mm_W2.5mm_P5.00mm,fit
+9,RN1 RN2 RN3 RN4 RN5 RN6 RN7 RA1 RA2,330R,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit
+11,RP1 RP2 RP3 RP4 RP5 RP6 RP7 RP8 RP9 RP10 RP11,10K provisional,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,provisional_10k_calibrate
+1,RS1,10K,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit
+5,R116 R216 R316 R416 R516,6K8,Colloquy:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal,fit

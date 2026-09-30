@@ -1,0 +1,433 @@
+{
+  "board": "C:\\workspace\\workspace2\\Colloquy\\exposition\\CAD\\KiCad\\electronic box v2\\colloquy-control-v2\\colloquy-control-v2.kicad_pcb",
+  "sha256": "5fceaad1d01ee8807bff49bff78d9c89b8b36b35696fd634791c4919a6c232b9",
+  "footprints": 132,
+  "track_and_via_count": 1294,
+  "checks": [
+    {
+      "check": "J1 original connector drilling",
+      "passed": true,
+      "detail": "Plated pad numbers, positions, and drill sizes match the old board."
+    },
+    {
+      "check": "J5 original connector drilling",
+      "passed": true,
+      "detail": "Plated pad numbers, positions, and drill sizes match the old board."
+    },
+    {
+      "check": "A-J3 original connector drilling",
+      "passed": true,
+      "detail": "Plated pad numbers, positions, and drill sizes match the old board."
+    },
+    {
+      "check": "B-J4 original connector drilling",
+      "passed": true,
+      "detail": "Plated pad numbers, positions, and drill sizes match the old board."
+    },
+    {
+      "check": "J2 original connector drilling",
+      "passed": true,
+      "detail": "Plated pad numbers, positions, and drill sizes match the old board."
+    },
+    {
+      "check": "A1 original connector drilling",
+      "passed": true,
+      "detail": "Plated pad numbers, positions, and drill sizes match the old board."
+    },
+    {
+      "check": "J6 original connector drilling",
+      "passed": true,
+      "detail": "Plated pad numbers, positions, and drill sizes match the old board."
+    },
+    {
+      "check": "J7 original connector drilling",
+      "passed": true,
+      "detail": "Plated pad numbers, positions, and drill sizes match the old board."
+    },
+    {
+      "check": "M1 original cutout geometry",
+      "passed": true,
+      "detail": {
+        "original_circles": [
+          [
+            "",
+            [
+              61.0,
+              59.66
+            ],
+            [
+              4.5,
+              4.5
+            ]
+          ],
+          [
+            "",
+            [
+              61.0,
+              101.66
+            ],
+            [
+              4.5,
+              4.5
+            ]
+          ],
+          [
+            "",
+            [
+              103.0,
+              59.66
+            ],
+            [
+              4.5,
+              4.5
+            ]
+          ],
+          [
+            "",
+            [
+              103.0,
+              101.66
+            ],
+            [
+              4.5,
+              4.5
+            ]
+          ]
+        ],
+        "replacement_drills": [
+          [
+            "",
+            [
+              61.0,
+              59.66
+            ],
+            [
+              4.5,
+              4.5
+            ]
+          ],
+          [
+            "",
+            [
+              61.0,
+              101.66
+            ],
+            [
+              4.5,
+              4.5
+            ]
+          ],
+          [
+            "",
+            [
+              103.0,
+              59.66
+            ],
+            [
+              4.5,
+              4.5
+            ]
+          ],
+          [
+            "",
+            [
+              103.0,
+              101.66
+            ],
+            [
+              4.5,
+              4.5
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "check": "J2 original cutout geometry",
+      "passed": true,
+      "detail": {
+        "original_circles": [
+          [
+            "",
+            [
+              248.95,
+              66.02
+            ],
+            [
+              1.6,
+              1.6
+            ]
+          ]
+        ],
+        "replacement_drills": [
+          [
+            "",
+            [
+              248.95,
+              66.02
+            ],
+            [
+              1.6,
+              1.6
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "check": "H1 new M3 standoff",
+      "passed": true,
+      "detail": [
+        [
+          "",
+          [
+            52.0,
+            114.0
+          ],
+          [
+            3.2,
+            3.2
+          ]
+        ]
+      ]
+    },
+    {
+      "check": "H2 new M3 standoff",
+      "passed": true,
+      "detail": [
+        [
+          "",
+          [
+            244.0,
+            82.0
+          ],
+          [
+            3.2,
+            3.2
+          ]
+        ]
+      ]
+    },
+    {
+      "check": "H3 new M3 standoff",
+      "passed": true,
+      "detail": [
+        [
+          "",
+          [
+            52.0,
+            341.0
+          ],
+          [
+            3.2,
+            3.2
+          ]
+        ]
+      ]
+    },
+    {
+      "check": "H4 new M3 standoff",
+      "passed": true,
+      "detail": [
+        [
+          "",
+          [
+            244.0,
+            341.0
+          ],
+          [
+            3.2,
+            3.2
+          ]
+        ]
+      ]
+    },
+    {
+      "check": "Mega duplicated supply pin mapping",
+      "passed": true,
+      "detail": {
+        "5V1": "MEGA_5V",
+        "5V2": "MEGA_5V",
+        "5V3": "MEGA_5V",
+        "5V4": "MEGA_5V",
+        "GND1": "GND",
+        "GND2": "GND",
+        "GND3": "GND",
+        "GND4": "GND",
+        "GND5": "GND",
+        "GND6": "GND"
+      }
+    },
+    {
+      "check": "U1 VDD bypass placement",
+      "passed": true,
+      "detail": {
+        "ic": "U1",
+        "function": "VDD bypass",
+        "capacitor": "C115",
+        "direct_pin_distance_mm": 8.062,
+        "review_limit_mm": 10
+      }
+    },
+    {
+      "check": "U1 CKIN capacitor placement",
+      "passed": true,
+      "detail": {
+        "ic": "U1",
+        "function": "CKIN capacitor",
+        "capacitor": "C114",
+        "direct_pin_distance_mm": 5.014,
+        "review_limit_mm": 8
+      }
+    },
+    {
+      "check": "U1 internal reference bypass placement",
+      "passed": true,
+      "detail": {
+        "ic": "U1",
+        "function": "internal reference bypass",
+        "capacitor": "C116",
+        "direct_pin_distance_mm": 4.467,
+        "review_limit_mm": 8
+      }
+    },
+    {
+      "check": "U2 VDD bypass placement",
+      "passed": true,
+      "detail": {
+        "ic": "U2",
+        "function": "VDD bypass",
+        "capacitor": "C215",
+        "direct_pin_distance_mm": 8.062,
+        "review_limit_mm": 10
+      }
+    },
+    {
+      "check": "U2 CKIN capacitor placement",
+      "passed": true,
+      "detail": {
+        "ic": "U2",
+        "function": "CKIN capacitor",
+        "capacitor": "C214",
+        "direct_pin_distance_mm": 5.014,
+        "review_limit_mm": 8
+      }
+    },
+    {
+      "check": "U2 internal reference bypass placement",
+      "passed": true,
+      "detail": {
+        "ic": "U2",
+        "function": "internal reference bypass",
+        "capacitor": "C216",
+        "direct_pin_distance_mm": 4.467,
+        "review_limit_mm": 8
+      }
+    },
+    {
+      "check": "U3 VDD bypass placement",
+      "passed": true,
+      "detail": {
+        "ic": "U3",
+        "function": "VDD bypass",
+        "capacitor": "C315",
+        "direct_pin_distance_mm": 8.062,
+        "review_limit_mm": 10
+      }
+    },
+    {
+      "check": "U3 CKIN capacitor placement",
+      "passed": true,
+      "detail": {
+        "ic": "U3",
+        "function": "CKIN capacitor",
+        "capacitor": "C314",
+        "direct_pin_distance_mm": 5.014,
+        "review_limit_mm": 8
+      }
+    },
+    {
+      "check": "U3 internal reference bypass placement",
+      "passed": true,
+      "detail": {
+        "ic": "U3",
+        "function": "internal reference bypass",
+        "capacitor": "C316",
+        "direct_pin_distance_mm": 4.467,
+        "review_limit_mm": 8
+      }
+    },
+    {
+      "check": "U4 VDD bypass placement",
+      "passed": true,
+      "detail": {
+        "ic": "U4",
+        "function": "VDD bypass",
+        "capacitor": "C415",
+        "direct_pin_distance_mm": 8.062,
+        "review_limit_mm": 10
+      }
+    },
+    {
+      "check": "U4 CKIN capacitor placement",
+      "passed": true,
+      "detail": {
+        "ic": "U4",
+        "function": "CKIN capacitor",
+        "capacitor": "C414",
+        "direct_pin_distance_mm": 5.014,
+        "review_limit_mm": 8
+      }
+    },
+    {
+      "check": "U4 internal reference bypass placement",
+      "passed": true,
+      "detail": {
+        "ic": "U4",
+        "function": "internal reference bypass",
+        "capacitor": "C416",
+        "direct_pin_distance_mm": 4.467,
+        "review_limit_mm": 8
+      }
+    },
+    {
+      "check": "U5 VDD bypass placement",
+      "passed": true,
+      "detail": {
+        "ic": "U5",
+        "function": "VDD bypass",
+        "capacitor": "C515",
+        "direct_pin_distance_mm": 8.062,
+        "review_limit_mm": 10
+      }
+    },
+    {
+      "check": "U5 CKIN capacitor placement",
+      "passed": true,
+      "detail": {
+        "ic": "U5",
+        "function": "CKIN capacitor",
+        "capacitor": "C514",
+        "direct_pin_distance_mm": 5.014,
+        "review_limit_mm": 8
+      }
+    },
+    {
+      "check": "U5 internal reference bypass placement",
+      "passed": true,
+      "detail": {
+        "ic": "U5",
+        "function": "internal reference bypass",
+        "capacitor": "C516",
+        "direct_pin_distance_mm": 4.467,
+        "review_limit_mm": 8
+      }
+    }
+  ],
+  "passed": true,
+  "limitations": [
+    "Support component distances are straight-line placement checks, not routed loop lengths.",
+    "Actual enclosure fit, harness current ratings, and operating temperature remain unmeasured.",
+    "Run KiCad DRC separately for clearances, courtyard overlap, and connectivity."
+  ]
+}

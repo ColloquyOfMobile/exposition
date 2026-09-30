@@ -1,0 +1,11 @@
+*.kicad_prl
+*.lck
+~*
+*-backups/
+*-placed.kicad_pcb
+*-placed.kicad_pro
+reports/placement.*
+reports/placement-drc.json
+reports/placed-geometry-review.json
+__pycache__/
+fp-info-cache

@@ -1,0 +1,6 @@
+# Preserve the bytewise release hashes across Windows and Unix checkouts.
+*.kicad_* -text
+circuit.json -text
+fp-lib-table -text
+sym-lib-table -text
+*.zip -text
