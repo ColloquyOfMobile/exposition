@@ -30,6 +30,11 @@ that get confused with each other the moment they share a page:
   on the servos; close to TJ's), changed by fitting the Pro Minis, moving
   jumpers and reflashing the Mega. The same AD9833 voice channel
   sits in the rack for one and in each body for the other.
+- **thomas or teensy** - the fifth, and the one that tests rather than
+  chooses: the v2 board with Thomas's chain kept whole and a Teensy 4.1
+  chain (I2S DACs out, sampled microphones in) added beside it. One
+  shunt moves five relays and the board is in one mode or the other,
+  never both. Every connection to the harness is the v2 board's.
 - **cad boards** - an index of every board designed in `CAD/`: what it
   is, where it sits, how many there are, and which document holds its
   pinouts. The only document here that covers the TPA2005D1 breakout and
@@ -121,6 +126,20 @@ class AD9833DualMode(_ElectronicsDocument):
 
     file_name = "AD9833_DUAL_MODE.md"
     document_name = "ad9833 dual mode"
+
+
+class ThomasOrTeensy(_ElectronicsDocument):
+    """The fifth solution, and a sibling of the other four.
+
+    Not a choice between the two sound chains but a board for trying
+    both: Thomas mode is the v2 project as drawn, Teensy mode is the
+    Teensy column of `sound options` made into a circuit, and a shunt
+    picks one for the whole board. Its connector tables are held to the
+    v2 project's `circuit.json` by `test_thomas_or_teensy.py`.
+    """
+
+    file_name = "THOMAS_OR_TEENSY.md"
+    document_name = "thomas or teensy"
 
 
 class CADBoards(_ElectronicsDocument):
@@ -238,6 +257,7 @@ class Electronics(Base):
             OneBoardPerBody(owner=self),
             OpenCMAndProMinis(owner=self),
             AD9833DualMode(owner=self),
+            ThomasOrTeensy(owner=self),
             SoundOptions(owner=self),
             CADBoards(owner=self),
         ]

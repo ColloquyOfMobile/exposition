@@ -49,23 +49,27 @@ def test_the_section_offers_the_written_documents_not_the_generated_ones():
         "one board per body",
         "opencm and pro minis",
         "ad9833 dual mode",
+        "thomas or teensy",
         "sound options",
         "cad boards",
     ]
 
 
-def test_the_four_solutions_are_siblings():
-    """The second, third and fourth are not variations on `next pcb` - they are
+def test_the_solutions_are_siblings():
+    """The second to fifth are not variations on `next pcb` - they are
     complete answers to the same question, against the same fixed
-    harness, and they sit beside it rather than under it."""
+    harness, and they sit beside it rather than under it. The fifth,
+    `thomas or teensy`, is built on the v2 drawing of `next pcb` and is
+    still a sibling: it is a different board, not a page of that one."""
     children = _electronics().snapshot_children
+    others = (
+        "one board per body", "opencm and pro minis", "ad9833 dual mode",
+        "thomas or teensy",
+    )
 
-    for name in (
-        "next pcb", "one board per body", "opencm and pro minis",
-        "ad9833 dual mode",
-    ):
+    for name in ("next pcb",) + others:
         assert name in children, name
-    for name in ("one board per body", "opencm and pro minis", "ad9833 dual mode"):
+    for name in others:
         assert name not in children["next pcb"].snapshot_children, name
 
 

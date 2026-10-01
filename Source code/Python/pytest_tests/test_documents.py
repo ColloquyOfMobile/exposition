@@ -36,6 +36,7 @@ from colloquy.hardware.electronics import (
     OneBoardPerBody,
     OpenCMAndProMinis,
     SoundOptions,
+    ThomasOrTeensy,
 )
 from colloquy.tests.test_audio_subsystem.setup_document import HardwareSetup
 from colloquy.markdown_document import MarkdownDocument
@@ -49,6 +50,7 @@ DOCUMENTS = (
     OneBoardPerBody,
     OpenCMAndProMinis,
     AD9833DualMode,
+    ThomasOrTeensy,
     SoundOptions,
     CADBoards,
 )
@@ -87,6 +89,7 @@ def test_each_document_sits_beside_what_it_describes(document):
         "ONE_BOARD_PER_BODY.md": "electronics",
         "OPENCM_AND_PRO_MINIS.md": "electronics",
         "AD9833_DUAL_MODE.md": "electronics",
+        "THOMAS_OR_TEENSY.md": "electronics",
         "SOUND_OPTIONS.md": "electronics",
         "CAD_BOARDS.md": "electronics",
     }
@@ -114,6 +117,7 @@ def test_no_two_documents_share_a_file(stub_factory):
         "ONE_BOARD_PER_BODY.md",
         "OPENCM_AND_PRO_MINIS.md",
         "AD9833_DUAL_MODE.md",
+        "THOMAS_OR_TEENSY.md",
         "SOUND_OPTIONS.md",
         "CAD_BOARDS.md",
     }
@@ -137,6 +141,7 @@ def test_they_are_named_for_what_they_are(document):
         "one board per body",
         "opencm and pro minis",
         "ad9833 dual mode",
+        "thomas or teensy",
         "sound options",
         "cad boards",
     }
