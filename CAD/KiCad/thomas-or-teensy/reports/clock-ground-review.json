@@ -1,0 +1,64 @@
+{
+  "measurements": {
+    "BCLK": {
+      "length_mm": 170.28,
+      "without_adjacent_ground_fill_mm": 14.05,
+      "long_gaps_mm": []
+    },
+    "LRCLK": {
+      "length_mm": 184.51,
+      "without_adjacent_ground_fill_mm": 19.5,
+      "long_gaps_mm": [
+        1.2
+      ]
+    },
+    "I2S_A": {
+      "length_mm": 122.08,
+      "without_adjacent_ground_fill_mm": 7.52,
+      "long_gaps_mm": []
+    },
+    "I2S_B": {
+      "length_mm": 66.33,
+      "without_adjacent_ground_fill_mm": 6.98,
+      "long_gaps_mm": []
+    },
+    "I2S_C": {
+      "length_mm": 76.78,
+      "without_adjacent_ground_fill_mm": 5.14,
+      "long_gaps_mm": []
+    }
+  },
+  "ground_split_crossings": [
+    {
+      "net": "BCLK",
+      "x_mm": 130.6,
+      "y_mm": 123.0,
+      "distance_to_JP1_mm": 1.6
+    },
+    {
+      "net": "LRCLK",
+      "x_mm": 131.8,
+      "y_mm": 123.0,
+      "distance_to_JP1_mm": 2.8
+    },
+    {
+      "net": "I2S_A",
+      "x_mm": 125.0,
+      "y_mm": 123.0,
+      "distance_to_JP1_mm": 4.0
+    },
+    {
+      "net": "I2S_B",
+      "x_mm": 126.2,
+      "y_mm": 123.0,
+      "distance_to_JP1_mm": 2.8
+    },
+    {
+      "net": "I2S_C",
+      "x_mm": 127.4,
+      "y_mm": 123.0,
+      "distance_to_JP1_mm": 1.6
+    }
+  ],
+  "method": "Centreline samples at 0.2mm against the adjacent internal ground-plane fill; excludes ground tracks and is not a field solver."
+}

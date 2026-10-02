@@ -1,0 +1,9 @@
+{
+  "coil_supply_path_outside_analog": {
+    "K1": true,
+    "K2": true,
+    "K3": true
+  },
+  "all_passed": true,
+  "method": "Physical connectivity graph, excluding every +5V pad/via or sampled track centreline inside the AGND zone outline."
+}

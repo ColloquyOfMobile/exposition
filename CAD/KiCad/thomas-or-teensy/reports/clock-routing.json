@@ -1,0 +1,146 @@
+{
+  "routes": [
+    {
+      "net": "I2S_A",
+      "region": "digital",
+      "grid_nodes": 961
+    },
+    {
+      "net": "I2S_A",
+      "region": "analog",
+      "grid_nodes": 1131
+    },
+    {
+      "net": "I2S_B",
+      "region": "digital",
+      "grid_nodes": 320
+    },
+    {
+      "net": "I2S_B",
+      "region": "analog",
+      "grid_nodes": 754
+    },
+    {
+      "net": "I2S_C",
+      "region": "digital",
+      "grid_nodes": 750
+    },
+    {
+      "net": "I2S_C",
+      "region": "analog",
+      "grid_nodes": 436
+    },
+    {
+      "net": "BCLK",
+      "region": "digital",
+      "grid_nodes": 1334
+    },
+    {
+      "net": "BCLK",
+      "region": "analog",
+      "grid_nodes": 528
+    },
+    {
+      "net": "BCLK",
+      "region": "analog",
+      "grid_nodes": 479
+    },
+    {
+      "net": "BCLK",
+      "region": "analog",
+      "grid_nodes": 423
+    },
+    {
+      "net": "BCLK",
+      "region": "digital",
+      "grid_nodes": 230
+    },
+    {
+      "net": "LRCLK",
+      "region": "digital",
+      "grid_nodes": 1345
+    },
+    {
+      "net": "LRCLK",
+      "region": "analog",
+      "grid_nodes": 498
+    },
+    {
+      "net": "LRCLK",
+      "region": "analog",
+      "grid_nodes": 623
+    },
+    {
+      "net": "LRCLK",
+      "region": "analog",
+      "grid_nodes": 532
+    },
+    {
+      "net": "LRCLK",
+      "region": "digital",
+      "grid_nodes": 220
+    }
+  ],
+  "test_points_mm": {
+    "TP43": [
+      119.5,
+      117.5
+    ],
+    "TP44": [
+      123.0,
+      118.0
+    ]
+  },
+  "crossings": {
+    "I2S_A": [
+      [
+        125.0,
+        121.5
+      ],
+      [
+        125.0,
+        124.5
+      ]
+    ],
+    "I2S_B": [
+      [
+        126.2,
+        121.5
+      ],
+      [
+        126.2,
+        124.5
+      ]
+    ],
+    "I2S_C": [
+      [
+        127.4,
+        121.5
+      ],
+      [
+        127.4,
+        124.5
+      ]
+    ],
+    "BCLK": [
+      [
+        130.6,
+        121.5
+      ],
+      [
+        130.6,
+        124.5
+      ]
+    ],
+    "LRCLK": [
+      [
+        131.8,
+        121.5
+      ],
+      [
+        131.8,
+        124.5
+      ]
+    ]
+  }
+}

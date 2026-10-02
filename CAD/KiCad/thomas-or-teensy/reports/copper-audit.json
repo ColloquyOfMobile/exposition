@@ -1,0 +1,1352 @@
+{
+  "measurements": {
+    "+12V": {
+      "track_length_mm": 414.375,
+      "vias": 0,
+      "min_width_mm": 1.6,
+      "max_width_mm": 2.0,
+      "inside_analog_mm": 23.807
+    },
+    "+5V": {
+      "track_length_mm": 782.769,
+      "vias": 11,
+      "min_width_mm": 0.25,
+      "max_width_mm": 2.0,
+      "inside_analog_mm": 10.699
+    },
+    "AGND": {
+      "track_length_mm": 1394.884,
+      "vias": 39,
+      "min_width_mm": 0.24,
+      "max_width_mm": 0.4,
+      "inside_analog_mm": 1187.614
+    },
+    "BCLK": {
+      "track_length_mm": 170.285,
+      "vias": 11,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.2,
+      "inside_analog_mm": 84.154
+    },
+    "BCLK_raw": {
+      "track_length_mm": 10.083,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "COIL_GATE": {
+      "track_length_mm": 8.729,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "COIL_LOW": {
+      "track_length_mm": 277.962,
+      "vias": 12,
+      "min_width_mm": 0.4,
+      "max_width_mm": 0.4,
+      "inside_analog_mm": 0.0
+    },
+    "DAC_3V3": {
+      "track_length_mm": 171.59,
+      "vias": 4,
+      "min_width_mm": 0.3,
+      "max_width_mm": 0.4,
+      "inside_analog_mm": 147.342
+    },
+    "DAC_A{slash}CAPM": {
+      "track_length_mm": 10.981,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 10.981
+    },
+    "DAC_A{slash}CAPP": {
+      "track_length_mm": 9.492,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 9.492
+    },
+    "DAC_A{slash}LDOO": {
+      "track_length_mm": 11.648,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 11.648
+    },
+    "DAC_A{slash}VNEG": {
+      "track_length_mm": 12.524,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 12.524
+    },
+    "DAC_B{slash}CAPM": {
+      "track_length_mm": 57.539,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 57.539
+    },
+    "DAC_B{slash}CAPP": {
+      "track_length_mm": 11.142,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 11.142
+    },
+    "DAC_B{slash}LDOO": {
+      "track_length_mm": 11.317,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 11.317
+    },
+    "DAC_B{slash}VNEG": {
+      "track_length_mm": 9.821,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 9.821
+    },
+    "DAC_C{slash}CAPM": {
+      "track_length_mm": 10.833,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 10.833
+    },
+    "DAC_C{slash}CAPP": {
+      "track_length_mm": 9.516,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 9.516
+    },
+    "DAC_C{slash}LDOO": {
+      "track_length_mm": 10.566,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 10.566
+    },
+    "DAC_C{slash}VNEG": {
+      "track_length_mm": 13.484,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 13.484
+    },
+    "DAC_XSMT": {
+      "track_length_mm": 166.887,
+      "vias": 4,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 82.29
+    },
+    "GND": {
+      "track_length_mm": 1031.897,
+      "vias": 15,
+      "min_width_mm": 0.3,
+      "max_width_mm": 0.4,
+      "inside_analog_mm": 26.636
+    },
+    "I2S_A": {
+      "track_length_mm": 122.079,
+      "vias": 6,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 65.794
+    },
+    "I2S_A_raw": {
+      "track_length_mm": 7.209,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "I2S_B": {
+      "track_length_mm": 66.325,
+      "vias": 6,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 44.721
+    },
+    "I2S_B_raw": {
+      "track_length_mm": 5.168,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "I2S_C": {
+      "track_length_mm": 76.779,
+      "vias": 4,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 29.574
+    },
+    "I2S_C_raw": {
+      "track_length_mm": 9.661,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "LRCLK": {
+      "track_length_mm": 184.509,
+      "vias": 15,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 97.793
+    },
+    "LRCLK_raw": {
+      "track_length_mm": 6.139,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "MEGA_5V": {
+      "track_length_mm": 558.385,
+      "vias": 16,
+      "min_width_mm": 0.3,
+      "max_width_mm": 0.4,
+      "inside_analog_mm": 258.691
+    },
+    "MODE": {
+      "track_length_mm": 120.522,
+      "vias": 5,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "MODE_MEGA": {
+      "track_length_mm": 63.616,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "MODE_TEENSY": {
+      "track_length_mm": 192.442,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "TEENSY_3V3": {
+      "track_length_mm": 409.023,
+      "vias": 14,
+      "min_width_mm": 0.3,
+      "max_width_mm": 0.4,
+      "inside_analog_mm": 144.781
+    },
+    "TEENSY_A8": {
+      "track_length_mm": 31.09,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 5.024
+    },
+    "TEENSY_VIN": {
+      "track_length_mm": 89.783,
+      "vias": 0,
+      "min_width_mm": 0.3,
+      "max_width_mm": 0.4,
+      "inside_analog_mm": 0.0
+    },
+    "amp shutdown": {
+      "track_length_mm": 24.961,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "analyser{slash}reset": {
+      "track_length_mm": 326.193,
+      "vias": 8,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 193.016
+    },
+    "analyser{slash}strobe": {
+      "track_length_mm": 327.866,
+      "vias": 7,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 216.739
+    },
+    "bench{slash}adc": {
+      "track_length_mm": 52.254,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 14.214
+    },
+    "bench{slash}buffer": {
+      "track_length_mm": 181.191,
+      "vias": 4,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 23.861
+    },
+    "bench{slash}dac": {
+      "track_length_mm": 140.483,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 109.915
+    },
+    "bench{slash}dac raw": {
+      "track_length_mm": 14.108,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 14.108
+    },
+    "bench{slash}filter": {
+      "track_length_mm": 18.814,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 18.814
+    },
+    "bench{slash}isolator in": {
+      "track_length_mm": 21.467,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 14.59
+    },
+    "bench{slash}microphone": {
+      "track_length_mm": 48.782,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 21.386
+    },
+    "bench{slash}mid": {
+      "track_length_mm": 31.637,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 31.637
+    },
+    "centre{slash}spare1": {
+      "track_length_mm": 20.265,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "dxl_data": {
+      "track_length_mm": 421.869,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "female1{slash}adc": {
+      "track_length_mm": 56.461,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 15.345
+    },
+    "female1{slash}analyser out": {
+      "track_length_mm": 185.013,
+      "vias": 0,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 94.731
+    },
+    "female1{slash}audio return": {
+      "track_length_mm": 118.153,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 98.376
+    },
+    "female1{slash}buffer": {
+      "track_length_mm": 168.45,
+      "vias": 6,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 154.502
+    },
+    "female1{slash}dac": {
+      "track_length_mm": 297.523,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 146.81
+    },
+    "female1{slash}dac raw": {
+      "track_length_mm": 12.54,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 12.54
+    },
+    "female1{slash}filter": {
+      "track_length_mm": 45.802,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 45.802
+    },
+    "female1{slash}filter mid": {
+      "track_length_mm": 24.292,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 24.292
+    },
+    "female1{slash}filter out": {
+      "track_length_mm": 136.404,
+      "vias": 4,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 119.139
+    },
+    "female1{slash}internal reference": {
+      "track_length_mm": 9.093,
+      "vias": 0,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 9.093
+    },
+    "female1{slash}isolator in": {
+      "track_length_mm": 13.522,
+      "vias": 0,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 13.522
+    },
+    "female1{slash}line out": {
+      "track_length_mm": 111.963,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 91.547
+    },
+    "female1{slash}mic attenuated": {
+      "track_length_mm": 27.494,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 27.494
+    },
+    "female1{slash}microphone": {
+      "track_length_mm": 277.826,
+      "vias": 3,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 264.257
+    },
+    "female1{slash}mid": {
+      "track_length_mm": 17.81,
+      "vias": 0,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 17.81
+    },
+    "female1{slash}msgeq input": {
+      "track_length_mm": 11.794,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 11.794
+    },
+    "female1{slash}neopixel": {
+      "track_length_mm": 201.049,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "female1{slash}neopixel{slash}driven": {
+      "track_length_mm": 15.827,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "female1{slash}oscillator": {
+      "track_length_mm": 10.841,
+      "vias": 0,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 10.841
+    },
+    "female1{slash}photosensor": {
+      "track_length_mm": 271.562,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 19.617
+    },
+    "female1{slash}selected": {
+      "track_length_mm": 73.447,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 44.118
+    },
+    "female1{slash}spare1": {
+      "track_length_mm": 41.497,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 2.942
+    },
+    "female1{slash}spare2": {
+      "track_length_mm": 29.575,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 7.096
+    },
+    "female1{slash}spare3": {
+      "track_length_mm": 32.535,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 2.934
+    },
+    "female1{slash}spare4": {
+      "track_length_mm": 27.223,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 1.933
+    },
+    "female1{slash}spare5": {
+      "track_length_mm": 23.437,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "female1{slash}spare6": {
+      "track_length_mm": 17.742,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "female1{slash}tone": {
+      "track_length_mm": 166.97,
+      "vias": 3,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 31.602
+    },
+    "female2{slash}adc": {
+      "track_length_mm": 45.287,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 9.685
+    },
+    "female2{slash}analyser out": {
+      "track_length_mm": 216.852,
+      "vias": 5,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 128.338
+    },
+    "female2{slash}audio return": {
+      "track_length_mm": 138.046,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 107.671
+    },
+    "female2{slash}buffer": {
+      "track_length_mm": 159.354,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 145.398
+    },
+    "female2{slash}dac": {
+      "track_length_mm": 275.509,
+      "vias": 5,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 194.229
+    },
+    "female2{slash}dac raw": {
+      "track_length_mm": 14.215,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 14.215
+    },
+    "female2{slash}filter": {
+      "track_length_mm": 25.183,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 25.183
+    },
+    "female2{slash}filter mid": {
+      "track_length_mm": 24.858,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 24.858
+    },
+    "female2{slash}filter out": {
+      "track_length_mm": 117.294,
+      "vias": 4,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 93.758
+    },
+    "female2{slash}internal reference": {
+      "track_length_mm": 10.48,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 10.48
+    },
+    "female2{slash}isolator in": {
+      "track_length_mm": 18.57,
+      "vias": 0,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 18.57
+    },
+    "female2{slash}line out": {
+      "track_length_mm": 131.776,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 88.812
+    },
+    "female2{slash}mic attenuated": {
+      "track_length_mm": 26.399,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 26.399
+    },
+    "female2{slash}microphone": {
+      "track_length_mm": 286.861,
+      "vias": 4,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 151.786
+    },
+    "female2{slash}mid": {
+      "track_length_mm": 25.143,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 25.143
+    },
+    "female2{slash}msgeq input": {
+      "track_length_mm": 11.768,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 11.768
+    },
+    "female2{slash}neopixel": {
+      "track_length_mm": 317.3,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 86.831
+    },
+    "female2{slash}neopixel{slash}driven": {
+      "track_length_mm": 38.03,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "female2{slash}oscillator": {
+      "track_length_mm": 11.081,
+      "vias": 0,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 11.081
+    },
+    "female2{slash}photosensor": {
+      "track_length_mm": 297.334,
+      "vias": 3,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 74.94
+    },
+    "female2{slash}selected": {
+      "track_length_mm": 51.266,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 13.355
+    },
+    "female2{slash}spare1": {
+      "track_length_mm": 23.87,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 2.537
+    },
+    "female2{slash}spare2": {
+      "track_length_mm": 23.885,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 1.495
+    },
+    "female2{slash}spare3": {
+      "track_length_mm": 24.115,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 1.498
+    },
+    "female2{slash}spare4": {
+      "track_length_mm": 21.219,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.995
+    },
+    "female2{slash}spare5": {
+      "track_length_mm": 20.92,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 1.487
+    },
+    "female2{slash}spare6": {
+      "track_length_mm": 21.016,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 1.493
+    },
+    "female2{slash}tone": {
+      "track_length_mm": 93.114,
+      "vias": 3,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 37.539
+    },
+    "female3{slash}adc": {
+      "track_length_mm": 33.397,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 9.745
+    },
+    "female3{slash}analyser out": {
+      "track_length_mm": 236.045,
+      "vias": 3,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 112.69
+    },
+    "female3{slash}audio return": {
+      "track_length_mm": 145.887,
+      "vias": 3,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 63.903
+    },
+    "female3{slash}buffer": {
+      "track_length_mm": 161.654,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 141.104
+    },
+    "female3{slash}dac": {
+      "track_length_mm": 175.718,
+      "vias": 4,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 151.423
+    },
+    "female3{slash}dac raw": {
+      "track_length_mm": 18.445,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 18.445
+    },
+    "female3{slash}filter": {
+      "track_length_mm": 19.948,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 19.948
+    },
+    "female3{slash}filter mid": {
+      "track_length_mm": 24.858,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 24.858
+    },
+    "female3{slash}filter out": {
+      "track_length_mm": 182.413,
+      "vias": 4,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 104.997
+    },
+    "female3{slash}internal reference": {
+      "track_length_mm": 8.93,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 8.93
+    },
+    "female3{slash}isolator in": {
+      "track_length_mm": 22.046,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 22.046
+    },
+    "female3{slash}line out": {
+      "track_length_mm": 127.601,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 81.725
+    },
+    "female3{slash}mic attenuated": {
+      "track_length_mm": 26.399,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 26.399
+    },
+    "female3{slash}microphone": {
+      "track_length_mm": 262.572,
+      "vias": 4,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 228.099
+    },
+    "female3{slash}mid": {
+      "track_length_mm": 31.603,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 31.603
+    },
+    "female3{slash}msgeq input": {
+      "track_length_mm": 11.773,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 11.773
+    },
+    "female3{slash}neopixel": {
+      "track_length_mm": 272.669,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 121.017
+    },
+    "female3{slash}neopixel{slash}driven": {
+      "track_length_mm": 48.476,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "female3{slash}oscillator": {
+      "track_length_mm": 11.066,
+      "vias": 0,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 11.066
+    },
+    "female3{slash}photosensor": {
+      "track_length_mm": 292.843,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 126.632
+    },
+    "female3{slash}selected": {
+      "track_length_mm": 158.643,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 19.649
+    },
+    "female3{slash}tone": {
+      "track_length_mm": 150.25,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 35.165
+    },
+    "link{slash}mega_tx": {
+      "track_length_mm": 56.465,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "link{slash}teensy_tx": {
+      "track_length_mm": 190.963,
+      "vias": 3,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 23.456
+    },
+    "link{slash}to_mega": {
+      "track_length_mm": 63.716,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "link{slash}to_teensy": {
+      "track_length_mm": 187.789,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 24.438
+    },
+    "male1{slash}adc": {
+      "track_length_mm": 34.632,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 9.422
+    },
+    "male1{slash}analyser out": {
+      "track_length_mm": 211.539,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 181.939
+    },
+    "male1{slash}audio return": {
+      "track_length_mm": 128.679,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 91.545
+    },
+    "male1{slash}aux": {
+      "track_length_mm": 219.634,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 119.441
+    },
+    "male1{slash}aux driven": {
+      "track_length_mm": 29.671,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "male1{slash}bar neopixel": {
+      "track_length_mm": 206.994,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 87.791
+    },
+    "male1{slash}bar neopixel{slash}driven": {
+      "track_length_mm": 30.09,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "male1{slash}buffer": {
+      "track_length_mm": 190.912,
+      "vias": 4,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 64.222
+    },
+    "male1{slash}dac": {
+      "track_length_mm": 170.008,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 153.698
+    },
+    "male1{slash}dac raw": {
+      "track_length_mm": 14.37,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 14.37
+    },
+    "male1{slash}filter": {
+      "track_length_mm": 34.324,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 34.324
+    },
+    "male1{slash}filter mid": {
+      "track_length_mm": 44.691,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 44.691
+    },
+    "male1{slash}filter out": {
+      "track_length_mm": 117.034,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 103.91
+    },
+    "male1{slash}internal reference": {
+      "track_length_mm": 8.436,
+      "vias": 0,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 8.436
+    },
+    "male1{slash}isolator in": {
+      "track_length_mm": 13.215,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 7.655
+    },
+    "male1{slash}line out": {
+      "track_length_mm": 135.605,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 93.148
+    },
+    "male1{slash}mic attenuated": {
+      "track_length_mm": 26.399,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 26.399
+    },
+    "male1{slash}microphone": {
+      "track_length_mm": 232.919,
+      "vias": 4,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 163.835
+    },
+    "male1{slash}mid": {
+      "track_length_mm": 18.817,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 18.817
+    },
+    "male1{slash}msgeq input": {
+      "track_length_mm": 11.778,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 11.778
+    },
+    "male1{slash}neopixel": {
+      "track_length_mm": 269.85,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 115.153
+    },
+    "male1{slash}neopixel{slash}driven": {
+      "track_length_mm": 55.342,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "male1{slash}oscillator": {
+      "track_length_mm": 11.61,
+      "vias": 0,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 11.61
+    },
+    "male1{slash}photosensor{slash}A": {
+      "track_length_mm": 288.691,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 124.264
+    },
+    "male1{slash}photosensor{slash}B": {
+      "track_length_mm": 288.727,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 121.19
+    },
+    "male1{slash}photosensor{slash}C": {
+      "track_length_mm": 292.285,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 111.982
+    },
+    "male1{slash}photosensor{slash}D": {
+      "track_length_mm": 226.803,
+      "vias": 3,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 112.127
+    },
+    "male1{slash}selected": {
+      "track_length_mm": 35.669,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 17.355
+    },
+    "male1{slash}tone": {
+      "track_length_mm": 222.445,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 84.414
+    },
+    "male2{slash}adc": {
+      "track_length_mm": 41.274,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 9.496
+    },
+    "male2{slash}analyser out": {
+      "track_length_mm": 188.043,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 147.773
+    },
+    "male2{slash}audio return": {
+      "track_length_mm": 105.511,
+      "vias": 3,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 11.947
+    },
+    "male2{slash}aux": {
+      "track_length_mm": 202.64,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 99.947
+    },
+    "male2{slash}aux driven": {
+      "track_length_mm": 33.175,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "male2{slash}bar neopixel": {
+      "track_length_mm": 197.461,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 88.048
+    },
+    "male2{slash}bar neopixel{slash}driven": {
+      "track_length_mm": 32.55,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "male2{slash}buffer": {
+      "track_length_mm": 172.808,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 30.168
+    },
+    "male2{slash}dac": {
+      "track_length_mm": 217.382,
+      "vias": 5,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 157.416
+    },
+    "male2{slash}dac raw": {
+      "track_length_mm": 14.77,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 14.77
+    },
+    "male2{slash}filter": {
+      "track_length_mm": 24.65,
+      "vias": 0,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 24.65
+    },
+    "male2{slash}filter mid": {
+      "track_length_mm": 29.114,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 29.114
+    },
+    "male2{slash}filter out": {
+      "track_length_mm": 153.149,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 139.078
+    },
+    "male2{slash}internal reference": {
+      "track_length_mm": 8.934,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 8.934
+    },
+    "male2{slash}isolator in": {
+      "track_length_mm": 18.126,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 11.209
+    },
+    "male2{slash}line out": {
+      "track_length_mm": 111.182,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 9.045
+    },
+    "male2{slash}mic attenuated": {
+      "track_length_mm": 26.057,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 26.057
+    },
+    "male2{slash}microphone": {
+      "track_length_mm": 255.318,
+      "vias": 5,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 149.442
+    },
+    "male2{slash}mid": {
+      "track_length_mm": 23.651,
+      "vias": 2,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 23.651
+    },
+    "male2{slash}msgeq input": {
+      "track_length_mm": 11.264,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 11.264
+    },
+    "male2{slash}neopixel": {
+      "track_length_mm": 222.576,
+      "vias": 3,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 116.699
+    },
+    "male2{slash}neopixel{slash}driven": {
+      "track_length_mm": 27.898,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 0.0
+    },
+    "male2{slash}oscillator": {
+      "track_length_mm": 11.578,
+      "vias": 0,
+      "min_width_mm": 0.2,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 11.578
+    },
+    "male2{slash}photosensor{slash}A": {
+      "track_length_mm": 234.687,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 118.843
+    },
+    "male2{slash}photosensor{slash}B": {
+      "track_length_mm": 227.288,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 117.392
+    },
+    "male2{slash}photosensor{slash}C": {
+      "track_length_mm": 232.126,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 116.653
+    },
+    "male2{slash}photosensor{slash}D": {
+      "track_length_mm": 247.377,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 101.574
+    },
+    "male2{slash}selected": {
+      "track_length_mm": 84.296,
+      "vias": 2,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 13.34
+    },
+    "male2{slash}tone": {
+      "track_length_mm": 175.714,
+      "vias": 1,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 99.227
+    },
+    "spare1{slash}buffer": {
+      "track_length_mm": 1.27,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 1.27
+    },
+    "spare2{slash}buffer": {
+      "track_length_mm": 1.27,
+      "vias": 0,
+      "min_width_mm": 0.25,
+      "max_width_mm": 0.25,
+      "inside_analog_mm": 1.27
+    }
+  },
+  "lengths_are_total_branched_copper": true,
+  "analog_membership_is_zone_outline_only": true,
+  "ground_return_continuity_verified": false,
+  "signal_integrity_simulated": false
+}

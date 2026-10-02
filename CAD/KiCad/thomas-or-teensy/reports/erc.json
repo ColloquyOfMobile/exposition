@@ -1,0 +1,189 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-02T05:48:21+0200",
+    "kicad_version": "9.0.7",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea",
+            "violations": []
+        },
+        {
+            "path": "/controller/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/1efbf770-e6da-5e9c-a5a9-108ff0ce670d",
+            "violations": []
+        },
+        {
+            "path": "/power/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/3e85c688-8899-5bff-8ec0-868912f21884",
+            "violations": []
+        },
+        {
+            "path": "/harness/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/55cdb490-5742-5578-95a8-2b8359213d93",
+            "violations": []
+        },
+        {
+            "path": "/harness_2/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/9e752077-06e1-5cf0-b5fe-aa5f91f20b21",
+            "violations": []
+        },
+        {
+            "path": "/harness_3/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/7e71a58d-83d4-5351-b5d8-88c02c3bba7b",
+            "violations": []
+        },
+        {
+            "path": "/audio3/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/864d5272-b1ce-5d88-95e3-bf3c148e511a",
+            "violations": []
+        },
+        {
+            "path": "/audio3_2/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/b8ddbf8c-de9d-547a-92de-d4063d6f7d96",
+            "violations": []
+        },
+        {
+            "path": "/audio4/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/1fc93ddd-d78a-5f50-91d3-e270cd0be7cc",
+            "violations": []
+        },
+        {
+            "path": "/audio4_2/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/64e385d2-0fbb-5947-a4c1-f489c234abd7",
+            "violations": []
+        },
+        {
+            "path": "/audio5/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/61f5806e-12e3-50eb-908a-3d1468dbcb8d",
+            "violations": []
+        },
+        {
+            "path": "/audio5_2/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/e6bc2934-67b1-5da2-a9cb-97db578ff1a1",
+            "violations": []
+        },
+        {
+            "path": "/audio1/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/f98fae7c-1b41-53c1-8550-188c41cb3159",
+            "violations": []
+        },
+        {
+            "path": "/audio1_2/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/c57f1b63-099e-5274-bf37-f7886365f73d",
+            "violations": []
+        },
+        {
+            "path": "/audio2/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/13a4c014-a746-5ed7-b4cc-adbc4ba6b7e3",
+            "violations": []
+        },
+        {
+            "path": "/audio2_2/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/b41e251e-fd67-5e87-9793-01b1903e5d01",
+            "violations": []
+        },
+        {
+            "path": "/io/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/f0999bc3-11f9-524d-9086-ae49cbe9bbb2",
+            "violations": []
+        },
+        {
+            "path": "/teensy/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/5f938ce6-56ed-5ce3-a02d-abe6ca3aede8",
+            "violations": []
+        },
+        {
+            "path": "/teensy_2/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/e8c7b3d6-dbdc-5416-bf6f-0d2c0bc2de47",
+            "violations": []
+        },
+        {
+            "path": "/dac_power/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/6c46575b-04d7-5096-9468-93fa97ef4cb5",
+            "violations": []
+        },
+        {
+            "path": "/dac_a/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/e505fa34-a5d0-5bb5-bd2b-0c1dc347608f",
+            "violations": []
+        },
+        {
+            "path": "/dac_a_2/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/d2abe4a3-49ee-52c1-a872-20a2eaa34e67",
+            "violations": []
+        },
+        {
+            "path": "/dac_b/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/3ddf0c73-ea78-51f0-8461-0d5843d1a49c",
+            "violations": []
+        },
+        {
+            "path": "/dac_b_2/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/c69b399b-ebb3-50b3-a74d-b8bff37717b4",
+            "violations": []
+        },
+        {
+            "path": "/dac_c/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/20870a9e-60ca-59f5-b7fa-baab0cfb3520",
+            "violations": []
+        },
+        {
+            "path": "/dac_c_2/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/4437326a-6934-5f1d-8496-91f802830a31",
+            "violations": []
+        },
+        {
+            "path": "/bench/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/56a983d9-7fd7-54b4-aaf3-73b6da5b8187",
+            "violations": []
+        },
+        {
+            "path": "/ears1/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/56c1afa8-08ff-508c-ac43-46ec01db3dde",
+            "violations": []
+        },
+        {
+            "path": "/ears1_2/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/f317dce9-0556-5c5b-b032-39f1f91965ee",
+            "violations": []
+        },
+        {
+            "path": "/ears2/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/07516b12-5d39-5325-9065-b8113d2219e4",
+            "violations": []
+        },
+        {
+            "path": "/ears2_2/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/a31adaea-36fb-5315-a19f-8c6732dd785f",
+            "violations": []
+        },
+        {
+            "path": "/relays/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/e2ef7e6e-c78f-556a-b486-add6854330bf",
+            "violations": []
+        },
+        {
+            "path": "/relays_2/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/d192701a-e0e7-5b9e-b2c8-abcd6859d1a9",
+            "violations": []
+        },
+        {
+            "path": "/relays_3/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/720f3ef4-7701-55d8-8f00-2197c4f1697c",
+            "violations": []
+        },
+        {
+            "path": "/logic/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/5e74b06e-5889-5814-b5cc-c0740c55c51e",
+            "violations": []
+        },
+        {
+            "path": "/logic_2/",
+            "uuid_path": "/6cdef3ce-f19b-599d-9d84-3c201daf65ea/058ebaec-11d0-53a9-86b4-5ddb51980bf1",
+            "violations": []
+        }
+    ],
+    "source": "thomas-or-teensy.kicad_sch"
+}

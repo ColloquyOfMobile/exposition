@@ -1,0 +1,15 @@
+{
+  "erc_findings": 0,
+  "drc_findings": {},
+  "unconnected_items": 0,
+  "schematic_parity_findings": 0,
+  "contract_parity_passed": true,
+  "acceptance_tests_passed": 7,
+  "components": 286,
+  "circuit_nets": 192,
+  "copper_layers": 4,
+  "coil_supply_outside_analog_passed": true,
+  "maximum_clock_split_distance_from_JP1_mm": 4.0,
+  "hardware_validated": false,
+  "fabrication_released": false
+}

@@ -1,0 +1,109 @@
+(footprint "PPS_6041"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Panasonic ECHU(X) 6041 D1/D3/D4. Datasheet lands A4 B7 C3.8")
+	(property "Reference" "REF**"
+		(at 0 -3.2 0)
+		(layer "F.SilkS")
+		(uuid "d14e4018-edda-4b62-a4aa-de5b12d44feb")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Value" "PPS_6041"
+		(at 0 3.2 0)
+		(layer "F.Fab")
+		(uuid "f4ccb1f0-3dac-45dd-b03a-5fd40912fd6a")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.12)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "aa807395-705a-4745-8a81-28aad2d79462")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "15b3acdd-a020-4fe1-b8be-70ee145b4594")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -1.8 -2.15)
+		(end 1.8 -2.15)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "007b787a-2183-4ac2-ad42-58cb9f0b7559")
+	)
+	(fp_line
+		(start -1.8 2.15)
+		(end 1.8 2.15)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "19fb2ddd-d82d-496c-9d2c-0f3937385b8d")
+	)
+	(fp_rect
+		(start -3.75 -2.3)
+		(end 3.75 2.3)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "3663b151-858d-427b-8bbc-85bb776b83bb")
+	)
+	(fp_rect
+		(start -3 -2.05)
+		(end 3 2.05)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "51658c7b-0636-4374-81e8-053640a05d29")
+	)
+	(pad "1" smd rect
+		(at -2.75 0)
+		(size 1.5 3.8)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "b41ff581-33f5-4afd-8b8c-119efc57981f")
+	)
+	(pad "2" smd rect
+		(at 2.75 0)
+		(size 1.5 3.8)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "11df3e01-c984-4c4a-bf01-d325c0c54458")
+	)
+	(embedded_fonts no)
+)
