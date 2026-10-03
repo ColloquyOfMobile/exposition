@@ -50,21 +50,23 @@ def test_the_section_offers_the_written_documents_not_the_generated_ones():
         "opencm and pro minis",
         "ad9833 dual mode",
         "thomas or teensy",
+        "shields",
         "sound options",
         "cad boards",
     ]
 
 
 def test_the_solutions_are_siblings():
-    """The second to fifth are not variations on `next pcb` - they are
+    """The second to sixth are not variations on `next pcb` - they are
     complete answers to the same question, against the same fixed
     harness, and they sit beside it rather than under it. The fifth,
     `thomas or teensy`, is built on the v2 drawing of `next pcb` and is
-    still a sibling: it is a different board, not a page of that one."""
+    still a sibling: it is a different board, not a page of that one.
+    So is the sixth, `shields`, which is the v2 board made a backplane."""
     children = _electronics().snapshot_children
     others = (
         "one board per body", "opencm and pro minis", "ad9833 dual mode",
-        "thomas or teensy",
+        "thomas or teensy", "shields",
     )
 
     for name in ("next pcb",) + others:

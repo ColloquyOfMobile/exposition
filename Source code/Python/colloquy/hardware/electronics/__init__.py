@@ -35,6 +35,13 @@ that get confused with each other the moment they share a page:
   chain (I2S DACs out, sampled microphones in) added beside it. One
   shunt moves five relays and the board is in one mode or the other,
   never both. Every connection to the harness is the v2 board's.
+- **shields** - the sixth: the main board becomes a backplane with no
+  silicon on it, and every solution is a set of shields in its slots -
+  the U2D2, a computing shield (the Mega itself, or a Teensy 4.1 on an
+  adapter in the Mega's footprint), an analyser shield (MSGEQ7s, or
+  buffers straight to the Teensy) and five voice cards, the output
+  filters, whose corner is four resistors. `IOREF` is what lets any
+  shield sit beside any other. Its figures are computed by `shields.py`.
 - **cad boards** - an index of every board designed in `CAD/`: what it
   is, where it sits, how many there are, and which document holds its
   pinouts. The only document here that covers the TPA2005D1 breakout and
@@ -140,6 +147,21 @@ class ThomasOrTeensy(_ElectronicsDocument):
 
     file_name = "THOMAS_OR_TEENSY.md"
     document_name = "thomas or teensy"
+
+
+class Shields(_ElectronicsDocument):
+    """The sixth solution, and a sibling of the other five.
+
+    Not a board with the solutions on it but a backplane they plug into:
+    the v2 board with its audio parts moved out into shields, so that
+    trying another solution is changing one shield and holding the rest
+    still. Its tables are held to the v2 project's `circuit.json`, to the
+    sketch and to `shields.py` - which computes the voice cards' filter
+    and the Teensy's frequencies - by `test_shields.py`.
+    """
+
+    file_name = "SHIELDS.md"
+    document_name = "shields"
 
 
 class CADBoards(_ElectronicsDocument):
@@ -258,6 +280,7 @@ class Electronics(Base):
             OpenCMAndProMinis(owner=self),
             AD9833DualMode(owner=self),
             ThomasOrTeensy(owner=self),
+            Shields(owner=self),
             SoundOptions(owner=self),
             CADBoards(owner=self),
         ]

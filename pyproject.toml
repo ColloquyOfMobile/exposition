@@ -63,6 +63,11 @@ files = [
     # count of samples and a sample rate all read as "about a thousand"
     # and mean four different things.
     "Source code/Python/colloquy/tests/test_goertzel_ear/goertzel.py",
+    # The shield spec's arithmetic: a voice card's corner in hertz, its
+    # resistors in ohms and its capacitors in farads are three floats
+    # that read alike, and a Teensy pin number is a small int beside a
+    # timer prescaler that is one too. Pure functions, no tree.
+    "Source code/Python/colloquy/hardware/electronics/shields.py",
 ]
 mypy_path = "Source code/Python"
 
