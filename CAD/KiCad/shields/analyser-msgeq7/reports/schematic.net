@@ -1,7 +1,7 @@
 (export (version "E")
   (design
     (source "C:\\workspace\\workspace2\\Colloquy\\exposition\\CAD\\KiCad\\shields\\analyser-msgeq7\\analyser-msgeq7.kicad_sch")
-    (date "2026-10-04T13:34:43+0200")
+    (date "2026-10-04T13:37:42+0200")
     (tool "Eeschema 9.0.7")
     (textvar (name "REVISION") "A-prototype")
     (sheet (number "1") (name "/") (tstamps "/")

@@ -1,30 +1,15 @@
 Ref,Val,Package,PosX,PosY,Rot,Side
-"A-J3","DSUB-15","DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm",97.305000,-334.960000,0.000000,top
-"A1","Arduino Mega 2560","Arduino_Mega2560_R3_Shield",141.160000,-53.320000,-90.000000,top
-"B-J4","DSUB-15","DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm",179.655000,-334.960000,0.000000,top
 "C1","470uF 25V","CP_Elec_10x10.5",218.000000,-66.000000,0.000000,top
 "C2","100nF","C_0603_1608Metric",218.000000,-76.000000,0.000000,top
 "CI1","10uF X7R","C_0805_2012Metric",203.000000,-192.000000,0.000000,top
-"Extra1","1x6 header","PinHeader_1x06_P2.54mm_Vertical",71.000000,-285.000000,0.000000,top
-"Extra2","1x6 header","PinHeader_1x06_P2.54mm_Vertical",228.000000,-294.000000,0.000000,top
-"Extra3","1x1 pad","PinHeader_1x01_P2.54mm_Vertical",212.000000,-324.000000,0.000000,top
-"J1","DSUB-15","DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm",58.000000,-303.270000,-90.000000,top
 "J2","DC jack","PJ-082BH_jack_10A",251.700000,-61.170000,-90.000000,top
-"J5","DSUB-15","DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm",239.160000,-322.660000,90.000000,top
 "J6","screw bridge","screw_brigde",228.680000,-93.980000,-90.000000,top
-"J7","JST EH 3","JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical",70.040000,-124.440000,180.000000,top
-"JA1","ANALYSER - KEY 24","Header_2x12_Key24",78.000000,-269.000000,0.000000,top
 "JP1","0R","R_0805_2012Metric",133.000000,-160.000000,0.000000,top
 "JP2","0R","R_0805_2012Metric",195.000000,-260.000000,0.000000,top
 "JP3","0R","R_0805_2012Metric",227.000000,-260.000000,0.000000,top
 "JP4","0R","R_0805_2012Metric",99.000000,-260.000000,0.000000,top
 "JP5","0R","R_0805_2012Metric",131.000000,-260.000000,0.000000,top
 "JP6","0R","R_0805_2012Metric",163.000000,-260.000000,0.000000,top
-"JV1","female1 - KEY 14","Header_2x07_Key14",81.000000,-216.000000,0.000000,top
-"JV2","female2 - KEY 14","Header_2x07_Key14",113.000000,-216.000000,0.000000,top
-"JV3","female3 - KEY 14","Header_2x07_Key14",145.000000,-216.000000,0.000000,top
-"JV4","male1 - KEY 14","Header_2x07_Key14",177.000000,-216.000000,0.000000,top
-"JV5","male2 - KEY 14","Header_2x07_Key14",209.000000,-216.000000,0.000000,top
 "M1","U2D2","u2d2_mounting",49.000000,-56.660000,0.000000,top
 "R103","100R","R_0805_2012Metric",186.000000,-260.000000,0.000000,top
 "R203","100R","R_0805_2012Metric",218.000000,-260.000000,0.000000,top
