@@ -20,7 +20,7 @@ def via(board,net,point):
     v=p.PCB_VIA(board);v.SetNet(net);v.SetPosition(xy(*point));v.SetWidth(mm(.6));v.SetDrill(mm(.3))
     v.SetViaType(p.VIATYPE_THROUGH);v.SetLayerPair(p.F_Cu,p.B_Cu);board.Add(v)
 
-def route(board,netname,start,end):
+def route(board,netname,start,end,layer=p.In2_Cu):
     net=next(n for n in board.GetNetsByNetcode().values() if n.GetNetname().replace('{slash}','/')==netname)
     blocked=set()
     def rect(x0,y0,x1,y1):
@@ -28,13 +28,13 @@ def route(board,netname,start,end):
             for y in range(math.floor(y0/STEP),math.ceil(y1/STEP)+1):blocked.add((x,y))
     for fp in board.GetFootprints():
         for pad in fp.Pads():
-            if pad.GetNetCode()==net.GetNetCode() or not pad.IsOnLayer(p.In2_Cu):continue
+            if pad.GetNetCode()==net.GetNetCode() or not pad.IsOnLayer(layer):continue
             box=pad.GetBoundingBox();margin=.4
             rect(p.ToMM(box.GetLeft())-margin,p.ToMM(box.GetTop())-margin,p.ToMM(box.GetRight())+margin,p.ToMM(box.GetBottom())+margin)
     for t in board.GetTracks():
-        if t.GetNetCode()==net.GetNetCode() or not t.IsOnLayer(p.In2_Cu):continue
+        if t.GetNetCode()==net.GetNetCode() or not t.IsOnLayer(layer):continue
         a,b=[tuple(p.ToMM(v)) for v in [t.GetStart(),t.GetEnd()]]
-        length=math.dist(a,b);radius=p.ToMM(t.GetWidth(p.In2_Cu) if isinstance(t,p.PCB_VIA) else t.GetWidth())/2+.4
+        length=math.dist(a,b);radius=p.ToMM(t.GetWidth(layer) if isinstance(t,p.PCB_VIA) else t.GetWidth())/2+.4
         for i in range(max(1,math.ceil(length/.2))+1):
             f=i/max(1,math.ceil(length/.2));x=a[0]+(b[0]-a[0])*f;y=a[1]+(b[1]-a[1])*f
             rect(x-radius,y-radius,x+radius,y+radius)
@@ -62,7 +62,7 @@ def route(board,netname,start,end):
         if (points[i][0]-points[i-1][0],points[i][1]-points[i-1][1])!=(points[i+1][0]-points[i][0],points[i+1][1]-points[i][1]):simple.append(points[i])
     simple.append(goal);coords=[start]+[(x*STEP,y*STEP) for x,y in simple]+[end]
     for a,b in zip(coords,coords[1:]):
-        if math.dist(a,b)>.00001:track(board,net,a,b)
+        if math.dist(a,b)>.00001:track(board,net,a,b,layer)
     print(netname,len(simple),'inner segments',flush=True)
 
 def main():

@@ -1,9 +1,26 @@
 {
   "references_on_assembly_layer_due_to_space": [
     "CA21",
-    "CA39",
-    "CA40",
+    "CA27",
+    "CA38",
+    "RA21",
+    "RA22",
+    "RA24",
+    "RA26",
+    "RA27",
+    "RA38",
+    "RB24",
+    "RB25",
+    "RB26",
+    "RB27",
+    "RB38",
+    "RD10",
+    "RD11",
     "RD12",
-    "RD32"
+    "RD2",
+    "RD32",
+    "RD4",
+    "RD5",
+    "TP3"
   ]
 }

@@ -9,6 +9,11 @@ def label(board,value,x,y,size=.8,back=False):
     t=text(board,value,x,y,size,p.B_SilkS if back else p.F_SilkS)
     t.SetMirrored(back);return t
 
+def writebox(board,x,y,w,h):
+    shape=p.PCB_SHAPE(board);shape.SetShape(p.SHAPE_T_RECT)
+    shape.SetStart(xy(x,y));shape.SetEnd(xy(x+w,y+h));shape.SetLayer(p.F_SilkS)
+    shape.SetFilled(True);shape.SetWidth(mm(.1));board.Add(shape)
+
 def main(only=None):
     for folder in ROOT.iterdir():
         if only and folder.name not in only:continue
@@ -31,7 +36,7 @@ def main(only=None):
                 x=93+(i-1)*32
                 label(b,f'JV{i} - {body.upper()}\nMEGA D{mega} - TEENSY {gpio}',x,207,1)
                 label(b,'CARD        PITCH       Hz',x,234,1)
-                rect(b,x-10,236,8,3,p.F_SilkS);rect(b,x+2,236,8,3,p.F_SilkS)
+                writebox(b,x-10,236,8,3);writebox(b,x+2,236,8,3)
                 at(f'TPV{i}',f'TONE {i}');at(f'TPL{i}',f'LINE {i}')
                 at(f'TPM{i}',f'MIC {i}');at(f'TPA{i}',f'ANA {i}')
                 at(f'JV{i}','1',-1.4,-2)
@@ -41,16 +46,17 @@ def main(only=None):
             label(b,'MIC ORDER F1 F2 F3 M1 M2 - MODULE N = BODY N',151,278,1)
             at('JA1','1',-1.5,-2);at('JA1','KEY <-',7,25.4)
             at('TPI1','IOREF: 5 V = MEGA / 3.3 V = TEENSY',-2,4)
-            label(b,'U2D2',76,70,1.5);at('J7','SERVO BUS - 12 V',8,-5)
+            label(b,'U2D2',76,106,1.5);at('J7','SERVO BUS - 12 V',8,-5)
             at('JP1','JP1 - ONLY AGND-GND BOND',0,6)
+            at('TP20','STROBE',8,0);at('TP21','RESET',8,0)
             label(b,'B-J4 - NO POWER',193,329,1.2)
             label(b,'COMPUTING SLOT\nMEGA 2560 OR TEENSY ADAPTER',167,100,1.2,True)
             label(b,'USB END ^',168,62,1.2,True)
             for ref in refs:
                 if ref.startswith('HM'):at(ref,'M3',0,-3)
         elif name=='teensy-adapter':
-            label(b,'TEENSY 4.1 ADAPTER\nIN PLACE OF THE MEGA\nFIRMWARE 5',168,68,1)
-            label(b,'3.3 V\nNOT 5 V TOLERANT',168,112,1)
+            label(b,'TEENSY 4.1\nADAPTER\nIN PLACE OF\nTHE MEGA\nFIRMWARE 5',167.5,65.5,1)
+            label(b,'3.3 V\nNOT 5 V\nTOLERANT',167.5,111,1)
             label(b,'USB ^',168,55,1);at('JT1','PIN 0',4,4);at('JT2','VIN',-3,0)
             label(b,'POWERED BY TEENSY USB',169,152,1)
             for pin in [0,1,3,33,36,37,40,41]:at(f'TP{pin}',str(pin),0,-2)
@@ -76,10 +82,10 @@ def main(only=None):
             active=name=='voice-active'
             label(b,'ACTIVE VOICE CARD' if active else 'THOMAS VOICE CARD',65,76,.9)
             if not active:label(b,'FIXED PITCH',66,79,.8)
-            label(b,'CORNER        Hz' if active else 'BODY',67,82,.8)
-            rect(b,61,83,10,2.5,p.F_SilkS)
+            label(b,'CORNER        Hz' if active else 'BODY',67 if active else 56,82,.8)
+            writebox(b,61,83,10,2.5)
             if active:label(b,'PLAY 0.5-1 x CORNER\nBEST 0.6-0.85 x CORNER',65,51.8,.8,True)
-            at('TP1','TONE',0,-2);at('TP4','LINE',0,1.8);at('TP5','AGND',4,1.8)
+            at('TP1','TONE',0,-2);at('TP4','LINE',-1,2);at('TP5','AGND',6,2)
             at('JV1','1',-1,-2);at('JV1','KEY <-',7,5.08)
             for x,v in zip([70,63,56,78],['CORNER' if active else 'BODY/Hz','Ra' if active else 'R1=R2','Rb' if active else 'C1=C2','FIT']):label(b,v,x,63.4,.8,True)
             rows=[]

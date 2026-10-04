@@ -300,50 +300,6 @@
       "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
     },
     {
-      "ref": "TP2",
-      "value": "tone",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
-      "pins": {
-        "1": "tone"
-      },
-      "sheet": "circuit",
-      "description": "",
-      "pin_names": {
-        "1": "1"
-      },
-      "pin_types": {
-        "1": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": false,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "993a404c-3563-5b39-a170-44c9d6819410",
-      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
-    },
-    {
-      "ref": "TP3",
-      "value": "stage1",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
-      "pins": {
-        "1": "stage1"
-      },
-      "sheet": "circuit",
-      "description": "",
-      "pin_names": {
-        "1": "1"
-      },
-      "pin_types": {
-        "1": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": false,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "a48c3f93-7110-526c-9b13-4ac8d2933474",
-      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
-    },
-    {
       "ref": "TP4",
       "value": "filter out",
       "footprint": "Shields:TestPoint_Pad_D1.5mm",

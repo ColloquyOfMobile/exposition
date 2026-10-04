@@ -81,8 +81,8 @@ Still outstanding: enclosure front/back height, gold-contact part numbers,
 keying plugs, stack heights, high-value C0G stock, photosensor calibration,
 rail/current budget and the harness measurements remain physical checks.
 
-The backplane is four-layer: F.Cu signals, In1.Cu GND, In2.Cu +5V with signal routes, B.Cu signals and local AGND. The Teensy adapter is also
-four-layer: F.Cu signals, In1.Cu GND, In2.Cu signals, B.Cu
+The backplane is four-layer: F.Cu signals, In1.Cu GND/signal routes, In2.Cu +5V/signal routes, B.Cu signals and local AGND. The Teensy adapter is also
+four-layer: F.Cu signals, In1.Cu GND/signal routes, In2.Cu signals, B.Cu
 signals/GND. Audio cards are two-layer with an AGND pour. JP1 is still the
 single passive GND/AGND bond. Plane connections are solid; finished copper
 weight, laminate construction and permissible temperature rise must be set

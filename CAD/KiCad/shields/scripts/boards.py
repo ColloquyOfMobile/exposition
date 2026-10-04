@@ -66,6 +66,7 @@ def placements(name,old):
             out[f'TPL{i}']=(90+(i-1)*32,225,0)
             out[f'TPM{i}']=(100+(i-1)*22,283,0)
             out[f'TPA{i}']=(100+(i-1)*22,305,0)
+        out.update(TPL3=(153.078,225.922,0),TPM5=(160.225909,311.092309,0),TPA5=(184.593555,322.7239,0))
         return out
     if name.startswith('voice'):
 
@@ -109,7 +110,7 @@ def placements(name,old):
             x=151+i%6*7;y=132+i//6*9
             out[f'RA{pin}']=(x,y,90);out[f'RB{pin}']=(x+3,y,90);out[f'CA{pin}']=(x,y+4,0)
         for i,pin in enumerate([0,1,3,33,36,37,40,41]):out[f'TP{pin}']=(162+i*4,120,0)
-        out['TPG']=(185,124,0)
+        out['TPG']=(185.666666,124.666666,0)
         return out
     raise ValueError(name)
 

@@ -5,12 +5,17 @@ unconnected items on all six routed boards**. No DRC exclusions were added
 to dismiss routing faults. `VALIDATION.json` contains the detailed results
 and SHA-256 hashes of the checked native files.
 
-The independent comparison covers 1,062 connected pins across the circuit
+The independent comparison covers 944 connected pins across the circuit
 manifests, exported native schematic netlists and actual PCB pads. It also
 checks the unchanged v2 harness coordinates/pinout, all previously connected
 Mega contacts, all five voice mating pairs, both analyser mating pairs,
-the mirrored adapter contacts, EEPROM supply/write-protect connections and
-the single passive backplane ground bond. All checks pass.
+the mirrored adapter contacts, the revised Teensy A10-A15 mapping, removal
+of identification hardware and the single passive backplane ground bond.
+All checks pass. The existing shield-spec pytest suite also passes: 24 tests.
+
+This revision uses 2x3 voice connectors (key 6), 2x11 analyser connectors
+(key 22), and silkscreen identification with complete voice population tables.
+It is not connector-compatible with the initial EEPROM-equipped prototype.
 
 | Design | Copper layers | ERC | DRC | Unconnected |
 |---|---:|---:|---:|---:|

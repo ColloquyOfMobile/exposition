@@ -22,6 +22,9 @@ def finish(folder):
     limit=(bounds.GetLeft()+mm(.3),bounds.GetTop()+mm(.3),bounds.GetRight()-mm(.3),bounds.GetBottom()-mm(.3))
     obstacles={p.F_SilkS:[],p.B_SilkS:[]};accepted={p.F_SilkS:[],p.B_SilkS:[]}
     fields=[]
+    for item in board.GetDrawings():
+        if not isinstance(item,p.PCB_TEXT) and item.GetLayer() in obstacles:
+            obstacles[item.GetLayer()].append(box(item,.1))
     for fp in board.GetFootprints():
         if fp.GetReference().startswith('H') and fp.GetFPID().GetLibNickname()!='Shields':
             fp.SetFPID(p.LIB_ID('Shields','MountingHole_3.2mm_M3'))
@@ -37,7 +40,8 @@ def finish(folder):
     for field in texts+fields:
         layer=field.GetLayer()
         if layer not in obstacles:continue
-        field.SetTextSize(xy(max(.8,p.ToMM(field.GetTextSize().x)),max(.8,p.ToMM(field.GetTextSize().y))))
+        minimum=1 if name in ['backplane','teensy-adapter'] else .8
+        field.SetTextSize(xy(max(minimum,p.ToMM(field.GetTextSize().x)),max(minimum,p.ToMM(field.GetTextSize().y))))
         field.SetTextThickness(mm(.12));field.SetMirrored(layer==p.B_SilkS)
         field.SetTextAngle(p.EDA_ANGLE(0,p.DEGREES_T))
         if name.startswith('voice') and layer==p.B_SilkS and field in texts:

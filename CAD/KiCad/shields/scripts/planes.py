@@ -1,4 +1,4 @@
-"""Add connected copper pours; the backplane has dedicated supply/return planes.
+"""Add connected copper pours; the backplane has inner supply/return pours.
 
 No AGND/GND short is introduced. JP1 remains their only electrical bond.
 Run only after routing; KiCad DRC must be rerun on the filled result.

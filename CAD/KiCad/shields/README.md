@@ -42,11 +42,12 @@ Run `mechanical.py` before routing, then `planes.py`, `finish.py`, `check.py`
 and `verify.py`; `labels.py` applies the specified operating text and variant
 tables before finishing. `update_simplified.py` is a one-time migration from
 the original prototype; do not re-run it on updated boards.
- `trim_stubs.py` removes native-DRC-confirmed dead ends and
+`trim_stubs.py` removes native-DRC-confirmed dead ends and
 must be followed by another plane fill and check. `variants.py` creates assembly variants. Scripts require
 KiCad's Python; `check.py` also uses its CLI. Router intermediates belong in
-a temporary directory outside this deliverable. Do not run inner_routes.py
-twice on an already completed board; restore the outer-route checkpoint first.
+a temporary directory outside this deliverable. `repair_testpads.py` locates
+clear routed copper for probe pads; refill planes and rerun checks afterwards.
+Do not run historical migration/routing-completion scripts on finished boards.
 
 No Gerber order package is supplied while the electrical release issues in
 `REVIEW.md` remain open. These are editable, routed engineering prototypes.

@@ -110,7 +110,7 @@ def thomas():
         d.c(f'CX{i}','DNP PPS','AGND',net,fp='Shields:PPS_6041')['assembly']='DNP'
         d.c(f'CY{i}','DNP C0G','AGND',net,fp='Capacitor_SMD:C_1206_3216Metric')['assembly']='DNP'
     d.r('R3','100K','tone','GND')
-    for i,net in enumerate(['tone','tone','stage1','filter out','AGND'],1):d.tp(f'TP{i}',net)
+    for i,net in [(1,'tone'),(4,'filter out'),(5,'AGND')]:d.tp(f'TP{i}',net)
     return d
 
 
@@ -129,7 +129,7 @@ def active():
     d.c('C6','10uF X7R','ref/raw','AGND',fp=C8)
     d.c('C7','1uF X7R','stage2/out','filter out',fp=C8);d.r('R9','100K','filter out','AGND')
     d.c('C8','100nF','+5V','AGND');d.c('C9','10uF X7R','+5V','AGND',fp=C8)
-    for i,net in enumerate(['tone','input','stage1/out','filter out','AGND'],1):d.tp(f'TP{i}',net)
+    for i,net in [(1,'tone'),(4,'filter out'),(5,'AGND')]:d.tp(f'TP{i}',net)
     return d
 
 

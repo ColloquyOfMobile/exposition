@@ -15,6 +15,9 @@ CLI=Path(r'C:\Program Files\KiCad\9.0\bin\kicad-cli.exe')
 def run(folder):
     name=folder.name;reports=folder/'reports';reports.mkdir(exist_ok=True)
     sch=folder/(name+'.kicad_sch')
+    expected_svg={name+'.svg'}|{name+'-'+s.stem+'.svg' for s in folder.glob('*.kicad_sch') if s!=sch}
+    for old_svg in (reports/'schematic').glob('*.svg'):
+        if old_svg.name not in expected_svg:old_svg.unlink()
     board=folder/(name+'.kicad_pcb')
     if not board.exists():board=folder/(name+'-placed.kicad_pcb')
     if board.stem.endswith('-placed'):shutil.copy2(folder/(name+'.kicad_pro'),board.with_suffix('.kicad_pro'))
