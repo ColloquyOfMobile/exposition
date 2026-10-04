@@ -1,0 +1,1569 @@
+{
+  "project": "analyser-msgeq7",
+  "root_uuid": "051aa90c-bb55-5623-9e53-94470bed9b3c",
+  "components": [
+    {
+      "ref": "JA1",
+      "value": "ANALYSER - KEY 24",
+      "footprint": "Shields:Socket_2x12_Key24",
+      "pins": {
+        "1": "female1/microphone",
+        "2": "AGND",
+        "11": "female1/analyser out",
+        "3": "female2/microphone",
+        "4": "AGND",
+        "12": "female2/analyser out",
+        "5": "female3/microphone",
+        "6": "AGND",
+        "13": "female3/analyser out",
+        "7": "male1/microphone",
+        "8": "AGND",
+        "14": "male1/analyser out",
+        "9": "male2/microphone",
+        "10": "AGND",
+        "15": "male2/analyser out",
+        "16": "AGND",
+        "17": "analyser/strobe",
+        "18": "analyser/reset",
+        "19": "shield/sda",
+        "20": "shield/scl",
+        "21": "IOREF",
+        "22": "GND",
+        "23": "+5V"
+      },
+      "sheet": "interface",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2",
+        "11": "11",
+        "3": "3",
+        "4": "4",
+        "12": "12",
+        "5": "5",
+        "6": "6",
+        "13": "13",
+        "7": "7",
+        "8": "8",
+        "14": "14",
+        "9": "9",
+        "10": "10",
+        "15": "15",
+        "16": "16",
+        "17": "17",
+        "18": "18",
+        "19": "19",
+        "20": "20",
+        "21": "21",
+        "22": "22",
+        "23": "23"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "11": "passive",
+        "3": "passive",
+        "4": "passive",
+        "12": "passive",
+        "5": "passive",
+        "6": "passive",
+        "13": "passive",
+        "7": "passive",
+        "8": "passive",
+        "14": "passive",
+        "9": "passive",
+        "10": "passive",
+        "15": "passive",
+        "16": "passive",
+        "17": "passive",
+        "18": "passive",
+        "19": "passive",
+        "20": "passive",
+        "21": "passive",
+        "22": "passive",
+        "23": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "fd498214-22a1-591b-8ec0-e5310e8d75dd",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/ced2d10e-bbf6-59f9-8dd2-3b8fbcd538e9"
+    },
+    {
+      "ref": "H1",
+      "value": "M3 retention",
+      "footprint": "Shields:MountingHole_3.2mm_M3",
+      "pins": {},
+      "sheet": "interface",
+      "description": "",
+      "pin_names": {},
+      "pin_types": {},
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "4ae72475-f508-5fca-ae09-e89e5a63b785",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/ced2d10e-bbf6-59f9-8dd2-3b8fbcd538e9"
+    },
+    {
+      "ref": "H2",
+      "value": "M3 retention",
+      "footprint": "Shields:MountingHole_3.2mm_M3",
+      "pins": {},
+      "sheet": "interface",
+      "description": "",
+      "pin_names": {},
+      "pin_types": {},
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "e4f717b3-080d-5653-8b7b-2bb8c520fb16",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/ced2d10e-bbf6-59f9-8dd2-3b8fbcd538e9"
+    },
+    {
+      "ref": "U3",
+      "value": "MSGEQ7N",
+      "footprint": "Shields:SOIC-8_3.9x4.9mm_P1.27mm",
+      "description": "female1 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly",
+      "pins": {
+        "1": "IOREF",
+        "2": "AGND",
+        "3": "female1/analyser out",
+        "4": "analyser/strobe",
+        "5": "female1/msgeq input",
+        "6": "female1/internal reference",
+        "7": "analyser/reset",
+        "8": "female1/oscillator"
+      },
+      "sheet": "female1",
+      "uuid": "9c0b1cff-9d2c-5f4e-b14b-bc82fde277c9",
+      "pin_names": {
+        "1": "VDD",
+        "2": "VSS",
+        "3": "OUT",
+        "4": "STROBE",
+        "5": "IN",
+        "6": "GND_REF",
+        "7": "RESET",
+        "8": "CKIN"
+      },
+      "pin_types": {
+        "1": "power_in",
+        "2": "power_in",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "power_out",
+        "7": "input",
+        "8": "input"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "MSGEQ7N",
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/21643d82-ac1d-5cd9-9874-515481d700d6"
+    },
+    {
+      "ref": "R311",
+      "value": "47K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "description": "Microphone attenuator series: default 0.126 gain with 6K8 shunt",
+      "pins": {
+        "1": "female1/microphone",
+        "2": "female1/mic attenuated"
+      },
+      "sheet": "female1",
+      "uuid": "46bd2ae3-6c43-5693-849a-d2e9d83b7b69",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/21643d82-ac1d-5cd9-9874-515481d700d6"
+    },
+    {
+      "ref": "R313",
+      "value": "200K 1%",
+      "footprint": "Shields:R_0603_1608Metric",
+      "description": "MSGEQ7 clock resistor; keep adjacent to pin8",
+      "pins": {
+        "1": "IOREF",
+        "2": "female1/oscillator"
+      },
+      "sheet": "female1",
+      "uuid": "546009bc-f8bd-5fb8-b82c-d03fad859d1e",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/21643d82-ac1d-5cd9-9874-515481d700d6"
+    },
+    {
+      "ref": "R316",
+      "value": "6K8",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female1/mic attenuated",
+        "2": "AGND"
+      },
+      "description": "Microphone attenuator shunt; >=5K load even when bypass selected",
+      "sheet": "female1",
+      "uuid": "9cb12832-0fe3-5b8c-bdb6-846bece01a92",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/21643d82-ac1d-5cd9-9874-515481d700d6"
+    },
+    {
+      "ref": "C312",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "description": "AC input coupling; passes 63Hz and above with internal 1Mohm bias",
+      "pins": {
+        "1": "female1/mic attenuated",
+        "2": "female1/msgeq input"
+      },
+      "sheet": "female1",
+      "uuid": "5635667b-c39a-5e49-9383-6a1a3733e0e3",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/21643d82-ac1d-5cd9-9874-515481d700d6"
+    },
+    {
+      "ref": "C314",
+      "value": "33pF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "description": "MSGEQ7 clock capacitor; 33pF includes stray capacitance",
+      "pins": {
+        "1": "female1/oscillator",
+        "2": "AGND"
+      },
+      "sheet": "female1",
+      "uuid": "7a059191-cbf9-5b57-a2ad-3beb404bed96",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/21643d82-ac1d-5cd9-9874-515481d700d6"
+    },
+    {
+      "ref": "C315",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "description": "Local MSGEQ7 supply bypass, close to pins1 and2",
+      "pins": {
+        "1": "IOREF",
+        "2": "AGND"
+      },
+      "sheet": "female1",
+      "uuid": "b55e2445-dbb0-58bc-8d41-4a55d12c0a19",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/21643d82-ac1d-5cd9-9874-515481d700d6"
+    },
+    {
+      "ref": "C316",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "female1/internal reference",
+        "2": "AGND"
+      },
+      "description": "Pin6 internal reference bypass; not a connection to board ground",
+      "sheet": "female1",
+      "uuid": "9409224e-f8b9-577c-adb1-4620a614497c",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/21643d82-ac1d-5cd9-9874-515481d700d6"
+    },
+    {
+      "ref": "JS3",
+      "value": "ATTEN BYPASS (OPEN)",
+      "footprint": "Shields:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm",
+      "pins": {
+        "1": "female1/microphone",
+        "2": "female1/mic attenuated"
+      },
+      "description": "Default OPEN. Bridge only for weak microphone output after measuring ADC headroom",
+      "sheet": "female1",
+      "uuid": "2c0ca537-7fc8-5910-941a-c10f8a24b15d",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "open",
+      "include_bom": false,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/21643d82-ac1d-5cd9-9874-515481d700d6"
+    },
+    {
+      "ref": "TP13",
+      "value": "test pad",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "description": "female1 analyser output, module 0",
+      "pins": {
+        "1": "female1/analyser out"
+      },
+      "sheet": "female1",
+      "uuid": "a00c93ee-e7c4-5641-8c61-36582fc1021b",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/21643d82-ac1d-5cd9-9874-515481d700d6"
+    },
+    {
+      "ref": "U4",
+      "value": "MSGEQ7N",
+      "footprint": "Shields:SOIC-8_3.9x4.9mm_P1.27mm",
+      "description": "female2 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly",
+      "pins": {
+        "1": "IOREF",
+        "2": "AGND",
+        "3": "female2/analyser out",
+        "4": "analyser/strobe",
+        "5": "female2/msgeq input",
+        "6": "female2/internal reference",
+        "7": "analyser/reset",
+        "8": "female2/oscillator"
+      },
+      "sheet": "female2",
+      "uuid": "66ff3f8b-5960-5347-bfcc-e2eb28b061e5",
+      "pin_names": {
+        "1": "VDD",
+        "2": "VSS",
+        "3": "OUT",
+        "4": "STROBE",
+        "5": "IN",
+        "6": "GND_REF",
+        "7": "RESET",
+        "8": "CKIN"
+      },
+      "pin_types": {
+        "1": "power_in",
+        "2": "power_in",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "power_out",
+        "7": "input",
+        "8": "input"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "MSGEQ7N",
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/dc261c20-56d8-521f-a1cb-54128e0c60cf"
+    },
+    {
+      "ref": "R411",
+      "value": "47K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "description": "Microphone attenuator series: default 0.126 gain with 6K8 shunt",
+      "pins": {
+        "1": "female2/microphone",
+        "2": "female2/mic attenuated"
+      },
+      "sheet": "female2",
+      "uuid": "4c003404-0e16-5ded-9345-8ccfcfc0be37",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/dc261c20-56d8-521f-a1cb-54128e0c60cf"
+    },
+    {
+      "ref": "R413",
+      "value": "200K 1%",
+      "footprint": "Shields:R_0603_1608Metric",
+      "description": "MSGEQ7 clock resistor; keep adjacent to pin8",
+      "pins": {
+        "1": "IOREF",
+        "2": "female2/oscillator"
+      },
+      "sheet": "female2",
+      "uuid": "4bab9d96-c95b-5584-9f88-2c867c8b48da",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/dc261c20-56d8-521f-a1cb-54128e0c60cf"
+    },
+    {
+      "ref": "R416",
+      "value": "6K8",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female2/mic attenuated",
+        "2": "AGND"
+      },
+      "description": "Microphone attenuator shunt; >=5K load even when bypass selected",
+      "sheet": "female2",
+      "uuid": "8f4e8bd1-db7c-572d-946d-0cf7d436e19d",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/dc261c20-56d8-521f-a1cb-54128e0c60cf"
+    },
+    {
+      "ref": "C412",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "description": "AC input coupling; passes 63Hz and above with internal 1Mohm bias",
+      "pins": {
+        "1": "female2/mic attenuated",
+        "2": "female2/msgeq input"
+      },
+      "sheet": "female2",
+      "uuid": "ab520cc9-8e24-53d1-9652-72d7ed1ab485",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/dc261c20-56d8-521f-a1cb-54128e0c60cf"
+    },
+    {
+      "ref": "C414",
+      "value": "33pF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "description": "MSGEQ7 clock capacitor; 33pF includes stray capacitance",
+      "pins": {
+        "1": "female2/oscillator",
+        "2": "AGND"
+      },
+      "sheet": "female2",
+      "uuid": "b52ddecd-9acf-5cea-9213-35a81791903a",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/dc261c20-56d8-521f-a1cb-54128e0c60cf"
+    },
+    {
+      "ref": "C415",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "description": "Local MSGEQ7 supply bypass, close to pins1 and2",
+      "pins": {
+        "1": "IOREF",
+        "2": "AGND"
+      },
+      "sheet": "female2",
+      "uuid": "52e34de6-396f-57b5-8820-da99e4e8a351",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/dc261c20-56d8-521f-a1cb-54128e0c60cf"
+    },
+    {
+      "ref": "C416",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "female2/internal reference",
+        "2": "AGND"
+      },
+      "description": "Pin6 internal reference bypass; not a connection to board ground",
+      "sheet": "female2",
+      "uuid": "d2a345dd-345d-5393-b0a8-7cc4045f4417",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/dc261c20-56d8-521f-a1cb-54128e0c60cf"
+    },
+    {
+      "ref": "JS4",
+      "value": "ATTEN BYPASS (OPEN)",
+      "footprint": "Shields:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm",
+      "pins": {
+        "1": "female2/microphone",
+        "2": "female2/mic attenuated"
+      },
+      "description": "Default OPEN. Bridge only for weak microphone output after measuring ADC headroom",
+      "sheet": "female2",
+      "uuid": "f60bd19e-f47d-5795-9ad0-896b9948e104",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "open",
+      "include_bom": false,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/dc261c20-56d8-521f-a1cb-54128e0c60cf"
+    },
+    {
+      "ref": "TP14",
+      "value": "test pad",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "description": "female2 analyser output, module 1",
+      "pins": {
+        "1": "female2/analyser out"
+      },
+      "sheet": "female2",
+      "uuid": "4e2e3bee-b020-5fdf-a655-d96a359626a8",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/dc261c20-56d8-521f-a1cb-54128e0c60cf"
+    },
+    {
+      "ref": "U5",
+      "value": "MSGEQ7N",
+      "footprint": "Shields:SOIC-8_3.9x4.9mm_P1.27mm",
+      "description": "female3 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly",
+      "pins": {
+        "1": "IOREF",
+        "2": "AGND",
+        "3": "female3/analyser out",
+        "4": "analyser/strobe",
+        "5": "female3/msgeq input",
+        "6": "female3/internal reference",
+        "7": "analyser/reset",
+        "8": "female3/oscillator"
+      },
+      "sheet": "female3",
+      "uuid": "56b4ef74-2e2f-5d4c-8a40-4b54be1057e0",
+      "pin_names": {
+        "1": "VDD",
+        "2": "VSS",
+        "3": "OUT",
+        "4": "STROBE",
+        "5": "IN",
+        "6": "GND_REF",
+        "7": "RESET",
+        "8": "CKIN"
+      },
+      "pin_types": {
+        "1": "power_in",
+        "2": "power_in",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "power_out",
+        "7": "input",
+        "8": "input"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "MSGEQ7N",
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/d9205148-6e26-58de-8e1a-8d90ae444064"
+    },
+    {
+      "ref": "R511",
+      "value": "47K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "description": "Microphone attenuator series: default 0.126 gain with 6K8 shunt",
+      "pins": {
+        "1": "female3/microphone",
+        "2": "female3/mic attenuated"
+      },
+      "sheet": "female3",
+      "uuid": "ef7e72d5-19df-59be-88d2-a7e621f5028f",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/d9205148-6e26-58de-8e1a-8d90ae444064"
+    },
+    {
+      "ref": "R513",
+      "value": "200K 1%",
+      "footprint": "Shields:R_0603_1608Metric",
+      "description": "MSGEQ7 clock resistor; keep adjacent to pin8",
+      "pins": {
+        "1": "IOREF",
+        "2": "female3/oscillator"
+      },
+      "sheet": "female3",
+      "uuid": "3efb3527-bf22-53f3-a0e6-d9a3df7e34e9",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/d9205148-6e26-58de-8e1a-8d90ae444064"
+    },
+    {
+      "ref": "R516",
+      "value": "6K8",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female3/mic attenuated",
+        "2": "AGND"
+      },
+      "description": "Microphone attenuator shunt; >=5K load even when bypass selected",
+      "sheet": "female3",
+      "uuid": "7332ad98-42c4-53ac-8c97-dd073b4519cd",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/d9205148-6e26-58de-8e1a-8d90ae444064"
+    },
+    {
+      "ref": "C512",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "description": "AC input coupling; passes 63Hz and above with internal 1Mohm bias",
+      "pins": {
+        "1": "female3/mic attenuated",
+        "2": "female3/msgeq input"
+      },
+      "sheet": "female3",
+      "uuid": "d332982e-c03e-55c4-a319-172fd58c0a5b",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/d9205148-6e26-58de-8e1a-8d90ae444064"
+    },
+    {
+      "ref": "C514",
+      "value": "33pF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "description": "MSGEQ7 clock capacitor; 33pF includes stray capacitance",
+      "pins": {
+        "1": "female3/oscillator",
+        "2": "AGND"
+      },
+      "sheet": "female3",
+      "uuid": "6b5687ae-522e-5897-8817-0aef7defba59",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/d9205148-6e26-58de-8e1a-8d90ae444064"
+    },
+    {
+      "ref": "C515",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "description": "Local MSGEQ7 supply bypass, close to pins1 and2",
+      "pins": {
+        "1": "IOREF",
+        "2": "AGND"
+      },
+      "sheet": "female3",
+      "uuid": "03d6a12a-b85a-5c35-b447-ad7693ec61a4",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/d9205148-6e26-58de-8e1a-8d90ae444064"
+    },
+    {
+      "ref": "C516",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "female3/internal reference",
+        "2": "AGND"
+      },
+      "description": "Pin6 internal reference bypass; not a connection to board ground",
+      "sheet": "female3",
+      "uuid": "c4c106d3-5463-57cb-82a0-4903ea62a96b",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/d9205148-6e26-58de-8e1a-8d90ae444064"
+    },
+    {
+      "ref": "JS5",
+      "value": "ATTEN BYPASS (OPEN)",
+      "footprint": "Shields:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm",
+      "pins": {
+        "1": "female3/microphone",
+        "2": "female3/mic attenuated"
+      },
+      "description": "Default OPEN. Bridge only for weak microphone output after measuring ADC headroom",
+      "sheet": "female3",
+      "uuid": "59289f17-c076-57c6-96a8-49d67c9f656f",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "open",
+      "include_bom": false,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/d9205148-6e26-58de-8e1a-8d90ae444064"
+    },
+    {
+      "ref": "TP15",
+      "value": "test pad",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "description": "female3 analyser output, module 2",
+      "pins": {
+        "1": "female3/analyser out"
+      },
+      "sheet": "female3",
+      "uuid": "b0834fcb-a4b0-5eff-bea8-9338a700b751",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/d9205148-6e26-58de-8e1a-8d90ae444064"
+    },
+    {
+      "ref": "U1",
+      "value": "MSGEQ7N",
+      "footprint": "Shields:SOIC-8_3.9x4.9mm_P1.27mm",
+      "description": "male1 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly",
+      "pins": {
+        "1": "IOREF",
+        "2": "AGND",
+        "3": "male1/analyser out",
+        "4": "analyser/strobe",
+        "5": "male1/msgeq input",
+        "6": "male1/internal reference",
+        "7": "analyser/reset",
+        "8": "male1/oscillator"
+      },
+      "sheet": "male1",
+      "uuid": "2ab5296e-db0a-5da4-bf28-6dc4b9f14011",
+      "pin_names": {
+        "1": "VDD",
+        "2": "VSS",
+        "3": "OUT",
+        "4": "STROBE",
+        "5": "IN",
+        "6": "GND_REF",
+        "7": "RESET",
+        "8": "CKIN"
+      },
+      "pin_types": {
+        "1": "power_in",
+        "2": "power_in",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "power_out",
+        "7": "input",
+        "8": "input"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "MSGEQ7N",
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/aa4ad7eb-b5c2-51f7-9017-3795b1e71fe2"
+    },
+    {
+      "ref": "R111",
+      "value": "47K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "description": "Microphone attenuator series: default 0.126 gain with 6K8 shunt",
+      "pins": {
+        "1": "male1/microphone",
+        "2": "male1/mic attenuated"
+      },
+      "sheet": "male1",
+      "uuid": "d9dff014-6116-59ad-9980-abc63248d92d",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/aa4ad7eb-b5c2-51f7-9017-3795b1e71fe2"
+    },
+    {
+      "ref": "R113",
+      "value": "200K 1%",
+      "footprint": "Shields:R_0603_1608Metric",
+      "description": "MSGEQ7 clock resistor; keep adjacent to pin8",
+      "pins": {
+        "1": "IOREF",
+        "2": "male1/oscillator"
+      },
+      "sheet": "male1",
+      "uuid": "7b88b015-3d0a-53b6-a24a-f80daa9ab3cc",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/aa4ad7eb-b5c2-51f7-9017-3795b1e71fe2"
+    },
+    {
+      "ref": "R116",
+      "value": "6K8",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male1/mic attenuated",
+        "2": "AGND"
+      },
+      "description": "Microphone attenuator shunt; >=5K load even when bypass selected",
+      "sheet": "male1",
+      "uuid": "51c9ee2d-2db5-5123-9dc6-038a5b6fef74",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/aa4ad7eb-b5c2-51f7-9017-3795b1e71fe2"
+    },
+    {
+      "ref": "C112",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "description": "AC input coupling; passes 63Hz and above with internal 1Mohm bias",
+      "pins": {
+        "1": "male1/mic attenuated",
+        "2": "male1/msgeq input"
+      },
+      "sheet": "male1",
+      "uuid": "f522c4f1-0e3c-5f74-9552-81ab0d7bd93c",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/aa4ad7eb-b5c2-51f7-9017-3795b1e71fe2"
+    },
+    {
+      "ref": "C114",
+      "value": "33pF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "description": "MSGEQ7 clock capacitor; 33pF includes stray capacitance",
+      "pins": {
+        "1": "male1/oscillator",
+        "2": "AGND"
+      },
+      "sheet": "male1",
+      "uuid": "18b0b643-0db3-5639-8bf1-ba6b505886ac",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/aa4ad7eb-b5c2-51f7-9017-3795b1e71fe2"
+    },
+    {
+      "ref": "C115",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "description": "Local MSGEQ7 supply bypass, close to pins1 and2",
+      "pins": {
+        "1": "IOREF",
+        "2": "AGND"
+      },
+      "sheet": "male1",
+      "uuid": "3852ca84-4229-58f9-bd6a-0fcc37505086",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/aa4ad7eb-b5c2-51f7-9017-3795b1e71fe2"
+    },
+    {
+      "ref": "C116",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "male1/internal reference",
+        "2": "AGND"
+      },
+      "description": "Pin6 internal reference bypass; not a connection to board ground",
+      "sheet": "male1",
+      "uuid": "6028bb3f-1097-5e6f-b6ff-f41ed5fb86eb",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/aa4ad7eb-b5c2-51f7-9017-3795b1e71fe2"
+    },
+    {
+      "ref": "JS1",
+      "value": "ATTEN BYPASS (OPEN)",
+      "footprint": "Shields:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm",
+      "pins": {
+        "1": "male1/microphone",
+        "2": "male1/mic attenuated"
+      },
+      "description": "Default OPEN. Bridge only for weak microphone output after measuring ADC headroom",
+      "sheet": "male1",
+      "uuid": "6c9e10a9-7dbc-50cf-afd6-d58eec06dc5b",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "open",
+      "include_bom": false,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/aa4ad7eb-b5c2-51f7-9017-3795b1e71fe2"
+    },
+    {
+      "ref": "TP11",
+      "value": "test pad",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "description": "male1 analyser output, module 3",
+      "pins": {
+        "1": "male1/analyser out"
+      },
+      "sheet": "male1",
+      "uuid": "ebc3ea99-909e-5ba4-b70e-2223773b8377",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/aa4ad7eb-b5c2-51f7-9017-3795b1e71fe2"
+    },
+    {
+      "ref": "U2",
+      "value": "MSGEQ7N",
+      "footprint": "Shields:SOIC-8_3.9x4.9mm_P1.27mm",
+      "description": "male2 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly",
+      "pins": {
+        "1": "IOREF",
+        "2": "AGND",
+        "3": "male2/analyser out",
+        "4": "analyser/strobe",
+        "5": "male2/msgeq input",
+        "6": "male2/internal reference",
+        "7": "analyser/reset",
+        "8": "male2/oscillator"
+      },
+      "sheet": "male2",
+      "uuid": "284a3048-b9fc-526f-a46f-1b384aead10e",
+      "pin_names": {
+        "1": "VDD",
+        "2": "VSS",
+        "3": "OUT",
+        "4": "STROBE",
+        "5": "IN",
+        "6": "GND_REF",
+        "7": "RESET",
+        "8": "CKIN"
+      },
+      "pin_types": {
+        "1": "power_in",
+        "2": "power_in",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "power_out",
+        "7": "input",
+        "8": "input"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "MSGEQ7N",
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/cb306862-3936-51d4-85b9-48ddd84f46f1"
+    },
+    {
+      "ref": "R211",
+      "value": "47K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "description": "Microphone attenuator series: default 0.126 gain with 6K8 shunt",
+      "pins": {
+        "1": "male2/microphone",
+        "2": "male2/mic attenuated"
+      },
+      "sheet": "male2",
+      "uuid": "00248a0e-db6f-5ae0-9d5e-2d4965288e85",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/cb306862-3936-51d4-85b9-48ddd84f46f1"
+    },
+    {
+      "ref": "R213",
+      "value": "200K 1%",
+      "footprint": "Shields:R_0603_1608Metric",
+      "description": "MSGEQ7 clock resistor; keep adjacent to pin8",
+      "pins": {
+        "1": "IOREF",
+        "2": "male2/oscillator"
+      },
+      "sheet": "male2",
+      "uuid": "585fc35a-b8bc-50c8-b7bb-5287c0465594",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/cb306862-3936-51d4-85b9-48ddd84f46f1"
+    },
+    {
+      "ref": "R216",
+      "value": "6K8",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male2/mic attenuated",
+        "2": "AGND"
+      },
+      "description": "Microphone attenuator shunt; >=5K load even when bypass selected",
+      "sheet": "male2",
+      "uuid": "6cec1fa2-9b88-5dba-a60e-0bb3757646a7",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/cb306862-3936-51d4-85b9-48ddd84f46f1"
+    },
+    {
+      "ref": "C212",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "description": "AC input coupling; passes 63Hz and above with internal 1Mohm bias",
+      "pins": {
+        "1": "male2/mic attenuated",
+        "2": "male2/msgeq input"
+      },
+      "sheet": "male2",
+      "uuid": "171ebc9b-2dd7-5618-b352-4d781d17e84f",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/cb306862-3936-51d4-85b9-48ddd84f46f1"
+    },
+    {
+      "ref": "C214",
+      "value": "33pF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "description": "MSGEQ7 clock capacitor; 33pF includes stray capacitance",
+      "pins": {
+        "1": "male2/oscillator",
+        "2": "AGND"
+      },
+      "sheet": "male2",
+      "uuid": "1d9ba575-9eeb-5fd9-af5b-7dd800b5f56a",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/cb306862-3936-51d4-85b9-48ddd84f46f1"
+    },
+    {
+      "ref": "C215",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "description": "Local MSGEQ7 supply bypass, close to pins1 and2",
+      "pins": {
+        "1": "IOREF",
+        "2": "AGND"
+      },
+      "sheet": "male2",
+      "uuid": "f9b82adf-d555-5c00-afbd-50a28a8c4009",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/cb306862-3936-51d4-85b9-48ddd84f46f1"
+    },
+    {
+      "ref": "C216",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "male2/internal reference",
+        "2": "AGND"
+      },
+      "description": "Pin6 internal reference bypass; not a connection to board ground",
+      "sheet": "male2",
+      "uuid": "ca1ffc7b-81b6-551c-81b8-be861af76e52",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/cb306862-3936-51d4-85b9-48ddd84f46f1"
+    },
+    {
+      "ref": "JS2",
+      "value": "ATTEN BYPASS (OPEN)",
+      "footprint": "Shields:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm",
+      "pins": {
+        "1": "male2/microphone",
+        "2": "male2/mic attenuated"
+      },
+      "description": "Default OPEN. Bridge only for weak microphone output after measuring ADC headroom",
+      "sheet": "male2",
+      "uuid": "c6e86917-c784-5150-b42b-b2c2f9fdefc8",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "open",
+      "include_bom": false,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/cb306862-3936-51d4-85b9-48ddd84f46f1"
+    },
+    {
+      "ref": "TP12",
+      "value": "test pad",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "description": "male2 analyser output, module 4",
+      "pins": {
+        "1": "male2/analyser out"
+      },
+      "sheet": "male2",
+      "uuid": "8f169d45-7b43-55ee-b6c2-c83465ba5114",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "copper only",
+      "include_bom": false,
+      "datasheet": "",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/cb306862-3936-51d4-85b9-48ddd84f46f1"
+    },
+    {
+      "ref": "TPS",
+      "value": "analyser/strobe",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "analyser/strobe"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "d6e75297-1f15-5aca-a565-b34cc3a2cd84",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/35612c59-504f-5b7a-ad9a-930c5c58f069"
+    },
+    {
+      "ref": "TPR",
+      "value": "analyser/reset",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "analyser/reset"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "b6e832fa-9c9a-5823-befe-734e402dad3b",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/35612c59-504f-5b7a-ad9a-930c5c58f069"
+    },
+    {
+      "ref": "UID1",
+      "value": "M24C02-RMN6TP",
+      "footprint": "Shields:SOIC-8_3.9x4.9mm_P1.27mm",
+      "pins": {
+        "1": "IOREF",
+        "2": "GND",
+        "3": "IOREF",
+        "4": "GND",
+        "5": "shield/sda",
+        "6": "shield/scl",
+        "7": "id/wp",
+        "8": "IOREF"
+      },
+      "sheet": "identity",
+      "description": "Address straps honoured; WP high except during assembly programming",
+      "pin_names": {
+        "1": "E0",
+        "2": "E1",
+        "3": "E2",
+        "4": "VSS",
+        "5": "SDA",
+        "6": "SCL",
+        "7": "WC",
+        "8": "VCC"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "power_in",
+        "5": "bidirectional",
+        "6": "input",
+        "7": "input",
+        "8": "power_in"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "M24C02-RMN6TP",
+      "datasheet": "https://www.st.com/resource/en/datasheet/m24c02-r.pdf",
+      "uuid": "a5b10433-ef8c-5626-b1d5-ae20894681c0",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/e47c57b8-e318-5cad-ada2-e08e05cc583c"
+    },
+    {
+      "ref": "RID1",
+      "value": "10K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "id/wp",
+        "2": "IOREF"
+      },
+      "sheet": "identity",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "169341bc-be86-5b32-b007-2ac33d6341c2",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/e47c57b8-e318-5cad-ada2-e08e05cc583c"
+    },
+    {
+      "ref": "CID1",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "IOREF",
+        "2": "GND"
+      },
+      "sheet": "identity",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "e96d452c-1369-59d0-a0a8-2284f1e2b2fc",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/e47c57b8-e318-5cad-ada2-e08e05cc583c"
+    },
+    {
+      "ref": "JSID1",
+      "value": "WRITE ENABLE - OPEN",
+      "footprint": "Shields:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm",
+      "pins": {
+        "1": "id/wp",
+        "2": "GND"
+      },
+      "sheet": "identity",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "open",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "aeb4de5a-6197-5192-9a29-b248bf159137",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/e47c57b8-e318-5cad-ada2-e08e05cc583c"
+    }
+  ],
+  "production_release": false
+}

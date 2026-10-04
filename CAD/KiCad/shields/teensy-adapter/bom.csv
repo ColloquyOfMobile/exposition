@@ -1,0 +1,66 @@
+Reference,Value,Footprint,MPN,Assembly
+JM1,MEGA PATTERN FEMALE,Shields:Mega_Female,,fit
+RC34,100R,Shields:R_0603_1608Metric,,fit
+RC35,100R,Shields:R_0603_1608Metric,,fit
+JT1,Teensy 4.1 JT1,Shields:PinSocket_1x24_P2.54mm_Vertical,,fit
+JT2,Teensy 4.1 JT2,Shields:PinSocket_1x24_P2.54mm_Vertical,,fit
+RD2,100K,Shields:R_0603_1608Metric,,fit
+RD4,100K,Shields:R_0603_1608Metric,,fit
+RD5,100K,Shields:R_0603_1608Metric,,fit
+RD6,100K,Shields:R_0603_1608Metric,,fit
+U1,SN74LV4T125PWR,Shields:TSSOP-14_4.4x5mm_P0.65mm,SN74LV4T125PWR,fit
+CB1,100nF,Shields:C_0603_1608Metric,,fit
+RD28,100K,Shields:R_0603_1608Metric,,fit
+RD7,100K,Shields:R_0603_1608Metric,,fit
+RD8,100K,Shields:R_0603_1608Metric,,fit
+RD9,100K,Shields:R_0603_1608Metric,,fit
+U2,SN74LV4T125PWR,Shields:TSSOP-14_4.4x5mm_P0.65mm,SN74LV4T125PWR,fit
+CB2,100nF,Shields:C_0603_1608Metric,,fit
+RD10,100K,Shields:R_0603_1608Metric,,fit
+RD11,100K,Shields:R_0603_1608Metric,,fit
+RD12,100K,Shields:R_0603_1608Metric,,fit
+RD29,100K,Shields:R_0603_1608Metric,,fit
+U3,SN74LV4T125PWR,Shields:TSSOP-14_4.4x5mm_P0.65mm,SN74LV4T125PWR,fit
+CB3,100nF,Shields:C_0603_1608Metric,,fit
+RD30,100K,Shields:R_0603_1608Metric,,fit
+RD31,100K,Shields:R_0603_1608Metric,,fit
+RD32,100K,Shields:R_0603_1608Metric,,fit
+U4,SN74LV4T125PWR,Shields:TSSOP-14_4.4x5mm_P0.65mm,SN74LV4T125PWR,fit
+CB4,100nF,Shields:C_0603_1608Metric,,fit
+RA19,100K,Shields:R_0603_1608Metric,,fit
+RB19,150K,Shields:R_0603_1608Metric,,fit
+CA19,10nF C0G,Shields:C_0603_1608Metric,,fit
+RA20,100K,Shields:R_0603_1608Metric,,fit
+RB20,150K,Shields:R_0603_1608Metric,,fit
+CA20,10nF C0G,Shields:C_0603_1608Metric,,fit
+RA21,100K,Shields:R_0603_1608Metric,,fit
+RB21,150K,Shields:R_0603_1608Metric,,fit
+CA21,10nF C0G,Shields:C_0603_1608Metric,,fit
+RA22,100K,Shields:R_0603_1608Metric,,fit
+RB22,150K,Shields:R_0603_1608Metric,,fit
+CA22,10nF C0G,Shields:C_0603_1608Metric,,fit
+RA23,100K,Shields:R_0603_1608Metric,,fit
+RB23,150K,Shields:R_0603_1608Metric,,fit
+CA23,10nF C0G,Shields:C_0603_1608Metric,,fit
+RA26,100K,Shields:R_0603_1608Metric,,fit
+RB26,150K,Shields:R_0603_1608Metric,,fit
+CA26,10nF C0G,Shields:C_0603_1608Metric,,fit
+RA27,100K,Shields:R_0603_1608Metric,,fit
+RB27,150K,Shields:R_0603_1608Metric,,fit
+CA27,10nF C0G,Shields:C_0603_1608Metric,,fit
+RA38,100K,Shields:R_0603_1608Metric,,fit
+RB38,150K,Shields:R_0603_1608Metric,,fit
+CA38,10nF C0G,Shields:C_0603_1608Metric,,fit
+RA39,100K,Shields:R_0603_1608Metric,,fit
+RB39,150K,Shields:R_0603_1608Metric,,fit
+CA39,10nF C0G,Shields:C_0603_1608Metric,,fit
+RA40,100K,Shields:R_0603_1608Metric,,fit
+RB40,150K,Shields:R_0603_1608Metric,,fit
+CA40,10nF C0G,Shields:C_0603_1608Metric,,fit
+RA41,100K,Shields:R_0603_1608Metric,,fit
+RB41,150K,Shields:R_0603_1608Metric,,fit
+CA41,10nF C0G,Shields:C_0603_1608Metric,,fit
+D1,SS14,Shields:D_SOD-123,SS14,fit
+CV1,10uF X7R,Shields:C_0805_2012Metric,,fit
+CI1,10uF X7R,Shields:C_0805_2012Metric,,fit
+CI2,100nF,Shields:C_0603_1608Metric,,fit

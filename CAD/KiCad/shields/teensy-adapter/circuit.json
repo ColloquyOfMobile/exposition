@@ -1,0 +1,2333 @@
+{
+  "project": "teensy-adapter",
+  "root_uuid": "2a34184d-f581-57f8-88bf-73706d912fa4",
+  "components": [
+    {
+      "ref": "JM1",
+      "value": "MEGA PATTERN FEMALE",
+      "footprint": "Shields:Mega_Female",
+      "pins": {
+        "GND1": "GND",
+        "5V1": "MEGA_5V",
+        "A5": "female1/photosensor",
+        "A6": "female2/photosensor",
+        "A7": "female3/photosensor",
+        "A9": "male1/photosensor/B",
+        "A11": "male1/photosensor/D",
+        "A8": "male1/photosensor/A",
+        "A10": "male1/photosensor/C",
+        "A13": "male2/photosensor/B",
+        "A15": "male2/photosensor/D",
+        "A12": "male2/photosensor/A",
+        "A14": "male2/photosensor/C",
+        "D6": "female1/tone",
+        "D46": "female2/tone",
+        "D10": "female3/tone",
+        "D11": "male1/tone",
+        "D5": "male2/tone",
+        "D4": "analyser/strobe",
+        "D3": "analyser/reset",
+        "A0": "female1/analyser out",
+        "A1": "female2/analyser out",
+        "A2": "female3/analyser out",
+        "A3": "male1/analyser out",
+        "A4": "male2/analyser out",
+        "D14": "female1/neopixel/driven",
+        "D7": "female2/neopixel/driven",
+        "D8": "female3/neopixel/driven",
+        "D9": "male1/neopixel/driven",
+        "D15": "male2/neopixel/driven",
+        "D16": "male1/bar neopixel/driven",
+        "D17": "male2/bar neopixel/driven",
+        "D2": "amp shutdown",
+        "D24": "male1/aux driven",
+        "D25": "male2/aux driven",
+        "3V3": null,
+        "5V3": "MEGA_5V",
+        "5V4": "MEGA_5V",
+        "AREF": null,
+        "D0": null,
+        "D1": null,
+        "D12": null,
+        "D13": null,
+        "D18": null,
+        "D19": null,
+        "D20": null,
+        "D21": null,
+        "D22": null,
+        "D23": null,
+        "D26": null,
+        "D27": null,
+        "D28": null,
+        "D29": null,
+        "D30": null,
+        "D31": null,
+        "D32": null,
+        "D33": null,
+        "D34": null,
+        "D35": null,
+        "D36": null,
+        "D37": null,
+        "D38": null,
+        "D39": null,
+        "D40": null,
+        "D41": null,
+        "D42": null,
+        "D43": null,
+        "D44": null,
+        "D45": null,
+        "D47": null,
+        "D48": null,
+        "D49": null,
+        "D50": null,
+        "D51": null,
+        "D52": null,
+        "D53": null,
+        "GND2": "GND",
+        "GND3": "GND",
+        "GND5": "GND",
+        "GND6": "GND",
+        "IORF": "IOREF",
+        "RST1": null,
+        "SCL": "shield/scl",
+        "SDA": "shield/sda",
+        "VIN": null
+      },
+      "sheet": "mega",
+      "description": "Same physical contact coordinates as the v2 computing slot",
+      "pin_names": {
+        "GND1": "GND1",
+        "5V1": "5V1",
+        "A5": "A5",
+        "A6": "A6",
+        "A7": "A7",
+        "A9": "A9",
+        "A11": "A11",
+        "A8": "A8",
+        "A10": "A10",
+        "A13": "A13",
+        "A15": "A15",
+        "A12": "A12",
+        "A14": "A14",
+        "D6": "D6",
+        "D46": "D46",
+        "D10": "D10",
+        "D11": "D11",
+        "D5": "D5",
+        "D4": "D4",
+        "D3": "D3",
+        "A0": "A0",
+        "A1": "A1",
+        "A2": "A2",
+        "A3": "A3",
+        "A4": "A4",
+        "D14": "D14",
+        "D7": "D7",
+        "D8": "D8",
+        "D9": "D9",
+        "D15": "D15",
+        "D16": "D16",
+        "D17": "D17",
+        "D2": "D2",
+        "D24": "D24",
+        "D25": "D25",
+        "3V3": "3V3",
+        "5V3": "5V3",
+        "5V4": "5V4",
+        "AREF": "AREF",
+        "D0": "D0",
+        "D1": "D1",
+        "D12": "D12",
+        "D13": "D13",
+        "D18": "D18",
+        "D19": "D19",
+        "D20": "D20",
+        "D21": "D21",
+        "D22": "D22",
+        "D23": "D23",
+        "D26": "D26",
+        "D27": "D27",
+        "D28": "D28",
+        "D29": "D29",
+        "D30": "D30",
+        "D31": "D31",
+        "D32": "D32",
+        "D33": "D33",
+        "D34": "D34",
+        "D35": "D35",
+        "D36": "D36",
+        "D37": "D37",
+        "D38": "D38",
+        "D39": "D39",
+        "D40": "D40",
+        "D41": "D41",
+        "D42": "D42",
+        "D43": "D43",
+        "D44": "D44",
+        "D45": "D45",
+        "D47": "D47",
+        "D48": "D48",
+        "D49": "D49",
+        "D50": "D50",
+        "D51": "D51",
+        "D52": "D52",
+        "D53": "D53",
+        "GND2": "GND2",
+        "GND3": "GND3",
+        "GND5": "GND5",
+        "GND6": "GND6",
+        "IORF": "IORF",
+        "RST1": "RST1",
+        "SCL": "SCL",
+        "SDA": "SDA",
+        "VIN": "VIN"
+      },
+      "pin_types": {
+        "GND1": "passive",
+        "5V1": "passive",
+        "A5": "passive",
+        "A6": "passive",
+        "A7": "passive",
+        "A9": "passive",
+        "A11": "passive",
+        "A8": "passive",
+        "A10": "passive",
+        "A13": "passive",
+        "A15": "passive",
+        "A12": "passive",
+        "A14": "passive",
+        "D6": "passive",
+        "D46": "passive",
+        "D10": "passive",
+        "D11": "passive",
+        "D5": "passive",
+        "D4": "passive",
+        "D3": "passive",
+        "A0": "passive",
+        "A1": "passive",
+        "A2": "passive",
+        "A3": "passive",
+        "A4": "passive",
+        "D14": "passive",
+        "D7": "passive",
+        "D8": "passive",
+        "D9": "passive",
+        "D15": "passive",
+        "D16": "passive",
+        "D17": "passive",
+        "D2": "passive",
+        "D24": "passive",
+        "D25": "passive",
+        "3V3": "passive",
+        "5V3": "passive",
+        "5V4": "passive",
+        "AREF": "passive",
+        "D0": "passive",
+        "D1": "passive",
+        "D12": "passive",
+        "D13": "passive",
+        "D18": "passive",
+        "D19": "passive",
+        "D20": "passive",
+        "D21": "passive",
+        "D22": "passive",
+        "D23": "passive",
+        "D26": "passive",
+        "D27": "passive",
+        "D28": "passive",
+        "D29": "passive",
+        "D30": "passive",
+        "D31": "passive",
+        "D32": "passive",
+        "D33": "passive",
+        "D34": "passive",
+        "D35": "passive",
+        "D36": "passive",
+        "D37": "passive",
+        "D38": "passive",
+        "D39": "passive",
+        "D40": "passive",
+        "D41": "passive",
+        "D42": "passive",
+        "D43": "passive",
+        "D44": "passive",
+        "D45": "passive",
+        "D47": "passive",
+        "D48": "passive",
+        "D49": "passive",
+        "D50": "passive",
+        "D51": "passive",
+        "D52": "passive",
+        "D53": "passive",
+        "GND2": "passive",
+        "GND3": "passive",
+        "GND5": "passive",
+        "GND6": "passive",
+        "IORF": "passive",
+        "RST1": "passive",
+        "SCL": "passive",
+        "SDA": "passive",
+        "VIN": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "04e75b2a-0163-577e-9a60-2b457f722405",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/f260262e-1c6d-5655-a113-171412ba1d71"
+    },
+    {
+      "ref": "RC34",
+      "value": "100R",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/34",
+        "2": "analyser/strobe"
+      },
+      "sheet": "controls",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "b48148eb-9593-5497-80db-e1a0580d643c",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/3fdb454b-8b6c-5bcc-8f30-3df50d4c6adb"
+    },
+    {
+      "ref": "RC35",
+      "value": "100R",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/35",
+        "2": "analyser/reset"
+      },
+      "sheet": "controls",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "9d7b1338-32b1-501c-b368-0ca84813bfdd",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/3fdb454b-8b6c-5bcc-8f30-3df50d4c6adb"
+    },
+    {
+      "ref": "TP0",
+      "value": "gpio/0",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "gpio/0"
+      },
+      "sheet": "controls",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "3f523dbc-3d8a-5b95-a4d6-de6db605ba4c",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/3fdb454b-8b6c-5bcc-8f30-3df50d4c6adb"
+    },
+    {
+      "ref": "TP1",
+      "value": "gpio/1",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "gpio/1"
+      },
+      "sheet": "controls",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "87c4fe82-7491-5a49-bdbf-012789c02044",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/3fdb454b-8b6c-5bcc-8f30-3df50d4c6adb"
+    },
+    {
+      "ref": "TP3",
+      "value": "gpio/3",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "gpio/3"
+      },
+      "sheet": "controls",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "225759a6-ce50-5f3d-bc47-4bec0eb8a2b3",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/3fdb454b-8b6c-5bcc-8f30-3df50d4c6adb"
+    },
+    {
+      "ref": "TP33",
+      "value": "gpio/33",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "gpio/33"
+      },
+      "sheet": "controls",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "659baea9-0baa-5f5f-8e44-2e92d6e96b0e",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/3fdb454b-8b6c-5bcc-8f30-3df50d4c6adb"
+    },
+    {
+      "ref": "TP36",
+      "value": "gpio/36",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "gpio/36"
+      },
+      "sheet": "controls",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "21f467c9-8c49-5c2f-83b5-5c37bfecc129",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/3fdb454b-8b6c-5bcc-8f30-3df50d4c6adb"
+    },
+    {
+      "ref": "TP37",
+      "value": "gpio/37",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "gpio/37"
+      },
+      "sheet": "controls",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "b181e6e0-9c9b-563e-b76f-88bcc362cdf8",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/3fdb454b-8b6c-5bcc-8f30-3df50d4c6adb"
+    },
+    {
+      "ref": "JT1",
+      "value": "Teensy 4.1 JT1",
+      "footprint": "Shields:PinSocket_1x24_P2.54mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "gpio/0",
+        "3": "gpio/1",
+        "4": "gpio/2",
+        "5": "gpio/3",
+        "6": "gpio/4",
+        "7": "gpio/5",
+        "8": "gpio/6",
+        "9": "gpio/7",
+        "10": "gpio/8",
+        "11": "gpio/9",
+        "12": "gpio/10",
+        "13": "gpio/11",
+        "14": "gpio/12",
+        "15": "IOREF",
+        "16": "shield/scl",
+        "17": "shield/sda",
+        "18": "adc/26",
+        "19": "adc/27",
+        "20": "gpio/28",
+        "21": "gpio/29",
+        "22": "gpio/30",
+        "23": "gpio/31",
+        "24": "gpio/32"
+      },
+      "sheet": "teensy",
+      "description": "Socket pad 1 at USB end; numbers here are physical socket pads",
+      "pin_names": {
+        "1": "GND",
+        "2": "0",
+        "3": "1",
+        "4": "2",
+        "5": "3",
+        "6": "4",
+        "7": "5",
+        "8": "6",
+        "9": "7",
+        "10": "8",
+        "11": "9",
+        "12": "10",
+        "13": "11",
+        "14": "12",
+        "15": "3V3",
+        "16": "24",
+        "17": "25",
+        "18": "26",
+        "19": "27",
+        "20": "28",
+        "21": "29",
+        "22": "30",
+        "23": "31",
+        "24": "32"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive",
+        "7": "passive",
+        "8": "passive",
+        "9": "passive",
+        "10": "passive",
+        "11": "passive",
+        "12": "passive",
+        "13": "passive",
+        "14": "passive",
+        "15": "passive",
+        "16": "passive",
+        "17": "passive",
+        "18": "passive",
+        "19": "passive",
+        "20": "passive",
+        "21": "passive",
+        "22": "passive",
+        "23": "passive",
+        "24": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "2d56d0c8-0b16-573c-b6bf-6c985a21abea",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/4bde25da-7384-5846-84a3-9e57048a772b"
+    },
+    {
+      "ref": "JT2",
+      "value": "Teensy 4.1 JT2",
+      "footprint": "Shields:PinSocket_1x24_P2.54mm_Vertical",
+      "pins": {
+        "1": "VIN_USB",
+        "2": "GND",
+        "3": "IOREF",
+        "4": "adc/23",
+        "5": "adc/22",
+        "6": "adc/21",
+        "7": "adc/20",
+        "8": "adc/19",
+        "9": "male2/analyser out",
+        "10": "male1/analyser out",
+        "11": "female3/analyser out",
+        "12": "female2/analyser out",
+        "13": "female1/analyser out",
+        "14": null,
+        "15": "GND",
+        "16": "adc/41",
+        "17": "adc/40",
+        "18": "adc/39",
+        "19": "adc/38",
+        "20": "gpio/37",
+        "21": "gpio/36",
+        "22": "gpio/35",
+        "23": "gpio/34",
+        "24": "gpio/33"
+      },
+      "sheet": "teensy",
+      "description": "Socket pad 1 at USB end; numbers here are physical socket pads",
+      "pin_names": {
+        "1": "VIN",
+        "2": "GND",
+        "3": "3V3",
+        "4": "23",
+        "5": "22",
+        "6": "21",
+        "7": "20",
+        "8": "19",
+        "9": "18",
+        "10": "17",
+        "11": "16",
+        "12": "15",
+        "13": "14",
+        "14": "13",
+        "15": "GND",
+        "16": "41",
+        "17": "40",
+        "18": "39",
+        "19": "38",
+        "20": "37",
+        "21": "36",
+        "22": "35",
+        "23": "34",
+        "24": "33"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive",
+        "7": "passive",
+        "8": "passive",
+        "9": "passive",
+        "10": "passive",
+        "11": "passive",
+        "12": "passive",
+        "13": "passive",
+        "14": "passive",
+        "15": "passive",
+        "16": "passive",
+        "17": "passive",
+        "18": "passive",
+        "19": "passive",
+        "20": "passive",
+        "21": "passive",
+        "22": "passive",
+        "23": "passive",
+        "24": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "7abefeeb-a2b1-577b-b620-b64030ddd412",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/4bde25da-7384-5846-84a3-9e57048a772b"
+    },
+    {
+      "ref": "RD2",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/2",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "4b6da0c5-0033-58d7-bd67-de0bf83ae50e",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/ad0f2abc-5831-5895-87ec-2d038d68f162"
+    },
+    {
+      "ref": "RD4",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/4",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "21bed282-fec8-542b-8c84-8ae51f586eea",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/ad0f2abc-5831-5895-87ec-2d038d68f162"
+    },
+    {
+      "ref": "RD5",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/5",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "5dcf282d-2488-5c69-a2eb-0796eedd3ba2",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/ad0f2abc-5831-5895-87ec-2d038d68f162"
+    },
+    {
+      "ref": "RD6",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/6",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "a7498513-337f-562c-a72f-645648adf414",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/ad0f2abc-5831-5895-87ec-2d038d68f162"
+    },
+    {
+      "ref": "U1",
+      "value": "SN74LV4T125PWR",
+      "footprint": "Shields:TSSOP-14_4.4x5mm_P0.65mm",
+      "pins": {
+        "14": "VIN_USB",
+        "7": "GND",
+        "1": "GND",
+        "2": "gpio/2",
+        "3": "female1/tone",
+        "4": "GND",
+        "5": "gpio/4",
+        "6": "female2/tone",
+        "10": "GND",
+        "9": "gpio/5",
+        "8": "female3/tone",
+        "13": "GND",
+        "12": "gpio/6",
+        "11": "male1/tone"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "14": "VCC",
+        "7": "GND",
+        "1": "OE1",
+        "2": "A1",
+        "3": "Y1",
+        "4": "OE2",
+        "5": "A2",
+        "6": "Y2",
+        "10": "OE3",
+        "9": "A3",
+        "8": "Y3",
+        "13": "OE4",
+        "12": "A4",
+        "11": "Y4"
+      },
+      "pin_types": {
+        "14": "power_in",
+        "7": "power_in",
+        "1": "input",
+        "2": "input",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "output",
+        "10": "input",
+        "9": "input",
+        "8": "output",
+        "13": "input",
+        "12": "input",
+        "11": "output"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "SN74LV4T125PWR",
+      "datasheet": "https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf",
+      "uuid": "5c5f5d82-1f1b-5ab9-bc28-89995dbdc10b",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/ad0f2abc-5831-5895-87ec-2d038d68f162"
+    },
+    {
+      "ref": "CB1",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "VIN_USB",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "a2b69054-17e5-50e4-9900-8c83b505f643",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/ad0f2abc-5831-5895-87ec-2d038d68f162"
+    },
+    {
+      "ref": "RD28",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/28",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "7b25df30-eede-5c5e-bd31-754c29f28f27",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/ad0f2abc-5831-5895-87ec-2d038d68f162"
+    },
+    {
+      "ref": "RD7",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/7",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "3176e021-fc60-55a8-8d69-de8feeb72b42",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/ad0f2abc-5831-5895-87ec-2d038d68f162"
+    },
+    {
+      "ref": "RD8",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/8",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "f0a24742-aaec-5745-a281-5642cd02d428",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/ad0f2abc-5831-5895-87ec-2d038d68f162"
+    },
+    {
+      "ref": "RD9",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/9",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "4b404349-2570-51b3-b644-0897bb0e8c54",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/ad0f2abc-5831-5895-87ec-2d038d68f162"
+    },
+    {
+      "ref": "U2",
+      "value": "SN74LV4T125PWR",
+      "footprint": "Shields:TSSOP-14_4.4x5mm_P0.65mm",
+      "pins": {
+        "14": "VIN_USB",
+        "7": "GND",
+        "1": "GND",
+        "2": "gpio/28",
+        "3": "male2/tone",
+        "4": "GND",
+        "5": "gpio/7",
+        "6": "female1/neopixel/driven",
+        "10": "GND",
+        "9": "gpio/8",
+        "8": "female2/neopixel/driven",
+        "13": "GND",
+        "12": "gpio/9",
+        "11": "female3/neopixel/driven"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "14": "VCC",
+        "7": "GND",
+        "1": "OE1",
+        "2": "A1",
+        "3": "Y1",
+        "4": "OE2",
+        "5": "A2",
+        "6": "Y2",
+        "10": "OE3",
+        "9": "A3",
+        "8": "Y3",
+        "13": "OE4",
+        "12": "A4",
+        "11": "Y4"
+      },
+      "pin_types": {
+        "14": "power_in",
+        "7": "power_in",
+        "1": "input",
+        "2": "input",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "output",
+        "10": "input",
+        "9": "input",
+        "8": "output",
+        "13": "input",
+        "12": "input",
+        "11": "output"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "SN74LV4T125PWR",
+      "datasheet": "https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf",
+      "uuid": "15f47913-006f-5b52-9327-b6d197342da2",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/ad0f2abc-5831-5895-87ec-2d038d68f162"
+    },
+    {
+      "ref": "CB2",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "VIN_USB",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "bae72607-6ff2-5e37-a2f6-638c1bc188d9",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/aa309451-9ab5-54bb-9f14-afa9e587732e"
+    },
+    {
+      "ref": "RD10",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/10",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "c76d08b0-efc7-5b93-88f4-c28664cbefb0",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/aa309451-9ab5-54bb-9f14-afa9e587732e"
+    },
+    {
+      "ref": "RD11",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/11",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "22671231-07e1-5d5f-8c14-3831b5cdf742",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/aa309451-9ab5-54bb-9f14-afa9e587732e"
+    },
+    {
+      "ref": "RD12",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/12",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "cd4397a2-58b6-5b97-8b0c-cb5d5cc11daf",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/aa309451-9ab5-54bb-9f14-afa9e587732e"
+    },
+    {
+      "ref": "RD29",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/29",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "317b006a-e8a2-5784-bd36-d63afef220cf",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/aa309451-9ab5-54bb-9f14-afa9e587732e"
+    },
+    {
+      "ref": "U3",
+      "value": "SN74LV4T125PWR",
+      "footprint": "Shields:TSSOP-14_4.4x5mm_P0.65mm",
+      "pins": {
+        "14": "VIN_USB",
+        "7": "GND",
+        "1": "GND",
+        "2": "gpio/10",
+        "3": "male1/neopixel/driven",
+        "4": "GND",
+        "5": "gpio/11",
+        "6": "male2/neopixel/driven",
+        "10": "GND",
+        "9": "gpio/12",
+        "8": "male2/bar neopixel/driven",
+        "13": "GND",
+        "12": "gpio/29",
+        "11": "male1/bar neopixel/driven"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "14": "VCC",
+        "7": "GND",
+        "1": "OE1",
+        "2": "A1",
+        "3": "Y1",
+        "4": "OE2",
+        "5": "A2",
+        "6": "Y2",
+        "10": "OE3",
+        "9": "A3",
+        "8": "Y3",
+        "13": "OE4",
+        "12": "A4",
+        "11": "Y4"
+      },
+      "pin_types": {
+        "14": "power_in",
+        "7": "power_in",
+        "1": "input",
+        "2": "input",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "output",
+        "10": "input",
+        "9": "input",
+        "8": "output",
+        "13": "input",
+        "12": "input",
+        "11": "output"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "SN74LV4T125PWR",
+      "datasheet": "https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf",
+      "uuid": "162b0f0b-86d6-5321-86d5-8b1aab78b85e",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/aa309451-9ab5-54bb-9f14-afa9e587732e"
+    },
+    {
+      "ref": "CB3",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "VIN_USB",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "79848d85-6ca9-5d48-9aed-ce26d9576fb4",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/aa309451-9ab5-54bb-9f14-afa9e587732e"
+    },
+    {
+      "ref": "RD30",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/30",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "a9af5bbe-f747-56b1-bbd5-9a34dc2ff842",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/aa309451-9ab5-54bb-9f14-afa9e587732e"
+    },
+    {
+      "ref": "RD31",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/31",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "84c499a6-c25f-5a27-8a6d-7a1e86c69d4c",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/aa309451-9ab5-54bb-9f14-afa9e587732e"
+    },
+    {
+      "ref": "RD32",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "gpio/32",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "0ea8f9dd-d803-59b7-ae4d-14e21c712993",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/aa309451-9ab5-54bb-9f14-afa9e587732e"
+    },
+    {
+      "ref": "U4",
+      "value": "SN74LV4T125PWR",
+      "footprint": "Shields:TSSOP-14_4.4x5mm_P0.65mm",
+      "pins": {
+        "14": "VIN_USB",
+        "7": "GND",
+        "1": "GND",
+        "2": "gpio/30",
+        "3": "male1/aux driven",
+        "4": "GND",
+        "5": "gpio/31",
+        "6": "male2/aux driven",
+        "10": "GND",
+        "9": "gpio/32",
+        "8": "amp shutdown",
+        "13": "GND",
+        "12": "GND",
+        "11": null
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "14": "VCC",
+        "7": "GND",
+        "1": "OE1",
+        "2": "A1",
+        "3": "Y1",
+        "4": "OE2",
+        "5": "A2",
+        "6": "Y2",
+        "10": "OE3",
+        "9": "A3",
+        "8": "Y3",
+        "13": "OE4",
+        "12": "A4",
+        "11": "Y4"
+      },
+      "pin_types": {
+        "14": "power_in",
+        "7": "power_in",
+        "1": "input",
+        "2": "input",
+        "3": "output",
+        "4": "input",
+        "5": "input",
+        "6": "output",
+        "10": "input",
+        "9": "input",
+        "8": "output",
+        "13": "input",
+        "12": "input",
+        "11": "output"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "SN74LV4T125PWR",
+      "datasheet": "https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf",
+      "uuid": "e5dd9ac4-72c0-5a32-8217-95a4756c7b23",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/aa309451-9ab5-54bb-9f14-afa9e587732e"
+    },
+    {
+      "ref": "CB4",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "VIN_USB",
+        "2": "GND"
+      },
+      "sheet": "translators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "28406163-9047-52be-bed9-6834da4c717f",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/e1d55d88-61cc-5caa-9929-2ebc8d9f6058"
+    },
+    {
+      "ref": "RA19",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female1/photosensor",
+        "2": "adc/19"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "b668fe9d-0888-5b00-99ab-231beff024cb",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "RB19",
+      "value": "150K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "adc/19",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "1f59be6b-44d9-552c-9809-3f14a49800ef",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "CA19",
+      "value": "10nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "adc/19",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "7f266b1a-29df-55a4-ac98-037427d37020",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "RA20",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female2/photosensor",
+        "2": "adc/20"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "7389e789-c714-5641-8b6f-a7b26d64a3b6",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "RB20",
+      "value": "150K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "adc/20",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "aead01d7-5bc1-547b-84b1-5d272f07d2dc",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "CA20",
+      "value": "10nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "adc/20",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "f095a90e-0aa2-5a28-b92c-f1ccbe46250a",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "RA21",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female3/photosensor",
+        "2": "adc/21"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "d8b4ce19-df1b-5859-919c-698d54764ff8",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "RB21",
+      "value": "150K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "adc/21",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "d0532c76-9031-58be-bd6d-6305cee905dc",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "CA21",
+      "value": "10nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "adc/21",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "3fdf7fd9-26b6-514a-96f5-658593a22c17",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "RA22",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male1/photosensor/A",
+        "2": "adc/22"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "55eef531-c704-57dd-af35-456aaabc0c6a",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "RB22",
+      "value": "150K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "adc/22",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "19878b43-3111-535c-a789-28e0ef04ef2e",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "CA22",
+      "value": "10nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "adc/22",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "538b6f8a-4b8b-5f5c-9b3c-7151f4873190",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "RA23",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male1/photosensor/B",
+        "2": "adc/23"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "4e1d823a-6304-586e-83fe-068b8eaa3721",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "RB23",
+      "value": "150K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "adc/23",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "d574bc6e-d102-5590-81d3-c764eee98f25",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "CA23",
+      "value": "10nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "adc/23",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "1741d759-5320-5948-8f5d-af04e5001b2d",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "RA26",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male1/photosensor/C",
+        "2": "adc/26"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "8011ce19-0b8b-55ae-afeb-008e20dc7304",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "RB26",
+      "value": "150K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "adc/26",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "cd111e1c-c0c7-513a-bda7-f8f78aab015d",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "CA26",
+      "value": "10nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "adc/26",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "0cbd81ff-4f2a-5eba-8c43-c0121accb690",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8"
+    },
+    {
+      "ref": "RA27",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male1/photosensor/D",
+        "2": "adc/27"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "b26a59f6-9c86-5ccb-a240-a5ee29f849b5",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/1c6d1bf5-875a-5e5f-96e6-c5487129c86b"
+    },
+    {
+      "ref": "RB27",
+      "value": "150K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "adc/27",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "d14ce976-9bee-5ad8-ab40-bf17059e8324",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/1c6d1bf5-875a-5e5f-96e6-c5487129c86b"
+    },
+    {
+      "ref": "CA27",
+      "value": "10nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "adc/27",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "a0522a8b-4794-506b-9786-1ee7ccb119c2",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/1c6d1bf5-875a-5e5f-96e6-c5487129c86b"
+    },
+    {
+      "ref": "RA38",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male2/photosensor/A",
+        "2": "adc/38"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "ccc4ed6a-c1a4-5919-9ae5-e1f9d4059d87",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/1c6d1bf5-875a-5e5f-96e6-c5487129c86b"
+    },
+    {
+      "ref": "RB38",
+      "value": "150K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "adc/38",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "df3a0d6e-408c-51d2-a4dc-1c6e8703ef43",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/1c6d1bf5-875a-5e5f-96e6-c5487129c86b"
+    },
+    {
+      "ref": "CA38",
+      "value": "10nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "adc/38",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "2cbcfc4b-3a7b-5140-882a-f68d85bb13b9",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/1c6d1bf5-875a-5e5f-96e6-c5487129c86b"
+    },
+    {
+      "ref": "RA39",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male2/photosensor/B",
+        "2": "adc/39"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "68739eb7-620f-531c-be19-96f6c6e7778f",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/1c6d1bf5-875a-5e5f-96e6-c5487129c86b"
+    },
+    {
+      "ref": "RB39",
+      "value": "150K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "adc/39",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "ca456619-d389-5038-91c7-6c2c02f4b28c",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/1c6d1bf5-875a-5e5f-96e6-c5487129c86b"
+    },
+    {
+      "ref": "CA39",
+      "value": "10nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "adc/39",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "6fbadef1-d3c6-5e59-b098-8071dc93fded",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/1c6d1bf5-875a-5e5f-96e6-c5487129c86b"
+    },
+    {
+      "ref": "RA40",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male2/photosensor/C",
+        "2": "adc/40"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "0f14818a-9288-51e7-8f9d-cc91a74953a0",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/1c6d1bf5-875a-5e5f-96e6-c5487129c86b"
+    },
+    {
+      "ref": "RB40",
+      "value": "150K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "adc/40",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "dedde838-db0a-5287-8ccf-ee97d043fdd7",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/1c6d1bf5-875a-5e5f-96e6-c5487129c86b"
+    },
+    {
+      "ref": "CA40",
+      "value": "10nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "adc/40",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "0e0ddf14-b19b-5c9b-abbd-0dbbab113c22",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/1c6d1bf5-875a-5e5f-96e6-c5487129c86b"
+    },
+    {
+      "ref": "RA41",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male2/photosensor/D",
+        "2": "adc/41"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "2303a3fc-cb05-59f9-84c8-911883bbb4aa",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/1c6d1bf5-875a-5e5f-96e6-c5487129c86b"
+    },
+    {
+      "ref": "RB41",
+      "value": "150K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "adc/41",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "ccef8d15-dc35-5ace-9413-8401dc4d8d65",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/1c6d1bf5-875a-5e5f-96e6-c5487129c86b"
+    },
+    {
+      "ref": "CA41",
+      "value": "10nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "adc/41",
+        "2": "GND"
+      },
+      "sheet": "sensors",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "6ce33215-c940-5e0b-baad-534017a7ac9e",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/1c6d1bf5-875a-5e5f-96e6-c5487129c86b"
+    },
+    {
+      "ref": "D1",
+      "value": "SS14",
+      "footprint": "Shields:D_SOD-123",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "VIN_USB"
+      },
+      "sheet": "power",
+      "description": "Cathode to MEGA_5V; USB alone supplies VIN",
+      "pin_names": {
+        "1": "K",
+        "2": "A"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "SS14",
+      "datasheet": "",
+      "uuid": "b35c6676-f6b1-5331-9802-ba7c49653f4d",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/cb79e5bc-fd6a-534a-bd75-010023780d0f"
+    },
+    {
+      "ref": "CV1",
+      "value": "10uF X7R",
+      "footprint": "Shields:C_0805_2012Metric",
+      "pins": {
+        "1": "VIN_USB",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "cfa2d676-6c2a-5ae5-aa6b-84a377001e48",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/cb79e5bc-fd6a-534a-bd75-010023780d0f"
+    },
+    {
+      "ref": "CI1",
+      "value": "10uF X7R",
+      "footprint": "Shields:C_0805_2012Metric",
+      "pins": {
+        "1": "IOREF",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "ebb1d6f1-42d2-5678-87a9-c5431780e592",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/cb79e5bc-fd6a-534a-bd75-010023780d0f"
+    },
+    {
+      "ref": "CI2",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "IOREF",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "ee268462-86f2-5cd3-a520-581266583547",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/cb79e5bc-fd6a-534a-bd75-010023780d0f"
+    },
+    {
+      "ref": "TPV",
+      "value": "VIN_USB",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "VIN_USB"
+      },
+      "sheet": "power",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "2d0c2ce4-4c78-5ad5-b2e8-e313c0c5170a",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/cb79e5bc-fd6a-534a-bd75-010023780d0f"
+    },
+    {
+      "ref": "TPI",
+      "value": "IOREF",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "IOREF"
+      },
+      "sheet": "power",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "36957ef0-80f5-5728-bdc1-cf01ec31c272",
+      "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/cb79e5bc-fd6a-534a-bd75-010023780d0f"
+    }
+  ],
+  "production_release": false
+}

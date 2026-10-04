@@ -1,0 +1,1530 @@
+{
+  "project": "analyser-direct",
+  "root_uuid": "783c6f08-b3fb-5bc3-a49e-ea674f7f79b7",
+  "components": [
+    {
+      "ref": "JA1",
+      "value": "ANALYSER - KEY 24",
+      "footprint": "Shields:Socket_2x12_Key24",
+      "pins": {
+        "1": "female1/microphone",
+        "2": "AGND",
+        "11": "female1/analyser out",
+        "3": "female2/microphone",
+        "4": "AGND",
+        "12": "female2/analyser out",
+        "5": "female3/microphone",
+        "6": "AGND",
+        "13": "female3/analyser out",
+        "7": "male1/microphone",
+        "8": "AGND",
+        "14": "male1/analyser out",
+        "9": "male2/microphone",
+        "10": "AGND",
+        "15": "male2/analyser out",
+        "16": "AGND",
+        "17": "analyser/strobe",
+        "18": "analyser/reset",
+        "19": "shield/sda",
+        "20": "shield/scl",
+        "21": "IOREF",
+        "22": "GND",
+        "23": "+5V"
+      },
+      "sheet": "interface",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2",
+        "11": "11",
+        "3": "3",
+        "4": "4",
+        "12": "12",
+        "5": "5",
+        "6": "6",
+        "13": "13",
+        "7": "7",
+        "8": "8",
+        "14": "14",
+        "9": "9",
+        "10": "10",
+        "15": "15",
+        "16": "16",
+        "17": "17",
+        "18": "18",
+        "19": "19",
+        "20": "20",
+        "21": "21",
+        "22": "22",
+        "23": "23"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "11": "passive",
+        "3": "passive",
+        "4": "passive",
+        "12": "passive",
+        "5": "passive",
+        "6": "passive",
+        "13": "passive",
+        "7": "passive",
+        "8": "passive",
+        "14": "passive",
+        "9": "passive",
+        "10": "passive",
+        "15": "passive",
+        "16": "passive",
+        "17": "passive",
+        "18": "passive",
+        "19": "passive",
+        "20": "passive",
+        "21": "passive",
+        "22": "passive",
+        "23": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "14374b16-ad8c-5fa3-8841-b9b2956ef7d5",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/7a938f8d-247e-5101-a639-b0a83bfd77d8"
+    },
+    {
+      "ref": "H1",
+      "value": "M3 retention",
+      "footprint": "Shields:MountingHole_3.2mm_M3",
+      "pins": {},
+      "sheet": "interface",
+      "description": "",
+      "pin_names": {},
+      "pin_types": {},
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "fa9c00da-0ad0-5b22-aad6-d5b224c412ff",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/7a938f8d-247e-5101-a639-b0a83bfd77d8"
+    },
+    {
+      "ref": "H2",
+      "value": "M3 retention",
+      "footprint": "Shields:MountingHole_3.2mm_M3",
+      "pins": {},
+      "sheet": "interface",
+      "description": "",
+      "pin_names": {},
+      "pin_types": {},
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "d85a2993-2863-53ac-9e78-7c8f3ff12684",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/7a938f8d-247e-5101-a639-b0a83bfd77d8"
+    },
+    {
+      "ref": "JB1",
+      "value": "BENCH GND +5V SIGNAL",
+      "footprint": "Shields:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical",
+      "pins": {
+        "1": "AGND",
+        "2": "+5V",
+        "3": "bench/mic"
+      },
+      "sheet": "interface",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2",
+        "3": "3"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "020b9fa6-c10f-5f6d-ae5c-433955c4c81f",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/7a938f8d-247e-5101-a639-b0a83bfd77d8"
+    },
+    {
+      "ref": "JSRC1",
+      "value": "HARNESS - CH0 - BENCH",
+      "footprint": "Shields:PinHeader_1x03_P2.54mm_Vertical",
+      "pins": {
+        "1": "female1/microphone",
+        "2": "ch0/source",
+        "3": "bench/mic"
+      },
+      "sheet": "interface",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2",
+        "3": "3"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive"
+      },
+      "assembly": "open",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "08d3366b-ec89-51c5-b018-75a30222ecce",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/996cbd1e-1780-5056-a374-3f3c1b7e75e9"
+    },
+    {
+      "ref": "R10",
+      "value": "1M",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "ch0/source",
+        "2": "AGND"
+      },
+      "sheet": "female1",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "79c1cfab-ac0c-5de5-b052-6beb45413ab4",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/81896d02-3533-5c5b-b3cb-3ac925a7a92d"
+    },
+    {
+      "ref": "R11",
+      "value": "10K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "ch0/source",
+        "2": "female1/mid"
+      },
+      "sheet": "female1",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "9dda9b12-913c-572f-a803-350a85e8a0a3",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/81896d02-3533-5c5b-b3cb-3ac925a7a92d"
+    },
+    {
+      "ref": "R12",
+      "value": "10K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female1/mid",
+        "2": "female1/in"
+      },
+      "sheet": "female1",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "98224cbc-3d6e-5882-a347-be5ee2fdee4c",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/81896d02-3533-5c5b-b3cb-3ac925a7a92d"
+    },
+    {
+      "ref": "C11",
+      "value": "2.2nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "female1/mid",
+        "2": "female1/buffer"
+      },
+      "sheet": "female1",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "634faab9-2dae-5dc2-95e9-f574e17430b3",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/81896d02-3533-5c5b-b3cb-3ac925a7a92d"
+    },
+    {
+      "ref": "C12",
+      "value": "1nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "female1/in",
+        "2": "AGND"
+      },
+      "sheet": "female1",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "8ed26bf9-2fcd-597b-8065-46f5d925d4ac",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/81896d02-3533-5c5b-b3cb-3ac925a7a92d"
+    },
+    {
+      "ref": "R13",
+      "value": "100R",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female1/buffer",
+        "2": "female1/analyser out"
+      },
+      "sheet": "female1",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "da4ef7e7-f9da-5a56-af51-8eadd851b2f5",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/81896d02-3533-5c5b-b3cb-3ac925a7a92d"
+    },
+    {
+      "ref": "C13",
+      "value": "1nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "female1/analyser out",
+        "2": "AGND"
+      },
+      "sheet": "female1",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "9d90c393-686e-50c2-95cc-9367aae62a99",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/81896d02-3533-5c5b-b3cb-3ac925a7a92d"
+    },
+    {
+      "ref": "TP1",
+      "value": "female1/analyser out",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "female1/analyser out"
+      },
+      "sheet": "female1",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "5a09be29-ce7a-5f45-80d4-b44b3bdf7c78",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/81896d02-3533-5c5b-b3cb-3ac925a7a92d"
+    },
+    {
+      "ref": "R20",
+      "value": "1M",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female2/microphone",
+        "2": "AGND"
+      },
+      "sheet": "female2",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "a3742a32-a987-59a6-8a71-048c1e8537aa",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/b2c68912-fec5-5d1d-91f2-726e99433a8f"
+    },
+    {
+      "ref": "R21",
+      "value": "10K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female2/microphone",
+        "2": "female2/mid"
+      },
+      "sheet": "female2",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "128c0699-ef8b-50fe-a211-2dfb4e7437fc",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/b2c68912-fec5-5d1d-91f2-726e99433a8f"
+    },
+    {
+      "ref": "R22",
+      "value": "10K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female2/mid",
+        "2": "female2/in"
+      },
+      "sheet": "female2",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "8eeab63a-2bb0-5801-acd7-914cb3985be5",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/b2c68912-fec5-5d1d-91f2-726e99433a8f"
+    },
+    {
+      "ref": "C21",
+      "value": "2.2nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "female2/mid",
+        "2": "female2/buffer"
+      },
+      "sheet": "female2",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "fc769e3c-8a45-576e-ae7b-d51f53aa4c8a",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/b2c68912-fec5-5d1d-91f2-726e99433a8f"
+    },
+    {
+      "ref": "C22",
+      "value": "1nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "female2/in",
+        "2": "AGND"
+      },
+      "sheet": "female2",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "0db0be07-1cd1-51ed-8e1b-a807f539f88e",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/b2c68912-fec5-5d1d-91f2-726e99433a8f"
+    },
+    {
+      "ref": "R23",
+      "value": "100R",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female2/buffer",
+        "2": "female2/analyser out"
+      },
+      "sheet": "female2",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "d800bfc2-9a6d-5e67-b909-84a47219adaa",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/b2c68912-fec5-5d1d-91f2-726e99433a8f"
+    },
+    {
+      "ref": "C23",
+      "value": "1nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "female2/analyser out",
+        "2": "AGND"
+      },
+      "sheet": "female2",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "be7fd67e-2ce7-52d6-8159-c0f1344db19c",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/b2c68912-fec5-5d1d-91f2-726e99433a8f"
+    },
+    {
+      "ref": "TP2",
+      "value": "female2/analyser out",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "female2/analyser out"
+      },
+      "sheet": "female2",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "38acf809-70ec-50ff-939c-4ae4ecb8f7d8",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/b2c68912-fec5-5d1d-91f2-726e99433a8f"
+    },
+    {
+      "ref": "R30",
+      "value": "1M",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female3/microphone",
+        "2": "AGND"
+      },
+      "sheet": "female3",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "5a0f04d6-d2b1-5505-a6fa-8558ddafb21f",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/2aa95aa8-2894-5812-b400-dfb986ee43ea"
+    },
+    {
+      "ref": "R31",
+      "value": "10K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female3/microphone",
+        "2": "female3/mid"
+      },
+      "sheet": "female3",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "f9b57cdc-5916-5681-9d84-dea0e8b9c62c",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/2aa95aa8-2894-5812-b400-dfb986ee43ea"
+    },
+    {
+      "ref": "R32",
+      "value": "10K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female3/mid",
+        "2": "female3/in"
+      },
+      "sheet": "female3",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "8815b6be-3626-5e6a-9797-ae753ce665dc",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/2aa95aa8-2894-5812-b400-dfb986ee43ea"
+    },
+    {
+      "ref": "C31",
+      "value": "2.2nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "female3/mid",
+        "2": "female3/buffer"
+      },
+      "sheet": "female3",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "e4abd724-38b7-5235-9850-1d68c0552339",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/2aa95aa8-2894-5812-b400-dfb986ee43ea"
+    },
+    {
+      "ref": "C32",
+      "value": "1nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "female3/in",
+        "2": "AGND"
+      },
+      "sheet": "female3",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "105c80b9-28df-5319-8e72-a4c424a2e236",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/2aa95aa8-2894-5812-b400-dfb986ee43ea"
+    },
+    {
+      "ref": "R33",
+      "value": "100R",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female3/buffer",
+        "2": "female3/analyser out"
+      },
+      "sheet": "female3",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "5bc2f34b-8fa0-5132-9dc5-8edddd66ea6a",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/2aa95aa8-2894-5812-b400-dfb986ee43ea"
+    },
+    {
+      "ref": "C33",
+      "value": "1nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "female3/analyser out",
+        "2": "AGND"
+      },
+      "sheet": "female3",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "88b3547e-761d-5e19-8c9c-0ab55cab5918",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/2aa95aa8-2894-5812-b400-dfb986ee43ea"
+    },
+    {
+      "ref": "TP3",
+      "value": "female3/analyser out",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "female3/analyser out"
+      },
+      "sheet": "female3",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "cc757033-f6bb-5539-a86a-cb4d82b7936e",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/2aa95aa8-2894-5812-b400-dfb986ee43ea"
+    },
+    {
+      "ref": "R40",
+      "value": "1M",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male1/microphone",
+        "2": "AGND"
+      },
+      "sheet": "male1",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "1720b613-d142-5bd8-8a0f-2d46753fbf04",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/613dd97c-ee4b-5f77-b175-2f7a1c06be7d"
+    },
+    {
+      "ref": "R41",
+      "value": "10K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male1/microphone",
+        "2": "male1/mid"
+      },
+      "sheet": "male1",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "1f81a06e-baa0-56e3-b8b8-ad6dccd2b889",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/613dd97c-ee4b-5f77-b175-2f7a1c06be7d"
+    },
+    {
+      "ref": "R42",
+      "value": "10K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male1/mid",
+        "2": "male1/in"
+      },
+      "sheet": "male1",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "6a91cab8-5c7a-5316-b16a-24733f218def",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/613dd97c-ee4b-5f77-b175-2f7a1c06be7d"
+    },
+    {
+      "ref": "C41",
+      "value": "2.2nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "male1/mid",
+        "2": "male1/buffer"
+      },
+      "sheet": "male1",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "7a0696bf-82c0-5340-9e28-f4e115af8777",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/613dd97c-ee4b-5f77-b175-2f7a1c06be7d"
+    },
+    {
+      "ref": "C42",
+      "value": "1nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "male1/in",
+        "2": "AGND"
+      },
+      "sheet": "male1",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "3f0e81aa-6107-590b-abfd-c6e084e53607",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/613dd97c-ee4b-5f77-b175-2f7a1c06be7d"
+    },
+    {
+      "ref": "R43",
+      "value": "100R",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male1/buffer",
+        "2": "male1/analyser out"
+      },
+      "sheet": "male1",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "a841db74-473b-5ba8-a8e0-ecd42e02d69b",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/613dd97c-ee4b-5f77-b175-2f7a1c06be7d"
+    },
+    {
+      "ref": "C43",
+      "value": "1nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "male1/analyser out",
+        "2": "AGND"
+      },
+      "sheet": "male1",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "4a612e35-c4fd-5cae-9344-bc8bf0a344c6",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/613dd97c-ee4b-5f77-b175-2f7a1c06be7d"
+    },
+    {
+      "ref": "TP4",
+      "value": "male1/analyser out",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "male1/analyser out"
+      },
+      "sheet": "male1",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "4b083ef0-0d78-5af6-baa4-eaeb905b9382",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/613dd97c-ee4b-5f77-b175-2f7a1c06be7d"
+    },
+    {
+      "ref": "R50",
+      "value": "1M",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male2/microphone",
+        "2": "AGND"
+      },
+      "sheet": "male2",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "e4ee5546-be3e-547d-b2d2-1d311e861c09",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/63490993-3db0-513e-8e0f-fb2077a00ada"
+    },
+    {
+      "ref": "R51",
+      "value": "10K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male2/microphone",
+        "2": "male2/mid"
+      },
+      "sheet": "male2",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "cfc1bb9f-028a-522a-aaed-121a15c95382",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/63490993-3db0-513e-8e0f-fb2077a00ada"
+    },
+    {
+      "ref": "R52",
+      "value": "10K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male2/mid",
+        "2": "male2/in"
+      },
+      "sheet": "male2",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "38998358-126e-592c-8f8d-e206927bfe57",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/63490993-3db0-513e-8e0f-fb2077a00ada"
+    },
+    {
+      "ref": "C51",
+      "value": "2.2nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "male2/mid",
+        "2": "male2/buffer"
+      },
+      "sheet": "male2",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "90b867fc-5c89-5733-b2fb-851c2142cf7c",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/63490993-3db0-513e-8e0f-fb2077a00ada"
+    },
+    {
+      "ref": "C52",
+      "value": "1nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "male2/in",
+        "2": "AGND"
+      },
+      "sheet": "male2",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "ae076430-42db-59e1-8daa-d7f3e476c060",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/63490993-3db0-513e-8e0f-fb2077a00ada"
+    },
+    {
+      "ref": "R53",
+      "value": "100R",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male2/buffer",
+        "2": "male2/analyser out"
+      },
+      "sheet": "male2",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "36a1668f-5c94-57c3-83d1-dd38909c4b0e",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/63490993-3db0-513e-8e0f-fb2077a00ada"
+    },
+    {
+      "ref": "C53",
+      "value": "1nF C0G",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "male2/analyser out",
+        "2": "AGND"
+      },
+      "sheet": "male2",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "3d3b66af-ce78-5641-8463-36eeeb0fff83",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/63490993-3db0-513e-8e0f-fb2077a00ada"
+    },
+    {
+      "ref": "TP5",
+      "value": "male2/analyser out",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "male2/analyser out"
+      },
+      "sheet": "male2",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "2f526830-747f-53a4-9415-2b0f65605d64",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/63490993-3db0-513e-8e0f-fb2077a00ada"
+    },
+    {
+      "ref": "U1",
+      "value": "MCP6004-I/SL",
+      "footprint": "Shields:SOIC-14_3.9x8.7mm_P1.27mm",
+      "pins": {
+        "4": "IOREF",
+        "11": "AGND",
+        "1": "female1/buffer",
+        "2": "female1/buffer",
+        "3": "female1/in",
+        "7": "female2/buffer",
+        "6": "female2/buffer",
+        "5": "female2/in",
+        "8": "female3/buffer",
+        "9": "female3/buffer",
+        "10": "female3/in",
+        "14": "male1/buffer",
+        "13": "male1/buffer",
+        "12": "male1/in"
+      },
+      "sheet": "buffers",
+      "description": "Unity-gain followers; unused sections terminated",
+      "pin_names": {
+        "4": "VDD",
+        "11": "VSS",
+        "1": "OUT1",
+        "2": "IN1-",
+        "3": "IN1+",
+        "7": "OUT2",
+        "6": "IN2-",
+        "5": "IN2+",
+        "8": "OUT3",
+        "9": "IN3-",
+        "10": "IN3+",
+        "14": "OUT4",
+        "13": "IN4-",
+        "12": "IN4+"
+      },
+      "pin_types": {
+        "4": "power_in",
+        "11": "power_in",
+        "1": "output",
+        "2": "input",
+        "3": "input",
+        "7": "output",
+        "6": "input",
+        "5": "input",
+        "8": "output",
+        "9": "input",
+        "10": "input",
+        "14": "output",
+        "13": "input",
+        "12": "input"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "MCP6004-I/SL",
+      "datasheet": "",
+      "uuid": "9d4949f3-572e-5234-953f-a32fef7a67fc",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/f794484d-4748-5f1c-98f7-c590fd26b8bb"
+    },
+    {
+      "ref": "CB1",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "IOREF",
+        "2": "AGND"
+      },
+      "sheet": "buffers",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "c599854e-5076-5485-b46c-112c24e53d66",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/f794484d-4748-5f1c-98f7-c590fd26b8bb"
+    },
+    {
+      "ref": "CBU1",
+      "value": "10uF X7R",
+      "footprint": "Shields:C_0805_2012Metric",
+      "pins": {
+        "1": "IOREF",
+        "2": "AGND"
+      },
+      "sheet": "buffers",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "06486944-9bc9-5690-acc5-2b8fa5672ddc",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/f794484d-4748-5f1c-98f7-c590fd26b8bb"
+    },
+    {
+      "ref": "U2",
+      "value": "MCP6004-I/SL",
+      "footprint": "Shields:SOIC-14_3.9x8.7mm_P1.27mm",
+      "pins": {
+        "4": "IOREF",
+        "11": "AGND",
+        "1": "male2/buffer",
+        "2": "male2/buffer",
+        "3": "male2/in",
+        "7": "spare/1/0",
+        "6": "spare/1/0",
+        "5": "AGND",
+        "8": "spare/1/1",
+        "9": "spare/1/1",
+        "10": "AGND",
+        "14": "spare/1/2",
+        "13": "spare/1/2",
+        "12": "AGND"
+      },
+      "sheet": "buffers",
+      "description": "Unity-gain followers; unused sections terminated",
+      "pin_names": {
+        "4": "VDD",
+        "11": "VSS",
+        "1": "OUT1",
+        "2": "IN1-",
+        "3": "IN1+",
+        "7": "OUT2",
+        "6": "IN2-",
+        "5": "IN2+",
+        "8": "OUT3",
+        "9": "IN3-",
+        "10": "IN3+",
+        "14": "OUT4",
+        "13": "IN4-",
+        "12": "IN4+"
+      },
+      "pin_types": {
+        "4": "power_in",
+        "11": "power_in",
+        "1": "output",
+        "2": "input",
+        "3": "input",
+        "7": "output",
+        "6": "input",
+        "5": "input",
+        "8": "output",
+        "9": "input",
+        "10": "input",
+        "14": "output",
+        "13": "input",
+        "12": "input"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "MCP6004-I/SL",
+      "datasheet": "",
+      "uuid": "bbdc4588-9ef3-5f49-9c12-7816826b1344",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/f794484d-4748-5f1c-98f7-c590fd26b8bb"
+    },
+    {
+      "ref": "CB2",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "IOREF",
+        "2": "AGND"
+      },
+      "sheet": "buffers",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "d47b2bb9-d48a-5f32-940e-4fd3d92f2a0f",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/f794484d-4748-5f1c-98f7-c590fd26b8bb"
+    },
+    {
+      "ref": "CBU2",
+      "value": "10uF X7R",
+      "footprint": "Shields:C_0805_2012Metric",
+      "pins": {
+        "1": "IOREF",
+        "2": "AGND"
+      },
+      "sheet": "buffers",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "4a68cce9-5db0-51cf-bb37-18267dc13df8",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/f794484d-4748-5f1c-98f7-c590fd26b8bb"
+    },
+    {
+      "ref": "TPR",
+      "value": "IOREF",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "IOREF"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "8f28dacf-7700-565c-b628-fc1ac5cf48bc",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/c6dafb66-03ac-5d57-8bf9-907fa23e9dee"
+    },
+    {
+      "ref": "UID1",
+      "value": "M24C02-RMN6TP",
+      "footprint": "Shields:SOIC-8_3.9x4.9mm_P1.27mm",
+      "pins": {
+        "1": "IOREF",
+        "2": "GND",
+        "3": "IOREF",
+        "4": "GND",
+        "5": "shield/sda",
+        "6": "shield/scl",
+        "7": "id/wp",
+        "8": "IOREF"
+      },
+      "sheet": "identity",
+      "description": "Address straps honoured; WP high except during assembly programming",
+      "pin_names": {
+        "1": "E0",
+        "2": "E1",
+        "3": "E2",
+        "4": "VSS",
+        "5": "SDA",
+        "6": "SCL",
+        "7": "WC",
+        "8": "VCC"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "power_in",
+        "5": "bidirectional",
+        "6": "input",
+        "7": "input",
+        "8": "power_in"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "M24C02-RMN6TP",
+      "datasheet": "https://www.st.com/resource/en/datasheet/m24c02-r.pdf",
+      "uuid": "c62cde85-003c-545b-9a88-551e35df0bd5",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/846b3d43-bb0d-5b99-8299-b52c9d468960"
+    },
+    {
+      "ref": "RID1",
+      "value": "10K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "id/wp",
+        "2": "IOREF"
+      },
+      "sheet": "identity",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "ee9dec5e-992f-5acc-9380-a5283487a2ac",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/846b3d43-bb0d-5b99-8299-b52c9d468960"
+    },
+    {
+      "ref": "CID1",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "IOREF",
+        "2": "GND"
+      },
+      "sheet": "identity",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "0fc8e874-c505-592e-a912-eb38a7b2a83f",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/846b3d43-bb0d-5b99-8299-b52c9d468960"
+    },
+    {
+      "ref": "JSID1",
+      "value": "WRITE ENABLE - OPEN",
+      "footprint": "Shields:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm",
+      "pins": {
+        "1": "id/wp",
+        "2": "GND"
+      },
+      "sheet": "identity",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "open",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "b73406bc-23bc-5448-936b-0cceed73dabf",
+      "sheet_path": "/783c6f08-b3fb-5bc3-a49e-ea674f7f79b7/846b3d43-bb0d-5b99-8299-b52c9d468960"
+    }
+  ],
+  "production_release": false
+}

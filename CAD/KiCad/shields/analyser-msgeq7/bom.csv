@@ -1,0 +1,45 @@
+Reference,Value,Footprint,MPN,Assembly
+JA1,ANALYSER - KEY 24,Shields:Socket_2x12_Key24,,fit
+U3,MSGEQ7N,Shields:SOIC-8_3.9x4.9mm_P1.27mm,MSGEQ7N,fit
+R311,47K,Shields:R_0603_1608Metric,,fit
+R313,200K 1%,Shields:R_0603_1608Metric,,fit
+R316,6K8,Shields:R_0603_1608Metric,,fit
+C312,100nF,Shields:C_0603_1608Metric,,fit
+C314,33pF C0G,Shields:C_0603_1608Metric,,fit
+C315,100nF,Shields:C_0603_1608Metric,,fit
+C316,100nF,Shields:C_0603_1608Metric,,fit
+U4,MSGEQ7N,Shields:SOIC-8_3.9x4.9mm_P1.27mm,MSGEQ7N,fit
+R411,47K,Shields:R_0603_1608Metric,,fit
+R413,200K 1%,Shields:R_0603_1608Metric,,fit
+R416,6K8,Shields:R_0603_1608Metric,,fit
+C412,100nF,Shields:C_0603_1608Metric,,fit
+C414,33pF C0G,Shields:C_0603_1608Metric,,fit
+C415,100nF,Shields:C_0603_1608Metric,,fit
+C416,100nF,Shields:C_0603_1608Metric,,fit
+U5,MSGEQ7N,Shields:SOIC-8_3.9x4.9mm_P1.27mm,MSGEQ7N,fit
+R511,47K,Shields:R_0603_1608Metric,,fit
+R513,200K 1%,Shields:R_0603_1608Metric,,fit
+R516,6K8,Shields:R_0603_1608Metric,,fit
+C512,100nF,Shields:C_0603_1608Metric,,fit
+C514,33pF C0G,Shields:C_0603_1608Metric,,fit
+C515,100nF,Shields:C_0603_1608Metric,,fit
+C516,100nF,Shields:C_0603_1608Metric,,fit
+U1,MSGEQ7N,Shields:SOIC-8_3.9x4.9mm_P1.27mm,MSGEQ7N,fit
+R111,47K,Shields:R_0603_1608Metric,,fit
+R113,200K 1%,Shields:R_0603_1608Metric,,fit
+R116,6K8,Shields:R_0603_1608Metric,,fit
+C112,100nF,Shields:C_0603_1608Metric,,fit
+C114,33pF C0G,Shields:C_0603_1608Metric,,fit
+C115,100nF,Shields:C_0603_1608Metric,,fit
+C116,100nF,Shields:C_0603_1608Metric,,fit
+U2,MSGEQ7N,Shields:SOIC-8_3.9x4.9mm_P1.27mm,MSGEQ7N,fit
+R211,47K,Shields:R_0603_1608Metric,,fit
+R213,200K 1%,Shields:R_0603_1608Metric,,fit
+R216,6K8,Shields:R_0603_1608Metric,,fit
+C212,100nF,Shields:C_0603_1608Metric,,fit
+C214,33pF C0G,Shields:C_0603_1608Metric,,fit
+C215,100nF,Shields:C_0603_1608Metric,,fit
+C216,100nF,Shields:C_0603_1608Metric,,fit
+UID1,M24C02-RMN6TP,Shields:SOIC-8_3.9x4.9mm_P1.27mm,M24C02-RMN6TP,fit
+RID1,10K,Shields:R_0603_1608Metric,,fit
+CID1,100nF,Shields:C_0603_1608Metric,,fit

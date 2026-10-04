@@ -1,0 +1,534 @@
+{
+  "project": "voice-thomas",
+  "root_uuid": "b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8",
+  "components": [
+    {
+      "ref": "JV1",
+      "value": "VOICE - KEY 14",
+      "footprint": "Shields:Socket_2x07_Key14",
+      "pins": {
+        "1": "tone",
+        "2": "GND",
+        "3": "filter out",
+        "4": "AGND",
+        "5": "+5V",
+        "6": "AGND",
+        "7": "IOREF",
+        "8": "GND",
+        "9": "shield/sda",
+        "10": "shield/scl",
+        "11": "addr0",
+        "12": "addr1",
+        "13": "addr2"
+      },
+      "sheet": "interface",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6",
+        "7": "7",
+        "8": "8",
+        "9": "9",
+        "10": "10",
+        "11": "11",
+        "12": "12",
+        "13": "13"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive",
+        "7": "passive",
+        "8": "passive",
+        "9": "passive",
+        "10": "passive",
+        "11": "passive",
+        "12": "passive",
+        "13": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "7d049d1e-e366-5628-b9d6-6f600420c41e",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/3b9bbe2e-8467-5b31-a4a8-4ed75210e53f"
+    },
+    {
+      "ref": "H1",
+      "value": "M3 retention",
+      "footprint": "Shields:MountingHole_3.2mm_M3",
+      "pins": {},
+      "sheet": "interface",
+      "description": "",
+      "pin_names": {},
+      "pin_types": {},
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "d2e6da5e-e4bc-595e-8271-fc976af0e6cd",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/3b9bbe2e-8467-5b31-a4a8-4ed75210e53f"
+    },
+    {
+      "ref": "R1",
+      "value": "1K2",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "tone",
+        "2": "stage1"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "4cbfdf74-4c4a-5f65-a074-96b21137b1ff",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
+    },
+    {
+      "ref": "R2",
+      "value": "1K2",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "stage1",
+        "2": "filter out"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "0c82aec4-7e4a-57f5-bfa1-657246426776",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
+    },
+    {
+      "ref": "C1",
+      "value": "150nF PPS",
+      "footprint": "Shields:PPS_6041",
+      "pins": {
+        "1": "AGND",
+        "2": "stage1"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "ae679ff8-dff1-51fb-adb9-dbf65bb3df99",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
+    },
+    {
+      "ref": "CX1",
+      "value": "DNP PPS",
+      "footprint": "Shields:PPS_6041",
+      "pins": {
+        "1": "AGND",
+        "2": "stage1"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "DNP",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "9c803e53-c28a-50ca-8262-7cff6128c090",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
+    },
+    {
+      "ref": "CY1",
+      "value": "DNP C0G",
+      "footprint": "Shields:C_1206_3216Metric",
+      "pins": {
+        "1": "AGND",
+        "2": "stage1"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "DNP",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "6ea3bc19-5dd7-53ee-85c2-3f681252b61f",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
+    },
+    {
+      "ref": "C2",
+      "value": "150nF PPS",
+      "footprint": "Shields:PPS_6041",
+      "pins": {
+        "1": "AGND",
+        "2": "filter out"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "4c49c939-67f0-5d77-8b4c-b67d85152125",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
+    },
+    {
+      "ref": "CX2",
+      "value": "DNP PPS",
+      "footprint": "Shields:PPS_6041",
+      "pins": {
+        "1": "AGND",
+        "2": "filter out"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "DNP",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "32b6c048-c39c-5298-8ba5-60cd87565c9e",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
+    },
+    {
+      "ref": "CY2",
+      "value": "DNP C0G",
+      "footprint": "Shields:C_1206_3216Metric",
+      "pins": {
+        "1": "AGND",
+        "2": "filter out"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "DNP",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "a40325cc-bd2e-5136-b494-1f1079bac47d",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
+    },
+    {
+      "ref": "R3",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "tone",
+        "2": "GND"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "03538c72-15dc-502c-9e59-e5cd008d43a4",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
+    },
+    {
+      "ref": "TP1",
+      "value": "tone",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "tone"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "4d596742-5d6c-5b33-8b07-bf9866d23bd7",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
+    },
+    {
+      "ref": "TP2",
+      "value": "tone",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "tone"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "993a404c-3563-5b39-a170-44c9d6819410",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
+    },
+    {
+      "ref": "TP3",
+      "value": "stage1",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "stage1"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "a48c3f93-7110-526c-9b13-4ac8d2933474",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
+    },
+    {
+      "ref": "TP4",
+      "value": "filter out",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "filter out"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "a13687d3-bef7-5184-8598-76bc9c51bd5f",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
+    },
+    {
+      "ref": "TP5",
+      "value": "AGND",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "AGND"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "471a9adf-3dac-582d-88c4-03d1cc58b822",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
+    },
+    {
+      "ref": "UID1",
+      "value": "M24C02-RMN6TP",
+      "footprint": "Shields:SOIC-8_3.9x4.9mm_P1.27mm",
+      "pins": {
+        "1": "addr0",
+        "2": "addr1",
+        "3": "addr2",
+        "4": "GND",
+        "5": "shield/sda",
+        "6": "shield/scl",
+        "7": "id/wp",
+        "8": "IOREF"
+      },
+      "sheet": "identity",
+      "description": "Address straps honoured; WP high except during assembly programming",
+      "pin_names": {
+        "1": "E0",
+        "2": "E1",
+        "3": "E2",
+        "4": "VSS",
+        "5": "SDA",
+        "6": "SCL",
+        "7": "WC",
+        "8": "VCC"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "power_in",
+        "5": "bidirectional",
+        "6": "input",
+        "7": "input",
+        "8": "power_in"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "M24C02-RMN6TP",
+      "datasheet": "https://www.st.com/resource/en/datasheet/m24c02-r.pdf",
+      "uuid": "83e95613-7e8d-59e9-a670-91707d6d9f57",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/c0283d37-2368-54a1-90a1-4b5020e1555a"
+    },
+    {
+      "ref": "RID1",
+      "value": "10K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "id/wp",
+        "2": "IOREF"
+      },
+      "sheet": "identity",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "b53e12e3-8fe4-5cb7-a295-35af374b6ecd",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/c0283d37-2368-54a1-90a1-4b5020e1555a"
+    },
+    {
+      "ref": "CID1",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "IOREF",
+        "2": "GND"
+      },
+      "sheet": "identity",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "22e5de46-a971-58da-8bb4-67d531e2b273",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/c0283d37-2368-54a1-90a1-4b5020e1555a"
+    },
+    {
+      "ref": "JSID1",
+      "value": "WRITE ENABLE - OPEN",
+      "footprint": "Shields:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm",
+      "pins": {
+        "1": "id/wp",
+        "2": "GND"
+      },
+      "sheet": "identity",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "open",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "a3be3252-d16b-5a70-892e-d27e4cb2e385",
+      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/c0283d37-2368-54a1-90a1-4b5020e1555a"
+    }
+  ],
+  "production_release": false
+}
