@@ -40,6 +40,8 @@ def finish(folder):
         field.SetTextSize(xy(max(.8,p.ToMM(field.GetTextSize().x)),max(.8,p.ToMM(field.GetTextSize().y))))
         field.SetTextThickness(mm(.12));field.SetMirrored(layer==p.B_SilkS)
         field.SetTextAngle(p.EDA_ANGLE(0,p.DEGREES_T))
+        if name.startswith('voice') and layer==p.B_SilkS and field in texts:
+            accepted[layer].append(box(field,.05));continue  # Fixed table rows must not drift.
         origin=field.GetPosition();found=False
         # Reference text stays close to its part; top/bottom offsets first.
         candidates=[(0,0)]

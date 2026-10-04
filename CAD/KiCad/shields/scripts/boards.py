@@ -25,7 +25,7 @@ def text(board,value,x,y,size=.8,layer=p.F_SilkS):
 
 def make_slots():
     LOCAL.mkdir(exist_ok=True)
-    for rows in [7,12]:
+    for rows in [3,11]:
         for kind in ['Header','Socket']:
             name=f'{kind}_2x{rows:02d}_Key{rows*2}'
             temporary=p.BOARD();f=p.FOOTPRINT(temporary);temporary.Add(f);f.SetFPID(p.LIB_ID('Shields',name));f.SetAttributes(p.FP_THROUGH_HOLE)
@@ -33,7 +33,8 @@ def make_slots():
             for n in range(1,rows*2):
                 pad=p.PAD(f);pad.SetNumber(str(n));pad.SetAttribute(p.PAD_ATTRIB_PTH)
                 pad.SetShape(p.PAD_SHAPE_RECT if n==1 else p.PAD_SHAPE_OVAL)
-                pad.SetSize(xy(1.7,1.7));pad.SetDrillSize(xy(1,1));pad.SetLayerSet(p.LSET.AllCuMask())
+                layers=p.LSET.AllCuMask();layers.AddLayer(p.F_Mask);layers.AddLayer(p.B_Mask)
+                pad.SetSize(xy(1.7,1.7));pad.SetDrillSize(xy(1,1));pad.SetLayerSet(layers)
                 pad.SetPosition(xy((n-1)%2*2.54,(n-1)//2*2.54));f.Add(pad)
             rect(f,-1.5,-1.5,5.54,(rows-1)*2.54+3,layer)
             rect(f,-1.8,-1.8,6.14,(rows-1)*2.54+3.6,p.F_CrtYd if kind=='Header' else p.B_CrtYd)
@@ -61,8 +62,13 @@ def placements(name,old):
             out.update({f'JV{i}':(x+3,216,0),f'HV{i}':(x+24,244,0),f'RL{i}':(x+12,255,0),
                         f'R{n}03':(x+12,260,0),f'JP{n+1}':(x+21,260,0),f'TP{n}':(x+7,255,0),
                         f'TP{n+10}':(91+(i-1)*24,324,0),f'TPV{i}':(x+7,206,0)})
+        for i in range(1,6):
+            out[f'TPL{i}']=(90+(i-1)*32,225,0)
+            out[f'TPM{i}']=(100+(i-1)*22,283,0)
+            out[f'TPA{i}']=(100+(i-1)*22,305,0)
         return out
     if name.startswith('voice'):
+
         out=dict(JV1=(53,56,0),H1=(74,84,0),UID1=(69,77,0),CID1=(74,72,0),RID1=(64,81,90),JSID1=(62,85,0),
                  TP1=(53,86,0),TP2=(57,86,0),TP3=(61,89,0),TP4=(65,89,0),TP5=(67.54,89,0))
         if name=='voice-thomas':
@@ -81,10 +87,10 @@ def placements(name,old):
                 out.update({f'U{n}':(x,y,0),f'R{n}11':(x,80,0),f'R{n}16':(x+7,80,90),f'C{n}12':(x-6,70,90),
                             f'R{n}13':(x+7,y-2,90),f'C{n}14':(x+7,y+2,90),f'C{n}15':(x-6,y-3,90),f'C{n}16':(x+7,73,90),
                             f'JS{n}':(x,86,0),f'TP{n+10}':(x-7,y+9,0)})
-            out.update(TPS=(180,56,0),TPR=(185,56,0))
+            out.update(TPS=(180,56,0),TPR=(185,56,0),TPI=(178,90,0),TPG=(183,90,0))
         else:
             out.update(JB1=(151,99,0),JSRC1=(164,87,0),U1=(104,77,0),U2=(177,67,0),
-                       CB1=(110,73,90),CBU1=(110,79,90),CB2=(183,63,90),CBU2=(183,70,90),TPR=(186,94,0))
+                       CB1=(110,73,90),CBU1=(110,79,90),CB2=(183,63,90),CBU2=(183,70,90),TPR=(186,94,0),TPG=(180,94,0))
             for i,b in enumerate(BODY,1):
                 x=68+(i-1)*22
                 out.update({f'R{i}0':(x,56,90),f'R{i}1':(x,61,90),f'R{i}2':(x,67,90),f'R{i}3':(x,87,90),
@@ -102,7 +108,8 @@ def placements(name,old):
         for i,pin in enumerate(ANALOG[5:]):
             x=151+i%6*7;y=132+i//6*9
             out[f'RA{pin}']=(x,y,90);out[f'RB{pin}']=(x+3,y,90);out[f'CA{pin}']=(x,y+4,0)
-        for i,pin in enumerate([0,1,3,33,36,37]):out[f'TP{pin}']=(162+i*4,120,0)
+        for i,pin in enumerate([0,1,3,33,36,37,40,41]):out[f'TP{pin}']=(162+i*4,120,0)
+        out['TPG']=(185,124,0)
         return out
     raise ValueError(name)
 

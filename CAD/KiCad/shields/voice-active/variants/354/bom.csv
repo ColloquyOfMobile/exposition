@@ -1,8 +1,7 @@
 Reference,Value,Footprint,MPN,Assembly
-JV1,VOICE - KEY 14,Shields:Socket_2x07_Key14,,fit
+JV1,VOICE - KEY 6,Shields:Socket_2x03_Key6,,fit
 R1,15K,Shields:R_0603_1608Metric,,fit
 R2,10K,Shields:R_0603_1608Metric,,fit
-C1,470pF C0G,Shields:C_0603_1608Metric,,fit
 U1,MCP6024-I/SL,Shields:SOIC-14_3.9x8.7mm_P1.27mm,MCP6024-I/SL,fit
 R3,41200 ohm 1%,Shields:R_0603_1608Metric,,fit
 R4,41200 ohm 1%,Shields:R_0603_1608Metric,,fit
@@ -19,6 +18,3 @@ C7,1uF X7R,Shields:C_0805_2012Metric,,fit
 R9,100K,Shields:R_0603_1608Metric,,fit
 C8,100nF,Shields:C_0603_1608Metric,,fit
 C9,10uF X7R,Shields:C_0805_2012Metric,,fit
-UID1,M24C02-RMN6TP,Shields:SOIC-8_3.9x4.9mm_P1.27mm,M24C02-RMN6TP,fit
-RID1,10K,Shields:R_0603_1608Metric,,fit
-CID1,100nF,Shields:C_0603_1608Metric,,fit

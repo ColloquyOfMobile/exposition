@@ -1,0 +1,12 @@
+{
+  "kind": "voice active",
+  "corner": 354,
+  "sweet": [
+    212,
+    301
+  ],
+  "allowed": [
+    177,
+    354
+  ]
+}

@@ -1,6 +1,11 @@
 # Colloquy shield PCB set
 
-All six native KiCad 9 projects and their common footprint library live here.
+All six native KiCad 9 projects implement the simplified 2026-10-04 spec.
+Their common footprint library lives here too. No identification chips or I2C
+bus remain. Voice headers are keyed 2x3; analyser headers are keyed 2x11.
+
+Build the backplane, five Thomas cards and MSGEQ7 analyser first for the
+exhibition. The Teensy adapter, direct analyser and active cards follow.
 
 | Project | Function | Quantity in the full comparison set |
 |---|---|---:|
@@ -31,9 +36,13 @@ These scripts read earlier designs without changing them. Regeneration is
 explicit; the board generator never overwrites a routed board.
 
 Routing uses `scripts/route.py` with an official Freerouting 2.4.1 JAR,
-followed by the documented inner-layer completion in `scripts/inner_routes.py`.
+using the existing two/four-layer stackups. `scripts/inner_routes.py` is
+retained only as a historical tool for the first prototype.
 Run `mechanical.py` before routing, then `planes.py`, `finish.py`, `check.py`
-and `verify.py`; `trim_stubs.py` removes native-DRC-confirmed dead ends and
+and `verify.py`; `labels.py` applies the specified operating text and variant
+tables before finishing. `update_simplified.py` is a one-time migration from
+the original prototype; do not re-run it on updated boards.
+ `trim_stubs.py` removes native-DRC-confirmed dead ends and
 must be followed by another plane fill and check. `variants.py` creates assembly variants. Scripts require
 KiCad's Python; `check.py` also uses its CLI. Router intermediates belong in
 a temporary directory outside this deliverable. Do not run inner_routes.py

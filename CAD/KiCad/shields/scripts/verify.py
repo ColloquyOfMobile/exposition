@@ -58,18 +58,18 @@ def main():
     # Slot pairs must mate in world coordinates with a translation only.
     for design in ['voice-thomas','voice-active']:
         card=pads(loaded[design]);c0=position(card[('JV1','1')])
-        assert ('JV1','14') not in card
+        assert ('JV1','6') not in card
         for i,b in enumerate(BODY,1):
             ref=f'JV{i}';b0=position(back[(ref,'1')]);offset=(b0[0]-c0[0],b0[1]-c0[1])
-            for n in range(1,14):
+            for n in range(1,6):
                 bp,cp=position(back[(ref,str(n))]),position(card[('JV1',str(n))])
                 assert all(near(bp[j],cp[j]+offset[j]) for j in range(2)),(design,n,'mating coordinate')
             bh=next(f for f in loaded['backplane'].GetFootprints() if f.GetReference()==f'HV{i}')
             ch=next(f for f in loaded[design].GetFootprints() if f.GetReference()=='H1')
             assert all(near(position(bh)[j],position(ch)[j]+offset[j]) for j in range(2))
     for design in ['analyser-msgeq7','analyser-direct']:
-        card=pads(loaded[design]);assert ('JA1','24') not in card
-        for n in range(1,24):
+        card=pads(loaded[design]);assert ('JA1','22') not in card
+        for n in range(1,22):
             bp,cp=position(back[('JA1',str(n))]),position(card[('JA1',str(n))])
             assert near(bp[0],cp[0]+25) and near(bp[1],cp[1]+215)
     adapter=pads(loaded['teensy-adapter'])
@@ -81,12 +81,20 @@ def main():
     backdata=json.loads((ROOT/'backplane/circuit.json').read_text())
     bonds=[c['ref'] for c in backdata['components'] if c['ref'].startswith(('R','JP')) and set(c['pins'].values())=={'AGND','GND'}]
     assert bonds==['JP1'],bonds
-    for n,name in enumerate(['voice-active','voice-thomas','analyser-direct','analyser-msgeq7']):
-        parts={c['ref']:c for c in json.loads((ROOT/name/'circuit.json').read_text())['components']}
-        assert parts['UID1']['pins']['8']=='IOREF'
-        assert parts['UID1']['pins']['7']=='id/wp' and parts['RID1']['pins']=={'1':'id/wp','2':'IOREF'}
+    for name,board in loaded.items():
+        for fp in board.GetFootprints():
+            assert fp.GetReference() not in ['UID1','RID1','CID1','JSID1']
+            for pad in fp.Pads():
+                assert plain(pad.GetNetname()) not in ['shield/sda','shield/scl','addr0','addr1','addr2','id/wp']
+    for i,gpio in enumerate([14,15,16,17,18,19,20,21,22,23,24,25,26,27,38,39]):
+        data=json.loads((ROOT/'teensy-adapter/circuit.json').read_text())
+        sockets=[c for c in data['components'] if c['ref'] in ['JT1','JT2']]
+        pins=[(c['ref'],n) for c in sockets for n,label in c['pin_names'].items() if label==str(gpio)]
+        assert len(pins)==1
+        net=plain(adapter[pins[0]].GetNetname())
+        assert net==(V2['A1']['pins'][f'A{i}'] if i<5 else f'adc/{gpio}')
     summary['interfaces']={'fixed_harness_pinout_and_coordinates':'PASS','v2_connected_Mega_pins':'PASS',
-        'five_voice_mating_pairs':'PASS','two_analyser_mating_pairs':'PASS','adapter_mirror':'PASS','single_ground_bond':'PASS'}
+        'five_voice_mating_pairs':'PASS','two_analyser_mating_pairs':'PASS','adapter_mirror':'PASS','single_ground_bond':'PASS','no_identification_hardware':'PASS','revised_Teensy_analogue_mapping':'PASS'}
     (ROOT/'VALIDATION.json').write_text(json.dumps(summary,indent=2)+'\n')
     for name,result in summary.items():print(name,result)
     assert all(not r['parity_differences'] for n,r in summary.items() if n!='interfaces')

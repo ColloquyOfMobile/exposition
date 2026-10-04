@@ -45,16 +45,16 @@ RP11,10K provisional,Shields:R_0603_1608Metric,,provisional_10k_calibrate
 RS1,10K,Shields:R_0603_1608Metric,,fit
 RA1,330R,Shields:R_0603_1608Metric,,fit
 RA2,330R,Shields:R_0603_1608Metric,,fit
-JA1,ANALYSER - KEY 24,Shields:Header_2x12_Key24,,fit
-JV1,female1 - KEY 14,Shields:Header_2x07_Key14,,fit
+JA1,ANALYSER - KEY 22,Shields:Header_2x11_Key22,,fit
+JV1,female1 - KEY 6,Shields:Header_2x03_Key6,,fit
 RL1,100K,Shields:R_0603_1608Metric,,fit
-JV2,female2 - KEY 14,Shields:Header_2x07_Key14,,fit
+JV2,female2 - KEY 6,Shields:Header_2x03_Key6,,fit
 RL2,100K,Shields:R_0603_1608Metric,,fit
-JV3,female3 - KEY 14,Shields:Header_2x07_Key14,,fit
+JV3,female3 - KEY 6,Shields:Header_2x03_Key6,,fit
 RL3,100K,Shields:R_0603_1608Metric,,fit
-JV4,male1 - KEY 14,Shields:Header_2x07_Key14,,fit
+JV4,male1 - KEY 6,Shields:Header_2x03_Key6,,fit
 RL4,100K,Shields:R_0603_1608Metric,,fit
-JV5,male2 - KEY 14,Shields:Header_2x07_Key14,,fit
+JV5,male2 - KEY 6,Shields:Header_2x03_Key6,,fit
 RL5,100K,Shields:R_0603_1608Metric,,fit
 RND1,100K,Shields:R_0603_1608Metric,,fit
 RND2,100K,Shields:R_0603_1608Metric,,fit
@@ -63,6 +63,3 @@ RND4,100K,Shields:R_0603_1608Metric,,fit
 RND5,100K,Shields:R_0603_1608Metric,,fit
 RND6,100K,Shields:R_0603_1608Metric,,fit
 RND7,100K,Shields:R_0603_1608Metric,,fit
-RI1,4K7,Shields:R_0603_1608Metric,,fit
-RI2,4K7,Shields:R_0603_1608Metric,,fit
-CI1,10uF X7R,Shields:C_0805_2012Metric,,fit

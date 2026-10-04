@@ -17,7 +17,7 @@ def route(folder,args):
     board=p.LoadBoard(str(folder/(name+('.kicad_pcb' if args.from_routed else '-placed.kicad_pcb'))))
     previous_zones=list(board.Zones())
     for z in previous_zones:board.Remove(z)
-    board.SetCopperLayerCount(2)  # Internal planes are re-added after routing.
+    # Retain the existing signal-layer count; planes are re-filled afterwards.
     violations=set()
     if args.rip_violations:
         report=json.loads((folder/'reports/drc.json').read_text())

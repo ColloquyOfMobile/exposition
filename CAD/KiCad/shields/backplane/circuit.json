@@ -96,8 +96,8 @@
         "RST1": null,
         "RST2": null,
         "SCK": null,
-        "SCL": "shield/scl",
-        "SDA": "shield/sda",
+        "SCL": null,
+        "SDA": null,
         "VIN": null
       },
       "sheet": "controller",
@@ -284,8 +284,8 @@
         "RST1": "passive",
         "RST2": "passive",
         "SCK": "passive",
-        "SCL": "bidirectional",
-        "SDA": "bidirectional",
+        "SCL": "passive",
+        "SDA": "passive",
         "VIN": "passive"
       },
       "assembly": "fit",
@@ -1990,8 +1990,8 @@
     },
     {
       "ref": "JA1",
-      "value": "ANALYSER - KEY 24",
-      "footprint": "Shields:Header_2x12_Key24",
+      "value": "ANALYSER - KEY 22",
+      "footprint": "Shields:Header_2x11_Key22",
       "pins": {
         "1": "female1/microphone",
         "2": "AGND",
@@ -2011,11 +2011,9 @@
         "16": "AGND",
         "17": "analyser/strobe",
         "18": "analyser/reset",
-        "19": "shield/sda",
-        "20": "shield/scl",
-        "21": "IOREF",
-        "22": "GND",
-        "23": "+5V"
+        "19": "IOREF",
+        "20": "GND",
+        "21": "+5V"
       },
       "sheet": "slots",
       "description": "",
@@ -2040,9 +2038,7 @@
         "18": "18",
         "19": "19",
         "20": "20",
-        "21": "21",
-        "22": "22",
-        "23": "23"
+        "21": "21"
       },
       "pin_types": {
         "1": "passive",
@@ -2065,9 +2061,7 @@
         "18": "passive",
         "19": "passive",
         "20": "passive",
-        "21": "passive",
-        "22": "passive",
-        "23": "passive"
+        "21": "passive"
       },
       "assembly": "fit",
       "include_bom": true,
@@ -2078,22 +2072,14 @@
     },
     {
       "ref": "JV1",
-      "value": "female1 - KEY 14",
-      "footprint": "Shields:Header_2x07_Key14",
+      "value": "female1 - KEY 6",
+      "footprint": "Shields:Header_2x03_Key6",
       "pins": {
         "1": "female1/tone",
         "2": "GND",
         "3": "female1/filter out",
         "4": "AGND",
-        "5": "+5V",
-        "6": "AGND",
-        "7": "IOREF",
-        "8": "GND",
-        "9": "shield/sda",
-        "10": "shield/scl",
-        "11": "GND",
-        "12": "GND",
-        "13": "GND"
+        "5": "+5V"
       },
       "sheet": "slots",
       "description": "",
@@ -2102,30 +2088,14 @@
         "2": "2",
         "3": "3",
         "4": "4",
-        "5": "5",
-        "6": "6",
-        "7": "7",
-        "8": "8",
-        "9": "9",
-        "10": "10",
-        "11": "11",
-        "12": "12",
-        "13": "13"
+        "5": "5"
       },
       "pin_types": {
         "1": "passive",
         "2": "passive",
         "3": "passive",
         "4": "passive",
-        "5": "passive",
-        "6": "passive",
-        "7": "passive",
-        "8": "passive",
-        "9": "passive",
-        "10": "passive",
-        "11": "passive",
-        "12": "passive",
-        "13": "passive"
+        "5": "passive"
       },
       "assembly": "fit",
       "include_bom": true,
@@ -2199,22 +2169,14 @@
     },
     {
       "ref": "JV2",
-      "value": "female2 - KEY 14",
-      "footprint": "Shields:Header_2x07_Key14",
+      "value": "female2 - KEY 6",
+      "footprint": "Shields:Header_2x03_Key6",
       "pins": {
         "1": "female2/tone",
         "2": "GND",
         "3": "female2/filter out",
         "4": "AGND",
-        "5": "+5V",
-        "6": "AGND",
-        "7": "IOREF",
-        "8": "GND",
-        "9": "shield/sda",
-        "10": "shield/scl",
-        "11": "IOREF",
-        "12": "GND",
-        "13": "GND"
+        "5": "+5V"
       },
       "sheet": "slots",
       "description": "",
@@ -2223,30 +2185,14 @@
         "2": "2",
         "3": "3",
         "4": "4",
-        "5": "5",
-        "6": "6",
-        "7": "7",
-        "8": "8",
-        "9": "9",
-        "10": "10",
-        "11": "11",
-        "12": "12",
-        "13": "13"
+        "5": "5"
       },
       "pin_types": {
         "1": "passive",
         "2": "passive",
         "3": "passive",
         "4": "passive",
-        "5": "passive",
-        "6": "passive",
-        "7": "passive",
-        "8": "passive",
-        "9": "passive",
-        "10": "passive",
-        "11": "passive",
-        "12": "passive",
-        "13": "passive"
+        "5": "passive"
       },
       "assembly": "fit",
       "include_bom": true,
@@ -2320,22 +2266,14 @@
     },
     {
       "ref": "JV3",
-      "value": "female3 - KEY 14",
-      "footprint": "Shields:Header_2x07_Key14",
+      "value": "female3 - KEY 6",
+      "footprint": "Shields:Header_2x03_Key6",
       "pins": {
         "1": "female3/tone",
         "2": "GND",
         "3": "female3/filter out",
         "4": "AGND",
-        "5": "+5V",
-        "6": "AGND",
-        "7": "IOREF",
-        "8": "GND",
-        "9": "shield/sda",
-        "10": "shield/scl",
-        "11": "GND",
-        "12": "IOREF",
-        "13": "GND"
+        "5": "+5V"
       },
       "sheet": "slots",
       "description": "",
@@ -2344,30 +2282,14 @@
         "2": "2",
         "3": "3",
         "4": "4",
-        "5": "5",
-        "6": "6",
-        "7": "7",
-        "8": "8",
-        "9": "9",
-        "10": "10",
-        "11": "11",
-        "12": "12",
-        "13": "13"
+        "5": "5"
       },
       "pin_types": {
         "1": "passive",
         "2": "passive",
         "3": "passive",
         "4": "passive",
-        "5": "passive",
-        "6": "passive",
-        "7": "passive",
-        "8": "passive",
-        "9": "passive",
-        "10": "passive",
-        "11": "passive",
-        "12": "passive",
-        "13": "passive"
+        "5": "passive"
       },
       "assembly": "fit",
       "include_bom": true,
@@ -2441,22 +2363,14 @@
     },
     {
       "ref": "JV4",
-      "value": "male1 - KEY 14",
-      "footprint": "Shields:Header_2x07_Key14",
+      "value": "male1 - KEY 6",
+      "footprint": "Shields:Header_2x03_Key6",
       "pins": {
         "1": "male1/tone",
         "2": "GND",
         "3": "male1/filter out",
         "4": "AGND",
-        "5": "+5V",
-        "6": "AGND",
-        "7": "IOREF",
-        "8": "GND",
-        "9": "shield/sda",
-        "10": "shield/scl",
-        "11": "IOREF",
-        "12": "IOREF",
-        "13": "GND"
+        "5": "+5V"
       },
       "sheet": "slots",
       "description": "",
@@ -2465,30 +2379,14 @@
         "2": "2",
         "3": "3",
         "4": "4",
-        "5": "5",
-        "6": "6",
-        "7": "7",
-        "8": "8",
-        "9": "9",
-        "10": "10",
-        "11": "11",
-        "12": "12",
-        "13": "13"
+        "5": "5"
       },
       "pin_types": {
         "1": "passive",
         "2": "passive",
         "3": "passive",
         "4": "passive",
-        "5": "passive",
-        "6": "passive",
-        "7": "passive",
-        "8": "passive",
-        "9": "passive",
-        "10": "passive",
-        "11": "passive",
-        "12": "passive",
-        "13": "passive"
+        "5": "passive"
       },
       "assembly": "fit",
       "include_bom": true,
@@ -2562,22 +2460,14 @@
     },
     {
       "ref": "JV5",
-      "value": "male2 - KEY 14",
-      "footprint": "Shields:Header_2x07_Key14",
+      "value": "male2 - KEY 6",
+      "footprint": "Shields:Header_2x03_Key6",
       "pins": {
         "1": "male2/tone",
         "2": "GND",
         "3": "male2/filter out",
         "4": "AGND",
-        "5": "+5V",
-        "6": "AGND",
-        "7": "IOREF",
-        "8": "GND",
-        "9": "shield/sda",
-        "10": "shield/scl",
-        "11": "GND",
-        "12": "GND",
-        "13": "IOREF"
+        "5": "+5V"
       },
       "sheet": "slots",
       "description": "",
@@ -2586,30 +2476,14 @@
         "2": "2",
         "3": "3",
         "4": "4",
-        "5": "5",
-        "6": "6",
-        "7": "7",
-        "8": "8",
-        "9": "9",
-        "10": "10",
-        "11": "11",
-        "12": "12",
-        "13": "13"
+        "5": "5"
       },
       "pin_types": {
         "1": "passive",
         "2": "passive",
         "3": "passive",
         "4": "passive",
-        "5": "passive",
-        "6": "passive",
-        "7": "passive",
-        "8": "passive",
-        "9": "passive",
-        "10": "passive",
-        "11": "passive",
-        "12": "passive",
-        "13": "passive"
+        "5": "passive"
       },
       "assembly": "fit",
       "include_bom": true,
@@ -2889,81 +2763,6 @@
       "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/1cb8b04e-6dee-5865-ab6f-2100c6242893"
     },
     {
-      "ref": "RI1",
-      "value": "4K7",
-      "footprint": "Shields:R_0603_1608Metric",
-      "pins": {
-        "1": "shield/sda",
-        "2": "IOREF"
-      },
-      "sheet": "slots",
-      "description": "",
-      "pin_names": {
-        "1": "1",
-        "2": "2"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "db844c90-5804-59e3-8bf3-7850216f4a6b",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
-    },
-    {
-      "ref": "RI2",
-      "value": "4K7",
-      "footprint": "Shields:R_0603_1608Metric",
-      "pins": {
-        "1": "shield/scl",
-        "2": "IOREF"
-      },
-      "sheet": "slots",
-      "description": "",
-      "pin_names": {
-        "1": "1",
-        "2": "2"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "e8abafef-cc11-5257-9d18-946b782697b5",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
-    },
-    {
-      "ref": "CI1",
-      "value": "10uF X7R",
-      "footprint": "Shields:C_0805_2012Metric",
-      "pins": {
-        "1": "IOREF",
-        "2": "GND"
-      },
-      "sheet": "slots",
-      "description": "",
-      "pin_names": {
-        "1": "1",
-        "2": "2"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "5772de20-37f2-5e77-ad42-93c161d85070",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
-    },
-    {
       "ref": "TPI1",
       "value": "IOREF",
       "footprint": "Shields:TestPoint_Pad_D1.5mm",
@@ -2986,11 +2785,11 @@
       "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
     },
     {
-      "ref": "TPI2",
-      "value": "shield/sda",
+      "ref": "TPL1",
+      "value": "female1/filter out",
       "footprint": "Shields:TestPoint_Pad_D1.5mm",
       "pins": {
-        "1": "shield/sda"
+        "1": "female1/filter out"
       },
       "sheet": "slots",
       "description": "",
@@ -3004,15 +2803,15 @@
       "include_bom": false,
       "mpn": "",
       "datasheet": "",
-      "uuid": "5b9cbd6e-57fd-5559-be72-38be67bbb6ff",
+      "uuid": "4af2e332-056b-53a1-abfe-13dc2f9c5ebb",
       "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
     },
     {
-      "ref": "TPI3",
-      "value": "shield/scl",
+      "ref": "TPM1",
+      "value": "female1/microphone",
       "footprint": "Shields:TestPoint_Pad_D1.5mm",
       "pins": {
-        "1": "shield/scl"
+        "1": "female1/microphone"
       },
       "sheet": "slots",
       "description": "",
@@ -3026,8 +2825,294 @@
       "include_bom": false,
       "mpn": "",
       "datasheet": "",
-      "uuid": "66b3bcfc-d62c-51bb-8c97-d66b9ee0bc49",
+      "uuid": "2c4e88e2-ea00-58ae-a5c3-024ded3a592d",
       "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
+    },
+    {
+      "ref": "TPA1",
+      "value": "female1/analyser out",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "female1/analyser out"
+      },
+      "sheet": "slots",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "7d79b2ae-3428-550f-9cb2-318dc7052e75",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
+    },
+    {
+      "ref": "TPL2",
+      "value": "female2/filter out",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "female2/filter out"
+      },
+      "sheet": "slots",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "97698eee-5a93-5476-af2f-0b2aebba00fe",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
+    },
+    {
+      "ref": "TPM2",
+      "value": "female2/microphone",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "female2/microphone"
+      },
+      "sheet": "slots",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "acc051c1-2131-5961-9c47-4f12bd176c0f",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
+    },
+    {
+      "ref": "TPA2",
+      "value": "female2/analyser out",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "female2/analyser out"
+      },
+      "sheet": "slots",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "9d841572-1680-5bed-8a5d-ccd0dea97ee9",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
+    },
+    {
+      "ref": "TPL3",
+      "value": "female3/filter out",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "female3/filter out"
+      },
+      "sheet": "slots",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "83143d33-aea3-5018-b13b-982912dd40f9",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
+    },
+    {
+      "ref": "TPM3",
+      "value": "female3/microphone",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "female3/microphone"
+      },
+      "sheet": "slots",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "75e0acda-7f8e-56d8-a562-4c7dccff63d4",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9"
+    },
+    {
+      "ref": "TPA3",
+      "value": "female3/analyser out",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "female3/analyser out"
+      },
+      "sheet": "slots",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "cd2d936c-6f57-5778-a434-f238dfb33fbe",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9"
+    },
+    {
+      "ref": "TPL4",
+      "value": "male1/filter out",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "male1/filter out"
+      },
+      "sheet": "slots",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "99607d91-3cf8-5147-9e42-0fc830cee0ff",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9"
+    },
+    {
+      "ref": "TPM4",
+      "value": "male1/microphone",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "male1/microphone"
+      },
+      "sheet": "slots",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "57b39081-324d-5737-8af3-04e5715cdf67",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9"
+    },
+    {
+      "ref": "TPA4",
+      "value": "male1/analyser out",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "male1/analyser out"
+      },
+      "sheet": "slots",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "8a38a3c2-356c-5f35-82f9-da47d655b1b2",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9"
+    },
+    {
+      "ref": "TPL5",
+      "value": "male2/filter out",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "male2/filter out"
+      },
+      "sheet": "slots",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "304caa0a-6f70-5cd1-98de-a87575158cfa",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9"
+    },
+    {
+      "ref": "TPM5",
+      "value": "male2/microphone",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "male2/microphone"
+      },
+      "sheet": "slots",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "af5b0795-a7f8-58d8-93ba-2ef661a6f6b6",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9"
+    },
+    {
+      "ref": "TPA5",
+      "value": "male2/analyser out",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "male2/analyser out"
+      },
+      "sheet": "slots",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "f6fe287b-d531-55c0-ba53-e1fa51d80cda",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9"
     }
   ],
   "production_release": false

@@ -4,8 +4,8 @@
   "components": [
     {
       "ref": "JA1",
-      "value": "ANALYSER - KEY 24",
-      "footprint": "Shields:Socket_2x12_Key24",
+      "value": "ANALYSER - KEY 22",
+      "footprint": "Shields:Socket_2x11_Key22",
       "pins": {
         "1": "female1/microphone",
         "2": "AGND",
@@ -25,11 +25,9 @@
         "16": "AGND",
         "17": "analyser/strobe",
         "18": "analyser/reset",
-        "19": "shield/sda",
-        "20": "shield/scl",
-        "21": "IOREF",
-        "22": "GND",
-        "23": null
+        "19": "IOREF",
+        "20": null,
+        "21": null
       },
       "sheet": "interface",
       "description": "",
@@ -54,9 +52,7 @@
         "18": "18",
         "19": "19",
         "20": "20",
-        "21": "21",
-        "22": "22",
-        "23": "23"
+        "21": "21"
       },
       "pin_types": {
         "1": "passive",
@@ -79,9 +75,7 @@
         "18": "passive",
         "19": "passive",
         "20": "passive",
-        "21": "passive",
-        "22": "passive",
-        "23": "passive"
+        "21": "passive"
       },
       "assembly": "fit",
       "include_bom": true,
@@ -1447,122 +1441,48 @@
       "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/35612c59-504f-5b7a-ad9a-930c5c58f069"
     },
     {
-      "ref": "UID1",
-      "value": "M24C02-RMN6TP",
-      "footprint": "Shields:SOIC-8_3.9x4.9mm_P1.27mm",
+      "ref": "TPI",
+      "value": "IOREF",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
       "pins": {
-        "1": "IOREF",
-        "2": "GND",
-        "3": "IOREF",
-        "4": "GND",
-        "5": "shield/sda",
-        "6": "shield/scl",
-        "7": "id/wp",
-        "8": "IOREF"
+        "1": "IOREF"
       },
-      "sheet": "identity",
-      "description": "Address straps honoured; WP high except during assembly programming",
-      "pin_names": {
-        "1": "E0",
-        "2": "E1",
-        "3": "E2",
-        "4": "VSS",
-        "5": "SDA",
-        "6": "SCL",
-        "7": "WC",
-        "8": "VCC"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive",
-        "3": "passive",
-        "4": "power_in",
-        "5": "bidirectional",
-        "6": "input",
-        "7": "input",
-        "8": "power_in"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "M24C02-RMN6TP",
-      "datasheet": "https://www.st.com/resource/en/datasheet/m24c02-r.pdf",
-      "uuid": "a5b10433-ef8c-5626-b1d5-ae20894681c0",
-      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/e47c57b8-e318-5cad-ada2-e08e05cc583c"
-    },
-    {
-      "ref": "RID1",
-      "value": "10K",
-      "footprint": "Shields:R_0603_1608Metric",
-      "pins": {
-        "1": "id/wp",
-        "2": "IOREF"
-      },
-      "sheet": "identity",
+      "sheet": "circuit",
       "description": "",
       "pin_names": {
-        "1": "1",
-        "2": "2"
+        "1": "1"
       },
       "pin_types": {
-        "1": "passive",
-        "2": "passive"
+        "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "169341bc-be86-5b32-b007-2ac33d6341c2",
-      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/e47c57b8-e318-5cad-ada2-e08e05cc583c"
-    },
-    {
-      "ref": "CID1",
-      "value": "100nF",
-      "footprint": "Shields:C_0603_1608Metric",
-      "pins": {
-        "1": "IOREF",
-        "2": "GND"
-      },
-      "sheet": "identity",
-      "description": "",
-      "pin_names": {
-        "1": "1",
-        "2": "2"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "e96d452c-1369-59d0-a0a8-2284f1e2b2fc",
-      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/e47c57b8-e318-5cad-ada2-e08e05cc583c"
-    },
-    {
-      "ref": "JSID1",
-      "value": "WRITE ENABLE - OPEN",
-      "footprint": "Shields:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm",
-      "pins": {
-        "1": "id/wp",
-        "2": "GND"
-      },
-      "sheet": "identity",
-      "description": "",
-      "pin_names": {
-        "1": "1",
-        "2": "2"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive"
-      },
-      "assembly": "open",
       "include_bom": false,
       "mpn": "",
       "datasheet": "",
-      "uuid": "aeb4de5a-6197-5192-9a29-b248bf159137",
-      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/e47c57b8-e318-5cad-ada2-e08e05cc583c"
+      "uuid": "f2037217-e9c5-5487-acc9-beb9cac28320",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/35612c59-504f-5b7a-ad9a-930c5c58f069"
+    },
+    {
+      "ref": "TPG",
+      "value": "AGND",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "AGND"
+      },
+      "sheet": "circuit",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "de826593-f0f4-572e-9036-fb864d066fab",
+      "sheet_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/35612c59-504f-5b7a-ad9a-930c5c58f069"
     }
   ],
   "production_release": false

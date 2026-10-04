@@ -1,5 +1,5 @@
 Reference,Value,Footprint,MPN,Assembly
-JA1,ANALYSER - KEY 24,Shields:Socket_2x12_Key24,,fit
+JA1,ANALYSER - KEY 22,Shields:Socket_2x11_Key22,,fit
 U3,MSGEQ7N,Shields:SOIC-8_3.9x4.9mm_P1.27mm,MSGEQ7N,fit
 R311,47K,Shields:R_0603_1608Metric,,fit
 R313,200K 1%,Shields:R_0603_1608Metric,,fit
@@ -40,6 +40,3 @@ C212,100nF,Shields:C_0603_1608Metric,,fit
 C214,33pF C0G,Shields:C_0603_1608Metric,,fit
 C215,100nF,Shields:C_0603_1608Metric,,fit
 C216,100nF,Shields:C_0603_1608Metric,,fit
-UID1,M24C02-RMN6TP,Shields:SOIC-8_3.9x4.9mm_P1.27mm,M24C02-RMN6TP,fit
-RID1,10K,Shields:R_0603_1608Metric,,fit
-CID1,100nF,Shields:C_0603_1608Metric,,fit
