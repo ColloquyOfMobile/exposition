@@ -29,7 +29,7 @@
         "20": "shield/scl",
         "21": "IOREF",
         "22": "GND",
-        "23": "+5V"
+        "23": null
       },
       "sheet": "interface",
       "description": "",

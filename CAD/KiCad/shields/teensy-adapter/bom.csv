@@ -60,7 +60,7 @@ CA40,10nF C0G,Shields:C_0603_1608Metric,,fit
 RA41,100K,Shields:R_0603_1608Metric,,fit
 RB41,150K,Shields:R_0603_1608Metric,,fit
 CA41,10nF C0G,Shields:C_0603_1608Metric,,fit
-D1,SS14,Shields:D_SOD-123,SS14,fit
+D1,1N5819HW,Shields:D_SOD-123,1N5819HW,fit
 CV1,10uF X7R,Shields:C_0805_2012Metric,,fit
 CI1,10uF X7R,Shields:C_0805_2012Metric,,fit
 CI2,100nF,Shields:C_0603_1608Metric,,fit

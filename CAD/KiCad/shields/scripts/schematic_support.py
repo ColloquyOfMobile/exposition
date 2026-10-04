@@ -116,7 +116,7 @@ def lib_symbol(p, external=False):
         elif style == "capacitor":
             for y in [-0.762, 0.762]:
                 text.append(f'(polyline (pts (xy -2.54 {y}) (xy 2.54 {y})) (stroke (width 0.508) (type default)) (fill (type none)))')
-            if p["ref"] == "C1":
+            if 'CP_Elec' in p['footprint']:
                 text.append(f'(text "+" (at -3.81 2.54 0) {fx(1.27)})')
         elif style == "flag":
             text.append('(polyline (pts (xy 0 0) (xy 0 2.54) (xy -1.27 3.81) (xy 0 5.08) (xy 1.27 3.81) (xy 0 2.54)) (stroke (width 0.254) (type default)) (fill (type none)))')
@@ -206,7 +206,7 @@ class Sheet:
         syms = "\n".join(lib_symbol(p) for p in self.parts.values())
         content = f'''(kicad_sch (version 20250114) (generator "eeschema") (generator_version "9.0")
           (uuid {q(uid('sheetfile/'+self.name))}) (paper "A3")
-          (title_block (title {q(self.title)}) (date "2026-10-01") (rev "A-review")
+          (title_block (title {q(self.title)}) (date "2026-10-04") (rev "A-prototype")
             (company "Colloquy of Mobiles") (comment 1 "Prototype: verify harness polarity and sensor values before connection"))
           (lib_symbols {syms})
           {chr(10).join(self.objects)}

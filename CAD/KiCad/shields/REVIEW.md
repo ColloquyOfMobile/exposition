@@ -49,6 +49,8 @@ not change. Firmware 5 is separate work and has not been implemented here.
 * [PJRC Teensy 4.1](https://www.pjrc.com/store/teensy41.html) documents the
   3.3V-only input range and USB/VIN power constraint. The adapter draws from
   VIN; it never feeds VIN. A Schottky points from VIN toward MEGA_5V.
+  The selected [Diodes 1N5819HW](https://www.diodes.com/part/view/1N5819HW)
+  is SOD-123; this avoids assigning the larger SS14 package to SOD-123 lands.
 * The project-local PPS footprint is the earlier reviewed Panasonic 6041
   pattern. See the [Panasonic ECHU catalogue](https://mediap.industry.panasonic.eu/assets/imported/industrial.panasonic.com/cdbs/www-data/pdf/RDI0000/ABD0000C173.pdf).
 
@@ -71,12 +73,22 @@ an agreed power-sequencing constraint or added powered-off isolation before
 release. The older Thomas/Teensy project's TMUX1511 solution is a relevant
 starting point, not evidence that this unswitched circuit has been qualified.
 
-Also outstanding: the adapter's four mounting-hole locations must be checked
-against the physical Mega; the inherited backplane Mega footprint describes
-headers but does not include those four holes. Do not invent drilling from a
-silkscreen outline. Enclosure front/back height, gold-contact part numbers,
+The inherited backplane Mega footprint omitted its mounting holes. Four
+peripheral 3.2mm holes are now added to both mating boards from Arduino's
+official `MEGA2560_Rev3e.brd` CAD, with exact transforms recorded in
+`mechanical.json`. Its two optional central holes are unused.
+
+Still outstanding: enclosure front/back height, gold-contact part numbers,
 keying plugs, stack heights, high-value C0G stock, photosensor calibration,
 rail/current budget and the harness measurements remain physical checks.
+
+The backplane is four-layer: F.Cu signals, In1.Cu GND, In2.Cu +5V with two
+photosensor routes, B.Cu signals and local AGND. The Teensy adapter is also
+four-layer: F.Cu signals, In1.Cu GND, In2.Cu a congested tone route, B.Cu
+signals/GND. Audio cards are two-layer with an AGND pour. JP1 is still the
+single passive GND/AGND bond. Plane connections are solid; finished copper
+weight, laminate construction and permissible temperature rise must be set
+with the fabricator. DRC does not qualify the 12V harness current or vias.
 
 No hardware is attached or exercised by the generation and validation scripts.
 ERC/DRC results cannot establish the powered-off, acoustic or mechanical tests

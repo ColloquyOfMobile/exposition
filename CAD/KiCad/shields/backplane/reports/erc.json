@@ -1,0 +1,109 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-04T13:34:42+0200",
+    "kicad_version": "9.0.7",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae",
+            "violations": []
+        },
+        {
+            "path": "/controller/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/7884b288-f19c-5fd4-b200-dce0240ef3a8",
+            "violations": []
+        },
+        {
+            "path": "/controller_2/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/d8fabbaf-00af-54d6-ad69-ba3ae76764c2",
+            "violations": []
+        },
+        {
+            "path": "/power/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/894454a2-d177-57a2-9ba1-53ccc0188784",
+            "violations": []
+        },
+        {
+            "path": "/power_2/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/da935bb6-8fb3-54a1-a2be-83ab57096529",
+            "violations": []
+        },
+        {
+            "path": "/harness/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/4d1e0a4d-e5c7-5e78-a753-340b3e9c90bf",
+            "violations": []
+        },
+        {
+            "path": "/harness_2/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/2b3477a0-a53a-573c-a9af-ae66cd115320",
+            "violations": []
+        },
+        {
+            "path": "/harness_3/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/8a5df3da-395a-5e03-9144-a3db5233228a",
+            "violations": []
+        },
+        {
+            "path": "/audio3/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/905df8d0-f9b6-5ac9-b63e-bb1b87483a24",
+            "violations": []
+        },
+        {
+            "path": "/audio4/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/92d10b79-e0f3-5b2b-9265-0be7be83e974",
+            "violations": []
+        },
+        {
+            "path": "/audio5/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/4ac66573-ca9b-5c18-b4a0-b84361df81b0",
+            "violations": []
+        },
+        {
+            "path": "/audio1/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/5fc387a2-27a3-59b0-a96d-6f3ed99b907a",
+            "violations": []
+        },
+        {
+            "path": "/audio2/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e4fde952-a3d6-5548-bdd5-579ed624857b",
+            "violations": []
+        },
+        {
+            "path": "/io/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/1ab8eff8-800d-5e1c-a071-13960f8b8229",
+            "violations": []
+        },
+        {
+            "path": "/io_2/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/1cb8b04e-6dee-5865-ab6f-2100c6242893",
+            "violations": []
+        },
+        {
+            "path": "/slots/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/07655d6a-0e60-5d53-a9b5-fbafb3fe37b6",
+            "violations": []
+        },
+        {
+            "path": "/slots_2/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc",
+            "violations": []
+        },
+        {
+            "path": "/slots_3/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9",
+            "violations": []
+        },
+        {
+            "path": "/mechanical/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/efb3da17-72b3-5638-9bdc-3e35610c8569",
+            "violations": []
+        },
+        {
+            "path": "/supplies/",
+            "uuid_path": "/c974ff16-a701-53ef-8165-966482bbbbae/52e8110b-a7b5-50cc-b963-598bfde3c477",
+            "violations": []
+        }
+    ],
+    "source": "backplane.kicad_sch"
+}

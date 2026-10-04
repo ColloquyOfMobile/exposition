@@ -112,6 +112,7 @@ def backplane():
 def thomas():
     d=Circuit('voice-thomas')
     d.add('JV1','VOICE - KEY 14','Shields:Socket_2x07_Key14',voice_pins(),'interface')
+    d.parts['JV1']['pins']['5']=None  # Passive card does not consume external +5V.
     d.add('H1','M3 retention',HOLE,{},'interface')
     d.r('R1','1K2','tone','stage1');d.r('R2','1K2','stage1','filter out')
     # Three parallel footprints per stage cover all five BOMs, including 470 nF.
@@ -146,6 +147,7 @@ def active():
 def msgeq():
     d=Circuit('analyser-msgeq7')
     d.add('JA1','ANALYSER - KEY 24','Shields:Socket_2x12_Key24',analyser_pins(),'interface')
+    d.parts['JA1']['pins']['23']=None  # Analyser is powered exclusively by IOREF.
     for i in [1,2]:d.add(f'H{i}','M3 retention',HOLE,{},'interface')
     for b in BODY:
         n=CHANNEL[b]
@@ -161,6 +163,7 @@ def msgeq():
 def direct():
     d=Circuit('analyser-direct')
     d.add('JA1','ANALYSER - KEY 24','Shields:Socket_2x12_Key24',analyser_pins(),'interface')
+    for pin in ['17','18']:d.parts['JA1']['pins'][pin]=None
     for i in [1,2]:d.add(f'H{i}','M3 retention',HOLE,{},'interface')
     d.add('JB1','BENCH GND +5V SIGNAL','Connector_JST:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical',{1:'AGND',2:'+5V',3:'bench/mic'},'interface')
     d.add('JSRC1','HARNESS - CH0 - BENCH','Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical',{1:BODY[0]+'/microphone',2:'ch0/source',3:'bench/mic'},'interface')
@@ -214,7 +217,7 @@ def teensy():
     for i,pin in enumerate(ANALOG[5:],5):
         d.r(f'RA{pin}','100K',pins[f'A{i}'],f'adc/{pin}','sensors')
         d.r(f'RB{pin}','150K',f'adc/{pin}','GND','sensors');d.c(f'CA{pin}','10nF C0G',f'adc/{pin}','GND','sensors')
-    d.add('D1','SS14','Diode_SMD:D_SOD-123',{1:'MEGA_5V',2:'VIN_USB'},'power','Cathode to MEGA_5V; USB alone supplies VIN',names={'1':'K','2':'A'},mpn='SS14')
+    d.add('D1','1N5819HW','Diode_SMD:D_SOD-123',{1:'MEGA_5V',2:'VIN_USB'},'power','Cathode to MEGA_5V; USB alone supplies VIN',names={'1':'K','2':'A'},mpn='1N5819HW')
     d.c('CV1','10uF X7R','VIN_USB','GND','power',C8);d.c('CI1','10uF X7R','IOREF','GND','power',C8);d.c('CI2','100nF','IOREF','GND','power')
     d.tp('TPV','VIN_USB','power');d.tp('TPI','IOREF','power')
     return d

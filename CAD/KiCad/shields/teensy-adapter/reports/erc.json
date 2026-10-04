@@ -1,0 +1,69 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-04T13:34:47+0200",
+    "kicad_version": "9.0.7",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/2a34184d-f581-57f8-88bf-73706d912fa4",
+            "violations": []
+        },
+        {
+            "path": "/mega/",
+            "uuid_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/f260262e-1c6d-5655-a113-171412ba1d71",
+            "violations": []
+        },
+        {
+            "path": "/mega_2/",
+            "uuid_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/bd539831-2357-513b-8cda-db3ae613690d",
+            "violations": []
+        },
+        {
+            "path": "/controls/",
+            "uuid_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/3fdb454b-8b6c-5bcc-8f30-3df50d4c6adb",
+            "violations": []
+        },
+        {
+            "path": "/teensy/",
+            "uuid_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/4bde25da-7384-5846-84a3-9e57048a772b",
+            "violations": []
+        },
+        {
+            "path": "/translators/",
+            "uuid_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/ad0f2abc-5831-5895-87ec-2d038d68f162",
+            "violations": []
+        },
+        {
+            "path": "/translators_2/",
+            "uuid_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/aa309451-9ab5-54bb-9f14-afa9e587732e",
+            "violations": []
+        },
+        {
+            "path": "/translators_3/",
+            "uuid_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/e1d55d88-61cc-5caa-9929-2ebc8d9f6058",
+            "violations": []
+        },
+        {
+            "path": "/sensors/",
+            "uuid_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/95fb521b-ab51-54d4-a583-a9ec7f9d7fb8",
+            "violations": []
+        },
+        {
+            "path": "/sensors_2/",
+            "uuid_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/1c6d1bf5-875a-5e5f-96e6-c5487129c86b",
+            "violations": []
+        },
+        {
+            "path": "/power/",
+            "uuid_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/cb79e5bc-fd6a-534a-bd75-010023780d0f",
+            "violations": []
+        },
+        {
+            "path": "/supplies/",
+            "uuid_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/42051b00-b99c-54be-8868-2a651f217260",
+            "violations": []
+        }
+    ],
+    "source": "teensy-adapter.kicad_sch"
+}

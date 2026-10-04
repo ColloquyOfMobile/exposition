@@ -1,0 +1,25 @@
+{
+  "connected_pins": 153,
+  "parity_differences": [],
+  "erc_violations": 0,
+  "drc_violations": 0,
+  "unconnected_items": 0,
+  "copper_layers": 2,
+  "tracks_and_vias": 516,
+  "sha256": {
+    "analyser-direct.kicad_pcb": "b7e554a85d5d0d3145737db12f9ef7da6ce4b5b692d485eee239a91ba80b4762",
+    "analyser-direct.kicad_pro": "6d6629808792857b83fdae94d59d0b988c3b61caae398f62ef303bbde59e2fd3",
+    "analyser-direct.kicad_sch": "1fda553f161b7868ea66372782b57e922f2240047d211ac3f9b4151ba71dce40",
+    "buffers.kicad_sch": "36c4bd94f11f368d7a5ee4afecd9f575ddf21518850272a00125c665aaaa7f4a",
+    "circuit.kicad_sch": "9e31158d8666af94b2fd83e48a78429b79230a2bc4f81d8f58f13050ea0c998e",
+    "female1.kicad_sch": "2a9c984174c39e193f5c75d783c0a5c15d5c9077712d0043717d11b487a7c793",
+    "female2.kicad_sch": "9089eb515739af2feea44a30813de07f050c385d91410ceea531ec8e25cf48a0",
+    "female3.kicad_sch": "2522088f94d5fbf4e1ee66f212243afdb10c189bf7cfb108573fa2dc164f035d",
+    "identity.kicad_sch": "7382b15b583aca3faa4a113f8eb74fdfea96a102cb0cc1d6d61c1e698ea87c4b",
+    "interface.kicad_sch": "b86295c9c7a2bb6eea58ba7fb72118790cd05bcc19b6506fa11e3020ba769c4d",
+    "interface_2.kicad_sch": "89a53fb719e593cfb5b2e0b9d936c413d20453bcf590eea0bceaec216dafb0d1",
+    "male1.kicad_sch": "7b4b504edb82f259c31685b2c335f0155e5c8da933035fe8ab602c11a58713a0",
+    "male2.kicad_sch": "0452d3836c0c1541dc7facc2101b3008d8d83a2072055050385d7ba8cf0dc075",
+    "supplies.kicad_sch": "b1be033f01d4d79c6348f72d7441d39ddf699b66d1f4e41b868837e64f12bac4"
+  }
+}

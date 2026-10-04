@@ -1,0 +1,34 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-04T13:34:48+0200",
+    "kicad_version": "9.0.7",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8",
+            "violations": []
+        },
+        {
+            "path": "/interface/",
+            "uuid_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/3b9bbe2e-8467-5b31-a4a8-4ed75210e53f",
+            "violations": []
+        },
+        {
+            "path": "/circuit/",
+            "uuid_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac",
+            "violations": []
+        },
+        {
+            "path": "/identity/",
+            "uuid_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/c0283d37-2368-54a1-90a1-4b5020e1555a",
+            "violations": []
+        },
+        {
+            "path": "/supplies/",
+            "uuid_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/7d605af4-4ae5-506a-b080-22abd9c55008",
+            "violations": []
+        }
+    ],
+    "source": "voice-thomas.kicad_sch"
+}

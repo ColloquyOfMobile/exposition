@@ -1,0 +1,25 @@
+{
+  "connected_pins": 270,
+  "parity_differences": [],
+  "erc_violations": 0,
+  "drc_violations": 0,
+  "unconnected_items": 0,
+  "copper_layers": 4,
+  "tracks_and_vias": 1300,
+  "sha256": {
+    "controls.kicad_sch": "1c3a790bed489796f3bae4371a11741755d47a1297b6a93042abb63c7299f295",
+    "mega.kicad_sch": "d8d374826dd333639705a2ea601a6cfcd63022ac36618824eb1361964ced6ac0",
+    "mega_2.kicad_sch": "00e9661f2d7ee5b4e32a62e8440bd31f4a7937d67e2ffc231b0f85ea578024c5",
+    "power.kicad_sch": "3b74c02db05fb86de8857d753853065d5f82ea0a07617566c23acd0858c2c7dc",
+    "sensors.kicad_sch": "aae3468a487d8f68b38cb576e74c93f790149a8d701dac74aac59d40f71ce974",
+    "sensors_2.kicad_sch": "5c5b568ccc5c473e7b9d7d234745e21b4b35bb3f057fc2ccc4a094bc55cf22f6",
+    "supplies.kicad_sch": "1379de4fff907050b366455230f23bd978aa867455981c6951ca80c9632e326b",
+    "teensy-adapter.kicad_pcb": "67ae99b1b8bf61f7b18452f4b7c9db58499ffe949c0af6e9329729f96c5aa0bd",
+    "teensy-adapter.kicad_pro": "38a5a3beb24d4dbab077c785e482e217b46b289111e0b7c8566d7755c9a8da6f",
+    "teensy-adapter.kicad_sch": "ef242b6bde307548b54bc3f13fe694b99a72b5f2bbd5de27b41b622fbb46e5ba",
+    "teensy.kicad_sch": "4abc8045b0f4bd88dade6900cd6927be7589a7954caef3f852cec88f18930a7c",
+    "translators.kicad_sch": "f604a41650c1b30bf1a3fcd585e907535b62abdd819976911d08889819922f25",
+    "translators_2.kicad_sch": "df62203ee1112c00505be315f2b208d9f7d21dd73d3434043d4c1791b8291589",
+    "translators_3.kicad_sch": "8ca480750dd1cc06e6bf64f7aded67bc3d3a7edcc8c80d85fdb6567ae69cd6c2"
+  }
+}

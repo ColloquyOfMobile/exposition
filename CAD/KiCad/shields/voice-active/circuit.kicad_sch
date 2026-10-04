@@ -1,6 +1,6 @@
 (kicad_sch (version 20250114) (generator "eeschema") (generator_version "9.0")
           (uuid "2d3bde7e-fd89-5f5e-9af0-78dd764b28c2") (paper "A3")
-          (title_block (title "voice-active / circuit") (date "2026-10-01") (rev "A-review")
+          (title_block (title "voice-active / circuit") (date "2026-10-04") (rev "A-prototype")
             (company "Colloquy of Mobiles") (comment 1 "Prototype: verify harness polarity and sensor values before connection"))
           (lib_symbols (symbol "Colloquy:U1" (pin_names (offset 1.27)) (exclude_from_sim no) (in_bom yes) (on_board yes)
 (property "Reference" "U" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
@@ -59,7 +59,6 @@
 (symbol "C1_1_1"
 (polyline (pts (xy -2.54 -0.762) (xy 2.54 -0.762)) (stroke (width 0.508) (type default)) (fill (type none)))
 (polyline (pts (xy -2.54 0.762) (xy 2.54 0.762)) (stroke (width 0.508) (type default)) (fill (type none)))
-(text "+" (at -3.81 2.54 0) (effects (font (size 1.27 1.27))  ))
 (pin passive line (at 0 5.08 270) (length 4.318) (name "~" (effects (font (size 1.016 1.016))  )) (number "1" (effects (font (size 0.889 0.889))  )))
 (pin passive line (at 0 -5.08 90) (length 4.318) (name "~" (effects (font (size 1.016 1.016))  )) (number "2" (effects (font (size 0.889 0.889))  )))
 )

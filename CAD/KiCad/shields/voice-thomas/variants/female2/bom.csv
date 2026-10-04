@@ -1,0 +1,14 @@
+Reference,Value,Footprint,MPN,Assembly
+JV1,VOICE - KEY 14,Shields:Socket_2x07_Key14,,fit
+R1,1800 ohm 1%,Shields:R_0603_1608Metric,,fit
+R2,1800 ohm 1%,Shields:R_0603_1608Metric,,fit
+C1,DNP PPS,Shields:PPS_6041,,DNP
+CX1,DNP PPS,Shields:PPS_6041,,DNP
+CY1,47nF C0G 5% >=25V,Shields:C_1206_3216Metric,,fit
+C2,DNP PPS,Shields:PPS_6041,,DNP
+CX2,DNP PPS,Shields:PPS_6041,,DNP
+CY2,47nF C0G 5% >=25V,Shields:C_1206_3216Metric,,fit
+R3,100K,Shields:R_0603_1608Metric,,fit
+UID1,M24C02-RMN6TP,Shields:SOIC-8_3.9x4.9mm_P1.27mm,M24C02-RMN6TP,fit
+RID1,10K,Shields:R_0603_1608Metric,,fit
+CID1,100nF,Shields:C_0603_1608Metric,,fit

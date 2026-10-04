@@ -1,0 +1,55 @@
+{
+  "source": "https://docs.arduino.cc/static/00ab83283ad8f7aae17832d0fe1b1d51/A000067-cad-files.zip",
+  "file": "MEGA2560_Rev3e.brd",
+  "eagle_peripheral_holes_mm": [
+    [
+      96.52,
+      2.54
+    ],
+    [
+      15.24,
+      50.8
+    ],
+    [
+      90.17,
+      50.8
+    ],
+    [
+      13.97,
+      2.54
+    ]
+  ],
+  "drill_mm": 3.2,
+  "backplane_transform": "x=141.16+eagle_y; y=53.32+eagle_x",
+  "adapter_transform": "x=194.50-eagle_y; y=53.32+eagle_x",
+  "voice_card_mm": [
+    30,
+    42
+  ],
+  "voice_connector": [
+    3,
+    6
+  ],
+  "voice_retention": [
+    24,
+    34
+  ],
+  "analyser_mm": [
+    150,
+    55
+  ],
+  "analyser_connector": [
+    3,
+    4
+  ],
+  "analyser_retention": [
+    [
+      142,
+      4
+    ],
+    [
+      142,
+      47
+    ]
+  ]
+}

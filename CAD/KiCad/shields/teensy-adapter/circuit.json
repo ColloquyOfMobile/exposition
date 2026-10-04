@@ -2186,7 +2186,7 @@
     },
     {
       "ref": "D1",
-      "value": "SS14",
+      "value": "1N5819HW",
       "footprint": "Shields:D_SOD-123",
       "pins": {
         "1": "MEGA_5V",
@@ -2204,7 +2204,7 @@
       },
       "assembly": "fit",
       "include_bom": true,
-      "mpn": "SS14",
+      "mpn": "1N5819HW",
       "datasheet": "",
       "uuid": "b35c6676-f6b1-5331-9802-ba7c49653f4d",
       "sheet_path": "/2a34184d-f581-57f8-88bf-73706d912fa4/cb79e5bc-fd6a-534a-bd75-010023780d0f"

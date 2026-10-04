@@ -28,7 +28,7 @@ def make_slots():
     for rows in [7,12]:
         for kind in ['Header','Socket']:
             name=f'{kind}_2x{rows:02d}_Key{rows*2}'
-            f=p.FOOTPRINT(None);f.SetFPID(p.LIB_ID('Shields',name));f.SetAttributes(p.FP_THROUGH_HOLE)
+            temporary=p.BOARD();f=p.FOOTPRINT(temporary);temporary.Add(f);f.SetFPID(p.LIB_ID('Shields',name));f.SetAttributes(p.FP_THROUGH_HOLE)
             layer=p.F_SilkS if kind=='Header' else p.B_SilkS
             for n in range(1,rows*2):
                 pad=p.PAD(f);pad.SetNumber(str(n));pad.SetAttribute(p.PAD_ATTRIB_PTH)
@@ -38,7 +38,9 @@ def make_slots():
             rect(f,-1.5,-1.5,5.54,(rows-1)*2.54+3,layer)
             rect(f,-1.8,-1.8,6.14,(rows-1)*2.54+3.6,p.F_CrtYd if kind=='Header' else p.B_CrtYd)
             f.SetLibDescription('Physical top-view contact map; '+('bottom mounted socket, blocked final cavity' if kind=='Socket' else 'top mounted male, final pin removed'))
-            # Libraries store front-side footprints; instance assembly side is set later.
+            # Canonical library view is front-side; flip back at placement.
+            if kind=='Socket':
+                f.SetLayer(p.B_Cu);f.Flip(f.GetPosition(),True)
             p.PCB_IO_MGR.PluginFind(p.PCB_IO_MGR.KICAD_SEXP).FootprintSave(str(LOCAL),f)
     shutil.copy2(ROOT.parent/'thomas-or-teensy/Colloquy.pretty/PPS_6041.kicad_mod',LOCAL/'PPS_6041.kicad_mod')
 
@@ -64,12 +66,12 @@ def placements(name,old):
         out=dict(JV1=(53,56,0),H1=(74,84,0),UID1=(69,77,0),CID1=(74,72,0),RID1=(64,81,90),JSID1=(62,85,0),
                  TP1=(53,86,0),TP2=(57,86,0),TP3=(61,89,0),TP4=(65,89,0),TP5=(67.54,89,0))
         if name=='voice-thomas':
-            out.update(R1=(61,56,0),R2=(70,56,0),R3=(61,60,90),C1=(65,63,0),CX1=(65,68,0),CY1=(61,73,90),
+            out.update(R1=(61,56,0),R2=(70,56,0),R3=(58.5,60,90),C1=(65,63,0),CX1=(65,68,0),CY1=(61,73,90),
                        C2=(74,63,0),CX2=(74,68,0),CY2=(78,73,90))
         else:
             out.update(U1=(68,64,0),R1=(61,54,90),R2=(64,54,90),C1=(61,59,90),R3=(61,63,90),R4=(61,68,90),
                        C2=(65,70,0),C3=(65,73,0),R5=(76,61,90),R6=(76,66,90),C4=(72,54,0),C5=(76,57,0),
-                       R7=(77,77,90),R8=(77,81,90),C6=(72,71,0),C7=(57,78,90),R9=(57,82,90),C8=(68,57,0),C9=(68,53,0))
+                       R7=(77,75,90),R8=(77,78.5,90),C6=(72,71,0),C7=(57,78,90),R9=(57,82,90),C8=(68,57,0),C9=(68,53,0),CID1=(77,71.5,0))
         return out
     if name.startswith('analyser'):
         out=dict(JA1=(53,54,0),H1=(192,54,0),H2=(192,97,0),UID1=(178,85,0),CID1=(184,81,90),RID1=(170,89,90),JSID1=(170,94,0))
@@ -81,8 +83,8 @@ def placements(name,old):
                             f'JS{n}':(x,86,0),f'TP{n+10}':(x-7,y+9,0)})
             out.update(TPS=(180,56,0),TPR=(185,56,0))
         else:
-            out.update(JB1=(165,97,0),JSRC1=(160,87,0),U1=(104,77,0),U2=(164,68,0),
-                       CB1=(110,73,90),CBU1=(110,79,90),CB2=(170,63,90),CBU2=(170,70,90),TPR=(186,94,0))
+            out.update(JB1=(151,99,0),JSRC1=(164,87,0),U1=(104,77,0),U2=(177,67,0),
+                       CB1=(110,73,90),CBU1=(110,79,90),CB2=(183,63,90),CBU2=(183,70,90),TPR=(186,94,0))
             for i,b in enumerate(BODY,1):
                 x=68+(i-1)*22
                 out.update({f'R{i}0':(x,56,90),f'R{i}1':(x,61,90),f'R{i}2':(x,67,90),f'R{i}3':(x,87,90),
@@ -96,7 +98,7 @@ def placements(name,old):
             out[f'U{chip+1}']=(x,y,0);out[f'CB{chip+1}']=(x,y-5,0)
             for ch in range(4):
                 idx=chip*4+ch
-                if idx<15:out[f'RD{OUTPUTS[idx][0]}']=(x+(5 if chip<2 else -5),y-4+ch*3,0)
+                if idx<15:out[f'RD{OUTPUTS[idx][0]}']=(165 if chip<2 else 170,y-4+ch*3,0)
         for i,pin in enumerate(ANALOG[5:]):
             x=151+i%6*7;y=132+i//6*9
             out[f'RA{pin}']=(x,y,90);out[f'RB{pin}']=(x+3,y,90);out[f'CA{pin}']=(x,y+4,0)
@@ -160,7 +162,7 @@ def main():
                 fp=p.FootprintLoad(str(path),fpname)
                 if not fp:raise RuntimeError(f'Missing {path}/{fpname}')
             board.Add(fp);fp.SetReference(ref);fp.SetValue(c['value'])
-            if fpname.startswith('Socket_'):fp.SetLayer(p.B_Cu)
+            if fpname.startswith('Socket_'):fp.Flip(fp.GetPosition(),True)
             if ref!='JM1':
                 x,y,angle=places[ref];fp.SetOrientationDegrees(angle);fp.SetPosition(xy(x,y))
             path=p.KIID_PATH()

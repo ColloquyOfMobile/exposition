@@ -1,6 +1,6 @@
 (kicad_sch (version 20250114) (generator "eeschema") (generator_version "9.0")
           (uuid "1336bd0f-70b6-5de4-8507-24e0d9a0681c") (paper "A3")
-          (title_block (title "backplane / slots") (date "2026-10-01") (rev "A-review")
+          (title_block (title "backplane / slots") (date "2026-10-04") (rev "A-prototype")
             (company "Colloquy of Mobiles") (comment 1 "Prototype: verify harness polarity and sensor values before connection"))
           (lib_symbols (symbol "Colloquy:JA1" (pin_names (offset 1.27)) (exclude_from_sim no) (in_bom yes) (on_board yes)
 (property "Reference" "JA" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))

@@ -11,7 +11,7 @@
         "2": "GND",
         "3": "filter out",
         "4": "AGND",
-        "5": "+5V",
+        "5": null,
         "6": "AGND",
         "7": "IOREF",
         "8": "GND",
