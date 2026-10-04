@@ -96,128 +96,163 @@ else held still**.
 
 ## 1. The shields at a glance
 
-**Drawn.** One backplane; in each slot, the shields that fit it. Exactly
-one of each pair is fitted at a time. One body stands for all five.
+**Drawn: what swaps and what stays.** Hatched is fixed — the same in
+every solution: the laptop, the backplane's own parts, the U2D2, the
+harness and everything in the bodies. A dashed slot takes either of its
+two shields, changed with the rack's supply and the computing shield's
+USB unplugged; each voice slot is changed on its own. The dotted band is
+what changes with no shield moving at all. One body stands for all five.
 
 <div style="overflow-x: auto; margin: 1rem 0;">
-<svg viewBox="0 0 1300 700" role="img" aria-label="Block diagram of the shield backplane. The laptop has two USB leads: one to the computing slot, one to the U2D2. The backplane holds four kinds of slot. The computing slot is the Mega 2560's footprint and takes either the Mega itself or a Teensy 4.1 adapter in the same footprint. It sends five 5 V tone squares to five voice slots, each of which takes either a Thomas card, a fixed passive filter, or an active card, a fourth-order filter whose corner is set by four resistors. Each card's line out goes through the backplane's 100 ohm build-out to the DSUB harness and on to each body's divider, amplifier and speaker. The computing slot also drives the NeoPixels and reads the photosensors through the backplane's own resistors. Each body's MAX9814 microphone comes back up the harness to the analyser slot, which takes either five MSGEQ7s or five anti-alias buffers, and whose five outputs go to the computing slot's A0 to A4. The U2D2 slot drives the Dynamixel bus. The computing shield drives IOREF, its own logic voltage, which powers the processor-facing side of the other shields.">
+<svg viewBox="0 0 1300 890" role="img" aria-label="Block diagram of what swaps and what stays in the shield solution. Fixed, the same in every solution: the laptop with its two USB leads; the backplane with its DSUB-15s, power entry, servo bus header, build-out, NeoPixel and photosensor resistors, pull-downs, ground bonds, I2C bus and slot id straps; the U2D2; the DSUB harness with its four harness boards; and in each of the five bodies the divider, amplifier and speaker, the NeoPixels and photosensors, the MAX9814 microphone and the Dynamixel servo. Swappable, powered down, one of two shields per slot: the computing slot, which is the Mega footprint, takes the Mega 2560 on firmware 4 with IOREF at 5 V or the Teensy 4.1 adapter on firmware 5 with IOREF at 3.3 V; each of the five voice slots takes, on its own, a Thomas card, passive with one fixed pitch, in five variants one per body, or an active card, fourth order with the pitch free within its octave, in thirteen variants with corners from 177 Hz to 11.3 kHz; the analyser slot takes five MSGEQ7s read by the firmware or five anti-alias buffers whose raw samples go to the laptop. Signals: USB from the laptop to the computing slot and to the U2D2; five 5 V tones from the computing slot to the voice slots; five line outs through the harness to the bodies; NeoPixels and photosensors between the computing slot and the bodies; five microphones from the bodies to the analyser slot, whose outputs return to the computing slot on A0 to A4; the Dynamixel bus from the U2D2 to the servos. Set in software, with no shield moving: the pitch within the fitted card's octave on the Teensy, the firmware that follows the computing shield, how a voice goes quiet, and the shields read back from their id EEPROMs.">
 <defs>
-<marker id="sh-ax" viewBox="0 0 10 8" refX="9" refY="4" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" orient="auto"><polygon points="0,0 10,4 0,8" fill="currentColor"></polygon></marker>
+<marker id="sw-ax" viewBox="0 0 10 8" refX="9" refY="4" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" orient="auto"><polygon points="0,0 10,4 0,8" fill="currentColor"></polygon></marker>
+<pattern id="sw-hatch" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="currentColor" stroke-width="1.4" opacity="0.32"></line></pattern>
 </defs>
-<g font-family="'IBM Plex Mono', monospace" fill="currentColor">
-<text x="180" y="22" font-size="11" font-weight="600" letter-spacing="1.2" opacity="0.7">BACKPLANE &#183; copper, connectors and passives; no silicon</text>
-<text x="1118" y="22" font-size="11" font-weight="600" letter-spacing="1.2" opacity="0.7">BODY &#215; 5</text>
+<text x="20" y="27" font-family="'IBM Plex Mono', monospace" font-size="12.5" font-weight="600" letter-spacing="1.4" fill="currentColor" opacity="0.8">WHAT SWAPS AND WHAT STAYS</text>
+<!-- frames -->
+<rect x="20" y="300" width="120" height="150" rx="4" fill="url(#sw-hatch)" stroke="currentColor" stroke-width="1.6"></rect>
+<rect x="170" y="48" width="820" height="642" rx="6" fill="none" stroke="currentColor" stroke-width="1.8"></rect>
+<rect x="1035" y="48" width="40" height="642" rx="3" fill="url(#sw-hatch)" stroke="currentColor" stroke-width="1.4"></rect>
+<rect x="1095" y="48" width="190" height="642" rx="6" fill="none" stroke="currentColor" stroke-width="1.4"></rect>
+<g font-family="'IBM Plex Mono', monospace" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.75">
+<text x="186" y="69">BACKPLANE &#183; FIXED</text>
+<text x="1108" y="69">BODY &#215; 5 &#183; FIXED</text>
 </g>
-<rect x="20" y="270" width="110" height="140" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"></rect>
-<rect x="165" y="32" width="850" height="630" rx="6" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.7"></rect>
-<rect x="1035" y="32" width="50" height="630" rx="3" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.6"></rect>
-<rect x="1105" y="32" width="180" height="630" rx="6" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.7"></rect>
+<text x="974" y="69" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.65" text-anchor="end">swap a shield only with the rack supply and the computing USB unplugged</text>
+<text x="1059" y="262" font-family="'IBM Plex Mono', monospace" font-size="10" font-weight="600" fill="currentColor" opacity="0.8" text-anchor="middle" transform="rotate(-90 1059 262)">DSUB HARNESS</text>
+<text x="1059" y="405" font-family="'IBM Plex Mono', monospace" font-size="10" font-weight="600" fill="currentColor" opacity="0.8" text-anchor="middle" transform="rotate(-90 1059 405)">4 HARNESS BOARDS</text>
+<text x="1059" y="640" font-family="'IBM Plex Mono', monospace" font-size="10" font-weight="600" fill="currentColor" opacity="0.8" text-anchor="middle" transform="rotate(-90 1059 640)">FIXED</text>
 <!-- slots -->
-<rect x="190" y="60" width="260" height="210" rx="4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="6 4" opacity="0.7"></rect>
-<rect x="510" y="60" width="250" height="210" rx="4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="6 4" opacity="0.7"></rect>
-<rect x="510" y="340" width="250" height="190" rx="4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="6 4" opacity="0.7"></rect>
-<rect x="190" y="560" width="260" height="80" rx="4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="6 4" opacity="0.7"></rect>
-<rect x="800" y="60" width="195" height="210" rx="4" fill="none" stroke="currentColor" stroke-width="1.4"></rect>
-<g font-family="'IBM Plex Mono', monospace" font-size="10" font-weight="600" fill="currentColor" opacity="0.6">
-<text x="200" y="78">COMPUTING SLOT &#183; Mega footprint</text>
-<text x="520" y="78">VOICE SLOTS &#215; 5</text>
-<text x="520" y="358">ANALYSER SLOT</text>
-<text x="200" y="578">U2D2 SLOT</text>
-<text x="810" y="78">BACKPLANE PASSIVES</text>
+<g fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="7 4" opacity="0.85">
+<rect x="195" y="85" width="300" height="230" rx="5"></rect>
+<rect x="195" y="360" width="300" height="110" rx="5"></rect>
+<rect x="560" y="85" width="405" height="230" rx="5"></rect>
+<rect x="560" y="360" width="405" height="200" rx="5"></rect>
+</g>
+<g font-family="'IBM Plex Mono', monospace" font-size="10" font-weight="600" fill="currentColor" opacity="0.7">
+<text x="207" y="105">COMPUTING SLOT &#183; the Mega footprint</text>
+<text x="207" y="380">U2D2 SLOT</text>
+<text x="572" y="105">VOICE SLOTS JV1&#8211;JV5 &#183; each swapped on its own</text>
+<text x="572" y="380">ANALYSER SLOT JA1</text>
 </g>
 <!-- shields -->
-<rect x="205" y="92" width="230" height="62" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"></rect>
-<rect x="205" y="190" width="230" height="62" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"></rect>
-<rect x="525" y="92" width="220" height="62" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"></rect>
-<rect x="525" y="190" width="220" height="62" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"></rect>
-<rect x="525" y="372" width="220" height="56" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"></rect>
-<rect x="525" y="460" width="220" height="56" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"></rect>
-<rect x="205" y="592" width="230" height="38" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"></rect>
-<g font-family="Chivo, sans-serif" font-weight="600" fill="currentColor" text-anchor="middle">
-<text x="75" y="325" font-size="15">Laptop</text>
-<text x="320" y="117" font-size="13">Mega 2560</text>
-<text x="320" y="215" font-size="13">Teensy 4.1 adapter</text>
-<text x="635" y="117" font-size="12.5">Thomas card</text>
-<text x="635" y="215" font-size="12.5">active card</text>
-<text x="635" y="396" font-size="12.5">5 &#215; MSGEQ7</text>
-<text x="635" y="484" font-size="12.5">5 &#215; anti-alias buffer</text>
-<text x="320" y="616" font-size="13">U2D2</text>
+<g fill="none" stroke="currentColor" stroke-width="1.7">
+<rect x="213" y="120" width="264" height="68" rx="3"></rect>
+<rect x="213" y="228" width="264" height="68" rx="3"></rect>
+<rect x="578" y="120" width="369" height="68" rx="3"></rect>
+<rect x="578" y="228" width="369" height="68" rx="3"></rect>
+<rect x="578" y="392" width="369" height="60" rx="3"></rect>
+<rect x="578" y="490" width="369" height="60" rx="3"></rect>
 </g>
-<g font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" text-anchor="middle" opacity="0.65">
-<text x="75" y="345">Python program</text>
-<text x="75" y="372">2 USB leads</text>
-<text x="75" y="388">in every setup</text>
-<text x="320" y="134">IOREF 5 V</text>
-<text x="320" y="147">firmware 4, unmodified</text>
-<text x="320" y="232">IOREF 3.3 V, translators</text>
-<text x="320" y="245">firmware 5</text>
-<text x="635" y="134">passive, fixed pitch</text>
-<text x="635" y="147">Thomas's values</text>
-<text x="635" y="232">4th order, any pitch in</text>
-<text x="635" y="245">an octave; 4 resistors</text>
-<text x="635" y="413">bands, read by firmware</text>
-<text x="635" y="501">samples, to the laptop</text>
-<text x="320" y="173" font-weight="700" opacity="0.9">or</text>
-<text x="635" y="173" font-weight="700" opacity="0.9">or</text>
-<text x="635" y="447" font-weight="700" opacity="0.9">or</text>
-<text x="1060" y="300">DSUB</text>
-<text x="1060" y="313">harness</text>
-<text x="1060" y="326">fixed</text>
+<rect x="213" y="392" width="264" height="60" rx="3" fill="url(#sw-hatch)" stroke="currentColor" stroke-width="1.7"></rect>
+<g font-family="Chivo, sans-serif" font-size="13.5" font-weight="600" fill="currentColor" text-anchor="middle">
+<text x="345" y="148">Mega 2560</text>
+<text x="345" y="256">Teensy 4.1 adapter</text>
+<text x="345" y="418">U2D2</text>
+<text x="762" y="144">Thomas card</text>
+<text x="762" y="252">Active card</text>
+<text x="762" y="417">5 &#215; MSGEQ7</text>
+<text x="762" y="515">5 &#215; anti-alias buffer</text>
 </g>
-<g font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" opacity="0.75">
-<text x="815" y="105">100 R build-out &#215; 5</text>
-<text x="815" y="130">330 R NeoPixel &#215; 7</text>
-<text x="815" y="155">10 K photosensor &#215; 11</text>
-<text x="815" y="180">ground bonds, bulk</text>
-<text x="815" y="205">IOREF &#183; I2C &#183; slot ids</text>
-<text x="815" y="230">pull-downs</text>
+<g font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" text-anchor="middle" opacity="0.72">
+<text x="345" y="169">firmware 4, unmodified &#183; IOREF 5 V</text>
+<text x="345" y="277">firmware 5 &#183; IOREF 3.3 V</text>
+<text x="345" y="438">the same in every setup</text>
+<text x="762" y="162">passive, Thomas&#8217;s values &#183; one fixed pitch</text>
+<text x="762" y="178">5 variants, one per body</text>
+<text x="762" y="270">4th order &#183; pitch free within its octave</text>
+<text x="762" y="286">13 variants: corners 177 Hz &#8211; 11.3 kHz</text>
+<text x="762" y="437">seven bands per body, read by the firmware</text>
+<text x="762" y="535">raw samples to the laptop &#183; Goertzel</text>
+</g>
+<g font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" fill="currentColor" text-anchor="middle" opacity="0.9">
+<text x="345" y="213">&#8645; either one</text>
+<text x="762" y="213">&#8645; either one, in each slot</text>
+<text x="762" y="476">&#8645; either one</text>
+</g>
+<!-- fixed on the backplane -->
+<rect x="195" y="500" width="300" height="170" rx="5" fill="url(#sw-hatch)" stroke="currentColor" stroke-width="1.6"></rect>
+<text x="207" y="522" font-family="'IBM Plex Mono', monospace" font-size="10" font-weight="600" fill="currentColor" opacity="0.8">FIXED ON THE BACKPLANE</text>
+<g font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" opacity="0.85">
+<text x="207" y="546">4 &#215; DSUB-15 &#183; power entry &#183; servo bus J7</text>
+<text x="207" y="566">100 R build-outs &#183; 330 R NeoPixel resistors</text>
+<text x="207" y="586">10 K photosensor loads &#183; pull-downs</text>
+<text x="207" y="606">ground bonds &#183; I2C &#183; slot id straps</text>
+<text x="207" y="632">IOREF, set by the computing shield:</text>
+<text x="207" y="648">why every combination is safe</text>
 </g>
 <!-- body -->
-<rect x="1120" y="95" width="150" height="50" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"></rect>
-<rect x="1120" y="185" width="150" height="34" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"></rect>
-<rect x="1120" y="420" width="150" height="34" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"></rect>
-<rect x="1120" y="595" width="150" height="34" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"></rect>
+<g fill="url(#sw-hatch)" stroke="currentColor" stroke-width="1.6">
+<rect x="1110" y="160" width="160" height="60" rx="3"></rect>
+<rect x="1110" y="315" width="160" height="40" rx="3"></rect>
+<rect x="1110" y="455" width="160" height="40" rx="3"></rect>
+<rect x="1110" y="570" width="160" height="40" rx="3"></rect>
+</g>
 <g font-family="Chivo, sans-serif" font-size="11.5" fill="currentColor" text-anchor="middle">
-<text x="1195" y="116">divider, amplifier,</text>
-<text x="1195" y="132">speaker</text>
-<text x="1195" y="206">pixels &#183; photosensors</text>
-<text x="1195" y="441">MAX9814 microphone</text>
-<text x="1195" y="616">Dynamixel servo</text>
+<text x="1190" y="186">divider &#183; amplifier</text>
+<text x="1190" y="204">speaker</text>
+<text x="1190" y="339">NeoPixels &#183; photosensors</text>
+<text x="1190" y="479">MAX9814 microphone</text>
+<text x="1190" y="594">Dynamixel servo</text>
+</g>
+<text x="80" y="347" font-family="Chivo, sans-serif" font-size="15" font-weight="600" fill="currentColor" text-anchor="middle">Laptop</text>
+<g font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" text-anchor="middle" opacity="0.72">
+<text x="80" y="367">Python program</text>
+<text x="80" y="410">2 USB leads</text>
+<text x="80" y="425">in every setup</text>
 </g>
 <!-- wires -->
 <g fill="none" stroke="currentColor">
-<path d="M 130 300 H 160 V 123 H 203" stroke-width="1.4" marker-end="url(#sh-ax)"></path>
-<path d="M 130 380 H 160 V 611 H 203" stroke-width="1.4" marker-end="url(#sh-ax)"></path>
-<path d="M 450 123 H 523" stroke-width="1.4" marker-end="url(#sh-ax)"></path>
-<path d="M 760 123 H 798" stroke-width="2.4" marker-end="url(#sh-ax)"></path>
-<path d="M 995 120 H 1118" stroke-width="2.4" marker-end="url(#sh-ax)"></path>
-<path d="M 450 252 H 480 V 290 H 780 V 240 H 798" stroke-width="1.4" marker-end="url(#sh-ax)"></path>
-<path d="M 995 202 H 1118" stroke-width="1.4" marker-end="url(#sh-ax)"></path>
-<path d="M 1118 437 H 747" stroke-width="2.4" marker-end="url(#sh-ax)"></path>
-<path d="M 523 490 H 320 V 272" stroke-width="2.4" marker-end="url(#sh-ax)"></path>
-<path d="M 435 611 H 1118" stroke-width="1.4" marker-end="url(#sh-ax)"></path>
-<path d="M 400 272 V 330 H 495 V 360 H 508" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.7" marker-end="url(#sh-ax)"></path>
+<path d="M 140 330 H 160 V 205 H 193" stroke-width="1.4" marker-end="url(#sw-ax)"></path>
+<path d="M 140 422 H 211" stroke-width="1.4" marker-end="url(#sw-ax)"></path>
+<path d="M 495 170 H 558" stroke-width="1.4" marker-end="url(#sw-ax)"></path>
+<path d="M 965 190 H 1108" stroke-width="2.4" marker-end="url(#sw-ax)"></path>
+<path d="M 495 290 H 512 V 335 H 1108" stroke-width="1.4" marker-end="url(#sw-ax)"></path>
+<path d="M 1108 475 H 967" stroke-width="2.4" marker-end="url(#sw-ax)"></path>
+<path d="M 558 520 H 545 V 270 H 497" stroke-width="2.4" marker-end="url(#sw-ax)"></path>
+<path d="M 477 422 H 530 V 590 H 1108" stroke-width="1.4" marker-end="url(#sw-ax)"></path>
 </g>
-<g font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.8">
-<text x="460" y="116">tone &#215; 5</text>
-<text x="452" y="133" opacity="0.8">5 V square</text>
-<text x="1000" y="112">line out</text>
-<text x="600" y="303">NeoPixels &#183; photosensors</text>
-<text x="880" y="430">microphone &#215; 5</text>
-<text x="328" y="320">A0&#8211;A4</text>
-<text x="404" y="322">IOREF, strobe,</text>
-<text x="404" y="334">reset, I2C</text>
-<text x="640" y="604">Dynamixel data &#183; J7</text>
+<g font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.85">
+<text x="164" y="198">USB</text>
+<text x="165" y="415">USB</text>
+<text x="499" y="162">tone &#215; 5</text>
+<text x="499" y="183">5 V</text>
+<text x="972" y="182">line out</text>
+<text x="640" y="329">NeoPixels &#183; photosensors</text>
+<text x="974" y="467">mic &#215; 5</text>
+<text x="500" y="263">A0&#8211;A4</text>
+<text x="640" y="584">Dynamixel bus &#183; J7</text>
 </g>
-<g font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" opacity="0.75">
-<rect x="20" y="676" width="28" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"></rect>
-<text x="56" y="687">a shield; one of each pair is fitted</text>
-<rect x="390" y="676" width="28" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="6 4"></rect>
-<text x="426" y="687">a slot on the backplane</text>
-<line x1="640" y1="683" x2="680" y2="683" stroke="currentColor" stroke-width="2.4"></line>
-<text x="688" y="687">audio</text>
-<line x1="760" y1="683" x2="800" y2="683" stroke="currentColor" stroke-width="1.4"></line>
-<text x="808" y="687">digital, sensors, servo data</text>
+<!-- software -->
+<rect x="20" y="715" width="1265" height="118" rx="6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="1.5 4" stroke-linecap="round"></rect>
+<text x="36" y="738" font-family="'IBM Plex Mono', monospace" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.75">SET IN SOFTWARE &#183; NO SHIELD MOVES</text>
+<g font-family="Chivo, sans-serif" font-size="12.5" font-weight="600" fill="currentColor">
+<text x="36" y="766">Pitch, within the fitted card&#8217;s octave</text>
+<text x="352" y="766">Firmware follows the computing shield</text>
+<text x="668" y="766">How a voice goes quiet</text>
+<text x="984" y="766">What is fitted, read back</text>
+</g>
+<g font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" opacity="0.72">
+<text x="36" y="788">Teensy only; a Mega plays its timers&#8217; five</text>
+<text x="36" y="804">a new octave is another active card</text>
+<text x="352" y="788">4 on the Mega, 5 on the Teensy</text>
+<text x="352" y="804">flashed from the page</text>
+<text x="668" y="788">idle low, as today, or a 1 MHz carrier</text>
+<text x="668" y="804">that leaves no thump (Teensy)</text>
+<text x="984" y="788">each shield&#8217;s id EEPROM, in the greeting</text>
+<text x="984" y="804">a pitch its card can&#8217;t carry is refused</text>
+</g>
+<!-- legend -->
+<g font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" opacity="0.8">
+<rect x="20" y="856" width="30" height="16" rx="2" fill="url(#sw-hatch)" stroke="currentColor" stroke-width="1.6"></rect>
+<text x="58" y="868">fixed: the same in every solution</text>
+<rect x="330" y="856" width="30" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="7 4"></rect>
+<text x="368" y="868">a slot: swap its shield, powered down</text>
+<rect x="670" y="856" width="30" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"></rect>
+<text x="708" y="868">a shield; &#8645; one of the two is fitted</text>
+<rect x="1010" y="856" width="30" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="1.5 4" stroke-linecap="round"></rect>
+<text x="1048" y="868">set in software</text>
 </g>
 </svg>
 </div>
