@@ -78,10 +78,6 @@ TEENSY41_ANALOG: Final[dict[int, frozenset[str]]] = {
     41: frozenset({"ADC1"}),
 }
 
-# `Wire/WireIMXRT.cpp`: Wire2 (LPI2C4) has no alternate pins.
-TEENSY41_WIRE2_SCL: Final = 24
-TEENSY41_WIRE2_SDA: Final = 25
-
 # The LED pin. The bootloader blinks it, so nothing that reaches the
 # piece may hang off it (`next pcb` section 1's reason for D13).
 TEENSY41_LED: Final = 13

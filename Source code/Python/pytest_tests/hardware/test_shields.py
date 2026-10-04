@@ -36,8 +36,8 @@ DOCUMENT = Shields.folder / Shields.file_name
 CIRCUIT = KICAD / "electronic box v2" / "colloquy-control-v2" / "circuit.json"
 SKETCH = firmware.SKETCH_PATH
 
-# The three footprint pins the backplane adds.
-ADDED_PINS = {"IORF", "SDA", "SCL"}
+# The one footprint pin the backplane adds.
+ADDED_PINS = {"IORF"}
 
 
 # --- reading the files ------------------------------------------------------
@@ -116,7 +116,7 @@ def test_the_files_are_where_this_thinks_they_are():
     assert SKETCH.is_file()
 
 
-# --- section 3e: the computing slot is v2's footprint ---------------------
+# --- section 2b: the computing slot is v2's footprint ---------------------
 
 
 def test_the_computing_slot_is_the_v2_boards_footprint_pin_for_pin():
@@ -131,34 +131,29 @@ def test_the_computing_slot_is_the_v2_boards_footprint_pin_for_pin():
     assert written == v2
 
 
-def test_the_added_footprint_pins_are_free_on_v2_and_in_firmware_4():
-    """IOREF and the R3 header's I2C pair. If v2 or firmware 4 used any of
-    them - or D20/D21, which they are on a Mega - the Mega would no longer
-    see the v2 board."""
+def test_the_only_added_footprint_pin_is_ioref_and_it_is_free_on_v2():
+    """If v2 used it, the Mega would no longer see the v2 board."""
     _, added = _table("Added pin")
+
     assert {row[0] for row in added} == ADDED_PINS
-
-    used_on_v2 = set(_pins("A1"))
-    assert not (ADDED_PINS | {"D20", "D21"}) & used_on_v2
-
-    sketch = SKETCH.read_text(encoding="utf-8")
-    defined = set(re.findall(r"^#define \w+ (\d+)\b", sketch, re.MULTILINE))
-    assert not {"20", "21"} & defined
-    assert "Wire" not in sketch
+    assert not ADDED_PINS & set(_pins("A1"))
 
 
-# --- section 3g: the voice slots -------------------------------------------
+# --- section 2d: the voice slots -------------------------------------------
 
 
 def test_slot_n_is_body_n_and_carries_v2s_nets():
     """Pin 1 is the body's tone net, which is on the Mega pin
     `drivers/audio.py` names; pin 3 is the net v2's own build-out takes
-    to the line out; the straps count the slots up from 0x50."""
+    to the line out; and the silkscreen beside the slot names both pins
+    the tone can come from, since with no shield identification the
+    silkscreen is the only label a slot has."""
     _, rows = _table("Voice slot")
     footprint = _footprint()
+    teensy = {row[2]: row[0] for row in _teensy_rows()}
 
     assert [row[1] for row in rows] == list(audio.BODIES)
-    for number, (slot, body, tone, filter_out, straps, address) in enumerate(rows):
+    for number, (slot, body, tone, filter_out, silkscreen) in enumerate(rows):
         assert slot == f"JV{number + 1}"
         assert tone == f"{body}/tone"
         assert footprint[audio.VOICES[body]["pin"]] == tone
@@ -170,12 +165,13 @@ def test_slot_n_is_body_n_and_carries_v2s_nets():
         ]
         assert [component["value"] for component in build_out] == ["100R"]
 
-        bits = "".join("1" if strap == "IOREF" else "0" for strap in straps.split())
-        assert int(bits, 2) == number
-        assert int(address, 16) == 0x50 + number
+        mega = audio.VOICES[body]["pin"]
+        assert silkscreen == (
+            f"{slot} · {body.upper()} · MEGA {mega} · TEENSY {teensy[tone]}"
+        )
 
 
-# --- section 5b: the Teensy adapter ----------------------------------------
+# --- section 3b: the Teensy adapter ----------------------------------------
 
 
 def test_no_teensy_pin_is_used_twice_and_the_led_is_left_alone():
@@ -242,7 +238,7 @@ def test_the_photosensors_are_divided_and_the_microphones_are_not():
 
 def test_what_leaves_the_backplane_is_translated_and_what_stays_is_not():
     """NeoPixels, tones, aux and shutdown go to bodies and cards at 5 V;
-    the analyser's controls and the I2C pair stay at IOREF."""
+    the analyser's controls stay at IOREF."""
     translated = [row for row in _teensy_rows() if row[3].startswith("translator")]
     for row in _teensy_rows():
         net = row[2]
@@ -253,14 +249,16 @@ def test_what_leaves_the_backplane_is_translated_and_what_stays_is_not():
     assert len(translated) <= 4 * 4
 
 
-def test_the_i2c_pair_is_on_wire2():
-    by_net = {row[2]: int(row[0]) for row in _teensy_rows()}
+def test_every_analogue_input_keeps_its_mega_a_number():
+    """A0-A15 mean the same on both processors."""
+    analogue = [row for row in _teensy_rows() if row[1].startswith("A")]
 
-    assert by_net["shield/scl"] == shields.TEENSY41_WIRE2_SCL
-    assert by_net["shield/sda"] == shields.TEENSY41_WIRE2_SDA
+    assert len(analogue) == 16
+    for row in analogue:
+        assert row[1] == f"A{_a_number(int(row[0]))}", row
 
 
-# --- sections 6a and 7b: what leaves v2 keeps v2's values ------------------
+# --- sections 4a and 5a: what leaves v2 keeps v2's values ------------------
 
 
 def test_the_thomas_cards_are_v2s_filters():
@@ -312,7 +310,7 @@ def test_the_msgeq7_shield_is_v2s_network_in_every_channel():
             assert [twin["value"] for twin in twins] == [value], (ref, body)
 
 
-# --- section 7c: the voice cards, recomputed --------------------------------
+# --- section 5b: the voice cards, recomputed --------------------------------
 
 
 def test_the_card_list_is_the_computed_one():
@@ -404,7 +402,7 @@ def test_the_stage_qs_and_the_line_level_are_the_ones_quoted():
     assert f"**{shields.line_level_vpp():.2f} Vpp**" in text
 
 
-# --- section 9a: what the Teensy plays --------------------------------------
+# --- section 7a: what the Teensy plays --------------------------------------
 
 
 def test_the_teensy_frequencies_are_what_its_core_produces():
@@ -430,7 +428,7 @@ def test_the_lowest_pitch_is_the_largest_divider_at_the_largest_prescaler():
     assert "**17.9 Hz**" in DOCUMENT.read_text(encoding="utf-8")
 
 
-# --- section 9c: the port ---------------------------------------------------
+# --- section 7c: the port ---------------------------------------------------
 
 
 def test_the_port_table_names_every_class_and_function_in_the_sketch():
