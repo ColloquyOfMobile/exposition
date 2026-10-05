@@ -38,10 +38,14 @@ that get confused with each other the moment they share a page:
 - **shields** - the sixth: the main board becomes a backplane with no
   silicon on it, and every solution is a set of shields in its slots -
   the U2D2, a computing shield (the Mega itself, or a Teensy 4.1 on an
-  adapter in the Mega's footprint), an analyser shield (MSGEQ7s, or
-  buffers straight to the Teensy) and five voice cards, the output
-  filters, whose corner is four resistors. `IOREF` is what lets any
-  shield sit beside any other. Its figures are computed by `shields.py`.
+  adapter in the Mega's footprint), the MSGEQ7 analyser shield (the
+  Mega's ear; the Teensy takes the microphones directly) and five voice
+  cards, the output filters, whose corner is four resistors. Its figures
+  are computed by `shields.py`.
+- **microphone board** - not a solution but a board: one per body,
+  carrying the MAX9814 and screwed to the body's aluminium extrusion,
+  in place of Thomas's breakout on its hand-wired carrier. Its figures
+  are computed by `microphone_board.py`.
 - **cad boards** - an index of every board designed in `CAD/`: what it
   is, where it sits, how many there are, and which document holds its
   pinouts. The only document here that covers the TPA2005D1 breakout and
@@ -164,6 +168,20 @@ class Shields(_ElectronicsDocument):
     document_name = "shields"
 
 
+class MicrophoneBoard(_ElectronicsDocument):
+    """One board per body: the microphone, on the extrusion.
+
+    Beside the solutions rather than under one, since every one of them
+    hears through it - the MSGEQ7s on the Mega and the Teensy's direct
+    path alike. Its connector is held to the harness boards' microphone
+    sockets, and its figures to `microphone_board.py`, by
+    `test_microphone_board.py`.
+    """
+
+    file_name = "MICROPHONE_BOARD.md"
+    document_name = "microphone board"
+
+
 class CADBoards(_ElectronicsDocument):
     """An index of the design files, not a fifth copy of their pinouts:
     those stay in `harness` and `as built`, which read the copper."""
@@ -281,6 +299,7 @@ class Electronics(Base):
             AD9833DualMode(owner=self),
             ThomasOrTeensy(owner=self),
             Shields(owner=self),
+            MicrophoneBoard(owner=self),
             SoundOptions(owner=self),
             CADBoards(owner=self),
         ]

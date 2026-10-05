@@ -51,6 +51,7 @@ def test_the_section_offers_the_written_documents_not_the_generated_ones():
         "ad9833 dual mode",
         "thomas or teensy",
         "shields",
+        "microphone board",
         "sound options",
         "cad boards",
     ]

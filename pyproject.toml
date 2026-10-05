@@ -68,6 +68,9 @@ files = [
     # that read alike, and a Teensy pin number is a small int beside a
     # timer prescaler that is one too. Pure functions, no tree.
     "Source code/Python/colloquy/hardware/electronics/shields.py",
+    # The microphone board's arithmetic: ohms, farads, volts and the
+    # millimetres of a screw stack, all small floats.
+    "Source code/Python/colloquy/hardware/electronics/microphone_board.py",
 ]
 mypy_path = "Source code/Python"
 
