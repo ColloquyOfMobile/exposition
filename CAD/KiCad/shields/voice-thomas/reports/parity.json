@@ -7,10 +7,10 @@
   "copper_layers": 2,
   "tracks_and_vias": 59,
   "sha256": {
-    "circuit.kicad_sch": "c5914394abc7aefd3b343e286a02007861b6bd03b5da7c3f585f5aa02c5edb99",
-    "interface.kicad_sch": "ff10456fc9e10d891146f80bcfd7a0663cdd53512a9a67e4566b9847f8076866",
+    "circuit.kicad_sch": "294a0e712f8447df31b52f62acf8755e32b63dd8773c3588624de9d5c9feb8db",
+    "interface.kicad_sch": "b08ab887f951c86935c4778feeef4ee44f01cc0d4998c6c49bb697c487f393b3",
     "voice-thomas.kicad_pcb": "a78753050f2c00f26fd4d1b9805bdfe794acdcd12ec7d2618e94c4ea4c05886b",
     "voice-thomas.kicad_pro": "80b927e42b7bd400d895598e4d84cab3abac139304c0909c2dadc7c894f4b751",
-    "voice-thomas.kicad_sch": "40c498698cacc1eda4ea7ccca3533fc5bd69461798122008967b02750096f76a"
+    "voice-thomas.kicad_sch": "50d47093bf519b387707c39b030c6aafc6140650351ac1267f0a9ae26ec40bef"
   }
 }

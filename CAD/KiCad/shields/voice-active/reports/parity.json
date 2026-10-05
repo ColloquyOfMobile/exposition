@@ -7,12 +7,12 @@
   "copper_layers": 2,
   "tracks_and_vias": 198,
   "sha256": {
-    "circuit.kicad_sch": "1faf79588a1885d7fbb286d2bb2478c81ba2c35cb18839787e542b9deecf19cc",
-    "circuit_2.kicad_sch": "77c2a94e243ebec66e44d00b4bdd933af7e52ae2da3949ba00286c66c452c424",
-    "interface.kicad_sch": "54f94dbfc8174fe1574afd834cd2d47feb2101d1a0ce940db39df060ee824228",
-    "supplies.kicad_sch": "d2f06c3912e45ff83bea0a07718bb04b8c1232a1eac76f8a3aad8fe6688c2f11",
+    "circuit.kicad_sch": "8246cd9fbd11fa913098b74aca1da45c1b4586e86c4d9312b8050995d177cdae",
+    "circuit_2.kicad_sch": "37b74632539043d2b5ba4a865543b97fb10492aa93e00206e0c64ad469879239",
+    "interface.kicad_sch": "2fd697f32650c4fea9b7751fc17356e260f43b09a64213a77cb9da308df9ae05",
+    "supplies.kicad_sch": "24d37bab7c9296880a811db65fadbd94607fb6349f0475f20029801986d7d98d",
     "voice-active.kicad_pcb": "63e4704c85961fb1338343dab8eebf1aaef09d9cd50f2043c758e4762231efcd",
     "voice-active.kicad_pro": "fbd7d40b63c0fce2b489f1e24a66ec8dd6a074f0bff9d77ca7421b66e814b5d4",
-    "voice-active.kicad_sch": "9a5d98f41931895d6f156a9a86351c197392dd468d821020cb9b1aed6c5fbea0"
+    "voice-active.kicad_sch": "108438f5236618a52e90f3a9beae2c5b68c2775d29a71d6b5d3ffc3c51fcbae2"
   }
 }

@@ -17,8 +17,9 @@ def zone(board,name,net,layer,points):
     board.Add(z)
 
 
-def main():
+def main(only=None):
     for folder in ROOT.iterdir():
+        if only and folder.name not in only:continue
         name=folder.name;path=folder/(name+'.kicad_pcb')
         if not path.exists():continue
         board=p.LoadBoard(str(path));old=list(board.Zones())
@@ -48,4 +49,6 @@ def main():
         print(name,'filled',len(list(board.Zones())),'zones',flush=True)
 
 
-if __name__=='__main__':main()
+if __name__=='__main__':
+    import sys
+    main(sys.argv[1:])

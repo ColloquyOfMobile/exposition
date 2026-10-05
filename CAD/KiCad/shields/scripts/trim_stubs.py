@@ -1,11 +1,13 @@
 """Remove only tracks/vias explicitly reported dangling by KiCad, then recheck."""
 import json
 import subprocess
+import sys
 import pcbnew as p
 from design import ROOT
 from check import CLI
 
-for name in ['backplane','teensy-adapter','voice-active','voice-thomas','analyser-direct','analyser-msgeq7']:
+for name in ['backplane','teensy-adapter','voice-active','voice-thomas','analyser-msgeq7']:
+    if sys.argv[1:] and name not in sys.argv[1:]:continue
     path=ROOT/name/(name+'.kicad_pcb');report=ROOT/name/'reports/drc.json'
     for attempt in range(30):
         subprocess.run([str(CLI),'pcb','drc','--format','json','-o',str(report),str(path)],check=True,capture_output=True)

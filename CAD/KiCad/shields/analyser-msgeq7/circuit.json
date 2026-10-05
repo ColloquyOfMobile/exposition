@@ -25,7 +25,7 @@
         "16": "AGND",
         "17": "analyser/strobe",
         "18": "analyser/reset",
-        "19": "IOREF",
+        "19": "MEGA_5V",
         "20": null,
         "21": null
       },
@@ -122,7 +122,7 @@
       "footprint": "Shields:SOIC-8_3.9x4.9mm_P1.27mm",
       "description": "female1 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly",
       "pins": {
-        "1": "IOREF",
+        "1": "MEGA_5V",
         "2": "AGND",
         "3": "female1/analyser out",
         "4": "analyser/strobe",
@@ -189,7 +189,7 @@
       "footprint": "Shields:R_0603_1608Metric",
       "description": "MSGEQ7 clock resistor; keep adjacent to pin8",
       "pins": {
-        "1": "IOREF",
+        "1": "MEGA_5V",
         "2": "female1/oscillator"
       },
       "sheet": "female1",
@@ -285,7 +285,7 @@
       "footprint": "Shields:C_0603_1608Metric",
       "description": "Local MSGEQ7 supply bypass, close to pins1 and2",
       "pins": {
-        "1": "IOREF",
+        "1": "MEGA_5V",
         "2": "AGND"
       },
       "sheet": "female1",
@@ -378,7 +378,7 @@
       "footprint": "Shields:SOIC-8_3.9x4.9mm_P1.27mm",
       "description": "female2 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly",
       "pins": {
-        "1": "IOREF",
+        "1": "MEGA_5V",
         "2": "AGND",
         "3": "female2/analyser out",
         "4": "analyser/strobe",
@@ -445,7 +445,7 @@
       "footprint": "Shields:R_0603_1608Metric",
       "description": "MSGEQ7 clock resistor; keep adjacent to pin8",
       "pins": {
-        "1": "IOREF",
+        "1": "MEGA_5V",
         "2": "female2/oscillator"
       },
       "sheet": "female2",
@@ -541,7 +541,7 @@
       "footprint": "Shields:C_0603_1608Metric",
       "description": "Local MSGEQ7 supply bypass, close to pins1 and2",
       "pins": {
-        "1": "IOREF",
+        "1": "MEGA_5V",
         "2": "AGND"
       },
       "sheet": "female2",
@@ -634,7 +634,7 @@
       "footprint": "Shields:SOIC-8_3.9x4.9mm_P1.27mm",
       "description": "female3 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly",
       "pins": {
-        "1": "IOREF",
+        "1": "MEGA_5V",
         "2": "AGND",
         "3": "female3/analyser out",
         "4": "analyser/strobe",
@@ -701,7 +701,7 @@
       "footprint": "Shields:R_0603_1608Metric",
       "description": "MSGEQ7 clock resistor; keep adjacent to pin8",
       "pins": {
-        "1": "IOREF",
+        "1": "MEGA_5V",
         "2": "female3/oscillator"
       },
       "sheet": "female3",
@@ -797,7 +797,7 @@
       "footprint": "Shields:C_0603_1608Metric",
       "description": "Local MSGEQ7 supply bypass, close to pins1 and2",
       "pins": {
-        "1": "IOREF",
+        "1": "MEGA_5V",
         "2": "AGND"
       },
       "sheet": "female3",
@@ -890,7 +890,7 @@
       "footprint": "Shields:SOIC-8_3.9x4.9mm_P1.27mm",
       "description": "male1 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly",
       "pins": {
-        "1": "IOREF",
+        "1": "MEGA_5V",
         "2": "AGND",
         "3": "male1/analyser out",
         "4": "analyser/strobe",
@@ -957,7 +957,7 @@
       "footprint": "Shields:R_0603_1608Metric",
       "description": "MSGEQ7 clock resistor; keep adjacent to pin8",
       "pins": {
-        "1": "IOREF",
+        "1": "MEGA_5V",
         "2": "male1/oscillator"
       },
       "sheet": "male1",
@@ -1053,7 +1053,7 @@
       "footprint": "Shields:C_0603_1608Metric",
       "description": "Local MSGEQ7 supply bypass, close to pins1 and2",
       "pins": {
-        "1": "IOREF",
+        "1": "MEGA_5V",
         "2": "AGND"
       },
       "sheet": "male1",
@@ -1146,7 +1146,7 @@
       "footprint": "Shields:SOIC-8_3.9x4.9mm_P1.27mm",
       "description": "male2 MSGEQ7P; pin6 is internal 2.5V reference, NEVER ground directly",
       "pins": {
-        "1": "IOREF",
+        "1": "MEGA_5V",
         "2": "AGND",
         "3": "male2/analyser out",
         "4": "analyser/strobe",
@@ -1213,7 +1213,7 @@
       "footprint": "Shields:R_0603_1608Metric",
       "description": "MSGEQ7 clock resistor; keep adjacent to pin8",
       "pins": {
-        "1": "IOREF",
+        "1": "MEGA_5V",
         "2": "male2/oscillator"
       },
       "sheet": "male2",
@@ -1309,7 +1309,7 @@
       "footprint": "Shields:C_0603_1608Metric",
       "description": "Local MSGEQ7 supply bypass, close to pins1 and2",
       "pins": {
-        "1": "IOREF",
+        "1": "MEGA_5V",
         "2": "AGND"
       },
       "sheet": "male2",
@@ -1442,10 +1442,10 @@
     },
     {
       "ref": "TPI",
-      "value": "IOREF",
+      "value": "MEGA_5V",
       "footprint": "Shields:TestPoint_Pad_D1.5mm",
       "pins": {
-        "1": "IOREF"
+        "1": "MEGA_5V"
       },
       "sheet": "circuit",
       "description": "",

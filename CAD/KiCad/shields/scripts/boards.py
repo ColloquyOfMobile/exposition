@@ -53,8 +53,7 @@ def placements(name,old):
         out.update(C1=(218,66,0),C2=(218,76,0),JP1=(133,160,0),RS1=(202,115,0),
                    TP30=(208,115,0),TP31=(226,76,0),TP32=(138,160,0),TP33=(229,85,0),TP34=(128,160,0),
                    TP20=(205,104,0),TP21=(205,109,0),RA1=(204,165,0),RA2=(204,170,0),
-                   JA1=(78,269,0),HA1=(217,269,0),HA2=(217,312,0),RI1=(203,184,0),RI2=(203,188,0),CI1=(203,192,0),
-                   TPI1=(209,192,0),TPI2=(209,184,0),TPI3=(209,188,0))
+                   JA1=(78,269,0),HA1=(217,269,0),HA2=(217,312,0))
         for i in range(1,8):out[f'RN{i}']=(204,120+i*5,0);out[f'RND{i}']=(211,120+i*5,90)
         for i in range(1,12):out[f'RP{i}']=(144+(i-1)%6*9,171+(i-1)//6*7,90)
         for i,b in enumerate(BODY,1):
@@ -66,7 +65,10 @@ def placements(name,old):
             out[f'TPL{i}']=(90+(i-1)*32,225,0)
             out[f'TPM{i}']=(100+(i-1)*22,283,0)
             out[f'TPA{i}']=(100+(i-1)*22,305,0)
-        out.update(TPL3=(153.078,225.922,0),TPM5=(160.225909,311.092309,0),TPA5=(184.593555,322.7239,0))
+            out[f'RM{i}']=(100+(i-1)*22,289,0)
+            out[f'RMD{i}']=(104+(i-1)*22,292,90)
+            out[f'TPD{i}']=(100+(i-1)*22,296,0)
+        out.update(RM5=(184,289,0),RMD5=(184,293,90),TPD5=(184,298,0),TPL3=(153.078,225.922,0),TPM5=(160.225909,311.092309,0),TPA5=(184.593555,322.7239,0))
         return out
     if name.startswith('voice'):
 
@@ -89,17 +91,10 @@ def placements(name,old):
                             f'R{n}13':(x+7,y-2,90),f'C{n}14':(x+7,y+2,90),f'C{n}15':(x-6,y-3,90),f'C{n}16':(x+7,73,90),
                             f'JS{n}':(x,86,0),f'TP{n+10}':(x-7,y+9,0)})
             out.update(TPS=(180,56,0),TPR=(185,56,0),TPI=(178,90,0),TPG=(183,90,0))
-        else:
-            out.update(JB1=(151,99,0),JSRC1=(164,87,0),U1=(104,77,0),U2=(177,67,0),
-                       CB1=(110,73,90),CBU1=(110,79,90),CB2=(183,63,90),CBU2=(183,70,90),TPR=(186,94,0),TPG=(180,94,0))
-            for i,b in enumerate(BODY,1):
-                x=68+(i-1)*22
-                out.update({f'R{i}0':(x,56,90),f'R{i}1':(x,61,90),f'R{i}2':(x,67,90),f'R{i}3':(x,87,90),
-                            f'C{i}1':(x+5,72,90),f'C{i}2':(x+5,67,90),f'C{i}3':(x+5,87,90),f'TP{i}':(x,93,0)})
         return out
     if name=='teensy-adapter':
         out=dict(JM1=(0,0,0),JT1=(160,57,0),JT2=(175.24,57,0),D1=(185,63,90),CV1=(181,58,90),
-                 CI1=(155,57,90),CI2=(155,62,90),TPV=(188,58,0),TPI=(151,57,0),RC34=(158,121,0),RC35=(158,125,0))
+                 CI1=(155,57,90),CI2=(155,62,90),TPV=(188,58,0),TPI=(151,57,0),TP34=(157.175,121,0),TP35=(157.175,125,0))
         for chip in range(4):
             x=151 if chip<2 else 183;y=78+chip%2*24
             out[f'U{chip+1}']=(x,y,0);out[f'CB{chip+1}']=(x,y-5,0)
@@ -110,6 +105,8 @@ def placements(name,old):
             x=151+i%6*7;y=132+i//6*9
             out[f'RA{pin}']=(x,y,90);out[f'RB{pin}']=(x+3,y,90);out[f'CA{pin}']=(x,y+4,0)
         for i,pin in enumerate([0,1,3,33,36,37,40,41]):out[f'TP{pin}']=(162+i*4,120,0)
+        for i in range(1,6):out[f'CM{i}']=(178.4,87.48-(i-1)*2.54,0)
+        out['CM5']=(178.4,74.5,0)
         out['TPG']=(185.666666,124.666666,0)
         return out
     raise ValueError(name)
@@ -137,7 +134,7 @@ def main():
     oldboard=p.LoadBoard(str(BASE/'colloquy-control-v2.kicad_pcb'));old={f.GetReference():f for f in oldboard.GetFootprints()}
     for folder in ROOT.iterdir():
         if not (folder/'circuit.json').exists():continue
-        name=folder.name;data=json.loads((folder/'circuit.json').read_text());board=p.BOARD();board.SetCopperLayerCount(2)
+        name=folder.name;data=json.loads((folder/'circuit.json').read_text());board=p.BOARD();board.SetCopperLayerCount(4 if name in ['backplane','teensy-adapter'] else 2)
         board.GetDesignSettings().SetBoardThickness(mm(1.6));board.GetDesignSettings().m_MinClearance=mm(.15)
         nets={}
         for i,net in enumerate(sorted({n for c in data['components'] for n in c['pins'].values() if n}),1):
@@ -170,7 +167,7 @@ def main():
                 fp=p.FootprintLoad(str(path),fpname)
                 if not fp:raise RuntimeError(f'Missing {path}/{fpname}')
             board.Add(fp);fp.SetReference(ref);fp.SetValue(c['value'])
-            if fpname.startswith('Socket_'):fp.Flip(fp.GetPosition(),True)
+            if fpname.startswith('Socket_') or (name=='teensy-adapter' and ref.startswith('CM')):fp.Flip(fp.GetPosition(),True)
             if ref!='JM1':
                 x,y,angle=places[ref];fp.SetOrientationDegrees(angle);fp.SetPosition(xy(x,y))
             path=p.KIID_PATH()
@@ -191,7 +188,7 @@ def main():
             if c.get('assembly')=='DNP':fp.SetDNP(True)
         if name=='backplane':
             text(board,'COLLOQUY / SHIELDS / A',104,179,1.4)
-            text(board,'IOREF: MEGA 5V / TEENSY 3.3V',119,184,1)
+            text(board,'MIC DIRECT / TEENSY - EMPTY JA1',119,184,1)
             text(board,'B-J4 - NO POWER',190,326,1)
             for i,b in enumerate(BODY,1):text(board,f'JV{i} {b}',93+(i-1)*32,202,.9)
             # Card envelopes are assembly drawings, not extra board edges.

@@ -1,35 +1,33 @@
-# SHIELDS specification review — 2026-10-04
+# SHIELDS specification review — 2026-10-05
 
 Source: `Source code/Python/colloquy/hardware/electronics/SHIELDS.md`, dated
 2026-10-03, and the completed v2 circuit and fixed mechanical geometry.
-This directory contains six PCB projects; the Mega and U2D2 are purchased
+This directory contains five PCB projects; the Mega and U2D2 are purchased
 modules, not additional PCB designs. Existing installation harness boards do
 not change. Firmware 5 is separate work and has not been implemented here.
 
-## Simplified specification update
+## Direct-microphone specification update
 
-Implements SHIELDS.md as simplified on 2026-10-04. Identification is entirely
-silkscreen: no EEPROMs, address straps, I2C pull-ups or SDA/SCL nets remain.
-Voice connectors are 2x3 with pin 6 removed; analyser connectors are 2x11
-with pin 22 removed. These do not mate with the first prototype revision.
-IOREF reaches only the analyser slot. The backplane's only new passive
-parts are the seven NeoPixel and five line-output pull-downs.
+Implements SHIELDS.md's 2026-10-05 revision. The direct analyser PCB and its
+MCP6004 filters are removed. Each microphone branches through 4.7K on the
+backplane to a new Mega-footprint contact D26-D30, with 1M to AGND and a
+labelled MIC DIRECT test pad. The adapter takes these to Teensy GPIO14-18
+(A0-A4), with 1nF C0G to GND beside each socket contact on B.Cu.
 
-Teensy A10-A15 now use GPIO 24, 25, 26, 27, 38, 39. GPIO 40 and 41 join
-the labelled spare pads. The unlisted 470pF active input capacitor is removed.
-The analogue filter stages, fixed harness positions and body order remain
-as specified. Body order is female1, female2, female3, male1, male2.
+The adapter leaves Mega A0-A4, D3, D4 and IOREF unconnected. GPIO34/35 are
+now spare test pads. The MSGEQ7 shield receives MEGA_5V at JA1 pin 19;
+backplane JA1 pins 20/21 are GND. JA1 is left empty with the Teensy.
+The eleven photosensor dividers and translated outputs are unchanged.
 
-Both voice boards are 30 x 42 mm; both analyser boards are 150 x 55 mm.
-The voice capacitor options retain the specified 470nF construction:
-220nF PPS + 220nF PPS + 30nF C0G per stage. The back carries the complete
-population table, with a tick box for each variant; the front has a write-in
-field. Operational labels and named test pads follow specification section 6.
-Slot solder-mask openings are explicitly included on both faces.
+Identification remains silkscreen only. Voice connectors are keyed 2x3 and
+JA1 is keyed 2x11. The voice cards are 30 x 42 mm; the MSGEQ7 shield is
+150 x 55 mm. Fixed harness positions, body order and complete voice-card
+population tables are retained. Body order is female1, female2, female3,
+male1, male2. Slot solder-mask openings are present on both faces.
 
-Build priority: backplane + five Thomas cards + MSGEQ7 analyser with the
-Mega first; then Teensy adapter, direct analyser, and the five active-card
-corners 1414, 4000, 8000, 250, 500. Other corners are optional later builds.
+Build priority: backplane + five Thomas cards + MSGEQ7 with the Mega;
+then Teensy adapter with JA1 empty; then active-card corners 1414, 4000,
+8000, 250, 500. Other corners are optional later builds.
 
 ## Manufacturer checks
 
@@ -39,10 +37,9 @@ corners 1414, 4000, 8000, 250, 500. Other corners are optional later builds.
   active-low enables, and grounded unused input. Each package has 100nF bypass.
 * [MSGEQ7 manufacturer datasheet](https://mix-sig.com/images/datasheets/MSGEQ7.pdf):
   supply 2.7–5.5V; pin 6 is its internal reference and is bypassed, never tied
-  directly to ground. The oscillator resistor is supplied from IOREF.
+  directly to ground. The oscillator resistor is supplied from MEGA_5V.
 * [MCP6024](https://www.microchip.com/en-us/product/mcp6024) is the 10MHz
-  rail-to-rail active-card amplifier; [MCP6004](https://www.microchip.com/en-us/product/MCP6004)
-  is the direct analyser's 1MHz amplifier. Both use the SOIC-14 quad pinout.
+  rail-to-rail active-card amplifier, using the SOIC-14 quad pinout.
 * [PJRC Teensy 4.1](https://www.pjrc.com/store/teensy41.html) documents the
   3.3V-only input range and USB/VIN power constraint. The adapter draws from
   VIN; it never feeds VIN. A Schottky points from VIN toward MEGA_5V.
@@ -60,9 +57,13 @@ not provide powered-off isolation:
 1. Eleven 100k/150k dividers limit current from live photosensors into an
    unpowered Teensy, but do not isolate its pin clamps. Nominal current limits
    are not a proof against phantom powering, including the aggregate current.
-2. The direct analyser is DC coupled from externally powered microphones into
-   IOREF-powered op-amps. Its 10k input resistor limits injection; the op-amp
-   is not specified as a powered-off isolator.
+2. The microphones are DC coupled through 4.7K into Teensy inputs. This
+   limits injection current but does not establish safe overvoltage or
+   powered-off operation. The MAX9814 output figures at a 3.3V supply do
+   not establish an absolute 2.45V ceiling for the modules powered at 5V.
+   Measure their peaks and power transients; the specified resistor alone
+   does not prove the spec's 5V-short-survival claim. The 34kHz RC pole
+   also does not guarantee alias rejection at all sample rates or sounds.
 3. The active card can receive a USB-powered 5V square while its own +5V rail
    is off. Its 15k input resistor likewise limits current without isolation.
 
@@ -70,7 +71,7 @@ The specified short-duration tolerance of asymmetric power has not been
 validated on hardware. The sequencing instruction is implemented; the claim
 that a one-minute interval is safe is not established by ERC/DRC. Step 1
 uses the Mega, passive voice cards and AC-coupled MSGEQ7 analyser and does
-not depend on qualifying the active-card or direct-analyser paths.
+not depend on qualifying the active-card or Teensy microphone paths.
 
 The inherited backplane Mega footprint omitted its mounting holes. Four
 peripheral 3.2mm holes are now added to both mating boards from Arduino's

@@ -719,7 +719,7 @@
 )
 (symbol "TPI" (pin_names (offset 1.27)) (exclude_from_sim no) (in_bom no) (on_board yes)
 (property "Reference" "TPI" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
-(property "Value" "IOREF" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
+(property "Value" "MEGA_5V" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
 (property "Footprint" "Shields:TestPoint_Pad_D1.5mm" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Datasheet" "" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Description" "" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))

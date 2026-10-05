@@ -1,7 +1,10 @@
 Reference,Value,Footprint,MPN,Assembly
 JM1,MEGA PATTERN FEMALE,Shields:Mega_Female,,fit
-RC34,100R,Shields:R_0603_1608Metric,,fit
-RC35,100R,Shields:R_0603_1608Metric,,fit
+CM1,1nF C0G,Shields:C_0603_1608Metric,,fit
+CM2,1nF C0G,Shields:C_0603_1608Metric,,fit
+CM3,1nF C0G,Shields:C_0603_1608Metric,,fit
+CM4,1nF C0G,Shields:C_0603_1608Metric,,fit
+CM5,1nF C0G,Shields:C_0603_1608Metric,,fit
 JT1,Teensy 4.1 JT1,Shields:PinSocket_1x24_P2.54mm_Vertical,,fit
 JT2,Teensy 4.1 JT2,Shields:PinSocket_1x24_P2.54mm_Vertical,,fit
 RD2,100K,Shields:R_0603_1608Metric,,fit

@@ -1,6 +1,6 @@
 (kicad_sch (version 20250114) (generator "eeschema") (generator_version "9.0")
           (uuid "dcaf2287-eadc-53d8-8110-cfb789e51cb7") (paper "A3")
-          (title_block (title "voice-active / circuit") (date "2026-10-04") (rev "A-prototype")
+          (title_block (title "voice-active / circuit") (date "2026-10-05") (rev "A-prototype")
             (company "Colloquy of Mobiles") (comment 1 "Prototype: verify harness polarity and sensor values before connection"))
           (lib_symbols (symbol "Colloquy:C5" (pin_names (offset 1.27)) (exclude_from_sim no) (in_bom yes) (on_board yes)
 (property "Reference" "C" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))

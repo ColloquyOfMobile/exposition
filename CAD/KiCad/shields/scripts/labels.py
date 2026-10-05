@@ -39,13 +39,14 @@ def main(only=None):
                 writebox(b,x-10,236,8,3);writebox(b,x+2,236,8,3)
                 at(f'TPV{i}',f'TONE {i}');at(f'TPL{i}',f'LINE {i}')
                 at(f'TPM{i}',f'MIC {i}');at(f'TPA{i}',f'ANA {i}')
+                at(f'TPD{i}',f'MIC DIRECT {i}',0,2)
                 at(f'JV{i}','1',-1.4,-2)
                 at(f'JV{i}','KEY <-',7,5.08)
                 n=CHANNEL[body];at(f'R{n}03','LINE OUT',0,3);at(f'JP{n+1}','AUDIO RTN',0,3)
-            label(b,'JA1 - ANALYSER - MSGEQ7 OR DIRECT',151,273,1.2)
+            label(b,'JA1 - MSGEQ7 ANALYSER - MEGA ONLY - EMPTY WITH TEENSY',151,273,1.2)
             label(b,'MIC ORDER F1 F2 F3 M1 M2 - MODULE N = BODY N',151,278,1)
             at('JA1','1',-1.5,-2);at('JA1','KEY <-',7,25.4)
-            at('TPI1','IOREF: 5 V = MEGA / 3.3 V = TEENSY',-2,4)
+            label(b,'MIC DIRECT - 4.7 K - TO TEENSY A0-A4',151,284,1)
             label(b,'U2D2',76,106,1.5);at('J7','SERVO BUS - 12 V',8,-5)
             at('JP1','JP1 - ONLY AGND-GND BOND',0,6)
             at('TP20','STROBE',8,0);at('TP21','RESET',8,0)
@@ -59,24 +60,18 @@ def main(only=None):
             label(b,'3.3 V\nNOT 5 V\nTOLERANT',167.5,111,1)
             label(b,'USB ^',168,55,1);at('JT1','PIN 0',4,4);at('JT2','VIN',-3,0)
             label(b,'POWERED BY TEENSY USB',169,152,1)
-            for pin in [0,1,3,33,36,37,40,41]:at(f'TP{pin}',str(pin),0,-2)
+            for pin in [0,1,3,33,34,35,36,37,40,41]:at(f'TP{pin}',str(pin),0,-2)
             at('TPV','VIN');at('TPI','3V3');at('TPG','GND',0,2)
-        elif name.startswith('analyser'):
-            label(b,'ANALYSER - '+('5 x MSGEQ7 - BANDS' if name.endswith('msgeq7') else 'DIRECT TO TEENSY - RAW SAMPLES'),123,52,1.2)
+        elif name=='analyser-msgeq7':
+            label(b,'MSGEQ7 ANALYSER - MEGA ONLY',123,52,1.2)
             for i,body in enumerate(BODY):
-                x=69+i*24 if name.endswith('msgeq7') else 68+i*22
-                label(b,f'CH{i} '+['F1','F2','F3','M1','M2'][i],x,59 if name.endswith('msgeq7') else 81,.9)
-                if name.endswith('msgeq7'):
-                    n=CHANNEL[body];at(f'JS{n}','OPEN UNLESS\nMEASURED',0,5)
-                    at(f'C{n}16','REF - NEVER\nGROUND',4,3)
-                    at(f'TP{n+10}',f'ANA {i}',0,2)
-                else:at(f'TP{i+1}',f'ANA {i}',0,2)
-            at('TPG','AGND',0,2);at('TPI' if name.endswith('msgeq7') else 'TPR','IOREF',0,2)
-            if name.endswith('direct'):
-                at('JSRC1','HARNESS < CH0 > BENCH',0,-4)
-                at('JB1','BENCH MIC - GND 5V SIG',0,4)
-                label(b,'UNPLUGGED MIC = 0 V',123,99,1)
-            else:at('TPS','STROBE',0,2);at('TPR','RESET',5,2)
+                x=69+i*24
+                label(b,f'CH{i} '+['F1','F2','F3','M1','M2'][i],x,59,.9)
+                n=CHANNEL[body];at(f'JS{n}','OPEN UNLESS\nMEASURED',0,5)
+                at(f'C{n}16','REF - NEVER\nGROUND',4,3)
+                at(f'TP{n+10}',f'ANA {i}',0,2)
+            at('TPG','AGND',0,2);at('TPI','MEGA 5V',0,2)
+            at('TPS','STROBE',0,2);at('TPR','RESET',5,2)
             at('JA1','1',-1,-2);at('JA1','KEY <-',7,25.4)
         else:
             active=name=='voice-active'

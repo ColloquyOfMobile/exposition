@@ -1,4 +1,4 @@
-"""Generate six SHIELDS circuits. Run with KiCad 9's Python; no hardware I/O."""
+"""Generate five SHIELDS circuits. Run with KiCad 9's Python; no hardware I/O."""
 from pathlib import Path
 import copy
 import csv
@@ -31,7 +31,7 @@ def analyser_pins():
         pins[str(2*i+2)] = 'AGND'
         pins[str(11+i)] = b+'/analyser out'
     pins.update({'16':'AGND','17':'analyser/strobe','18':'analyser/reset',
-                 '19':'IOREF','20':'GND','21':'+5V'})
+                 '19':'MEGA_5V','20':'GND','21':'GND'})
     return pins
 
 
@@ -80,8 +80,11 @@ def backplane():
         if ref=='C2': p['footprint']=C
         if ref=='C1': p.update(footprint='Capacitor_SMD:CP_Elec_10x10.5',value='470uF 25V',mpn='EEE-FK1E471P')
         d.parts[ref]=p
-    d.parts['A1']['pins'].update(IORF='IOREF')
-    d.parts['A1']['pin_types'].update(IORF='power_out')
+    for i,b in enumerate(BODY):
+        d.parts['A1']['pins'][f'D{26+i}']=b+'/mic direct'
+        d.r(f'RM{i+1}','4K7',b+'/microphone',b+'/mic direct','microphones')
+        d.r(f'RMD{i+1}','1M',b+'/mic direct','AGND','microphones')
+        d.tp(f'TPD{i+1}',b+'/mic direct','microphones')
     d.add('JA1','ANALYSER - KEY 22','Shields:Header_2x11_Key22',analyser_pins(),'slots')
     for i,b in enumerate(BODY,1):
         d.add(f'JV{i}',b+' - KEY 6','Shields:Header_2x03_Key6',voice_pins(b,i-1),'slots')
@@ -90,7 +93,6 @@ def backplane():
         d.tp(f'TPV{i}',b+'/tone','slots')
     for i in [1,2]: d.add(f'HA{i}','M3 analyser retention',HOLE,{},'mechanical')
     for i in range(1,8): d.r(f'RND{i}','100K',V2[f'RN{i}']['pins']['1'],'GND','io')
-    d.tp('TPI1','IOREF','slots')
     for i,b in enumerate(BODY,1):
         d.tp(f'TPL{i}',b+'/filter out','slots')
         d.tp(f'TPM{i}',b+'/microphone','slots')
@@ -136,41 +138,18 @@ def active():
 def msgeq():
     d=Circuit('analyser-msgeq7')
     d.add('JA1','ANALYSER - KEY 22','Shields:Socket_2x11_Key22',analyser_pins(),'interface')
-    d.parts['JA1']['pins']['21']=None  # Analyser is powered exclusively by IOREF.
+    d.parts['JA1']['pins']['21']=None  # Digital ground unused on the analogue shield.
     d.parts['JA1']['pins']['20']=None  # Digital ground unused without identification circuitry.
     for i in [1,2]:d.add(f'H{i}','M3 retention',HOLE,{},'interface')
     for b in BODY:
         n=CHANNEL[b]
         refs=[f'U{n}',f'R{n}11',f'R{n}13',f'R{n}16',f'C{n}12',f'C{n}14',f'C{n}15',f'C{n}16',f'JS{n}',f'TP{n+10}']
         for ref in refs:
-            p=copy.deepcopy(V2[ref]);p['sheet']=b;p['pins']={k:('IOREF' if v=='MEGA_5V' else v) for k,v in p['pins'].items()}
+            p=copy.deepcopy(V2[ref]);p['sheet']=b
             p['footprint']=SO8 if ref.startswith('U') else R if ref.startswith('R') else C if ref.startswith('C') else TP if ref.startswith('TP') else JUMPER
             if ref.startswith('U'):p.update(value='MSGEQ7N',mpn='MSGEQ7N')
             d.parts[ref]=p
-    d.tp('TPS','analyser/strobe');d.tp('TPR','analyser/reset');d.tp('TPI','IOREF');d.tp('TPG','AGND');return d
-
-
-def direct():
-    d=Circuit('analyser-direct')
-    d.add('JA1','ANALYSER - KEY 22','Shields:Socket_2x11_Key22',analyser_pins(),'interface')
-    d.parts['JA1']['pins']['20']=None  # Digital ground unused without identification circuitry.
-    for pin in ['17','18']:d.parts['JA1']['pins'][pin]=None
-    for i in [1,2]:d.add(f'H{i}','M3 retention',HOLE,{},'interface')
-    d.add('JB1','BENCH GND +5V SIGNAL','Connector_JST:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical',{1:'AGND',2:'+5V',3:'bench/mic'},'interface')
-    d.add('JSRC1','HARNESS - CH0 - BENCH','Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical',{1:BODY[0]+'/microphone',2:'ch0/source',3:'bench/mic'},'interface')
-    for i,b in enumerate(BODY,1):
-        src='ch0/source' if i==1 else b+'/microphone'
-        d.r(f'R{i}0','1M',src,'AGND',b)
-        d.r(f'R{i}1','10K',src,b+'/mid',b);d.r(f'R{i}2','10K',b+'/mid',b+'/in',b)
-        d.c(f'C{i}1','2.2nF C0G',b+'/mid',b+'/buffer',b);d.c(f'C{i}2','1nF C0G',b+'/in','AGND',b)
-        d.r(f'R{i}3','100R',b+'/buffer',b+'/analyser out',b);d.c(f'C{i}3','1nF C0G',b+'/analyser out','AGND',b)
-        d.tp(f'TP{i}',b+'/analyser out',b)
-    for i in range(2):
-        stages=[(b+'/in',b+'/buffer') for b in BODY[i*4:i*4+4]]
-        stages += [('AGND',f'spare/{i}/{j}') for j in range(4-len(stages))]
-        d.quad(f'U{i+1}','MCP6004-I/SL',stages,'IOREF','buffers')
-        d.c(f'CB{i+1}','100nF','IOREF','AGND','buffers');d.c(f'CBU{i+1}','10uF X7R','IOREF','AGND','buffers',C8)
-    d.tp('TPR','IOREF');d.tp('TPG','AGND');return d
+    d.tp('TPS','analyser/strobe');d.tp('TPR','analyser/reset');d.tp('TPI','MEGA_5V');d.tp('TPG','AGND');return d
 
 
 OUTPUTS=[(2,'D6'),(4,'D46'),(5,'D10'),(6,'D11'),(28,'D5'),(7,'D14'),(8,'D7'),(9,'D8'),
@@ -180,14 +159,16 @@ ANALOG=[14,15,16,17,18,19,20,21,22,23,24,25,26,27,38,39]
 
 def teensy():
     d=Circuit('teensy-adapter')
-    pins=copy.deepcopy(V2['A1']['pins']);pins.update(IORF='IOREF')
+    pins=copy.deepcopy(V2['A1']['pins'])
+    for i,b in enumerate(BODY):pins[f'D{26+i}']=b+'/mic direct'
+    for pin in ['A0','A1','A2','A3','A4','D3','D4']:pins[pin]=None
     for pin in ['MISO','MOSI','SCK','RST2','5V2','GND4']:pins.pop(pin,None)
     d.add('JM1','MEGA PATTERN FEMALE','Shields:Mega_Female',pins,'mega','Same physical contact coordinates as the v2 computing slot')
     mapping={'GND':'GND','VIN':'VIN_USB','3V3':'IOREF','13':None}
     for pin,mega in OUTPUTS:mapping[str(pin)]=f'gpio/{pin}'
-    for i,pin in enumerate(ANALOG): mapping[str(pin)]=pins[f'A{i}'] if i<5 else f'adc/{pin}'
-    for pin,mega in [(34,'D4'),(35,'D3')]:mapping[str(pin)]=f'gpio/{pin}';d.r(f'RC{pin}','100R',f'gpio/{pin}',pins[mega],'controls')
-    for pin in [0,1,3,33,36,37,40,41]:mapping[str(pin)]=f'gpio/{pin}';d.tp(f'TP{pin}',f'gpio/{pin}','controls')
+    for i,pin in enumerate(ANALOG): mapping[str(pin)]=BODY[i]+'/mic direct' if i<5 else f'adc/{pin}'
+    for i,pin in enumerate(ANALOG[:5]):d.c(f'CM{i+1}','1nF C0G',mapping[str(pin)],'GND','microphones')
+    for pin in [0,1,3,33,34,35,36,37,40,41]:mapping[str(pin)]=f'gpio/{pin}';d.tp(f'TP{pin}',f'gpio/{pin}','controls')
     left=['GND']+list(map(str,range(13)))+['3V3']+list(map(str,range(24,33)))
     right=['VIN','GND','3V3']+list(map(str,range(23,12,-1)))+['GND']+list(map(str,range(41,32,-1)))
     for ref,row in [('JT1',left),('JT2',right)]:
@@ -273,11 +254,11 @@ def emit(d):
         page.save();pages.append('supplies');library.update(flags)
     root=s.Sheet('root',d.name,{},1)
     root.text('COLLOQUY / SHIELDS / '+d.name.upper(),20.32,20.32,3.048,True)
-    root.text('Rev A prototype - SHIELDS.md simplified 2026-10-04 - read ../REVIEW.md before fabrication',20.32,30.48,1.27)
+    root.text('Rev A prototype - SHIELDS.md direct microphones 2026-10-05 - read ../REVIEW.md',20.32,30.48,1.27)
     for i,name in enumerate(pages):
         x,y=25.4+i%3*129.54,55.88+i//3*35.56
         root.objects.append(f'(sheet (at {x} {y}) (size 111.76 20.32) (stroke (width 0.254) (type default)) (fill (color 0 0 0 0)) (uuid {s.q(s.uid("sheet/"+name))}) '+s.prop('Sheetname',name,x+55.88,y-2.54,size=1.016)+s.prop('Sheetfile',name+'.kicad_sch',x+55.88,y+22.86,size=1.016)+f'(instances (project {s.q(d.name)} (path {s.q("/"+s.ROOT_UUID)} (page {s.q(i+2)})))))')
-    content=f'(kicad_sch (version 20250114) (generator "eeschema") (generator_version "9.0") (uuid {s.q(s.ROOT_UUID)}) (paper "A3") (title_block (title {s.q(d.name)}) (date "2026-10-04") (rev "A-prototype")) (lib_symbols) '+ '\n'.join(root.objects)+' (sheet_instances (path "/" (page "1"))) (embedded_fonts no))'
+    content=f'(kicad_sch (version 20250114) (generator "eeschema") (generator_version "9.0") (uuid {s.q(s.ROOT_UUID)}) (paper "A3") (title_block (title {s.q(d.name)}) (date "2026-10-05") (rev "A-prototype")) (lib_symbols) '+ '\n'.join(root.objects)+' (sheet_instances (path "/" (page "1"))) (embedded_fonts no))'
     (folder/(d.name+'.kicad_sch')).write_text(content,encoding='utf-8')
     (folder/'Colloquy.kicad_sym').write_text('(kicad_symbol_lib (version 20231120) (generator "kicad_symbol_editor")\n'+'\n'.join(s.lib_symbol(p,True) for p in library.values())+')',encoding='utf-8')
     (folder/'sym-lib-table').write_text('(sym_lib_table (version 7) (lib (name "Colloquy") (type "KiCad") (uri "${KIPRJMOD}/Colloquy.kicad_sym") (options "") (descr "SHIELDS symbols")))')
@@ -290,4 +271,4 @@ def emit(d):
 
 
 if __name__=='__main__':
-    for build in [backplane,teensy,msgeq,direct,thomas,active]:emit(build())
+    for build in [backplane,teensy,msgeq,thomas,active]:emit(build())

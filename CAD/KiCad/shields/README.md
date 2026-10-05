@@ -1,18 +1,20 @@
 # Colloquy shield PCB set
 
-All six native KiCad 9 projects implement the simplified 2026-10-04 spec.
+All five native KiCad 9 projects implement the direct-microphone 2026-10-05 spec.
 Their common footprint library lives here too. No identification chips or I2C
 bus remain. Voice headers are keyed 2x3; analyser headers are keyed 2x11.
 
 Build the backplane, five Thomas cards and MSGEQ7 analyser first for the
-exhibition. The Teensy adapter, direct analyser and active cards follow.
+exhibition. The Teensy adapter follows with JA1 empty; active cards come next.
+Five 4.7K/1M microphone networks on the backplane feed Mega-footprint
+D26-D30, which the adapter routes to Teensy A0-A4 with 1nF at each input.
+The obsolete direct analyser PCB is removed; its earlier design remains in Git.
 
 | Project | Function | Quantity in the full comparison set |
 |---|---|---:|
 | `backplane/backplane.kicad_pro` | Fixed harness, power and shield slots | 1 |
 | `teensy-adapter/teensy-adapter.kicad_pro` | Teensy 4.1 in the Mega computing slot | 1 |
 | `analyser-msgeq7/analyser-msgeq7.kicad_pro` | Five original band analysers | 1 |
-| `analyser-direct/analyser-direct.kicad_pro` | Five raw-microphone filters | 1 |
 | `voice-thomas/voice-thomas.kicad_pro` | Passive original voice, five BOM variants | 5 |
 | `voice-active/voice-active.kicad_pro` | Fourth-order voice, thirteen BOM variants | As required |
 
@@ -20,14 +22,14 @@ exhibition. The Teensy adapter, direct analyser and active cards follow.
 specification discrepancies and unresolved electrical/mechanical issues.
 The main `.kicad_pcb` in each project is the routed layout. The `-placed`
 files are unrouted regeneration checkpoints, not manufacturing inputs.
-The backplane and Teensy adapter use four copper layers; the four audio
+The backplane and Teensy adapter use four copper layers; the three audio
 designs use two. All are nominally 1.6 mm thick.
 
 Each project includes editable hierarchical schematics, a circuit connectivity
 manifest, BOM, component placement CSV and native validation reports.
 `ASSEMBLY.md` describes the five Thomas and thirteen active-card populations.
 `VALIDATION.json` records ERC, DRC, connectivity and mating checks.
-`Shields.pretty` is shared by all six via relative library
+`Shields.pretty` is shared by all five via relative library
 paths. Open each `.kicad_pro` to load its local symbol/footprint tables.
 
 Rebuild circuit sources with `scripts/design.py`, then placements with
@@ -47,6 +49,8 @@ must be followed by another plane fill and check. `variants.py` creates assembly
 KiCad's Python; `check.py` also uses its CLI. Router intermediates belong in
 a temporary directory outside this deliverable. `repair_testpads.py` locates
 clear routed copper for probe pads; refill planes and rerun checks afterwards.
+`update_direct_microphones.py` is the one-time Oct 4 to Oct 5 migration,
+with backups and validated temporary output before replacement.
 Do not run historical migration/routing-completion scripts on finished boards.
 
 No Gerber order package is supplied while the electrical release issues in

@@ -58,11 +58,11 @@
         "D21": null,
         "D22": null,
         "D23": null,
-        "D26": null,
-        "D27": null,
-        "D28": null,
-        "D29": null,
-        "D30": null,
+        "D26": "female1/mic direct",
+        "D27": "female2/mic direct",
+        "D28": "female3/mic direct",
+        "D29": "male1/mic direct",
+        "D30": "male2/mic direct",
         "D31": null,
         "D32": null,
         "D33": null,
@@ -90,7 +90,7 @@
         "GND4": "GND",
         "GND5": "GND",
         "GND6": "GND",
-        "IORF": "IOREF",
+        "IORF": null,
         "MISO": null,
         "MOSI": null,
         "RST1": null,
@@ -278,7 +278,7 @@
         "GND4": "power_in",
         "GND5": "power_in",
         "GND6": "power_in",
-        "IORF": "power_out",
+        "IORF": "passive",
         "MISO": "passive",
         "MOSI": "passive",
         "RST1": "passive",
@@ -1989,6 +1989,366 @@
       "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/da935bb6-8fb3-54a1-a2be-83ab57096529"
     },
     {
+      "ref": "RM1",
+      "value": "4K7",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female1/microphone",
+        "2": "female1/mic direct"
+      },
+      "sheet": "microphones",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "a8ef2af8-97be-510f-b508-333caa6faa84",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+    },
+    {
+      "ref": "RMD1",
+      "value": "1M",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female1/mic direct",
+        "2": "AGND"
+      },
+      "sheet": "microphones",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "959fe391-4f55-5a13-9f6b-d11a1d3826f9",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+    },
+    {
+      "ref": "TPD1",
+      "value": "female1/mic direct",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "female1/mic direct"
+      },
+      "sheet": "microphones",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "7442b3d7-5c14-5fb2-8bcf-bf378b7ce9c7",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+    },
+    {
+      "ref": "RM2",
+      "value": "4K7",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female2/microphone",
+        "2": "female2/mic direct"
+      },
+      "sheet": "microphones",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "d6f0e88c-224f-5750-b666-114797c2de34",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+    },
+    {
+      "ref": "RMD2",
+      "value": "1M",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female2/mic direct",
+        "2": "AGND"
+      },
+      "sheet": "microphones",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "8558efdc-bb1f-5efa-ba82-95a11bd7a848",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+    },
+    {
+      "ref": "TPD2",
+      "value": "female2/mic direct",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "female2/mic direct"
+      },
+      "sheet": "microphones",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "b9a2949c-8daa-5116-a6f0-c0405cfb318d",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+    },
+    {
+      "ref": "RM3",
+      "value": "4K7",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female3/microphone",
+        "2": "female3/mic direct"
+      },
+      "sheet": "microphones",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "8329ae91-5204-5b6a-b30c-6461c361f484",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+    },
+    {
+      "ref": "RMD3",
+      "value": "1M",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female3/mic direct",
+        "2": "AGND"
+      },
+      "sheet": "microphones",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "e992805e-e0aa-552d-859d-1c23928e49fd",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+    },
+    {
+      "ref": "TPD3",
+      "value": "female3/mic direct",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "female3/mic direct"
+      },
+      "sheet": "microphones",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "6c6be680-2dc7-5d2f-86d0-60debe965ed2",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+    },
+    {
+      "ref": "RM4",
+      "value": "4K7",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male1/microphone",
+        "2": "male1/mic direct"
+      },
+      "sheet": "microphones",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "550d8725-6201-52d1-a055-8bb1881732dc",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+    },
+    {
+      "ref": "RMD4",
+      "value": "1M",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male1/mic direct",
+        "2": "AGND"
+      },
+      "sheet": "microphones",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "f96707aa-d46c-5b68-ae7f-ba090ce5dc1f",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+    },
+    {
+      "ref": "TPD4",
+      "value": "male1/mic direct",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "male1/mic direct"
+      },
+      "sheet": "microphones",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "3cd698c9-887e-5947-855b-38cc69001642",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+    },
+    {
+      "ref": "RM5",
+      "value": "4K7",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male2/microphone",
+        "2": "male2/mic direct"
+      },
+      "sheet": "microphones",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "232232d6-4dc1-51b8-8005-3ef0ece5c587",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+    },
+    {
+      "ref": "RMD5",
+      "value": "1M",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male2/mic direct",
+        "2": "AGND"
+      },
+      "sheet": "microphones",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "17742303-ea2a-5236-a9ec-04fbf8b060e5",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+    },
+    {
+      "ref": "TPD5",
+      "value": "male2/mic direct",
+      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "pins": {
+        "1": "male2/mic direct"
+      },
+      "sheet": "microphones",
+      "description": "",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "5fdd7260-f9ee-5bbe-a44c-9cf819159a83",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+    },
+    {
       "ref": "JA1",
       "value": "ANALYSER - KEY 22",
       "footprint": "Shields:Header_2x11_Key22",
@@ -2011,9 +2371,9 @@
         "16": "AGND",
         "17": "analyser/strobe",
         "18": "analyser/reset",
-        "19": "IOREF",
+        "19": "MEGA_5V",
         "20": "GND",
-        "21": "+5V"
+        "21": "GND"
       },
       "sheet": "slots",
       "description": "",
@@ -2763,28 +3123,6 @@
       "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/1cb8b04e-6dee-5865-ab6f-2100c6242893"
     },
     {
-      "ref": "TPI1",
-      "value": "IOREF",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
-      "pins": {
-        "1": "IOREF"
-      },
-      "sheet": "slots",
-      "description": "",
-      "pin_names": {
-        "1": "1"
-      },
-      "pin_types": {
-        "1": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": false,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "796bd5a4-563e-5c88-b8a7-82d117be2d0f",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
-    },
-    {
       "ref": "TPL1",
       "value": "female1/filter out",
       "footprint": "Shields:TestPoint_Pad_D1.5mm",
@@ -2958,7 +3296,7 @@
       "mpn": "",
       "datasheet": "",
       "uuid": "75e0acda-7f8e-56d8-a562-4c7dccff63d4",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
     },
     {
       "ref": "TPA3",

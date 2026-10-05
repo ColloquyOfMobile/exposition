@@ -206,7 +206,7 @@ class Sheet:
         syms = "\n".join(lib_symbol(p) for p in self.parts.values())
         content = f'''(kicad_sch (version 20250114) (generator "eeschema") (generator_version "9.0")
           (uuid {q(uid('sheetfile/'+self.name))}) (paper "A3")
-          (title_block (title {q(self.title)}) (date "2026-10-04") (rev "A-prototype")
+          (title_block (title {q(self.title)}) (date "2026-10-05") (rev "A-prototype")
             (company "Colloquy of Mobiles") (comment 1 "Prototype: verify harness polarity and sensor values before connection"))
           (lib_symbols {syms})
           {chr(10).join(self.objects)}

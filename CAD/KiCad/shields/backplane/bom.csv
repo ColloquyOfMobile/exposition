@@ -45,6 +45,16 @@ RP11,10K provisional,Shields:R_0603_1608Metric,,provisional_10k_calibrate
 RS1,10K,Shields:R_0603_1608Metric,,fit
 RA1,330R,Shields:R_0603_1608Metric,,fit
 RA2,330R,Shields:R_0603_1608Metric,,fit
+RM1,4K7,Shields:R_0603_1608Metric,,fit
+RMD1,1M,Shields:R_0603_1608Metric,,fit
+RM2,4K7,Shields:R_0603_1608Metric,,fit
+RMD2,1M,Shields:R_0603_1608Metric,,fit
+RM3,4K7,Shields:R_0603_1608Metric,,fit
+RMD3,1M,Shields:R_0603_1608Metric,,fit
+RM4,4K7,Shields:R_0603_1608Metric,,fit
+RMD4,1M,Shields:R_0603_1608Metric,,fit
+RM5,4K7,Shields:R_0603_1608Metric,,fit
+RMD5,1M,Shields:R_0603_1608Metric,,fit
 JA1,ANALYSER - KEY 22,Shields:Header_2x11_Key22,,fit
 JV1,female1 - KEY 6,Shields:Header_2x03_Key6,,fit
 RL1,100K,Shields:R_0603_1608Metric,,fit

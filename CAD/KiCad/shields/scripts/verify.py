@@ -67,7 +67,7 @@ def main():
             bh=next(f for f in loaded['backplane'].GetFootprints() if f.GetReference()==f'HV{i}')
             ch=next(f for f in loaded[design].GetFootprints() if f.GetReference()=='H1')
             assert all(near(position(bh)[j],position(ch)[j]+offset[j]) for j in range(2))
-    for design in ['analyser-msgeq7','analyser-direct']:
+    for design in ['analyser-msgeq7']:
         card=pads(loaded[design]);assert ('JA1','22') not in card
         for n in range(1,22):
             bp,cp=position(back[('JA1',str(n))]),position(card[('JA1',str(n))])
@@ -92,9 +92,35 @@ def main():
         pins=[(c['ref'],n) for c in sockets for n,label in c['pin_names'].items() if label==str(gpio)]
         assert len(pins)==1
         net=plain(adapter[pins[0]].GetNetname())
-        assert net==(V2['A1']['pins'][f'A{i}'] if i<5 else f'adc/{gpio}')
+        assert net==(BODY[i]+'/mic direct' if i<5 else f'adc/{gpio}')
+    assert set(loaded)=={'backplane','teensy-adapter','analyser-msgeq7','voice-active','voice-thomas'}
+    backparts={c['ref']:c for c in backdata['components']}
+    adparts={c['ref']:c for c in data['components']}
+    for i,body in enumerate(BODY,1):
+        direct=body+'/mic direct'
+        assert plain(back[('A1',f'D{25+i}')].GetNetname())==direct
+        assert plain(adapter[('JM1',f'D{25+i}')].GetNetname())==direct
+        assert backparts[f'RM{i}']['pins']=={'1':body+'/microphone','2':direct}
+        assert backparts[f'RM{i}']['value']=='4K7'
+        assert backparts[f'RMD{i}']['pins']=={'1':direct,'2':'AGND'}
+        assert backparts[f'RMD{i}']['value']=='1M'
+        assert adparts[f'CM{i}']['pins']=={'1':direct,'2':'GND'}
+        assert adparts[f'CM{i}']['value']=='1nF C0G'
+        assert plain(back[(f'TPD{i}','1')].GetNetname())==direct
+    for pin in ['A0','A1','A2','A3','A4','D3','D4','IORF']:
+        assert not adapter[('JM1',pin)].GetNetname(),('Teensy isolation',pin)
+    assert not back[('A1','IORF')].GetNetname()
+    for pin in [34,35]:assert plain(adapter[(f'TP{pin}','1')].GetNetname())==f'gpio/{pin}'
+    analyser=pads(loaded['analyser-msgeq7'])
+    for pin,net in [('19','MEGA_5V'),('20','GND'),('21','GND')]:
+        assert plain(back[('JA1',pin)].GetNetname())==net
+    assert plain(analyser[('JA1','19')].GetNetname())=='MEGA_5V'
+    for n in range(1,6):
+        assert plain(analyser[(f'U{n}','1')].GetNetname())=='MEGA_5V'
+        assert plain(analyser[(f'R{n}13','1')].GetNetname())=='MEGA_5V'
     summary['interfaces']={'fixed_harness_pinout_and_coordinates':'PASS','v2_connected_Mega_pins':'PASS',
-        'five_voice_mating_pairs':'PASS','two_analyser_mating_pairs':'PASS','adapter_mirror':'PASS','single_ground_bond':'PASS','no_identification_hardware':'PASS','revised_Teensy_analogue_mapping':'PASS'}
+        'five_voice_mating_pairs':'PASS','MSGEQ7_mating_pair':'PASS','adapter_mirror':'PASS','single_ground_bond':'PASS','no_identification_hardware':'PASS','revised_Teensy_analogue_mapping':'PASS',
+        'direct_microphone_networks':'PASS','MSGEQ7_isolated_from_Teensy':'PASS','MSGEQ7_USB_5V_supply':'PASS'}
     (ROOT/'VALIDATION.json').write_text(json.dumps(summary,indent=2)+'\n')
     for name,result in summary.items():print(name,result)
     assert all(not r['parity_differences'] for n,r in summary.items() if n!='interfaces')
