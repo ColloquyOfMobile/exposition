@@ -535,3 +535,30 @@ def test_no_probe_rate_reboots_a_teensy_into_its_bootloader():
     (`cores/teensy4/usb.c`). `_diagnose_silence()` reopens at every probe
     rate, so one at 134 would turn a quiet board into a missing one."""
     assert 134 not in firmware.PROBE_BAUDRATES
+
+
+# --- section 6: LEDs and test pins -----------------------------------------
+
+# What each LED's net sits at, and the forward drop the currents assume.
+RAILS = {"+5V": 5.0, "+12V": 12.0, "MEGA_5V": 5.0}
+TONE_HIGH = 5.0
+LED_DROP = 2.0
+
+
+def test_eight_leds_each_at_the_current_its_resistor_gives():
+    _, rows = _table("LED")
+    leds = 0
+    for row in rows:
+        net, resistor, current = row[2], row[4], row[5]
+        volts = RAILS.get(net, TONE_HIGH)
+        ohms = _numbers(resistor)[0] * 1000
+        assert _numbers(current)[0] == round((volts - LED_DROP) / ohms * 1000, 1), row
+        leds += 5 if "TONE 5" in row[0] else 1
+
+    assert leds == 8
+
+
+def test_every_test_pin_row_has_its_own_ground():
+    _, rows = _table("Board")
+    for row in rows:
+        assert "GND" in row[2], row
