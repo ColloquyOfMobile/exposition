@@ -5,36 +5,40 @@
 solution shares, and **slots**. What differs between solutions is a
 **shield** in a slot: the **U2D2** (already one), a **computing shield**
 (the Mega 2560 itself, or a Teensy 4.1 on an adapter in the Mega's
-footprint), an **analyser shield** (five MSGEQ7s, or five buffers that
-hand the microphones straight to the Teensy), and five **voice cards**,
-the output filters, one per body. Trying another solution is changing a
-shield.
+footprint), the **MSGEQ7 analyser shield** (the Mega's ear), and five
+**voice cards**, the output filters, one per body. **The Teensy needs no
+analyser: the microphones reach it straight from the backplane.** Trying
+another solution is changing a shield.
 
-Written 2026-10-03; **simplified 2026-10-04**. The people building it are
-qualified, so this says what to build, in what order, and how to tell the
-pieces apart, and leaves out what a competent hand does anyway. **There
-is no shield identification in hardware: the silkscreen does that job**
-(section 6). It is the sixth solution, beside `next pcb`, `one board per
-body`, `opencm and pro minis`, `ad9833 dual mode` and `thomas or teensy`;
-the backplane is the v2 project
-(`CAD/KiCad/electronic box v2/colloquy-control-v2/`) with its audio parts
-moved into shields.
+Written 2026-10-03; **simplified 2026-10-04**; **direct microphones
+2026-10-05**. The people building it are qualified, so this says what to
+build, in what order, and how to tell the pieces apart, and leaves out
+what a competent hand does anyway. **There is no shield identification in
+hardware: the silkscreen does that job** (section 6). It is the sixth
+solution, beside `next pcb`, `one board per body`, `opencm and pro
+minis`, `ad9833 dual mode` and `thomas or teensy`; the backplane is the
+v2 project (`CAD/KiCad/electronic box v2/colloquy-control-v2/`) with its
+audio parts moved into shields.
 
 > **The brief, 2026-10-03.** One main PCB that only routes signals and
 > power; the solutions are shields. The computing shield comes as a Mega
-> and as a Teensy 4.1. The analyser comes as MSGEQ7s for the Mega and as a
-> direct route of the microphones to the Teensy, whose sound is
-> **analysed on the computer**. The output filters are shields too, so a
-> frequency can be changed quickly: **fixed** for the Mega, **changeable**
-> for the Teensy, made by **a timer and a filter**, not a DAC. **SMD** for
-> every simple part.
+> and as a Teensy 4.1. The analyser is MSGEQ7s for the Mega; for the
+> Teensy the microphones go to it directly and their sound is **analysed
+> on the computer**. The output filters are shields too, so a frequency
+> can be changed quickly: **fixed** for the Mega, **changeable** for the
+> Teensy, made by **a timer and a filter**, not a DAC. **SMD** for every
+> simple part.
 
 **Sources.** The backplane's pins and every value moved into a shield are
 v2's `circuit.json`; the Teensy facts are PJRC's own code (`pwm.c`,
 `analog.c`, `clockspeed.c`, `usb.c`, `usb_desc.h`, read 2026-10-03); the
-part choices were checked against their datasheets when the boards were
-drawn (`CAD/KiCad/shields/REVIEW.md`). Every filter figure and frequency
-here is computed by `colloquy/hardware/electronics/shields.py`, and
+microphone's output is the MAX9814 datasheet's (Maxim, electrical
+characteristics) and this repository's own measurement of it
+(`scope > diagnosing a microphone`, and `test goertzel ear` sampling it
+straight into a Mega's `A0`); the part choices were checked against their
+datasheets when the boards were drawn (`CAD/KiCad/shields/REVIEW.md`).
+Every filter figure, frequency and voltage here is computed by
+`colloquy/hardware/electronics/shields.py`, and
 `pytest_tests/hardware/test_shields.py` holds the tables to it, to
 `circuit.json` and to the sketch. What is still unmeasured is in
 section 12.
@@ -46,14 +50,13 @@ section 12.
 | Step | Build | What it gives | Why |
 |---|---|---|---|
 | **1** | backplane, five Thomas cards, MSGEQ7 shield; the Mega plugs in | **the v2 board**, electrically; firmware 4 unmodified | **the exhibition depends on this step alone** |
-| 2 | Teensy adapter, same shields | the same chain on the Teensy | proves the port before anything else changes |
-| 3 | direct analyser shield | the microphones on the laptop | hearing at any pitch |
-| 4 | five active cards: 1414, 4000, 8000, 250, 500 | cleaner voices at today's pitches | the first step away from Thomas's sound |
+| 2 | Teensy adapter in the Mega's place; the analyser slot emptied | the same voices on the Teensy, and the microphones on the laptop | proves the port, and hears at any pitch |
+| 3 | five active cards: 1414, 4000, 8000, 250, 500 | cleaner voices at today's pitches | the first step away from Thomas's sound |
 | later | other card corners; the continuous sample stream | any pitch; hearing while the piece runs | |
 
-**Each step changes one shield**, and its test is the previous step's
-test passing again (section 10). Order step 1 first and on its own if
-need be; nothing else is needed to open the exhibition.
+**Each step changes as little as it can**, and its test is the previous
+step's test passing again (section 10). Order step 1 first and on its own
+if need be; nothing else is needed to open the exhibition.
 
 ---
 
@@ -61,13 +64,13 @@ need be; nothing else is needed to open the exhibition.
 
 **Drawn: what swaps and what stays.** Hatched is fixed — the same in
 every solution: the laptop, the backplane's own parts, the U2D2, the
-harness and everything in the bodies. A dashed slot takes either of its
-two shields, changed powered down; each voice slot is changed on its own.
-The dotted band is what changes with no shield moving at all. One body
-stands for all five.
+harness and everything in the bodies. A dashed slot takes a shield,
+changed powered down; each voice slot is changed on its own. The dotted
+band is what changes with no shield moving at all. One body stands for
+all five.
 
 <div style="overflow-x: auto; margin: 1rem 0;">
-<svg viewBox="0 0 1300 890" role="img" aria-label="Block diagram of what swaps and what stays in the shield solution. Fixed, the same in every solution: the laptop with its two USB leads; the backplane with its DSUB-15s, power entry, servo bus header, build-out, NeoPixel and photosensor resistors, pull-downs, ground bonds and labelled test pads; the U2D2; the DSUB harness with its four harness boards; and in each of the five bodies the divider, amplifier and speaker, the NeoPixels and photosensors, the MAX9814 microphone and the Dynamixel servo. Swappable, powered down, one of two shields per slot: the computing slot, which is the Mega footprint, takes the Mega 2560 on firmware 4 with IOREF at 5 V or the Teensy 4.1 adapter on firmware 5 with IOREF at 3.3 V; each of the five voice slots takes, on its own, a Thomas card, passive with one fixed pitch, in five variants one per body, or an active card, fourth order with the pitch free within its octave, in thirteen variants with corners from 177 Hz to 11.3 kHz; the analyser slot takes five MSGEQ7s read by the firmware or five anti-alias buffers whose raw samples go to the laptop. Signals: USB from the laptop to the computing slot and to the U2D2; five 5 V tones from the computing slot to the voice slots; five line outs through the harness to the bodies; NeoPixels and photosensors between the computing slot and the bodies; five microphones from the bodies to the analyser slot, whose outputs return to the computing slot on A0 to A4; the Dynamixel bus from the U2D2 to the servos. Set in software, with no shield moving: the pitch within the fitted card's octave on the Teensy, the firmware that follows the computing shield, what each body sings, and the hearing, analysed on the laptop.">
+<svg viewBox="0 0 1300 890" role="img" aria-label="Block diagram of what swaps and what stays in the shield solution. Fixed, the same in every solution: the laptop with its two USB leads; the backplane with its DSUB-15s, power entry, servo bus header, build-out, NeoPixel and photosensor resistors, pull-downs, a 4.7 K and 1 M on each direct microphone, ground bonds and labelled test pads; the U2D2; the DSUB harness with its four harness boards; and in each of the five bodies the divider, amplifier and speaker, the NeoPixels and photosensors, the MAX9814 microphone and the Dynamixel servo. Swappable, powered down, one of two shields per slot: the computing slot, which is the Mega footprint, takes the Mega 2560 on firmware 4 at 5 V or the Teensy 4.1 adapter on firmware 5 at 3.3 V behind translators; each of the five voice slots takes, on its own, a Thomas card, passive with one fixed pitch, in five variants one per body, or an active card, fourth order with the pitch free within its octave, in thirteen variants with corners from 177 Hz to 11.3 kHz; the analyser slot takes five MSGEQ7s, the Mega's ear, and is left empty with the Teensy. Signals: USB from the laptop to the computing slot and to the U2D2; five 5 V tones from the computing slot to the voice slots; five line outs through the harness to the bodies; NeoPixels and photosensors between the computing slot and the bodies; five microphones from the bodies, each to the analyser slot, whose band outputs return to the computing slot, and also straight to the computing slot through 4.7 K, where the Teensy reads them on A0 to A4; the Dynamixel bus from the U2D2 to the servos. Set in software, with no shield moving: the pitch within the fitted card's octave on the Teensy, the firmware that follows the computing shield, what each body sings, and the hearing, analysed on the laptop.">
 <defs>
 <marker id="sw-ax" viewBox="0 0 10 8" refX="9" refY="4" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" orient="auto"><polygon points="0,0 10,4 0,8" fill="currentColor"></polygon></marker>
 <pattern id="sw-hatch" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="currentColor" stroke-width="1.4" opacity="0.32"></line></pattern>
@@ -91,13 +94,13 @@ stands for all five.
 <rect x="195" y="85" width="300" height="230" rx="5"></rect>
 <rect x="195" y="360" width="300" height="110" rx="5"></rect>
 <rect x="560" y="85" width="405" height="230" rx="5"></rect>
-<rect x="560" y="360" width="405" height="200" rx="5"></rect>
+<rect x="560" y="360" width="405" height="110" rx="5"></rect>
 </g>
 <g font-family="'IBM Plex Mono', monospace" font-size="10" font-weight="600" fill="currentColor" opacity="0.7">
 <text x="207" y="105">COMPUTING SLOT &#183; the Mega footprint</text>
 <text x="207" y="380">U2D2 SLOT</text>
 <text x="572" y="105">VOICE SLOTS JV1&#8211;JV5 &#183; each swapped on its own</text>
-<text x="572" y="380">ANALYSER SLOT JA1</text>
+<text x="572" y="380">ANALYSER SLOT JA1 &#183; MEGA ONLY</text>
 </g>
 <!-- shields -->
 <g fill="none" stroke="currentColor" stroke-width="1.7">
@@ -106,7 +109,6 @@ stands for all five.
 <rect x="578" y="120" width="369" height="68" rx="3"></rect>
 <rect x="578" y="228" width="369" height="68" rx="3"></rect>
 <rect x="578" y="392" width="369" height="60" rx="3"></rect>
-<rect x="578" y="490" width="369" height="60" rx="3"></rect>
 </g>
 <rect x="213" y="392" width="264" height="60" rx="3" fill="url(#sw-hatch)" stroke="currentColor" stroke-width="1.7"></rect>
 <g font-family="Chivo, sans-serif" font-size="13.5" font-weight="600" fill="currentColor" text-anchor="middle">
@@ -116,23 +118,20 @@ stands for all five.
 <text x="762" y="144">Thomas card</text>
 <text x="762" y="252">Active card</text>
 <text x="762" y="417">5 &#215; MSGEQ7</text>
-<text x="762" y="515">5 &#215; anti-alias buffer</text>
 </g>
 <g font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" text-anchor="middle" opacity="0.72">
-<text x="345" y="169">firmware 4, unmodified &#183; IOREF 5 V</text>
-<text x="345" y="277">firmware 5 &#183; IOREF 3.3 V</text>
+<text x="345" y="169">firmware 4, unmodified &#183; 5 V</text>
+<text x="345" y="277">firmware 5 &#183; 3.3 V, translated</text>
 <text x="345" y="438">the same in every setup</text>
 <text x="762" y="162">passive, Thomas&#8217;s values &#183; one fixed pitch</text>
 <text x="762" y="178">5 variants, one per body</text>
 <text x="762" y="270">4th order &#183; pitch free within its octave</text>
 <text x="762" y="286">13 variants: corners 177 Hz &#8211; 11.3 kHz</text>
-<text x="762" y="437">seven bands per body, read by the firmware</text>
-<text x="762" y="535">raw samples to the laptop &#183; Goertzel</text>
+<text x="762" y="437">the Mega&#8217;s ear &#183; leave the slot empty with the Teensy</text>
 </g>
 <g font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" fill="currentColor" text-anchor="middle" opacity="0.9">
 <text x="345" y="213">&#8645; either one</text>
 <text x="762" y="213">&#8645; either one, in each slot</text>
-<text x="762" y="476">&#8645; either one</text>
 </g>
 <!-- fixed on the backplane -->
 <rect x="195" y="500" width="300" height="170" rx="5" fill="url(#sw-hatch)" stroke="currentColor" stroke-width="1.6"></rect>
@@ -141,23 +140,22 @@ stands for all five.
 <text x="207" y="546">4 &#215; DSUB-15 &#183; power entry &#183; servo bus J7</text>
 <text x="207" y="566">100 R build-outs &#183; 330 R NeoPixel resistors</text>
 <text x="207" y="586">10 K photosensor loads &#183; pull-downs</text>
-<text x="207" y="606">ground bonds &#183; labelled test pads</text>
-<text x="207" y="632">IOREF, set by the computing shield:</text>
-<text x="207" y="648">why every combination is safe</text>
+<text x="207" y="606">4.7 K + 1 M on each direct microphone</text>
+<text x="207" y="632">ground bonds &#183; labelled test pads</text>
 </g>
 <!-- body -->
 <g fill="url(#sw-hatch)" stroke="currentColor" stroke-width="1.6">
 <rect x="1110" y="160" width="160" height="60" rx="3"></rect>
 <rect x="1110" y="315" width="160" height="40" rx="3"></rect>
-<rect x="1110" y="455" width="160" height="40" rx="3"></rect>
-<rect x="1110" y="570" width="160" height="40" rx="3"></rect>
+<rect x="1110" y="395" width="160" height="40" rx="3"></rect>
+<rect x="1110" y="600" width="160" height="40" rx="3"></rect>
 </g>
 <g font-family="Chivo, sans-serif" font-size="11.5" fill="currentColor" text-anchor="middle">
 <text x="1190" y="186">divider &#183; amplifier</text>
 <text x="1190" y="204">speaker</text>
 <text x="1190" y="339">NeoPixels &#183; photosensors</text>
-<text x="1190" y="479">MAX9814 microphone</text>
-<text x="1190" y="594">Dynamixel servo</text>
+<text x="1190" y="419">MAX9814 microphone</text>
+<text x="1190" y="624">Dynamixel servo</text>
 </g>
 <text x="80" y="347" font-family="Chivo, sans-serif" font-size="15" font-weight="600" fill="currentColor" text-anchor="middle">Laptop</text>
 <g font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" text-anchor="middle" opacity="0.72">
@@ -172,10 +170,12 @@ stands for all five.
 <path d="M 495 170 H 558" stroke-width="1.4" marker-end="url(#sw-ax)"></path>
 <path d="M 965 190 H 1108" stroke-width="2.4" marker-end="url(#sw-ax)"></path>
 <path d="M 495 290 H 512 V 335 H 1108" stroke-width="1.4" marker-end="url(#sw-ax)"></path>
-<path d="M 1108 475 H 967" stroke-width="2.4" marker-end="url(#sw-ax)"></path>
-<path d="M 558 520 H 545 V 270 H 497" stroke-width="2.4" marker-end="url(#sw-ax)"></path>
-<path d="M 477 422 H 530 V 590 H 1108" stroke-width="1.4" marker-end="url(#sw-ax)"></path>
+<path d="M 1108 415 H 967" stroke-width="2.4" marker-end="url(#sw-ax)"></path>
+<path d="M 1005 415 V 490 H 525 V 265 H 497" stroke-width="2.4" marker-end="url(#sw-ax)"></path>
+<path d="M 558 422 H 545 V 240 H 497" stroke-width="2.4" marker-end="url(#sw-ax)"></path>
+<path d="M 477 440 H 505 V 620 H 1108" stroke-width="1.4" marker-end="url(#sw-ax)"></path>
 </g>
+<circle cx="1005" cy="415" r="4" fill="currentColor"></circle>
 <g font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="currentColor" opacity="0.85">
 <text x="164" y="198">USB</text>
 <text x="165" y="415">USB</text>
@@ -183,9 +183,11 @@ stands for all five.
 <text x="499" y="183">5 V</text>
 <text x="972" y="182">line out</text>
 <text x="640" y="329">NeoPixels &#183; photosensors</text>
-<text x="974" y="467">mic &#215; 5</text>
-<text x="500" y="263">A0&#8211;A4</text>
-<text x="640" y="584">Dynamixel bus &#183; J7</text>
+<text x="970" y="406">mic</text>
+<text x="499" y="233">bands</text>
+<text x="499" y="258">mics</text>
+<text x="600" y="484">microphones direct, through 4.7 K &#8594; Teensy A0&#8211;A4</text>
+<text x="640" y="614">Dynamixel bus &#183; J7</text>
 </g>
 <!-- software -->
 <rect x="20" y="715" width="1265" height="118" rx="6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="1.5 4" stroke-linecap="round"></rect>
@@ -204,7 +206,7 @@ stands for all five.
 <text x="668" y="788">tone on or off, from the page</text>
 <text x="668" y="804">which body sings what pattern</text>
 <text x="984" y="788">Goertzel bins at any pitch</text>
-<text x="984" y="804">with the direct analyser shield</text>
+<text x="984" y="804">microphones straight to the Teensy</text>
 </g>
 <!-- legend -->
 <g font-family="'IBM Plex Mono', monospace" font-size="10.5" fill="currentColor" opacity="0.8">
@@ -220,24 +222,25 @@ stands for all five.
 </svg>
 </div>
 
-| Slot | Shield for the Mega | Shield for the Teensy |
+| Slot | With the Mega | With the Teensy |
 |---|---|---|
 | computing | **the Mega 2560 itself**, firmware 4 | **Teensy 4.1 adapter**, firmware 5 |
-| analyser | **5 × MSGEQ7**, Thomas's network | **5 × anti-alias buffer**, raw signal |
+| analyser | **5 × MSGEQ7**, Thomas's network | **empty**: the microphones go straight to the Teensy |
 | voice × 5 | **Thomas card**: passive, one pitch | **active card**: 4th order, an octave of pitch |
 | U2D2 | the U2D2, the same in both | |
 
-**Two rules make the slots safe with any shield in them:**
+**Two rules:**
 
-1. **`IOREF`** — the Arduino R3 footprint's own pin for the processor's
-   logic voltage (5 V on a Mega, 3.3 V on the adapter) — **powers every
-   part that drives a processor pin.** So an analyser shield can never put
-   more on `A0` than its processor takes, and the same shield suits both.
+1. **Nothing reaches a Teensy pin above 3.3 V.** Its outputs are
+   translated up to 5 V; the photosensors are divided down; the
+   microphones never exceed 2.45 V by their own output stage and arrive
+   through 4.7 K; the MSGEQ7's outputs are not connected to it at all.
+   Section 4c checks every analogue signal against both processors.
 2. **The rack supply and the computing shield's USB go on and off
-   together.** With one off and the other on, series resistors limit
-   the current into the unpowered side to a fraction of a milliamp per
-   line: safe for the minute it takes to bring the other up, not a way to
-   leave the piece. It is printed on the board (section 6).
+   together.** With one off and the other on, series resistors limit the
+   current into the unpowered side to a fraction of a milliamp per line:
+   safe for the minute it takes to bring the other up, not a way to leave
+   the piece. It is printed on the board (section 6).
 
 ---
 
@@ -260,15 +263,14 @@ to `circuit.json` by its own test). The harness boards do not change.
 | **added** | analyser slot `JA1`: 2 × 11 header, 2.54 mm, last pin removed as key | THT |
 | **added** | voice slots `JV1`–`JV5`: 2 × 3 header, 2.54 mm, last pin removed as key | THT |
 | **added** | M3 standoffs: one per card, two for the analyser shield | |
-| **added** | `IOREF` net, from the footprint's `IORF` pin to `JA1` | copper |
+| **added** | per microphone: 4.7 K from the conductor to its footprint pin, 1 M from that pin to AGND (section 4a) | 0603 |
 | **added** | 100 K to GND on each of the seven `…/neopixel/driven` nets | 0603 |
 | **added** | 100 K to AGND on each of the five `…/filter out` nets | 0603 |
 
-**The two kinds of pull-down are the backplane's only new parts.** The
-first keeps every NeoPixel strip off a floating data line — while a
-processor boots, while one is unpowered, with the slot empty — which v2
-lacks too. The second leaves an empty voice slot's body at 0 V instead of
-an open amplifier input.
+**The pull-downs** keep every NeoPixel strip off a floating data line —
+while a processor boots, while one is unpowered, with the slot empty —
+which v2 lacks too, and leave an empty voice slot's body at 0 V instead
+of an open amplifier input.
 
 ### 2b. The computing slot: the Mega footprint, unchanged
 
@@ -311,14 +313,20 @@ firmware 4 runs unmodified. Held to `circuit.json` by the test.
 | `A14` | `male2/photosensor/C` | `RP10` |
 | `A15` | `male2/photosensor/D` | `RP11` |
 
-One footprint pin is added, unconnected on v2:
+**Five footprint pins are added**, all unconnected on v2 and untouched by
+firmware 4: the microphones, direct.
 
-| Added pin | Net | Why |
+| Added pin | Net | |
 |---|---|---|
-| `IORF` | `IOREF` | the computing shield's logic rail, out to the analyser slot |
+| `D26` | `female1/mic direct` | through 4.7 K from `female1/microphone` |
+| `D27` | `female2/mic direct` | through 4.7 K from `female2/microphone` |
+| `D28` | `female3/mic direct` | through 4.7 K from `female3/microphone` |
+| `D29` | `male1/mic direct` | through 4.7 K from `male1/microphone` |
+| `D30` | `male2/mic direct` | through 4.7 K from `male2/microphone` |
 
-The footprint's 5 V pins stay `MEGA_5V`, as v2: the computing shield's
-own USB 5 V, feeding `RS1` and nothing else.
+On a Mega these are unused digital inputs, and firmware 4 never looks at
+them. The footprint's 5 V pins stay `MEGA_5V`, as v2: the computing
+shield's own USB 5 V, feeding `RS1` and the MSGEQ7 shield.
 
 ### 2c. The analyser slot `JA1`
 
@@ -342,9 +350,9 @@ own USB 5 V, feeding `RS1` and nothing else.
 | 16 | `AGND` |
 | 17 | `analyser/strobe` |
 | 18 | `analyser/reset` |
-| 19 | `IOREF` |
+| 19 | `MEGA_5V` |
 | 20 | `GND` |
-| 21 | `+5V` |
+| 21 | `GND` |
 | 22 | key, no pin |
 
 Each microphone sits between two `AGND` pins, so no digital line runs
@@ -371,10 +379,10 @@ One pinout for all five:
 | `JV4` | male1 | `male1/tone` | `male1/filter out` | `JV4 · MALE1 · MEGA D11 · TEENSY 6` |
 | `JV5` | male2 | `male2/tone` | `male2/filter out` | `JV5 · MALE2 · MEGA D5 · TEENSY 28` |
 
-**Slot N is body N**, in body order, which is module order, which is
-`A0`–`A4`: one number identifies a body all the way round, as on every
-board so far. With Thomas cards fitted, the copper from tone pin to DSUB
-is v2's with two connector contacts in it.
+**Slot N is body N**, in body order, which is module order: one number
+identifies a body all the way round, as on every board so far. With
+Thomas cards fitted, the copper from tone pin to DSUB is v2's with two
+connector contacts in it.
 
 ---
 
@@ -383,9 +391,8 @@ is v2's with two connector contacts in it.
 ### 3a. The Mega 2560
 
 **The Mega is its own shield**: it plugs into the footprint exactly as
-into the v2 board, carried on the back, on its own USB lead, and its
-`IOREF` is its 5 V. Firmware 4 runs unmodified with the MSGEQ7 shield and
-Thomas cards: step 1.
+into the v2 board, carried on the back, on its own USB lead. Firmware 4
+runs unmodified with the MSGEQ7 shield and Thomas cards: step 1.
 
 ### 3b. The Teensy 4.1 adapter
 
@@ -396,20 +403,22 @@ end where the Mega's USB-B is. Still two USB leads in the rack.
 
 - **Power: the Teensy's own USB, as a Mega.** It takes 5 V from `VIN`
   and never feeds it; a Schottky from `VIN` gives the footprint's 5 V
-  pins (`MEGA_5V`), and the Teensy's 3.3 V is `IOREF`.
-- **Its pins are not 5 V tolerant.** So everything leaving for the
+  pins (`MEGA_5V`).
+- **Its pins are not 5 V tolerant**, so everything leaving for the
   bodies and the cards — seven NeoPixel lines, five tones, two aux lines,
   amp shutdown — goes through four **SN74LV4T125** translators powered
   from `VIN`, which makes them 5 V exactly as from a Mega. A card's level
   does not depend on which processor is fitted.
-- **What stays at `IOREF` goes direct**: the analyser's strobe and reset.
+- **The microphones come in direct** on the five added footprint pins,
+  each with 1 nF at the Teensy pin (section 4a).
 - **The photosensors are divided** (100 K / 150 K): they are 3-pin
-  modules on the body's 5 V and can reach it. The analyser outputs need
-  nothing, being bounded by `IOREF`.
+  modules on the body's 5 V and can reach it.
+- **The analyser's pins are not connected** — `A0`–`A4`, strobe and
+  reset — since with the Teensy the slot is empty.
 
-**Every analogue input keeps its Mega `A`-number**, so `A0`–`A15` mean
-the same on both processors. Read out of PJRC's core; the test checks
-every row against `shields.py`.
+**The photosensors keep their Mega `A`-numbers, and the microphones take
+`A0`–`A4`**, where a Mega reads their bands. Read out of PJRC's core; the
+test checks every row against `shields.py`.
 
 | Teensy pin | Mega pin | Net | How |
 |---|---|---|---|
@@ -428,13 +437,11 @@ every row against `shields.py`.
 | 30 | `D24` | `male1/aux driven` | translator |
 | 31 | `D25` | `male2/aux driven` | translator |
 | 32 | `D2` | `amp shutdown` | translator |
-| 34 | `D4` | `analyser/strobe` | direct, 100 R |
-| 35 | `D3` | `analyser/reset` | direct, 100 R |
-| 14 | `A0` | `female1/analyser out` | direct; A0 |
-| 15 | `A1` | `female2/analyser out` | direct; A1 |
-| 16 | `A2` | `female3/analyser out` | direct; A2 |
-| 17 | `A3` | `male1/analyser out` | direct; A3 |
-| 18 | `A4` | `male2/analyser out` | direct; A4 |
+| 14 | `D26` | `female1/mic direct` | direct, 1 nF; A0 |
+| 15 | `D27` | `female2/mic direct` | direct, 1 nF; A1 |
+| 16 | `D28` | `female3/mic direct` | direct, 1 nF; A2 |
+| 17 | `D29` | `male1/mic direct` | direct, 1 nF; A3 |
+| 18 | `D30` | `male2/mic direct` | direct, 1 nF; A4 |
 | 19 | `A5` | `female1/photosensor` | divider; A5 |
 | 20 | `A6` | `female2/photosensor` | divider; A6 |
 | 21 | `A7` | `female3/photosensor` | divider; A7 |
@@ -451,8 +458,8 @@ every row against `shields.py`.
 (`analogWriteFrequency()` sets a whole unit, so two voices on one would
 play one pitch); the microphones are on 14–18, which **both converters
 reach**, so they can be sampled in pairs; nothing is on 13, the LED the
-bootloader blinks. **Spare**: 0, 1, 3, 33, 36, 37, 40, 41, each to a
-labelled pad.
+bootloader blinks. **Spare**: 0, 1, 3, 33, 34, 35, 36, 37, 40, 41, each to
+a labelled pad.
 
 | Part | Value | Package | Note |
 |---|---|---|---|
@@ -460,59 +467,115 @@ labelled pad.
 | Mega-pattern headers | female: five 1×8, one 1×10, one 2×18 | THT | |
 | translators ×4 | SN74LV4T125 | TSSOP-14 | `VCC` from `VIN`; `OE` to GND; spare input to GND; partial-power-down outputs (TI) |
 | translator input pull-downs ×15 | 100 K | 0603 | low while the Teensy boots or is absent |
+| microphone reservoirs ×5 | 1 nF C0G, Teensy pin to GND | 0603 | section 4a |
 | photosensor dividers ×11 | 100 K series, 150 K to GND, 10 nF C0G at the pin | 0603 | 5.25 V becomes 3.15 V |
-| analyser control series ×2 | 100 R | 0603 | |
 | `VIN` to `MEGA_5V` | Schottky, 1N5819HW | SOD-123 | |
 | decoupling | 100 nF per IC; 10 µF on `VIN` and on 3.3 V | 0603, 0805 | |
 
 ---
 
-## 4. The analyser shields
+## 4. The microphones and the analyser
 
-Both are 150 × 55 mm, run every processor-facing part from `IOREF`, and
-take the five microphones in body order.
+### 4a. The microphones, direct
 
-### 4a. The MSGEQ7 shield
+**`test goertzel ear` already proved it**: a MAX9814 module wired straight
+to a Mega's `A0`, nothing in between, sampled at 19.2 kSPS, heard every
+tone it was played. The Teensy gets the same signal the same way. Each
+microphone conductor branches on the backplane — to `JA1` for the MSGEQ7
+shield, and through **4.7 K** to its footprint pin — with **1 M to AGND**
+on the pin side, and the adapter adds **1 nF** at the Teensy pin.
 
-**v2's analyser array** in SMD, with the supply and the oscillator
-resistor on `IOREF` where v2 has `MEGA_5V` (on a Mega the same 5 V). Per
-channel, five times; held to `circuit.json` by the test:
+**What the microphone puts out** (MAX9814 datasheet, characterised at a
+3.3 V supply):
+
+| | Datasheet | Measured here, on the body's 5 V |
+|---|---|---|
+| output bias | 1.23 V (1.14–1.32 V) | 1.21 V (248 counts of 1023 at 5 V) |
+| swing, AGC regulating | 1.40 Vpp (1.26–1.54 Vpp) | about 1.44 Vpp in a quiet room (294 counts) |
+| swing, most it will give | 2.0 Vpp at 1 % THD | |
+| highest output | 2.45 V | |
+| output impedance; minimum load; capacitive load | 50 Ω; 5 kΩ; 200 pF | |
+
+So **the signal lives between about 0.2 and 2.3 V and cannot pass
+2.45 V**: inside the Teensy's 0–3.3 V with 0.85 V to spare, and the
+measured module agrees with the datasheet on both bias and swing.
+
+**The three parts, and what each is for:**
+
+- **4.7 K series**: the protection a Teensy needs and a Mega did not.
+  The datasheet's 2.45 V is at a 3.3 V supply and the modules run on 5 V,
+  and a harness conductor shorted to 5 V is a fault worth surviving: it
+  would push at most 0.3 mA into the pin's clamp. It also keeps the
+  backplane's copper off the MAX9814's 200 pF budget, which the cable has
+  already spent, and is a negligible load against its 5 kΩ minimum.
+- **1 M to AGND**: a microphone that is unplugged reads a flat **0 V**,
+  not a ghost of its neighbour (an open ADC pin reads 95 % of the channel
+  converted before it, measured on `microphone_sampler`). It takes 0.5 %
+  off the signal. So the bias is a reading: **0 V** nothing plugged in,
+  **about 1.23 V** a live MAX9814, **about 0.75 V** the dead module of
+  `diagnosing a microphone` (its bias 475 mV low).
+- **1 nF at the Teensy pin**: the converter's sampling kick lands on it
+  rather than on the cable. With the 4.7 K it is a 34 kHz first-order
+  low-pass: a fraction of a decibel at the highest pitch any card
+  carries, and all the anti-aliasing the Mega's 19.2 kSPS test shows is
+  needed at the Teensy's 44 kSPS.
+
+**No gain, no offset, no buffer.** The signal uses 61 % of the Teensy's
+range, about 2480 of its 4096 counts, against the 294 counts of 1023 the
+Mega's test worked with. The third that is left is headroom for the moment before
+the AGC reacts to a sudden sound (1.1 ms in the datasheet, with its own
+timing capacitor).
+
+### 4b. The MSGEQ7 shield: the Mega's ear
+
+**v2's analyser array** in SMD, supplied from `MEGA_5V` exactly as on v2.
+150 × 55 mm. Per channel, five times; held to `circuit.json` by the test:
 
 | MSGEQ7 part | Value | Package | v2 (female1's) | Note |
 |---|---|---|---|---|
 | microphone series | 47K | 0603, 1 % | `R311` | |
 | microphone shunt | 6K8 | 0603, 1 % | `R316` | to AGND |
 | input coupling | 100nF | 0603 X7R | `C312` | |
-| oscillator resistor | 200K 1% | 0603, 1 % | `R313` | to `IOREF` |
+| oscillator resistor | 200K 1% | 0603, 1 % | `R313` | to `MEGA_5V` |
 | oscillator capacitor | 33pF C0G | 0603 | `C314` | close to pin 8 |
 | reference bypass | 100nF | 0603 | `C316` | pin 6 is a reference, **never grounded** |
 | attenuator bypass | ATTEN BYPASS (OPEN) | solder jumper | `JS3` | bridged only after measuring |
-| supply bypass | 100 nF, `IOREF` to AGND | 0603 | | |
+| supply bypass | 100 nF, `MEGA_5V` to AGND | 0603 | | |
 | analyser | `MSGEQ7N` | SOIC-8 | `U3` | buy six from an authorised distributor |
 
-With a Teensy it runs at 3.3 V, inside its 2.7–5.5 V range; whether the
-bands hold there is a measurement, and only the step-2 comparison needs
-it.
+**With the Teensy the slot is empty.** Left in by mistake it does no
+harm: its outputs reach footprint pins the adapter does not connect.
 
-### 4b. The direct shield
+### 4c. Voltages and references, checked
 
-Per microphone, `thomas or teensy` 4c's buffer:
+**The Teensy's reference is fixed at its own 3.3 V** (`analogReference()`
+does nothing on a Teensy 4), so the best use of it is to bring every
+signal inside 0–3.3 V with no more margin than safety needs. **The Mega
+reads against `AVcc`, its own USB 5 V**, which is also the MSGEQ7's
+supply.
 
-| Part | Value | Package | Note |
-|---|---|---|---|
-| input bias | 1 M to AGND | 0603 | **an unplugged microphone reads a flat 0 V** |
-| input resistors | 10 K, 10 K | 0603, 1 % | Sallen–Key, unity gain |
-| feedback capacitor | 2.2 nF C0G | 0603 | |
-| ground capacitor | 1 nF C0G to AGND | 0603 | about 10.7 kHz, Q 0.74 |
-| op-amp | MCP6004, on `IOREF` | SOIC-14 | two quads; unused sections as followers to AGND |
-| output | 100 R, then 1 nF C0G to AGND | 0603 | |
-| bench input | JST EH 3: GND, `+5V`, signal | THT | a body's MAX9814 plugs in |
-| channel 0 source | 1×3 header and shunt | THT | `HARNESS` or `BENCH` |
-| decoupling | 100 nF + 10 µF per quad | 0603, 0805 | |
+| Signal | Read on | Reference | Range at the pin | Span used |
+|---|---|---|---|---|
+| microphone, direct | Teensy A0–A4 | 3.3 V | 0.23–2.23 V; 2.45 V highest | 61 % |
+| photosensor, divided | Teensy A5–A15 | 3.3 V | 0–3.15 V | 95 % |
+| photosensor | Mega A5–A15 | 5 V | 0–5.25 V | 100 % |
+| MSGEQ7 band | Mega A0–A4 | 5 V | 0 V to its own 5 V supply | ratiometric |
+| microphone, direct | Mega D26–D30 | not read | 0.23–2.23 V | |
 
-**DC-coupled on purpose**, so the bias is a reading: **0 V** nothing
-plugged in, **about 1.25 V** a live MAX9814, **about 0.78 V** the dead
-module of `diagnosing a microphone`.
+- **The microphones** are not scaled up on the Teensy: section 4a's
+  headroom is worth more than the extra counts.
+- **The photosensors** on the Teensy are divided by 0.6, so 5.25 V — the
+  top of a USB-class 5 V rail — arrives as 3.15 V: 95 % of the range,
+  under it by 0.15 V. On the Mega they read as v2 does; a sensor on the
+  jack's 5 V above the USB's 5 V reads 1023, as it always has.
+- **The MSGEQ7** runs from the same rail the Mega reads against, so its
+  bands are ratiometric and use the whole range.
+- **The Mega's internal 2.56 V reference** would suit a microphone on a
+  Mega's own `A`-pin, as in `test goertzel ear`, but the photosensors need
+  the full 5 V on the same converter, so the piece stays on `AVcc`. The
+  test worked on `AVcc` anyway.
+- **Digital lines**: everything a Teensy drives toward a body or a card
+  is translated to 5 V; nothing at 5 V is driven toward a Teensy.
 
 ---
 
@@ -570,7 +633,7 @@ as built:
 So **a card carries an octave of pitch in software**, and even at its
 edges it is cleaner than Thomas's channels are at their own pitch (21–23
 dB). The corners are half an octave apart, so every pitch from 106 Hz to
-9.6 kHz has a card. **Build the five of step 4 first**; the rest when a
+9.6 kHz has a card. **Build the five of step 3 first**; the rest when a
 pitch needs them.
 
 | Card | Corner | Sweet window | Allowed window | `Ra` (×2) | `Rb` (×2) |
@@ -632,8 +695,8 @@ marker. Every test pad carries its name.
 | beside each voice slot | the slot's line in 2d, e.g. `JV1 · FEMALE1 · MEGA D6 · TEENSY 2`, and under it `CARD ______  PITCH ______ Hz` |
 | along the voice slot row | `SLOT N = BODY N` |
 | beside each slot's key | `KEY` with an arrow to the missing pin; `1` at pin 1 |
-| beside `JA1` | `JA1 · ANALYSER · MSGEQ7 OR DIRECT` and `MIC ORDER F1 F2 F3 M1 M2 · MODULE N = BODY N` |
-| `IOREF` pad | `IOREF: 5 V = MEGA · 3.3 V = TEENSY` |
+| beside `JA1` | `JA1 · MSGEQ7 ANALYSER · MEGA ONLY · EMPTY WITH TEENSY` and `MIC ORDER F1 F2 F3 M1 M2 · MODULE N = BODY N` |
+| beside the microphone resistors | `MIC DIRECT · 4.7 K · TO TEENSY A0–A4` |
 | `M1` and `J7` | `U2D2` and `SERVO BUS · 12 V` |
 | rails | `BOARD +5V`, `+12V`, `MEGA 5V (COMPUTING USB)` |
 | DSUBs | as v2, with `B-J4 · NO POWER` |
@@ -641,8 +704,9 @@ marker. Every test pad carries its name.
 
 **Test pads, front**: `TONE 1`–`TONE 5` and `LINE 1`–`LINE 5` beside each
 voice slot (what goes into a card and what comes out); `MIC 1`–`MIC 5`
-and `ANA 1`–`ANA 5` beside `JA1`; `IOREF`, `MEGA 5V`, `+5V`, `+12V`,
-`GND`, `AGND`.
+(the conductor) and `MIC DIRECT 1`–`MIC DIRECT 5` (after the 4.7 K, where
+a meter reads the bias: 1.23 V live, 0 V unplugged); `ANA 1`–`ANA 5`
+beside `JA1`; `MEGA 5V`, `+5V`, `+12V`, `GND`, `AGND`.
 
 ### Backplane, back (the computing slot)
 
@@ -657,17 +721,15 @@ and the four mounting holes marked `M3`.
 | across the Teensy sockets | `3.3 V · NOT 5 V TOLERANT` |
 | socket outline | `USB ↑` and `PIN 0` / `VIN` at their ends, so the Teensy cannot go in reversed |
 | around the translators | `POWERED BY TEENSY USB` |
-| spare pads | their pin numbers: `0 1 3 33 36 37 40 41` |
+| by the microphone reservoirs | `MIC A0–A4 · DIRECT` |
+| spare pads | their pin numbers: `0 1 3 33 34 35 36 37 40 41` |
 | test pads | `VIN`, `3V3`, `GND` |
 
-### Analyser shields
+### MSGEQ7 shield
 
-| Shield | Text |
-|---|---|
-| MSGEQ7 | `ANALYSER · 5 × MSGEQ7 · BANDS`; per channel `CH0 F1` … `CH4 M2`; by each bypass jumper `OPEN UNLESS MEASURED`; by each pin 6 `REF · NEVER GROUND` |
-| direct | `ANALYSER · DIRECT TO TEENSY · RAW SAMPLES`; per channel `CH0 F1` … `CH4 M2`; the channel-0 header `HARNESS ◂ CH0 ▸ BENCH`; the bench connector `BENCH MIC · GND 5V SIG`; `UNPLUGGED MIC = 0 V` |
-
-Test pads on both: each output `ANA 0`–`ANA 4`, `IOREF`, `AGND`.
+`MSGEQ7 ANALYSER · MEGA ONLY`; per channel `CH0 F1` … `CH4 M2`; by each
+bypass jumper `OPEN UNLESS MEASURED`; by each pin 6 `REF · NEVER GROUND`.
+Test pads `ANA 0`–`ANA 4`, `MEGA 5V`, `AGND`.
 
 ### Voice cards
 
@@ -710,7 +772,8 @@ So step 2 plays the Mega's pitches exactly. Code:
 
 ### 7b. Ears
 
-Pins 14–18 reach both converters, so a frame is three paired conversions
+The microphones arrive on pins 14–18, straight from the MAX9814 (4a).
+Those pins reach both converters, so a frame is three paired conversions
 — about **44 kSPS per microphone** (*check* the conversion time; the
 first bench measurement).
 
@@ -741,15 +804,15 @@ The analysis is already written: `test_goertzel_ear`'s `goertzel.py`.
 | pin `#define`s | the second set, 3b |
 | `LightSensor::read()` | 12-bit read **scaled to Mega counts**, so `params.json` thresholds keep their meaning |
 | `Voice` | **rewritten**: the register code becomes the three calls of 7a; `<body>/speaker` gains an optional `hz` |
-| `Analyser` | unchanged but for a `delayMicroseconds(1)` in the reset pulse |
+| `Analyser` | **Mega only**: the Teensy build leaves it out, having no MSGEQ7 |
 | `Female`, `Male` | **unchanged** |
 | object initialisation | unchanged but for pin names |
 | `greeting()` | gains `"board"`: `"mega2560"` or `"teensy41"` |
 | `setup()` | unchanged |
 | `loop()` | gains the port-open behaviour below |
-| new paths | `microphones/capture` |
+| new paths | `microphones/capture` (the Teensy's), replacing `microphones` (the Mega's bands) |
 
-**Four things the Mega does by accident and the Teensy must do on
+**Three things the Mega does by accident and the Teensy must do on
 purpose**, each of which fails silently otherwise:
 
 - **Greet when the port opens.** Opening a Mega's port reboots it and it
@@ -758,8 +821,6 @@ purpose**, each of which fails silently otherwise:
 - **Go quiet when the port opens or closes.** Return to the boot state —
   pixels off, voices silent — on each DTR edge, so a crashed program
   never leaves a body singing.
-- **Stretch the MSGEQ7 reset pulse.** Its 100 ns minimum was met by the
-  Mega's slow `digitalWrite`; on a Teensy it needs the delay above.
 - **Scale the light sensors**, above.
 
 And one thing the driver must never do: **134 baud reboots a Teensy into
@@ -776,8 +837,8 @@ contain it. The test pins that.
   of each fitted active card is noted beside it in `params.json` (the
   card says it in its silkscreen), and the page refuses a pitch outside
   the card's allowed window.
-- `drivers/hearing/` stops being emulated where the direct shield is
-  fitted, through `goertzel.py`.
+- `drivers/hearing/` stops being emulated on the Teensy, through
+  `goertzel.py`.
 
 ---
 
@@ -792,8 +853,7 @@ for connectors and sockets:
 | DSUB-15s, `J2`, `J6`, `J7`, Mega mating headers | backplane |
 | `JA1`, `JV1`–`JV5` | backplane |
 | Mega-pattern female headers, Teensy sockets | Teensy adapter |
-| slot sockets | every shield and card |
-| bench connector, channel-0 header | direct analyser shield |
+| slot sockets | the MSGEQ7 shield and every card |
 
 **Slot contacts gold on both halves**; the socket's cavity at the key is
 plugged.
@@ -804,9 +864,11 @@ plugged.
 
 - **The backplane keeps v2's outline, fixed connectors, Mega position
   and AGND region**; it is four layers, the adapter four, the cards and
-  analysers two.
-- **Voice slots near the DSUBs' line-out pins, the analyser slot near
-  the microphone pins**, both in the AGND region; `JP1` the only bond.
+  the MSGEQ7 shield two.
+- **Voice slots near the DSUBs' line-out pins; `JA1` and the five 4.7 K
+  near the microphone pins**, in the AGND region; `JP1` the only bond.
+  The direct microphone traces run over AGND to the footprint, away
+  from the tone lines.
 - **The tone lines are the backplane's noisiest nets**: short, over
   unbroken ground, away from the microphones.
 - **Heights** — cards in front, the adapter behind — are a dry fit
@@ -817,17 +879,17 @@ plugged.
 ## 10. Bring-up and changing a shield
 
 1. **Bare backplane**: continuity and isolation as in the v2 README;
-   `IOREF` isolated from both 5 V rails with no computing shield; every
-   NeoPixel line and every `LINE` pad at 0 V through its pull-down.
+   every NeoPixel line and every `LINE` pad at 0 V through its
+   pull-down; every `MIC DIRECT` pad at 0 V with no microphone.
 2. **Step 1**: Mega, MSGEQ7 shield, five Thomas cards, firmware 4, then
    `test audio loop` and `test audio bringup` exactly as on v2.
    **The backplane's acceptance test.**
-3. **Step 2**: the Teensy adapter in the Mega's place, same shields,
-   firmware 5 at the Mega's pitches; the same two tests pass.
-4. **Step 3**: the direct shield; polled capture and `goertzel.py`, every
-   tone on its own bin, and each microphone's bias read on the page.
-5. **Step 4**: the five active cards, still at the Mega's pitches.
-6. **Then** free the pitches within each card's window, and
+3. **Step 2**: the Teensy adapter in the Mega's place, the analyser slot
+   empty, firmware 5 at the Mega's pitches. A meter on each `MIC DIRECT`
+   pad first: about 1.23 V. Then polled capture and `goertzel.py`: every
+   tone on its own bin, heard by the expected microphones.
+4. **Step 3**: the five active cards, still at the Mega's pitches.
+5. **Then** free the pitches within each card's window, and
    `next pcb` section 3's harness measurement with both card kinds.
 
 **Changing a shield**: stop the piece from the page, unplug the rack
@@ -843,12 +905,11 @@ in its silkscreen box, power both back up together.
 | backplane | 1 | about v2's board cost |
 | Teensy adapter | 1 | EUR 45–60 |
 | MSGEQ7 shield | 1 | EUR 20–40 |
-| direct analyser shield | 1 | EUR 5–10 |
 | Thomas cards | 5 | EUR 10–20 |
 | active cards, assembled | 5 to 13 | EUR 3–6 each |
 
-**The Teensy solution on its own** — adapter, direct shield, five active
-cards — is about **EUR 65–100**.
+**The Teensy solution on its own** — adapter and five active cards — is
+about **EUR 60–90**.
 
 ---
 
@@ -856,7 +917,9 @@ cards — is about **EUR 65–100**.
 
 - The Teensy's conversion time, and so the sampling rate (7b).
 - The continuous stream (7b).
-- The MSGEQ7 at 3.3 V, for the step-2 comparison only.
+- The MAX9814's highest output on a 5 V supply: the datasheet gives it at
+  3.3 V. The 4.7 K makes it harmless either way; the measured swing on 5 V
+  matches the 3.3 V figures.
 - Heights against the enclosure (9).
 - `next pcb` section 3's harness measurement and section 5's amplifier
   rail; nothing here depends on either.

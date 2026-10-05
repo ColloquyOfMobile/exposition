@@ -260,6 +260,50 @@ def card_for(hz: float) -> float:
     raise ValueError(f"{hz} Hz is outside every card's sweet window")
 
 
+# --- The analogue inputs ---------------------------------------------------
+#
+# The microphone, out of the MAX9814 datasheet's electrical
+# characteristics (Maxim; characterised at a 3.3 V supply). This
+# repository measured the same part on the body's 5 V at 1.21 V of bias
+# and about 1.44 Vpp in a quiet room (`scope > diagnosing a microphone`),
+# which is the datasheet's bias and its 1.40 Vpp regulated level.
+MAX9814_BIAS: Final = 1.23  # V, MICOUT unconnected
+MAX9814_MOST_VPP: Final = 2.0  # V peak to peak, maximum output at 1 % THD
+MAX9814_HIGHEST: Final = 2.45  # V, MICOUT high output, sourcing 1 mA
+
+# Its path to the Teensy: 4.7 K on the backplane, 1 M to AGND after it,
+# 1 nF at the pin on the adapter.
+MIC_SERIES: Final = 4.7e3  # ohms
+MIC_RESERVOIR: Final = 1e-9  # farads
+
+# `analogReference()` is empty on a Teensy 4: the converter reads against
+# its own 3.3 V and nothing else.
+TEENSY41_REFERENCE: Final = 3.3  # V
+TEENSY41_COUNTS: Final = 4096
+
+# A photosensor is a 3-pin module on the body's 5 V; 5.25 V is the top of
+# a USB-class 5 V rail. The adapter divides it 100 K over 150 K.
+PHOTOSENSOR_HIGHEST: Final = 5.25  # V
+PHOTOSENSOR_DIVIDER: Final = 150e3 / (100e3 + 150e3)
+
+
+def microphone_window() -> tuple[float, float]:
+    """The lowest and highest a microphone's output reaches at its most."""
+    half = MAX9814_MOST_VPP / 2
+    return MAX9814_BIAS - half, MAX9814_BIAS + half
+
+
+def span_used(low: float, high: float, reference: float) -> float:
+    """The fraction of a converter's range a signal from low to high
+    occupies."""
+    return (high - low) / reference
+
+
+def microphone_corner() -> float:
+    """The 4.7 K and the 1 nF at the pin, as a low-pass, in hertz."""
+    return 1 / (2 * math.pi * MIC_SERIES * MIC_RESERVOIR)
+
+
 # --- Level -----------------------------------------------------------------
 #
 # The card divides the 5 V square to 2.0 Vpp around its own mid-rail

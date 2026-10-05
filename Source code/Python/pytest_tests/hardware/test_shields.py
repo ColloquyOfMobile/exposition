@@ -36,8 +36,12 @@ DOCUMENT = Shields.folder / Shields.file_name
 CIRCUIT = KICAD / "electronic box v2" / "colloquy-control-v2" / "circuit.json"
 SKETCH = firmware.SKETCH_PATH
 
-# The one footprint pin the backplane adds.
-ADDED_PINS = {"IORF"}
+# The footprint pins the backplane adds: the microphones, direct.
+ADDED_PINS = {"D26", "D27", "D28", "D29", "D30"}
+
+# The footprint pins the Teensy adapter leaves unconnected: the analyser's,
+# since with the Teensy the analyser slot is empty.
+NOT_ON_THE_ADAPTER = {"A0", "A1", "A2", "A3", "A4", "D3", "D4"}
 
 
 # --- reading the files ------------------------------------------------------
@@ -131,12 +135,28 @@ def test_the_computing_slot_is_the_v2_boards_footprint_pin_for_pin():
     assert written == v2
 
 
-def test_the_only_added_footprint_pin_is_ioref_and_it_is_free_on_v2():
-    """If v2 used it, the Mega would no longer see the v2 board."""
+def test_the_added_footprint_pins_are_free_on_v2_and_in_firmware_4():
+    """The five direct microphones. If v2 or firmware 4 used any of these
+    pins, the Mega would no longer see the v2 board."""
     _, added = _table("Added pin")
-
     assert {row[0] for row in added} == ADDED_PINS
     assert not ADDED_PINS & set(_pins("A1"))
+
+    sketch = SKETCH.read_text(encoding="utf-8")
+    defined = {
+        f"D{number}"
+        for number in re.findall(r"^#define \w+ (\d+)\b", sketch, re.MULTILINE)
+    }
+    assert not ADDED_PINS & defined
+
+
+def test_each_microphone_reaches_its_added_pin_in_body_order():
+    """D26 is female1's, D30 male2's: body order, which is module order."""
+    _, added = _table("Added pin")
+
+    assert [row[1] for row in added] == [f"{body}/mic direct" for body in audio.BODIES]
+    for row, body in zip(added, audio.BODIES):
+        assert f"from {body}/microphone" in row[2]
 
 
 # --- section 2d: the voice slots -------------------------------------------
@@ -181,15 +201,18 @@ def test_no_teensy_pin_is_used_twice_and_the_led_is_left_alone():
     assert shields.TEENSY41_LED not in pins
 
 
-def test_the_adapter_carries_every_footprint_net_once_and_on_its_own_pin():
+def test_the_adapter_carries_every_footprint_net_but_the_analysers_once():
     """The adapter stands in for a Mega, so every net the footprint
-    carries has to arrive on the Mega pin the backplane expects it on."""
-    # IOREF is the Teensy's 3.3 V, a supply rather than a pin.
-    footprint = {pin: net for pin, net in _footprint().items() if pin != "IORF"}
+    carries has to arrive on the Mega pin the backplane expects it on -
+    except the analyser's, which a Teensy never reads."""
+    footprint = {
+        pin: net for pin, net in _footprint().items() if pin not in NOT_ON_THE_ADAPTER
+    }
     rows = _teensy_rows()
 
     assert {row[1]: row[2] for row in rows} == footprint
     assert len(rows) == len(footprint)
+    assert not NOT_ON_THE_ADAPTER & {row[1] for row in rows}
 
 
 def test_five_voices_sit_on_five_timer_units():
@@ -205,7 +228,7 @@ def test_five_voices_sit_on_five_timer_units():
 
 
 def test_the_microphones_are_on_pins_both_converters_reach_in_body_order():
-    microphones = [row for row in _teensy_rows() if row[2].endswith("/analyser out")]
+    microphones = [row for row in _teensy_rows() if row[2].endswith("/mic direct")]
     pins = [int(row[0]) for row in microphones]
 
     assert pins == [14, 15, 16, 17, 18]
@@ -221,24 +244,25 @@ def _a_number(pin):
 def test_every_analogue_input_is_on_an_analogue_pin_named_right():
     for row in _teensy_rows():
         pin = int(row[0])
-        if "photosensor" in row[2] or row[2].endswith("/analyser out"):
+        if "photosensor" in row[2] or row[2].endswith("/mic direct"):
             assert pin in shields.TEENSY41_ANALOG, row
             assert row[3].endswith(f"A{_a_number(pin)}"), row
 
 
 def test_the_photosensors_are_divided_and_the_microphones_are_not():
-    """A photosensor module can put 5 V on its line; the analyser
-    shields' outputs are bounded by IOREF and go direct."""
+    """A photosensor module can put 5 V on its line; a MAX9814 cannot pass
+    2.45 V, so the microphones go direct, with only the reservoir at the
+    pin (the 4.7 K is on the backplane)."""
     for row in _teensy_rows():
         if "photosensor" in row[2]:
             assert row[3].startswith("divider"), row
-        if row[2].endswith("/analyser out"):
-            assert row[3].startswith("direct"), row
+        if row[2].endswith("/mic direct"):
+            assert row[3].startswith("direct, 1 nF"), row
 
 
 def test_what_leaves_the_backplane_is_translated_and_what_stays_is_not():
     """NeoPixels, tones, aux and shutdown go to bodies and cards at 5 V;
-    the analyser's controls stay at IOREF."""
+    nothing else on the adapter is translated."""
     translated = [row for row in _teensy_rows() if row[3].startswith("translator")]
     for row in _teensy_rows():
         net = row[2]
@@ -249,13 +273,74 @@ def test_what_leaves_the_backplane_is_translated_and_what_stays_is_not():
     assert len(translated) <= 4 * 4
 
 
-def test_every_analogue_input_keeps_its_mega_a_number():
-    """A0-A15 mean the same on both processors."""
-    analogue = [row for row in _teensy_rows() if row[1].startswith("A")]
+def test_the_photosensors_keep_their_mega_a_numbers():
+    """A5-A15 mean the same on both processors; A0-A4 are the bands on a
+    Mega and the microphones themselves on the Teensy."""
+    photosensors = [row for row in _teensy_rows() if "photosensor" in row[2]]
 
-    assert len(analogue) == 16
-    for row in analogue:
+    assert len(photosensors) == 11
+    for row in photosensors:
         assert row[1] == f"A{_a_number(int(row[0]))}", row
+
+
+# --- section 4: the microphones, and every voltage against its reference ----
+
+
+def test_the_microphone_table_is_the_datasheets_and_the_measured_part():
+    datasheet = {row[0]: _numbers(row[1]) for row in _microphone_rows()}
+
+    assert datasheet["output bias"][0] == shields.MAX9814_BIAS
+    assert datasheet["swing, most it will give"][0] == shields.MAX9814_MOST_VPP
+    assert datasheet["highest output"] == [shields.MAX9814_HIGHEST]
+
+
+def _microphone_rows():
+    lines = DOCUMENT.read_text(encoding="utf-8").splitlines()
+    start = lines.index("| | Datasheet | Measured here, on the body's 5 V |")
+    rows = []
+    for line in lines[start + 2:]:
+        if not line.startswith("|"):
+            break
+        rows.append(_cells(line))
+    return rows
+
+
+def test_nothing_reaches_a_teensy_pin_above_its_reference():
+    """Section 4c, recomputed: the microphones as they come, the
+    photosensors divided, each against the Teensy's fixed 3.3 V."""
+    _, rows = _table("Signal")
+    teensy = [row for row in rows if row[1].startswith("Teensy")]
+    assert len(teensy) == 2
+
+    microphone, photosensor = teensy
+    low, high = shields.microphone_window()
+    assert _numbers(microphone[3]) == pytest.approx(
+        [round(low, 2), round(high, 2), shields.MAX9814_HIGHEST]
+    )
+    assert shields.MAX9814_HIGHEST < shields.TEENSY41_REFERENCE
+    assert _numbers(microphone[4]) == [
+        round(100 * shields.span_used(low, high, shields.TEENSY41_REFERENCE))
+    ]
+
+    top = shields.PHOTOSENSOR_HIGHEST * shields.PHOTOSENSOR_DIVIDER
+    assert _numbers(photosensor[3]) == pytest.approx([0, round(top, 2)])
+    assert top < shields.TEENSY41_REFERENCE
+    assert _numbers(photosensor[4]) == [
+        round(100 * shields.span_used(0, top, shields.TEENSY41_REFERENCE))
+    ]
+    for row in teensy:
+        assert row[2] == f"{shields.TEENSY41_REFERENCE} V"
+
+
+def test_the_microphone_figures_quoted_in_the_prose_are_the_computed_ones():
+    text = DOCUMENT.read_text(encoding="utf-8")
+    low, high = shields.microphone_window()
+    counts = shields.span_used(low, high, shields.TEENSY41_REFERENCE) * shields.TEENSY41_COUNTS
+
+    assert f"about {round(counts, -1):.0f} of its 4096 counts" in text
+    assert f"a {shields.microphone_corner() / 1000:.0f} kHz first-order" in text
+    spare = shields.TEENSY41_REFERENCE - shields.MAX9814_HIGHEST
+    assert f"with {spare:.2f} V to spare" in text
 
 
 # --- sections 4a and 5a: what leaves v2 keeps v2's values ------------------
