@@ -38,10 +38,11 @@ that get confused with each other the moment they share a page:
 - **shields** - the sixth: the main board becomes a backplane with no
   silicon on it, and every solution is a set of shields in its slots -
   the U2D2, a computing shield (the Mega itself, or a Teensy 4.1 on an
-  adapter in the Mega's footprint), the MSGEQ7 analyser shield (the
-  Mega's ear; the Teensy takes the microphones directly) and five voice
-  cards, the output filters, whose corner is four resistors. Its figures
-  are computed by `shields.py`.
+  adapter in the Mega's footprint), the analyser carrier (Thomas's five
+  DFRobot MSGEQ7 modules: the Mega's ear; the Teensy takes the
+  microphones directly) and five voice cards, the output filters:
+  Thomas's RC, its pitch set by through-hole R and C. Its figures are
+  computed by `shields.py`.
 - **microphone board** - not a solution but a board: one per body,
   carrying the MAX9814 and screwed to the body's aluminium extrusion,
   in place of Thomas's breakout on its hand-wired carrier. Its figures

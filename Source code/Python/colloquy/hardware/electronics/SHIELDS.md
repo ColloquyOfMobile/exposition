@@ -5,13 +5,15 @@
 solution shares, and **slots**. What differs between solutions is a
 **shield** in a slot: the **U2D2** (already one), a **computing shield**
 (the Mega 2560 itself, or a Teensy 4.1 on an adapter in the Mega's
-footprint), the **MSGEQ7 analyser shield** (the Mega's ear), and five
-**voice cards**, the output filters, one per body. **The Teensy needs no
+footprint), the **MSGEQ7 analyser shield** (Thomas's five DFRobot
+modules on a carrier: the Mega's ear), and five **voice cards**, the
+output filters, one per body: **Thomas's RC filter, its pitch set by
+through-hole R and C**. **The Teensy needs no
 analyser: the microphones reach it straight from the backplane.** Trying
 another solution is changing a shield.
 
-Written 2026-10-03; **simplified 2026-10-04**; **direct microphones
-2026-10-05**. The people building it are qualified, so this says what to
+Written 2026-10-03; **simplified 2026-10-04**; **direct microphones,
+Thomas's filter on every card and his analyser modules 2026-10-05**. The people building it are qualified, so this says what to
 build, in what order, and how to tell the pieces apart, and leaves out
 what a competent hand does anyway. **There is no shield identification in
 hardware: the silkscreen does that job** (section 6). It is the sixth
@@ -27,7 +29,8 @@ audio parts moved into shields.
 > on the computer**. The output filters are shields too, so a frequency
 > can be changed quickly: **fixed** for the Mega, **changeable** for the
 > Teensy, made by **a timer and a filter**, not a DAC. **SMD** for every
-> simple part.
+> simple part; **through-hole** for the parts that set a pitch; the
+> analysers are **the modules already bought**.
 
 **Sources.** The backplane's pins and every value moved into a shield are
 v2's `circuit.json`; the Teensy facts are PJRC's own code (`pwm.c`,
@@ -49,10 +52,9 @@ section 12.
 
 | Step | Build | What it gives | Why |
 |---|---|---|---|
-| **1** | backplane, five Thomas cards, MSGEQ7 shield; the Mega plugs in | **the v2 board**, electrically; firmware 4 unmodified | **the exhibition depends on this step alone** |
+| **1** | backplane, five Thomas cards, the analyser carrier with Thomas's five modules; the Mega plugs in | **the v2 board**, electrically; firmware 4 unmodified | **the exhibition depends on this step alone** |
 | 2 | Teensy adapter in the Mega's place; the analyser slot emptied | the same voices on the Teensy, and the microphones on the laptop | proves the port, and hears at any pitch |
-| 3 | five active cards: 1414, 4000, 8000, 250, 500 | cleaner voices at today's pitches | the first step away from Thomas's sound |
-| later | other card corners; the continuous sample stream | any pitch; hearing while the piece runs | |
+| later | new pitches: re-value the cards from section 5b; the continuous sample stream | any pitch; hearing while the piece runs | |
 
 **Each step changes as little as it can**, and its test is the previous
 step's test passing again (section 10). Order step 1 first and on its own
@@ -70,7 +72,7 @@ band is what changes with no shield moving at all. One body stands for
 all five.
 
 <div style="overflow-x: auto; margin: 1rem 0;">
-<svg viewBox="0 0 1300 890" role="img" aria-label="Block diagram of what swaps and what stays in the shield solution. Fixed, the same in every solution: the laptop with its two USB leads; the backplane with its DSUB-15s, power entry, servo bus header, build-out, NeoPixel and photosensor resistors, pull-downs, a 4.7 K and 1 M on each direct microphone, eight LEDs, test pins and ground bonds; the U2D2; the DSUB harness with its four harness boards; and in each of the five bodies the divider, amplifier and speaker, the NeoPixels and photosensors, the MAX9814 microphone and the Dynamixel servo. Swappable, powered down, one of two shields per slot: the computing slot, which is the Mega footprint, takes the Mega 2560 on firmware 4 at 5 V or the Teensy 4.1 adapter on firmware 5 at 3.3 V behind translators; each of the five voice slots takes, on its own, a Thomas card, passive with one fixed pitch, in five variants one per body, or an active card, fourth order with the pitch free within its octave, in thirteen variants with corners from 177 Hz to 11.3 kHz; the analyser slot takes five MSGEQ7s, the Mega's ear, and is left empty with the Teensy. Signals: USB from the laptop to the computing slot and to the U2D2; five 5 V tones from the computing slot to the voice slots; five line outs through the harness to the bodies; NeoPixels and photosensors between the computing slot and the bodies; five microphones from the bodies, each to the analyser slot, whose band outputs return to the computing slot, and also straight to the computing slot through 4.7 K, where the Teensy reads them on A0 to A4; the Dynamixel bus from the U2D2 to the servos. Set in software, with no shield moving: the pitch within the fitted card's octave on the Teensy, the firmware that follows the computing shield, what each body sings, and the hearing, analysed on the laptop.">
+<svg viewBox="0 0 1300 890" role="img" aria-label="Block diagram of what swaps and what stays in the shield solution. Fixed, the same in every solution: the laptop with its two USB leads; the backplane with its DSUB-15s, power entry, servo bus header, build-out, NeoPixel and photosensor resistors, pull-downs, a 4.7 K and 1 M on each direct microphone, eight LEDs, test pins and ground bonds; the U2D2; the DSUB harness with its four harness boards; and in each of the five bodies the divider, amplifier and speaker, the NeoPixels and photosensors, the MAX9814 microphone and the Dynamixel servo. Swappable, powered down, one of two shields per slot: the computing slot, which is the Mega footprint, takes the Mega 2560 on firmware 4 at 5 V or the Teensy 4.1 adapter on firmware 5 at 3.3 V behind translators; each of the five voice slots takes, on its own, a voice card: Thomas's passive RC filter, the same card for both processors, its pitch set by through-hole resistors and capacitors; the analyser slot takes Thomas's five DFRobot MSGEQ7 modules on a carrier, the Mega's ear, and is left empty with the Teensy. Signals: USB from the laptop to the computing slot and to the U2D2; five 5 V tones from the computing slot to the voice slots; five line outs through the harness to the bodies; NeoPixels and photosensors between the computing slot and the bodies; five microphones from the bodies, each to the analyser slot, whose band outputs return to the computing slot, and also straight to the computing slot through 4.7 K, where the Teensy reads them on A0 to A4; the Dynamixel bus from the U2D2 to the servos. Set in software, with no shield moving: the pitch within a quarter octave of its card on the Teensy, the firmware that follows the computing shield, what each body sings, and the hearing, analysed on the laptop.">
 <defs>
 <marker id="sw-ax" viewBox="0 0 10 8" refX="9" refY="4" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="8" orient="auto"><polygon points="0,0 10,4 0,8" fill="currentColor"></polygon></marker>
 <pattern id="sw-hatch" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="currentColor" stroke-width="1.4" opacity="0.32"></line></pattern>
@@ -106,8 +108,7 @@ all five.
 <g fill="none" stroke="currentColor" stroke-width="1.7">
 <rect x="213" y="120" width="264" height="68" rx="3"></rect>
 <rect x="213" y="228" width="264" height="68" rx="3"></rect>
-<rect x="578" y="120" width="369" height="68" rx="3"></rect>
-<rect x="578" y="228" width="369" height="68" rx="3"></rect>
+<rect x="578" y="125" width="369" height="160" rx="3"></rect>
 <rect x="578" y="392" width="369" height="60" rx="3"></rect>
 </g>
 <rect x="213" y="392" width="264" height="60" rx="3" fill="url(#sw-hatch)" stroke="currentColor" stroke-width="1.7"></rect>
@@ -115,23 +116,21 @@ all five.
 <text x="345" y="148">Mega 2560</text>
 <text x="345" y="256">Teensy 4.1 adapter</text>
 <text x="345" y="418">U2D2</text>
-<text x="762" y="144">Thomas card</text>
-<text x="762" y="252">Active card</text>
-<text x="762" y="417">5 &#215; MSGEQ7</text>
+<text x="762" y="163">Voice card &#183; Thomas&#8217;s RC filter</text>
+<text x="762" y="417">5 &#215; MSGEQ7 module</text>
 </g>
 <g font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" text-anchor="middle" opacity="0.72">
 <text x="345" y="169">firmware 4, unmodified &#183; 5 V</text>
 <text x="345" y="277">firmware 5 &#183; 3.3 V, translated</text>
 <text x="345" y="438">the same in every setup</text>
-<text x="762" y="162">passive, Thomas&#8217;s values &#183; one fixed pitch</text>
-<text x="762" y="178">5 variants, one per body</text>
-<text x="762" y="270">4th order &#183; pitch free within its octave</text>
-<text x="762" y="286">13 variants: corners 177 Hz &#8211; 11.3 kHz</text>
-<text x="762" y="437">the Mega&#8217;s ear &#183; leave the slot empty with the Teensy</text>
+<text x="762" y="190">the same card for the Mega and the Teensy</text>
+<text x="762" y="212">through-hole R and C set the pitch</text>
+<text x="762" y="234">Thomas&#8217;s five, or valued for any pitch</text>
+<text x="762" y="256">the Teensy moves it &#177; &#188; octave in software</text>
+<text x="762" y="437">Thomas&#8217;s DFRobot boards &#183; empty with the Teensy</text>
 </g>
 <g font-family="'IBM Plex Mono', monospace" font-size="11" font-weight="700" fill="currentColor" text-anchor="middle" opacity="0.9">
 <text x="345" y="213">&#8645; either one</text>
-<text x="762" y="213">&#8645; either one, in each slot</text>
 </g>
 <!-- fixed on the backplane -->
 <rect x="195" y="500" width="300" height="170" rx="5" fill="url(#sw-hatch)" stroke="currentColor" stroke-width="1.6"></rect>
@@ -193,14 +192,14 @@ all five.
 <rect x="20" y="715" width="1265" height="118" rx="6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="1.5 4" stroke-linecap="round"></rect>
 <text x="36" y="738" font-family="'IBM Plex Mono', monospace" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.75">SET IN SOFTWARE &#183; NO SHIELD MOVES</text>
 <g font-family="Chivo, sans-serif" font-size="12.5" font-weight="600" fill="currentColor">
-<text x="36" y="766">Pitch, within the fitted card&#8217;s octave</text>
+<text x="36" y="766">Pitch, within &#188; octave of its card</text>
 <text x="352" y="766">Firmware follows the computing shield</text>
 <text x="668" y="766">What each body sings</text>
 <text x="984" y="766">Hearing, on the laptop</text>
 </g>
 <g font-family="'IBM Plex Mono', monospace" font-size="10" fill="currentColor" opacity="0.72">
 <text x="36" y="788">Teensy only; a Mega plays its timers&#8217; five</text>
-<text x="36" y="804">a new octave is another active card</text>
+<text x="36" y="804">further: new R and C on the card</text>
 <text x="352" y="788">4 on the Mega, 5 on the Teensy</text>
 <text x="352" y="804">flashed from the page</text>
 <text x="668" y="788">tone on or off, from the page</text>
@@ -225,8 +224,8 @@ all five.
 | Slot | With the Mega | With the Teensy |
 |---|---|---|
 | computing | **the Mega 2560 itself**, firmware 4 | **Teensy 4.1 adapter**, firmware 5 |
-| analyser | **5 × MSGEQ7**, Thomas's network | **empty**: the microphones go straight to the Teensy |
-| voice × 5 | **Thomas card**: passive, one pitch | **active card**: 4th order, an octave of pitch |
+| analyser | **5 × MSGEQ7 module**, Thomas's DFRobot boards on a carrier | **empty**: the microphones go straight to the Teensy |
+| voice × 5 | **Thomas card**: his RC, his values | **the same card**, its R and C valued for the Teensy's pitch |
 | U2D2 | the U2D2, the same in both | |
 
 **Two rules:**
@@ -258,8 +257,8 @@ to `circuit.json` by its own test). The harness boards do not change.
 | **kept** | four DSUB-15s, `J2`, `J6`, `J7`, `Extra1`–`Extra3`, U2D2 mount `M1`, the Mega footprint `A1` (on the back) | as v2 |
 | **kept** | NeoPixel series 330 R; photosensor loads 10 K provisional; line-out build-outs 100 R; amp-shutdown pull-up 10 K | `RN1`–`RN7`, `RP1`–`RP11`, `R103`–`R503`, `RS1` |
 | **kept** | one AGND–GND bond, one bond per body audio return; 470 µF bulk; test pads; mounting holes | `JP1`–`JP6` |
-| **moved** to Thomas cards | the five passive filters | `R101`–`C502` |
-| **moved** to the MSGEQ7 shield | the five MSGEQ7s and their networks | `U1`–`U5` and theirs |
+| **moved** to the voice cards, through-hole | the five passive filters | `R101`–`C502` |
+| **replaced** by Thomas's five DFRobot modules on the analyser carrier | the five MSGEQ7s and their networks | `U1`–`U5` and theirs |
 | **added** | analyser slot `JA1`: 2 × 11 header, 2.54 mm, last pin removed as key | THT |
 | **added** | voice slots `JV1`–`JV5`: 2 × 3 header, 2.54 mm, last pin removed as key | THT |
 | **added** | M3 standoffs: one per card, two for the analyser shield | |
@@ -529,25 +528,32 @@ Mega's test worked with. The third that is left is headroom for the moment befor
 the AGC reacts to a sudden sound (1.1 ms in the datasheet, with its own
 timing capacitor).
 
-### 4b. The MSGEQ7 shield: the Mega's ear
+### 4b. The MSGEQ7 shield: Thomas's five modules, on a carrier
 
-**v2's analyser array** in SMD, supplied from `MEGA_5V` exactly as on v2.
-150 × 55 mm. Per channel, five times; held to `circuit.json` by the test:
+**The analysers are the five DFRobot "Audio Analyzer V2.0" modules
+(DFR0126) already bought and on Thomas's array**: each one an MSGEQ7
+with its own clock, reference and input parts, and its own `PWR` LED. The
+shield is a plain carrier for them, through-hole only: it holds the five
+on M3 nylon standoffs through their own mounting holes and wires them as
+Thomas's proto board does, with nothing between a microphone and its
+module.
 
-| MSGEQ7 part | Value | Package | v2 (female1's) | Note |
-|---|---|---|---|---|
-| microphone series | 47K | 0603, 1 % | `R311` | |
-| microphone shunt | 6K8 | 0603, 1 % | `R316` | to AGND |
-| input coupling | 100nF | 0603 X7R | `C312` | |
-| oscillator resistor | 200K 1% | 0603, 1 % | `R313` | to `MEGA_5V` |
-| oscillator capacitor | 33pF C0G | 0603 | `C314` | close to pin 8 |
-| reference bypass | 100nF | 0603 | `C316` | pin 6 is a reference, **never grounded** |
-| attenuator bypass | ATTEN BYPASS (OPEN) | solder jumper | `JS3` | bridged only after measuring |
-| supply bypass | 100 nF, `MEGA_5V` to AGND | 0603 | | |
-| analyser | `MSGEQ7N` | SOIC-8 | `U3` | buy six from an authorised distributor |
+| Per module | Connects to | As on Thomas's array |
+|---|---|---|
+| input header `R` (right channel) | its body's `microphone` | the microphone goes into `R`; `L` is unused |
+| input header `+` and `−` | `MEGA_5V` and AGND | the module's supply: the rail the Mega reads against |
+| control `S` | `analyser/strobe` | commoned across all five |
+| control `R` (reset) | `analyser/reset` | commoned across all five |
+| output connector | its `analyser out` net | the module's own 3-pin lead |
 
-**With the Teensy the slot is empty.** Left in by mistake it does no
-harm: its outputs reach footprint pins the adapter does not connect.
+**Measure one module before drawing the carrier.** DFRobot gives only
+"5 V, 30 × 20 mm"; the hole spacing and where its headers sit decide
+whether a module plugs straight into sockets on the carrier or is wired
+with short leads (Dupont for the headers, its own lead for the output).
+Either way the carrier is laid out for five modules in body order, and is
+as big as that needs: it need not stay 150 × 55 mm.
+
+**With the Teensy the slot is empty**, carrier and modules together.
 
 ### 4c. Voltages and references, checked
 
@@ -584,17 +590,25 @@ supply.
 
 ## 5. The voice cards
 
-**A card per slot**, so one body's pitch changes without touching the
-others. Each kind is one PCB, 30 × 42 mm, SMD on one side, a 2×3 socket
-beneath and one M3 screw; a variant is a BOM. Every card has a pad on its
-tone input and two 1-pin headers, `LINE` and `AGND`, 2.54 mm apart, so a
-powered speaker or a scope plugs straight on at the bench.
+**Every voice card is Thomas's filter**: two RC sections, `R1 = R2` and
+`C1 = C2`, from the tone to the line — his circuit, for the Mega and the
+Teensy alike. **The four parts that set the pitch are through-hole**:
+metal-film resistors and film capacitors, so a card is re-valued with a
+soldering iron, or with machine-pin sockets in the same holes if the
+parts are to be changed by hand. The rest is SMD: 100 K from the tone to
+GND, so an undriven slot idles at 0 V. A card per slot, so one body's
+pitch changes without touching the others; 30 × 42 mm, a 2 × 3 socket
+beneath and one M3 screw. Slot pin 5 (`+5V`) is not used by the card.
 
-### 5a. The Thomas card: passive, one pitch
+Every card has a pad on its tone input and two 1-pin headers, `LINE` and
+`AGND`, 2.54 mm apart, so a powered speaker or a scope plugs straight on
+at the bench.
 
-**Thomas's channel moved off the main board**: two RC sections, `R1 = R2`
-and `C1 = C2`, from tone to line, exactly v2's, plus 100 K from tone to
-GND so an undriven slot idles at 0 V. Five variants:
+### 5a. Thomas's five
+
+Exactly the v2 board's channels; the test holds this table to
+`circuit.json`. These are the cards for the Mega, and for the Teensy
+while it plays the Mega's pitches (step 2).
 
 | Thomas card | Body | Plays (Mega) | `R1 = R2` | `C1 = C2` | v2 |
 |---|---|---|---|---|---|
@@ -604,81 +618,55 @@ GND so an undriven slot idles at 0 V. Five variants:
 | 160 Hz | male1 | 162 Hz | 2K2 | 470nF | `R101`/`R102`, `C101`/`C102` |
 | 400 Hz | male2 | 405 Hz | 2K | 220nF | `R201`/`R202`, `C201`/`C202` |
 
-**Three capacitor lands in parallel per position**, so every value is made
-from stocked parts — 470 nF is 220 nF PPS + 220 nF PPS + 30 nF C0G — and
-unused lands are left empty. C0G or PPS film only, never X7R: each corner
-sits at its own tone and these carry DC.
+### 5b. A card for any other pitch
 
-### 5b. The active card: any pitch in an octave
+**The rule is Thomas's own**: he put each tone about **three times above
+its channel's corner** (2.3 to 3.6 on his five), where the fundamental
+loses about 10.5 dB and the third harmonic lands about 22 dB below it.
+For a pitch f, that is
 
-One quad op-amp (MCP6024, SOIC-14) on `+5V`:
+**R × C = 0.179 / f** (R in ohms, C in farads, f in hertz)
 
-1. **Input**: 15 K from the tone, 10 K to a 2.5 V reference, then a
-   buffer. The 5 V square becomes 2.0 Vpp, and its fundamental is
-   (4/π) × 2.0 = **2.55 Vpp**: the line level the body divider was sized
-   for.
-2. **Stage 1**: unity-gain Sallen–Key, two equal resistors `Ra`, 12 nF in
-   feedback, 10 nF to AGND — **Q 0.548**.
-3. **Stage 2**: the same with `Rb`, 22 nF and 3.3 nF — **Q 1.291**.
-   Together a fourth-order Butterworth.
-4. **Reference**: 10 K / 10 K across `+5V`, 10 µF, a follower.
-5. **Output**: 1 µF X7R and 100 K to AGND, the line centred on 0 V.
+with R kept between 1 K and 4.7 K — Thomas's own are 1K2 to 2K2, and a
+larger R loses more into the body's 25 K divider.
 
-**The four capacitors never change; the four resistors (two values) are
-the variant.** Where a pitch may sit on a card, computed for the cards
-as built:
+**The Teensy may move a pitch a quarter of an octave either way on a
+card** without re-valuing it: the level stays within 1.7 dB of the
+card's own and the third harmonic at least 21.1 dB down, which is
+Thomas's quality (21.0 to 23.1 dB on his five). Further than that, take
+the next row. Cards valued half an octave apart cover every pitch from
+149 Hz to 13.5 kHz:
 
-| Window | Pitch / corner | Fundamental loses | 3rd harmonic | 5th harmonic | Used for |
-|---|---|---|---|---|---|
-| sweet | 0.60 – 0.85 | at most 1.1 dB | at least 29.7 dB down | at least 51.9 dB down | **choosing** a card |
-| allowed | 0.50 – 1.00 | at most 3.1 dB | at least 23.6 dB down | at least 45.6 dB down | what the firmware may play on it |
+| Card pitch | The Teensy may play | `R1 = R2` | `C1 = C2` | Line |
+|---|---|---|---|---|
+| 177 Hz | 149–210 Hz | 2K2 | 470nF | 1.84 Vpp |
+| 250 Hz | 210–297 Hz | 2K2 | 330nF | 1.85 Vpp |
+| 354 Hz | 297–420 Hz | 2K2 | 220nF | 1.97 Vpp |
+| 500 Hz | 420–595 Hz | 2K4 | 150nF | 1.87 Vpp |
+| 707 Hz | 595–841 Hz | 2K4 | 100nF | 1.99 Vpp |
+| 1000 Hz | 841–1189 Hz | 1K8 | 100nF | 1.87 Vpp |
+| 1414 Hz | 1189–1682 Hz | 2K7 | 47nF | 1.88 Vpp |
+| 2000 Hz | 1682–2378 Hz | 2K7 | 33nF | 1.89 Vpp |
+| 2828 Hz | 2378–3364 Hz | 2K | 33nF | 1.80 Vpp |
+| 4000 Hz | 3364–4757 Hz | 2K | 22nF | 1.91 Vpp |
+| 5657 Hz | 4757–6727 Hz | 2K2 | 15nF | 1.80 Vpp |
+| 8000 Hz | 6727–9514 Hz | 2K2 | 10nF | 1.91 Vpp |
+| 11314 Hz | 9514–13454 Hz | 1K6 | 10nF | 1.86 Vpp |
 
-So **a card carries an octave of pitch in software**, and even at its
-edges it is cleaner than Thomas's channels are at their own pitch (21–23
-dB). The corners are half an octave apart, so every pitch from 106 Hz to
-9.6 kHz has a card. **Build the five of step 3 first**; the rest when a
-pitch needs them.
-
-| Card | Corner | Sweet window | Allowed window | `Ra` (×2) | `Rb` (×2) |
-|---|---|---|---|---|---|
-| 177 | 177 Hz | 106–150 Hz | 88–177 Hz | 82K5 | 105K |
-| 250 | 250 Hz | 150–212 Hz | 125–250 Hz | 57K6 | 75K |
-| 354 | 354 Hz | 212–301 Hz | 177–354 Hz | 41K2 | 52K3 |
-| 500 | 500 Hz | 300–425 Hz | 250–500 Hz | 29K4 | 37K4 |
-| 707 | 707 Hz | 424–601 Hz | 354–707 Hz | 20K5 | 26K7 |
-| 1000 | 1000 Hz | 600–850 Hz | 500–1000 Hz | 14K7 | 18K7 |
-| 1414 | 1414 Hz | 849–1202 Hz | 707–1414 Hz | 10K2 | 13K3 |
-| 2000 | 2000 Hz | 1200–1700 Hz | 1000–2000 Hz | 7K32 | 9K31 |
-| 2828 | 2828 Hz | 1697–2404 Hz | 1414–2828 Hz | 5K11 | 6K65 |
-| 4000 | 4000 Hz | 2400–3400 Hz | 2000–4000 Hz | 3K65 | 4K64 |
-| 5657 | 5657 Hz | 3394–4808 Hz | 2828–5657 Hz | 2K55 | 3K32 |
-| 8000 | 8000 Hz | 4800–6800 Hz | 4000–8000 Hz | 1K82 | 2K32 |
-| 11314 | 11314 Hz | 6788–9617 Hz | 5657–11314 Hz | 1K27 | 1K65 |
-
-**Against Thomas's channel, at the pitches the Mega plays** (same 5 V
-square in, so this is the filter alone):
-
-| Pitch | Body | Thomas: fundamental | Thomas: 3rd | Thomas: line | Card | Card: fundamental | Card: 3rd | Card: line |
-|---|---|---|---|---|---|---|---|---|
-| 1012 | female1 | -10.8 dB | -22.3 dB | 1.85 Vpp | 1414 | -0.2 dB | -35.9 dB | 2.49 Vpp |
-| 2531 | female2 | -12.3 dB | -23.1 dB | 1.55 Vpp | 4000 | -0.1 dB | -31.6 dB | 2.51 Vpp |
-| 6329 | female3 | -8.4 dB | -21.0 dB | 2.42 Vpp | 8000 | -0.6 dB | -38.8 dB | 2.37 Vpp |
-| 162 | male1 | -10.0 dB | -21.9 dB | 2.02 Vpp | 250 | -0.0 dB | -32.5 dB | 2.53 Vpp |
-| 405 | male2 | -10.5 dB | -22.2 dB | 1.89 Vpp | 500 | -0.8 dB | -39.8 dB | 2.32 Vpp |
+Every row puts out about Thomas's level (1.55 to 2.42 Vpp on his five),
+which the body divider was sized for.
 
 | Part | Value | Package |
 |---|---|---|
-| op-amp | MCP6024 | SOIC-14 |
-| input divider | 15 K, 10 K | 0603, 1 % |
-| stage 1 | `Ra` ×2; 12 nF, 10 nF | 0603 1 %; C0G 5 % |
-| stage 2 | `Rb` ×2; 22 nF, 3.3 nF | 0603 1 %; C0G 5 % |
-| reference | 10 K ×2, 10 µF X7R | 0603, 0805 |
-| output | 1 µF X7R, 100 K | 0805, 0603 |
-| decoupling | 100 nF + 10 µF | 0603, 0805 |
+| R1, R2 | from the tables, metal film, 1 %, 0.25 W | **THT**, axial, 7.62 mm pitch |
+| C1, C2 | from the tables, film (PET or PP), 5 %, 50 V or more | **THT**, radial, 5 mm pitch |
+| tone pull-down | 100 K | 0603 |
+| test pins | `LINE`, `AGND` | 1 × 1 header, THT |
 
-**The level is the input divider**: it gives Thomas's 2.5 Vpp. A hotter
-card is a divider variant, up to about 4.5 Vpp, and the first remedy if
-`next pcb` section 3's harness measurement comes back weak.
+**Film capacitors only, never ceramic**: each corner sits at its own
+tone and these carry DC, and a ceramic X7R loses capacitance with it.
+Every value in both tables is a stock through-hole film part, 470 nF
+included.
 
 ---
 
@@ -775,22 +763,18 @@ and the four mounting holes marked `M3`.
 
 ### MSGEQ7 shield
 
-`MSGEQ7 ANALYSER · MEGA ONLY`; per channel `CH0 F1` … `CH4 M2`; by each
-bypass jumper `OPEN UNLESS MEASURED`; by each pin 6 `REF · NEVER GROUND`.
-Test pads `ANA 0`–`ANA 4`, `MEGA 5V`, `AGND`.
+`ANALYSER CARRIER · 5 × DFROBOT AUDIO ANALYZER · MEGA ONLY`; at each site
+`MODULE 0 · F1` … `MODULE 4 · M2`, and beside its connections
+`IN R ← MIC · + 5V · − GND` and `R RESET · S STROBE`. Test pads `ANA 0`–
+`ANA 4`, `MEGA 5V`, `AGND`.
 
 ### Voice cards
 
-**Front of every card**: its kind in large type, `BODY ______` or
-`CORNER ______ Hz` to write in, and `LINE` / `AGND` at its two output
-pins.
-**Back of every card: the whole variant table, with a box to tick**, so
-the card says what it is and the resistors can be checked against it.
-
-| Card | Front | Back |
-|---|---|---|
-| Thomas | `THOMAS VOICE CARD · FIXED PITCH`, `BODY ______` | the five rows of 5a: body, pitch, `R1 = R2`, `C1 = C2`, ☐ |
-| active | `ACTIVE VOICE CARD`, `CORNER ______ Hz`, `PLAY 0.5–1 × CORNER · BEST 0.6–0.85 × CORNER` | the thirteen rows of 5b: corner, `Ra`, `Rb`, ☐ |
+**Front**: `VOICE CARD · THOMAS RC`, `PITCH ______ Hz` and `BODY ______`
+to write in, `LINE` / `AGND` at its two output pins, and the four pitch
+parts outlined as `R1 R2 C1 C2 · SET THE PITCH`. **Back**: Thomas's five
+and the thirteen rows of 5b, pitch, `R1 = R2`, `C1 = C2` and a box to
+tick, under `R × C = 0.179 / f`.
 
 ---
 
@@ -883,10 +867,10 @@ contain it. The test pins that.
   `0x16C0:0x048B` (Dual Serial), both as plausible Arduinos.
 - The flasher's board type follows the computing shield:
   `teensy:avr:teensy41` through PJRC's board package.
-- `drivers/audio.py`'s pitch becomes a setting on the Teensy. The corner
-  of each fitted active card is noted beside it in `params.json` (the
-  card says it in its silkscreen), and the page refuses a pitch outside
-  the card's allowed window.
+- `drivers/audio.py`'s pitch becomes a setting on the Teensy. The pitch
+  each fitted card is valued for is noted beside it in `params.json` (the
+  card says it in its silkscreen), and the page refuses a pitch more than
+  a quarter of an octave from it.
 - `drivers/hearing/` stops being emulated on the Teensy, through
   `goertzel.py`.
 
@@ -894,16 +878,20 @@ contain it. The test pins that.
 
 ## 8. SMD and through-hole
 
-**Every resistor, capacitor, IC and diode is SMD**: 0603 for signal
-parts, 0805 for 10 µF and 1 µF, SOIC or TSSOP for ICs. Through-hole only
-for connectors and sockets:
+**Every resistor, capacitor, IC and diode is SMD** — 0603 for signal
+parts, 0805 for 10 µF and 1 µF, SOIC or TSSOP for ICs — **except the four
+parts that set each voice card's pitch**, which are through-hole so they
+can be changed by hand. The analysers are bought modules. Through-hole
+otherwise only for connectors and sockets:
 
 | Through-hole | Where |
 |---|---|
 | DSUB-15s, `J2`, `J6`, `J7`, Mega mating headers | backplane |
 | `JA1`, `JV1`–`JV5` | backplane |
 | Mega-pattern female headers, Teensy sockets | Teensy adapter |
-| slot sockets | the MSGEQ7 shield and every card |
+| slot sockets | the analyser carrier and every card |
+| `R1`, `R2`, `C1`, `C2` | every voice card |
+| standoffs and headers for the five modules | analyser carrier |
 | test pins, 1 × 1 | backplane, adapter, every card |
 
 **Slot contacts gold on both halves**; the socket's cavity at the key is
@@ -936,7 +924,7 @@ plugged.
    with the rack supply on and no shield, `+5V` and `+12V` lit,
    `MEGA 5V` and every `TONE` dark, every NeoPixel line and `LINE` pin at
    0 V through its pull-down, every `MIC DIRECT` pin at 0 V.
-2. **Step 1**: Mega, MSGEQ7 shield, five Thomas cards, firmware 4, then
+2. **Step 1**: Mega, the analyser carrier, five Thomas cards, firmware 4, then
    `test audio loop` and `test audio bringup` exactly as on v2; each
    `TONE` LED lights with its body. **The backplane's acceptance test.**
 3. **Step 2**: the Teensy adapter in the Mega's place, the analyser slot
@@ -944,9 +932,9 @@ plugged.
    Teensy's USB and its own LED flickers with each command. A meter on
    each `MIC DIRECT` pin first: about 1.23 V. Then polled capture and `goertzel.py`: every
    tone on its own bin, heard by the expected microphones.
-4. **Step 3**: the five active cards, still at the Mega's pitches.
-5. **Then** free the pitches within each card's window, and
-   `next pcb` section 3's harness measurement with both card kinds.
+4. **Then** free the pitches: re-value each card from section 5b, and
+   let the Teensy move a pitch a quarter of an octave on it in software.
+   And `next pcb` section 3's harness measurement.
 
 **Changing a shield**: stop the piece from the page, unplug the rack
 supply and the computing USB, change the shield, write the card or slot
@@ -960,12 +948,11 @@ in its silkscreen box, power both back up together.
 |---|---|---|
 | backplane | 1 | about v2's board cost |
 | Teensy adapter | 1 | EUR 45–60 |
-| MSGEQ7 shield | 1 | EUR 20–40 |
-| Thomas cards | 5 | EUR 10–20 |
-| active cards, assembled | 5 to 13 | EUR 3–6 each |
+| analyser carrier (the modules are already owned) | 1 | EUR 10–15 |
+| voice cards | 5, and more for new pitches | EUR 2–4 each |
 
-**The Teensy solution on its own** — adapter and five active cards — is
-about **EUR 60–90**.
+**The Teensy solution on its own** is the adapter, about **EUR 45–60**:
+the cards and the backplane are the same for both processors.
 
 ---
 
@@ -976,6 +963,7 @@ about **EUR 60–90**.
 - The MAX9814's highest output on a 5 V supply: the datasheet gives it at
   3.3 V. The 4.7 K makes it harmless either way; the measured swing on 5 V
   matches the 3.3 V figures.
+- One DFRobot module measured: its holes and where its headers sit (4b).
 - Heights against the enclosure (9).
 - `next pcb` section 3's harness measurement and section 5's amplifier
   rail; nothing here depends on either.

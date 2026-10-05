@@ -8,9 +8,10 @@ by hand. **Facts about the Teensy 4.1** - which pin sits on which timer,
 which pins both converters reach, what the timers can actually produce -
 were read out of PJRC's own core on 2026-10-03, and a pin table written
 against them is only as good as the copy. **The voice cards' filter** -
-which resistor gives which corner, and over which pitches a card is
-cleaner than Thomas's channel - is a calculation, and a calculation
-restated in prose is one that can be wrong without anything noticing.
+Thomas's two RC sections, which R and C value a card for a pitch, and how
+far the Teensy may move that pitch on it - is a calculation, and a
+calculation restated in prose is one that can be wrong without anything
+noticing.
 
 So both are here, and `pytest_tests/hardware/test_shields.py` holds the
 document's tables to this module and this module to the v2 contract.
@@ -106,10 +107,14 @@ def teensy_pwm_frequency(hz: float, pin: int) -> float:
     return TEENSY41_F_BUS / (1 << prescale) / divider
 
 
-# --- Thomas's channel, the baseline ----------------------------------------
+# --- The voice card: Thomas's filter ---------------------------------------
 #
 # Two RC sections, R1 = R2 and C1 = C2, the second loading the first:
-# H = 1 / (1 + 3sRC + (sRC)^2). Values are the v2 board's (R101..C502 in
+# H = 1 / (1 + 3sRC + (sRC)^2). Every voice card is this circuit, for the
+# Mega and the Teensy alike; only R and C change, and they are the
+# through-hole parts on the card.
+#
+# Thomas's own five are the v2 board's values (R101..C502 in
 # `circuit.json`), body order. The pitch each plays is what his trimmed
 # OCR values come out at (the sketch's own comment), not the round name.
 THOMAS_CHANNELS: Final[dict[str, tuple[float, float]]] = {
@@ -134,98 +139,69 @@ def thomas_response(hz: float, ohms: float, farads: float) -> complex:
     return 1 / (1 + 3 * s * t + (s * t) ** 2)
 
 
-# --- The active voice card -------------------------------------------------
-#
-# Fourth-order Butterworth, two unity-gain Sallen-Key stages with equal
-# resistors. With equal R a stage's Q is set by its capacitor ratio alone,
-# Q = sqrt(C1/C2) / 2 (C1 the feedback capacitor, C2 the one to ground),
-# so a card's *shape* is fixed by four capacitors that never change and
-# its *corner* by four resistors that are the whole of a card variant.
-# Butterworth wants Q = 0.541 and 1.307; E12 C0G values give 0.548 and
-# 1.291, which moves nothing that matters (see the test).
-STAGE_CAPACITORS: Final[tuple[tuple[float, float], ...]] = (
-    (12e-9, 10e-9),
-    (22e-9, 3.3e-9),
-)
+# Where this filter is 3 dB down, as omega * RC: the root of
+# x^4 + 7x^2 - 1 = 0, which |H| = 1/sqrt(2) reduces to.
+X_3DB: Final = math.sqrt((math.sqrt(53) - 7) / 2)
 
-# A card is named by its corner, on a half-octave grid through 1 kHz.
-# Half an octave is what makes the sweet windows below tile: 0.6 x sqrt 2
-# is 0.849, just under 0.85, so every pitch from 106 Hz to 9.6 kHz lies
-# in some card's sweet window (in a sliver of 0.2 % at each join, in two).
-CARD_CORNERS: Final[tuple[float, ...]] = tuple(
+# Thomas put each tone about three times above its channel's corner (his
+# five sit 2.3 to 3.6 times above it). There the fundamental loses about
+# 10.5 dB and the third harmonic lands about 22 dB below it.
+TONE_OVER_CORNER: Final = 3.0
+
+# A card is valued for one pitch, and the Teensy may move that pitch a
+# quarter of an octave either way on it: the level stays within 1.7 dB of
+# the card's own and the third harmonic at least 21.1 dB down, which is
+# Thomas's own quality (21.0 to 23.1 dB). So cards valued half an octave
+# apart cover every pitch from 149 Hz to 13.5 kHz. The test recomputes
+# both figures for the cards as built.
+CARD_WINDOW_OCTAVES: Final = 0.25
+CARD_PITCHES: Final[tuple[float, ...]] = tuple(
     1000.0 * 2 ** (k / 2) for k in range(-5, 8)
 )
 
-# Where a pitch may sit, as a fraction of the card's corner.
-#
-# SWEET: what a card is *chosen* by. Within it the fundamental loses at
-# most 1.1 dB and the third harmonic is at least 29.7 dB down - better
-# than every Thomas channel at its own pitch (21-23 dB).
-#
-# ALLOWED: what the firmware will play on a fitted card without asking
-# for another one. One octave; the fundamental loses at most 3.1 dB at
-# the top and the third harmonic is still at least 23.6 dB down, which is
-# no worse than Thomas's chain.
-#
-# All four figures are for the cards as built (E96 resistors, E12
-# capacitors), and the test recomputes them.
-SWEET: Final = (0.60, 0.85)
-ALLOWED: Final = (0.50, 1.00)
-
-# The E96 decade, for the resistors that make a card.
-E96: Final[tuple[float, ...]] = (
-    1.00, 1.02, 1.05, 1.07, 1.10, 1.13, 1.15, 1.18, 1.21, 1.24, 1.27, 1.30,
-    1.33, 1.37, 1.40, 1.43, 1.47, 1.50, 1.54, 1.58, 1.62, 1.65, 1.69, 1.74,
-    1.78, 1.82, 1.87, 1.91, 1.96, 2.00, 2.05, 2.10, 2.15, 2.21, 2.26, 2.32,
-    2.37, 2.43, 2.49, 2.55, 2.61, 2.67, 2.74, 2.80, 2.87, 2.94, 3.01, 3.09,
-    3.16, 3.24, 3.32, 3.40, 3.48, 3.57, 3.65, 3.74, 3.83, 3.92, 4.02, 4.12,
-    4.22, 4.32, 4.42, 4.53, 4.64, 4.75, 4.87, 4.99, 5.11, 5.23, 5.36, 5.49,
-    5.62, 5.76, 5.90, 6.04, 6.19, 6.34, 6.49, 6.65, 6.81, 6.98, 7.15, 7.32,
-    7.50, 7.68, 7.87, 8.06, 8.25, 8.45, 8.66, 8.87, 9.09, 9.31, 9.53, 9.76,
+# The through-hole parts a card is built from: E24 metal-film resistors
+# kept between 1 K and 4.7 K (Thomas's own are 1K2 to 2K2, and a higher R
+# loses more into the body's 25 K divider), and film capacitors in E6.
+E24: Final[tuple[float, ...]] = (
+    1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0, 2.2, 2.4, 2.7, 3.0,
+    3.3, 3.6, 3.9, 4.3, 4.7, 5.1, 5.6, 6.2, 6.8, 7.5, 8.2, 9.1,
 )
+FILM_CAPACITORS: Final[tuple[float, ...]] = (
+    10e-9, 15e-9, 22e-9, 33e-9, 47e-9, 68e-9,
+    100e-9, 150e-9, 220e-9, 330e-9, 470e-9,
+)
+RESISTOR_RANGE: Final = (1e3, 4.7e3)
+RESISTOR_AIM: Final = 2.2e3
 
 
-def e96(ohms: float) -> float:
-    """The nearest E96 value, compared on a log scale as the series is."""
+def e24(ohms: float) -> float:
+    """The nearest E24 value, compared on a log scale as the series is."""
     decade = 10 ** math.floor(math.log10(ohms))
-    candidates = [value * decade for value in E96] + [10 * decade]
+    candidates = [value * decade for value in E24] + [10 * decade]
     return min(candidates, key=lambda value: abs(math.log(value / ohms)))
 
 
-def stage_q(capacitors: tuple[float, float]) -> float:
-    feedback, to_ground = capacitors
-    return math.sqrt(feedback / to_ground) / 2
+def rc_for(hz: float) -> float:
+    """The R x C that puts `hz` three times above the corner."""
+    return TONE_OVER_CORNER * X_3DB / (2 * math.pi * hz)
 
 
-def stage_resistor(corner_hz: float, capacitors: tuple[float, float]) -> float:
-    """The exact equal-R value that puts this stage's natural frequency
-    on the card's corner."""
-    feedback, to_ground = capacitors
-    return 1 / (2 * math.pi * corner_hz * math.sqrt(feedback * to_ground))
-
-
-def card_resistors(corner_hz: float) -> tuple[float, ...]:
-    """The E96 resistors of a card, one value per stage (two of each)."""
-    return tuple(
-        e96(stage_resistor(corner_hz, capacitors))
-        for capacitors in STAGE_CAPACITORS
-    )
-
-
-def card_response(
-    hz: float, corner_hz: float, resistors: tuple[float, ...] | None = None
-) -> complex:
-    """The card's transfer at `hz`. With `resistors` given it is the card
-    as built, E96 rounding and all; without, the ideal corner."""
-    if resistors is None:
-        resistors = tuple(
-            stage_resistor(corner_hz, capacitors) for capacitors in STAGE_CAPACITORS
-        )
-    s = 2j * math.pi * hz
-    response: complex = 1
-    for ohms, (feedback, to_ground) in zip(resistors, STAGE_CAPACITORS):
-        response /= 1 + 2 * s * ohms * to_ground + (s * ohms) ** 2 * feedback * to_ground
-    return response
+def card_values(hz: float) -> tuple[float, float]:
+    """R and C for a card valued for `hz`: the film capacitor that lands
+    R nearest Thomas's 2K2 within 1 K to 4.7 K, and the E24 resistor to
+    go with it."""
+    wanted = rc_for(hz)
+    best: tuple[float, float, float] | None = None
+    for farads in FILM_CAPACITORS:
+        ohms = e24(wanted / farads)
+        if not RESISTOR_RANGE[0] <= ohms <= RESISTOR_RANGE[1]:
+            continue
+        score = abs(math.log(ohms / RESISTOR_AIM)) + 5 * abs(math.log(ohms * farads / wanted))
+        if best is None or score < best[0]:
+            best = (score, ohms, farads)
+    if best is None:
+        raise ValueError(f"no film capacitor gives {hz} Hz with a resistor in range")
+    return best[1], best[2]
 
 
 def db(value: complex | float) -> float:
@@ -252,12 +228,31 @@ def square_through(response: Callable[[float], complex], hz: float) -> Harmonics
     )
 
 
-def card_for(hz: float) -> float:
-    """The corner of the card whose sweet window holds this pitch."""
-    for corner in CARD_CORNERS:
-        if SWEET[0] * corner <= hz < SWEET[1] * corner:
-            return corner
-    raise ValueError(f"{hz} Hz is outside every card's sweet window")
+class Window(NamedTuple):
+    """What a card does over the pitches the Teensy may play on it."""
+
+    low: float  # Hz
+    high: float  # Hz
+    level_swing: float  # dB, the most the fundamental moves from the card's own pitch
+    third: float  # dB, the worst third harmonic over the window
+
+
+def card_window(pitch: float, steps: int = 100) -> Window:
+    ohms, farads = card_values(pitch)
+
+    def response(hz: float) -> complex:
+        return thomas_response(hz, ohms, farads)
+
+    own = square_through(response, pitch).fundamental
+    low = pitch * 2 ** -CARD_WINDOW_OCTAVES
+    high = pitch * 2 ** CARD_WINDOW_OCTAVES
+    swing, third = 0.0, -math.inf
+    for step in range(steps + 1):
+        hz = low * (high / low) ** (step / steps)
+        found = square_through(response, hz)
+        swing = max(swing, abs(found.fundamental - own))
+        third = max(third, found.third)
+    return Window(low, high, swing, third)
 
 
 # --- The analogue inputs ---------------------------------------------------
@@ -306,16 +301,10 @@ def microphone_corner() -> float:
 
 # --- Level -----------------------------------------------------------------
 #
-# The card divides the 5 V square to 2.0 Vpp around its own mid-rail
-# before filtering, so the passband fundamental is (4/pi) x 2.0 = 2.55 Vpp:
-# `next pcb` section 3's line level, which the body's 22K/3K3 divider was
-# sized for. 15K from the voice line, 10K to the reference.
+# A 5 V square's fundamental is (4/pi) x 5 = 6.37 Vpp before the filter;
+# what reaches the line is that, less what the card takes off it.
 LOGIC_HIGH: Final = 5.0
-DIVIDER_TOP: Final = 15e3
-DIVIDER_BOTTOM: Final = 10e3
 
 
-def line_level_vpp(gain_db: float = 0.0) -> float:
-    square = LOGIC_HIGH * DIVIDER_BOTTOM / (DIVIDER_TOP + DIVIDER_BOTTOM)
-    return 4 / math.pi * square * 10 ** (gain_db / 20)
-
+def line_level_vpp(gain_db: float) -> float:
+    return 4 / math.pi * LOGIC_HIGH * 10 ** (gain_db / 20)

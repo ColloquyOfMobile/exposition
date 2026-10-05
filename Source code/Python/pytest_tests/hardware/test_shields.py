@@ -101,6 +101,12 @@ def _farads(text):
     return float(match.group(1)) * 1e-9
 
 
+def _flat():
+    """The document's prose with every run of whitespace made one space,
+    so a phrase can be found across a line break."""
+    return re.sub(r"\s+", " ", DOCUMENT.read_text(encoding="utf-8"))
+
+
 def _footprint():
     """Every footprint pin the document gives a net, v2's and the added."""
     _, rows = _table("Mega pin")
@@ -343,7 +349,7 @@ def test_the_microphone_figures_quoted_in_the_prose_are_the_computed_ones():
     assert f"with {spare:.2f} V to spare" in text
 
 
-# --- sections 4a and 5a: what leaves v2 keeps v2's values ------------------
+# --- section 5a: Thomas's five are v2's filters ----------------------------
 
 
 def test_the_thomas_cards_are_v2s_filters():
@@ -365,126 +371,90 @@ def test_the_thomas_cards_are_v2s_filters():
         )
 
 
-def _role(component, body):
-    """A part's place in one body's channel, with the body taken out of
-    its net names, so female1's oscillator resistor and male2's compare.
-    The kind of part is in it too: the series resistor and the bypass
-    jumper join the same two nets."""
-    kind = re.match(r"[A-Z]+", component["ref"]).group(0)
-    return (kind,) + tuple(sorted(
-        (net or "").replace(f"{body}/", "<body>/")
-        for net in component["pins"].values()
-    ))
+# --- section 5b: a card for any pitch, recomputed --------------------------
 
 
-def test_the_msgeq7_shield_is_v2s_network_in_every_channel():
-    _, rows = _table("MSGEQ7 part")
-    for row in rows:
-        value, ref = row[1], row[3]
-        if not re.fullmatch(r"[RCJ]S?\d+", ref):
-            continue
-        female1 = _component(ref)
-        assert female1["value"] == value, ref
+def test_the_card_table_is_the_computed_one():
+    """Pitch, window, R, C and line level for every row, as `shields.py`
+    values them: E24 resistors and E6 film capacitors, through-hole."""
+    _, rows = _table("Card pitch")
+    assert len(rows) == len(shields.CARD_PITCHES)
 
-        role = _role(female1, "female1")
-        for body in audio.BODIES:
-            twins = [
-                component for component in _components()
-                if _role(component, body) == role
-            ]
-            assert [twin["value"] for twin in twins] == [value], (ref, body)
+    for row, pitch in zip(rows, shields.CARD_PITCHES):
+        ohms, farads = shields.card_values(pitch)
+        window = shields.card_window(pitch)
+        level = shields.square_through(
+            lambda hz: shields.thomas_response(hz, ohms, farads), pitch
+        ).fundamental
 
-
-# --- section 5b: the voice cards, recomputed --------------------------------
-
-
-def test_the_card_list_is_the_computed_one():
-    _, rows = _table("Card")
-    assert len(rows) == len(shields.CARD_CORNERS)
-
-    for row, corner in zip(rows, shields.CARD_CORNERS):
-        assert _numbers(row[0]) == [round(corner)]
-        assert _numbers(row[1]) == [round(corner)]
-        sweet = [round(shields.SWEET[0] * corner), round(shields.SWEET[1] * corner)]
-        allowed = [round(shields.ALLOWED[0] * corner), round(shields.ALLOWED[1] * corner)]
-        assert _numbers(row[2].replace("–", " ")) == sweet
-        assert _numbers(row[3].replace("–", " ")) == allowed
-        assert (_ohms(row[4]), _ohms(row[5])) == pytest.approx(
-            shields.card_resistors(corner)
-        )
+        assert _numbers(row[0]) == [round(pitch)]
+        assert _numbers(row[1].replace("–", " ")) == [round(window.low), round(window.high)]
+        assert _ohms(row[2]) == ohms
+        assert _farads(row[3]) == pytest.approx(farads)
+        assert _numbers(row[4]) == [round(shields.line_level_vpp(level), 2)]
+        assert shields.RESISTOR_RANGE[0] <= ohms <= shields.RESISTOR_RANGE[1]
+        assert farads in shields.FILM_CAPACITORS
 
 
-def test_the_sweet_windows_leave_no_gap():
-    for lower, upper in zip(shields.CARD_CORNERS, shields.CARD_CORNERS[1:]):
-        assert shields.SWEET[0] * upper <= shields.SWEET[1] * lower
-
-
-def _worst_over(window):
-    worst = shields.Harmonics(0.0, -math.inf, -math.inf)
-    for corner in shields.CARD_CORNERS:
-        resistors = shields.card_resistors(corner)
-        for step in range(201):
-            ratio = window[0] + (window[1] - window[0]) * step / 200
-            found = shields.square_through(
-                lambda hz: shields.card_response(hz, corner, resistors), ratio * corner
-            )
-            worst = shields.Harmonics(
-                min(worst.fundamental, found.fundamental),
-                max(worst.third, found.third),
-                max(worst.fifth, found.fifth),
-            )
-    return worst
+def test_the_windows_join_with_no_gap():
+    for lower, upper in zip(shields.CARD_PITCHES, shields.CARD_PITCHES[1:]):
+        assert shields.card_window(upper).low <= shields.card_window(lower).high * (1 + 1e-9)
 
 
 def test_the_window_figures_are_the_cards_as_built():
-    """Over every card, E96 resistors and E12 capacitors, the document's
-    worst cases are what the arithmetic gives, to the tenth it quotes."""
-    _, rows = _table("Window")
-    windows = {"sweet": shields.SWEET, "allowed": shields.ALLOWED}
-    for row in rows:
-        window = windows[row[0]]
-        assert _numbers(row[1].replace("–", " ")) == pytest.approx(list(window))
-        worst = _worst_over(window)
-        assert _numbers(row[2]) == [round(-worst.fundamental, 1)]
-        assert _numbers(row[3]) == [round(-worst.third, 1)]
-        assert _numbers(row[4]) == [round(-worst.fifth, 1)]
+    """The worst level swing and the worst third harmonic over every
+    card's window, to the tenth the document quotes - and at least as
+    clean as Thomas's own channels."""
+    windows = [shields.card_window(pitch) for pitch in shields.CARD_PITCHES]
+    swing = max(window.level_swing for window in windows)
+    third = max(window.third for window in windows)
+    text = _flat()
+
+    assert f"within {swing:.1f} dB" in text
+    assert f"at least {-third:.1f} dB down" in text
+    thomas = [
+        shields.square_through(
+            lambda hz: shields.thomas_response(hz, ohms, farads), shields.MEGA_PITCHES[body]
+        ).third
+        for body, (ohms, farads) in shields.THOMAS_CHANNELS.items()
+    ]
+    assert third <= max(thomas) + 0.1
 
 
-def test_the_comparison_with_thomas_is_recomputed():
-    _, rows = _table("Pitch")
-    assert [row[1] for row in rows] == list(audio.BODIES)
+def test_the_rule_is_thomas_s_own_ratio():
+    """R x C puts the tone three times above the corner, which is where
+    Thomas's five sit; the document quotes the constant and his range."""
+    text = _flat()
+    ratios = [
+        shields.MEGA_PITCHES[body] / (shields.X_3DB / (2 * math.pi * ohms * farads))
+        for body, (ohms, farads) in shields.THOMAS_CHANNELS.items()
+    ]
 
-    for row in rows:
-        body = row[1]
-        hz = shields.MEGA_PITCHES[body]
-        assert _numbers(row[0]) == [hz]
+    assert f"**R × C = {shields.rc_for(1.0):.3f} / f**" in text
+    assert f"({min(ratios):.1f} to {max(ratios):.1f} on his five)" in text
+    assert min(ratios) <= shields.TONE_OVER_CORNER <= max(ratios)
 
-        ohms, farads = shields.THOMAS_CHANNELS[body]
-        thomas = shields.square_through(
-            lambda f: shields.thomas_response(f, ohms, farads), hz
+
+def test_every_card_puts_out_thomas_s_level():
+    levels = [
+        shields.line_level_vpp(
+            shields.square_through(
+                lambda hz: shields.thomas_response(hz, ohms, farads), shields.MEGA_PITCHES[body]
+            ).fundamental
         )
-        # Unloaded, for a 5.0 V square: its fundamental is (4/pi) x 5 Vpp.
-        thomas_line = 4 / math.pi * shields.LOGIC_HIGH * 10 ** (thomas.fundamental / 20)
-        assert _numbers(row[2]) == [round(thomas.fundamental, 1)]
-        assert _numbers(row[3]) == [round(thomas.third, 1)]
-        assert _numbers(row[4]) == [round(thomas_line, 2)]
+        for body, (ohms, farads) in shields.THOMAS_CHANNELS.items()
+    ]
+    text = _flat()
+    assert f"({min(levels):.2f} to {max(levels):.2f} Vpp on his five)" in text
 
-        corner = shields.card_for(hz)
-        assert _numbers(row[5]) == [round(corner)]
-        resistors = shields.card_resistors(corner)
-        card = shields.square_through(
-            lambda f: shields.card_response(f, corner, resistors), hz
+    for pitch in shields.CARD_PITCHES:
+        ohms, farads = shields.card_values(pitch)
+        level = shields.line_level_vpp(
+            shields.square_through(
+                lambda hz: shields.thomas_response(hz, ohms, farads), pitch
+            ).fundamental
         )
-        assert _numbers(row[6]) == [round(card.fundamental, 1)]
-        assert _numbers(row[7]) == [round(card.third, 1)]
-        assert _numbers(row[8]) == [round(shields.line_level_vpp(card.fundamental), 2)]
-
-
-def test_the_stage_qs_and_the_line_level_are_the_ones_quoted():
-    text = DOCUMENT.read_text(encoding="utf-8")
-    for capacitors in shields.STAGE_CAPACITORS:
-        assert f"**Q {shields.stage_q(capacitors):.3f}**" in text
-    assert f"**{shields.line_level_vpp():.2f} Vpp**" in text
+        assert min(levels) <= level <= max(levels), pitch
 
 
 # --- section 7a: what the Teensy plays --------------------------------------
