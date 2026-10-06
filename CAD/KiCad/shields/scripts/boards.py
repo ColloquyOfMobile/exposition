@@ -139,6 +139,7 @@ def main(only=None):
     oldboard=p.LoadBoard(str(BASE/'colloquy-control-v2.kicad_pcb'));old={f.GetReference():f for f in oldboard.GetFootprints()}
     for folder in ROOT.iterdir():
         if only and folder.name not in only:continue
+        if folder.name=='analyser-carrier':continue  # Dedicated photo-mount generator: carrier.py.
         if not (folder/'circuit.json').exists():continue
         name=folder.name;data=json.loads((folder/'circuit.json').read_text());board=p.BOARD();board.SetCopperLayerCount(4 if name in ['backplane','teensy-adapter'] else 2)
         board.GetDesignSettings().SetBoardThickness(mm(1.6));board.GetDesignSettings().m_MinClearance=mm(.15)

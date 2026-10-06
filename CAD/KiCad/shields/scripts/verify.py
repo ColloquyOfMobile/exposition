@@ -88,7 +88,7 @@ def main():
         assert len(pins)==1
         net=plain(adapter[pins[0]].GetNetname())
         assert net==(BODY[i]+'/mic direct' if i<5 else f'adc/{gpio}')
-    assert set(loaded)=={'backplane','teensy-adapter','voice-thomas','microphone'}
+    assert set(loaded)=={'backplane','teensy-adapter','voice-thomas','microphone','analyser-carrier'}
     backparts={c['ref']:c for c in backdata['components']}
     adparts={c['ref']:c for c in data['components']}
     for i,body in enumerate(BODY,1):
@@ -138,8 +138,28 @@ def main():
     for f in mf.values():assert f.GetLayer()==p.F_Cu
     for pin in ['4','7','11','15']:assert plain(mp[('U1',pin)].GetNetname())=='GND'
     assert plain(mp[('U1','2')].GetNetname())==plain(mp[('U1','5')].GetNetname())
+    carrier=loaded['analyser-carrier'];cp=pads(carrier)
+    assert ('JA1','22') not in cp
+    for pin in range(1,22):
+        a,b=position(cp[('JA1',str(pin))]),position(back[('JA1',str(pin))])
+        assert near(a[0]+25,b[0]) and near(a[1]+215,b[1])
+    cf={f.GetReference():f for f in carrier.GetFootprints()}
+    for ref,backref in [('H1','HA1'),('H2','HA2')]:
+        a=position(cf[ref]);bb=next(f for f in loaded['backplane'].GetFootprints() if f.GetReference()==backref)
+        assert all(near(x,y) for x,y in zip((a[0]+25,a[1]+215),position(bb)))
+    for i,body in enumerate(BODY,1):
+        expected={f'JI{i}':['microphone','MEGA_5V','AGND'],f'JO{i}':['AGND','MEGA_5V','analyser out'],f'JC{i}':['analyser/reset','analyser/strobe']}
+        for ref,nets in expected.items():
+            for pin,net in enumerate(nets,1):
+                if net in ['microphone','analyser out']:net=body+'/'+net
+                assert plain(cp[(ref,str(pin))].GetNetname())==net
+        mounts=list(cf[f'M{i}'].Pads());assert len(mounts)==2
+        assert all(t.GetAttribute()==p.PAD_ATTRIB_NPTH for t in mounts)
+        a,b=map(position,mounts);assert near(((a[0]-b[0])**2+(a[1]-b[1])**2)**.5,20.32)
+        assert sorted(tuple(p.ToMM(t.GetDrillSize())) for t in mounts)==[(3.2,3.2),(5.74,3.2)]
+    assert not cp[('JA1','20')].GetNetname() and not cp[('JA1','21')].GetNetname()
     summary['interfaces']={'fixed_harness_pinout_and_coordinates':'PASS','v2_connected_Mega_pins':'PASS',
-        'five_voice_mating_pairs':'PASS','analyser_carrier':'PENDING measured module geometry','adapter_mirror':'PASS','single_ground_bond':'PASS','no_identification_hardware':'PASS','revised_Teensy_analogue_mapping':'PASS',
+        'five_voice_mating_pairs':'PASS','analyser_carrier':'PASS electrical/mating coordinates; photo-derived module fit UNVERIFIED','adapter_mirror':'PASS','single_ground_bond':'PASS','no_identification_hardware':'PASS','revised_Teensy_analogue_mapping':'PASS',
         'direct_microphone_networks':'PASS','MSGEQ7_isolated_from_Teensy':'PASS','MSGEQ7_slot_USB_5V_supply':'PASS','LEDs_and_test_headers':'PASS','THT_voice_pitch_components':'PASS','microphone_mounting_and_ground_pins':'PASS'}
     (ROOT/'VALIDATION.json').write_text(json.dumps(summary,indent=2)+'\n')
     for name,result in summary.items():print(name,result)

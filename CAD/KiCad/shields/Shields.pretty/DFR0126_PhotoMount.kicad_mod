@@ -1,0 +1,278 @@
+(footprint "DFR0126_PhotoMount"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Photo estimate: 8 x 2.54mm holes, +/-1.27mm longitudinal slot tolerance; 29x32mm reserved envelope. Short leads, not direct header mating.")
+	(property "Reference" ""
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(uuid "8a8f3267-210e-4246-8224-8f800fa4ef66")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "d4e9f969-3a1c-4650-8efa-4fb28c26f2f6")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c396b0be-db22-4920-905f-c37e9197e737")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f27908d9-7d20-47d1-abab-72ece5ab8d25")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(fp_line
+		(start -4.34 -8)
+		(end 24.66 -8)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "822ef55f-be80-4a15-a8a2-0aecf0f3d460")
+	)
+	(fp_line
+		(start -4.34 24)
+		(end -4.34 -8)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "ce1dc88e-9dc8-4e3a-b52a-08c9dd80c8e7")
+	)
+	(fp_line
+		(start 24.66 -8)
+		(end 24.66 24)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "6dcd4f27-4e2c-4fd3-ab14-de22b259cd61")
+	)
+	(fp_line
+		(start 24.66 24)
+		(end -4.34 24)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "969c6c08-a13a-4834-89e1-12ff3691ca61")
+	)
+	(fp_line
+		(start -4.34 -8)
+		(end 24.66 -8)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "d93cc81d-10a6-4979-9e4d-bebcc7a04d85")
+	)
+	(fp_line
+		(start -4.34 24)
+		(end -4.34 -8)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "e369f41b-29db-40a8-9722-61639e840664")
+	)
+	(fp_line
+		(start 24.66 -8)
+		(end 24.66 24)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "0e69772b-34af-425e-955c-5f0f3d39a975")
+	)
+	(fp_line
+		(start 24.66 24)
+		(end -4.34 24)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "de20cb07-53e8-4c88-875f-906106b65837")
+	)
+	(pad "" np_thru_hole circle
+		(at 0 0)
+		(size 3.2 3.2)
+		(drill 3.2)
+		(layers "*.Cu")
+		(uuid "f43c3251-6770-48ab-9296-ba25acc23302")
+	)
+	(pad "" np_thru_hole oval
+		(at 20.32 0)
+		(size 5.74 3.2)
+		(drill oval 5.74 3.2)
+		(layers "*.Cu")
+		(thermal_bridge_angle 45)
+		(uuid "358eb723-73a7-4d35-9982-3c3c98e57aea")
+	)
+	(zone
+		(net 0)
+		(net_name "")
+		(layer "F.Cu")
+		(uuid "1d863b85-2f8f-4aca-9f97-6ecafda431a6")
+		(hatch edge 0.5)
+		(connect_pads
+			(clearance 0)
+		)
+		(min_thickness 0.25)
+		(filled_areas_thickness no)
+		(keepout
+			(tracks not_allowed)
+			(vias not_allowed)
+			(pads allowed)
+			(copperpour not_allowed)
+			(footprints allowed)
+		)
+		(placement
+			(enabled no)
+			(sheetname "")
+		)
+		(fill
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+		)
+		(polygon
+			(pts
+				(xy -2 -2) (xy 2 -2) (xy 2 2) (xy -2 2)
+			)
+		)
+	)
+	(zone
+		(net 0)
+		(net_name "")
+		(layer "F.Cu")
+		(uuid "154a074a-09ee-4a57-8a26-2564dc1fe01a")
+		(hatch edge 0.5)
+		(connect_pads
+			(clearance 0)
+		)
+		(min_thickness 0.25)
+		(filled_areas_thickness no)
+		(keepout
+			(tracks not_allowed)
+			(vias not_allowed)
+			(pads allowed)
+			(copperpour not_allowed)
+			(footprints allowed)
+		)
+		(placement
+			(enabled no)
+			(sheetname "")
+		)
+		(fill
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+		)
+		(polygon
+			(pts
+				(xy 17.12 -2) (xy 23.52 -2) (xy 23.52 2) (xy 17.12 2)
+			)
+		)
+	)
+	(zone
+		(net 0)
+		(net_name "")
+		(layer "B.Cu")
+		(uuid "1c14b63e-f5b3-4c14-adfb-6137f8774407")
+		(hatch edge 0.5)
+		(connect_pads
+			(clearance 0)
+		)
+		(min_thickness 0.25)
+		(filled_areas_thickness no)
+		(keepout
+			(tracks not_allowed)
+			(vias not_allowed)
+			(pads allowed)
+			(copperpour not_allowed)
+			(footprints allowed)
+		)
+		(placement
+			(enabled no)
+			(sheetname "")
+		)
+		(fill
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+		)
+		(polygon
+			(pts
+				(xy -2 -2) (xy 2 -2) (xy 2 2) (xy -2 2)
+			)
+		)
+	)
+	(zone
+		(net 0)
+		(net_name "")
+		(layer "B.Cu")
+		(uuid "5e36a699-4cc2-4e2f-889b-209e2a43a474")
+		(hatch edge 0.5)
+		(connect_pads
+			(clearance 0)
+		)
+		(min_thickness 0.25)
+		(filled_areas_thickness no)
+		(keepout
+			(tracks not_allowed)
+			(vias not_allowed)
+			(pads allowed)
+			(copperpour not_allowed)
+			(footprints allowed)
+		)
+		(placement
+			(enabled no)
+			(sheetname "")
+		)
+		(fill
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+		)
+		(polygon
+			(pts
+				(xy 17.12 -2) (xy 23.52 -2) (xy 23.52 2) (xy 17.12 2)
+			)
+		)
+	)
+	(embedded_fonts no)
+)

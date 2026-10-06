@@ -1,4 +1,24 @@
 {
+  "analyser-carrier": {
+    "connected_pins": 66,
+    "parity_differences": [],
+    "erc_violations": 0,
+    "drc_violations": 0,
+    "unconnected_items": 0,
+    "copper_layers": 2,
+    "tracks_and_vias": 258,
+    "sha256": {
+      "analyser-carrier.kicad_pcb": "86f3618f0118ab5a6225fc303dff0b33dac425f8a725d377e3ba5d9e853e6ce1",
+      "analyser-carrier.kicad_pro": "6f212188a8d5f0aa25123207bb806c6e34d1bb07144d647de5dcda07fc8c94f4",
+      "analyser-carrier.kicad_sch": "4ede15f49610245c5700b41a3ae86cf49d1196c99a7c36fa2b71b4a420dd14db",
+      "female1.kicad_sch": "6c5749587fa77fecfe798c2456bcdad9f957d825c053b97155001830441f4083",
+      "female2.kicad_sch": "a49da7c1b4a26bd51c01cb715da5ab7bd9aba2ff1a6ce126f78ee426d476608a",
+      "female3.kicad_sch": "d1a123c517b1be4ad5f1fb0eda66efb8858fe6e653354e94a08c858c23292dbe",
+      "interface.kicad_sch": "9f7d7f79cea0bf04c6bad071d97cae361a034aff0761e88334a4d745e884f2a6",
+      "male1.kicad_sch": "b55aabd8363f3c6177ff89042dd08391f719a2be768c5183938ec65f4d7a3ffa",
+      "male2.kicad_sch": "c5b176c0e01786e19c93a0d7973385dd4576071485bb877d220cd03ff779b95d"
+    }
+  },
   "backplane": {
     "connected_pins": 366,
     "parity_differences": [],
@@ -103,7 +123,7 @@
     "fixed_harness_pinout_and_coordinates": "PASS",
     "v2_connected_Mega_pins": "PASS",
     "five_voice_mating_pairs": "PASS",
-    "analyser_carrier": "PENDING measured module geometry",
+    "analyser_carrier": "PASS electrical/mating coordinates; photo-derived module fit UNVERIFIED",
     "adapter_mirror": "PASS",
     "single_ground_bond": "PASS",
     "no_identification_hardware": "PASS",

@@ -29,5 +29,7 @@ for shield retention. Computing USB and rack power switch together; unplug
 both before swapping cards. Verify numbering and rail isolation before power.
 
 Exhibition build: backplane, five Thomas cards, Mega and measured DFRobot
-carrier. Teensy follows with the analyser slot empty. The carrier is pending
-module geometry; the old bare-chip analyser is not an approved substitute.
+carrier. Teensy follows with the analyser slot empty. The carrier uses photo-derived module mounts; use its 1:1 template to
+confirm fit. Module 0 is rotated 180 degrees. Wire the short leads by the
+carrier README pin table; do not infer output cable order from colours.
+The old bare-chip analyser is not an approved substitute.

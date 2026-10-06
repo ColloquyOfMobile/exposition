@@ -1,7 +1,7 @@
 (export (version "E")
   (design
     (source "C:\\workspace\\workspace2\\Colloquy\\exposition\\CAD\\KiCad\\shields\\voice-thomas\\voice-thomas.kicad_sch")
-    (date "2026-10-06T10:48:43+0200")
+    (date "2026-10-06T14:45:30+0200")
     (tool "Eeschema 9.0.7")
     (sheet (number "1") (name "/") (tstamps "/")
       (title_block

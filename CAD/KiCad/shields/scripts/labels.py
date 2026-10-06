@@ -65,6 +65,10 @@ def main(only=None):
             label(b,'POWERED BY TEENSY USB',169,152,1)
             for pin in [0,1,3,33,34,35,36,37,40,41]:at(f'TP{pin}',str(pin),0,-2)
             at('TPV','VIN');at('TPI','3V3');at('TPG','GND',0,2)
+        elif name=='analyser-carrier':
+            from carrier import operating_labels
+            operating_labels(b)
+            named.update([f'TPA{i}' for i in range(5)]+['TPG','TP5'])
         elif name=='analyser-msgeq7':
             label(b,'MSGEQ7 ANALYSER - MEGA ONLY',123,52,1.2)
             for i,body in enumerate(BODY):

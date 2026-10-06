@@ -1,7 +1,7 @@
 (export (version "E")
   (design
     (source "C:\\workspace\\workspace2\\Colloquy\\exposition\\CAD\\KiCad\\shields\\teensy-adapter\\teensy-adapter.kicad_sch")
-    (date "2026-10-06T10:48:38+0200")
+    (date "2026-10-06T14:45:31+0200")
     (tool "Eeschema 9.0.7")
     (textvar (name "REVISION") "A-prototype")
     (sheet (number "1") (name "/") (tstamps "/")

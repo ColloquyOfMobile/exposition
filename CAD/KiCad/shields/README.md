@@ -9,7 +9,7 @@ All current KiCad 9 projects and their shared library are in this folder.
 | teensy-adapter | Teensy 4.1 in the Mega slot; three power test headers | 1 |
 | voice-thomas | Thomas RC filter for either processor; THT pitch components | 5, more as needed |
 | microphone | MAX9814 body microphone, 20 x 62 mm, two M5 holes | 6 (one spare) |
-| analyser-carrier | Five purchased DFRobot modules | Pending module measurement |
+| analyser-carrier | Five purchased DFRobot modules, photo-derived mounts | 1 |
 
 The active filter is obsolete. One voice layout supports all five Thomas
 populations and thirteen new-pitch populations. See ASSEMBLY.md and its BOMs.
@@ -22,12 +22,12 @@ two; nominal thickness is 1.6 mm. Symbols and footprints are local.
 Native ERC/DRC, netlist parity and interface results are in VALIDATION.md/json.
 
 Engineering prototypes: no fabrication release or Gerber order package.
-The analyser carrier requires actual module measurements. The microphone
+The analyser carrier uses user-authorized photo-derived mounts with tolerance slots; confirm fit with its 1:1 template. The microphone
 capsule's exact stocked part and land pattern must be confirmed. REVIEW.md
-lists outstanding physical checks. The old analyser envelope on the backplane
-remains provisional until the carrier is sized.
+lists outstanding physical checks. The carrier retains the original 150 x 55mm backplane envelope and retention points.
 
 Generation: scripts/design.py, boards.py, variants.py with KiCad's Python.
+The analyser carrier has its own generator, scripts/carrier.py.
 Routing: scripts/route.py with Freerouting 2.4.1. After routing, run labels.py,
 finish.py, planes.py, check.py and verify.py. Preserve mechanical holes and
 validated connector positions when regenerating. Historical migration scripts

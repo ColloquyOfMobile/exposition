@@ -3,9 +3,13 @@
 Current basis: SHIELDS.md at 2d9fe1d and MICROPHONE_BOARD.md. These are editable
 engineering prototypes; native checks do not constitute fabrication release.
 
-The analyser carrier is blocked on actual DFR0126 module geometry required
-by section 4b. See analyser-carrier/README.md. Carrier size, retention and
-clearance to voice cards/backplane/enclosure must be resolved together.
+The analyser carrier uses user-authorized photo inference from Thomas's
+2.54mm-grid setup: nominal module mounting pitch 20.32mm, one round hole
+and one tolerance slot. Its 150 x 55mm outline and existing JA1/retention
+coordinates are preserved. Module 0 rotates 180 degrees to clear JA1.
+See analyser-carrier/README.md and its 1:1 mounting template. The module
+outline, screw fit, standoff height and lead routing still need physical
+confirmation; this is not a manufacturer-verified land pattern.
 
 Voice cards now contain only Thomas's two RC sections and 100K pull-down.
 Four pitch components are THT; no op amp or active-filter supply remains.

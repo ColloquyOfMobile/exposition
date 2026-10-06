@@ -1,0 +1,22 @@
+Reference,Value,Footprint,MPN,Assembly
+JA1,ANALYSER - KEY 22,Shields:Socket_2x11_Key22,,fit
+M1,DFRobot DFR0126 Audio Analyzer V2.0,Shields:DFR0126_PhotoMount,DFR0126,fit
+JI1,INPUT R + -,Shields:PinHeader_1x03_P2.54mm_Vertical,,fit
+JO1,OUTPUT GND +5V SIG,Shields:PinHeader_1x03_P2.54mm_Vertical,,fit
+JC1,CONTROL R S,Shields:PinHeader_1x02_P2.54mm_Vertical,,fit
+M2,DFRobot DFR0126 Audio Analyzer V2.0,Shields:DFR0126_PhotoMount,DFR0126,fit
+JI2,INPUT R + -,Shields:PinHeader_1x03_P2.54mm_Vertical,,fit
+JO2,OUTPUT GND +5V SIG,Shields:PinHeader_1x03_P2.54mm_Vertical,,fit
+JC2,CONTROL R S,Shields:PinHeader_1x02_P2.54mm_Vertical,,fit
+M3,DFRobot DFR0126 Audio Analyzer V2.0,Shields:DFR0126_PhotoMount,DFR0126,fit
+JI3,INPUT R + -,Shields:PinHeader_1x03_P2.54mm_Vertical,,fit
+JO3,OUTPUT GND +5V SIG,Shields:PinHeader_1x03_P2.54mm_Vertical,,fit
+JC3,CONTROL R S,Shields:PinHeader_1x02_P2.54mm_Vertical,,fit
+M4,DFRobot DFR0126 Audio Analyzer V2.0,Shields:DFR0126_PhotoMount,DFR0126,fit
+JI4,INPUT R + -,Shields:PinHeader_1x03_P2.54mm_Vertical,,fit
+JO4,OUTPUT GND +5V SIG,Shields:PinHeader_1x03_P2.54mm_Vertical,,fit
+JC4,CONTROL R S,Shields:PinHeader_1x02_P2.54mm_Vertical,,fit
+M5,DFRobot DFR0126 Audio Analyzer V2.0,Shields:DFR0126_PhotoMount,DFR0126,fit
+JI5,INPUT R + -,Shields:PinHeader_1x03_P2.54mm_Vertical,,fit
+JO5,OUTPUT GND +5V SIG,Shields:PinHeader_1x03_P2.54mm_Vertical,,fit
+JC5,CONTROL R S,Shields:PinHeader_1x02_P2.54mm_Vertical,,fit

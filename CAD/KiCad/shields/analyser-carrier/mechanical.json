@@ -1,0 +1,54 @@
+{
+  "basis": "User-authorized photo inference on assumed 2.54mm grid, 2026-10-06; not a measured manufacturer drawing",
+  "hole_spacing_mm": 20.32,
+  "round_hole_mm": 3.2,
+  "slot_mm": [
+    5.74,
+    3.2
+  ],
+  "nominal_spacing_range_mm": [
+    19.05,
+    21.59
+  ],
+  "module_reserved_envelope_mm": [
+    29,
+    32
+  ],
+  "board_mm": [
+    150,
+    55
+  ],
+  "module_origins_mm": [
+    [
+      75.16,
+      88,
+      180
+    ],
+    [
+      84.84,
+      68,
+      0
+    ],
+    [
+      114.84,
+      68,
+      0
+    ],
+    [
+      144.84,
+      68,
+      0
+    ],
+    [
+      174.84,
+      68,
+      0
+    ]
+  ],
+  "carrier_to_backplane_translation_mm": [
+    25,
+    215
+  ],
+  "short_leads": true,
+  "physical_fit_verified": false
+}
