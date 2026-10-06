@@ -1,0 +1,22 @@
+Reference,Value,Footprint,MPN,Assembly
+JV1,VOICE - KEY 6,Shields:Socket_2x03_Key6,,fit
+R1,15K,Shields:R_0603_1608Metric,,fit
+R2,10K,Shields:R_0603_1608Metric,,fit
+U1,MCP6024-I/SL,Shields:SOIC-14_3.9x8.7mm_P1.27mm,MCP6024-I/SL,fit
+R3,10K2,Shields:R_0603_1608Metric,,fit
+R4,10K2,Shields:R_0603_1608Metric,,fit
+C2,12nF C0G,Shields:C_0805_2012Metric,,fit
+C3,10nF C0G,Shields:C_0805_2012Metric,,fit
+R5,13K3,Shields:R_0603_1608Metric,,fit
+R6,13K3,Shields:R_0603_1608Metric,,fit
+C4,22nF C0G,Shields:C_0805_2012Metric,,fit
+C5,3.3nF C0G,Shields:C_0805_2012Metric,,fit
+R7,10K,Shields:R_0603_1608Metric,,fit
+R8,10K,Shields:R_0603_1608Metric,,fit
+C6,10uF X7R,Shields:C_0805_2012Metric,,fit
+C7,1uF X7R,Shields:C_0805_2012Metric,,fit
+R9,100K,Shields:R_0603_1608Metric,,fit
+C8,100nF,Shields:C_0603_1608Metric,,fit
+C9,10uF X7R,Shields:C_0805_2012Metric,,fit
+TP4,filter out,Shields:TestPin_1x01_P2.54mm,,fit
+TP5,AGND,Shields:TestPin_1x01_P2.54mm,,fit

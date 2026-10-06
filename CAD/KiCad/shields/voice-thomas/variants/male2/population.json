@@ -1,5 +1,9 @@
 {
-  "kind": "voice thomas",
+  "kind": "Thomas RC",
   "body": "male2",
-  "hz": 405
+  "pitch_hz": 405,
+  "window_hz": [
+    405,
+    405
+  ]
 }

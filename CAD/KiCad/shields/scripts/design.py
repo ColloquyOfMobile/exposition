@@ -1,4 +1,4 @@
-"""Generate five SHIELDS circuits. Run with KiCad 9's Python; no hardware I/O."""
+"""Generate the current SHIELDS circuits. Run with KiCad 9's Python; no hardware I/O."""
 from pathlib import Path
 import copy
 import csv
@@ -17,6 +17,8 @@ C8 = 'Capacitor_SMD:C_0805_2012Metric'
 SO8 = 'Package_SO:SOIC-8_3.9x4.9mm_P1.27mm'
 SO14 = 'Package_SO:SOIC-14_3.9x8.7mm_P1.27mm'
 TP = 'TestPoint:TestPoint_Pad_D1.5mm'
+TEST_PIN = 'Shields:TestPin_1x01_P2.54mm'
+LED = 'LED_SMD:LED_0603_1608Metric'
 HOLE = 'MountingHole:MountingHole_3.2mm_M3'
 JUMPER = 'Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm'
 NS = uuid.UUID('a7b0ac89-c05b-4dcd-aacd-e80870eaee66')
@@ -59,6 +61,13 @@ class Circuit:
         return self.add(ref,val,fp,{1:a,2:b},sheet)
     def tp(self,ref,net,sheet='circuit'):
         return self.add(ref,net,TP,{1:net},sheet)
+    def testpin(self,ref,net,sheet='circuit'):
+        part=self.add(ref,net,TEST_PIN,{1:net},sheet)
+        part.update(include_bom=True,description='Single gold 2.54 mm header; Dupont test pin')
+        return part
+    def led(self,ref,resistor,value,source,colour,sheet='indicators'):
+        self.r(resistor,value,source,'led/'+ref,sheet)
+        return self.add(ref,colour+' LED',LED,{1:'GND',2:'led/'+ref},sheet,names={'1':'K','2':'A'})
     def quad(self,ref,value,stages,rail='+5V',sheet='circuit'):
         pins={'4':rail,'11':'AGND'}; names={'4':'VDD','11':'VSS'}; types={'4':'power_in','11':'power_in'}
         for i,((out,neg,pos),(source,dest)) in enumerate(zip([(1,2,3),(7,6,5),(8,9,10),(14,13,12)],stages)):
@@ -97,6 +106,15 @@ def backplane():
         d.tp(f'TPL{i}',b+'/filter out','slots')
         d.tp(f'TPM{i}',b+'/microphone','slots')
         d.tp(f'TPA{i}',b+'/analyser out','slots')
+        d.led(f'DT{i}',f'RLT{i}','1K5',b+'/tone','YELLOW')
+        for ref,net in [(f'TPV{i}',b+'/tone'),(f'TPL{i}',b+'/filter out'),
+                        (f'TPD{i}',b+'/mic direct'),(f'TPA{i}',b+'/analyser out')]:
+            d.testpin(ref,net,'test_pins')
+        d.parts.pop(f'TP{CHANNEL[b]+10}',None)  # Superseded by the labelled ANA header.
+    for ref,net in [('TP31','+5V'),('TP33','+12V'),('TPUSB','MEGA_5V'),('TP34','GND'),
+                    ('TPVG','AGND'),('TPEG','AGND')]:d.testpin(ref,net,'test_pins')
+    for ref,res,val,net in [('DP5','RLP5','2K2','+5V'),('DP12','RLP12','4K7','+12V'),('DPUSB','RLPUSB','2K2','MEGA_5V')]:
+        d.led(ref,res,val,net,'GREEN')
     return d
 
 
@@ -105,51 +123,13 @@ def thomas():
     d.add('JV1','VOICE - KEY 6','Shields:Socket_2x03_Key6',voice_pins(),'interface')
     d.parts['JV1']['pins']['5']=None  # Passive card does not consume external +5V.
     d.add('H1','M3 retention',HOLE,{},'interface')
-    d.r('R1','1K2','tone','stage1');d.r('R2','1K2','stage1','filter out')
-    # Three parallel footprints per stage cover all five BOMs, including 470 nF.
+    resistor='Shields:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal'
+    d.r('R1','1K2 1% 0.25W','tone','stage1',fp=resistor);d.r('R2','1K2 1% 0.25W','stage1','filter out',fp=resistor)
     for i,net in enumerate(['stage1','filter out'],1):
-        d.c(f'C{i}','150nF PPS','AGND',net,fp='Shields:PPS_6041')
-        d.c(f'CX{i}','DNP PPS','AGND',net,fp='Shields:PPS_6041')['assembly']='DNP'
-        d.c(f'CY{i}','DNP C0G','AGND',net,fp='Capacitor_SMD:C_1206_3216Metric')['assembly']='DNP'
+        d.c(f'C{i}','150nF film 5% >=50V','AGND',net,fp='Shields:C_Rect_L7.0mm_W6.5mm_P5.00mm')
     d.r('R3','100K','tone','GND')
-    for i,net in [(1,'tone'),(4,'filter out'),(5,'AGND')]:d.tp(f'TP{i}',net)
+    d.tp('TP1','tone');d.testpin('TP4','filter out');d.testpin('TP5','AGND')
     return d
-
-
-def active():
-    d=Circuit('voice-active')
-    d.add('JV1','VOICE - KEY 6','Shields:Socket_2x03_Key6',voice_pins(),'interface')
-    d.parts['JV1']['pins']['2']=None  # No digital-ground circuit on the active card.
-    d.add('H1','M3 retention',HOLE,{},'interface')
-    d.r('R1','15K','tone','input');d.r('R2','10K','input','vref')
-    d.quad('U1','MCP6024-I/SL',[('input','buffer'),('stage1/in','stage1/out'),('stage2/in','stage2/out'),('ref/raw','vref')])
-    for i,(source,ra,cf,cg) in enumerate([('buffer','10K2','12nF','10nF'),('stage1/out','13K3','22nF','3.3nF')],1):
-        d.r(f'R{i*2+1}',ra,source,f'stage{i}/mid');d.r(f'R{i*2+2}',ra,f'stage{i}/mid',f'stage{i}/in')
-        d.c(f'C{i*2}',cf+' C0G',f'stage{i}/mid',f'stage{i}/out',fp=C8)
-        d.c(f'C{i*2+1}',cg+' C0G',f'stage{i}/in','AGND',fp=C8)
-    d.r('R7','10K','+5V','ref/raw');d.r('R8','10K','ref/raw','AGND')
-    d.c('C6','10uF X7R','ref/raw','AGND',fp=C8)
-    d.c('C7','1uF X7R','stage2/out','filter out',fp=C8);d.r('R9','100K','filter out','AGND')
-    d.c('C8','100nF','+5V','AGND');d.c('C9','10uF X7R','+5V','AGND',fp=C8)
-    for i,net in [(1,'tone'),(4,'filter out'),(5,'AGND')]:d.tp(f'TP{i}',net)
-    return d
-
-
-def msgeq():
-    d=Circuit('analyser-msgeq7')
-    d.add('JA1','ANALYSER - KEY 22','Shields:Socket_2x11_Key22',analyser_pins(),'interface')
-    d.parts['JA1']['pins']['21']=None  # Digital ground unused on the analogue shield.
-    d.parts['JA1']['pins']['20']=None  # Digital ground unused without identification circuitry.
-    for i in [1,2]:d.add(f'H{i}','M3 retention',HOLE,{},'interface')
-    for b in BODY:
-        n=CHANNEL[b]
-        refs=[f'U{n}',f'R{n}11',f'R{n}13',f'R{n}16',f'C{n}12',f'C{n}14',f'C{n}15',f'C{n}16',f'JS{n}',f'TP{n+10}']
-        for ref in refs:
-            p=copy.deepcopy(V2[ref]);p['sheet']=b
-            p['footprint']=SO8 if ref.startswith('U') else R if ref.startswith('R') else C if ref.startswith('C') else TP if ref.startswith('TP') else JUMPER
-            if ref.startswith('U'):p.update(value='MSGEQ7N',mpn='MSGEQ7N')
-            d.parts[ref]=p
-    d.tp('TPS','analyser/strobe');d.tp('TPR','analyser/reset');d.tp('TPI','MEGA_5V');d.tp('TPG','AGND');return d
 
 
 OUTPUTS=[(2,'D6'),(4,'D46'),(5,'D10'),(6,'D11'),(28,'D5'),(7,'D14'),(8,'D7'),(9,'D8'),
@@ -191,13 +171,45 @@ def teensy():
         d.r(f'RB{pin}','150K',f'adc/{pin}','GND','sensors');d.c(f'CA{pin}','10nF C0G',f'adc/{pin}','GND','sensors')
     d.add('D1','1N5819HW','Diode_SMD:D_SOD-123',{1:'MEGA_5V',2:'VIN_USB'},'power','Cathode to MEGA_5V; USB alone supplies VIN',names={'1':'K','2':'A'},mpn='1N5819HW')
     d.c('CV1','10uF X7R','VIN_USB','GND','power',C8);d.c('CI1','10uF X7R','IOREF','GND','power',C8);d.c('CI2','100nF','IOREF','GND','power')
-    d.tp('TPV','VIN_USB','power');d.tp('TPI','IOREF','power');d.tp('TPG','GND','power')
+    d.testpin('TPV','VIN_USB','power');d.testpin('TPI','IOREF','power');d.testpin('TPG','GND','power')
+    d.parts['TP0']['footprint']='Shields:TestPoint_Pad_D1.0mm'
+    return d
+
+
+def microphone():
+    d=Circuit('microphone')
+    names=dict(zip(map(str,range(1,16)),['CT','SHDN','CG','NC_GND','VDD','MICOUT','GND',
+                    'MICIN','A/R','GAIN','NC_GND','BIAS','MICBIAS','TH','EP']))
+    pins=dict(zip(map(str,range(1,16)),['CT','VDD','CG','GND','VDD','MICOUT','GND',
+                    'MICIN','AR','GAIN','GND','BIAS','MICBIAS','TH','GND']))
+    d.add('U1','MAX9814ETD+','Package_DFN_QFN:TDFN-14-1EP_3x3mm_P0.4mm_EP1.78x2.35mm',
+          pins,'amplifier',names=names,types={'5':'power_in','7':'power_in','15':'power_in',
+          '6':'output','13':'output','2':'input','8':'input','9':'input','10':'input','14':'input'},
+          mpn='MAX9814ETD+',ds='https://www.analog.com/media/en/technical-documentation/data-sheets/max9814.pdf')
+    d.add('MK1','9.7mm electret -44dB','Shields:Electret_9.7mm_P2.5mm',
+          {1:'MIC_POS',2:'GND'},'amplifier','Provisional capsule land pattern; confirm stocked part and polarity',names={'1':'+','2':'CASE/GND'})
+    d.r('R1','2K21','MICBIAS','MIC_POS','amplifier')
+    d.c('C1','100nF C0G','MIC_POS','MICIN','amplifier',C8)
+    d.r('R2','150K','MICBIAS','TH','amplifier');d.r('R3','100K','TH','GND','amplifier')
+    for ref,value,net in [('C2','470nF X7R','CT'),('C3','2.2uF X5R','CG'),('C4','470nF X7R','BIAS'),
+                          ('C5','1uF','VDD'),('C6','100nF','VDD')]:d.c(ref,value,net,'GND','amplifier')
+    d.r('R4','33R','+5V','VDD','power');d.c('C7','22uF X5R 10V','VDD','GND','power',C8)
+    d.r('R5','470R','MICOUT','OUT','interface')
+    for ref,net,setting in [('JP1','GAIN','FIT 2-3: 40dB'),('JP2','AR','FIT 1-2: 1:500')]:
+        part=d.add(ref,setting,'Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical',
+                   {1:'GND',2:net,3:'VDD'},'interface',names={'1':'GND','2':net,'3':'VDD'})
+        part['description']='Fit removable shunt: '+setting
+    d.led('D1','R6','2K2','+5V','GREEN','power')
+    d.add('J1','GND / +5V / OUT','Connector_JST:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical',
+          {1:'GND',2:'+5V',3:'OUT'},'interface',mpn='B3B-EH-A')
+    d.testpin('TP1','MICOUT','interface');d.testpin('TP2','GND','interface')
+    for i in [1,2]:d.add(f'H{i}','M5 / 12mm copper keepout','Shields:MountingHole_5.5mm_Keepout12',{},'mechanical')
     return d
 
 
 _geometry=s.sym_geometry
 def geometry(p):
-    if p['ref'].startswith(('#FLG','R','C','JP','JSID','TP')) or len(p['pins'])<=1:return _geometry(p)
+    if (len(p['pins'])<=2 and p['ref'].startswith(('#FLG','R','C','JP','JSID','TP'))) or len(p['pins'])<=1:return _geometry(p)
     pins=list(p['pins']);groups=[pins[i:i+24] for i in range(0,len(pins),24)];out={}
     for unit,group in enumerate(groups,1):
         left,right=group[:12],group[12:]
@@ -271,4 +283,4 @@ def emit(d):
 
 
 if __name__=='__main__':
-    for build in [backplane,teensy,msgeq,thomas,active]:emit(build())
+    for build in [backplane,teensy,thomas,microphone]:emit(build())

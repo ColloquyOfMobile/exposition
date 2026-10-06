@@ -1200,116 +1200,6 @@
       "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e4fde952-a3d6-5548-bdd5-579ed624857b"
     },
     {
-      "ref": "TP13",
-      "value": "test pad",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
-      "description": "female1 analyser output, module 0",
-      "pins": {
-        "1": "female1/analyser out"
-      },
-      "sheet": "audio3",
-      "uuid": "ae9f928d-6ec3-5060-afd6-f0282d818856",
-      "pin_names": {
-        "1": "1"
-      },
-      "pin_types": {
-        "1": "passive"
-      },
-      "assembly": "copper only",
-      "include_bom": false,
-      "mpn": "",
-      "datasheet": "",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/905df8d0-f9b6-5ac9-b63e-bb1b87483a24"
-    },
-    {
-      "ref": "TP14",
-      "value": "test pad",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
-      "description": "female2 analyser output, module 1",
-      "pins": {
-        "1": "female2/analyser out"
-      },
-      "sheet": "audio4",
-      "uuid": "d9a62b4e-2abc-5e98-a620-7345909c1345",
-      "pin_names": {
-        "1": "1"
-      },
-      "pin_types": {
-        "1": "passive"
-      },
-      "assembly": "copper only",
-      "include_bom": false,
-      "mpn": "",
-      "datasheet": "",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/92d10b79-e0f3-5b2b-9265-0be7be83e974"
-    },
-    {
-      "ref": "TP15",
-      "value": "test pad",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
-      "description": "female3 analyser output, module 2",
-      "pins": {
-        "1": "female3/analyser out"
-      },
-      "sheet": "audio5",
-      "uuid": "5900cf20-a2c1-51ac-9a61-3136c9e92453",
-      "pin_names": {
-        "1": "1"
-      },
-      "pin_types": {
-        "1": "passive"
-      },
-      "assembly": "copper only",
-      "include_bom": false,
-      "mpn": "",
-      "datasheet": "",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/4ac66573-ca9b-5c18-b4a0-b84361df81b0"
-    },
-    {
-      "ref": "TP11",
-      "value": "test pad",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
-      "description": "male1 analyser output, module 3",
-      "pins": {
-        "1": "male1/analyser out"
-      },
-      "sheet": "audio1",
-      "uuid": "7cf628b5-85e3-59e8-bf04-881bdbb4b24e",
-      "pin_names": {
-        "1": "1"
-      },
-      "pin_types": {
-        "1": "passive"
-      },
-      "assembly": "copper only",
-      "include_bom": false,
-      "mpn": "",
-      "datasheet": "",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/5fc387a2-27a3-59b0-a96d-6f3ed99b907a"
-    },
-    {
-      "ref": "TP12",
-      "value": "test pad",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
-      "description": "male2 analyser output, module 4",
-      "pins": {
-        "1": "male2/analyser out"
-      },
-      "sheet": "audio2",
-      "uuid": "12aa82c3-91a2-5905-b63a-8d8a969d5b34",
-      "pin_names": {
-        "1": "1"
-      },
-      "pin_types": {
-        "1": "passive"
-      },
-      "assembly": "copper only",
-      "include_bom": false,
-      "mpn": "",
-      "datasheet": "",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e4fde952-a3d6-5548-bdd5-579ed624857b"
-    },
-    {
       "ref": "TP20",
       "value": "test pad",
       "footprint": "Shields:TestPoint_Pad_D1.5mm",
@@ -1902,25 +1792,25 @@
     },
     {
       "ref": "TP31",
-      "value": "test pad",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
-      "description": "+5V rail",
+      "value": "+5V",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "+5V"
       },
-      "sheet": "power",
-      "uuid": "4d5d9061-2589-5d72-a88a-a515d80d3917",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
       "pin_types": {
         "1": "passive"
       },
-      "assembly": "copper only",
-      "include_bom": false,
+      "assembly": "fit",
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/894454a2-d177-57a2-9ba1-53ccc0188784"
+      "uuid": "4d5d9061-2589-5d72-a88a-a515d80d3917",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
     },
     {
       "ref": "TP32",
@@ -1946,47 +1836,47 @@
     },
     {
       "ref": "TP33",
-      "value": "test pad",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
-      "description": "GND rail",
+      "value": "+12V",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
-        "1": "GND"
+        "1": "+12V"
       },
-      "sheet": "power",
-      "uuid": "42fbb37f-9adf-5398-846a-7a8933a75b2d",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
       "pin_types": {
         "1": "passive"
       },
-      "assembly": "copper only",
-      "include_bom": false,
+      "assembly": "fit",
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/da935bb6-8fb3-54a1-a2be-83ab57096529"
+      "uuid": "42fbb37f-9adf-5398-846a-7a8933a75b2d",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
     },
     {
       "ref": "TP34",
-      "value": "test pad",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
-      "description": "AGND rail",
+      "value": "GND",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
-        "1": "AGND"
+        "1": "GND"
       },
-      "sheet": "power",
-      "uuid": "ada52601-9c1a-5d31-aabc-de384b2fa20e",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
       "pin_types": {
         "1": "passive"
       },
-      "assembly": "copper only",
-      "include_bom": false,
+      "assembly": "fit",
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/da935bb6-8fb3-54a1-a2be-83ab57096529"
+      "uuid": "ada52601-9c1a-5d31-aabc-de384b2fa20e",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
     },
     {
       "ref": "RM1",
@@ -2041,12 +1931,12 @@
     {
       "ref": "TPD1",
       "value": "female1/mic direct",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "female1/mic direct"
       },
-      "sheet": "microphones",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -2054,11 +1944,11 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "7442b3d7-5c14-5fb2-8bcf-bf378b7ce9c7",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
     },
     {
       "ref": "RM2",
@@ -2113,12 +2003,12 @@
     {
       "ref": "TPD2",
       "value": "female2/mic direct",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "female2/mic direct"
       },
-      "sheet": "microphones",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -2126,11 +2016,11 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "b9a2949c-8daa-5116-a6f0-c0405cfb318d",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
     },
     {
       "ref": "RM3",
@@ -2185,12 +2075,12 @@
     {
       "ref": "TPD3",
       "value": "female3/mic direct",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "female3/mic direct"
       },
-      "sheet": "microphones",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -2198,11 +2088,11 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "6c6be680-2dc7-5d2f-86d0-60debe965ed2",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
     },
     {
       "ref": "RM4",
@@ -2257,12 +2147,12 @@
     {
       "ref": "TPD4",
       "value": "male1/mic direct",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "male1/mic direct"
       },
-      "sheet": "microphones",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -2270,11 +2160,11 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "3cd698c9-887e-5947-855b-38cc69001642",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
     },
     {
       "ref": "RM5",
@@ -2329,12 +2219,12 @@
     {
       "ref": "TPD5",
       "value": "male2/mic direct",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "male2/mic direct"
       },
-      "sheet": "microphones",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -2342,11 +2232,11 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "5fdd7260-f9ee-5bbe-a44c-9cf819159a83",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/3fdc6357-5372-5fd3-83fe-b68f2a3a3693"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
     },
     {
       "ref": "JA1",
@@ -2508,12 +2398,12 @@
     {
       "ref": "TPV1",
       "value": "female1/tone",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "female1/tone"
       },
-      "sheet": "slots",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -2521,11 +2411,11 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "736b7dae-0b93-53a7-a15e-2b2de0a3f4a4",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/07655d6a-0e60-5d53-a9b5-fbafb3fe37b6"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
     },
     {
       "ref": "JV2",
@@ -2605,12 +2495,12 @@
     {
       "ref": "TPV2",
       "value": "female2/tone",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "female2/tone"
       },
-      "sheet": "slots",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -2618,11 +2508,11 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "572ad59f-38a2-5179-a7c2-6add1498a6db",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/07655d6a-0e60-5d53-a9b5-fbafb3fe37b6"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
     },
     {
       "ref": "JV3",
@@ -2702,12 +2592,12 @@
     {
       "ref": "TPV3",
       "value": "female3/tone",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "female3/tone"
       },
-      "sheet": "slots",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -2715,11 +2605,11 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "fe82a51f-daca-5deb-85b3-08dd41752bb7",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/07655d6a-0e60-5d53-a9b5-fbafb3fe37b6"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
     },
     {
       "ref": "JV4",
@@ -2799,12 +2689,12 @@
     {
       "ref": "TPV4",
       "value": "male1/tone",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "male1/tone"
       },
-      "sheet": "slots",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -2812,11 +2702,11 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "6e251fdc-486e-5a8b-be7f-3b3bd50ce83e",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/07655d6a-0e60-5d53-a9b5-fbafb3fe37b6"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
     },
     {
       "ref": "JV5",
@@ -2896,12 +2786,12 @@
     {
       "ref": "TPV5",
       "value": "male2/tone",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "male2/tone"
       },
-      "sheet": "slots",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -2909,11 +2799,11 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "d7ab0111-3b17-5675-adb9-4a876458e5c8",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
     },
     {
       "ref": "HA1",
@@ -3125,12 +3015,12 @@
     {
       "ref": "TPL1",
       "value": "female1/filter out",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "female1/filter out"
       },
-      "sheet": "slots",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -3138,11 +3028,11 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "4af2e332-056b-53a1-abfe-13dc2f9c5ebb",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
     },
     {
       "ref": "TPM1",
@@ -3164,17 +3054,17 @@
       "mpn": "",
       "datasheet": "",
       "uuid": "2c4e88e2-ea00-58ae-a5c3-024ded3a592d",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/07655d6a-0e60-5d53-a9b5-fbafb3fe37b6"
     },
     {
       "ref": "TPA1",
       "value": "female1/analyser out",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "female1/analyser out"
       },
-      "sheet": "slots",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -3182,21 +3072,71 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "7d79b2ae-3428-550f-9cb2-318dc7052e75",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
+    },
+    {
+      "ref": "RLT1",
+      "value": "1K5",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female1/tone",
+        "2": "led/DT1"
+      },
+      "sheet": "indicators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "b6bcacfe-8903-5429-99f3-b07c88a0d0ce",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/c177470c-e3f5-5743-81c8-8e4c0b8691e4"
+    },
+    {
+      "ref": "DT1",
+      "value": "YELLOW LED",
+      "footprint": "Shields:LED_0603_1608Metric",
+      "pins": {
+        "1": "GND",
+        "2": "led/DT1"
+      },
+      "sheet": "indicators",
+      "description": "",
+      "pin_names": {
+        "1": "K",
+        "2": "A"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "ae5a2dd5-650e-50da-9459-30de7a87cebe",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/c177470c-e3f5-5743-81c8-8e4c0b8691e4"
     },
     {
       "ref": "TPL2",
       "value": "female2/filter out",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "female2/filter out"
       },
-      "sheet": "slots",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -3204,11 +3144,11 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "97698eee-5a93-5476-af2f-0b2aebba00fe",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
     },
     {
       "ref": "TPM2",
@@ -3230,17 +3170,17 @@
       "mpn": "",
       "datasheet": "",
       "uuid": "acc051c1-2131-5961-9c47-4f12bd176c0f",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/07655d6a-0e60-5d53-a9b5-fbafb3fe37b6"
     },
     {
       "ref": "TPA2",
       "value": "female2/analyser out",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "female2/analyser out"
       },
-      "sheet": "slots",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -3248,21 +3188,71 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "9d841572-1680-5bed-8a5d-ccd0dea97ee9",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
+    },
+    {
+      "ref": "RLT2",
+      "value": "1K5",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female2/tone",
+        "2": "led/DT2"
+      },
+      "sheet": "indicators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "d4fa9dbd-a104-53ff-9f24-87371fe29e18",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/c177470c-e3f5-5743-81c8-8e4c0b8691e4"
+    },
+    {
+      "ref": "DT2",
+      "value": "YELLOW LED",
+      "footprint": "Shields:LED_0603_1608Metric",
+      "pins": {
+        "1": "GND",
+        "2": "led/DT2"
+      },
+      "sheet": "indicators",
+      "description": "",
+      "pin_names": {
+        "1": "K",
+        "2": "A"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "15a73469-a28a-54e4-a4ec-f08c6325de65",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/c177470c-e3f5-5743-81c8-8e4c0b8691e4"
     },
     {
       "ref": "TPL3",
       "value": "female3/filter out",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "female3/filter out"
       },
-      "sheet": "slots",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -3270,11 +3260,11 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "83143d33-aea3-5018-b13b-982912dd40f9",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/e0faefa9-b996-5e9c-9245-0925bcd167fc"
     },
     {
       "ref": "TPM3",
@@ -3296,17 +3286,17 @@
       "mpn": "",
       "datasheet": "",
       "uuid": "75e0acda-7f8e-56d8-a562-4c7dccff63d4",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/07655d6a-0e60-5d53-a9b5-fbafb3fe37b6"
     },
     {
       "ref": "TPA3",
       "value": "female3/analyser out",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "female3/analyser out"
       },
-      "sheet": "slots",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -3314,21 +3304,71 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "cd2d936c-6f57-5778-a434-f238dfb33fbe",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/fa483745-ba56-5c5f-a04b-8542f5b1be40"
+    },
+    {
+      "ref": "RLT3",
+      "value": "1K5",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "female3/tone",
+        "2": "led/DT3"
+      },
+      "sheet": "indicators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "b64ba501-aa25-548b-83fb-c2a81d125c43",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/c177470c-e3f5-5743-81c8-8e4c0b8691e4"
+    },
+    {
+      "ref": "DT3",
+      "value": "YELLOW LED",
+      "footprint": "Shields:LED_0603_1608Metric",
+      "pins": {
+        "1": "GND",
+        "2": "led/DT3"
+      },
+      "sheet": "indicators",
+      "description": "",
+      "pin_names": {
+        "1": "K",
+        "2": "A"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "7b1ceceb-1bc1-567b-84b3-2faf9bb28951",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/c177470c-e3f5-5743-81c8-8e4c0b8691e4"
     },
     {
       "ref": "TPL4",
       "value": "male1/filter out",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "male1/filter out"
       },
-      "sheet": "slots",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -3336,11 +3376,11 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "99607d91-3cf8-5147-9e42-0fc830cee0ff",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/fa483745-ba56-5c5f-a04b-8542f5b1be40"
     },
     {
       "ref": "TPM4",
@@ -3362,17 +3402,17 @@
       "mpn": "",
       "datasheet": "",
       "uuid": "57b39081-324d-5737-8af3-04e5715cdf67",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/07655d6a-0e60-5d53-a9b5-fbafb3fe37b6"
     },
     {
       "ref": "TPA4",
       "value": "male1/analyser out",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "male1/analyser out"
       },
-      "sheet": "slots",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -3380,21 +3420,71 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "8a38a3c2-356c-5f35-82f9-da47d655b1b2",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/fa483745-ba56-5c5f-a04b-8542f5b1be40"
+    },
+    {
+      "ref": "RLT4",
+      "value": "1K5",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male1/tone",
+        "2": "led/DT4"
+      },
+      "sheet": "indicators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "133cada0-77a7-523f-ae8a-2dda97500cd1",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/c177470c-e3f5-5743-81c8-8e4c0b8691e4"
+    },
+    {
+      "ref": "DT4",
+      "value": "YELLOW LED",
+      "footprint": "Shields:LED_0603_1608Metric",
+      "pins": {
+        "1": "GND",
+        "2": "led/DT4"
+      },
+      "sheet": "indicators",
+      "description": "",
+      "pin_names": {
+        "1": "K",
+        "2": "A"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "c2368843-0754-57ae-ada2-0614411da686",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/c177470c-e3f5-5743-81c8-8e4c0b8691e4"
     },
     {
       "ref": "TPL5",
       "value": "male2/filter out",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "male2/filter out"
       },
-      "sheet": "slots",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -3402,11 +3492,11 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "304caa0a-6f70-5cd1-98de-a87575158cfa",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/fa483745-ba56-5c5f-a04b-8542f5b1be40"
     },
     {
       "ref": "TPM5",
@@ -3428,17 +3518,17 @@
       "mpn": "",
       "datasheet": "",
       "uuid": "af5b0795-a7f8-58d8-93ba-2ef661a6f6b6",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/37d4bbc6-76ed-50ad-a98c-d3e67342d8bc"
     },
     {
       "ref": "TPA5",
       "value": "male2/analyser out",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "male2/analyser out"
       },
-      "sheet": "slots",
-      "description": "",
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -3446,11 +3536,277 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "f6fe287b-d531-55c0-ba53-e1fa51d80cda",
-      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/41ae4712-1962-5c99-85ef-a0ccc72ad0b9"
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/fa483745-ba56-5c5f-a04b-8542f5b1be40"
+    },
+    {
+      "ref": "RLT5",
+      "value": "1K5",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "male2/tone",
+        "2": "led/DT5"
+      },
+      "sheet": "indicators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "594a5536-8536-5727-b582-1eee6c1a10bb",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/c177470c-e3f5-5743-81c8-8e4c0b8691e4"
+    },
+    {
+      "ref": "DT5",
+      "value": "YELLOW LED",
+      "footprint": "Shields:LED_0603_1608Metric",
+      "pins": {
+        "1": "GND",
+        "2": "led/DT5"
+      },
+      "sheet": "indicators",
+      "description": "",
+      "pin_names": {
+        "1": "K",
+        "2": "A"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "a82391ff-c05f-5cd7-8f89-df211ed36d48",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/c177470c-e3f5-5743-81c8-8e4c0b8691e4"
+    },
+    {
+      "ref": "TPUSB",
+      "value": "MEGA_5V",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
+      "pins": {
+        "1": "MEGA_5V"
+      },
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "ed41d5e6-4af8-5498-9699-2d42914fcd6d",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/fa483745-ba56-5c5f-a04b-8542f5b1be40"
+    },
+    {
+      "ref": "TPVG",
+      "value": "AGND",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
+      "pins": {
+        "1": "AGND"
+      },
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "125527cb-7751-5314-b44b-ef1f1a7220b9",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/fa483745-ba56-5c5f-a04b-8542f5b1be40"
+    },
+    {
+      "ref": "TPEG",
+      "value": "AGND",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
+      "pins": {
+        "1": "AGND"
+      },
+      "sheet": "test_pins",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "85edf519-ac4c-5db1-9228-06d593e77c85",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/fa483745-ba56-5c5f-a04b-8542f5b1be40"
+    },
+    {
+      "ref": "RLP5",
+      "value": "2K2",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "led/DP5"
+      },
+      "sheet": "indicators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "fbfdaa2c-a885-5ff2-bed1-9b171e6859f1",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/c177470c-e3f5-5743-81c8-8e4c0b8691e4"
+    },
+    {
+      "ref": "DP5",
+      "value": "GREEN LED",
+      "footprint": "Shields:LED_0603_1608Metric",
+      "pins": {
+        "1": "GND",
+        "2": "led/DP5"
+      },
+      "sheet": "indicators",
+      "description": "",
+      "pin_names": {
+        "1": "K",
+        "2": "A"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "edc8c3cd-3461-5034-8589-f921745b207e",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/c177470c-e3f5-5743-81c8-8e4c0b8691e4"
+    },
+    {
+      "ref": "RLP12",
+      "value": "4K7",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "+12V",
+        "2": "led/DP12"
+      },
+      "sheet": "indicators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "03510c59-7619-54df-b92f-abe3ff358bbf",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/c177470c-e3f5-5743-81c8-8e4c0b8691e4"
+    },
+    {
+      "ref": "DP12",
+      "value": "GREEN LED",
+      "footprint": "Shields:LED_0603_1608Metric",
+      "pins": {
+        "1": "GND",
+        "2": "led/DP12"
+      },
+      "sheet": "indicators",
+      "description": "",
+      "pin_names": {
+        "1": "K",
+        "2": "A"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "fcb95ab7-4c44-569b-ac8b-d5a4a0a76a52",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/c177470c-e3f5-5743-81c8-8e4c0b8691e4"
+    },
+    {
+      "ref": "RLPUSB",
+      "value": "2K2",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "MEGA_5V",
+        "2": "led/DPUSB"
+      },
+      "sheet": "indicators",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "54db44ab-48e7-5b03-81f1-6f8e30f64a69",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/c177470c-e3f5-5743-81c8-8e4c0b8691e4"
+    },
+    {
+      "ref": "DPUSB",
+      "value": "GREEN LED",
+      "footprint": "Shields:LED_0603_1608Metric",
+      "pins": {
+        "1": "GND",
+        "2": "led/DPUSB"
+      },
+      "sheet": "indicators",
+      "description": "",
+      "pin_names": {
+        "1": "K",
+        "2": "A"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "1f32da30-c032-5b7b-98a0-a738d2e87a0d",
+      "sheet_path": "/c974ff16-a701-53ef-8165-966482bbbbae/c177470c-e3f5-5743-81c8-8e4c0b8691e4"
     }
   ],
   "production_release": false

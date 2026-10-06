@@ -1,0 +1,49 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-06T10:48:37+0200",
+    "kicad_version": "9.0.7",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e",
+            "violations": []
+        },
+        {
+            "path": "/amplifier/",
+            "uuid_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/8418d248-bc0d-5c52-894c-4ccbebf424c1",
+            "violations": []
+        },
+        {
+            "path": "/amplifier_2/",
+            "uuid_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/f198330e-ecb8-5222-b6f7-82e27733bbdc",
+            "violations": []
+        },
+        {
+            "path": "/power/",
+            "uuid_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/ec32bd1f-1e3a-5ce5-9c97-069da672330b",
+            "violations": []
+        },
+        {
+            "path": "/interface/",
+            "uuid_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/696c3ac1-dca8-520b-adad-1d64b64fed5e",
+            "violations": []
+        },
+        {
+            "path": "/interface_2/",
+            "uuid_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/affb086c-3d3d-56b1-a1bd-954d7a262328",
+            "violations": []
+        },
+        {
+            "path": "/mechanical/",
+            "uuid_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/2412fcfe-628e-5f3d-b87f-175f6f93224e",
+            "violations": []
+        },
+        {
+            "path": "/supplies/",
+            "uuid_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/76e70ea5-e3de-5843-b252-08d6a72f451a",
+            "violations": []
+        }
+    ],
+    "source": "microphone.kicad_sch"
+}

@@ -1,0 +1,606 @@
+{
+  "project": "microphone",
+  "root_uuid": "aa568eb8-4137-509b-b6c6-b3e0a9fa148e",
+  "components": [
+    {
+      "ref": "U1",
+      "value": "MAX9814ETD+",
+      "footprint": "Shields:TDFN-14-1EP_3x3mm_P0.4mm_EP1.78x2.35mm",
+      "pins": {
+        "1": "CT",
+        "2": "VDD",
+        "3": "CG",
+        "4": "GND",
+        "5": "VDD",
+        "6": "MICOUT",
+        "7": "GND",
+        "8": "MICIN",
+        "9": "AR",
+        "10": "GAIN",
+        "11": "GND",
+        "12": "BIAS",
+        "13": "MICBIAS",
+        "14": "TH",
+        "15": "GND"
+      },
+      "sheet": "amplifier",
+      "description": "",
+      "pin_names": {
+        "1": "CT",
+        "2": "SHDN",
+        "3": "CG",
+        "4": "NC_GND",
+        "5": "VDD",
+        "6": "MICOUT",
+        "7": "GND",
+        "8": "MICIN",
+        "9": "A/R",
+        "10": "GAIN",
+        "11": "NC_GND",
+        "12": "BIAS",
+        "13": "MICBIAS",
+        "14": "TH",
+        "15": "EP"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "input",
+        "3": "passive",
+        "4": "passive",
+        "5": "power_in",
+        "6": "output",
+        "7": "power_in",
+        "8": "input",
+        "9": "input",
+        "10": "input",
+        "11": "passive",
+        "12": "passive",
+        "13": "output",
+        "14": "input",
+        "15": "power_in"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "MAX9814ETD+",
+      "datasheet": "https://www.analog.com/media/en/technical-documentation/data-sheets/max9814.pdf",
+      "uuid": "3a208d24-29c4-5f89-baa7-11e21b940937",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/8418d248-bc0d-5c52-894c-4ccbebf424c1"
+    },
+    {
+      "ref": "MK1",
+      "value": "9.7mm electret -44dB",
+      "footprint": "Shields:Electret_9.7mm_P2.5mm",
+      "pins": {
+        "1": "MIC_POS",
+        "2": "GND"
+      },
+      "sheet": "amplifier",
+      "description": "Provisional capsule land pattern; confirm stocked part and polarity",
+      "pin_names": {
+        "1": "+",
+        "2": "CASE/GND"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "91a9defb-f5af-510f-aa67-217b10577d33",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/8418d248-bc0d-5c52-894c-4ccbebf424c1"
+    },
+    {
+      "ref": "R1",
+      "value": "2K21",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "MICBIAS",
+        "2": "MIC_POS"
+      },
+      "sheet": "amplifier",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "a4020b96-f448-5384-90f7-6c5f4ec19f4e",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/8418d248-bc0d-5c52-894c-4ccbebf424c1"
+    },
+    {
+      "ref": "C1",
+      "value": "100nF C0G",
+      "footprint": "Shields:C_0805_2012Metric",
+      "pins": {
+        "1": "MIC_POS",
+        "2": "MICIN"
+      },
+      "sheet": "amplifier",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "5866387a-e24f-5b27-8cc5-e38b02699329",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/8418d248-bc0d-5c52-894c-4ccbebf424c1"
+    },
+    {
+      "ref": "R2",
+      "value": "150K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "MICBIAS",
+        "2": "TH"
+      },
+      "sheet": "amplifier",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "295c1b74-8444-5339-88af-a668b5b3c0c2",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/8418d248-bc0d-5c52-894c-4ccbebf424c1"
+    },
+    {
+      "ref": "R3",
+      "value": "100K",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "TH",
+        "2": "GND"
+      },
+      "sheet": "amplifier",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "d1b9960d-1a7d-5124-a28b-ccdb6629a8d1",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/8418d248-bc0d-5c52-894c-4ccbebf424c1"
+    },
+    {
+      "ref": "C2",
+      "value": "470nF X7R",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "CT",
+        "2": "GND"
+      },
+      "sheet": "amplifier",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "1036e3e3-708f-5ed1-b8aa-48e37a4bba26",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/8418d248-bc0d-5c52-894c-4ccbebf424c1"
+    },
+    {
+      "ref": "C3",
+      "value": "2.2uF X5R",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "CG",
+        "2": "GND"
+      },
+      "sheet": "amplifier",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "84c16370-3a4e-5d83-a639-830a7708a46d",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/8418d248-bc0d-5c52-894c-4ccbebf424c1"
+    },
+    {
+      "ref": "C4",
+      "value": "470nF X7R",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "BIAS",
+        "2": "GND"
+      },
+      "sheet": "amplifier",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "5a5bb12c-949a-5ed0-81dd-f7fc231d3f4e",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/8418d248-bc0d-5c52-894c-4ccbebf424c1"
+    },
+    {
+      "ref": "C5",
+      "value": "1uF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "VDD",
+        "2": "GND"
+      },
+      "sheet": "amplifier",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "2da55a9b-6059-5448-8c31-06f8a0b369d6",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/8418d248-bc0d-5c52-894c-4ccbebf424c1"
+    },
+    {
+      "ref": "C6",
+      "value": "100nF",
+      "footprint": "Shields:C_0603_1608Metric",
+      "pins": {
+        "1": "VDD",
+        "2": "GND"
+      },
+      "sheet": "amplifier",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "140562bf-1007-516b-9baa-32afe2efec27",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/f198330e-ecb8-5222-b6f7-82e27733bbdc"
+    },
+    {
+      "ref": "R4",
+      "value": "33R",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "VDD"
+      },
+      "sheet": "power",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "3eed6b92-57c0-56d4-beef-71844902c986",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/ec32bd1f-1e3a-5ce5-9c97-069da672330b"
+    },
+    {
+      "ref": "C7",
+      "value": "22uF X5R 10V",
+      "footprint": "Shields:C_0805_2012Metric",
+      "pins": {
+        "1": "VDD",
+        "2": "GND"
+      },
+      "sheet": "power",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "950ef4bb-bfe5-55f0-b607-9abe8c6950f4",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/ec32bd1f-1e3a-5ce5-9c97-069da672330b"
+    },
+    {
+      "ref": "R5",
+      "value": "470R",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "MICOUT",
+        "2": "OUT"
+      },
+      "sheet": "interface",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "ac7ddc0e-2d1a-5442-b307-0a2b612a5776",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/696c3ac1-dca8-520b-adad-1d64b64fed5e"
+    },
+    {
+      "ref": "JP1",
+      "value": "FIT 2-3: 40dB",
+      "footprint": "Shields:PinHeader_1x03_P2.54mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "GAIN",
+        "3": "VDD"
+      },
+      "sheet": "interface",
+      "description": "Fit removable shunt: FIT 2-3: 40dB",
+      "pin_names": {
+        "1": "GND",
+        "2": "GAIN",
+        "3": "VDD"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "bb4e1cd3-698b-5a4c-a9a5-13f5542f926b",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/696c3ac1-dca8-520b-adad-1d64b64fed5e"
+    },
+    {
+      "ref": "JP2",
+      "value": "FIT 1-2: 1:500",
+      "footprint": "Shields:PinHeader_1x03_P2.54mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "AR",
+        "3": "VDD"
+      },
+      "sheet": "interface",
+      "description": "Fit removable shunt: FIT 1-2: 1:500",
+      "pin_names": {
+        "1": "GND",
+        "2": "AR",
+        "3": "VDD"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "97f0318a-ddb0-5f10-865b-ce561042bd7e",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/696c3ac1-dca8-520b-adad-1d64b64fed5e"
+    },
+    {
+      "ref": "R6",
+      "value": "2K2",
+      "footprint": "Shields:R_0603_1608Metric",
+      "pins": {
+        "1": "+5V",
+        "2": "led/D1"
+      },
+      "sheet": "power",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "a9d40344-77bd-5c5c-b06d-41cb86ebe4a6",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/ec32bd1f-1e3a-5ce5-9c97-069da672330b"
+    },
+    {
+      "ref": "D1",
+      "value": "GREEN LED",
+      "footprint": "Shields:LED_0603_1608Metric",
+      "pins": {
+        "1": "GND",
+        "2": "led/D1"
+      },
+      "sheet": "power",
+      "description": "",
+      "pin_names": {
+        "1": "K",
+        "2": "A"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "2df2d17a-599b-571a-9e11-8a421a966486",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/ec32bd1f-1e3a-5ce5-9c97-069da672330b"
+    },
+    {
+      "ref": "J1",
+      "value": "GND / +5V / OUT",
+      "footprint": "Shields:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical",
+      "pins": {
+        "1": "GND",
+        "2": "+5V",
+        "3": "OUT"
+      },
+      "sheet": "interface",
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2",
+        "3": "3"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "B3B-EH-A",
+      "datasheet": "",
+      "uuid": "4c747c91-60da-5779-8ff8-102fe8a76cba",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/affb086c-3d3d-56b1-a1bd-954d7a262328"
+    },
+    {
+      "ref": "TP1",
+      "value": "MICOUT",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
+      "pins": {
+        "1": "MICOUT"
+      },
+      "sheet": "interface",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "db5b5fbd-add9-5ec6-8312-d49edafb4061",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/696c3ac1-dca8-520b-adad-1d64b64fed5e"
+    },
+    {
+      "ref": "TP2",
+      "value": "GND",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
+      "pins": {
+        "1": "GND"
+      },
+      "sheet": "interface",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
+      "pin_names": {
+        "1": "1"
+      },
+      "pin_types": {
+        "1": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "6fcd3cc6-472b-597d-b76d-19bfe77a5a5e",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/696c3ac1-dca8-520b-adad-1d64b64fed5e"
+    },
+    {
+      "ref": "H1",
+      "value": "M5 / 12mm copper keepout",
+      "footprint": "Shields:MountingHole_5.5mm_Keepout12",
+      "pins": {},
+      "sheet": "mechanical",
+      "description": "",
+      "pin_names": {},
+      "pin_types": {},
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "66861fc3-20d2-5689-9edb-ed89f95a488d",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/2412fcfe-628e-5f3d-b87f-175f6f93224e"
+    },
+    {
+      "ref": "H2",
+      "value": "M5 / 12mm copper keepout",
+      "footprint": "Shields:MountingHole_5.5mm_Keepout12",
+      "pins": {},
+      "sheet": "mechanical",
+      "description": "",
+      "pin_names": {},
+      "pin_types": {},
+      "assembly": "fit",
+      "include_bom": false,
+      "mpn": "",
+      "datasheet": "",
+      "uuid": "34740771-6389-5f26-904b-cb28ca2d786e",
+      "sheet_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/2412fcfe-628e-5f3d-b87f-175f6f93224e"
+    }
+  ],
+  "production_release": false
+}

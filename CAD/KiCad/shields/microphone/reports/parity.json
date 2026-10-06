@@ -1,0 +1,21 @@
+{
+  "connected_pins": 56,
+  "parity_differences": [],
+  "erc_violations": 0,
+  "drc_violations": 0,
+  "unconnected_items": 0,
+  "copper_layers": 2,
+  "tracks_and_vias": 172,
+  "sha256": {
+    "amplifier.kicad_sch": "6d1834304dccb1896e76c3d5b80a8fb15a51a92d211b3f4761d404fed0525af9",
+    "amplifier_2.kicad_sch": "f5a06491fbfb636a78147f1cae810749fa53496044100be5d34a0a0c4b6cb78e",
+    "interface.kicad_sch": "df21993eb6b888279dc5d66a127044e342f1710134eacc29e006893e13a6c916",
+    "interface_2.kicad_sch": "08566c6e09a631ef96e369dd6dd505779c1ccc304c4013d27afd8c761e134b5e",
+    "mechanical.kicad_sch": "e7e85f0e8933759ed783db6ff14336926653aea7ce208721b91f71d52a18bed5",
+    "microphone.kicad_pcb": "7f0a525ca5e390ba5aef43498615029122397858b42edd63eafa6c52097efd34",
+    "microphone.kicad_pro": "ca160f1b7a5d6ff2bb18804a636daad19dad3cc13db133fa1f805502f86e56a0",
+    "microphone.kicad_sch": "bd0833f1352a86e8cb00af4a57263167c9405b635eb9fe300d6596aca709b667",
+    "power.kicad_sch": "49a3776c8d146d6b29c53b70867edc38d2d403bd62efb5f1fcfc8251c5a1923c",
+    "supplies.kicad_sch": "90911990357308a3626301c8bd3c6d117eb7bf2117e95252ca6506aeab3d6f10"
+  }
+}

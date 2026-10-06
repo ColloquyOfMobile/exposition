@@ -1,0 +1,22 @@
+Reference,Value,Footprint,MPN,Assembly
+U1,MAX9814ETD+,Shields:TDFN-14-1EP_3x3mm_P0.4mm_EP1.78x2.35mm,MAX9814ETD+,fit
+MK1,9.7mm electret -44dB,Shields:Electret_9.7mm_P2.5mm,,fit
+R1,2K21,Shields:R_0603_1608Metric,,fit
+C1,100nF C0G,Shields:C_0805_2012Metric,,fit
+R2,150K,Shields:R_0603_1608Metric,,fit
+R3,100K,Shields:R_0603_1608Metric,,fit
+C2,470nF X7R,Shields:C_0603_1608Metric,,fit
+C3,2.2uF X5R,Shields:C_0603_1608Metric,,fit
+C4,470nF X7R,Shields:C_0603_1608Metric,,fit
+C5,1uF,Shields:C_0603_1608Metric,,fit
+C6,100nF,Shields:C_0603_1608Metric,,fit
+R4,33R,Shields:R_0603_1608Metric,,fit
+C7,22uF X5R 10V,Shields:C_0805_2012Metric,,fit
+R5,470R,Shields:R_0603_1608Metric,,fit
+JP1,FIT 2-3: 40dB,Shields:PinHeader_1x03_P2.54mm_Vertical,,fit
+JP2,FIT 1-2: 1:500,Shields:PinHeader_1x03_P2.54mm_Vertical,,fit
+R6,2K2,Shields:R_0603_1608Metric,,fit
+D1,GREEN LED,Shields:LED_0603_1608Metric,,fit
+J1,GND / +5V / OUT,Shields:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical,B3B-EH-A,fit
+TP1,MICOUT,Shields:TestPin_1x01_P2.54mm,,fit
+TP2,GND,Shields:TestPin_1x01_P2.54mm,,fit

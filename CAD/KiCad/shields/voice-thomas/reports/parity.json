@@ -1,15 +1,15 @@
 {
-  "connected_pins": 25,
+  "connected_pins": 17,
   "parity_differences": [],
   "erc_violations": 0,
   "drc_violations": 0,
   "unconnected_items": 0,
   "copper_layers": 2,
-  "tracks_and_vias": 59,
+  "tracks_and_vias": 36,
   "sha256": {
-    "circuit.kicad_sch": "294a0e712f8447df31b52f62acf8755e32b63dd8773c3588624de9d5c9feb8db",
+    "circuit.kicad_sch": "1741969ce5bbef60b8c88c456d43812cda30457fa9cdfdedd04cc6a09e5e2920",
     "interface.kicad_sch": "b08ab887f951c86935c4778feeef4ee44f01cc0d4998c6c49bb697c487f393b3",
-    "voice-thomas.kicad_pcb": "a78753050f2c00f26fd4d1b9805bdfe794acdcd12ec7d2618e94c4ea4c05886b",
+    "voice-thomas.kicad_pcb": "deb23efa738ffa5fff2a142e3a83d8aa4ef8b525ef0f1dfa50cebf37fb3fab6f",
     "voice-thomas.kicad_pro": "80b927e42b7bd400d895598e4d84cab3abac139304c0909c2dadc7c894f4b751",
     "voice-thomas.kicad_sch": "50d47093bf519b387707c39b030c6aafc6140650351ac1267f0a9ae26ec40bef"
   }

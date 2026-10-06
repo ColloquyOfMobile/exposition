@@ -41,7 +41,7 @@ def main(only=None):
             zone(board,'SH_RETURN_BOTTOM','GND',p.B_Cu,points)
             layers=4
         else:
-            zone(board,'SH_RETURN','GND' if name=='teensy-adapter' else 'AGND',p.B_Cu,points)
+            zone(board,'SH_RETURN','GND' if name in ['teensy-adapter','microphone'] else 'AGND',p.B_Cu,points)
             layers=2
         board.BuildConnectivity();p.ZONE_FILLER(board).Fill(board.Zones());p.SaveBoard(str(path),board)
         (folder/'reports/planes.json').write_text(json.dumps({'copper_layers':layers,'thickness_mm':1.6,
@@ -51,4 +51,8 @@ def main(only=None):
 
 if __name__=='__main__':
     import sys
-    main(sys.argv[1:])
+    if len(sys.argv)>1:main(sys.argv[1:])
+    else:
+        import subprocess
+        for f in ROOT.iterdir():
+            if (f/'circuit.json').exists():subprocess.run([sys.executable,__file__,f.name],check=True)

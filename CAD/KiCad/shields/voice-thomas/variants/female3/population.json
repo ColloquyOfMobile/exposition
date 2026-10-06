@@ -1,5 +1,9 @@
 {
-  "kind": "voice thomas",
+  "kind": "Thomas RC",
   "body": "female3",
-  "hz": 6329
+  "pitch_hz": 6329,
+  "window_hz": [
+    6329,
+    6329
+  ]
 }

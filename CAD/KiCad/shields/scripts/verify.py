@@ -56,7 +56,7 @@ def main():
     for pin,net in V2['A1']['pins'].items():
         if net:assert plain(back[('A1',pin)].GetNetname())==net
     # Slot pairs must mate in world coordinates with a translation only.
-    for design in ['voice-thomas','voice-active']:
+    for design in ['voice-thomas']:
         card=pads(loaded[design]);c0=position(card[('JV1','1')])
         assert ('JV1','6') not in card
         for i,b in enumerate(BODY,1):
@@ -67,11 +67,6 @@ def main():
             bh=next(f for f in loaded['backplane'].GetFootprints() if f.GetReference()==f'HV{i}')
             ch=next(f for f in loaded[design].GetFootprints() if f.GetReference()=='H1')
             assert all(near(position(bh)[j],position(ch)[j]+offset[j]) for j in range(2))
-    for design in ['analyser-msgeq7']:
-        card=pads(loaded[design]);assert ('JA1','22') not in card
-        for n in range(1,22):
-            bp,cp=position(back[('JA1',str(n))]),position(card[('JA1',str(n))])
-            assert near(bp[0],cp[0]+25) and near(bp[1],cp[1]+215)
     adapter=pads(loaded['teensy-adapter'])
     for (ref,pin),pad in adapter.items():
         if ref!='JM1':continue
@@ -93,7 +88,7 @@ def main():
         assert len(pins)==1
         net=plain(adapter[pins[0]].GetNetname())
         assert net==(BODY[i]+'/mic direct' if i<5 else f'adc/{gpio}')
-    assert set(loaded)=={'backplane','teensy-adapter','analyser-msgeq7','voice-active','voice-thomas'}
+    assert set(loaded)=={'backplane','teensy-adapter','voice-thomas','microphone'}
     backparts={c['ref']:c for c in backdata['components']}
     adparts={c['ref']:c for c in data['components']}
     for i,body in enumerate(BODY,1):
@@ -111,16 +106,41 @@ def main():
         assert not adapter[('JM1',pin)].GetNetname(),('Teensy isolation',pin)
     assert not back[('A1','IORF')].GetNetname()
     for pin in [34,35]:assert plain(adapter[(f'TP{pin}','1')].GetNetname())==f'gpio/{pin}'
-    analyser=pads(loaded['analyser-msgeq7'])
     for pin,net in [('19','MEGA_5V'),('20','GND'),('21','GND')]:
         assert plain(back[('JA1',pin)].GetNetname())==net
-    assert plain(analyser[('JA1','19')].GetNetname())=='MEGA_5V'
-    for n in range(1,6):
-        assert plain(analyser[(f'U{n}','1')].GetNetname())=='MEGA_5V'
-        assert plain(analyser[(f'R{n}13','1')].GetNetname())=='MEGA_5V'
+    for name,count in [('backplane',26),('teensy-adapter',3),('voice-thomas',2),('microphone',2)]:
+        headers=[f for f in loaded[name].GetFootprints() if str(f.GetFPID().GetLibItemName())=='TestPin_1x01_P2.54mm']
+        assert len(headers)==count,(name,len(headers))
+    leds=[c for c in backparts.values() if c['ref'] in ['DP5','DP12','DPUSB','DT1','DT2','DT3','DT4','DT5']]
+    assert len(leds)==8
+    for c in leds:assert c['pins']=={'1':'GND','2':'led/'+c['ref']}
+    power_positions=[position(back[(ref,'1')]) for ref in ['TP31','TP33','TPUSB','TP34']]
+    assert near(power_positions[1][0]-power_positions[0][0],5.08)
+    assert near(power_positions[2][0]-power_positions[1][0],5.08)
+    voiceparts={f.GetReference():f for f in loaded['voice-thomas'].GetFootprints()}
+    assert set(voiceparts)=={'JV1','H1','R1','R2','R3','C1','C2','TP1','TP4','TP5'}
+    for ref,pitch in [('R1',7.62),('R2',7.62),('C1',5),('C2',5)]:
+        pp=list(voiceparts[ref].Pads());assert all(x.GetAttribute()==p.PAD_ATTRIB_PTH for x in pp)
+        a,b=[position(x) for x in pp];assert near(((a[0]-b[0])**2+(a[1]-b[1])**2)**.5,pitch)
+    assert not pads(loaded['voice-thomas'])[('JV1','5')].GetNetname()
+    mic=loaded['microphone'];mf={f.GetReference():f for f in mic.GetFootprints()};mp=pads(mic)
+    assert position(mf['H1'])==(60,56) and position(mf['H2'])==(60,106)
+    for ref in ['H1','H2']:
+        hp=next(iter(mf[ref].Pads()));assert hp.GetAttribute()==p.PAD_ATTRIB_NPTH
+        assert all(near(v,5.5) for v in p.ToMM(hp.GetDrillSize()))
+        hx,hy=position(mf[ref])
+        for f in mic.GetFootprints():
+            if f.GetReference()==ref:continue
+            for pad in f.Pads():
+                x,y=position(pad);sx,sy=p.ToMM(pad.GetSize())
+                assert ((x-hx)**2+(y-hy)**2)**.5-max(sx,sy)/2>=6,(ref,f.GetReference(),'keepout')
+        assert len(list(mf[ref].Zones()))==2
+    for f in mf.values():assert f.GetLayer()==p.F_Cu
+    for pin in ['4','7','11','15']:assert plain(mp[('U1',pin)].GetNetname())=='GND'
+    assert plain(mp[('U1','2')].GetNetname())==plain(mp[('U1','5')].GetNetname())
     summary['interfaces']={'fixed_harness_pinout_and_coordinates':'PASS','v2_connected_Mega_pins':'PASS',
-        'five_voice_mating_pairs':'PASS','MSGEQ7_mating_pair':'PASS','adapter_mirror':'PASS','single_ground_bond':'PASS','no_identification_hardware':'PASS','revised_Teensy_analogue_mapping':'PASS',
-        'direct_microphone_networks':'PASS','MSGEQ7_isolated_from_Teensy':'PASS','MSGEQ7_USB_5V_supply':'PASS'}
+        'five_voice_mating_pairs':'PASS','analyser_carrier':'PENDING measured module geometry','adapter_mirror':'PASS','single_ground_bond':'PASS','no_identification_hardware':'PASS','revised_Teensy_analogue_mapping':'PASS',
+        'direct_microphone_networks':'PASS','MSGEQ7_isolated_from_Teensy':'PASS','MSGEQ7_slot_USB_5V_supply':'PASS','LEDs_and_test_headers':'PASS','THT_voice_pitch_components':'PASS','microphone_mounting_and_ground_pins':'PASS'}
     (ROOT/'VALIDATION.json').write_text(json.dumps(summary,indent=2)+'\n')
     for name,result in summary.items():print(name,result)
     assert all(not r['parity_differences'] for n,r in summary.items() if n!='interfaces')

@@ -1,0 +1,54 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-05T19:06:38+0200",
+    "kicad_version": "9.0.7",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c",
+            "violations": []
+        },
+        {
+            "path": "/interface/",
+            "uuid_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/ced2d10e-bbf6-59f9-8dd2-3b8fbcd538e9",
+            "violations": []
+        },
+        {
+            "path": "/female1/",
+            "uuid_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/21643d82-ac1d-5cd9-9874-515481d700d6",
+            "violations": []
+        },
+        {
+            "path": "/female2/",
+            "uuid_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/dc261c20-56d8-521f-a1cb-54128e0c60cf",
+            "violations": []
+        },
+        {
+            "path": "/female3/",
+            "uuid_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/d9205148-6e26-58de-8e1a-8d90ae444064",
+            "violations": []
+        },
+        {
+            "path": "/male1/",
+            "uuid_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/aa4ad7eb-b5c2-51f7-9017-3795b1e71fe2",
+            "violations": []
+        },
+        {
+            "path": "/male2/",
+            "uuid_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/cb306862-3936-51d4-85b9-48ddd84f46f1",
+            "violations": []
+        },
+        {
+            "path": "/circuit/",
+            "uuid_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/35612c59-504f-5b7a-ad9a-930c5c58f069",
+            "violations": []
+        },
+        {
+            "path": "/supplies/",
+            "uuid_path": "/051aa90c-bb55-5623-9e53-94470bed9b3c/d58d215f-1028-50bc-9aff-b1218bbcd7a6",
+            "violations": []
+        }
+    ],
+    "source": "analyser-msgeq7.kicad_sch"
+}

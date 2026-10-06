@@ -26,8 +26,8 @@ def route(folder,args):
         if track.GetNetname().replace('{slash}','/') in (args.rip_net or []) or track.m_Uuid.AsString() in violations:board.Delete(track)
     ns=board.GetDesignSettings().m_NetSettings
     ns.ClearNetclasses();ns.ClearNetclassPatternAssignments();ns.ClearNetclassLabelAssignments()
-    for cls,width in [('Default',.25),('Power',1.5 if name=='backplane' else .5)]:
-        nc=p.NETCLASS(cls);nc.SetClearance(p.FromMM(.2));nc.SetTrackWidth(p.FromMM(width))
+    for cls,width in [('Default',.15 if name=='microphone' else .25),('Power',1.5 if name=='backplane' else .5)]:
+        nc=p.NETCLASS(cls);nc.SetClearance(p.FromMM(.15 if name=='microphone' else .2));nc.SetTrackWidth(p.FromMM(width))
         nc.SetViaDiameter(p.FromMM(.6));nc.SetViaDrill(p.FromMM(.3))
         if cls=='Default':ns.SetDefaultNetclass(nc)
         else:

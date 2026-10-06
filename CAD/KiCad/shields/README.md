@@ -1,62 +1,36 @@
 # Colloquy shield PCB set
 
-All five native KiCad 9 projects implement the direct-microphone 2026-10-05 spec.
-Their common footprint library lives here too. No identification chips or I2C
-bus remain. Voice headers are keyed 2x3; analyser headers are keyed 2x11.
+Updated for SHIELDS.md revision 2d9fe1d and MICROPHONE_BOARD.md (2026-10-05).
+All current KiCad 9 projects and their shared library are in this folder.
 
-Build the backplane, five Thomas cards and MSGEQ7 analyser first for the
-exhibition. The Teensy adapter follows with JA1 empty; active cards come next.
-Five 4.7K/1M microphone networks on the backplane feed Mega-footprint
-D26-D30, which the adapter routes to Teensy A0-A4 with 1nF at each input.
-The obsolete direct analyser PCB is removed; its earlier design remains in Git.
+| Project | Function | Quantity |
+|---|---|---|
+| backplane | Harness, power, shield slots, eight LEDs and 26 test headers | 1 |
+| teensy-adapter | Teensy 4.1 in the Mega slot; three power test headers | 1 |
+| voice-thomas | Thomas RC filter for either processor; THT pitch components | 5, more as needed |
+| microphone | MAX9814 body microphone, 20 x 62 mm, two M5 holes | 6 (one spare) |
+| analyser-carrier | Five purchased DFRobot modules | Pending module measurement |
 
-| Project | Function | Quantity in the full comparison set |
-|---|---|---:|
-| `backplane/backplane.kicad_pro` | Fixed harness, power and shield slots | 1 |
-| `teensy-adapter/teensy-adapter.kicad_pro` | Teensy 4.1 in the Mega computing slot | 1 |
-| `analyser-msgeq7/analyser-msgeq7.kicad_pro` | Five original band analysers | 1 |
-| `voice-thomas/voice-thomas.kicad_pro` | Passive original voice, five BOM variants | 5 |
-| `voice-active/voice-active.kicad_pro` | Fourth-order voice, thirteen BOM variants | As required |
+The active filter is obsolete. One voice layout supports all five Thomas
+populations and thirteen new-pitch populations. See ASSEMBLY.md and its BOMs.
+The old active voice and bare-chip analyser files are clearly archived under
+obsolete/ and are not current build inputs.
 
-**Engineering prototypes, not a fabrication release.** Read `REVIEW.md` for
-specification discrepancies and unresolved electrical/mechanical issues.
-The main `.kicad_pcb` in each project is the routed layout. The `-placed`
-files are unrouted regeneration checkpoints, not manufacturing inputs.
-The backplane and Teensy adapter use four copper layers; the three audio
-designs use two. All are nominally 1.6 mm thick.
+Open each current .kicad_pro. Main .kicad_pcb files are routed; -placed files
+are unrouted checkpoints. Backplane/adapter use four copper layers; voice/mic
+two; nominal thickness is 1.6 mm. Symbols and footprints are local.
+Native ERC/DRC, netlist parity and interface results are in VALIDATION.md/json.
 
-Each project includes editable hierarchical schematics, a circuit connectivity
-manifest, BOM, component placement CSV and native validation reports.
-`ASSEMBLY.md` describes the five Thomas and thirteen active-card populations.
-`VALIDATION.json` records ERC, DRC, connectivity and mating checks.
-`Shields.pretty` is shared by all five via relative library
-paths. Open each `.kicad_pro` to load its local symbol/footprint tables.
+Engineering prototypes: no fabrication release or Gerber order package.
+The analyser carrier requires actual module measurements. The microphone
+capsule's exact stocked part and land pattern must be confirmed. REVIEW.md
+lists outstanding physical checks. The old analyser envelope on the backplane
+remains provisional until the carrier is sized.
 
-Rebuild circuit sources with `scripts/design.py`, then placements with
-`scripts/boards.py`, using the Python interpreter shipped with KiCad 9.
-These scripts read earlier designs without changing them. Regeneration is
-explicit; the board generator never overwrites a routed board.
-
-Routing uses `scripts/route.py` with an official Freerouting 2.4.1 JAR,
-using the existing two/four-layer stackups. `scripts/inner_routes.py` is
-retained only as a historical tool for the first prototype.
-Run `mechanical.py` before routing, then `planes.py`, `finish.py`, `check.py`
-and `verify.py`; `labels.py` applies the specified operating text and variant
-tables before finishing. `update_simplified.py` is a one-time migration from
-the original prototype; do not re-run it on updated boards.
-`trim_stubs.py` removes native-DRC-confirmed dead ends and
-must be followed by another plane fill and check. `variants.py` creates assembly variants. Scripts require
-KiCad's Python; `check.py` also uses its CLI. Router intermediates belong in
-a temporary directory outside this deliverable. `repair_testpads.py` locates
-clear routed copper for probe pads; refill planes and rerun checks afterwards.
-`update_direct_microphones.py` is the one-time Oct 4 to Oct 5 migration,
-with backups and validated temporary output before replacement.
-Do not run historical migration/routing-completion scripts on finished boards.
-
-No Gerber order package is supplied while the electrical release issues in
-`REVIEW.md` remain open. These are editable, routed engineering prototypes.
-
-`positions.csv` is KiCad's SMD-only placement export in mm with its absolute
-origin and positive Y pointing up. It includes optional lands: filter it by
-the selected variant BOM's Assembly column before use. Through-hole headers,
-modules and retention hardware are manually fitted from the assembly drawings.
+Generation: scripts/design.py, boards.py, variants.py with KiCad's Python.
+Routing: scripts/route.py with Freerouting 2.4.1. After routing, run labels.py,
+finish.py, planes.py, check.py and verify.py. Preserve mechanical holes and
+validated connector positions when regenerating. Historical migration scripts
+are one-time tools, not general rebuild commands. Router files stay in tmp/.
+positions.csv contains SMD-only placements; fit THT parts manually from BOMs
+and assembly views. Filter all populations by their selected BOM.

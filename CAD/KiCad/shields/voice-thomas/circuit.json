@@ -54,8 +54,8 @@
     },
     {
       "ref": "R1",
-      "value": "1K2",
-      "footprint": "Shields:R_0603_1608Metric",
+      "value": "1K2 1% 0.25W",
+      "footprint": "Shields:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal",
       "pins": {
         "1": "tone",
         "2": "stage1"
@@ -79,8 +79,8 @@
     },
     {
       "ref": "R2",
-      "value": "1K2",
-      "footprint": "Shields:R_0603_1608Metric",
+      "value": "1K2 1% 0.25W",
+      "footprint": "Shields:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal",
       "pins": {
         "1": "stage1",
         "2": "filter out"
@@ -104,8 +104,8 @@
     },
     {
       "ref": "C1",
-      "value": "150nF PPS",
-      "footprint": "Shields:PPS_6041",
+      "value": "150nF film 5% >=50V",
+      "footprint": "Shields:C_Rect_L7.0mm_W6.5mm_P5.00mm",
       "pins": {
         "1": "AGND",
         "2": "stage1"
@@ -128,59 +128,9 @@
       "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
     },
     {
-      "ref": "CX1",
-      "value": "DNP PPS",
-      "footprint": "Shields:PPS_6041",
-      "pins": {
-        "1": "AGND",
-        "2": "stage1"
-      },
-      "sheet": "circuit",
-      "description": "",
-      "pin_names": {
-        "1": "1",
-        "2": "2"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive"
-      },
-      "assembly": "DNP",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "9c803e53-c28a-50ca-8262-7cff6128c090",
-      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
-    },
-    {
-      "ref": "CY1",
-      "value": "DNP C0G",
-      "footprint": "Shields:C_1206_3216Metric",
-      "pins": {
-        "1": "AGND",
-        "2": "stage1"
-      },
-      "sheet": "circuit",
-      "description": "",
-      "pin_names": {
-        "1": "1",
-        "2": "2"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive"
-      },
-      "assembly": "DNP",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "6ea3bc19-5dd7-53ee-85c2-3f681252b61f",
-      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
-    },
-    {
       "ref": "C2",
-      "value": "150nF PPS",
-      "footprint": "Shields:PPS_6041",
+      "value": "150nF film 5% >=50V",
+      "footprint": "Shields:C_Rect_L7.0mm_W6.5mm_P5.00mm",
       "pins": {
         "1": "AGND",
         "2": "filter out"
@@ -200,56 +150,6 @@
       "mpn": "",
       "datasheet": "",
       "uuid": "4c49c939-67f0-5d77-8b4c-b67d85152125",
-      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
-    },
-    {
-      "ref": "CX2",
-      "value": "DNP PPS",
-      "footprint": "Shields:PPS_6041",
-      "pins": {
-        "1": "AGND",
-        "2": "filter out"
-      },
-      "sheet": "circuit",
-      "description": "",
-      "pin_names": {
-        "1": "1",
-        "2": "2"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive"
-      },
-      "assembly": "DNP",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "32b6c048-c39c-5298-8ba5-60cd87565c9e",
-      "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
-    },
-    {
-      "ref": "CY2",
-      "value": "DNP C0G",
-      "footprint": "Shields:C_1206_3216Metric",
-      "pins": {
-        "1": "AGND",
-        "2": "filter out"
-      },
-      "sheet": "circuit",
-      "description": "",
-      "pin_names": {
-        "1": "1",
-        "2": "2"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive"
-      },
-      "assembly": "DNP",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "a40325cc-bd2e-5136-b494-1f1079bac47d",
       "sheet_path": "/b263c855-4a4b-5b9c-a9f0-0ad21dbcdee8/102b2cb9-34f2-51e0-a5cc-88d2355ca4ac"
     },
     {
@@ -302,12 +202,12 @@
     {
       "ref": "TP4",
       "value": "filter out",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "filter out"
       },
       "sheet": "circuit",
-      "description": "",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -315,7 +215,7 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "a13687d3-bef7-5184-8598-76bc9c51bd5f",
@@ -324,12 +224,12 @@
     {
       "ref": "TP5",
       "value": "AGND",
-      "footprint": "Shields:TestPoint_Pad_D1.5mm",
+      "footprint": "Shields:TestPin_1x01_P2.54mm",
       "pins": {
         "1": "AGND"
       },
       "sheet": "circuit",
-      "description": "",
+      "description": "Single gold 2.54 mm header; Dupont test pin",
       "pin_names": {
         "1": "1"
       },
@@ -337,7 +237,7 @@
         "1": "passive"
       },
       "assembly": "fit",
-      "include_bom": false,
+      "include_bom": true,
       "mpn": "",
       "datasheet": "",
       "uuid": "471a9adf-3dac-582d-88c4-03d1cc58b822",

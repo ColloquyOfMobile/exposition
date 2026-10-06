@@ -25,53 +25,19 @@ def save(kind,name,changes,identity):
 
 
 def main():
-    for b in BODY:
-        r,c=math.THOMAS_CHANNELS[b];values={f'R{i}':dict(value=f'{r:g} ohm 1%') for i in [1,2]}
-        for i in [1,2]:
-            values[f'C{i}']=dict(value='DNP PPS',assembly='DNP',mpn='')
-            values[f'CX{i}']=dict(value='DNP PPS',assembly='DNP',mpn='')
-            values[f'CY{i}']=dict(value='DNP C0G',assembly='DNP',mpn='')
-            if c>=100e-9:
-                nf=150 if b=='female1' else 220
-                values[f'C{i}']=dict(value=f'{nf}nF PPS 5%',assembly='fit',mpn='ECHU1H154JX9' if nf==150 else 'ECHU1H224JX9')
-                if b=='male1':
-                    values[f'CX{i}']=dict(value='220nF PPS 5%',assembly='fit',mpn='ECHU1H224JX9')
-                    values[f'CY{i}']=dict(value='30nF C0G 5% >=25V',assembly='fit',mpn='')
-            else:values[f'CY{i}']=dict(value=f'{c*1e9:g}nF C0G 5% >=25V',assembly='fit',mpn='')
-        save('voice-thomas',b,values,dict(kind='voice thomas',body=b,hz=int(math.MEGA_PITCHES[b])))
     rows=[]
-    for corner in math.CARD_CORNERS:
-        ra,rb=math.card_resistors(corner);label=str(round(corner))
-        changes={ref:dict(value=f'{val:g} ohm 1%') for ref,val in [('R3',ra),('R4',ra),('R5',rb),('R6',rb)]}
-        sweet=[round(corner*x) for x in math.SWEET];allowed=[round(corner*x) for x in math.ALLOWED]
-        save('voice-active',label,changes,dict(kind='voice active',corner=round(corner),sweet=sweet,allowed=allowed))
-        rows.append([label,ra,rb,*sweet,*allowed])
-    with (ROOT/'voice-active/variants.csv').open('w',newline='') as f:
-        w=csv.writer(f);w.writerow(['Card','R3=R4 ohm','R5=R6 ohm','Sweet min Hz','Sweet max Hz','Allowed min Hz','Allowed max Hz']);w.writerows(rows)
-    (ROOT/'ASSEMBLY.md').write_text('''# Assembly and variants
-
-The default native voice layouts are female1 Thomas (1012Hz) and active 1414.
-All five Thomas populations and all thirteen active populations use their own
-complete BOM under `variants/`. A BOM changes population, never connector order.
-Mark the fitted body or corner in the front white box and tick its row in the
-back silkscreen table. The same artwork supports every population. The
-population.json files describe assembly choices; no memory chip is fitted.
-
-Build in this order: (1) backplane, five Thomas cards and MSGEQ7 analyser with
-Mega/firmware 4; (2) Teensy adapter with analyser slot empty; (3) active cards
-1414, 4000, 8000, 250, 500 in body order. Other corners come later as needed.
-
-Fit gold-plated contacts on both halves. Remove male pin 6/22 and block the
-matching socket cavity. Sockets are on B.Cu. Small parts are on F.Cu except the five Teensy
-input capacitors CM1-CM5, on B.Cu beside the microphone socket pins.
-Use insulated M3 standoffs. Do not hot-plug any card. Verify contact numbering
-with a meter before fitting silicon. All MSGEQ7 attenuation bypasses are OPEN.
-Leave JA1 empty with the Teensy. MIC DIRECT pads read the microphone bias.
-
-The 5V backplane rail, USB-derived MEGA_5V and IOREF are distinct supplies.
-Follow REVIEW.md and SHIELDS.md section 10 for continuity and power-up checks.
-Hardware performance, enclosure fit and a fabrication release remain unverified.
-''')
+    for body in BODY:
+        ohms,farads=math.THOMAS_CHANNELS[body]
+        hz=int(math.MEGA_PITCHES[body]);rows.append([body,hz,ohms,farads*1e9,hz,hz])
+    for pitch in math.CARD_PITCHES:
+        ohms,farads=math.card_values(pitch)
+        rows.append(['pitch-'+str(round(pitch)),round(pitch),ohms,farads*1e9,round(pitch*2**-.25),round(pitch*2**.25)])
+    for name,hz,ohms,nf,low,high in rows:
+        changes={f'R{i}':dict(value=f'{ohms:g} ohm metal film 1% 0.25W') for i in [1,2]}
+        changes.update({f'C{i}':dict(value=f'{nf:g}nF film 5% >=50V') for i in [1,2]})
+        save('voice-thomas',name,changes,dict(kind='Thomas RC',body=name if name in BODY else None,pitch_hz=hz,window_hz=[low,high]))
+    with (ROOT/'voice-thomas/variants.csv').open('w',newline='') as f:
+        w=csv.writer(f);w.writerow(['Population','Pitch Hz','R1=R2 ohm','C1=C2 nF film','Low Hz','High Hz']);w.writerows(rows)
 
 
 if __name__=='__main__':main()

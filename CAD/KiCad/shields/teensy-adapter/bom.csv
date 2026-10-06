@@ -67,3 +67,6 @@ D1,1N5819HW,Shields:D_SOD-123,1N5819HW,fit
 CV1,10uF X7R,Shields:C_0805_2012Metric,,fit
 CI1,10uF X7R,Shields:C_0805_2012Metric,,fit
 CI2,100nF,Shields:C_0603_1608Metric,,fit
+TPV,VIN_USB,Shields:TestPin_1x01_P2.54mm,,fit
+TPI,IOREF,Shields:TestPin_1x01_P2.54mm,,fit
+TPG,GND,Shields:TestPin_1x01_P2.54mm,,fit

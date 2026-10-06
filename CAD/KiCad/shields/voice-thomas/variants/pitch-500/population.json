@@ -1,0 +1,9 @@
+{
+  "kind": "Thomas RC",
+  "body": null,
+  "pitch_hz": 500,
+  "window_hz": [
+    420,
+    595
+  ]
+}

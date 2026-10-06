@@ -45,27 +45,40 @@ RP11,10K provisional,Shields:R_0603_1608Metric,,provisional_10k_calibrate
 RS1,10K,Shields:R_0603_1608Metric,,fit
 RA1,330R,Shields:R_0603_1608Metric,,fit
 RA2,330R,Shields:R_0603_1608Metric,,fit
+TP31,+5V,Shields:TestPin_1x01_P2.54mm,,fit
+TP33,+12V,Shields:TestPin_1x01_P2.54mm,,fit
+TP34,GND,Shields:TestPin_1x01_P2.54mm,,fit
 RM1,4K7,Shields:R_0603_1608Metric,,fit
 RMD1,1M,Shields:R_0603_1608Metric,,fit
+TPD1,female1/mic direct,Shields:TestPin_1x01_P2.54mm,,fit
 RM2,4K7,Shields:R_0603_1608Metric,,fit
 RMD2,1M,Shields:R_0603_1608Metric,,fit
+TPD2,female2/mic direct,Shields:TestPin_1x01_P2.54mm,,fit
 RM3,4K7,Shields:R_0603_1608Metric,,fit
 RMD3,1M,Shields:R_0603_1608Metric,,fit
+TPD3,female3/mic direct,Shields:TestPin_1x01_P2.54mm,,fit
 RM4,4K7,Shields:R_0603_1608Metric,,fit
 RMD4,1M,Shields:R_0603_1608Metric,,fit
+TPD4,male1/mic direct,Shields:TestPin_1x01_P2.54mm,,fit
 RM5,4K7,Shields:R_0603_1608Metric,,fit
 RMD5,1M,Shields:R_0603_1608Metric,,fit
+TPD5,male2/mic direct,Shields:TestPin_1x01_P2.54mm,,fit
 JA1,ANALYSER - KEY 22,Shields:Header_2x11_Key22,,fit
 JV1,female1 - KEY 6,Shields:Header_2x03_Key6,,fit
 RL1,100K,Shields:R_0603_1608Metric,,fit
+TPV1,female1/tone,Shields:TestPin_1x01_P2.54mm,,fit
 JV2,female2 - KEY 6,Shields:Header_2x03_Key6,,fit
 RL2,100K,Shields:R_0603_1608Metric,,fit
+TPV2,female2/tone,Shields:TestPin_1x01_P2.54mm,,fit
 JV3,female3 - KEY 6,Shields:Header_2x03_Key6,,fit
 RL3,100K,Shields:R_0603_1608Metric,,fit
+TPV3,female3/tone,Shields:TestPin_1x01_P2.54mm,,fit
 JV4,male1 - KEY 6,Shields:Header_2x03_Key6,,fit
 RL4,100K,Shields:R_0603_1608Metric,,fit
+TPV4,male1/tone,Shields:TestPin_1x01_P2.54mm,,fit
 JV5,male2 - KEY 6,Shields:Header_2x03_Key6,,fit
 RL5,100K,Shields:R_0603_1608Metric,,fit
+TPV5,male2/tone,Shields:TestPin_1x01_P2.54mm,,fit
 RND1,100K,Shields:R_0603_1608Metric,,fit
 RND2,100K,Shields:R_0603_1608Metric,,fit
 RND3,100K,Shields:R_0603_1608Metric,,fit
@@ -73,3 +86,32 @@ RND4,100K,Shields:R_0603_1608Metric,,fit
 RND5,100K,Shields:R_0603_1608Metric,,fit
 RND6,100K,Shields:R_0603_1608Metric,,fit
 RND7,100K,Shields:R_0603_1608Metric,,fit
+TPL1,female1/filter out,Shields:TestPin_1x01_P2.54mm,,fit
+TPA1,female1/analyser out,Shields:TestPin_1x01_P2.54mm,,fit
+RLT1,1K5,Shields:R_0603_1608Metric,,fit
+DT1,YELLOW LED,Shields:LED_0603_1608Metric,,fit
+TPL2,female2/filter out,Shields:TestPin_1x01_P2.54mm,,fit
+TPA2,female2/analyser out,Shields:TestPin_1x01_P2.54mm,,fit
+RLT2,1K5,Shields:R_0603_1608Metric,,fit
+DT2,YELLOW LED,Shields:LED_0603_1608Metric,,fit
+TPL3,female3/filter out,Shields:TestPin_1x01_P2.54mm,,fit
+TPA3,female3/analyser out,Shields:TestPin_1x01_P2.54mm,,fit
+RLT3,1K5,Shields:R_0603_1608Metric,,fit
+DT3,YELLOW LED,Shields:LED_0603_1608Metric,,fit
+TPL4,male1/filter out,Shields:TestPin_1x01_P2.54mm,,fit
+TPA4,male1/analyser out,Shields:TestPin_1x01_P2.54mm,,fit
+RLT4,1K5,Shields:R_0603_1608Metric,,fit
+DT4,YELLOW LED,Shields:LED_0603_1608Metric,,fit
+TPL5,male2/filter out,Shields:TestPin_1x01_P2.54mm,,fit
+TPA5,male2/analyser out,Shields:TestPin_1x01_P2.54mm,,fit
+RLT5,1K5,Shields:R_0603_1608Metric,,fit
+DT5,YELLOW LED,Shields:LED_0603_1608Metric,,fit
+TPUSB,MEGA_5V,Shields:TestPin_1x01_P2.54mm,,fit
+TPVG,AGND,Shields:TestPin_1x01_P2.54mm,,fit
+TPEG,AGND,Shields:TestPin_1x01_P2.54mm,,fit
+RLP5,2K2,Shields:R_0603_1608Metric,,fit
+DP5,GREEN LED,Shields:LED_0603_1608Metric,,fit
+RLP12,4K7,Shields:R_0603_1608Metric,,fit
+DP12,GREEN LED,Shields:LED_0603_1608Metric,,fit
+RLPUSB,2K2,Shields:R_0603_1608Metric,,fit
+DPUSB,GREEN LED,Shields:LED_0603_1608Metric,,fit

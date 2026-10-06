@@ -1,0 +1,9 @@
+Reference,Value,Footprint,MPN,Assembly
+JV1,VOICE - KEY 6,Shields:Socket_2x03_Key6,,fit
+R1,2200 ohm metal film 1% 0.25W,Shields:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal,,fit
+R2,2200 ohm metal film 1% 0.25W,Shields:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal,,fit
+C1,220nF film 5% >=50V,Shields:C_Rect_L7.0mm_W6.5mm_P5.00mm,,fit
+C2,220nF film 5% >=50V,Shields:C_Rect_L7.0mm_W6.5mm_P5.00mm,,fit
+R3,100K,Shields:R_0603_1608Metric,,fit
+TP4,filter out,Shields:TestPin_1x01_P2.54mm,,fit
+TP5,AGND,Shields:TestPin_1x01_P2.54mm,,fit

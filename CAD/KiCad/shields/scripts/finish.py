@@ -26,7 +26,7 @@ def finish(folder):
         if not isinstance(item,p.PCB_TEXT) and item.GetLayer() in obstacles:
             obstacles[item.GetLayer()].append(box(item,.1))
     for fp in board.GetFootprints():
-        if fp.GetReference().startswith('H') and fp.GetFPID().GetLibNickname()!='Shields':
+        if fp.GetReference().startswith('H') and str(fp.GetFPID().GetLibNickname())!='Shields':
             fp.SetFPID(p.LIB_ID('Shields','MountingHole_3.2mm_M3'))
         for pad in fp.Pads():
             for silk,mask in [(p.F_SilkS,p.F_Mask),(p.B_SilkS,p.B_Mask)]:
@@ -74,5 +74,9 @@ def finish(folder):
 
 
 if __name__=='__main__':
-    for f in ROOT.iterdir():
-        if (f/'circuit.json').exists():finish(f)
+    import sys,subprocess
+    if len(sys.argv)>1:
+        for name in sys.argv[1:]:finish(ROOT/name)
+    else:
+        for f in ROOT.iterdir():
+            if (f/'circuit.json').exists():subprocess.run([sys.executable,__file__,f.name],check=True)

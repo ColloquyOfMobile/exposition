@@ -30,16 +30,16 @@ def main(only=None):
             label(b,'COLLOQUY - SHIELD BACKPLANE - REV A',145,57,1.4)
             label(b,'POWER RACK AND COMPUTING USB TOGETHER',144,190,1.2)
             label(b,'CHANGE A SHIELD ONLY WITH BOTH UNPLUGGED',144,194,1.1)
-            rect(b,110,187,68,10,p.F_SilkS)
-            label(b,'SLOT N = BODY N',145,200,1.2)
+            rect(b,110,187,68,9,p.F_SilkS)
+            label(b,'T = TONE / L = LINE',145,199,1)
             for i,(body,mega,gpio) in enumerate(zip(BODY,[6,46,10,11,5],[2,4,5,6,28]),1):
                 x=93+(i-1)*32
                 label(b,f'JV{i} - {body.upper()}\nMEGA D{mega} - TEENSY {gpio}',x,207,1)
                 label(b,'CARD        PITCH       Hz',x,234,1)
                 writebox(b,x-10,236,8,3);writebox(b,x+2,236,8,3)
-                at(f'TPV{i}',f'TONE {i}');at(f'TPL{i}',f'LINE {i}')
-                at(f'TPM{i}',f'MIC {i}');at(f'TPA{i}',f'ANA {i}')
-                at(f'TPD{i}',f'MIC DIRECT {i}',0,2)
+                at(f'TPV{i}',f'T{i}',0,-2);at(f'TPL{i}',f'L{i}',0,2)
+                at(f'TPM{i}',f'MIC {i}');at(f'TPA{i}',f'A{i}',0,2)
+                at(f'TPD{i}',f'M{i}',0,-2)
                 at(f'JV{i}','1',-1.4,-2)
                 at(f'JV{i}','KEY <-',7,5.08)
                 n=CHANNEL[body];at(f'R{n}03','LINE OUT',0,3);at(f'JP{n+1}','AUDIO RTN',0,3)
@@ -47,6 +47,9 @@ def main(only=None):
             label(b,'MIC ORDER F1 F2 F3 M1 M2 - MODULE N = BODY N',151,278,1)
             at('JA1','1',-1.5,-2);at('JA1','KEY <-',7,25.4)
             label(b,'MIC DIRECT - 4.7 K - TO TEENSY A0-A4',151,284,1)
+            for ref,val in [('DP5','BOARD 5V'),('DP12','12V'),('DPUSB','MEGA 5V')]:at(ref,val,0,-2)
+            for i in range(1,6):at(f'DT{i}',f'TONE {i}',0,-2)
+            for ref,val,dy in [('TP31','5V',2),('TP33','12V',2),('TPUSB','USB',-2),('TP34','GND',2),('TPVG','AGND',2),('TPEG','AGND',2)]:at(ref,val,0,dy)
             label(b,'U2D2',76,106,1.5);at('J7','SERVO BUS - 12 V',8,-5)
             at('JP1','JP1 - ONLY AGND-GND BOND',0,6)
             at('TP20','STROBE',8,0);at('TP21','RESET',8,0)
@@ -73,29 +76,48 @@ def main(only=None):
             at('TPG','AGND',0,2);at('TPI','MEGA 5V',0,2)
             at('TPS','STROBE',0,2);at('TPR','RESET',5,2)
             at('JA1','1',-1,-2);at('JA1','KEY <-',7,25.4)
-        else:
-            active=name=='voice-active'
-            label(b,'ACTIVE VOICE CARD' if active else 'THOMAS VOICE CARD',65,76,.9)
-            if not active:label(b,'FIXED PITCH',66,79,.8)
-            label(b,'CORNER        Hz' if active else 'BODY',67 if active else 56,82,.8)
-            writebox(b,61,83,10,2.5)
-            if active:label(b,'PLAY 0.5-1 x CORNER\nBEST 0.6-0.85 x CORNER',65,51.8,.8,True)
+        elif name=='microphone':
+            label(b,'COLLOQUY MIC',60,52,1)
+            label(b,'MAX9814',60,61.8,.8)
+            label(b,'GND  GAIN  VDD',57,88.5,.8)
+            label(b,'A/R',52,91,.8)
+            label(b,'GND +5V OUT',60,99,.8)
+            label(b,'MIC GND',66,94,.8)
+            label(b,'40dB: GAIN-VDD\n50dB: GAIN-GND\n60dB: OPEN\nA/R: GND = 1:500\nVDD = 1:2000\nOPEN = 1:4000',60,77,.8,True)
+            label(b,'M5 / NYLON\nINSULATE FRAME',60,96,.8,True)
+            named.update(['TP1','TP2'])
+        elif name=='voice-thomas':
+            label(b,'VOICE CARD - THOMAS RC',65,51.5,.8)
+            label(b,'PITCH             Hz',65,81,.8);writebox(b,61,82,7,1.6)
+            label(b,'BODY',57,84.5,.8);writebox(b,60,84,8,1.6)
+            label(b,'R1 R2 C1 C2\nSET THE PITCH',74,69,.8)
             at('TP1','TONE',0,-2);at('TP4','LINE',-1,2);at('TP5','AGND',6,2)
-            at('JV1','1',-1,-2);at('JV1','KEY <-',7,5.08)
-            for x,v in zip([70,63,56,78],['CORNER' if active else 'BODY/Hz','Ra' if active else 'R1=R2','Rb' if active else 'C1=C2','FIT']):label(b,v,x,63.4,.8,True)
+            at('JV1','1',-1,-2);at('JV1','KEY',5,5.08)
+            label(b,'R x C = 0.179 / f',65,51.6,.8,True)
             rows=[]
-            if active:
-                for c in math.CARD_CORNERS:
-                    a,r=math.card_resistors(c)
-                    rows.append((str(round(c)),f'{a/1000:g}K',f'{r/1000:g}K'))
-            else:
-                for body in BODY:
-                    r,c=math.THOMAS_CHANNELS[body]
-                    rows.append((body.replace('female','F').replace('male','M')+' '+str(int(math.MEGA_PITCHES[body])),f'{r/1000:g}K',f'{c*1e9:g}n'))
-            for i,row in enumerate(rows):
-                y=65+i*(1.6 if active else 3)
-                for x,v in zip([70,63,56],row):label(b,v,x,y,.8,True)
-                rect(b,77.5,y-.5,1,1,p.B_SilkS)
+            for body in BODY:
+                rr,cc=math.THOMAS_CHANNELS[body]
+                rows.append((body.replace('female','F').replace('male','M')+' '+str(int(math.MEGA_PITCHES[body])),rr,cc))
+            for pitch in math.CARD_PITCHES:
+                rr,cc=math.card_values(pitch);rows.append((str(round(pitch)),rr,cc))
+            from finish import box,intersects
+            obstacles=[]
+            for fp in b.GetFootprints():
+                obstacles += [box(pad,.25) for pad in fp.Pads() if pad.IsOnLayer(p.B_Mask)]
+                obstacles += [box(g,.15) for g in fp.GraphicalItems() if g.GetLayer()==p.B_SilkS]
+            for col in range(2):
+                last=52.5
+                for pitch,rr,cc in rows[col*9:(col+1)*9]:
+                    rv=f'{rr/1000:g}'.replace('.','K')
+                    if 'K' not in rv:rv+='K'
+                    t=label(b,f'{pitch} {rv} {cc*1e9:g}n',57.5+col*15,54,.8,True)
+                    for step in range(150):
+                        y=last+1.7+step*.25;t.SetPosition(xy(57.5+col*15,y))
+                        bounds=box(t,.12)
+                        if y>90:raise RuntimeError('Voice table does not fit')
+                        if not any(intersects(bounds,o) for o in obstacles):
+                            mark=rect(b,63.6+col*15,y-.4,.7,.8,p.B_SilkS)
+                            obstacles.append(bounds);last=y;break
         # All otherwise unnamed test pads carry their actual net.
         for ref,fp in refs.items():
             if not ref.startswith('TP'):continue
@@ -109,5 +131,9 @@ def main(only=None):
 
 if __name__=='__main__':
     import sys
-    main(sys.argv[1:])
+    if len(sys.argv)>1:main(sys.argv[1:])
+    else:
+        import subprocess
+        for f in ROOT.iterdir():
+            if (f/'circuit.json').exists():subprocess.run([sys.executable,__file__,f.name],check=True)
 

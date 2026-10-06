@@ -47,6 +47,9 @@ def make_slots():
 
 
 def placements(name,old):
+    if name=='microphone':
+        from debug_layout import positions
+        return positions(name)
     if name=='backplane':
         fixed={'A1','M1','J2','J6','J7','J5','J1','A-J3','B-J4','Extra1','Extra2','Extra3'}
         out={r:(*pos(f),f.GetOrientationDegrees()) for r,f in old.items() if r in fixed}
@@ -119,8 +122,8 @@ def project(folder,name):
     settings['rules'].update(min_clearance=.15,min_track_width=.15,min_copper_edge_clearance=.3,
                              min_via_diameter=.6,min_through_hole_diameter=.3,min_via_annular_width=.15,min_hole_clearance=.25)
     data['net_settings']['classes']=[];data['net_settings']['netclass_patterns']=[]
-    for cls,width in [('Default',.25),('Power',1.5 if name=='backplane' else .5)]:
-        data['net_settings']['classes'].append(dict(name=cls,clearance=.2,track_width=width,via_diameter=.6,via_drill=.3,
+    for cls,width in [('Default',.15 if name=='microphone' else .25),('Power',1.5 if name=='backplane' else .5)]:
+        data['net_settings']['classes'].append(dict(name=cls,clearance=.15 if name=='microphone' else .2,track_width=width,via_diameter=.6,via_drill=.3,
               microvia_diameter=.3,microvia_drill=.1,diff_pair_gap=.2,diff_pair_width=.25,diff_pair_via_gap=.2,
               pcb_color='rgba(0, 0, 0, 0.000)',schematic_color='rgba(0, 0, 0, 0.000)',wire_width=6,bus_width=12,line_style=0))
     for net in ['+5V','+12V']:
@@ -129,10 +132,13 @@ def project(folder,name):
     (folder/(name+'.kicad_pro')).write_text(json.dumps(data,indent=2)+'\n')
 
 
-def main():
+def main(only=None):
     make_slots()
+    from debug_layout import positions,footprints,outline
+    footprints()
     oldboard=p.LoadBoard(str(BASE/'colloquy-control-v2.kicad_pcb'));old={f.GetReference():f for f in oldboard.GetFootprints()}
     for folder in ROOT.iterdir():
+        if only and folder.name not in only:continue
         if not (folder/'circuit.json').exists():continue
         name=folder.name;data=json.loads((folder/'circuit.json').read_text());board=p.BOARD();board.SetCopperLayerCount(4 if name in ['backplane','teensy-adapter'] else 2)
         board.GetDesignSettings().SetBoardThickness(mm(1.6));board.GetDesignSettings().m_MinClearance=mm(.15)
@@ -144,10 +150,11 @@ def main():
                 if g.GetLayer()==p.Edge_Cuts:board.Add(g.Duplicate())
             for ref,f in old.items():
                 if ref.startswith('H'):board.Add(f.Duplicate())
+        elif name=='microphone':outline(board)
         elif name.startswith('voice'):rect(board,50,50,30,42)
         elif name.startswith('analyser'):rect(board,50,50,150,55)
         else:rect(board,141.16,53.32,53.34,101.6)
-        places=placements(name,old)
+        places=placements(name,old);places.update(positions(name))
         for c in data['components']:
             ref=c['ref'];lib,fpname=c['footprint'].split(':',1)
             if name=='backplane' and ref in old and ref in {'A1','M1','J2','J6','J7','J5','J1','A-J3','B-J4','Extra1','Extra2','Extra3'}:
@@ -199,7 +206,7 @@ def main():
             if name=='voice-active':
                 text(board,'SWEET 849-1202',65,90.5,.6,p.B_SilkS);text(board,'ALLOW 707-1414 / IDLE 1MHz',65,52,.55,p.B_SilkS)
         elif name.startswith('analyser'):text(board,name.upper(),125,102,1)
-        else:
+        elif name=='teensy-adapter':
             text(board,'TEENSY USB POWER ONLY',167,151.8,.8)
             text(board,'3.3V - NOT 5V TOLERANT',167,125,.8)
             rect(board,158.73,55.73,17.78,60.96,p.Dwgs_User)
@@ -211,7 +218,9 @@ def main():
         print(name,len(list(board.GetFootprints())),'footprints')
 
 
-if __name__=='__main__':main()
+if __name__=='__main__':
+    import sys
+    main(sys.argv[1:])
 
 
 
