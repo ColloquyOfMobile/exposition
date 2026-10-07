@@ -1,4 +1,4 @@
-# Native KiCad validation — 2026-10-06
+# Native KiCad validation — 2026-10-07
 
 KiCad 9.0.7 reports zero ERC violations, zero DRC violations and zero
 unconnected items on all five current routed boards. No new DRC exclusions
@@ -21,7 +21,9 @@ mirrored adapter contacts, direct microphone networks and the single
 AGND/GND bond. Header counts, eight LED polarities, THT pitch-component
 spacing, microphone ground pins and mounting-hole/keepout geometry pass.
 The carrier's JA1 and retention coordinates match the backplane. All five
-module lead pinouts and round/slot drilling geometry pass independent checks.
+module socket pinouts, photo-derived pad coordinates and round/slot drilling
+geometry pass independent checks. The carrier now requires modified modules:
+remove R4 and jumper L to OUT; there are no module-to-carrier cables.
 Actual module fit is photo-derived and remains a physical check.
 
 The focused specification tests pass: 36 tests (test_shields.py and

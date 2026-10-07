@@ -8,7 +8,7 @@ The analyser carrier uses user-authorized photo inference from Thomas's
 and one tolerance slot. Its 150 x 55mm outline and existing JA1/retention
 coordinates are preserved. Module 0 rotates 180 degrees to clear JA1.
 See analyser-carrier/README.md and its 1:1 mounting template. The module
-outline, screw fit, standoff height and lead routing still need physical
+outline, screw fit, standoff height and socket alignment still need physical
 confirmation; this is not a manufacturer-verified land pattern.
 
 Voice cards now contain only Thomas's two RC sections and 100K pull-down.
@@ -44,3 +44,11 @@ mechanical.json. Preserve the fixed harness pinout and locations.
 
 No hardware was connected; follow SHIELDS.md bring-up instructions. Previous
 component-selection notes for obsolete circuits are archived under obsolete/.
+
+## Direct-plug carrier revision — 2026-10-07
+
+The analyser carrier now uses female sockets beneath modified modules. No
+module-to-carrier leads remain. Each module requires removal of its left-input
+22K resistor R4, an on-module jumper from isolated L to OUT, and downward
+male headers. Read analyser-carrier/README.md before assembly. Socket positions
+are photo-derived; check all contacts against the updated 1:1 template.

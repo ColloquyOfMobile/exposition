@@ -5,7 +5,7 @@
           (lib_symbols (symbol "Colloquy:JA1" (pin_names (offset 1.27)) (exclude_from_sim no) (in_bom yes) (on_board yes)
 (property "Reference" "JA" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
 (property "Value" "ANALYSER - KEY 22" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
-(property "Footprint" "Shields:Socket_2x11_Key22" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
+(property "Footprint" "Shields:Socket_2x11_Key22_PlugCarrier" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Datasheet" "" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Description" "" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (symbol "JA1_1_1"
@@ -80,7 +80,7 @@
 (symbol (lib_id "Colloquy:JA1") (at 101.6000 83.8200 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "448ef8c3-336d-5e5c-b708-d25ea3bfddfb")
 (property "Reference" "JA1" (at 101.6000 48.2600 0) (effects (font (size 1.016 1.016))  ))
 (property "Value" "ANALYSER - KEY 22" (at 101.6000 50.8000 0) (effects (font (size 1.016 1.016))  ))
-(property "Footprint" "Shields:Socket_2x11_Key22" (at 101.6000 83.8200 0) (effects (font (size 1.27 1.27))  (hide yes)))
+(property "Footprint" "Shields:Socket_2x11_Key22_PlugCarrier" (at 101.6000 83.8200 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Datasheet" "" (at 101.6000 83.8200 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Description" "" (at 101.6000 83.8200 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (pin "1" (uuid "6db02194-8e66-584c-89af-bcea1a0497bc"))

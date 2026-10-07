@@ -9,7 +9,7 @@ All current KiCad 9 projects and their shared library are in this folder.
 | teensy-adapter | Teensy 4.1 in the Mega slot; three power test headers | 1 |
 | voice-thomas | Thomas RC filter for either processor; THT pitch components | 5, more as needed |
 | microphone | MAX9814 body microphone, 20 x 62 mm, two M5 holes | 6 (one spare) |
-| analyser-carrier | Five purchased DFRobot modules, photo-derived mounts | 1 |
+| analyser-carrier | Five converted DFRobot modules, direct plug-in sockets | 1 |
 
 The active filter is obsolete. One voice layout supports all five Thomas
 populations and thirteen new-pitch populations. See ASSEMBLY.md and its BOMs.
@@ -34,3 +34,11 @@ validated connector positions when regenerating. Historical migration scripts
 are one-time tools, not general rebuild commands. Router files stay in tmp/.
 positions.csv contains SMD-only placements; fit THT parts manually from BOMs
 and assembly views. Filter all populations by their selected BOM.
+
+## Direct-plug carrier revision — 2026-10-07
+
+The analyser carrier now uses female sockets beneath modified modules. No
+module-to-carrier leads remain. Each module requires removal of its left-input
+22K resistor R4, an on-module jumper from isolated L to OUT, and downward
+male headers. Read analyser-carrier/README.md before assembly. Socket positions
+are photo-derived; check all contacts against the updated 1:1 template.

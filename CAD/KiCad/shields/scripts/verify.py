@@ -148,15 +148,18 @@ def main():
         a=position(cf[ref]);bb=next(f for f in loaded['backplane'].GetFootprints() if f.GetReference()==backref)
         assert all(near(x,y) for x,y in zip((a[0]+25,a[1]+215),position(bb)))
     for i,body in enumerate(BODY,1):
-        expected={f'JI{i}':['microphone','MEGA_5V','AGND'],f'JO{i}':['AGND','MEGA_5V','analyser out'],f'JC{i}':['analyser/reset','analyser/strobe']}
-        for ref,nets in expected.items():
-            for pin,net in enumerate(nets,1):
-                if net in ['microphone','analyser out']:net=body+'/'+net
-                assert plain(cp[(ref,str(pin))].GetNetname())==net
-        mounts=list(cf[f'M{i}'].Pads());assert len(mounts)==2
-        assert all(t.GetAttribute()==p.PAD_ATTRIB_NPTH for t in mounts)
+        nets=[body+'/analyser out','MEGA_5V','AGND',body+'/microphone','MEGA_5V','AGND','analyser/reset','analyser/strobe']
+        module=cf[f'M{i}'];origin=position(module);angle=module.GetOrientationDegrees()
+        sign=-1 if near(abs(angle),180) else 1
+        grid=[(3.81+j*2.54,-5.08) for j in range(6)]+[(17.78,17.78),(20.32,17.78)]
+        for pin,(net,(x,y)) in enumerate(zip(nets,grid),1):
+            pad=cp[(f'M{i}',str(pin))];assert plain(pad.GetNetname())==net
+            assert pad.GetAttribute()==p.PAD_ATTRIB_PTH
+            assert all(near(a,b) for a,b in zip(position(pad),(origin[0]+sign*x,origin[1]+sign*y)))
+        mounts=[t for t in module.Pads() if t.GetAttribute()==p.PAD_ATTRIB_NPTH];assert len(mounts)==2
         a,b=map(position,mounts);assert near(((a[0]-b[0])**2+(a[1]-b[1])**2)**.5,20.32)
         assert sorted(tuple(p.ToMM(t.GetDrillSize())) for t in mounts)==[(3.2,3.2),(5.74,3.2)]
+    assert not any(f.GetReference().startswith(('JI','JO','JC')) for f in carrier.GetFootprints())
     assert not cp[('JA1','20')].GetNetname() and not cp[('JA1','21')].GetNetname()
     summary['interfaces']={'fixed_harness_pinout_and_coordinates':'PASS','v2_connected_Mega_pins':'PASS',
         'five_voice_mating_pairs':'PASS','analyser_carrier':'PASS electrical/mating coordinates; photo-derived module fit UNVERIFIED','adapter_mirror':'PASS','single_ground_bond':'PASS','no_identification_hardware':'PASS','revised_Teensy_analogue_mapping':'PASS',

@@ -1,0 +1,8 @@
+Item,Quantity,Specification,Location
+DFR0126 modified module,5,Remove R4; link L to OUT,M1-M5
+Female socket 1x6,5,2.54mm straight gold contacts,Carrier six-contact row
+Female socket 1x2,5,2.54mm straight gold contacts,Carrier control row
+Male header 1x6,5,2.54mm straight gold; downward-facing,Module L and R groups
+Male header 1x2,5,2.54mm straight gold; downward-facing,Module R/S control
+Insulated jumper,5,Short link from OUT to isolated L,On module only
+Nylon M3 standoff set,10,Height matched to fully seated sockets,Module mounting holes

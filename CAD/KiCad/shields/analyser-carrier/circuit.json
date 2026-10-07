@@ -5,7 +5,7 @@
     {
       "ref": "JA1",
       "value": "ANALYSER - KEY 22",
-      "footprint": "Shields:Socket_2x11_Key22",
+      "footprint": "Shields:Socket_2x11_Key22_PlugCarrier",
       "pins": {
         "1": "female1/microphone",
         "2": "AGND",
@@ -118,99 +118,45 @@
     },
     {
       "ref": "M1",
-      "value": "DFRobot DFR0126 Audio Analyzer V2.0",
-      "footprint": "Shields:DFR0126_PhotoMount",
-      "pins": {},
+      "value": "DFR0126 MODIFIED / PLUG-IN",
+      "footprint": "Shields:DFR0126_PlugIn_Photo",
+      "pins": {
+        "1": "female1/analyser out",
+        "2": "MEGA_5V",
+        "3": "AGND",
+        "4": "female1/microphone",
+        "5": "MEGA_5V",
+        "6": "AGND",
+        "7": "analyser/reset",
+        "8": "analyser/strobe"
+      },
       "sheet": "female1",
-      "description": "Purchased module on nylon standoffs. Photo-derived 20.32mm hole spacing; second hole slotted. Connections via labelled short leads.",
-      "pin_names": {},
-      "pin_types": {},
+      "description": "Modified module: remove module R4 (left-input 22K), jumper isolated L to OUT, fit downward 2.54mm headers. Carrier sockets: one 1x6 and one 1x2. Photo-derived geometry.",
+      "pin_names": {
+        "1": "L_REPURPOSED_OUT",
+        "2": "+5V",
+        "3": "GND",
+        "4": "R_MIC",
+        "5": "+5V",
+        "6": "GND",
+        "7": "RESET",
+        "8": "STROBE"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive",
+        "7": "passive",
+        "8": "passive"
+      },
       "assembly": "fit",
       "include_bom": true,
-      "mpn": "DFR0126",
+      "mpn": "DFR0126 + 1x6/1x2 sockets",
       "datasheet": "https://wiki.dfrobot.com/dfr0126/",
       "uuid": "193728e2-fe3b-5c46-ba7f-bcad985d022b",
-      "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/ad6cf3da-8142-5ab9-8240-e5a64fbb5aa3"
-    },
-    {
-      "ref": "JI1",
-      "value": "INPUT R + -",
-      "footprint": "Shields:PinHeader_1x03_P2.54mm_Vertical",
-      "pins": {
-        "1": "female1/microphone",
-        "2": "MEGA_5V",
-        "3": "AGND"
-      },
-      "sheet": "female1",
-      "description": "",
-      "pin_names": {
-        "1": "R_MIC",
-        "2": "+5V",
-        "3": "GND"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive",
-        "3": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "e4c66d43-5ae8-5cd7-a934-1cb472a3f6f3",
-      "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/ad6cf3da-8142-5ab9-8240-e5a64fbb5aa3"
-    },
-    {
-      "ref": "JO1",
-      "value": "OUTPUT GND +5V SIG",
-      "footprint": "Shields:PinHeader_1x03_P2.54mm_Vertical",
-      "pins": {
-        "1": "AGND",
-        "2": "MEGA_5V",
-        "3": "female1/analyser out"
-      },
-      "sheet": "female1",
-      "description": "",
-      "pin_names": {
-        "1": "GND",
-        "2": "+5V",
-        "3": "OUT"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive",
-        "3": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "93f0c018-96bc-5960-b1b2-0485fffb9ec9",
-      "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/ad6cf3da-8142-5ab9-8240-e5a64fbb5aa3"
-    },
-    {
-      "ref": "JC1",
-      "value": "CONTROL R S",
-      "footprint": "Shields:PinHeader_1x02_P2.54mm_Vertical",
-      "pins": {
-        "1": "analyser/reset",
-        "2": "analyser/strobe"
-      },
-      "sheet": "female1",
-      "description": "",
-      "pin_names": {
-        "1": "RESET",
-        "2": "STROBE"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "6dcf9877-79c9-50ae-b070-d08ab3cc47cb",
       "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/ad6cf3da-8142-5ab9-8240-e5a64fbb5aa3"
     },
     {
@@ -237,99 +183,45 @@
     },
     {
       "ref": "M2",
-      "value": "DFRobot DFR0126 Audio Analyzer V2.0",
-      "footprint": "Shields:DFR0126_PhotoMount",
-      "pins": {},
+      "value": "DFR0126 MODIFIED / PLUG-IN",
+      "footprint": "Shields:DFR0126_PlugIn_Photo",
+      "pins": {
+        "1": "female2/analyser out",
+        "2": "MEGA_5V",
+        "3": "AGND",
+        "4": "female2/microphone",
+        "5": "MEGA_5V",
+        "6": "AGND",
+        "7": "analyser/reset",
+        "8": "analyser/strobe"
+      },
       "sheet": "female2",
-      "description": "Purchased module on nylon standoffs. Photo-derived 20.32mm hole spacing; second hole slotted. Connections via labelled short leads.",
-      "pin_names": {},
-      "pin_types": {},
+      "description": "Modified module: remove module R4 (left-input 22K), jumper isolated L to OUT, fit downward 2.54mm headers. Carrier sockets: one 1x6 and one 1x2. Photo-derived geometry.",
+      "pin_names": {
+        "1": "L_REPURPOSED_OUT",
+        "2": "+5V",
+        "3": "GND",
+        "4": "R_MIC",
+        "5": "+5V",
+        "6": "GND",
+        "7": "RESET",
+        "8": "STROBE"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive",
+        "7": "passive",
+        "8": "passive"
+      },
       "assembly": "fit",
       "include_bom": true,
-      "mpn": "DFR0126",
+      "mpn": "DFR0126 + 1x6/1x2 sockets",
       "datasheet": "https://wiki.dfrobot.com/dfr0126/",
       "uuid": "ef223c44-ca5c-5b2b-a385-c6fb504b379a",
-      "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/00b184cd-1d21-544c-abd2-eccfe05e9cc6"
-    },
-    {
-      "ref": "JI2",
-      "value": "INPUT R + -",
-      "footprint": "Shields:PinHeader_1x03_P2.54mm_Vertical",
-      "pins": {
-        "1": "female2/microphone",
-        "2": "MEGA_5V",
-        "3": "AGND"
-      },
-      "sheet": "female2",
-      "description": "",
-      "pin_names": {
-        "1": "R_MIC",
-        "2": "+5V",
-        "3": "GND"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive",
-        "3": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "97875895-39dd-50ee-ab31-c9e8e869d787",
-      "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/00b184cd-1d21-544c-abd2-eccfe05e9cc6"
-    },
-    {
-      "ref": "JO2",
-      "value": "OUTPUT GND +5V SIG",
-      "footprint": "Shields:PinHeader_1x03_P2.54mm_Vertical",
-      "pins": {
-        "1": "AGND",
-        "2": "MEGA_5V",
-        "3": "female2/analyser out"
-      },
-      "sheet": "female2",
-      "description": "",
-      "pin_names": {
-        "1": "GND",
-        "2": "+5V",
-        "3": "OUT"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive",
-        "3": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "7a5fe6f7-6423-53e1-b265-b99ab20022d9",
-      "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/00b184cd-1d21-544c-abd2-eccfe05e9cc6"
-    },
-    {
-      "ref": "JC2",
-      "value": "CONTROL R S",
-      "footprint": "Shields:PinHeader_1x02_P2.54mm_Vertical",
-      "pins": {
-        "1": "analyser/reset",
-        "2": "analyser/strobe"
-      },
-      "sheet": "female2",
-      "description": "",
-      "pin_names": {
-        "1": "RESET",
-        "2": "STROBE"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "26e1ef54-f981-559f-85b3-963b2307f019",
       "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/00b184cd-1d21-544c-abd2-eccfe05e9cc6"
     },
     {
@@ -356,99 +248,45 @@
     },
     {
       "ref": "M3",
-      "value": "DFRobot DFR0126 Audio Analyzer V2.0",
-      "footprint": "Shields:DFR0126_PhotoMount",
-      "pins": {},
+      "value": "DFR0126 MODIFIED / PLUG-IN",
+      "footprint": "Shields:DFR0126_PlugIn_Photo",
+      "pins": {
+        "1": "female3/analyser out",
+        "2": "MEGA_5V",
+        "3": "AGND",
+        "4": "female3/microphone",
+        "5": "MEGA_5V",
+        "6": "AGND",
+        "7": "analyser/reset",
+        "8": "analyser/strobe"
+      },
       "sheet": "female3",
-      "description": "Purchased module on nylon standoffs. Photo-derived 20.32mm hole spacing; second hole slotted. Connections via labelled short leads.",
-      "pin_names": {},
-      "pin_types": {},
+      "description": "Modified module: remove module R4 (left-input 22K), jumper isolated L to OUT, fit downward 2.54mm headers. Carrier sockets: one 1x6 and one 1x2. Photo-derived geometry.",
+      "pin_names": {
+        "1": "L_REPURPOSED_OUT",
+        "2": "+5V",
+        "3": "GND",
+        "4": "R_MIC",
+        "5": "+5V",
+        "6": "GND",
+        "7": "RESET",
+        "8": "STROBE"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive",
+        "7": "passive",
+        "8": "passive"
+      },
       "assembly": "fit",
       "include_bom": true,
-      "mpn": "DFR0126",
+      "mpn": "DFR0126 + 1x6/1x2 sockets",
       "datasheet": "https://wiki.dfrobot.com/dfr0126/",
       "uuid": "2d86d22c-cda2-5d9a-b90b-6aea5d204167",
-      "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/b0777b3b-e079-553a-a785-54f7fc847311"
-    },
-    {
-      "ref": "JI3",
-      "value": "INPUT R + -",
-      "footprint": "Shields:PinHeader_1x03_P2.54mm_Vertical",
-      "pins": {
-        "1": "female3/microphone",
-        "2": "MEGA_5V",
-        "3": "AGND"
-      },
-      "sheet": "female3",
-      "description": "",
-      "pin_names": {
-        "1": "R_MIC",
-        "2": "+5V",
-        "3": "GND"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive",
-        "3": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "5beb373f-d500-5b05-b6b2-e24e169ce2bc",
-      "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/b0777b3b-e079-553a-a785-54f7fc847311"
-    },
-    {
-      "ref": "JO3",
-      "value": "OUTPUT GND +5V SIG",
-      "footprint": "Shields:PinHeader_1x03_P2.54mm_Vertical",
-      "pins": {
-        "1": "AGND",
-        "2": "MEGA_5V",
-        "3": "female3/analyser out"
-      },
-      "sheet": "female3",
-      "description": "",
-      "pin_names": {
-        "1": "GND",
-        "2": "+5V",
-        "3": "OUT"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive",
-        "3": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "df45b28f-8cc4-504b-816f-590477a2b0dd",
-      "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/b0777b3b-e079-553a-a785-54f7fc847311"
-    },
-    {
-      "ref": "JC3",
-      "value": "CONTROL R S",
-      "footprint": "Shields:PinHeader_1x02_P2.54mm_Vertical",
-      "pins": {
-        "1": "analyser/reset",
-        "2": "analyser/strobe"
-      },
-      "sheet": "female3",
-      "description": "",
-      "pin_names": {
-        "1": "RESET",
-        "2": "STROBE"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "3a122a9f-80ed-5494-ac90-ea5c64c163ef",
       "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/b0777b3b-e079-553a-a785-54f7fc847311"
     },
     {
@@ -475,99 +313,45 @@
     },
     {
       "ref": "M4",
-      "value": "DFRobot DFR0126 Audio Analyzer V2.0",
-      "footprint": "Shields:DFR0126_PhotoMount",
-      "pins": {},
+      "value": "DFR0126 MODIFIED / PLUG-IN",
+      "footprint": "Shields:DFR0126_PlugIn_Photo",
+      "pins": {
+        "1": "male1/analyser out",
+        "2": "MEGA_5V",
+        "3": "AGND",
+        "4": "male1/microphone",
+        "5": "MEGA_5V",
+        "6": "AGND",
+        "7": "analyser/reset",
+        "8": "analyser/strobe"
+      },
       "sheet": "male1",
-      "description": "Purchased module on nylon standoffs. Photo-derived 20.32mm hole spacing; second hole slotted. Connections via labelled short leads.",
-      "pin_names": {},
-      "pin_types": {},
+      "description": "Modified module: remove module R4 (left-input 22K), jumper isolated L to OUT, fit downward 2.54mm headers. Carrier sockets: one 1x6 and one 1x2. Photo-derived geometry.",
+      "pin_names": {
+        "1": "L_REPURPOSED_OUT",
+        "2": "+5V",
+        "3": "GND",
+        "4": "R_MIC",
+        "5": "+5V",
+        "6": "GND",
+        "7": "RESET",
+        "8": "STROBE"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive",
+        "7": "passive",
+        "8": "passive"
+      },
       "assembly": "fit",
       "include_bom": true,
-      "mpn": "DFR0126",
+      "mpn": "DFR0126 + 1x6/1x2 sockets",
       "datasheet": "https://wiki.dfrobot.com/dfr0126/",
       "uuid": "d05705ec-6b39-51c9-8ff4-d5da81fe29fb",
-      "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/9dc28e12-03c7-5a17-8b5a-98cb0f1f2dfa"
-    },
-    {
-      "ref": "JI4",
-      "value": "INPUT R + -",
-      "footprint": "Shields:PinHeader_1x03_P2.54mm_Vertical",
-      "pins": {
-        "1": "male1/microphone",
-        "2": "MEGA_5V",
-        "3": "AGND"
-      },
-      "sheet": "male1",
-      "description": "",
-      "pin_names": {
-        "1": "R_MIC",
-        "2": "+5V",
-        "3": "GND"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive",
-        "3": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "55fadaca-8025-591d-b391-d551bfd865cb",
-      "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/9dc28e12-03c7-5a17-8b5a-98cb0f1f2dfa"
-    },
-    {
-      "ref": "JO4",
-      "value": "OUTPUT GND +5V SIG",
-      "footprint": "Shields:PinHeader_1x03_P2.54mm_Vertical",
-      "pins": {
-        "1": "AGND",
-        "2": "MEGA_5V",
-        "3": "male1/analyser out"
-      },
-      "sheet": "male1",
-      "description": "",
-      "pin_names": {
-        "1": "GND",
-        "2": "+5V",
-        "3": "OUT"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive",
-        "3": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "c41d6db3-88fe-5c69-81f2-8f846a493ce2",
-      "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/9dc28e12-03c7-5a17-8b5a-98cb0f1f2dfa"
-    },
-    {
-      "ref": "JC4",
-      "value": "CONTROL R S",
-      "footprint": "Shields:PinHeader_1x02_P2.54mm_Vertical",
-      "pins": {
-        "1": "analyser/reset",
-        "2": "analyser/strobe"
-      },
-      "sheet": "male1",
-      "description": "",
-      "pin_names": {
-        "1": "RESET",
-        "2": "STROBE"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "cc6d8813-3fb2-5141-aad0-43ba28194987",
       "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/9dc28e12-03c7-5a17-8b5a-98cb0f1f2dfa"
     },
     {
@@ -594,99 +378,45 @@
     },
     {
       "ref": "M5",
-      "value": "DFRobot DFR0126 Audio Analyzer V2.0",
-      "footprint": "Shields:DFR0126_PhotoMount",
-      "pins": {},
+      "value": "DFR0126 MODIFIED / PLUG-IN",
+      "footprint": "Shields:DFR0126_PlugIn_Photo",
+      "pins": {
+        "1": "male2/analyser out",
+        "2": "MEGA_5V",
+        "3": "AGND",
+        "4": "male2/microphone",
+        "5": "MEGA_5V",
+        "6": "AGND",
+        "7": "analyser/reset",
+        "8": "analyser/strobe"
+      },
       "sheet": "male2",
-      "description": "Purchased module on nylon standoffs. Photo-derived 20.32mm hole spacing; second hole slotted. Connections via labelled short leads.",
-      "pin_names": {},
-      "pin_types": {},
+      "description": "Modified module: remove module R4 (left-input 22K), jumper isolated L to OUT, fit downward 2.54mm headers. Carrier sockets: one 1x6 and one 1x2. Photo-derived geometry.",
+      "pin_names": {
+        "1": "L_REPURPOSED_OUT",
+        "2": "+5V",
+        "3": "GND",
+        "4": "R_MIC",
+        "5": "+5V",
+        "6": "GND",
+        "7": "RESET",
+        "8": "STROBE"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive",
+        "7": "passive",
+        "8": "passive"
+      },
       "assembly": "fit",
       "include_bom": true,
-      "mpn": "DFR0126",
+      "mpn": "DFR0126 + 1x6/1x2 sockets",
       "datasheet": "https://wiki.dfrobot.com/dfr0126/",
       "uuid": "2fcb2d01-b7b1-5689-885c-61c388b8e22a",
-      "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/014b53e8-e531-5d8a-883d-4ee1f231ad34"
-    },
-    {
-      "ref": "JI5",
-      "value": "INPUT R + -",
-      "footprint": "Shields:PinHeader_1x03_P2.54mm_Vertical",
-      "pins": {
-        "1": "male2/microphone",
-        "2": "MEGA_5V",
-        "3": "AGND"
-      },
-      "sheet": "male2",
-      "description": "",
-      "pin_names": {
-        "1": "R_MIC",
-        "2": "+5V",
-        "3": "GND"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive",
-        "3": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "c867287a-1400-5b7b-a7b7-b4ffa3fb4695",
-      "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/014b53e8-e531-5d8a-883d-4ee1f231ad34"
-    },
-    {
-      "ref": "JO5",
-      "value": "OUTPUT GND +5V SIG",
-      "footprint": "Shields:PinHeader_1x03_P2.54mm_Vertical",
-      "pins": {
-        "1": "AGND",
-        "2": "MEGA_5V",
-        "3": "male2/analyser out"
-      },
-      "sheet": "male2",
-      "description": "",
-      "pin_names": {
-        "1": "GND",
-        "2": "+5V",
-        "3": "OUT"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive",
-        "3": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "a393d123-18ac-5aeb-9f46-138aabfa502c",
-      "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/014b53e8-e531-5d8a-883d-4ee1f231ad34"
-    },
-    {
-      "ref": "JC5",
-      "value": "CONTROL R S",
-      "footprint": "Shields:PinHeader_1x02_P2.54mm_Vertical",
-      "pins": {
-        "1": "analyser/reset",
-        "2": "analyser/strobe"
-      },
-      "sheet": "male2",
-      "description": "",
-      "pin_names": {
-        "1": "RESET",
-        "2": "STROBE"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "b607e61e-2e48-5a5b-82d4-4563d8e93dd7",
       "sheet_path": "/76417ac7-fbc7-56a8-ac79-79796e9479f5/014b53e8-e531-5d8a-883d-4ee1f231ad34"
     },
     {
