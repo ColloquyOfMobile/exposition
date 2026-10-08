@@ -1,0 +1,344 @@
+[
+  {
+    "ref": "ICSP",
+    "source_package": "2X03",
+    "proxy": "PinHeader_2x03_P2.54mm_Vertical",
+    "pad_fit_rms_mm": 0.0
+  },
+  {
+    "ref": "PWML",
+    "source_package": "1X08",
+    "proxy": "PinSocket_1x08_P2.54mm_Vertical",
+    "pad_fit_rms_mm": 0.0
+  },
+  {
+    "ref": "PC1",
+    "source_package": "PANASONIC_D",
+    "proxy": "CP_Elec_6.3x5.8",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "PC2",
+    "source_package": "PANASONIC_D",
+    "proxy": "CP_Elec_6.3x5.8",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "ON",
+    "source_package": "CHIPLED_0805",
+    "proxy": "LED_0805_2012Metric",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "D1",
+    "source_package": "SMB",
+    "proxy": "D_SMB",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "X1",
+    "source_package": "POWERSUPPLY_DC-21MM",
+    "proxy": "BarrelJack_Horizontal",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "IC1",
+    "source_package": "LINEAR_SOT223",
+    "proxy": "SOT-223-3_TabPin2",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "C3",
+    "source_package": "C0603-ROUND",
+    "proxy": "C_0603_1608Metric",
+    "pad_fit_rms_mm": 0.114
+  },
+  {
+    "ref": "C6",
+    "source_package": "C0603-ROUND",
+    "proxy": "C_0603_1608Metric",
+    "pad_fit_rms_mm": 0.114
+  },
+  {
+    "ref": "C2",
+    "source_package": "C0603-ROUND",
+    "proxy": "C_0603_1608Metric",
+    "pad_fit_rms_mm": 0.114
+  },
+  {
+    "ref": "ADCL",
+    "source_package": "1X08",
+    "proxy": "PinSocket_1x08_P2.54mm_Vertical",
+    "pad_fit_rms_mm": 0.0
+  },
+  {
+    "ref": "COMMUNICATION",
+    "source_package": "1X08",
+    "proxy": "PinSocket_1x08_P2.54mm_Vertical",
+    "pad_fit_rms_mm": 0.0
+  },
+  {
+    "ref": "IC3",
+    "source_package": "TQFP100",
+    "proxy": "TQFP-100_14x14mm_P0.5mm",
+    "pad_fit_rms_mm": 0.3375
+  },
+  {
+    "ref": "C5",
+    "source_package": "C0603-ROUND",
+    "proxy": "C_0603_1608Metric",
+    "pad_fit_rms_mm": 0.114
+  },
+  {
+    "ref": "C4",
+    "source_package": "C0603-ROUND",
+    "proxy": "C_0603_1608Metric",
+    "pad_fit_rms_mm": 0.114
+  },
+  {
+    "ref": "ADCH",
+    "source_package": "1X08",
+    "proxy": "PinSocket_1x08_P2.54mm_Vertical",
+    "pad_fit_rms_mm": 0.0
+  },
+  {
+    "ref": "C1",
+    "source_package": "C0603-ROUND",
+    "proxy": "C_0603_1608Metric",
+    "pad_fit_rms_mm": 0.114
+  },
+  {
+    "ref": "C8",
+    "source_package": "C0603-ROUND",
+    "proxy": "C_0603_1608Metric",
+    "pad_fit_rms_mm": 0.114
+  },
+  {
+    "ref": "C13",
+    "source_package": "C0603-ROUND",
+    "proxy": "C_0603_1608Metric",
+    "pad_fit_rms_mm": 0.114
+  },
+  {
+    "ref": "RX",
+    "source_package": "CHIPLED_0805",
+    "proxy": "LED_0805_2012Metric",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "TX",
+    "source_package": "CHIPLED_0805",
+    "proxy": "LED_0805_2012Metric",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "X2",
+    "source_package": "PN61729",
+    "proxy": "PN61729_envelope",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "F1",
+    "source_package": "L1812",
+    "proxy": "L1812_envelope",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "C9",
+    "source_package": "C0603-ROUND",
+    "proxy": "C_0603_1608Metric",
+    "pad_fit_rms_mm": 0.114
+  },
+  {
+    "ref": "L",
+    "source_package": "CHIPLED_0805",
+    "proxy": "LED_0805_2012Metric",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "C7",
+    "source_package": "C0603-ROUND",
+    "proxy": "C_0603_1608Metric",
+    "pad_fit_rms_mm": 0.114
+  },
+  {
+    "ref": "T1",
+    "source_package": "SOT-23",
+    "proxy": "SOT-23",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "C12",
+    "source_package": "C0603-ROUND",
+    "proxy": "C_0603_1608Metric",
+    "pad_fit_rms_mm": 0.114
+  },
+  {
+    "ref": "C11",
+    "source_package": "C0603-ROUND",
+    "proxy": "C_0603_1608Metric",
+    "pad_fit_rms_mm": 0.114
+  },
+  {
+    "ref": "C10",
+    "source_package": "C0603-ROUND",
+    "proxy": "C_0603_1608Metric",
+    "pad_fit_rms_mm": 0.114
+  },
+  {
+    "ref": "IC4",
+    "source_package": "MLF32",
+    "proxy": "MLF32_envelope",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "ICSP1",
+    "source_package": "2X03",
+    "proxy": "PinHeader_2x03_P2.54mm_Vertical",
+    "pad_fit_rms_mm": 0.0
+  },
+  {
+    "ref": "L1",
+    "source_package": "0805",
+    "proxy": "L_0805_2012Metric",
+    "pad_fit_rms_mm": 0.0375
+  },
+  {
+    "ref": "Z1",
+    "source_package": "CT/CN0603",
+    "proxy": "R_0603_1608Metric",
+    "pad_fit_rms_mm": 0.175
+  },
+  {
+    "ref": "Z2",
+    "source_package": "CT/CN0603",
+    "proxy": "R_0603_1608Metric",
+    "pad_fit_rms_mm": 0.175
+  },
+  {
+    "ref": "Y1",
+    "source_package": "RESONATOR",
+    "proxy": "RESONATOR_envelope",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "R1",
+    "source_package": "R0603-ROUND",
+    "proxy": "R_0603_1608Metric",
+    "pad_fit_rms_mm": 0.064
+  },
+  {
+    "ref": "RN4",
+    "source_package": "CAY16",
+    "proxy": "R_Array_Convex_4x0603",
+    "pad_fit_rms_mm": 0.225
+  },
+  {
+    "ref": "RN5",
+    "source_package": "CAY16",
+    "proxy": "R_Array_Convex_4x0603",
+    "pad_fit_rms_mm": 0.225
+  },
+  {
+    "ref": "RN1",
+    "source_package": "CAY16",
+    "proxy": "R_Array_Convex_4x0603",
+    "pad_fit_rms_mm": 0.225
+  },
+  {
+    "ref": "RN3",
+    "source_package": "CAY16",
+    "proxy": "R_Array_Convex_4x0603",
+    "pad_fit_rms_mm": 0.225
+  },
+  {
+    "ref": "RN2",
+    "source_package": "CAY16",
+    "proxy": "R_Array_Convex_4x0603",
+    "pad_fit_rms_mm": 0.225
+  },
+  {
+    "ref": "RESET",
+    "source_package": "TS42",
+    "proxy": "TS42_envelope",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "R2",
+    "source_package": "R0603-ROUND",
+    "proxy": "R_0603_1608Metric",
+    "pad_fit_rms_mm": 0.064
+  },
+  {
+    "ref": "IC6",
+    "source_package": "SOT23-DBV",
+    "proxy": "SOT-23-5",
+    "pad_fit_rms_mm": 0.1592
+  },
+  {
+    "ref": "Y2",
+    "source_package": "QS",
+    "proxy": "QS_envelope",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "C14",
+    "source_package": "C0603-ROUND",
+    "proxy": "C_0603_1608Metric",
+    "pad_fit_rms_mm": 0.114
+  },
+  {
+    "ref": "C15",
+    "source_package": "C0603-ROUND",
+    "proxy": "C_0603_1608Metric",
+    "pad_fit_rms_mm": 0.114
+  },
+  {
+    "ref": "IC7",
+    "source_package": "MSOP08",
+    "proxy": "MSOP-8_3x3mm_P0.65mm",
+    "pad_fit_rms_mm": 0.0
+  },
+  {
+    "ref": "D3",
+    "source_package": "MINIMELF",
+    "proxy": "D_MiniMELF",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "XIO",
+    "source_package": "2X18",
+    "proxy": "PinSocket_2x18_P2.54mm_Vertical",
+    "pad_fit_rms_mm": 2.54
+  },
+  {
+    "ref": "JP6",
+    "source_package": "1X10",
+    "proxy": "PinSocket_1x10_P2.54mm_Vertical",
+    "pad_fit_rms_mm": 0.0
+  },
+  {
+    "ref": "POWER",
+    "source_package": "1X08",
+    "proxy": "PinSocket_1x08_P2.54mm_Vertical",
+    "pad_fit_rms_mm": 0.0
+  },
+  {
+    "ref": "D2",
+    "source_package": "MINIMELF",
+    "proxy": "D_MiniMELF",
+    "pad_fit_rms_mm": null
+  },
+  {
+    "ref": "L2",
+    "source_package": "0805",
+    "proxy": "L_0805_2012Metric",
+    "pad_fit_rms_mm": 0.0375
+  },
+  {
+    "ref": "C16",
+    "source_package": "C0603-ROUND",
+    "proxy": "C_0603_1608Metric",
+    "pad_fit_rms_mm": 0.114
+  }
+]
