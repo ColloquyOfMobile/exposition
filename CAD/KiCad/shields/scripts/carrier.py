@@ -38,10 +38,10 @@ def footprint():
   pad.SetSize(xy(5.74 if slot else 3.2,3.2));pad.SetDrillSize(xy(5.74 if slot else 3.2,3.2));pad.SetLayerSet(p.LSET.AllCuMask());f.Add(pad)
  # Component-side projection: six inline L/+/-/R/+/- contacts and R/S control.
  # Module L is isolated by removing R4 and rewired to its output before fitting.
- for number,x,y in [(i+1,3.81+i*2.54,-5.08) for i in range(6)]+[(7,17.78,17.78),(8,20.32,17.78)]:
+ for number,x,y in [(i+1,3.81+i*2.54,-5.08) for i in range(6)]+[(7,16.51,17.78),(8,19.05,17.78)]:
   pad=p.PAD(f);pad.SetNumber(str(number));pad.SetAttribute(p.PAD_ATTRIB_PTH);pad.SetShape(p.PAD_SHAPE_RECT if number in [1,7] else p.PAD_SHAPE_OVAL)
   pad.SetPosition(xy(x,y));pad.SetSize(xy(1.7,1.7));pad.SetDrillSize(xy(1,1));layers=p.LSET.AllCuMask();layers.AddLayer(p.F_Mask);layers.AddLayer(p.B_Mask);pad.SetLayerSet(layers);f.Add(pad)
- for x,y,w in [(2.54,-6.35,15.24),(16.51,16.51,5.08)]:
+ for x,y,w in [(2.54,-6.35,15.24),(15.24,16.51,5.08)]:
   rect(f,x,y,w,2.54,p.F_SilkS);rect(f,x,y,w,2.54,p.F_Fab)
  rect(f,-4.34,-8,29,32,p.F_CrtYd);rect(f,-4.34,-8,29,32,p.F_Fab)
  # Module envelope is assembly-only; its edge crosses underside socket pads.
@@ -90,6 +90,6 @@ def main():
  operating_labels(b)
  b.BuildConnectivity();p.SaveBoard(str(folder/'analyser-carrier-placed.kicad_pcb'),b);project(folder,'analyser-carrier')
  (folder/'fp-lib-table').write_text('(fp_lib_table (version 7) (lib (name "Shields") (type "KiCad") (uri "${KIPRJMOD}/../Shields.pretty") (options "") (descr "Local footprints")))')
- (folder/'mechanical.json').write_text(json.dumps({'basis':'User-authorized photo inference on assumed 2.54mm grid, 2026-10-07; not a measured manufacturer drawing','hole_spacing_mm':HOLE_SPACING,'round_hole_mm':3.2,'slot_mm':[5.74,3.2],'nominal_spacing_range_mm':[19.05,21.59],'module_reserved_envelope_mm':[29,32],'board_mm':[150,55],'module_origins_mm':[[78.16,88,180]]+[[68+i*29-HOLE_SPACING/2,68,0] for i in range(1,5)],'carrier_to_backplane_translation_mm':[25,215],'short_leads':False,'module_modification':'Remove R4; link isolated L to OUT; downward headers','socket_grid_mm':[[i+1,3.81+i*2.54,-5.08] for i in range(6)]+[[7,17.78,17.78],[8,20.32,17.78]],'physical_fit_verified':False},indent=2)+'\n')
+ (folder/'mechanical.json').write_text(json.dumps({'basis':'User-authorized photo inference on assumed 2.54mm grid, 2026-10-07; not a measured manufacturer drawing','hole_spacing_mm':HOLE_SPACING,'round_hole_mm':3.2,'slot_mm':[5.74,3.2],'nominal_spacing_range_mm':[19.05,21.59],'module_reserved_envelope_mm':[29,32],'board_mm':[150,55],'module_origins_mm':[[78.16,88,180]]+[[68+i*29-HOLE_SPACING/2,68,0] for i in range(1,5)],'carrier_to_backplane_translation_mm':[25,215],'short_leads':False,'module_modification':'Remove R4; link isolated L to OUT; downward headers','socket_grid_mm':[[i+1,3.81+i*2.54,-5.08] for i in range(6)]+[[7,16.51,17.78],[8,19.05,17.78]],'physical_fit_verified':False},indent=2)+'\n')
  print('analyser-carrier: generated',len(d['components']),'components')
 if __name__=='__main__':main()

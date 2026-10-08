@@ -162,7 +162,7 @@ def main():
         nets=[body+'/analyser out','MEGA_5V','AGND',body+'/microphone','MEGA_5V','AGND','analyser/reset','analyser/strobe']
         module=cf[f'M{i}'];origin=position(module);angle=module.GetOrientationDegrees()
         sign=-1 if near(abs(angle),180) else 1
-        grid=[(3.81+j*2.54,-5.08) for j in range(6)]+[(17.78,17.78),(20.32,17.78)]
+        grid=[(3.81+j*2.54,-5.08) for j in range(6)]+[(16.51,17.78),(19.05,17.78)]
         for pin,(net,(x,y)) in enumerate(zip(nets,grid),1):
             pad=cp[(f'M{i}',str(pin))];assert plain(pad.GetNetname())==net
             assert pad.GetAttribute()==p.PAD_ATTRIB_PTH

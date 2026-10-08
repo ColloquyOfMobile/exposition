@@ -52,13 +52,18 @@ Coordinates are **photo-derived assumptions**, not a manufacturer land pattern.
 | 4 | 11.43 | -5.08 | R microphone input |
 | 5 | 13.97 | -5.08 | +5V (right group) |
 | 6 | 16.51 | -5.08 | GND (right group) |
-| 7 | 17.78 | 17.78 | R reset |
-| 8 | 20.32 | 17.78 | S strobe |
+| 7 | 16.51 | 17.78 | R reset |
+| 8 | 19.05 | 17.78 | S strobe |
 
 All module +5V contacts use MEGA_5V; all module grounds use AGND. No digital
 GND bond is added. The original microphone signal still feeds the R input.
 ANA0-4, AGND and MEGA5V probe pads remain accessible. Leave the carrier out
 when the Teensy adapter is fitted.
+
+On 2026-10-08 the two-pin socket on each module position moved 1.27 mm
+in local -X to match the corrected DFRobot J4. Reset now aligns in X with
+input contact 6. Attached tracks and the nearby reset escape bends were
+adjusted; native DRC reports zero violations and zero unconnected items.
 
 ## Photo-derived fit
 

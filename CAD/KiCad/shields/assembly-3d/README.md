@@ -43,8 +43,8 @@ exports use the PCB editor's absolute origin, with Cartesian Y inverted.
   20.32 mm mounting-hole spacing retained. These are the modified plug-in modules,
   with replacement downward input/control headers. White output connector
   is now an SMD envelope wholly inside the outline. J4 pin 1 now aligns with
-  J2J3 pin 6; the carrier control sockets remain offset by 1.27 mm and require
-  a subsequent carrier-layout correction. Retained 3.2 mm mounting holes break
+  J2J3 pin 6; the carrier control sockets have moved 1.27 mm to match.
+  Retained 3.2 mm mounting holes break
   through the narrower side edges; their copper rings were reduced to 3.6 mm.
   Small component placements and connector shape are approximate. See the
   [module notes](../dfrobot-module/README.md).
@@ -101,7 +101,10 @@ supersedes the earlier Blender file hashes and the earlier DFRobot alignment
 checks. `update_dfrobot_geometry.py` replaces only module geometry in both Mega
 and combined files, preserving user scene/placement edits. Do not rerun
 `combine_scenes.py` over a user-edited combined file unless discarding those
-scene edits is intended.
+scene edits is intended. The subsequent carrier correction is validated in
+[carrier-update-validation.json](carrier-update-validation.json), which supersedes
+the previous carrier mismatch and affected Blender hashes. Regenerate that
+geometry in edited Blender files with `update_carrier_geometry.py`.
 Imported Arduino, Teensy and KiCad component geometry retains its original
 licensing and attribution; see the linked reference-project notes and their
 retained source/license files.

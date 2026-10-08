@@ -9,7 +9,6 @@
   "j1_all_pads_smd": true,
   "user_comments_preserved": 2,
   "known_reference_limitations": [
-    "3.2 mm mounting holes intersect side edges",
-    "Carrier control sockets still offset by 1.27 mm"
+    "3.2 mm mounting holes intersect side edges"
   ]
 }

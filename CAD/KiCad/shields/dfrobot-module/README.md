@@ -38,9 +38,8 @@ Relative input header centres still match `../analyser-carrier/mechanical.json`:
 six contacts at X=3.81, 6.35, 8.89, 11.43, 13.97, 16.51 and Y=-5.08 mm;
 two control contacts are now at X=16.51, 19.05 and Y=17.78 mm. J4 pin 1 is
 exactly aligned in X with J2J3 pin 6 (world X=70.85 mm), correcting the user's
-approximate move to X=70.825 mm. **The carrier's two control sockets per module
-still need this 1.27 mm shift; the carrier PCB/routing has not been altered by
-this reference-model correction.** The STEP exporter uses this
+approximate move to X=70.825 mm. The carrier's two-pin sockets have now also
+moved 1.27 mm to match, including their attached tracks. The STEP exporter uses this
 origin (its Cartesian Y axis is opposite the PCB editor's downward Y axis).
 
 R4 is omitted for the previously documented L-to-OUT plug-in modification.

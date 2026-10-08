@@ -1,0 +1,16 @@
+{
+  "mating_contacts_checked": 40,
+  "maximum_xy_error_mm": 3.411968959808029e-05,
+  "files": {
+    "mega-configuration.blend": {
+      "sha256": "cc26b7a35f6406ab1e64cac5fe9f96c9b6b1f21b0a4f2c7df42dbb3bdd1e4143",
+      "reopened": true,
+      "placement_preserved": true
+    },
+    "shield-configurations.blend": {
+      "sha256": "1c865bcb2f7bb4ab1bde026c242b42c00cab7a1c94d23c2db86d97bf7fe41b34",
+      "reopened": true,
+      "placement_preserved": true
+    }
+  }
+}

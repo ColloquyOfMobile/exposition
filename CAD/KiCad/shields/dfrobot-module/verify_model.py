@@ -25,7 +25,6 @@ assert len(comments)==2
 result = {'outline_mm':size,'retained_mounting_centres_mm':spacing,
           'mounting_pad_diameter_mm':3.6,'j4_pin1_and_j2j3_pin6_x_mm':p.ToMM(pin1.GetPosition().x),
           'j1_all_pads_smd':True,'user_comments_preserved':len(comments),
-          'known_reference_limitations':['3.2 mm mounting holes intersect side edges',
-                                          'Carrier control sockets still offset by 1.27 mm']}
+          'known_reference_limitations':['3.2 mm mounting holes intersect side edges']}
 (root/'validation.json').write_text(json.dumps(result,indent=2)+'\n')
 print(json.dumps(result,indent=2))

@@ -9,8 +9,12 @@ import json
 from mathutils import Vector
 
 ROOT = Path(__file__).resolve().parent
+grid=json.loads((ROOT.parent/'analyser-carrier/mechanical.json').read_text())['socket_grid_mm']
+mismatch=abs(grid[-2][1]-16.51)
+fit_note=('Control sockets align with corrected J4; physical fit not verified.' if mismatch<.001
+          else f'Carrier control sockets differ by {mismatch:.2f} mm.')
 report = {'correction':'22 x 34 mm; SMD J1; J4 pin 1 aligned with J2J3 pin 6',
-          'carrier_control_socket_mismatch_mm':1.27,'files':{}}
+          'carrier_control_socket_mismatch_mm':mismatch,'files':{}}
 for filename in ('mega-configuration.blend','shield-configurations.blend'):
     path = ROOT/filename
     bpy.ops.wm.open_mainfile(filepath=str(path))
@@ -44,14 +48,14 @@ for filename in ('mega-configuration.blend','shield-configurations.blend'):
             copy.parent = copies.get(source.parent,root)
             copy.matrix_local = source.matrix_local.copy()
         root['mechanical_revision'] = '2026-10-08 User.Comments correction'
-        root['carrier_fit_note'] = 'J4 control socket positions differ by 1.27 mm; carrier not changed.'
+        root['carrier_fit_note'] = fit_note
     for obj in imported:
         bpy.data.objects.remove(obj,do_unlink=True)
     assert original == {o.name:[list(r) for r in o.matrix_basis] for o in roots}
     for mesh in list(bpy.data.meshes):
         if mesh.users == 0:bpy.data.meshes.remove(mesh)
     for scene in bpy.data.scenes:
-        scene['dfrobot_fit_note'] = 'Corrected 22 x 34 mm reference. J4 carrier sockets still differ by 1.27 mm. Mounting holes break through side edges.'
+        scene['dfrobot_fit_note'] = 'Corrected 22 x 34 mm reference. '+fit_note+' Mounting holes break through side edges.'
     bpy.ops.wm.save_as_mainfile(filepath=str(path),compress=True)
     bpy.ops.wm.open_mainfile(filepath=str(path))
     for name,matrix in original.items():
@@ -66,8 +70,7 @@ manifest_path = ROOT/'mega-assembly.json'
 manifest = json.loads(manifest_path.read_text())
 for check in manifest['alignment_checks']:
     if 'DFRobot analyser' in check['name']:
-        check.update(maximum_xy_error_mm=1.27,aligned=False,
-                     note='Module corrected from user comments; carrier control sockets not yet moved.')
+        check.update(maximum_xy_error_mm=mismatch,aligned=mismatch<.001,note=fit_note)
 manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
 for filename in ('validation.json','combined-validation.json'):
     path = ROOT/filename

@@ -18,5 +18,5 @@
   "mesh_datablocks_shared_between_scenes": 41,
   "size_bytes": 16448643,
   "sha256": "e155dc395c66eb44ced7094cc4b7e076400ccbf1fbb470b70ea62d56d91b86dc",
-  "superseded_by": "dfrobot-update-validation.json (DFRobot geometry, fit checks and affected Blender hashes)"
+  "superseded_by": "carrier-update-validation.json (carrier alignment and affected Blender files)"
 }

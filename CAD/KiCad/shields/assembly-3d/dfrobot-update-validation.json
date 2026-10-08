@@ -40,5 +40,6 @@
       ],
       "sha256": "070f12e7187393ffb616c1dfd070a15c5bff9aef5a3a7dd008bccde6b28c7bb3"
     }
-  }
+  },
+  "superseded_by": "carrier-update-validation.json (carrier alignment and affected Blender files)"
 }

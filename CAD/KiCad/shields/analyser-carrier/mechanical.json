@@ -84,14 +84,15 @@
     ],
     [
       7,
-      17.78,
+      16.51,
       17.78
     ],
     [
       8,
-      20.32,
+      19.05,
       17.78
     ]
   ],
-  "physical_fit_verified": false
+  "physical_fit_verified": false,
+  "control_header_basis": "User module correction 2026-10-08: reset aligned with input pin 6"
 }

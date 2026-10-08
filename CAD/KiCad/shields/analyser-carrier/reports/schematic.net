@@ -1,7 +1,7 @@
 (export (version "E")
   (design
     (source "C:\\workspace\\workspace2\\Colloquy\\exposition\\CAD\\KiCad\\shields\\analyser-carrier\\analyser-carrier.kicad_sch")
-    (date "2026-10-07T14:30:00+0200")
+    (date "2026-10-08T17:06:35+0200")
     (tool "Eeschema 9.0.7")
     (sheet (number "1") (name "/") (tstamps "/")
       (title_block

@@ -1,106 +1,106 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="210mm" height="297mm" viewBox="0 0 210 297">
-<rect width="210" height="297" fill="white"/>
+<rect width="210" height="297" fill="white" />
 <g fill="black" font-family="sans-serif" font-size="4"><text x="20" y="20">DFR0126 direct-plug fit check / MODIFIED MODULES</text><text x="20" y="27">Print at 100%. Match ALL pins and holes before fabrication.</text></g>
-<g transform="translate(30 40)" fill="none" stroke="black" stroke-width="0.15"><rect width="150" height="55"/>
-<rect x="90.5" y="10.0" width="29" height="32" stroke-dasharray="1 1"/>
+<g transform="translate(30 40)" fill="none" stroke="black" stroke-width="0.15"><rect width="150" height="55" />
+<rect x="90.5" y="10.0" width="29" height="32" stroke-dasharray="1 1" />
 <text x="92.5" y="25.0" fill="black" stroke="none" font-family="sans-serif" font-size="2.5">M4: 0 deg</text>
-<circle cx="94.84" cy="18.0" r="1.6"/>
-<rect x="112.28999999999999" y="16.4" width="5.74" height="3.2" rx="1.6"/>
-<circle cx="98.65" cy="12.920000000000002" r="0.5"/>
+<circle cx="94.84" cy="18.0" r="1.6" />
+<rect x="112.28999999999999" y="16.4" width="5.74" height="3.2" rx="1.6" />
+<circle cx="98.65" cy="12.920000000000002" r="0.5" />
 <text x="98.65" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">1</text>
-<circle cx="101.19" cy="12.920000000000002" r="0.5"/>
+<circle cx="101.19" cy="12.920000000000002" r="0.5" />
 <text x="101.19" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">2</text>
-<circle cx="103.72999999999999" cy="12.920000000000002" r="0.5"/>
+<circle cx="103.72999999999999" cy="12.920000000000002" r="0.5" />
 <text x="103.72999999999999" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">3</text>
-<circle cx="106.27000000000001" cy="12.920000000000002" r="0.5"/>
+<circle cx="106.27000000000001" cy="12.920000000000002" r="0.5" />
 <text x="106.27000000000001" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">4</text>
-<circle cx="108.81" cy="12.920000000000002" r="0.5"/>
+<circle cx="108.81" cy="12.920000000000002" r="0.5" />
 <text x="108.81" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">5</text>
-<circle cx="111.349999" cy="12.920000000000002" r="0.5"/>
+<circle cx="111.349999" cy="12.920000000000002" r="0.5" />
 <text x="111.349999" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">6</text>
-<circle cx="112.62" cy="35.78" r="0.5"/>
-<text x="112.62" y="34.58" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">7</text>
-<circle cx="115.16" cy="35.78" r="0.5"/>
-<text x="115.16" y="34.58" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">8</text>
-<rect x="61.5" y="10.0" width="29" height="32" stroke-dasharray="1 1"/>
+<circle cx="111.349999" cy="35.78" r="0.5" />
+<text x="111.349999" y="34.58" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">7</text>
+<circle cx="113.88999899999999" cy="35.78" r="0.5" />
+<text x="113.88999899999999" y="34.58" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">8</text>
+<rect x="61.5" y="10.0" width="29" height="32" stroke-dasharray="1 1" />
 <text x="63.5" y="25.0" fill="black" stroke="none" font-family="sans-serif" font-size="2.5">M3: 0 deg</text>
-<circle cx="65.84" cy="18.0" r="1.6"/>
-<rect x="83.28999999999999" y="16.4" width="5.74" height="3.2" rx="1.6"/>
-<circle cx="69.65" cy="12.920000000000002" r="0.5"/>
+<circle cx="65.84" cy="18.0" r="1.6" />
+<rect x="83.28999999999999" y="16.4" width="5.74" height="3.2" rx="1.6" />
+<circle cx="69.65" cy="12.920000000000002" r="0.5" />
 <text x="69.65" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">1</text>
-<circle cx="72.19" cy="12.920000000000002" r="0.5"/>
+<circle cx="72.19" cy="12.920000000000002" r="0.5" />
 <text x="72.19" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">2</text>
-<circle cx="74.73" cy="12.920000000000002" r="0.5"/>
+<circle cx="74.73" cy="12.920000000000002" r="0.5" />
 <text x="74.73" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">3</text>
-<circle cx="77.27" cy="12.920000000000002" r="0.5"/>
+<circle cx="77.27" cy="12.920000000000002" r="0.5" />
 <text x="77.27" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">4</text>
-<circle cx="79.81" cy="12.920000000000002" r="0.5"/>
+<circle cx="79.81" cy="12.920000000000002" r="0.5" />
 <text x="79.81" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">5</text>
-<circle cx="82.349999" cy="12.920000000000002" r="0.5"/>
+<circle cx="82.349999" cy="12.920000000000002" r="0.5" />
 <text x="82.349999" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">6</text>
-<circle cx="83.62" cy="35.78" r="0.5"/>
-<text x="83.62" y="34.58" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">7</text>
-<circle cx="86.16" cy="35.78" r="0.5"/>
-<text x="86.16" y="34.58" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">8</text>
-<rect x="3.4999999999999964" y="14.0" width="29" height="32" stroke-dasharray="1 1"/>
+<circle cx="82.349999" cy="35.78" r="0.5" />
+<text x="82.349999" y="34.58" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">7</text>
+<circle cx="84.88999899999999" cy="35.78" r="0.5" />
+<text x="84.88999899999999" y="34.58" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">8</text>
+<rect x="3.4999999999999964" y="14.0" width="29" height="32" stroke-dasharray="1 1" />
 <text x="5.4999999999999964" y="29.0" fill="black" stroke="none" font-family="sans-serif" font-size="2.5">M1: 180 deg</text>
-<circle cx="28.159999999999997" cy="38.0" r="1.6"/>
-<rect x="4.970000000000003" y="36.4" width="5.74" height="3.2" rx="1.6"/>
-<circle cx="24.349999999999994" cy="43.08" r="0.5"/>
+<circle cx="28.159999999999997" cy="38.0" r="1.6" />
+<rect x="4.970000000000003" y="36.4" width="5.74" height="3.2" rx="1.6" />
+<circle cx="24.349999999999994" cy="43.08" r="0.5" />
 <text x="24.349999999999994" y="41.879999999999995" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">1</text>
-<circle cx="21.810000000000002" cy="43.08" r="0.5"/>
+<circle cx="21.810000000000002" cy="43.08" r="0.5" />
 <text x="21.810000000000002" y="41.879999999999995" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">2</text>
-<circle cx="19.269999999999996" cy="43.08" r="0.5"/>
+<circle cx="19.269999999999996" cy="43.08" r="0.5" />
 <text x="19.269999999999996" y="41.879999999999995" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">3</text>
-<circle cx="16.730000000000004" cy="43.08" r="0.5"/>
+<circle cx="16.730000000000004" cy="43.08" r="0.5" />
 <text x="16.730000000000004" y="41.879999999999995" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">4</text>
-<circle cx="14.189999999999998" cy="43.08" r="0.5"/>
+<circle cx="14.189999999999998" cy="43.08" r="0.5" />
 <text x="14.189999999999998" y="41.879999999999995" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">5</text>
-<circle cx="11.650001000000003" cy="43.08" r="0.5"/>
+<circle cx="11.650001000000003" cy="43.08" r="0.5" />
 <text x="11.650001000000003" y="41.879999999999995" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">6</text>
-<circle cx="10.380000000000003" cy="20.22" r="0.5"/>
-<text x="10.380000000000003" y="19.02" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">7</text>
-<circle cx="7.840000000000003" cy="20.22" r="0.5"/>
-<text x="7.840000000000003" y="19.02" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">8</text>
-<rect x="119.5" y="10.0" width="29" height="32" stroke-dasharray="1 1"/>
+<circle cx="11.650001000000003" cy="20.22" r="0.5" />
+<text x="11.650001000000003" y="19.02" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">7</text>
+<circle cx="9.110000999999997" cy="20.22" r="0.5" />
+<text x="9.110000999999997" y="19.02" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">8</text>
+<rect x="119.5" y="10.0" width="29" height="32" stroke-dasharray="1 1" />
 <text x="121.5" y="25.0" fill="black" stroke="none" font-family="sans-serif" font-size="2.5">M5: 0 deg</text>
-<circle cx="123.84" cy="18.0" r="1.6"/>
-<rect x="141.29" y="16.4" width="5.74" height="3.2" rx="1.6"/>
-<circle cx="127.65" cy="12.920000000000002" r="0.5"/>
+<circle cx="123.84" cy="18.0" r="1.6" />
+<rect x="141.29" y="16.4" width="5.74" height="3.2" rx="1.6" />
+<circle cx="127.65" cy="12.920000000000002" r="0.5" />
 <text x="127.65" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">1</text>
-<circle cx="130.19" cy="12.920000000000002" r="0.5"/>
+<circle cx="130.19" cy="12.920000000000002" r="0.5" />
 <text x="130.19" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">2</text>
-<circle cx="132.73" cy="12.920000000000002" r="0.5"/>
+<circle cx="132.73" cy="12.920000000000002" r="0.5" />
 <text x="132.73" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">3</text>
-<circle cx="135.27" cy="12.920000000000002" r="0.5"/>
+<circle cx="135.27" cy="12.920000000000002" r="0.5" />
 <text x="135.27" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">4</text>
-<circle cx="137.81" cy="12.920000000000002" r="0.5"/>
+<circle cx="137.81" cy="12.920000000000002" r="0.5" />
 <text x="137.81" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">5</text>
-<circle cx="140.349999" cy="12.920000000000002" r="0.5"/>
+<circle cx="140.349999" cy="12.920000000000002" r="0.5" />
 <text x="140.349999" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">6</text>
-<circle cx="141.62" cy="35.78" r="0.5"/>
-<text x="141.62" y="34.58" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">7</text>
-<circle cx="144.16" cy="35.78" r="0.5"/>
-<text x="144.16" y="34.58" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">8</text>
-<rect x="32.5" y="10.0" width="29" height="32" stroke-dasharray="1 1"/>
+<circle cx="140.349999" cy="35.78" r="0.5" />
+<text x="140.349999" y="34.58" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">7</text>
+<circle cx="142.889999" cy="35.78" r="0.5" />
+<text x="142.889999" y="34.58" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">8</text>
+<rect x="32.5" y="10.0" width="29" height="32" stroke-dasharray="1 1" />
 <text x="34.5" y="25.0" fill="black" stroke="none" font-family="sans-serif" font-size="2.5">M2: 0 deg</text>
-<circle cx="36.84" cy="18.0" r="1.6"/>
-<rect x="54.29" y="16.4" width="5.74" height="3.2" rx="1.6"/>
-<circle cx="40.650000000000006" cy="12.920000000000002" r="0.5"/>
+<circle cx="36.84" cy="18.0" r="1.6" />
+<rect x="54.29" y="16.4" width="5.74" height="3.2" rx="1.6" />
+<circle cx="40.650000000000006" cy="12.920000000000002" r="0.5" />
 <text x="40.650000000000006" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">1</text>
-<circle cx="43.19" cy="12.920000000000002" r="0.5"/>
+<circle cx="43.19" cy="12.920000000000002" r="0.5" />
 <text x="43.19" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">2</text>
-<circle cx="45.730000000000004" cy="12.920000000000002" r="0.5"/>
+<circle cx="45.730000000000004" cy="12.920000000000002" r="0.5" />
 <text x="45.730000000000004" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">3</text>
-<circle cx="48.269999999999996" cy="12.920000000000002" r="0.5"/>
+<circle cx="48.269999999999996" cy="12.920000000000002" r="0.5" />
 <text x="48.269999999999996" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">4</text>
-<circle cx="50.81" cy="12.920000000000002" r="0.5"/>
+<circle cx="50.81" cy="12.920000000000002" r="0.5" />
 <text x="50.81" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">5</text>
-<circle cx="53.349999" cy="12.920000000000002" r="0.5"/>
+<circle cx="53.349999" cy="12.920000000000002" r="0.5" />
 <text x="53.349999" y="11.720000000000002" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">6</text>
-<circle cx="54.620000000000005" cy="35.78" r="0.5"/>
-<text x="54.620000000000005" y="34.58" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">7</text>
-<circle cx="57.16" cy="35.78" r="0.5"/>
-<text x="57.16" y="34.58" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">8</text>
-</g><path d="M30 110h50 M30 108v4 M80 108v4" fill="none" stroke="black" stroke-width="0.3"/>
+<circle cx="53.349999" cy="35.78" r="0.5" />
+<text x="53.349999" y="34.58" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">7</text>
+<circle cx="55.889999" cy="35.78" r="0.5" />
+<text x="55.889999" y="34.58" fill="black" stroke="none" text-anchor="middle" font-family="sans-serif" font-size="1.6">8</text>
+</g><path d="M30 110h50 M30 108v4 M80 108v4" fill="none" stroke="black" stroke-width="0.3" />
 <g font-family="sans-serif" font-size="3.5"><text x="30" y="119">This line must measure 50 mm.</text><text x="30" y="130">1 OUT* / 2 +5 / 3 GND / 4 MIC / 5 +5 / 6 GND</text><text x="30" y="137">7 RESET / 8 STROBE. *Remove module R4; link L to OUT.</text><text x="30" y="147">Photo-derived socket positions: actual fit remains unverified.</text></g></svg>
