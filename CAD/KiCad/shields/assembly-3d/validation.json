@@ -1,0 +1,157 @@
+{
+  "mega": {
+    "visible_boards": 13,
+    "hidden_microphones": 6,
+    "visible_meshes": 361,
+    "bounds_xyz_mm": [
+      [
+        44.0,
+        254.0
+      ],
+      [
+        -349.16,
+        -46.98
+      ],
+      [
+        -3.805,
+        32.975
+      ]
+    ],
+    "computing_mount_max_xy_error_mm": 2.2e-05,
+    "connector_checks": [
+      {
+        "name": "02 Voice - Female 1 - 1012 Hz",
+        "contacts": 5,
+        "maximum_xy_error_mm": 1.5e-05
+      },
+      {
+        "name": "03 Voice - Female 2 - 2531 Hz",
+        "contacts": 5,
+        "maximum_xy_error_mm": 1.5e-05
+      },
+      {
+        "name": "04 Voice - Female 3 - 6329 Hz",
+        "contacts": 5,
+        "maximum_xy_error_mm": 2.2e-05
+      },
+      {
+        "name": "05 Voice - Male 1 - 162 Hz",
+        "contacts": 5,
+        "maximum_xy_error_mm": 2.2e-05
+      },
+      {
+        "name": "06 Voice - Male 2 - 405 Hz",
+        "contacts": 5,
+        "maximum_xy_error_mm": 2.2e-05
+      },
+      {
+        "name": "Mega perimeter headers (reserved POWER 1 omitted)",
+        "contacts": 85,
+        "maximum_xy_error_mm": 2.2e-05
+      },
+      {
+        "name": "Analyser carrier connector",
+        "contacts": 21,
+        "maximum_xy_error_mm": 3.1e-05
+      },
+      {
+        "name": "09 DFRobot analyser 1 - modified headers",
+        "contacts": 8,
+        "maximum_xy_error_mm": 3.1e-05
+      },
+      {
+        "name": "10 DFRobot analyser 2 - modified headers",
+        "contacts": 8,
+        "maximum_xy_error_mm": 1.5e-05
+      },
+      {
+        "name": "11 DFRobot analyser 3 - modified headers",
+        "contacts": 8,
+        "maximum_xy_error_mm": 1.5e-05
+      },
+      {
+        "name": "12 DFRobot analyser 4 - modified headers",
+        "contacts": 8,
+        "maximum_xy_error_mm": 1.5e-05
+      },
+      {
+        "name": "13 DFRobot analyser 5 - modified headers",
+        "contacts": 8,
+        "maximum_xy_error_mm": 1.5e-05
+      }
+    ],
+    "external_image_dependencies": [],
+    "reopened_successfully": true,
+    "blend_sha256": "b2859914f448fc309a233eb0f2973e50032925b1ccf3593a4c354960d264b761"
+  },
+  "teensy": {
+    "visible_boards": 8,
+    "hidden_microphones": 6,
+    "visible_meshes": 282,
+    "bounds_xyz_mm": [
+      [
+        44.0,
+        254.0
+      ],
+      [
+        -349.16,
+        -52.16
+      ],
+      [
+        -3.805,
+        29.584
+      ]
+    ],
+    "computing_mount_max_xy_error_mm": 0.0,
+    "connector_checks": [
+      {
+        "name": "02 Voice - Female 1 - 1012 Hz",
+        "contacts": 5,
+        "maximum_xy_error_mm": 1.5e-05
+      },
+      {
+        "name": "03 Voice - Female 2 - 2531 Hz",
+        "contacts": 5,
+        "maximum_xy_error_mm": 1.5e-05
+      },
+      {
+        "name": "04 Voice - Female 3 - 6329 Hz",
+        "contacts": 5,
+        "maximum_xy_error_mm": 2.2e-05
+      },
+      {
+        "name": "05 Voice - Male 1 - 162 Hz",
+        "contacts": 5,
+        "maximum_xy_error_mm": 2.2e-05
+      },
+      {
+        "name": "06 Voice - Male 2 - 405 Hz",
+        "contacts": 5,
+        "maximum_xy_error_mm": 2.2e-05
+      },
+      {
+        "name": "Adapter Mega contacts",
+        "contacts": 85,
+        "maximum_xy_error_mm": 0.0
+      },
+      {
+        "name": "Teensy 48 contacts",
+        "contacts": 48,
+        "maximum_xy_error_mm": 1.7e-05
+      }
+    ],
+    "external_image_dependencies": [],
+    "reopened_successfully": true,
+    "blend_sha256": "3917332710adacba7df51aa288dc2ede2b52644e268e0fa85d5469e4f32acaa0"
+  },
+  "source_pcb_sha256": {
+    "analyser-carrier": "a6fc1b010c978b9783427f10eaedc8cc4fb61fe74573cd25be9000062ce5f585",
+    "arduino-mega-reference": "c805cd7640893d15dcc2c7ef1a21ae8fc709f6f9ed4d0caefadd598fe67afef6",
+    "backplane": "dfa82eff00736b68b1a14105f3119caa8dfe3119569cae0a3e01c3b76ab41c4d",
+    "dfrobot-module": "f2860081462ca720228ad115bd8d12c09e9b5362c3dda4d8029ae0343fa7a0a0",
+    "microphone": "7f0a525ca5e390ba5aef43498615029122397858b42edd63eafa6c52097efd34",
+    "teensy-adapter": "788ae7de427f17d3fa1717582fc2a018abb0ffaca535383ef160c49156c9e790",
+    "teensy41-reference": "27d93e48803ee8e4ec5bcd634c5f7e20fb2116c97854604c8c80946c03954a33",
+    "voice-thomas": "deb23efa738ffa5fff2a142e3a83d8aa4ef8b525ef0f1dfa50cebf37fb3fab6f"
+  }
+}

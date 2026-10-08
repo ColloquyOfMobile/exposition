@@ -1,0 +1,489 @@
+{
+  "configuration": "teensy",
+  "units": "mm",
+  "nominal_mating_gap_mm": 11.04,
+  "boards": [
+    {
+      "name": "01 Backplane",
+      "source": "backplane",
+      "hidden": false,
+      "matrix_mm": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "02 Voice - Female 1 - 1012 Hz",
+      "source": "voice-thomas",
+      "hidden": false,
+      "matrix_mm": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          28.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -160.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          12.640000343322754
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "03 Voice - Female 2 - 2531 Hz",
+      "source": "voice-thomas",
+      "hidden": false,
+      "matrix_mm": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          60.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -160.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          12.640000343322754
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "04 Voice - Female 3 - 6329 Hz",
+      "source": "voice-thomas",
+      "hidden": false,
+      "matrix_mm": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          92.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -160.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          12.640000343322754
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "05 Voice - Male 1 - 162 Hz",
+      "source": "voice-thomas",
+      "hidden": false,
+      "matrix_mm": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          124.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -160.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          12.640000343322754
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "06 Voice - Male 2 - 405 Hz",
+      "source": "voice-thomas",
+      "hidden": false,
+      "matrix_mm": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          156.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -160.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          12.640000343322754
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "07 Teensy adapter",
+      "source": "teensy-adapter",
+      "hidden": false,
+      "matrix_mm": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          12.640000343322754
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "08 Teensy 4.1",
+      "source": "teensy41-reference",
+      "hidden": false,
+      "matrix_mm": [
+        [
+          -4.371138828673793e-08,
+          1.0,
+          0.0,
+          267.6199951171875
+        ],
+        [
+          -1.0,
+          -4.371138828673793e-08,
+          0.0,
+          13.789999961853027
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          25.280000686645508
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "REMOTE microphone 1 - display placement only",
+      "source": "microphone",
+      "hidden": true,
+      "matrix_mm": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          215.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "REMOTE microphone 2 - display placement only",
+      "source": "microphone",
+      "hidden": true,
+      "matrix_mm": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          241.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "REMOTE microphone 3 - display placement only",
+      "source": "microphone",
+      "hidden": true,
+      "matrix_mm": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          267.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "REMOTE microphone 4 - display placement only",
+      "source": "microphone",
+      "hidden": true,
+      "matrix_mm": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          215.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -80.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "REMOTE microphone 5 - display placement only",
+      "source": "microphone",
+      "hidden": true,
+      "matrix_mm": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          241.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -80.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "REMOTE microphone 6 - display placement only",
+      "source": "microphone",
+      "hidden": true,
+      "matrix_mm": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          267.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -80.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  ],
+  "alignment_checks": [
+    {
+      "name": "02 Voice - Female 1 - 1012 Hz",
+      "contacts": 5,
+      "maximum_xy_error_mm": 1.5e-05
+    },
+    {
+      "name": "03 Voice - Female 2 - 2531 Hz",
+      "contacts": 5,
+      "maximum_xy_error_mm": 1.5e-05
+    },
+    {
+      "name": "04 Voice - Female 3 - 6329 Hz",
+      "contacts": 5,
+      "maximum_xy_error_mm": 2.2e-05
+    },
+    {
+      "name": "05 Voice - Male 1 - 162 Hz",
+      "contacts": 5,
+      "maximum_xy_error_mm": 2.2e-05
+    },
+    {
+      "name": "06 Voice - Male 2 - 405 Hz",
+      "contacts": 5,
+      "maximum_xy_error_mm": 2.2e-05
+    },
+    {
+      "name": "Adapter Mega contacts",
+      "contacts": 85,
+      "maximum_xy_error_mm": 0.0
+    },
+    {
+      "name": "Teensy 48 contacts",
+      "contacts": 48,
+      "maximum_xy_error_mm": 1.7e-05
+    }
+  ],
+  "proxies": [
+    "J2 - estimated DC jack envelope",
+    "J6 - estimated screw bridge envelope",
+    "U1 - estimated TDFN body",
+    "U1 - estimated TDFN body",
+    "U1 - estimated TDFN body",
+    "U1 - estimated TDFN body",
+    "U1 - estimated TDFN body",
+    "U1 - estimated TDFN body"
+  ],
+  "visible_board_count": 8
+}
