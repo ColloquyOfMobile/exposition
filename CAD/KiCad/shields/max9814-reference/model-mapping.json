@@ -1,0 +1,78 @@
+[
+  {
+    "reference": "C9",
+    "model": "C_0805_2012Metric",
+    "side": "underside",
+    "basis": "representative KiCad library body; original Eagle pads retained"
+  },
+  {
+    "reference": "R3",
+    "model": "R_0805_2012Metric",
+    "side": "underside",
+    "basis": "representative KiCad library body; original Eagle pads retained"
+  },
+  {
+    "reference": "R2",
+    "model": "R_0805_2012Metric",
+    "side": "underside",
+    "basis": "representative KiCad library body; original Eagle pads retained"
+  },
+  {
+    "reference": "R1",
+    "model": "R_0805_2012Metric",
+    "side": "underside",
+    "basis": "representative KiCad library body; original Eagle pads retained"
+  },
+  {
+    "reference": "Q1",
+    "model": "electret_reference.wrl",
+    "basis": "source planar dimensions; approximate height and pin lengths"
+  },
+  {
+    "reference": "U$1",
+    "model": "TDFN-14-1EP_3x3mm_P0.4mm_EP1.78x2.35mm",
+    "side": "underside",
+    "basis": "simplified 3x3x0.8 mm IC envelope"
+  },
+  {
+    "reference": "C8",
+    "model": "C_0805_2012Metric",
+    "side": "underside",
+    "basis": "representative KiCad library body; original Eagle pads retained"
+  },
+  {
+    "reference": "C2",
+    "model": "C_0805_2012Metric",
+    "side": "underside",
+    "basis": "representative KiCad library body; original Eagle pads retained"
+  },
+  {
+    "reference": "C5",
+    "model": "C_0805_2012Metric",
+    "side": "underside",
+    "basis": "representative KiCad library body; original Eagle pads retained"
+  },
+  {
+    "reference": "C1",
+    "model": "C_0805_2012Metric",
+    "side": "underside",
+    "basis": "representative KiCad library body; original Eagle pads retained"
+  },
+  {
+    "reference": "FB1",
+    "model": "L_0805_2012Metric",
+    "side": "underside",
+    "basis": "representative KiCad library body; original Eagle pads retained"
+  },
+  {
+    "reference": "FB2",
+    "model": "L_0805_2012Metric",
+    "side": "underside",
+    "basis": "representative KiCad library body; original Eagle pads retained"
+  },
+  {
+    "reference": "J2",
+    "model": "header_down_reference.wrl",
+    "basis": "source planar dimensions; approximate height and pin lengths"
+  }
+]
