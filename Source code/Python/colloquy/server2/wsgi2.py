@@ -388,8 +388,7 @@ class WSGI2(Base):
                             text("shutdown")
 
                     with tag("div", style=""):
-                        with tag("a", href="/restart"):
-                            text("restart")
+                        doc.asis(self._html_restart_link())
 
                     with tag("div", style=""):
                         path = self._root / self._base_path
@@ -506,6 +505,23 @@ class WSGI2(Base):
 
         with tag("a", href=f"/virtual-panel/{action}/{back}"):
             text(f"{action} virtual drivers")
+
+        return doc.getvalue()
+
+    def _html_restart_link(self):
+        """`restart`, carrying the page it was pressed on.
+
+        Same shape as the virtual panel's link: the tail after `/restart/`
+        is this page's app path, so the `reload` the restart answers with
+        comes back here rather than to the front page - see
+        `_parse_restart`. `_base_path` rather than whatever /call/... led
+        here, as `refresh` does, so the reload never re-runs a command.
+        """
+        doc, tag, text = Doc().tagtext()
+
+        back = (self._root / self._base_path).as_posix()
+        with tag("a", href=f"/restart/{back}"):
+            text("restart")
 
         return doc.getvalue()
 
@@ -1017,7 +1033,18 @@ class WSGI2(Base):
 
         return status, headers, content
 
-    def _parse_restart(self):
+    def _parse_restart(self, *back):
+        """Re-exec the process, and offer the way back to where it was
+        pressed.
+
+        `back` is the app path `_html_restart_link` put after `/restart/`,
+        so `reload` lands on the node that was being looked at. Without
+        one - the emergency-stop page's link, or a typed URL - it is the
+        front page, as it always was. The tree's open and shut is in
+        memory and does not survive the exec, and does not need to: the
+        walk to a node follows `snapshot_children`, which is what
+        `refresh` relies on too.
+        """
         self.colloquy.shutdown()
         self.colloquy.join_all()
         self.shutdown_event.set()
@@ -1027,9 +1054,13 @@ class WSGI2(Base):
         status = "200 OK"
         headers = [("Content-Type", content_type)]
 
+        # Quoted back, since `_parse_path` unquoted it on the way in:
+        # "main pcb" is a page somebody restarts from.
+        reload_path = quote("/" + "/".join(back), safe="/")
+
         doc, tag, text = Doc().tagtext()
         with tag("div"):
-            with tag("a", href="/"):
+            with tag("a", href=reload_path):
                 text("reload")
 
         html = doc.getvalue()

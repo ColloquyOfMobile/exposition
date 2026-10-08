@@ -86,7 +86,7 @@ Both `Base.__call__`-style dispatch and the web request router work the same way
 - Parses the URL path into `app/...`, `shutdown`, or `restart`
 - Calls `colloquy.get_states(*args)` (defined in `colloquy/__init__.py`) which walks the `Base` tree via `snapshot_children`/`snapshot`, optionally executing an update (calling a command) if the path resolves to a callable leaf
 - Renders the resulting nested-dict "state" recursively as clickable HTML (`yattag`) — every node is a link that opens/closes it or calls it; this is effectively a generic tree browser/REPL for the whole hardware+behavior graph, not a purpose-built dashboard
-- `/shutdown` stops all threads, homes the bodies/bar, disables torque, and sets a shutdown event; `/restart` re-execs the process (`os.execl`) after shutdown
+- `/shutdown` stops all threads, homes the bodies/bar, disables torque, and sets a shutdown event; `/restart` re-execs the process (`os.execl`) after shutdown. The `restart` link carries the page it is on (`/restart/<app path>`, the `/virtual-panel/` shape), so the `reload` it answers with lands back there rather than on the front page; a bare `/restart` (the emergency-stop page's) reloads `/`. Both UIs; `pytest_tests/test_restart_link.py`
 
 There is no templating framework beyond `yattag`; new UI is added by adding `snapshot_children` / registering new command names on the relevant `Base` node, not by writing new routes.
 

@@ -310,8 +310,7 @@ class MockWSGI(Base):
                             text("shutdown")
 
                     with tag("div"):
-                        with tag("a", href="/restart"):
-                            text("restart")
+                        doc.asis(self._html_restart_link())
 
                     with tag("div"):
                         path = self._root / self._base_path
@@ -394,6 +393,20 @@ class MockWSGI(Base):
 
         with tag("a", href=f"/virtual-panel/{action}/{back}"):
             text(f"{action} virtual drivers")
+
+        return doc.getvalue()
+
+    def _html_restart_link(self):
+        """`restart`, carrying the page it was pressed on, so the
+        `reload` the restart answers with comes back here - see
+        `_parse_restart`. `_base_path`, as `refresh` uses, so the reload
+        never re-runs a command.
+        """
+        doc, tag, text = Doc().tagtext()
+
+        back = (self._root / self._base_path).as_posix()
+        with tag("a", href=f"/restart/{back}"):
+            text("restart")
 
         return doc.getvalue()
 
@@ -687,7 +700,11 @@ class MockWSGI(Base):
 
         return status, headers, content
 
-    def _parse_restart(self):
+    def _parse_restart(self, *back):
+        """Re-exec the process, and offer the way back to where it was
+        pressed: `back` is the app path `_html_restart_link` put after
+        `/restart/`, and without one `reload` is the front page.
+        """
         self.colloquy.shutdown()
         self.colloquy.join_all()
         self.shutdown_event.set()
@@ -697,9 +714,12 @@ class MockWSGI(Base):
         status = "200 OK"
         headers = [("Content-Type", content_type)]
 
+        # Quoted back, since `_parse_path` unquoted it on the way in.
+        reload_path = quote("/" + "/".join(back), safe="/")
+
         doc, tag, text = Doc().tagtext()
         with tag("div"):
-            with tag("a", href="/"):
+            with tag("a", href=reload_path):
                 text("reload")
 
         html = doc.getvalue()
