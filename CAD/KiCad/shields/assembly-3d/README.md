@@ -1,7 +1,12 @@
 # Shield assemblies — Blender / STEP reference
 
-Created 2026-10-08 from the current shield PCB files. Open these directly in
-Blender (created with Blender 5.2):
+Created 2026-10-08 from the current shield PCB files. Open
+[shield-configurations.blend](shield-configurations.blend) in Blender (5.2).
+Use the **Scene selector at the top right** to switch between **Mega** and
+**Teensy**. Repeated geometry is shared; each scene keeps its own objects,
+placements, visibility and camera. The file opens on Mega.
+
+The original individual files are also retained:
 
 | File | Fitted configuration |
 | --- | --- |
@@ -78,11 +83,15 @@ Run from this directory (adjust installed application paths if necessary):
 & 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python-exit-code 1 --python build_assemblies.py -- mega
 & 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python-exit-code 1 --python build_assemblies.py -- teensy
 & 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python-exit-code 1 --python verify_assemblies.py
+& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python-exit-code 1 --python combine_scenes.py
 ```
 
 `export_boards.py` creates ignored staging copies with added visual connector
 bodies and resolves local KiCad model paths. It does not overwrite source PCBs.
 Assembly manifests record all instance transforms in millimetres.
+`combine_scenes.py` combines both files, shares identical meshes, and reopens
+the result to verify scene populations, transforms and cameras. Its results
+are recorded in [combined-validation.json](combined-validation.json).
 Imported Arduino, Teensy and KiCad component geometry retains its original
 licensing and attribution; see the linked reference-project notes and their
 retained source/license files.
