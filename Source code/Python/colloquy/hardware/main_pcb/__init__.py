@@ -32,11 +32,18 @@ that drives the piece, and this is the equipment itself - a board, its
 screws, and whether it is in the rack. It is also neither the Arduino's
 nor the U2D2's to own, since it carries both and unmounting it takes out
 both at once.
+
+**Which board, and what is plugged into it**, is the `configuration`
+child: the same kind of note as the mounted flag, written by a press,
+because nothing in the hardware can say which shield is in a slot. See
+`configuration/__init__.py`.
 """
 from datetime import datetime
 
 from colloquy.base import Base
 from colloquy.ui import leaves
+
+from .configuration import Configuration
 
 
 class MainPCB(Base):
@@ -56,6 +63,8 @@ class MainPCB(Base):
         # over a screwdriver needs is a page that says it is safe to
         # disconnect, and that has to be the last page.
         self["the main PCB is back"] = self.remount
+        self._configuration = Configuration(owner=self)
+        self[self._configuration.name] = self._configuration
 
     @property
     def name(self):
@@ -68,6 +77,10 @@ class MainPCB(Base):
     @property
     def colloquy(self):
         return self.owner.colloquy
+
+    @property
+    def configuration(self):
+        return self._configuration
 
     @property
     def is_mounted(self):
@@ -111,14 +124,20 @@ class MainPCB(Base):
     @property
     def snapshot_children(self):
         # The unmount is not here: it is a link to its own route (see
-        # __init__). Only the remount is an ordinary command.
-        if self.is_mounted:
-            return {}
-        return {"the main PCB is back": self.remount}
+        # __init__). Only the remount is an ordinary command. The
+        # configuration is there either way - a board out on a desk is
+        # exactly when its shields get changed.
+        children = {self._configuration.name: self._configuration}
+        if not self.is_mounted:
+            children["the main PCB is back"] = self.remount
+        return children
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
         leaf = leaves.into(states, path)
+        # Named for what it says rather than after the child it summarises:
+        # a leaf with a child's name replaces the child's link.
+        leaf("board", self._configuration.summary)
 
         if self.is_mounted:
             leaf("state", "mounted")

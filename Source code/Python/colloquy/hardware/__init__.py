@@ -20,7 +20,10 @@ Three things so far, and they are three rather than one on purpose:
   to take it out safely. It is deliberately its own section rather than a
   child of `drivers/arduino` or `drivers/u2d2`, because it is neither and
   both: one board carries both links, so unmounting it takes out the
-  Arduino and the U2D2 together and neither of them owns it.
+  Arduino and the U2D2 together and neither of them owns it. Under it,
+  `configuration` is the other half of that state: *which* board is in
+  the rack and what is plugged into its slots - recorded by a press,
+  since no shield can say which it is.
 - `motors` is the other **state** - is the Dynamixel chain plugged in,
   and the command to take it off without any servo losing the turn count
   that lives in its volatile memory. Separate from `main_pcb` because the

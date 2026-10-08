@@ -71,6 +71,11 @@ files = [
     # The microphone board's arithmetic: ohms, farads, volts and the
     # millimetres of a screw stack, all small floats.
     "Source code/Python/colloquy/hardware/electronics/microphone_board.py",
+    # Which board is in the rack and what is in its slots: a board, a
+    # slot and a shield are three kinds of string that read alike, and
+    # what comes in is a hand-editable params entry that may be none of
+    # them. The node beside it (configuration/__init__.py) stays off.
+    "Source code/Python/colloquy/hardware/main_pcb/configuration/table.py",
 ]
 mypy_path = "Source code/Python"
 

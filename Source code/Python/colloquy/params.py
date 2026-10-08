@@ -25,7 +25,18 @@ DEFAULTS = {
     # Nothing sets this back on its own: a board that is out stays out
     # until somebody says it is back, because the alternative is an
     # installation that quietly decides it has hardware when it has not.
-    "main pcb": {"mounted": True, "unmounted at": ""},
+    #
+    # "configuration" is which board that is, and what is plugged into its
+    # slots - written by hardware/main_pcb/configuration/, because no
+    # shield identifies itself to anything. "fitted" is per board, and
+    # holds only what somebody has pressed: a slot nobody has recorded
+    # reads as its document's first step (configuration/table.py). No
+    # version bump: _fill_missing recurses, as for the rest of this entry.
+    "main pcb": {
+        "mounted": True,
+        "unmounted at": "",
+        "configuration": {"board": "electronic box", "fitted": {}, "recorded at": ""},
+    },
     # Whether the Dynamixel chain is plugged into the U2D2. Written by
     # hardware/motors/, read by main.py, which then does not open the
     # servo bus at all - which is what leaves Colloquy.servos_were_opened

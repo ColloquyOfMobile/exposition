@@ -121,7 +121,8 @@ def test_only_the_action_that_makes_sense_is_offered():
     path = ("hardware", "main pcb")
 
     mounted = make_pcb(mounted=True)
-    assert mounted.snapshot_children == {}
+    # The configuration is there either way; it is not an action.
+    assert list(mounted.snapshot_children) == ["configuration"]
     markup = mounted._snapshot_if_opened(path)["taking it out"]["html"]
     assert 'href="/unmount-main-pcb"' in markup
     assert "unmount the main PCB" in markup
