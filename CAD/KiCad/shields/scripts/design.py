@@ -178,34 +178,8 @@ def teensy():
 
 
 def microphone():
-    d=Circuit('microphone')
-    names=dict(zip(map(str,range(1,16)),['CT','SHDN','CG','NC_GND','VDD','MICOUT','GND',
-                    'MICIN','A/R','GAIN','NC_GND','BIAS','MICBIAS','TH','EP']))
-    pins=dict(zip(map(str,range(1,16)),['CT','VDD','CG','GND','VDD','MICOUT','GND',
-                    'MICIN','AR','GAIN','GND','BIAS','MICBIAS','TH','GND']))
-    d.add('U1','MAX9814ETD+','Package_DFN_QFN:TDFN-14-1EP_3x3mm_P0.4mm_EP1.78x2.35mm',
-          pins,'amplifier',names=names,types={'5':'power_in','7':'power_in','15':'power_in',
-          '6':'output','13':'output','2':'input','8':'input','9':'input','10':'input','14':'input'},
-          mpn='MAX9814ETD+',ds='https://www.analog.com/media/en/technical-documentation/data-sheets/max9814.pdf')
-    d.add('MK1','9.7mm electret -44dB','Shields:Electret_9.7mm_P2.5mm',
-          {1:'MIC_POS',2:'GND'},'amplifier','Provisional capsule land pattern; confirm stocked part and polarity',names={'1':'+','2':'CASE/GND'})
-    d.r('R1','2K21','MICBIAS','MIC_POS','amplifier')
-    d.c('C1','100nF C0G','MIC_POS','MICIN','amplifier',C8)
-    d.r('R2','150K','MICBIAS','TH','amplifier');d.r('R3','100K','TH','GND','amplifier')
-    for ref,value,net in [('C2','470nF X7R','CT'),('C3','2.2uF X5R','CG'),('C4','470nF X7R','BIAS'),
-                          ('C5','1uF','VDD'),('C6','100nF','VDD')]:d.c(ref,value,net,'GND','amplifier')
-    d.r('R4','33R','+5V','VDD','power');d.c('C7','22uF X5R 10V','VDD','GND','power',C8)
-    d.r('R5','470R','MICOUT','OUT','interface')
-    for ref,net,setting in [('JP1','GAIN','FIT 2-3: 40dB'),('JP2','AR','FIT 1-2: 1:500')]:
-        part=d.add(ref,setting,'Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical',
-                   {1:'GND',2:net,3:'VDD'},'interface',names={'1':'GND','2':net,'3':'VDD'})
-        part['description']='Fit removable shunt: '+setting
-    d.led('D1','R6','2K2','+5V','GREEN','power')
-    d.add('J1','GND / +5V / OUT','Connector_JST:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical',
-          {1:'GND',2:'+5V',3:'OUT'},'interface',mpn='B3B-EH-A')
-    d.testpin('TP1','MICOUT','interface');d.testpin('TP2','GND','interface')
-    for i in [1,2]:d.add(f'H{i}','M5 / 12mm copper keepout','Shields:MountingHole_5.5mm_Keepout12',{},'mechanical')
-    return d
+    from microphone_holder import circuit
+    return circuit()
 
 
 _geometry=s.sym_geometry

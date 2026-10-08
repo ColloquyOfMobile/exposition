@@ -15,17 +15,16 @@ Voice cards now contain only Thomas's two RC sections and 100K pull-down.
 Four pitch components are THT; no op amp or active-filter supply remains.
 Capacitor selection must fit the 7 x 6.5mm, 5mm-pitch film envelope.
 
-Microphone U1 is MAX9814ETD+, TDFN14 with exposed ground pad. Pin assignment
-was checked against Analog Devices' MAX9814 datasheet:
-https://www.analog.com/media/en/technical-documentation/data-sheets/max9814.pdf
-Pins 4/11 and EP are grounded; SHDN is tied to VDD. Bias, threshold divider,
-AGC capacitors, gain/A-R jumpers and output resistor follow the spec.
-The 9.7mm capsule part number is still open: the supplied 2.5mm-pitch pattern
-is provisional. Confirm polarity, lead spacing, sensitivity and body height
-against the purchased capsule before fabrication. Hole centers are 50mm
-apart, 5.5mm NPTH, with 12mm-diameter copper/part exclusion on both faces.
-Rule areas allow the NPTH itself; independent checks reject other pads inside.
-Nylon spacer/frame fit and acoustic effects require physical testing.
+Microphone revision B carries the existing violet MAX9814 module on a 1x5
+female socket. Module contacts and M2 holes match the local Adafruit reference;
+actual clone geometry remains unverified. R1 straps Gain to Vdd (40dB), R2
+straps AR to GND (1:500); supply filtering and output build-out remain.
+Artwork holes retain 50mm spacing, 5.5mm NPTH and 12mm keep-outs. Module
+holes are 2.2mm NPTH, 10.033mm apart, with 6mm keep-outs. Rule areas allow
+their own NPTH; independent checks reject other pads inside. Use insulating
+M2 supports, <=4mm heads, and match spacer length to the seated socket/header
+(11.04mm nominal). Verify M5 travel and clearance on the actual profile.
+Nylon does not establish vibration isolation. See microphone/README.md.
 
 Teensy microphones remain DC coupled through 4K7/1M on the backplane and
 1nF at each adapter ADC input. A resistor limits injection current but does

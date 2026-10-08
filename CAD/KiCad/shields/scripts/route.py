@@ -65,7 +65,7 @@ def route(folder,args):
             if t.GetNetname()=='+12V' and not isinstance(t,p.PCB_VIA):
                 if t.GetLayer() not in [p.F_Cu,p.B_Cu]:raise RuntimeError('+12V routed on inner copper')
                 t.SetWidth(p.FromMM(2))
-    p.SaveBoard(str(folder/(name+'.kicad_pcb')),board)
+    p.SaveBoard(str(folder/(name+'.kicad_pcb')),board,name=='microphone')
     print(name,'routed',len(list(board.GetTracks())),'tracks/vias',flush=True)
 
 

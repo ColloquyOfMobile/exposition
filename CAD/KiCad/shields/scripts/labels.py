@@ -81,14 +81,8 @@ def main(only=None):
             at('TPS','STROBE',0,2);at('TPR','RESET',5,2)
             at('JA1','1',-1,-2);at('JA1','KEY <-',7,25.4)
         elif name=='microphone':
-            label(b,'COLLOQUY MIC',60,52,1)
-            label(b,'MAX9814',60,61.8,.8)
-            label(b,'GND  GAIN  VDD',57,88.5,.8)
-            label(b,'A/R',52,91,.8)
-            label(b,'GND +5V OUT',60,99,.8)
-            label(b,'MIC GND',66,94,.8)
-            label(b,'40dB: GAIN-VDD\n50dB: GAIN-GND\n60dB: OPEN\nA/R: GND = 1:500\nVDD = 1:2000\nOPEN = 1:4000',60,77,.8,True)
-            label(b,'M5 / NYLON\nINSULATE FRAME',60,96,.8,True)
+            from microphone_holder import operating_labels
+            operating_labels(b)
             named.update(['TP1','TP2'])
         elif name=='voice-thomas':
             label(b,'VOICE CARD - THOMAS RC',65,51.5,.8)
@@ -131,7 +125,7 @@ def main(only=None):
                 value=fp.GetValue().upper().replace('MEGA_5V','MEGA 5V (COMPUTING USB)').replace('+5V','BOARD +5V')
                 for i,body in enumerate(BODY,1):value=value.replace(body.upper()+'/',str(i)+' ')
                 at(ref,value.replace('/',' ').replace('ANALYSER OUT','ANA').replace('FILTER OUT','LINE').replace('MICROPHONE','MIC'))
-        p.SaveBoard(str(path),b)
+        p.SaveBoard(str(path),b,name=='microphone')
 
 if __name__=='__main__':
     import sys

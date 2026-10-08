@@ -14,7 +14,7 @@
       ],
       [
         -3.805,
-        32.975
+        32.875
       ]
     ],
     "computing_mount_max_xy_error_mm": 2.2e-05,
@@ -22,67 +22,91 @@
       {
         "name": "02 Voice - Female 1 - 1012 Hz",
         "contacts": 5,
-        "maximum_xy_error_mm": 1.5e-05
+        "maximum_xy_error_mm": 1.5e-05,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "03 Voice - Female 2 - 2531 Hz",
         "contacts": 5,
-        "maximum_xy_error_mm": 1.5e-05
+        "maximum_xy_error_mm": 1.5e-05,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "04 Voice - Female 3 - 6329 Hz",
         "contacts": 5,
-        "maximum_xy_error_mm": 2.2e-05
+        "maximum_xy_error_mm": 2.2e-05,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "05 Voice - Male 1 - 162 Hz",
         "contacts": 5,
-        "maximum_xy_error_mm": 2.2e-05
+        "maximum_xy_error_mm": 2.2e-05,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "06 Voice - Male 2 - 405 Hz",
         "contacts": 5,
-        "maximum_xy_error_mm": 2.2e-05
+        "maximum_xy_error_mm": 2.2e-05,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "Mega perimeter headers (reserved POWER 1 omitted)",
         "contacts": 85,
-        "maximum_xy_error_mm": 2.2e-05
+        "maximum_xy_error_mm": 2.2e-05,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "Analyser carrier connector",
         "contacts": 21,
-        "maximum_xy_error_mm": 3.1e-05
+        "maximum_xy_error_mm": 3.1e-05,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "09 DFRobot analyser 1 - modified headers",
         "contacts": 8,
-        "maximum_xy_error_mm": 3.1e-05
+        "maximum_xy_error_mm": 3.1e-05,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "10 DFRobot analyser 2 - modified headers",
         "contacts": 8,
-        "maximum_xy_error_mm": 1.5e-05
+        "maximum_xy_error_mm": 1.5e-05,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "11 DFRobot analyser 3 - modified headers",
         "contacts": 8,
-        "maximum_xy_error_mm": 1.5e-05
+        "maximum_xy_error_mm": 1.5e-05,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "12 DFRobot analyser 4 - modified headers",
         "contacts": 8,
-        "maximum_xy_error_mm": 1.5e-05
+        "maximum_xy_error_mm": 1.5e-05,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "13 DFRobot analyser 5 - modified headers",
         "contacts": 8,
-        "maximum_xy_error_mm": 1.5e-05
+        "maximum_xy_error_mm": 1.5e-05,
+        "aligned": true,
+        "note": ""
       }
     ],
     "external_image_dependencies": [],
     "reopened_successfully": true,
-    "blend_sha256": "b2859914f448fc309a233eb0f2973e50032925b1ccf3593a4c354960d264b761"
+    "blend_sha256": "d3e6aed5009a8735b844ed1098eb07f3048bccea7f1b5dbb5cdc863005742461"
   },
   "teensy": {
     "visible_boards": 8,
@@ -107,52 +131,66 @@
       {
         "name": "02 Voice - Female 1 - 1012 Hz",
         "contacts": 5,
-        "maximum_xy_error_mm": 1.5e-05
+        "maximum_xy_error_mm": 1.5e-05,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "03 Voice - Female 2 - 2531 Hz",
         "contacts": 5,
-        "maximum_xy_error_mm": 1.5e-05
+        "maximum_xy_error_mm": 1.5e-05,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "04 Voice - Female 3 - 6329 Hz",
         "contacts": 5,
-        "maximum_xy_error_mm": 2.2e-05
+        "maximum_xy_error_mm": 2.2e-05,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "05 Voice - Male 1 - 162 Hz",
         "contacts": 5,
-        "maximum_xy_error_mm": 2.2e-05
+        "maximum_xy_error_mm": 2.2e-05,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "06 Voice - Male 2 - 405 Hz",
         "contacts": 5,
-        "maximum_xy_error_mm": 2.2e-05
+        "maximum_xy_error_mm": 2.2e-05,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "Adapter Mega contacts",
         "contacts": 85,
-        "maximum_xy_error_mm": 0.0
+        "maximum_xy_error_mm": 0.0,
+        "aligned": true,
+        "note": ""
       },
       {
         "name": "Teensy 48 contacts",
         "contacts": 48,
-        "maximum_xy_error_mm": 1.7e-05
+        "maximum_xy_error_mm": 1.7e-05,
+        "aligned": true,
+        "note": ""
       }
     ],
     "external_image_dependencies": [],
     "reopened_successfully": true,
-    "blend_sha256": "3917332710adacba7df51aa288dc2ede2b52644e268e0fa85d5469e4f32acaa0"
+    "blend_sha256": "ff4552fa48edc08c9d133bc7fcf662ade680573fb7db0eef8f135faf1163d084"
   },
   "source_pcb_sha256": {
-    "analyser-carrier": "a6fc1b010c978b9783427f10eaedc8cc4fb61fe74573cd25be9000062ce5f585",
+    "analyser-carrier": "73693394f7118769394455aa5838876c0096ae174b630d5a875798cff249ca4e",
     "arduino-mega-reference": "c805cd7640893d15dcc2c7ef1a21ae8fc709f6f9ed4d0caefadd598fe67afef6",
     "backplane": "dfa82eff00736b68b1a14105f3119caa8dfe3119569cae0a3e01c3b76ab41c4d",
-    "dfrobot-module": "f2860081462ca720228ad115bd8d12c09e9b5362c3dda4d8029ae0343fa7a0a0",
-    "microphone": "7f0a525ca5e390ba5aef43498615029122397858b42edd63eafa6c52097efd34",
+    "dfrobot-module": "7e682edcf761faa1d2e4612960a97d42e1d59f44f535175ce02a5b95c4cc97d7",
+    "max9814-reference": "a360811005e3a6491e449015d50cdbe58d6185f0a977be6e1eb8cc7376142f53",
+    "microphone": "3572cfad4cf98438c48e279a718c8d333ddd6955cd79eec85277058fc94f0a01",
     "teensy-adapter": "788ae7de427f17d3fa1717582fc2a018abb0ffaca535383ef160c49156c9e790",
     "teensy41-reference": "27d93e48803ee8e4ec5bcd634c5f7e20fb2116c97854604c8c80946c03954a33",
     "voice-thomas": "deb23efa738ffa5fff2a142e3a83d8aa4ef8b525ef0f1dfa50cebf37fb3fab6f"
-  },
-  "superseded_by": "carrier-update-validation.json (carrier alignment and affected Blender files)"
+  }
 }

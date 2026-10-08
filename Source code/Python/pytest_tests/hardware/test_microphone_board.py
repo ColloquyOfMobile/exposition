@@ -16,8 +16,11 @@ Three promises, each quiet when broken:
 
 Like `test_harness.py`, these read checked-in files rather than doubles.
 """
+import json
 import math
 import re
+
+import pytest
 
 from colloquy.hardware.electronics import MicrophoneBoard, harness, microphone_board, shields
 
@@ -124,20 +127,25 @@ def test_the_harness_boards_have_8_mm_holes_on_one_line_at_the_spacings_quoted()
 
 def test_the_circuit_figures_are_the_computed_ones():
     text = _flat()
-    low, high = microphone_board.held_window()
-
-    assert f"`TH` at {microphone_board.threshold_volts():.1f} V" in text
-    assert (
-        f"**held at {microphone_board.held_swing():.1f} Vpp ({low:.2f}–{high:.2f} V)**"
-        in text
-    )
-    assert f"a {microphone_board.input_corner():.0f} Hz corner" in text
     assert (
         f"a {microphone_board.supply_corner():.0f} Hz corner for a "
         f"{microphone_board.supply_drop():.2f} V drop" in text
     )
     assert f"the corner is {microphone_board.build_out_corner() / 1000:.0f} kHz" in text
-    assert f"attack {microphone_board.attack_seconds() * 1000:.1f} ms" in text
+
+
+def test_the_holder_uses_the_existing_module_and_preserves_its_harness():
+    folder = DOCUMENT.parents[5] / "CAD/KiCad/shields/microphone"
+    parts = {part["ref"]: part for part in json.loads((folder / "circuit.json").read_text())["components"]}
+    assert not {"U1", "MK1", "JP1", "JP2"}.intersection(parts)
+    assert parts["M1"]["pins"] == {"1": "GND", "2": "VDD", "3": "GAIN", "4": "MICOUT", "5": "AR"}
+    assert parts["J1"]["pins"] == {"1": "GND", "2": "+5V", "3": "OUT"}
+    assert parts["R1"]["pins"] == {"1": "GAIN", "2": "VDD"}
+    assert parts["R2"]["pins"] == {"1": "AR", "2": "GND"}
+    assert parts["R4"]["pins"] == {"1": "+5V", "2": "VDD"}
+    assert parts["R5"]["pins"] == {"1": "MICOUT", "2": "OUT"}
+    assert "11.04 mm module-to-carrier underside gap" in _flat()
+    assert "5 mm frame spacers" in _flat()
 
 
 def test_the_output_stays_inside_the_teensys_reference():
@@ -148,24 +156,27 @@ def test_the_output_stays_inside_the_teensys_reference():
     assert high < shields.TEENSY41_REFERENCE
 
 
-def test_the_screw_leaves_a_full_bite_on_the_nut():
+def test_the_nominal_screw_engagement_is_an_allowance_not_a_slot_depth_guarantee():
     left = microphone_board.thread_left_for_the_nut()
 
     assert left >= microphone_board.NUT_THREAD
     assert f"**{left:.1f} mm**" in _text()
+    assert "not proof the screw cannot bottom out" in _flat()
 
 
 def test_the_outline_adds_up():
-    """Two holes 50 mm apart, 6 mm from each end, on a 62 mm board; the
-    capsule clear of the first hole's keep-out."""
+    """Retain the artwork interface and distinguish its holes from module mounts."""
     text = _flat()
     width, length = (float(n) for n in re.search(r"\*\*(\d+) × (\d+) mm\*\*", text).groups())
     spacing = float(re.search(r"\*\*(\d+) mm apart\*\*, (\d+) mm from each end", text).group(1))
     end = float(re.search(r"\*\*\d+ mm apart\*\*, (\d+) mm from each end", text).group(1))
-    keep_out = float(re.search(r"keep-out \| (\d+) mm round each hole", text).group(1))
-    capsule_at = float(re.search(r"centred (\d+) mm from the end", text).group(1))
 
     assert (width, length) == (20, 62)
     assert 2 * end + spacing == length
-    assert end + keep_out / 2 + 9.7 / 2 <= capsule_at
-    assert keep_out <= width
+    folder = DOCUMENT.parents[5] / "CAD/KiCad/shields/microphone"
+    data = json.loads((folder / "mechanical.json").read_text())
+    assert data["board_mm"] == [width, length]
+    assert data["artwork_holes_mm"] == [[10, 6], [10, 56]]
+    assert data["artwork_drill_mm"] == 5.5 and data["module_drill_mm"] == 2.2
+    assert math.dist(*data["module_holes_mm"]) == pytest.approx(10.033)
+    assert not data["physical_fit_verified"]

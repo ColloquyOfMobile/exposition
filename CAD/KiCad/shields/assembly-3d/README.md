@@ -58,10 +58,11 @@ exports use the PCB editor's absolute origin, with Cartesian Y inverted.
 - **Amber blocks** on the backplane are estimated J2 DC-jack and J6 screw-bridge
   envelopes. Their exact housing dimensions are unknown. The U2D2 mount is empty;
   no U2D2 body geometry was available in the PCB project.
-- Remote microphones have a simple assumed Ø9.7 × 6 mm electret capsule and a
-  3 × 3 × 0.8 mm U1 IC body added in Blender. The source U1 STEP model was
-  unavailable. These bodies, the amber blocks and spacers are Blender additions;
-  they are not included in the individual STEP/GLB board exports.
+- Remote microphone holders now include the violet MAX9814 module, female
+  socket and insulating M2 supports in their STEP/GLB exports. Module planar
+  geometry comes from the local reference; socket/spacer heights are nominal.
+  No separate capsule or bare-chip proxy is added in Blender. See
+  [holder notes](../microphone/README.md) for physical-fit checks.
 - Standard 2×3/2×11 connector models visually include the keyed absent pin.
   PCB pad positions remain correct; the standard model is an envelope reference.
 - All five voice cards use the same physical geometry. Their collection names

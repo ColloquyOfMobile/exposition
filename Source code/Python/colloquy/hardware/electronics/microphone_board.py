@@ -6,7 +6,10 @@
 Every figure the document quotes about the board's circuit and its fixing
 to the extrusion is computed here, and
 `pytest_tests/hardware/test_microphone_board.py` holds the document to it.
-The part values are the MAX9814 datasheet's own typical application
+Revision B carries an existing module; the supply-filter/build-out and
+nominal frame stack calculations still apply. Bare-chip calculations below
+remain a reference to the former design, not a holder BOM. Their values
+are the MAX9814 datasheet's own typical application
 (Maxim, "Typical Application Circuit/Functional Diagram" and
 "Applications Information"); the screw stack is ISO dimensions.
 

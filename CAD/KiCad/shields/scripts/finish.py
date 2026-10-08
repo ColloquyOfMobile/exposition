@@ -66,7 +66,7 @@ def finish(folder):
         lib=fp.Duplicate();lib.Flip(lib.GetPosition(),True);lib.SetOrientationDegrees(0);lib.SetPosition(xy(0,0))
         lib.Reference().SetVisible(True);lib.Reference().SetLayer(p.F_SilkS);lib.Reference().SetMirrored(False)
         io.FootprintSave(str(ROOT/'Shields.pretty'),lib)
-    p.SaveBoard(str(path),board)
+    p.SaveBoard(str(path),board,name=='microphone')
     reports=folder/'reports';reports.mkdir(exist_ok=True)
     assembly_refs=sorted(fp.GetReference() for fp in board.GetFootprints() if fp.Reference().GetLayer() in [p.F_Fab,p.B_Fab])
     (reports/'silkscreen.json').write_text(json.dumps({'references_on_assembly_layer_due_to_space':assembly_refs},indent=2)+'\n')

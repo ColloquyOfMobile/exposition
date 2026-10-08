@@ -192,16 +192,7 @@ else:
 for i in range(6):
     name = f'REMOTE microphone {i+1} - display placement only'
     root = board('microphone',name,(215+26*(i%3),-80*(i//3),0),hidden=True)
-    coll = instances[name][3]
-    bpy.ops.mesh.primitive_cylinder_add(vertices=48,radius=.00485,depth=.006,location=(.060,-.067,.0046))
-    obj = bpy.context.object
-    obj.name = 'Estimated 9.7 mm electret capsule'
-    obj.parent = root
-    obj.data.materials.append(metal)
-    for old in list(obj.users_collection):old.objects.unlink(obj)
-    coll.objects.link(obj)
-    x,y = metadata('microphone')['U1']['xy']
-    proxy_box('U1 - estimated TDFN body',(x,-y,2),(3,3,.8),dark,root,coll)
+    # The PCB export includes the seated violet module and insulating supports.
 
 # Studio and saved viewport: board components remain individually selectable.
 studio = bpy.data.collections.new('Studio - cameras and lights')
@@ -258,5 +249,6 @@ manifest['visible_board_count'] = sum(not b['hidden'] for b in manifest['boards'
 (ROOT/(CONFIG+'-assembly.json')).write_text(json.dumps(manifest,indent=2)+'\n')
 bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/(CONFIG+'-configuration.blend')),compress=True)
 scene.render.filepath = str(ROOT/(CONFIG+'-preview.png'))
-bpy.ops.render.render(write_still=True)
+if '--no-render' not in sys.argv:
+    bpy.ops.render.render(write_still=True)
 print('ASSEMBLY COMPLETE',CONFIG,manifest['alignment_checks'])

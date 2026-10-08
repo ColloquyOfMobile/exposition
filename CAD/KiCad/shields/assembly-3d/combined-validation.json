@@ -1,6 +1,6 @@
 {
   "file": "shield-configurations.blend",
-  "shared_mesh_reassignments": 803,
+  "shared_mesh_reassignments": 752,
   "scenes": {
     "Mega": {
       "visible_boards": 13,
@@ -15,8 +15,7 @@
       "transforms_verified": true
     }
   },
-  "mesh_datablocks_shared_between_scenes": 41,
-  "size_bytes": 16448643,
-  "sha256": "e155dc395c66eb44ced7094cc4b7e076400ccbf1fbb470b70ea62d56d91b86dc",
-  "superseded_by": "carrier-update-validation.json (carrier alignment and affected Blender files)"
+  "mesh_datablocks_shared_between_scenes": 44,
+  "size_bytes": 16357920,
+  "sha256": "3151db65520dbf7b6083fbfbacf0d088a37321210320fe339500e4f0e0e06539"
 }

@@ -1,0 +1,54 @@
+{
+  "board_mm": [
+    20,
+    62
+  ],
+  "artwork_holes_mm": [
+    [
+      10,
+      6
+    ],
+    [
+      10,
+      56
+    ]
+  ],
+  "artwork_drill_mm": 5.5,
+  "module_holes_mm": [
+    [
+      15.016499999999994,
+      19.031999999999996
+    ],
+    [
+      4.983499999999999,
+      19.031999999999996
+    ]
+  ],
+  "module_drill_mm": 2.2,
+  "header_centres_mm": [
+    [
+      14.889499999999998,
+      41.003
+    ],
+    [
+      12.349499999999999,
+      41.003
+    ],
+    [
+      9.8095,
+      41.003
+    ],
+    [
+      7.269500000000001,
+      41.003
+    ],
+    [
+      4.729500000000002,
+      41.003
+    ]
+  ],
+  "module_underside_gap_mm": 11.04,
+  "module_head_max_diameter_mm": 4,
+  "basis": "Adafruit MAX9814 source geometry; socket/header height proxies",
+  "physical_fit_verified": false
+}

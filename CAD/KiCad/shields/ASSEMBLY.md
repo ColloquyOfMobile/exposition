@@ -10,17 +10,19 @@ substitution. Optional machine-pin sockets use the same holes. R3 is 100K
 0603. Slot +5V is unused. Write pitch/body on front and tick the back table.
 
 Test headers are individual gold 1x1 2.54mm pins: 26 backplane, 3 adapter,
-2 per voice card. The microphone adds MICOUT/GND, 2.54mm apart. Backplane
+2 per voice card. The microphone holder adds separate MICOUT/GND pins. Backplane
 12V has an empty grid position either side. Eight LEDs are on the backplane:
 three green supply indicators and five yellow tone indicators.
 
-Build six microphone boards, five plus a spare. JP1 GAIN defaults to VDD
-(pins 2-3, 40dB); JP2 A/R defaults to GND (pins 1-2, 1:500). Order two shunts
-per board. U1 exposed pad and NC4/NC11 go to GND. J1 is GND/+5V/OUT.
-Confirm the stocked electret's polarity and pin spacing before fabrication;
-the 9.7mm/2.5mm footprint is provisional. Two M5 x 12 ISO7380 screws,
-10mm washers, 5mm-high nylon spacers (10mm diameter) and profile-matched T-nuts
-mount each PCB. Keep the frame electrically isolated. Check assembled height.
+Build six microphone holders using the existing violet MAX9814 modules.
+M1 is a 1x5 2.54mm female socket; two insulating M2 fixings have 10.033mm
+spacing and <=4mm heads. Match spacer height to the seated socket/header
+(11.04mm nominal model, verify actual parts). R1/R2 are 0R links: Gain to
+Vdd for 40dB, AR to GND for 1:500. No shunts, bare MAX9814 or separate
+electret are fitted. J1 remains GND/+5V/OUT. Artwork holes remain 50mm apart:
+M5 screws, 10mm washers and 5mm-high nylon frame spacers. Match screw length
+to actual slot depth; M5x12 leaves 4.4mm allowance but may bottom out.
+Keep the frame isolated. See microphone/README.md for dry-fit checks.
 
 Use gold contacts on mating headers; remove male key 6/22 and block the
 matching socket cavity. Voice sockets are on B.Cu. Teensy input caps CM1-CM5

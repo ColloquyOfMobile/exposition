@@ -1,7 +1,7 @@
 {
     "$schema": "https://schemas.kicad.org/erc.v1.json",
     "coordinate_units": "mm",
-    "date": "2026-10-06T14:45:25+0200",
+    "date": "2026-10-08T22:14:52+0200",
     "kicad_version": "9.0.7",
     "sheets": [
         {
@@ -10,13 +10,8 @@
             "violations": []
         },
         {
-            "path": "/amplifier/",
-            "uuid_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/8418d248-bc0d-5c52-894c-4ccbebf424c1",
-            "violations": []
-        },
-        {
-            "path": "/amplifier_2/",
-            "uuid_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/f198330e-ecb8-5222-b6f7-82e27733bbdc",
+            "path": "/module/",
+            "uuid_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/797f9efc-3909-5a0b-a627-8de2bcdbeab3",
             "violations": []
         },
         {
@@ -27,11 +22,6 @@
         {
             "path": "/interface/",
             "uuid_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/696c3ac1-dca8-520b-adad-1d64b64fed5e",
-            "violations": []
-        },
-        {
-            "path": "/interface_2/",
-            "uuid_path": "/aa568eb8-4137-509b-b6c6-b3e0a9fa148e/affb086c-3d3d-56b1-a1bd-954d7a262328",
             "violations": []
         },
         {

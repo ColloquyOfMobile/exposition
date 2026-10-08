@@ -8,7 +8,7 @@ All current KiCad 9 projects and their shared library are in this folder.
 | backplane | Harness, power, shield slots, eight LEDs and 26 test headers | 1 |
 | teensy-adapter | Teensy 4.1 in the Mega slot; three power test headers | 1 |
 | voice-thomas | Thomas RC filter for either processor; THT pitch components | 5, more as needed |
-| microphone | MAX9814 body microphone, 20 x 62 mm, two M5 holes | 6 (one spare) |
+| microphone | Violet MAX9814 module holder, 20 x 62 mm, M5 artwork/M2 module fixings | 6 (one spare) |
 | analyser-carrier | Five converted DFRobot modules, direct plug-in sockets | 1 |
 
 The active filter is obsolete. One voice layout supports all five Thomas
@@ -23,11 +23,13 @@ Native ERC/DRC, netlist parity and interface results are in VALIDATION.md/json.
 
 Engineering prototypes: no fabrication release or Gerber order package.
 The analyser carrier uses user-authorized photo-derived mounts with tolerance slots; confirm fit with its 1:1 template. The microphone
-capsule's exact stocked part and land pattern must be confirmed. REVIEW.md
+module's actual pin/hole grid and seated connector height must be confirmed. REVIEW.md
 lists outstanding physical checks. The carrier retains the original 150 x 55mm backplane envelope and retention points.
 
 Generation: scripts/design.py, boards.py, variants.py with KiCad's Python.
-The analyser carrier has its own generator, scripts/carrier.py.
+The analyser carrier has its own generator, scripts/carrier.py; the microphone
+holder uses scripts/microphone_holder.py and microphone/build_module_model.py
+(FreeCAD Python). Holder placement includes a constrained underside test trace.
 Routing: scripts/route.py with Freerouting 2.4.1. After routing, run labels.py,
 finish.py, planes.py, check.py and verify.py. Preserve mechanical holes and
 validated connector positions when regenerating. Historical migration scripts

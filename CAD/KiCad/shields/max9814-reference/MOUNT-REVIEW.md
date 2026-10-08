@@ -4,6 +4,11 @@ Reviewed 2026-10-08 against `../microphone/microphone.kicad_pcb`,
 `Source code/Python/colloquy/hardware/electronics/MICROPHONE_BOARD.md`,
 and the new violet MAX9814 module reference.
 
+**Implemented in holder revision B, 2026-10-08:** the current
+`../microphone/` project now has the module socket and M2 supports described
+below, with retained M5 artwork fixings. This review records the previous
+bare-chip board; see `../microphone/README.md` for the revised design.
+
 **The existing support cannot take the violet module as drawn.** It is a
 complete replacement microphone circuit, with a bare MAX9814 and electret
 capsule. Its attachment to the artwork is a useful starting point for a

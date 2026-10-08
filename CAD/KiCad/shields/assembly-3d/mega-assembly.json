@@ -597,83 +597,91 @@
     {
       "name": "02 Voice - Female 1 - 1012 Hz",
       "contacts": 5,
-      "maximum_xy_error_mm": 1.5e-05
+      "maximum_xy_error_mm": 1.5e-05,
+      "aligned": true,
+      "note": ""
     },
     {
       "name": "03 Voice - Female 2 - 2531 Hz",
       "contacts": 5,
-      "maximum_xy_error_mm": 1.5e-05
+      "maximum_xy_error_mm": 1.5e-05,
+      "aligned": true,
+      "note": ""
     },
     {
       "name": "04 Voice - Female 3 - 6329 Hz",
       "contacts": 5,
-      "maximum_xy_error_mm": 2.2e-05
+      "maximum_xy_error_mm": 2.2e-05,
+      "aligned": true,
+      "note": ""
     },
     {
       "name": "05 Voice - Male 1 - 162 Hz",
       "contacts": 5,
-      "maximum_xy_error_mm": 2.2e-05
+      "maximum_xy_error_mm": 2.2e-05,
+      "aligned": true,
+      "note": ""
     },
     {
       "name": "06 Voice - Male 2 - 405 Hz",
       "contacts": 5,
-      "maximum_xy_error_mm": 2.2e-05
+      "maximum_xy_error_mm": 2.2e-05,
+      "aligned": true,
+      "note": ""
     },
     {
       "name": "Mega perimeter headers (reserved POWER 1 omitted)",
       "contacts": 85,
-      "maximum_xy_error_mm": 2.2e-05
+      "maximum_xy_error_mm": 2.2e-05,
+      "aligned": true,
+      "note": ""
     },
     {
       "name": "Analyser carrier connector",
       "contacts": 21,
-      "maximum_xy_error_mm": 3.1e-05
+      "maximum_xy_error_mm": 3.1e-05,
+      "aligned": true,
+      "note": ""
     },
     {
       "name": "09 DFRobot analyser 1 - modified headers",
       "contacts": 8,
-      "maximum_xy_error_mm": 3.411968959808029e-05,
+      "maximum_xy_error_mm": 3.1e-05,
       "aligned": true,
-      "note": "Carrier sockets corrected to match J4."
+      "note": ""
     },
     {
       "name": "10 DFRobot analyser 2 - modified headers",
       "contacts": 8,
-      "maximum_xy_error_mm": 3.411968959808029e-05,
+      "maximum_xy_error_mm": 1.5e-05,
       "aligned": true,
-      "note": "Carrier sockets corrected to match J4."
+      "note": ""
     },
     {
       "name": "11 DFRobot analyser 3 - modified headers",
       "contacts": 8,
-      "maximum_xy_error_mm": 3.411968959808029e-05,
+      "maximum_xy_error_mm": 1.5e-05,
       "aligned": true,
-      "note": "Carrier sockets corrected to match J4."
+      "note": ""
     },
     {
       "name": "12 DFRobot analyser 4 - modified headers",
       "contacts": 8,
-      "maximum_xy_error_mm": 3.411968959808029e-05,
+      "maximum_xy_error_mm": 1.5e-05,
       "aligned": true,
-      "note": "Carrier sockets corrected to match J4."
+      "note": ""
     },
     {
       "name": "13 DFRobot analyser 5 - modified headers",
       "contacts": 8,
-      "maximum_xy_error_mm": 3.411968959808029e-05,
+      "maximum_xy_error_mm": 1.5e-05,
       "aligned": true,
-      "note": "Carrier sockets corrected to match J4."
+      "note": ""
     }
   ],
   "proxies": [
     "J2 - estimated DC jack envelope",
-    "J6 - estimated screw bridge envelope",
-    "U1 - estimated TDFN body",
-    "U1 - estimated TDFN body",
-    "U1 - estimated TDFN body",
-    "U1 - estimated TDFN body",
-    "U1 - estimated TDFN body",
-    "U1 - estimated TDFN body"
+    "J6 - estimated screw bridge envelope"
   ],
   "visible_board_count": 13
 }

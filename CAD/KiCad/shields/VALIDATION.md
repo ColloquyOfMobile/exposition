@@ -11,15 +11,18 @@ remains unverified because its mounts were inferred from photographs.
 | Backplane | 4 | 0 | 0 | 0 |
 | Teensy adapter | 4 | 0 | 0 | 0 |
 | Thomas RC voice | 2 | 0 | 0 | 0 |
-| MAX9814 microphone | 2 | 0 | 0 | 0 |
+| MAX9814 module holder, rev B | 2 | 0 | 0 | 0 |
 | DFR0126 carrier | 2 | 0 | 0 | 0 |
 
 Independent manifest / native schematic-netlist / PCB-pad parity covers
-781 connected pins with zero differences. Interface checks preserve v2
+751 connected pins with zero differences (26 on the revised holder). Interface checks preserve v2
 harness positions/pinout, existing Mega pins, five voice mating pairs,
 front-mounted mirrored Mega contacts, unchanged adapter alignment, direct microphone networks and the single
 AGND/GND bond. Header counts, eight LED polarities, THT pitch-component
-spacing, microphone ground pins and mounting-hole/keepout geometry pass.
+spacing, microphone module contact mapping and mounting-hole/keepout geometry pass.
+Holder M1 contacts and both M2 mounts match the rotated local module reference;
+its M5 artwork interface remains 50mm/5.5mm NPTH. Native holder ERC/DRC and
+unconnected counts are all zero, with 64 tracks/vias and no exclusions.
 The carrier's JA1 and retention coordinates match the backplane. All five
 module socket pinouts, photo-derived pad coordinates and round/slot drilling
 geometry pass independent checks. The carrier now requires modified modules:
@@ -32,15 +35,16 @@ with the mirrored v2 coordinates and all four computing mounts with the
 unchanged adapter. The slim-front mounting footprints require <=4mm OD
 front posts/spacers and rear screw heads; hardware fit remains a dry-fit check.
 
-The focused specification tests pass: 36 tests (test_shields.py and
+The focused specification tests pass: 37 tests (test_shields.py and
 test_microphone_board.py). No application or firmware code was changed.
-The full repository pytest suite also passes: 1,597 tests on 2026-10-08.
+The full repository pytest suite also passes: 1,665 tests on 2026-10-08.
 Front/back assembly views were inspected for voice/microphone layouts;
 the carrier front assembly drawing is also inspected.
 All operating labels remain on silkscreen; some small component references
 use the assembly layer and are listed in each reports/silkscreen.json.
 
 These checks establish connectivity and geometric compliance, not acoustic
-performance, supply sequencing, current capacity or physical fit. Capsule
-pin spacing/part selection is provisional. No fabrication release is issued;
+performance, supply sequencing, current capacity or physical fit. The violet
+module's actual hole/header grid, socket/spacer height and screw fit remain
+physical checks. No fabrication release is issued;
 read REVIEW.md and analyser-carrier/README.md before ordering boards.

@@ -442,48 +442,56 @@
     {
       "name": "02 Voice - Female 1 - 1012 Hz",
       "contacts": 5,
-      "maximum_xy_error_mm": 1.5e-05
+      "maximum_xy_error_mm": 1.5e-05,
+      "aligned": true,
+      "note": ""
     },
     {
       "name": "03 Voice - Female 2 - 2531 Hz",
       "contacts": 5,
-      "maximum_xy_error_mm": 1.5e-05
+      "maximum_xy_error_mm": 1.5e-05,
+      "aligned": true,
+      "note": ""
     },
     {
       "name": "04 Voice - Female 3 - 6329 Hz",
       "contacts": 5,
-      "maximum_xy_error_mm": 2.2e-05
+      "maximum_xy_error_mm": 2.2e-05,
+      "aligned": true,
+      "note": ""
     },
     {
       "name": "05 Voice - Male 1 - 162 Hz",
       "contacts": 5,
-      "maximum_xy_error_mm": 2.2e-05
+      "maximum_xy_error_mm": 2.2e-05,
+      "aligned": true,
+      "note": ""
     },
     {
       "name": "06 Voice - Male 2 - 405 Hz",
       "contacts": 5,
-      "maximum_xy_error_mm": 2.2e-05
+      "maximum_xy_error_mm": 2.2e-05,
+      "aligned": true,
+      "note": ""
     },
     {
       "name": "Adapter Mega contacts",
       "contacts": 85,
-      "maximum_xy_error_mm": 0.0
+      "maximum_xy_error_mm": 0.0,
+      "aligned": true,
+      "note": ""
     },
     {
       "name": "Teensy 48 contacts",
       "contacts": 48,
-      "maximum_xy_error_mm": 1.7e-05
+      "maximum_xy_error_mm": 1.7e-05,
+      "aligned": true,
+      "note": ""
     }
   ],
   "proxies": [
     "J2 - estimated DC jack envelope",
-    "J6 - estimated screw bridge envelope",
-    "U1 - estimated TDFN body",
-    "U1 - estimated TDFN body",
-    "U1 - estimated TDFN body",
-    "U1 - estimated TDFN body",
-    "U1 - estimated TDFN body",
-    "U1 - estimated TDFN body"
+    "J6 - estimated screw bridge envelope"
   ],
   "visible_board_count": 8
 }

@@ -135,6 +135,9 @@ def main():
         a,b=[position(x) for x in pp];assert near(((a[0]-b[0])**2+(a[1]-b[1])**2)**.5,pitch)
     assert not pads(loaded['voice-thomas'])[('JV1','5')].GetNetname()
     mic=loaded['microphone'];mf={f.GetReference():f for f in mic.GetFootprints()};mp=pads(mic)
+    mic_settings=json.loads((ROOT/'microphone/microphone.kicad_pro').read_text())['board']['design_settings']
+    assert mic_settings['rules']['min_clearance']>=.15 and mic_settings['rules']['min_track_width']>=.15
+    assert not mic_settings['drc_exclusions']
     assert position(mf['H1'])==(60,56) and position(mf['H2'])==(60,106)
     for ref in ['H1','H2']:
         hp=next(iter(mf[ref].Pads()));assert hp.GetAttribute()==p.PAD_ATTRIB_NPTH
@@ -147,8 +150,28 @@ def main():
                 assert ((x-hx)**2+(y-hy)**2)**.5-max(sx,sy)/2>=6,(ref,f.GetReference(),'keepout')
         assert len(list(mf[ref].Zones()))==2
     for f in mf.values():assert f.GetLayer()==p.F_Cu
-    for pin in ['4','7','11','15']:assert plain(mp[('U1',pin)].GetNetname())=='GND'
-    assert plain(mp[('U1','2')].GetNetname())==plain(mp[('U1','5')].GetNetname())
+    assert 'U1' not in mf and 'MK1' not in mf and 'JP1' not in mf and 'JP2' not in mf
+    assert [plain(mp[('M1',str(i))].GetNetname()) for i in range(1,6)]==['GND','VDD','GAIN','MICOUT','AR']
+    assert [plain(mp[('J1',str(i))].GetNetname()) for i in range(1,4)]==['GND','+5V','OUT']
+    for ref,expected in [('R1',['GAIN','VDD']),('R2',['AR','GND']),('R4',['+5V','VDD']),('R5',['MICOUT','OUT'])]:
+        assert [plain(mp[(ref,str(i))].GetNetname()) for i in (1,2)]==expected
+    source=p.LoadBoard(str(ROOT/'max9814-reference/max9814-reference.kicad_pcb'))
+    sourcefp={f.GetReference():f for f in source.GetFootprints()}
+    for i in range(1,6):
+        original=next(a for a in sourcefp['J2'].Pads() if a.GetNumber()==str(i))
+        sx,sy=position(original);got=position(mp[('M1',str(i))])
+        assert near(got[0],67.0485-(sy-50)) and near(got[1],67+(sx-50))
+    for ref,source_ref in [('H3','U$4'),('H4','U$5')]:
+        original=next(iter(sourcefp[source_ref].Pads()));sx,sy=position(original)
+        got=next(iter(mf[ref].Pads()));gx,gy=position(got)
+        assert near(gx,67.0485-(sy-50)) and near(gy,67+(sx-50))
+        assert got.GetAttribute()==p.PAD_ATTRIB_NPTH and near(p.ToMM(got.GetDrillSize().x),2.2)
+        assert len(list(mf[ref].Zones()))==2
+        for f in mf.values():
+            if f.GetReference()==ref:continue
+            for pad in f.Pads():
+                x,y=position(pad);sx,sy=p.ToMM(pad.GetSize())
+                assert ((x-gx)**2+(y-gy)**2)**.5-max(sx,sy)/2>=3,(ref,f.GetReference(),'module spacer keepout')
     carrier=loaded['analyser-carrier'];cp=pads(carrier)
     assert ('JA1','22') not in cp
     for pin in range(1,22):

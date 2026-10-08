@@ -44,7 +44,7 @@ def main(only=None):
         else:
             zone(board,'SH_RETURN','GND' if name in ['teensy-adapter','microphone'] else 'AGND',p.B_Cu,points)
             layers=2
-        board.BuildConnectivity();p.ZONE_FILLER(board).Fill(board.Zones());p.SaveBoard(str(path),board)
+        board.BuildConnectivity();p.ZONE_FILLER(board).Fill(board.Zones());p.SaveBoard(str(path),board,name=='microphone')
         (folder/'reports/planes.json').write_text(json.dumps({'copper_layers':layers,'thickness_mm':1.6,
             'solid_pad_connections':True,'note':'Confirm finished copper weight and load/temperature rise with fabricator; current capacity is not established by DRC.'},indent=2)+'\n')
         print(name,'filled',len(list(board.Zones())),'zones',flush=True)
