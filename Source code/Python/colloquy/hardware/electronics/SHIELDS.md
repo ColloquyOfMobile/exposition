@@ -13,7 +13,8 @@ analyser: the microphones reach it straight from the backplane.** Trying
 another solution is changing a shield.
 
 Written 2026-10-03; **simplified 2026-10-04**; **direct microphones,
-Thomas's filter on every card and his analyser modules 2026-10-05**. The people building it are qualified, so this says what to
+Thomas's filter on every card and his analyser modules 2026-10-05**;
+**the Mega on the DSUB face and +12 V on an outer layer 2026-10-08**. The people building it are qualified, so this says what to
 build, in what order, and how to tell the pieces apart, and leaves out
 what a competent hand does anyway. **There is no shield identification in
 hardware: the silkscreen does that job** (section 6). It is the sixth
@@ -254,7 +255,7 @@ to `circuit.json` by its own test). The harness boards do not change.
 
 | | What | v2 references |
 |---|---|---|
-| **kept** | four DSUB-15s, `J2`, `J6`, `J7`, `Extra1`–`Extra3`, U2D2 mount `M1`, the Mega footprint `A1` (on the back) | as v2 |
+| **kept** | four DSUB-15s, `J2`, `J6`, `J7`, `Extra1`–`Extra3`, U2D2 mount `M1`, the Mega footprint `A1` (same place, **moved to the front**: 2b) | as v2 |
 | **kept** | NeoPixel series 330 R; photosensor loads 10 K provisional; line-out build-outs 100 R; amp-shutdown pull-up 10 K | `RN1`–`RN7`, `RP1`–`RP11`, `R103`–`R503`, `RS1` |
 | **kept** | one AGND–GND bond, one bond per body audio return; 470 µF bulk; test pads; mounting holes | `JP1`–`JP6` |
 | **moved** to the voice cards, through-hole | the five passive filters | `R101`–`C502` |
@@ -273,10 +274,28 @@ while a processor boots, while one is unpowered, with the slot empty —
 which v2 lacks too, and leave an empty voice slot's body at 0 V instead
 of an open amplifier input.
 
-### 2b. The computing slot: the Mega footprint, unchanged
+### 2b. The computing slot: the Mega footprint, on the DSUB face
 
 Every pin v2 connects keeps v2's net, so the Mega plugs in as it is and
 firmware 4 runs unmodified. Held to `circuit.json` by the test.
+
+**The Mega sits on the front, the face with the DSUBs**, upside down: its
+component side and female headers face the backplane, and male headers
+standing on the front go into them. The board in the rack carries it
+underneath, and that was a mistake; v2 and the first backplane copied
+its footprint pad for pad and kept it. Seen from the front, an
+upside-down Mega's headers are the **mirror image** of that footprint,
+mirrored about the Mega's own centre line (x = 167.83 mm on the board),
+so the slot keeps its rectangle and its USB end at the top edge, and
+the four mounting holes move to their mirror images. In KiCad that is a
+mirrored copy of the footprint on `F.Cu`, not the footprint flipped to
+`B.Cu`, which would draw the headers on the back.
+
+The gap between the Mega and the backplane is the Mega's 8.5 mm female
+headers plus the male headers' 2.5 mm plastic, and the Mega's USB-B
+shell is about as tall as that: **no pads, vias or test pins under the
+USB-B or the power jack**. Nothing on the backplane sits under the Mega
+today; keep it so.
 
 | Mega pin | Net | |
 |---|---|---|
@@ -391,8 +410,8 @@ connector contacts in it.
 
 ### 3a. The Mega 2560
 
-**The Mega is its own shield**: it plugs into the footprint exactly as
-into the v2 board, carried on the back, on its own USB lead. Firmware 4
+**The Mega is its own shield**: it plugs into the footprint upside down
+on the front, beside the DSUBs (2b), on its own USB lead. Firmware 4
 runs unmodified with the MSGEQ7 shield and Thomas cards: step 1.
 
 ### 3b. The Teensy 4.1 adapter
@@ -401,6 +420,13 @@ runs unmodified with the MSGEQ7 shield and Thomas cards: step 1.
 where a Mega has them (the ICSP is not needed), the Mega's four mounting
 holes, the Teensy in two 1×24 sockets on the far side with its USB at the
 end where the Mega's USB-B is. Still two USB leads in the rack.
+
+On the front it goes where the Mega goes and the same way round: its
+female headers face the backplane and **the Teensy faces out**, so its
+USB, its pins and the adapter's silkscreen are in reach. The adapter as
+drawn already fits this: its headers were laid out as the mirror of the
+back-mounted footprint, which is exactly the front-mounted one, holes
+included.
 
 - **Power: the Teensy's own USB, as a Mega.** It takes 5 V from `VIN`
   and never feeds it; a Schottky from `VIN` gives the footprint's 5 V
@@ -744,10 +770,11 @@ marker. Every LED, pin and pad carries its name.
 | DSUBs | as v2, with `B-J4 · NO POWER` |
 | audio | `LINE OUT` and `AUDIO RTN` at the old speaker pairs; `JP1 · ONLY AGND–GND BOND` |
 
-### Backplane, back (the computing slot)
+### Backplane, front, in the computing slot
 
-`COMPUTING SLOT · MEGA 2560 OR TEENSY ADAPTER`, `USB END` with an arrow,
-and the four mounting holes marked `M3`.
+`COMPUTING SLOT · MEGA 2560 OR TEENSY ADAPTER`, `MEGA COMPONENT SIDE
+DOWN`, `USB END` with an arrow, and the four mounting holes marked `M3`.
+Covered once a shield is in, and read when one is going in.
 
 ### Teensy adapter
 
@@ -903,7 +930,13 @@ plugged.
 
 - **The backplane keeps v2's outline, fixed connectors, Mega position
   and AGND region**; it is four layers, the adapter four, the cards and
-  the MSGEQ7 shield two.
+  the MSGEQ7 shield two. The Mega's position is kept but its face is not:
+  it is on the front (2b).
+- **+12 V on an outer layer**, `F.Cu` or `B.Cu`, at least v2's 2 mm,
+  never on an inner layer. It is the servo supply and the one rail with
+  no plane of its own, and inner copper is usually half the thickness of
+  outer copper and runs hotter: 1.5 mm inside carries less than the 1 mm
+  outer track on the board in the rack.
 - **Voice slots near the DSUBs' line-out pins; `JA1` and the five 4.7 K
   near the microphone pins**, in the AGND region; `JP1` the only bond.
   The direct microphone traces run over AGND to the footprint, away
@@ -913,8 +946,10 @@ plugged.
 - **LEDs and test pins where a hand and an eye reach them with the board
   in the rack**: the power row by the power entry, each `TONE` LED with
   its `TONE` / `LINE` pins beside its slot, the ears row beside `JA1`.
-- **Heights** — cards in front, the adapter behind — are a dry fit
-  against the enclosure before ordering.
+- **Heights** — the cards, the computing shield and the analyser
+  carrier, all in front — are a dry fit against the enclosure before
+  ordering. The adapter stands tallest: the Teensy on its sockets on top
+  of the slot's 11 mm.
 
 ---
 
@@ -968,3 +1003,6 @@ the cards and the backplane are the same for both processors.
 - `next pcb` section 3's harness measurement and section 5's amplifier
   rail; nothing here depends on either.
 - The photosensor loads, still v2's provisional 10 K.
+- The backplane in `CAD/KiCad/shields/` still carries the Mega
+  underneath and +12 V on its inner layers; both wait for the board to be
+  regenerated and re-routed (2b, 9). The adapter needs no change.
