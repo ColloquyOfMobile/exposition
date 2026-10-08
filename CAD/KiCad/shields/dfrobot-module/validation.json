@@ -1,0 +1,15 @@
+{
+  "outline_mm": [
+    22.0,
+    34.0
+  ],
+  "retained_mounting_centres_mm": 20.32,
+  "mounting_pad_diameter_mm": 3.6,
+  "j4_pin1_and_j2j3_pin6_x_mm": 70.85,
+  "j1_all_pads_smd": true,
+  "user_comments_preserved": 2,
+  "known_reference_limitations": [
+    "3.2 mm mounting holes intersect side edges",
+    "Carrier control sockets still offset by 1.27 mm"
+  ]
+}

@@ -39,10 +39,14 @@ exports use the PCB editor's absolute origin, with Cartesian Y inverted.
 - Spacers show nominal 4 mm outside diameter / 3.2 mm bore. The computing
   slot requires front spacers no larger than 4 mm OD and screw heads on the rear,
   as documented by the PCB project. Screws, nuts, washers and cables are omitted.
-- DFRobot geometry remains the **photo-derived 29 × 32 mm estimate**, with
-  20.32 mm mounting-hole spacing. These are the modified plug-in modules,
+- DFRobot geometry is corrected to the user's **22 × 34 mm** dimensions, with
+  20.32 mm mounting-hole spacing retained. These are the modified plug-in modules,
   with replacement downward input/control headers. White output connector
-  shapes and small component placements are approximate. See the
+  is now an SMD envelope wholly inside the outline. J4 pin 1 now aligns with
+  J2J3 pin 6; the carrier control sockets remain offset by 1.27 mm and require
+  a subsequent carrier-layout correction. Retained 3.2 mm mounting holes break
+  through the narrower side edges; their copper rings were reduced to 3.6 mm.
+  Small component placements and connector shape are approximate. See the
   [module notes](../dfrobot-module/README.md).
 - Mega planar geometry comes from the original Arduino Rev3e Eagle PCB;
   component bodies/heights are partly simplified. Its unused reserved POWER
@@ -90,8 +94,14 @@ Run from this directory (adjust installed application paths if necessary):
 bodies and resolves local KiCad model paths. It does not overwrite source PCBs.
 Assembly manifests record all instance transforms in millimetres.
 `combine_scenes.py` combines both files, shares identical meshes, and reopens
-the result to verify scene populations, transforms and cameras. Its results
-are recorded in [combined-validation.json](combined-validation.json).
+the result to verify scene populations, transforms and cameras. Its original
+results are recorded in [combined-validation.json](combined-validation.json).
+After the DFRobot comment correction, [dfrobot-update-validation.json](dfrobot-update-validation.json)
+supersedes the earlier Blender file hashes and the earlier DFRobot alignment
+checks. `update_dfrobot_geometry.py` replaces only module geometry in both Mega
+and combined files, preserving user scene/placement edits. Do not rerun
+`combine_scenes.py` over a user-edited combined file unless discarding those
+scene edits is intended.
 Imported Arduino, Teensy and KiCad component geometry retains its original
 licensing and attribution; see the linked reference-project notes and their
 retained source/license files.

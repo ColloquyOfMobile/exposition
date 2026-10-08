@@ -632,27 +632,37 @@
     {
       "name": "09 DFRobot analyser 1 - modified headers",
       "contacts": 8,
-      "maximum_xy_error_mm": 3.1e-05
+      "maximum_xy_error_mm": 1.27,
+      "aligned": false,
+      "note": "Module corrected from user comments; carrier control sockets not yet moved."
     },
     {
       "name": "10 DFRobot analyser 2 - modified headers",
       "contacts": 8,
-      "maximum_xy_error_mm": 1.5e-05
+      "maximum_xy_error_mm": 1.27,
+      "aligned": false,
+      "note": "Module corrected from user comments; carrier control sockets not yet moved."
     },
     {
       "name": "11 DFRobot analyser 3 - modified headers",
       "contacts": 8,
-      "maximum_xy_error_mm": 1.5e-05
+      "maximum_xy_error_mm": 1.27,
+      "aligned": false,
+      "note": "Module corrected from user comments; carrier control sockets not yet moved."
     },
     {
       "name": "12 DFRobot analyser 4 - modified headers",
       "contacts": 8,
-      "maximum_xy_error_mm": 1.5e-05
+      "maximum_xy_error_mm": 1.27,
+      "aligned": false,
+      "note": "Module corrected from user comments; carrier control sockets not yet moved."
     },
     {
       "name": "13 DFRobot analyser 5 - modified headers",
       "contacts": 8,
-      "maximum_xy_error_mm": 1.5e-05
+      "maximum_xy_error_mm": 1.27,
+      "aligned": false,
+      "note": "Module corrected from user comments; carrier control sockets not yet moved."
     }
   ],
   "proxies": [

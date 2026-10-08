@@ -1,0 +1,44 @@
+{
+  "correction": "22 x 34 mm; SMD J1; J4 pin 1 aligned with J2J3 pin 6",
+  "carrier_control_socket_mismatch_mm": 1.27,
+  "files": {
+    "mega-configuration.blend": {
+      "updated_instances": 5,
+      "preserved_root_transforms": true,
+      "j1_bounds_xyz_mm": [
+        [
+          55.70000037550926,
+          68.30000132322311
+        ],
+        [
+          -80.30000329017639,
+          -70.50000131130219
+        ],
+        [
+          1.5950000379234552,
+          7.594999857246876
+        ]
+      ],
+      "sha256": "8f4cc01debf2a9657a9ad419e6eaed21bbd9c3260b3a0798393102793d32d59b"
+    },
+    "shield-configurations.blend": {
+      "updated_instances": 5,
+      "preserved_root_transforms": true,
+      "j1_bounds_xyz_mm": [
+        [
+          55.70000037550926,
+          68.30000132322311
+        ],
+        [
+          -80.30000329017639,
+          -70.50000131130219
+        ],
+        [
+          1.5950000379234552,
+          7.594999857246876
+        ]
+      ],
+      "sha256": "070f12e7187393ffb616c1dfd070a15c5bff9aef5a3a7dd008bccde6b28c7bb3"
+    }
+  }
+}

@@ -153,5 +153,6 @@
     "teensy-adapter": "788ae7de427f17d3fa1717582fc2a018abb0ffaca535383ef160c49156c9e790",
     "teensy41-reference": "27d93e48803ee8e4ec5bcd634c5f7e20fb2116c97854604c8c80946c03954a33",
     "voice-thomas": "deb23efa738ffa5fff2a142e3a83d8aa4ef8b525ef0f1dfa50cebf37fb3fab6f"
-  }
+  },
+  "superseded_by": "dfrobot-update-validation.json (DFRobot geometry, fit checks and affected Blender hashes)"
 }

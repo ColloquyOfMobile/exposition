@@ -2,27 +2,29 @@
 from pathlib import Path
 import math
 import shutil
+import re
 import pcbnew as p
 
 ROOT = Path(__file__).resolve().parent
 LIB = Path('C:/Program Files/KiCad/9.0/share/kicad')
-ORIGIN = (54.34, 58.0)  # first mounting hole; board bounds 50,50 to 79,82
+ORIGIN = (54.34, 58.0)  # retained mounting centres; corrected bounds 53.5,49 to 75.5,83
 
 def xy(x, y):
     return p.VECTOR2I(p.FromMM(x), p.FromMM(y))
 
 def make():
+    previous = p.LoadBoard(str(ROOT/'dfrobot-module.kicad_pcb'))
     b = p.BOARD()
     b.GetDesignSettings().SetBoardThickness(p.FromMM(1.6))
     def line(a, c):
         s = p.PCB_SHAPE(); s.SetShape(p.SHAPE_T_SEGMENT)
         s.SetStart(xy(*a)); s.SetEnd(xy(*c)); s.SetLayer(p.Edge_Cuts)
         s.SetWidth(p.FromMM(.05)); b.Add(s)
-    # Photo-estimated 29 x 32 mm outline, nominal 2 mm corner radius.
-    for a,c in [((52,50),(77,50)),((79,52),(79,80)),
-                ((77,82),(52,82)),((50,80),(50,52))]:
+    # User's 22 x 34 mm size correction; keep the existing hole centre spacing.
+    for a,c in [((55.5,49),(73.5,49)),((75.5,51),(75.5,81)),
+                ((73.5,83),(55.5,83)),((53.5,81),(53.5,51))]:
         line(a,c)
-    for cx,cy,start in [(77,52,-90),(77,80,0),(52,80,90),(52,52,180)]:
+    for cx,cy,start in [(73.5,51,-90),(73.5,81,0),(55.5,81,90),(55.5,51,180)]:
         points=[xy(cx+2*math.cos(math.radians(start+d)),
                    cy+2*math.sin(math.radians(start+d))) for d in (0,45,90)]
         s=p.PCB_SHAPE(); s.SetShape(p.SHAPE_T_ARC)
@@ -36,6 +38,12 @@ def make():
             f.Flip(xy(0,0),p.FLIP_DIRECTION_TOP_BOTTOM)
         f.SetOrientationDegrees(angle)
         f.SetPosition(xy(ORIGIN[0]+x,ORIGIN[1]+y))
+        if ref == 'J1':
+            f.Models().clear()
+            model = p.FP_3DMODEL()
+            model.m_Filename = '${KIPRJMOD}/3dmodels/SMD_3pin_reference.step'
+            f.Models().push_back(model)
+            return f
         for m in f.Models():
             src=LIB/'3dmodels'/m.m_Filename.split('}/')[-1]
             dst=ROOT/'3dmodels'/src.name
@@ -44,14 +52,18 @@ def make():
             m.m_Filename='${KIPRJMOD}/3dmodels/'+src.name
         return f
     for i,x in enumerate((0,20.32),1):
-        fp('MountingHole','MountingHole_3.2mm_M3_Pad',f'H{i}',x,0)
+        hole = fp('MountingHole','MountingHole_3.2mm_M3_Pad',f'H{i}',x,0)
+        for pad in hole.Pads():
+            pad.SetSize(xy(3.6,3.6))
+        for graphic in list(hole.GraphicalItems()):
+            hole.Remove(graphic)
     fp('Package_DIP','DIP-8_W7.62mm','U1',6.35,11.43,90)
     # Modified plug-in assembly: all input/control mating pins face the carrier.
     # Mirrored footprint's row advances along +X with -90 degree rotation.
     fp('Connector_PinHeader_2.54mm','PinHeader_1x06_P2.54mm_Vertical','J2J3',3.81,-5.08,-90,True)
-    fp('Connector_PinHeader_2.54mm','PinHeader_1x02_P2.54mm_Vertical','J4',17.78,17.78,-90,True)
+    fp('Connector_PinHeader_2.54mm','PinHeader_1x02_P2.54mm_Vertical','J4',16.51,17.78,-90,True)
     # Visual envelope proxy only: exact original white connector is unidentified.
-    fp('Connector_JST','JST_XH_S3B-XH-A_1x03_P2.50mm_Horizontal','J1',3.81,18,0)
+    fp('Connector_JST','JST_XH_S3B-XH-SM4-TB_1x03-1MP_P2.50mm_Horizontal','J1',7.66,17,0)
     for ref,x,y in [('R1',3.3,7),('R2',3.3,12),('R3',11.5,-.5)]:
         fp('Resistor_SMD','R_0805_2012Metric',ref,x,y,90)
     for ref,x,y in [('C1',2.8,4),('C2',17,8),('C3',17,11),('C4',9,-.5)]:
@@ -66,7 +78,14 @@ def make():
     text('R   S',19.05,15.4,.8)
     text('PWR',-.1,9.5,.7)
     text('PHOTO MODEL',10.16,20.7,.7)
+    # Keep the user's annotations as the source of these corrections.
+    for drawing in previous.GetDrawings():
+        if drawing.GetLayer() == p.Cmts_User:
+            b.Add(drawing.Duplicate())
     p.SaveBoard(str(ROOT/'dfrobot-module.kicad_pcb'),b)
+    path = ROOT/'dfrobot-module.kicad_pcb'
+    path.write_text(re.sub(r'\$\{KICAD9_3DMODEL_DIR\}/[^/]+/([^"\s]+)',
+                          r'${KIPRJMOD}/3dmodels/\1',path.read_text()))
     # Ensure the plug-in contacts match the existing carrier assumptions.
     f=next(f for f in b.GetFootprints() if f.GetReference()=='J2J3')
     xs=sorted(round(p.ToMM(pad.GetPosition().x)-ORIGIN[0],2) for pad in f.Pads())
