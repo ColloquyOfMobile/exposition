@@ -35,12 +35,16 @@ from datetime import datetime
 from functools import partial
 
 from colloquy.base import Base
+from colloquy.hardware.electronics import shields_diagram
 from colloquy.ui import leaves
 
 from . import table
 
 # Where the board documents hang, for the links to them.
 _ELECTRONICS_PATH = "/app/hardware/electronics"
+# The drawing of the backplane's slots and its two steps, written by
+# `py export_shields_diagram.py`.
+_SHIELDS_DIAGRAM = f"/static/hardware/{shields_diagram.FILE_NAME}"
 
 
 class SlotNode(Base):
@@ -205,6 +209,17 @@ class Configuration(Base):
             )
         if reading.board.changing:
             leaf("changing what is fitted", reading.board.changing)
+        step = table.step_of(reading)
+        if step is not None:
+            leaf("step", f"{step.name} - {step.says}")
+        if reading.board is table.SHIELDS_BACKPLANE:
+            states["drawing"] = leaves.html(
+                path,
+                "drawing",
+                f'<p><img src="{_SHIELDS_DIAGRAM}" style="max-width: 100%" '
+                'alt="The shields backplane: its slots, what each can hold, and '
+                'the two configurations"></p>',
+            )
         for topic, sentence in table.notes(reading, self.wired_bodies).items():
             leaf(topic, sentence)
         return states

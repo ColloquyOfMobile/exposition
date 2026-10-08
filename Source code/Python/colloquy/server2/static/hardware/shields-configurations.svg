@@ -1,0 +1,549 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1097 799.4" width="1097" height="799.4" role="img" aria-label="The shields backplane drawn three times to scale: with its slots empty and named; in step 1, with the Mega 2560, the MSGEQ7 carrier and five Thomas cards; and in step 2, with the Teensy 4.1 adapter, the analyser slot empty and five Thomas cards. Below, what each slot can hold.">
+<defs><pattern id="revalued" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#c2571a" stroke-width="1.2" opacity="0.45"/></pattern></defs>
+<rect x="0" y="0" width="1097" height="799.4" fill="#ffffff" stroke="none" stroke-width="0"/>
+<text x="28" y="34" font-family="system-ui, 'Segoe UI', sans-serif" font-size="17" font-weight="700" fill="#1f2933" text-anchor="start">The shields backplane: its slots and the two configurations</text>
+<text x="28" y="54" font-family="system-ui, 'Segoe UI', sans-serif" font-size="11" font-weight="400" fill="#6b7280" text-anchor="start">Front view, to scale. Read from CAD/KiCad/shields; the slots and their choices are main pcb &gt; configuration's.</text>
+<text x="28" y="88" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="700" fill="#1f2933" text-anchor="start">THE SLOTS</text>
+<text x="28" y="106" font-family="system-ui, 'Segoe UI', sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">Dashed: a slot, which takes a shield. Grey: the same in</text>
+<text x="28" y="119" font-family="system-ui, 'Segoe UI', sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">every setup.</text>
+<rect x="28" y="146" width="315" height="445.5" fill="#e4efe0" stroke="#2f5d3a" stroke-width="1.6" rx="7.5"/>
+<rect x="318.5" y="158" width="21" height="18" fill="#d5d8dd" stroke="#6b7280" stroke-width="0.8"/>
+<rect x="302" y="205.7" width="21" height="28.5" fill="#d5d8dd" stroke="#6b7280" stroke-width="0.8"/>
+<rect x="55.1" y="250.4" width="16.5" height="7.2" fill="#d5d8dd" stroke="#6b7280" stroke-width="0.8"/>
+<rect x="35.5" y="152.8" width="85.5" height="72" fill="#d5d8dd" stroke="#6b7280" stroke-width="1" rx="1.5"/>
+<text x="78.2" y="186.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="11" font-weight="700" fill="#1f2933" text-anchor="middle">U2D2</text>
+<text x="78.2" y="199.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8.5" font-weight="400" fill="#6b7280" text-anchor="middle">every setup</text>
+<text x="75.6" y="257" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#6b7280" text-anchor="start">J7 servo bus</text>
+<text x="314.5" y="170" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#6b7280" text-anchor="end">J2 5 V in</text>
+<rect x="27" y="507.1" width="25.5" height="60.3" fill="#d5d8dd" stroke="#6b7280" stroke-width="1" rx="1.5"/>
+<text x="36.7" y="537.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#1f2933" text-anchor="middle" transform="rotate(-90 36.7 537.2)">J1</text>
+<text x="48.7" y="537.2" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="400" fill="#1f2933" text-anchor="middle" transform="rotate(-90 48.7 537.2)">female2</text>
+<rect x="317.3" y="507.1" width="25.5" height="60.3" fill="#d5d8dd" stroke="#6b7280" stroke-width="1" rx="1.5"/>
+<text x="327" y="537.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#1f2933" text-anchor="middle" transform="rotate(-90 327 537.2)">J5</text>
+<text x="339" y="537.2" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="400" fill="#1f2933" text-anchor="middle" transform="rotate(-90 339 537.2)">female1</text>
+<rect x="92.3" y="566.7" width="60.3" height="25.5" fill="#d5d8dd" stroke="#6b7280" stroke-width="1" rx="1.5"/>
+<text x="122.5" y="573.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#1f2933" text-anchor="middle">A-J3</text>
+<text x="122.5" y="585.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="400" fill="#1f2933" text-anchor="middle">female3 male1</text>
+<rect x="215.9" y="566.7" width="60.3" height="25.5" fill="#d5d8dd" stroke="#6b7280" stroke-width="1" rx="1.5"/>
+<text x="246" y="573.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#1f2933" text-anchor="middle">B-J4</text>
+<text x="246" y="585.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="400" fill="#1f2933" text-anchor="middle">male1 male2</text>
+<circle cx="287.5" cy="193.8" r="2.2" fill="#6fcf97" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="277" cy="193.8" r="2.2" fill="#6fcf97" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="298" cy="193.8" r="2.2" fill="#6fcf97" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="85.8" cy="358.8" r="2.2" fill="#f2c94c" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="131.5" cy="358.8" r="2.2" fill="#f2c94c" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="177.2" cy="358.8" r="2.2" fill="#f2c94c" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="223" cy="358.8" r="2.2" fill="#f2c94c" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="268.7" cy="358.8" r="2.2" fill="#f2c94c" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="249.9" cy="292.5" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="211" cy="433.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="249.9" cy="168.7" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="287.5" cy="535.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="115" cy="433.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="307" cy="433.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="287.5" cy="471.3" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="177.5" cy="283" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="259" cy="433.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="177.5" cy="170.6" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="163" cy="433.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<rect x="173.7" y="147.7" width="80" height="152.4" fill="none" stroke="#6b7280" stroke-width="1" stroke-dasharray="5 3" rx="1.2"/>
+<text x="213.7" y="219.9" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9" font-weight="700" fill="#6b7280" text-anchor="middle">computing slot</text>
+<text x="213.7" y="232.9" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8.5" font-weight="400" fill="#6b7280" text-anchor="middle" font-style="italic">the Mega footprint</text>
+<rect x="74.5" y="465.3" width="225" height="82.5" fill="none" stroke="#6b7280" stroke-width="1" stroke-dasharray="5 3" rx="1.2"/>
+<text x="187" y="502.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9" font-weight="700" fill="#6b7280" text-anchor="middle">analyser slot JA1</text>
+<text x="187" y="515.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8.5" font-weight="400" fill="#6b7280" text-anchor="middle" font-style="italic">takes the carrier</text>
+<rect x="79" y="382.8" width="45" height="63" fill="none" stroke="#6b7280" stroke-width="1" stroke-dasharray="5 3" rx="1.2"/>
+<text x="101.5" y="400.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#6b7280" text-anchor="middle">JV1</text>
+<text x="101.5" y="412.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#6b7280" text-anchor="middle">female1</text>
+<rect x="127" y="382.8" width="45" height="63" fill="none" stroke="#6b7280" stroke-width="1" stroke-dasharray="5 3" rx="1.2"/>
+<text x="149.5" y="400.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#6b7280" text-anchor="middle">JV2</text>
+<text x="149.5" y="412.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#6b7280" text-anchor="middle">female2</text>
+<rect x="175" y="382.8" width="45" height="63" fill="none" stroke="#6b7280" stroke-width="1" stroke-dasharray="5 3" rx="1.2"/>
+<text x="197.5" y="400.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#6b7280" text-anchor="middle">JV3</text>
+<text x="197.5" y="412.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#6b7280" text-anchor="middle">female3</text>
+<rect x="223" y="382.8" width="45" height="63" fill="none" stroke="#6b7280" stroke-width="1" stroke-dasharray="5 3" rx="1.2"/>
+<text x="245.5" y="400.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#6b7280" text-anchor="middle">JV4</text>
+<text x="245.5" y="412.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#6b7280" text-anchor="middle">male1</text>
+<rect x="271" y="382.8" width="45" height="63" fill="none" stroke="#6b7280" stroke-width="1" stroke-dasharray="5 3" rx="1.2"/>
+<text x="293.5" y="400.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#6b7280" text-anchor="middle">JV5</text>
+<text x="293.5" y="412.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#6b7280" text-anchor="middle">male2</text>
+<text x="78.8" y="361.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#6b7280" text-anchor="end">TONE LEDs</text>
+<text x="296" y="207.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#6b7280" text-anchor="end">power LEDs</text>
+<text x="391" y="88" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="700" fill="#1f2933" text-anchor="start">STEP 1: THE MEGA</text>
+<text x="391" y="106" font-family="system-ui, 'Segoe UI', sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">the v2 board electrically, firmware 4 unmodified - the</text>
+<text x="391" y="119" font-family="system-ui, 'Segoe UI', sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">exhibition depends on this step alone</text>
+<rect x="391" y="146" width="315" height="445.5" fill="#e4efe0" stroke="#2f5d3a" stroke-width="1.6" rx="7.5"/>
+<rect x="681.5" y="158" width="21" height="18" fill="#d5d8dd" stroke="#6b7280" stroke-width="0.8"/>
+<rect x="665" y="205.7" width="21" height="28.5" fill="#d5d8dd" stroke="#6b7280" stroke-width="0.8"/>
+<rect x="418.1" y="250.4" width="16.5" height="7.2" fill="#d5d8dd" stroke="#6b7280" stroke-width="0.8"/>
+<rect x="398.5" y="152.8" width="85.5" height="72" fill="#d5d8dd" stroke="#6b7280" stroke-width="1" rx="1.5"/>
+<text x="441.2" y="186.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="11" font-weight="700" fill="#1f2933" text-anchor="middle">U2D2</text>
+<text x="441.2" y="199.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8.5" font-weight="400" fill="#6b7280" text-anchor="middle">every setup</text>
+<text x="438.6" y="257" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#6b7280" text-anchor="start">J7 servo bus</text>
+<text x="677.5" y="170" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#6b7280" text-anchor="end">J2 5 V in</text>
+<rect x="390" y="507.1" width="25.5" height="60.3" fill="#d5d8dd" stroke="#6b7280" stroke-width="1" rx="1.5"/>
+<text x="399.7" y="537.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#1f2933" text-anchor="middle" transform="rotate(-90 399.7 537.2)">J1</text>
+<text x="411.7" y="537.2" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="400" fill="#1f2933" text-anchor="middle" transform="rotate(-90 411.7 537.2)">female2</text>
+<rect x="680.3" y="507.1" width="25.5" height="60.3" fill="#d5d8dd" stroke="#6b7280" stroke-width="1" rx="1.5"/>
+<text x="690" y="537.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#1f2933" text-anchor="middle" transform="rotate(-90 690 537.2)">J5</text>
+<text x="702" y="537.2" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="400" fill="#1f2933" text-anchor="middle" transform="rotate(-90 702 537.2)">female1</text>
+<rect x="455.3" y="566.7" width="60.3" height="25.5" fill="#d5d8dd" stroke="#6b7280" stroke-width="1" rx="1.5"/>
+<text x="485.5" y="573.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#1f2933" text-anchor="middle">A-J3</text>
+<text x="485.5" y="585.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="400" fill="#1f2933" text-anchor="middle">female3 male1</text>
+<rect x="578.9" y="566.7" width="60.3" height="25.5" fill="#d5d8dd" stroke="#6b7280" stroke-width="1" rx="1.5"/>
+<text x="609" y="573.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#1f2933" text-anchor="middle">B-J4</text>
+<text x="609" y="585.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="400" fill="#1f2933" text-anchor="middle">male1 male2</text>
+<circle cx="650.5" cy="193.8" r="2.2" fill="#6fcf97" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="640" cy="193.8" r="2.2" fill="#6fcf97" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="661" cy="193.8" r="2.2" fill="#6fcf97" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="448.8" cy="358.8" r="2.2" fill="#f2c94c" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="494.5" cy="358.8" r="2.2" fill="#f2c94c" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="540.2" cy="358.8" r="2.2" fill="#f2c94c" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="586" cy="358.8" r="2.2" fill="#f2c94c" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="631.7" cy="358.8" r="2.2" fill="#f2c94c" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="612.9" cy="292.5" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="574" cy="433.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="612.9" cy="168.7" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="650.5" cy="535.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="478" cy="433.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="670" cy="433.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="650.5" cy="471.3" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="540.5" cy="283" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="622" cy="433.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="540.5" cy="170.6" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="526" cy="433.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<rect x="597.9" y="144.8" width="14.2" height="2.9" fill="#d5d8dd" stroke="#6b7280" stroke-width="0.8"/>
+<rect x="550.4" y="137.8" width="18.5" height="9.9" fill="#d5d8dd" stroke="#6b7280" stroke-width="0.8"/>
+<rect x="536.7" y="147.7" width="80" height="152.4" fill="#cdeaeb" stroke="#00838a" stroke-width="1.4" rx="1.5"/>
+<rect x="612" y="188.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="200.2" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="204" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="570.1" y="246.1" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="223" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="226.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="230.7" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="234.5" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="238.3" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="242.1" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="245.9" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="249.7" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="257.3" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="261.1" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="265" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="268.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="272.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="276.4" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="280.2" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="284" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="182.7" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="242.1" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="238.3" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="234.5" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="230.7" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="226.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="223" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="219.2" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="215.4" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="209.3" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="205.5" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="201.7" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="197.9" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="194.1" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="190.3" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="249.7" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="253.5" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="257.3" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="261.1" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="265" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="268.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="272.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="276.4" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="543.5" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="543.5" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="547.3" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="547.3" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="551.1" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="551.1" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="554.9" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="554.9" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="558.7" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="558.7" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="562.5" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="562.5" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="566.3" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="566.3" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="570.1" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="570.1" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="573.9" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="573.9" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="577.8" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="577.8" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="581.6" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="581.6" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="585.4" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="585.4" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="589.2" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="589.2" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="593" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="593" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="596.8" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="596.8" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="600.6" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="600.6" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="186.5" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="207.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="211.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="577.8" y="246.1" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="604.4" y="287.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="604.4" y="291.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="192.6" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="570.1" y="242.3" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="573.9" y="246.1" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="196.4" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="577.8" y="242.3" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="573.9" y="242.3" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="175" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="539.6" y="178.8" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="612" y="215.4" width="1.8" height="1.8" fill="#00838a" stroke="none" stroke-width="0"/>
+<text x="559.6" y="134.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#6b7280" text-anchor="middle">USB</text>
+<text x="576.7" y="219.9" font-family="system-ui, 'Segoe UI', sans-serif" font-size="11" font-weight="700" fill="#00838a" text-anchor="middle">Mega 2560</text>
+<text x="576.7" y="233.9" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9" font-weight="400" fill="#1f2933" text-anchor="middle">firmware 4</text>
+<rect x="437.5" y="465.3" width="225" height="82.5" fill="#f7e8c9" stroke="#a8741a" stroke-width="1.4" rx="1.5"/>
+<rect x="442.8" y="486.3" width="43.5" height="48" fill="#d6e2f3" stroke="#2f5f9e" stroke-width="1" rx="1.2"/>
+<text x="464.5" y="509.3" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="700" fill="#2f5f9e" text-anchor="middle">MSGEQ7</text>
+<text x="464.5" y="520.3" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">female1</text>
+<rect x="486.2" y="480.3" width="43.5" height="48" fill="#d6e2f3" stroke="#2f5f9e" stroke-width="1" rx="1.2"/>
+<text x="508" y="503.3" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="700" fill="#2f5f9e" text-anchor="middle">MSGEQ7</text>
+<text x="508" y="514.3" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">female2</text>
+<rect x="529.8" y="480.3" width="43.5" height="48" fill="#d6e2f3" stroke="#2f5f9e" stroke-width="1" rx="1.2"/>
+<text x="551.5" y="503.3" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="700" fill="#2f5f9e" text-anchor="middle">MSGEQ7</text>
+<text x="551.5" y="514.3" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">female3</text>
+<rect x="573.2" y="480.3" width="43.5" height="48" fill="#d6e2f3" stroke="#2f5f9e" stroke-width="1" rx="1.2"/>
+<text x="595" y="503.3" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="700" fill="#2f5f9e" text-anchor="middle">MSGEQ7</text>
+<text x="595" y="514.3" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">male1</text>
+<rect x="616.8" y="480.3" width="43.5" height="48" fill="#d6e2f3" stroke="#2f5f9e" stroke-width="1" rx="1.2"/>
+<text x="638.5" y="503.3" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="700" fill="#2f5f9e" text-anchor="middle">MSGEQ7</text>
+<text x="638.5" y="514.3" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">male2</text>
+<text x="660.2" y="476.3" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9" font-weight="700" fill="#a8741a" text-anchor="end">MSGEQ7 carrier</text>
+<rect x="442" y="382.8" width="45" height="63" fill="#fbdfcc" stroke="#c2571a" stroke-width="1.2" rx="1.2"/>
+<text x="464.5" y="395.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#c2571a" text-anchor="middle">JV1</text>
+<text x="464.5" y="407.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">female1</text>
+<text x="464.5" y="424.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">Thomas</text>
+<text x="464.5" y="434.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">card</text>
+<rect x="490" y="382.8" width="45" height="63" fill="#fbdfcc" stroke="#c2571a" stroke-width="1.2" rx="1.2"/>
+<text x="512.5" y="395.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#c2571a" text-anchor="middle">JV2</text>
+<text x="512.5" y="407.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">female2</text>
+<text x="512.5" y="424.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">Thomas</text>
+<text x="512.5" y="434.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">card</text>
+<rect x="538" y="382.8" width="45" height="63" fill="#fbdfcc" stroke="#c2571a" stroke-width="1.2" rx="1.2"/>
+<text x="560.5" y="395.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#c2571a" text-anchor="middle">JV3</text>
+<text x="560.5" y="407.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">female3</text>
+<text x="560.5" y="424.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">Thomas</text>
+<text x="560.5" y="434.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">card</text>
+<rect x="586" y="382.8" width="45" height="63" fill="#fbdfcc" stroke="#c2571a" stroke-width="1.2" rx="1.2"/>
+<text x="608.5" y="395.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#c2571a" text-anchor="middle">JV4</text>
+<text x="608.5" y="407.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">male1</text>
+<text x="608.5" y="424.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">Thomas</text>
+<text x="608.5" y="434.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">card</text>
+<rect x="634" y="382.8" width="45" height="63" fill="#fbdfcc" stroke="#c2571a" stroke-width="1.2" rx="1.2"/>
+<text x="656.5" y="395.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#c2571a" text-anchor="middle">JV5</text>
+<text x="656.5" y="407.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">male2</text>
+<text x="656.5" y="424.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">Thomas</text>
+<text x="656.5" y="434.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">card</text>
+<text x="754" y="88" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="700" fill="#1f2933" text-anchor="start">STEP 2: THE TEENSY</text>
+<text x="754" y="106" font-family="system-ui, 'Segoe UI', sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">the same voices on the Teensy, and the microphones on the</text>
+<text x="754" y="119" font-family="system-ui, 'Segoe UI', sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">laptop</text>
+<rect x="754" y="146" width="315" height="445.5" fill="#e4efe0" stroke="#2f5d3a" stroke-width="1.6" rx="7.5"/>
+<rect x="1044.5" y="158" width="21" height="18" fill="#d5d8dd" stroke="#6b7280" stroke-width="0.8"/>
+<rect x="1028" y="205.7" width="21" height="28.5" fill="#d5d8dd" stroke="#6b7280" stroke-width="0.8"/>
+<rect x="781.1" y="250.4" width="16.5" height="7.2" fill="#d5d8dd" stroke="#6b7280" stroke-width="0.8"/>
+<rect x="761.5" y="152.8" width="85.5" height="72" fill="#d5d8dd" stroke="#6b7280" stroke-width="1" rx="1.5"/>
+<text x="804.2" y="186.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="11" font-weight="700" fill="#1f2933" text-anchor="middle">U2D2</text>
+<text x="804.2" y="199.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8.5" font-weight="400" fill="#6b7280" text-anchor="middle">every setup</text>
+<text x="801.6" y="257" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#6b7280" text-anchor="start">J7 servo bus</text>
+<text x="1040.5" y="170" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#6b7280" text-anchor="end">J2 5 V in</text>
+<rect x="753" y="507.1" width="25.5" height="60.3" fill="#d5d8dd" stroke="#6b7280" stroke-width="1" rx="1.5"/>
+<text x="762.7" y="537.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#1f2933" text-anchor="middle" transform="rotate(-90 762.7 537.2)">J1</text>
+<text x="774.7" y="537.2" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="400" fill="#1f2933" text-anchor="middle" transform="rotate(-90 774.7 537.2)">female2</text>
+<rect x="1043.3" y="507.1" width="25.5" height="60.3" fill="#d5d8dd" stroke="#6b7280" stroke-width="1" rx="1.5"/>
+<text x="1053" y="537.2" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#1f2933" text-anchor="middle" transform="rotate(-90 1053 537.2)">J5</text>
+<text x="1065" y="537.2" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="400" fill="#1f2933" text-anchor="middle" transform="rotate(-90 1065 537.2)">female1</text>
+<rect x="818.3" y="566.7" width="60.3" height="25.5" fill="#d5d8dd" stroke="#6b7280" stroke-width="1" rx="1.5"/>
+<text x="848.5" y="573.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#1f2933" text-anchor="middle">A-J3</text>
+<text x="848.5" y="585.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="400" fill="#1f2933" text-anchor="middle">female3 male1</text>
+<rect x="941.9" y="566.7" width="60.3" height="25.5" fill="#d5d8dd" stroke="#6b7280" stroke-width="1" rx="1.5"/>
+<text x="972" y="573.5" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#1f2933" text-anchor="middle">B-J4</text>
+<text x="972" y="585.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="7.5" font-weight="400" fill="#1f2933" text-anchor="middle">male1 male2</text>
+<circle cx="1013.5" cy="193.8" r="2.2" fill="#6fcf97" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="1003" cy="193.8" r="2.2" fill="#6fcf97" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="1024" cy="193.8" r="2.2" fill="#6fcf97" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="811.8" cy="358.8" r="2.2" fill="#f2c94c" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="857.5" cy="358.8" r="2.2" fill="#f2c94c" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="903.2" cy="358.8" r="2.2" fill="#f2c94c" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="949" cy="358.8" r="2.2" fill="#f2c94c" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="994.7" cy="358.8" r="2.2" fill="#f2c94c" stroke="#4b5563" stroke-width="0.6"/>
+<circle cx="975.9" cy="292.5" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="937" cy="433.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="975.9" cy="168.7" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="1013.5" cy="535.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="841" cy="433.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="1033" cy="433.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="1013.5" cy="471.3" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="903.5" cy="283" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="985" cy="433.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="903.5" cy="170.6" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<circle cx="889" cy="433.8" r="2.4" fill="#ffffff" stroke="#6b7280" stroke-width="0.8"/>
+<rect x="899.7" y="147.7" width="80" height="152.4" fill="#e7e0f1" stroke="#6a4c93" stroke-width="1.4" rx="1.5"/>
+<rect x="926.1" y="151.4" width="26.7" height="91.4" fill="#cfe6cf" stroke="#2e7d32" stroke-width="1.2" rx="1.2"/>
+<rect x="927.2" y="152.4" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="156.2" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="160.1" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="163.9" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="167.7" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="171.5" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="175.3" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="179.1" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="182.9" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="186.7" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="190.5" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="194.3" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="198.2" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="202" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="205.8" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="209.6" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="213.4" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="217.2" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="221" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="224.8" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="228.6" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="232.4" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="236.3" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="927.2" y="240.1" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="152.4" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="156.2" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="160.1" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="163.9" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="167.7" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="171.5" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="175.3" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="179.1" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="182.9" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="186.7" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="190.5" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="194.3" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="198.2" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="202" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="205.8" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="209.6" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="213.4" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="217.2" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="221" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="224.8" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="228.6" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="232.4" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="236.3" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="950" y="240.1" width="1.7" height="1.7" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<text x="942.9" y="197.1" font-family="system-ui, 'Segoe UI', sans-serif" font-size="10" font-weight="700" fill="#2e7d32" text-anchor="middle" transform="rotate(-90 942.9 197.1)">Teensy 4.1</text>
+<text x="939.7" y="269.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="10" font-weight="700" fill="#6a4c93" text-anchor="middle">adapter</text>
+<text x="939.7" y="282.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9" font-weight="400" fill="#1f2933" text-anchor="middle">firmware 5</text>
+<rect x="800.5" y="465.3" width="225" height="82.5" fill="none" stroke="#6b7280" stroke-width="1" stroke-dasharray="5 3" rx="1.2"/>
+<text x="913" y="502.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9" font-weight="700" fill="#6b7280" text-anchor="middle">analyser slot JA1</text>
+<text x="913" y="515.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8.5" font-weight="400" fill="#6b7280" text-anchor="middle" font-style="italic">empty</text>
+<rect x="805" y="382.8" width="45" height="63" fill="#fbdfcc" stroke="#c2571a" stroke-width="1.2" rx="1.2"/>
+<text x="827.5" y="395.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#c2571a" text-anchor="middle">JV1</text>
+<text x="827.5" y="407.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">female1</text>
+<text x="827.5" y="424.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">Thomas</text>
+<text x="827.5" y="434.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">card</text>
+<rect x="853" y="382.8" width="45" height="63" fill="#fbdfcc" stroke="#c2571a" stroke-width="1.2" rx="1.2"/>
+<text x="875.5" y="395.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#c2571a" text-anchor="middle">JV2</text>
+<text x="875.5" y="407.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">female2</text>
+<text x="875.5" y="424.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">Thomas</text>
+<text x="875.5" y="434.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">card</text>
+<rect x="901" y="382.8" width="45" height="63" fill="#fbdfcc" stroke="#c2571a" stroke-width="1.2" rx="1.2"/>
+<text x="923.5" y="395.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#c2571a" text-anchor="middle">JV3</text>
+<text x="923.5" y="407.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">female3</text>
+<text x="923.5" y="424.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">Thomas</text>
+<text x="923.5" y="434.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">card</text>
+<rect x="949" y="382.8" width="45" height="63" fill="#fbdfcc" stroke="#c2571a" stroke-width="1.2" rx="1.2"/>
+<text x="971.5" y="395.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#c2571a" text-anchor="middle">JV4</text>
+<text x="971.5" y="407.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">male1</text>
+<text x="971.5" y="424.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">Thomas</text>
+<text x="971.5" y="434.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">card</text>
+<rect x="997" y="382.8" width="45" height="63" fill="#fbdfcc" stroke="#c2571a" stroke-width="1.2" rx="1.2"/>
+<text x="1019.5" y="395.8" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace" font-size="9" font-weight="700" fill="#c2571a" text-anchor="middle">JV5</text>
+<text x="1019.5" y="407.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">male2</text>
+<text x="1019.5" y="424.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">Thomas</text>
+<text x="1019.5" y="434.8" font-family="system-ui, 'Segoe UI', sans-serif" font-size="8" font-weight="400" fill="#1f2933" text-anchor="middle">card</text>
+<text x="28" y="635.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="12" font-weight="700" fill="#1f2933" text-anchor="start">WHAT EACH SLOT CAN HOLD</text>
+<text x="28" y="661.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="11" font-weight="700" fill="#1f2933" text-anchor="start">computing slot</text>
+<rect x="50.4" y="674.4" width="5.2" height="1.1" fill="#d5d8dd" stroke="#6b7280" stroke-width="0.8"/>
+<rect x="33" y="671.9" width="6.8" height="3.6" fill="#d5d8dd" stroke="#6b7280" stroke-width="0.8"/>
+<rect x="28" y="675.5" width="29.3" height="55.9" fill="#cdeaeb" stroke="#00838a" stroke-width="1.4" rx="0.6"/>
+<rect x="55.6" y="690.5" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="694.7" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="696.1" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="40.2" y="711.6" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="703.1" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="704.5" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="705.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="707.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="708.7" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="710.1" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="711.5" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="712.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="715.7" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="717.1" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="718.5" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="719.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="721.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="722.7" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="724.1" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="725.5" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="688.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="710.1" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="708.7" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="707.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="705.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="704.5" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="703.1" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="701.7" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="700.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="698.1" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="696.7" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="695.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="693.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="692.5" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="691.1" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="712.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="714.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="715.7" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="717.1" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="718.5" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="719.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="721.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="722.7" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="30.5" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="30.5" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="31.9" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="31.9" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="33.3" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="33.3" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="34.7" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="34.7" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="36.1" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="36.1" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="37.4" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="37.4" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="38.8" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="38.8" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="40.2" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="40.2" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="41.6" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="41.6" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="43" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="43" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="44.4" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="44.4" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="45.8" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="45.8" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="47.2" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="47.2" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="48.6" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="48.6" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="50" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="50" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="51.4" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="51.4" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="689.7" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="697.5" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="698.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="43" y="711.6" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="52.8" y="726.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="52.8" y="728.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="691.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="40.2" y="710.2" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="41.6" y="711.6" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="693.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="43" y="710.2" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="41.6" y="710.2" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="685.5" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="29.1" y="686.9" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<rect x="55.6" y="700.3" width="0.7" height="0.7" fill="#00838a" stroke="none" stroke-width="0"/>
+<text x="42.7" y="745.4" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9.5" font-weight="400" fill="#1f2933" text-anchor="middle">Mega 2560</text>
+<rect x="124" y="675.5" width="29.3" height="55.9" fill="#e7e0f1" stroke="#6a4c93" stroke-width="1.4" rx="0.6"/>
+<rect x="133.7" y="676.8" width="9.8" height="33.5" fill="#cfe6cf" stroke="#2e7d32" stroke-width="1.2" rx="0.4"/>
+<rect x="134.1" y="677.2" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="678.6" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="680" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="681.4" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="682.8" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="684.2" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="685.6" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="687" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="688.4" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="689.8" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="691.2" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="692.6" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="694" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="695.4" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="696.8" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="698.2" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="699.6" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="701" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="702.4" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="703.8" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="705.2" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="706.6" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="708" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="134.1" y="709.4" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="677.2" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="678.6" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="680" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="681.4" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="682.8" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="684.2" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="685.6" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="687" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="688.4" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="689.8" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="691.2" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="692.6" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="694" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="695.4" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="696.8" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="698.2" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="699.6" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="701" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="702.4" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="703.8" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="705.2" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="706.6" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="708" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<rect x="142.4" y="709.4" width="0.6" height="0.6" fill="#2e7d32" stroke="none" stroke-width="0"/>
+<text x="138.7" y="745.4" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9.5" font-weight="400" fill="#1f2933" text-anchor="middle">Teensy 4.1 adapter</text>
+<rect x="220" y="675.5" width="29.3" height="55.9" fill="none" stroke="#6b7280" stroke-width="1" stroke-dasharray="5 3" rx="0.4"/>
+<text x="234.7" y="745.4" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9.5" font-weight="400" fill="#1f2933" text-anchor="middle">empty</text>
+<text x="391" y="661.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="11" font-weight="700" fill="#1f2933" text-anchor="start">analyser slot JA1</text>
+<rect x="391" y="675.5" width="75" height="27.5" fill="#f7e8c9" stroke="#a8741a" stroke-width="1.4" rx="0.5"/>
+<rect x="392.8" y="682.5" width="14.5" height="16" fill="#d6e2f3" stroke="#2f5f9e" stroke-width="1" rx="0.4"/>
+<rect x="407.2" y="680.5" width="14.5" height="16" fill="#d6e2f3" stroke="#2f5f9e" stroke-width="1" rx="0.4"/>
+<rect x="421.8" y="680.5" width="14.5" height="16" fill="#d6e2f3" stroke="#2f5f9e" stroke-width="1" rx="0.4"/>
+<rect x="436.2" y="680.5" width="14.5" height="16" fill="#d6e2f3" stroke="#2f5f9e" stroke-width="1" rx="0.4"/>
+<rect x="450.8" y="680.5" width="14.5" height="16" fill="#d6e2f3" stroke="#2f5f9e" stroke-width="1" rx="0.4"/>
+<text x="428.5" y="717" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9.5" font-weight="400" fill="#1f2933" text-anchor="middle">MSGEQ7 carrier</text>
+<rect x="492" y="675.5" width="75" height="27.5" fill="none" stroke="#6b7280" stroke-width="1" stroke-dasharray="5 3" rx="0.4"/>
+<text x="529.5" y="717" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9.5" font-weight="400" fill="#1f2933" text-anchor="middle">empty</text>
+<text x="754" y="661.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="11" font-weight="700" fill="#1f2933" text-anchor="start">each voice slot, JV1-JV5</text>
+<rect x="754" y="675.5" width="30" height="42" fill="#fbdfcc" stroke="#c2571a" stroke-width="1.2" rx="0.8"/>
+<text x="769" y="731.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9.5" font-weight="400" fill="#1f2933" text-anchor="middle">Thomas card</text>
+<rect x="850" y="675.5" width="30" height="42" fill="#fbdfcc" stroke="#c2571a" stroke-width="1.2" rx="0.8"/>
+<rect x="850" y="675.5" width="30" height="42" fill="url(#revalued)" stroke="none" stroke-width="0" rx="0.8"/>
+<text x="865" y="731.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9.5" font-weight="400" fill="#1f2933" text-anchor="middle">re-valued card</text>
+<rect x="946" y="675.5" width="30" height="42" fill="none" stroke="#6b7280" stroke-width="1" stroke-dasharray="5 3" rx="0.8"/>
+<text x="961" y="731.5" font-family="system-ui, 'Segoe UI', sans-serif" font-size="9.5" font-weight="400" fill="#1f2933" text-anchor="middle">empty</text>
+<text x="28" y="785.4" font-family="system-ui, 'Segoe UI', sans-serif" font-size="10" font-weight="400" fill="#6b7280" text-anchor="start">Change a shield only with the rack supply and the computing USB unplugged (shields, section 10), and record it under main pcb &gt; configuration.</text>
+</svg>

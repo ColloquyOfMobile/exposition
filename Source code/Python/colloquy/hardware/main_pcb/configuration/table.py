@@ -220,6 +220,53 @@ SHIELDS_BACKPLANE: Final = Board(
 
 BOARDS: Final = (ELECTRONIC_BOX, CONTROL_V2, THOMAS_OR_TEENSY, SHIELDS_BACKPLANE)
 
+
+class Step(NamedTuple):
+    """A whole configuration the shields document builds towards.
+
+    `shields` section 0 orders them, and each changes as little as it can
+    from the one before, so naming the step a record matches says more
+    than its seven slots do.
+    """
+
+    name: str
+    says: str
+    fitted: dict[str, str]
+
+
+def _step(computing: str, analyser: str) -> dict[str, str]:
+    fitted = {COMPUTING_SLOT.name: computing, ANALYSER_SLOT.name: analyser}
+    fitted.update({slot.name: THOMAS_CARD for slot in VOICE_SLOTS})
+    return fitted
+
+
+# `shields` section 0's two steps, in its words. The voice cards are
+# Thomas's in both: step 2 plays the Mega's pitches on the Teensy, and
+# re-valuing a card is the step after it.
+SHIELD_STEPS: Final = (
+    Step(
+        "step 1: the Mega",
+        "the v2 board electrically, firmware 4 unmodified - the exhibition "
+        "depends on this step alone",
+        _step(MEGA, MSGEQ7_CARRIER),
+    ),
+    Step(
+        "step 2: the Teensy",
+        "the same voices on the Teensy, and the microphones on the laptop",
+        _step(TEENSY_ADAPTER, EMPTY),
+    ),
+)
+
+
+def step_of(reading: "Reading") -> Step | None:
+    """The documented step a record is, if it is one."""
+    if reading.board is not SHIELDS_BACKPLANE:
+        return None
+    for step in SHIELD_STEPS:
+        if step.fitted == reading.fitted:
+            return step
+    return None
+
 # The one in the rack today. A fresh params.json says this, and so does
 # one written before the configuration was recorded at all.
 DEFAULT_BOARD: Final = ELECTRONIC_BOX.name

@@ -61,6 +61,12 @@ section 12.
 step's test passing again (section 10). Order step 1 first and on its own
 if need be; nothing else is needed to open the exhibition.
 
+![The backplane to scale, three times: its slots empty and named, step 1 with the Mega, step 2 with the Teensy, and what each slot can hold](/static/hardware/shields-configurations.svg)
+
+**Drawn from the boards**: `py export_shields_diagram.py` reads every
+slot, connector and hole out of `CAD/KiCad/shields/`, and the slots and
+their choices are the ones `hardware > main pcb > configuration` records.
+
 ---
 
 ## 1. At a glance
