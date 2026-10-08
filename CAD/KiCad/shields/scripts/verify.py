@@ -44,7 +44,7 @@ def main():
                 'erc_violations':sum(len(sh['violations']) for sh in erc['sheets']),
                 'drc_violations':len(drc['violations']),'unconnected_items':len(drc['unconnected_items']),
                 'copper_layers':board.GetCopperLayerCount(),'tracks_and_vias':len(list(board.GetTracks())),
-                'sha256':{f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(folder.glob('*.kicad_*')) if f.suffix in ['.kicad_sch','.kicad_pcb','.kicad_pro'] and '-placed' not in f.stem}}
+                'sha256':{f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(folder.glob('*.kicad_*')) if f.suffix in ['.kicad_sch','.kicad_pcb','.kicad_pro','.kicad_dru'] and '-placed' not in f.stem}}
         (folder/'reports/parity.json').write_text(json.dumps(result,indent=2)+'\n');summary[name]=result
     back=pads(loaded['backplane']);old=pads(p.LoadBoard(str(BASE/'colloquy-control-v2.kicad_pcb')))
     fixed=['J1','J5','A-J3','B-J4','J2','J6','J7','Extra1','Extra2','Extra3']
@@ -71,7 +71,18 @@ def main():
     for (ref,pin),pad in adapter.items():
         if ref!='JM1':continue
         bp,ap=position(back[('A1',pin)]),position(pad)
-        assert near(bp[0]+ap[0],335.66) and near(bp[1],ap[1]),(pin,'adapter mirror')
+        assert near(bp[0],ap[0]) and near(bp[1],ap[1]),(pin,'front adapter mating')
+    assert next(f for f in loaded['backplane'].GetFootprints() if f.GetReference()=='A1').GetLayer()==p.F_Cu
+    for pin in V2['A1']['pins']:
+        bp,op=position(back[('A1',pin)]),position(old[('A1',pin)])
+        assert near(bp[0]+op[0],335.66) and near(bp[1],op[1]),(pin,'front Mega mirror')
+    for i,(ex,ey) in enumerate(EAGLE_HOLES,1):
+        for name in ['backplane','teensy-adapter']:
+            mount=next(f for f in loaded[name].GetFootprints() if f.GetReference()==f'HM{i}')
+            assert all(near(a,b) for a,b in zip(position(mount),(194.50-ey,53.32+ex)))
+    for t in loaded['backplane'].GetTracks():
+        if t.GetNetname()=='+12V' and not isinstance(t,p.PCB_VIA):
+            assert t.GetLayer() in [p.F_Cu,p.B_Cu] and p.ToMM(t.GetWidth())>=2
     # Confirm exactly one direct passive GND/AGND bond in the whole backplane.
     backdata=json.loads((ROOT/'backplane/circuit.json').read_text())
     bonds=[c['ref'] for c in backdata['components'] if c['ref'].startswith(('R','JP')) and set(c['pins'].values())=={'AGND','GND'}]
@@ -162,7 +173,7 @@ def main():
     assert not any(f.GetReference().startswith(('JI','JO','JC')) for f in carrier.GetFootprints())
     assert not cp[('JA1','20')].GetNetname() and not cp[('JA1','21')].GetNetname()
     summary['interfaces']={'fixed_harness_pinout_and_coordinates':'PASS','v2_connected_Mega_pins':'PASS',
-        'five_voice_mating_pairs':'PASS','analyser_carrier':'PASS electrical/mating coordinates; photo-derived module fit UNVERIFIED','adapter_mirror':'PASS','single_ground_bond':'PASS','no_identification_hardware':'PASS','revised_Teensy_analogue_mapping':'PASS',
+        'five_voice_mating_pairs':'PASS','analyser_carrier':'PASS electrical/mating coordinates; photo-derived module fit UNVERIFIED','front_computing_slot_and_adapter_alignment':'PASS','servo_12V_outer_layers_minimum_2mm':'PASS','single_ground_bond':'PASS','no_identification_hardware':'PASS','revised_Teensy_analogue_mapping':'PASS',
         'direct_microphone_networks':'PASS','MSGEQ7_isolated_from_Teensy':'PASS','MSGEQ7_slot_USB_5V_supply':'PASS','LEDs_and_test_headers':'PASS','THT_voice_pitch_components':'PASS','microphone_mounting_and_ground_pins':'PASS'}
     (ROOT/'VALIDATION.json').write_text(json.dumps(summary,indent=2)+'\n')
     for name,result in summary.items():print(name,result)

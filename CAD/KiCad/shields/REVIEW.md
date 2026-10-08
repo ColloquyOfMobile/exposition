@@ -1,6 +1,6 @@
-# Engineering review — 2026-10-05
+# Engineering review — 2026-10-08
 
-Current basis: SHIELDS.md at 2d9fe1d and MICROPHONE_BOARD.md. These are editable
+Current basis: SHIELDS.md at 79e994b and MICROPHONE_BOARD.md. These are editable
 engineering prototypes; native checks do not constitute fabrication release.
 
 The analyser carrier uses user-authorized photo inference from Thomas's
@@ -41,6 +41,12 @@ only backplane AGND/GND bond. Finished copper, stackup, current/temperature
 rise, EMC, connector height/keying and enclosure fit need qualification.
 Mega mounting coordinates come from Arduino MEGA2560_Rev3e.brd; see
 mechanical.json. Preserve the fixed harness pinout and locations.
+
+The computing slot is now on the front with mirrored contacts/holes. USB and
+power-jack rule areas prohibit pads and vias. +12V uses outer layers only,
+with every trace at least 2mm wide. DRC and the interface checker enforce
+these constraints. HM1-HM4 require <=4mm OD front spacers/posts and rear screw
+heads; wide hex hardware clashes with the header bodies (ASSEMBLY.md).
 
 No hardware was connected; follow SHIELDS.md bring-up instructions. Previous
 component-selection notes for obsolete circuits are archived under obsolete/.

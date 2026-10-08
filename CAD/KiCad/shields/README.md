@@ -1,6 +1,6 @@
 # Colloquy shield PCB set
 
-Updated for SHIELDS.md revision 2d9fe1d and MICROPHONE_BOARD.md (2026-10-05).
+Updated for SHIELDS.md revision 79e994b (2026-10-08) and MICROPHONE_BOARD.md.
 All current KiCad 9 projects and their shared library are in this folder.
 
 | Project | Function | Quantity |
@@ -34,6 +34,15 @@ validated connector positions when regenerating. Historical migration scripts
 are one-time tools, not general rebuild commands. Router files stay in tmp/.
 positions.csv contains SMD-only placements; fit THT parts manually from BOMs
 and assembly views. Filter all populations by their selected BOM.
+
+## Front computing slot and servo supply — 2026-10-08
+
+The 2026-10-08 backplane also puts the computing slot on the DSUB/front face,
+mirrored about x=167.83 mm, with holes matching the unchanged Teensy adapter.
+USB/jack rule areas exclude pads and vias. Computing-slot spacers must be
+round and <=4 mm OD on the front, with screw heads on the rear (ASSEMBLY.md).
++12V is routed at >=2 mm entirely on outer copper, enforced by native DRC
+rules and independent verification.
 
 ## Direct-plug carrier revision — 2026-10-07
 

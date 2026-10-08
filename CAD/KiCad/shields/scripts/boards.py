@@ -122,12 +122,14 @@ def project(folder,name):
     settings['rules'].update(min_clearance=.15,min_track_width=.15,min_copper_edge_clearance=.3,
                              min_via_diameter=.6,min_through_hole_diameter=.3,min_via_annular_width=.15,min_hole_clearance=.25)
     data['net_settings']['classes']=[];data['net_settings']['netclass_patterns']=[]
-    for cls,width in [('Default',.15 if name=='microphone' else .25),('Power',1.5 if name=='backplane' else .5)]:
+    classes=[('Default',.15 if name=='microphone' else .25),('Power',1.5 if name=='backplane' else .5)]
+    if name=='backplane':classes.append(('Servo12V',2.0))
+    for cls,width in classes:
         data['net_settings']['classes'].append(dict(name=cls,clearance=.15 if name=='microphone' else .2,track_width=width,via_diameter=.6,via_drill=.3,
               microvia_diameter=.3,microvia_drill=.1,diff_pair_gap=.2,diff_pair_width=.25,diff_pair_via_gap=.2,
               pcb_color='rgba(0, 0, 0, 0.000)',schematic_color='rgba(0, 0, 0, 0.000)',wire_width=6,bus_width=12,line_style=0))
     for net in ['+5V','+12V']:
-        data['net_settings']['netclass_patterns'].append({'netclass':'Power','pattern':net})
+        data['net_settings']['netclass_patterns'].append({'netclass':'Servo12V' if name=='backplane' and net=='+12V' else 'Power','pattern':net})
     # All severities remain enabled. There are no ERC/DRC blanket exclusions.
     (folder/(name+'.kicad_pro')).write_text(json.dumps(data,indent=2)+'\n')
 
@@ -178,6 +180,9 @@ def main(only=None):
             if fpname.startswith('Socket_') or (name=='teensy-adapter' and ref.startswith('CM')):fp.Flip(fp.GetPosition(),True)
             if ref!='JM1':
                 x,y,angle=places[ref];fp.SetOrientationDegrees(angle);fp.SetPosition(xy(x,y))
+            if name=='backplane' and ref=='A1':
+                from front_slot import mirror_mega
+                mirror_mega(fp);fpname='Mega_Front_Mirrored'
             path=p.KIID_PATH()
             for u in (c['sheet_path'].strip('/')+'/'+c['uuid']).split('/'):path.push_back(p.KIID(u))
             fp.SetPath(path)
@@ -195,6 +200,8 @@ def main(only=None):
             fp.SetFPID(p.LIB_ID('Shields',localname));c['footprint']='Shields:'+localname
             if c.get('assembly')=='DNP':fp.SetDNP(True)
         if name=='backplane':
+            from front_slot import housing_rules
+            housing_rules(board)
             text(board,'COLLOQUY / SHIELDS / A',104,179,1.4)
             text(board,'MIC DIRECT / TEENSY - EMPTY JA1',119,184,1)
             text(board,'B-J4 - NO POWER',190,326,1)

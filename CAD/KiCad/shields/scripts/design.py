@@ -88,6 +88,7 @@ def backplane():
         if ref.startswith('TP'): p['footprint']=TP
         if ref=='C2': p['footprint']=C
         if ref=='C1': p.update(footprint='Capacitor_SMD:CP_Elec_10x10.5',value='470uF 25V',mpn='EEE-FK1E471P')
+        if ref=='A1':p['footprint']='Shields:Mega_Front_Mirrored'
         d.parts[ref]=p
     for i,b in enumerate(BODY):
         d.parts['A1']['pins'][f'D{26+i}']=b+'/mic direct'

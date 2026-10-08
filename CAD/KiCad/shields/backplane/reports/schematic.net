@@ -1,7 +1,7 @@
 (export (version "E")
   (design
     (source "C:\\workspace\\workspace2\\Colloquy\\exposition\\CAD\\KiCad\\shields\\backplane\\backplane.kicad_sch")
-    (date "2026-10-06T14:45:26+0200")
+    (date "2026-10-08T11:42:20+0200")
     (tool "Eeschema 9.0.7")
     (textvar (name "REVISION") "A-prototype")
     (sheet (number "1") (name "/") (tstamps "/")
@@ -375,10 +375,10 @@
   (components
     (comp (ref "A1")
       (value "Arduino Mega 2560")
-      (footprint "Shields:Arduino_Mega2560_R3_Shield")
+      (footprint "Shields:Mega_Front_Mirrored")
       (description "carried as a shield, as now")
       (fields
-        (field (name "Footprint") "Shields:Arduino_Mega2560_R3_Shield")
+        (field (name "Footprint") "Shields:Mega_Front_Mirrored")
         (field (name "Datasheet"))
         (field (name "Description") "carried as a shield, as now"))
       (libsource (lib "Colloquy") (part "A1") (description "carried as a shield, as now"))
@@ -2125,7 +2125,7 @@
       (fields
         (field (name "Reference") "A")
         (field (name "Value") "Arduino Mega 2560")
-        (field (name "Footprint") "Shields:Arduino_Mega2560_R3_Shield")
+        (field (name "Footprint") "Shields:Mega_Front_Mirrored")
         (field (name "Datasheet"))
         (field (name "Description") "carried as a shield, as now"))
       (pins

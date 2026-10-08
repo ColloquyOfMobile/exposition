@@ -28,6 +28,19 @@ are on B.Cu; microphone components are all on F.Cu. Use insulated M3 standoffs
 for shield retention. Computing USB and rack power switch together; unplug
 both before swapping cards. Verify numbering and rail isolation before power.
 
+The Mega or Teensy adapter goes on the DSUB/front face. Mega components and
+female sockets face the backplane; the Teensy adapter's sockets face the
+backplane and its Teensy faces outward. The male/female plastic stack is
+nominally 11 mm (2.5 + 8.5 mm); verify the selected connectors when choosing
+post length. The USB end remains at the top edge.
+
+For HM1-HM4 use M3 posts/round spacers **no more than 4 mm outside diameter
+on the front**; fit screw heads on the back. Standard wide hex standoffs or
+front washers conflict with the nearby headers at HM2/HM3. The custom
+mounting footprints retain 3.2 mm holes, a 4.1 mm front courtyard and 6.9 mm
+rear screw-head courtyard. Confirm hardware fit during the enclosure dry fit.
+Do not place pads, vias or test pins beneath the Mega USB/power housings.
+
 Exhibition build: backplane, five Thomas cards, Mega and measured DFRobot
 carrier. Teensy follows with the analyser slot empty. The carrier uses photo-derived module mounts; use its 1:1 template to
 confirm fit. Module 0 is rotated 180 degrees. Fit the converted modules to the carrier sockets using its README pin table.

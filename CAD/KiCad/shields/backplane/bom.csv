@@ -1,5 +1,5 @@
 Reference,Value,Footprint,MPN,Assembly
-A1,Arduino Mega 2560,Shields:Arduino_Mega2560_R3_Shield,,fit
+A1,Arduino Mega 2560,Shields:Mega_Front_Mirrored,,fit
 M1,U2D2,Shields:u2d2_mounting,,fit
 J2,DC jack,Shields:PJ-082BH_jack_10A,,fit
 J6,screw bridge,Shields:screw_brigde,,fit

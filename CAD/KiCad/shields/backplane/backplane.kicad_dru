@@ -1,0 +1,3 @@
+(version 1)
+(rule "Servo12V width" (condition "A.NetName == '+12V'") (constraint track_width (min 2mm)))
+(rule "Servo12V outer copper only" (condition "A.NetName == '+12V' && (A.Layer == 'In1.Cu' || A.Layer == 'In2.Cu')") (constraint disallow track))

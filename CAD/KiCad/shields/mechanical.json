@@ -20,7 +20,7 @@
     ]
   ],
   "drill_mm": 3.2,
-  "backplane_transform": "x=141.16+eagle_y; y=53.32+eagle_x",
+  "backplane_transform": "x=194.50-eagle_y; y=53.32+eagle_x",
   "adapter_transform": "x=194.50-eagle_y; y=53.32+eagle_x",
   "voice_card_mm": [
     30,

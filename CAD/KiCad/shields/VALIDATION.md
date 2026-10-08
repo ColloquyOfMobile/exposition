@@ -1,4 +1,4 @@
-# Native KiCad validation — 2026-10-07
+# Native KiCad validation — 2026-10-08
 
 KiCad 9.0.7 reports zero ERC violations, zero DRC violations and zero
 unconnected items on all five current routed boards. No new DRC exclusions
@@ -17,7 +17,7 @@ remains unverified because its mounts were inferred from photographs.
 Independent manifest / native schematic-netlist / PCB-pad parity covers
 781 connected pins with zero differences. Interface checks preserve v2
 harness positions/pinout, existing Mega pins, five voice mating pairs,
-mirrored adapter contacts, direct microphone networks and the single
+front-mounted mirrored Mega contacts, unchanged adapter alignment, direct microphone networks and the single
 AGND/GND bond. Header counts, eight LED polarities, THT pitch-component
 spacing, microphone ground pins and mounting-hole/keepout geometry pass.
 The carrier's JA1 and retention coordinates match the backplane. All five
@@ -26,8 +26,15 @@ geometry pass independent checks. The carrier now requires modified modules:
 remove R4 and jumper L to OUT; there are no module-to-carrier cables.
 Actual module fit is photo-derived and remains a physical check.
 
+The updated backplane also passes native housing pad/via keepouts and +12V
+outer-layer/2mm-minimum rules. Independent checks compare every Mega contact
+with the mirrored v2 coordinates and all four computing mounts with the
+unchanged adapter. The slim-front mounting footprints require <=4mm OD
+front posts/spacers and rear screw heads; hardware fit remains a dry-fit check.
+
 The focused specification tests pass: 36 tests (test_shields.py and
 test_microphone_board.py). No application or firmware code was changed.
+The full repository pytest suite also passes: 1,597 tests on 2026-10-08.
 Front/back assembly views were inspected for voice/microphone layouts;
 the carrier front assembly drawing is also inspected.
 All operating labels remain on silkscreen; some small component references

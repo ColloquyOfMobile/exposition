@@ -1003,6 +1003,8 @@ the cards and the backplane are the same for both processors.
 - `next pcb` section 3's harness measurement and section 5's amplifier
   rail; nothing here depends on either.
 - The photosensor loads, still v2's provisional 10 K.
-- The backplane in `CAD/KiCad/shields/` still carries the Mega
-  underneath and +12 V on its inner layers; both wait for the board to be
-  regenerated and re-routed (2b, 9). The adapter needs no change.
+- The backplane in `CAD/KiCad/shields/` was updated and re-routed on
+  2026-10-08: mirrored front computing slot and mounts, +12 V on outer
+  copper at >=2 mm. The adapter is unchanged. Computing-slot hardware
+  needs <=4 mm OD round spacers/posts on the front and screw heads on the
+  rear to clear the nearby headers; see the PCB assembly notes.

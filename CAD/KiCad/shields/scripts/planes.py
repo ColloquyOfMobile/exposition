@@ -24,6 +24,7 @@ def main(only=None):
         if not path.exists():continue
         board=p.LoadBoard(str(path));old=list(board.Zones())
         for z in old:
+            if z.GetIsRuleArea():continue
             if not z.GetZoneName().startswith('SH_'):raise RuntimeError('Unrecognized zone')
             board.Remove(z)
         bounds=board.GetBoardEdgesBoundingBox()

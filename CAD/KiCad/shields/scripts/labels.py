@@ -27,9 +27,9 @@ def main(only=None):
             named.add(ref)
             f=refs[ref];x,y=p.ToMM(f.GetPosition());label(b,value,x+dx,y+dy,size or (1 if name in ['backplane','teensy-adapter'] else .8))
         if name=='backplane':
-            label(b,'COLLOQUY - SHIELD BACKPLANE - REV A',145,57,1.4)
+            label(b,'COLLOQUY - SHIELD BACKPLANE - REV A',105,174,1.4)
             label(b,'POWER RACK AND COMPUTING USB TOGETHER',144,190,1.2)
-            label(b,'CHANGE A SHIELD ONLY WITH BOTH UNPLUGGED',144,194,1.1)
+            label(b,'CHANGE A SHIELD ONLY WITH BOTH UNPLUGGED',144,184,1.1)
             rect(b,110,187,68,9,p.F_SilkS)
             label(b,'T = TONE / L = LINE',145,199,1)
             for i,(body,mega,gpio) in enumerate(zip(BODY,[6,46,10,11,5],[2,4,5,6,28]),1):
@@ -54,8 +54,8 @@ def main(only=None):
             at('JP1','JP1 - ONLY AGND-GND BOND',0,6)
             at('TP20','STROBE',8,0);at('TP21','RESET',8,0)
             label(b,'B-J4 - NO POWER',193,329,1.2)
-            label(b,'COMPUTING SLOT\nMEGA 2560 OR TEENSY ADAPTER',167,100,1.2,True)
-            label(b,'USB END ^',168,62,1.2,True)
+            label(b,'COMPUTING SLOT\nMEGA 2560 OR TEENSY ADAPTER\nMEGA COMPONENT SIDE DOWN',167,100,1.2)
+            label(b,'USB END ^',168,63,1.2)
             for ref in refs:
                 if ref.startswith('HM'):at(ref,'M3',0,-3)
         elif name=='teensy-adapter':

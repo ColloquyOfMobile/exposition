@@ -2,7 +2,7 @@
 (symbol "A1" (pin_names (offset 1.27)) (exclude_from_sim no) (in_bom yes) (on_board yes)
 (property "Reference" "A" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
 (property "Value" "Arduino Mega 2560" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
-(property "Footprint" "Shields:Arduino_Mega2560_R3_Shield" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
+(property "Footprint" "Shields:Mega_Front_Mirrored" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Datasheet" "" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Description" "carried as a shield, as now" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (symbol "A1_1_1"
