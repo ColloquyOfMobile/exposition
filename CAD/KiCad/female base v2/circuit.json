@@ -1,0 +1,445 @@
+{
+  "name": "female-base-v2",
+  "components": [
+    {
+      "ref": "J4",
+      "value": "photosensor",
+      "footprint": "Body:J4_original",
+      "pins": {
+        "1": "GND",
+        "2": "5V",
+        "3": "photo sensor output"
+      },
+      "description": "Original harness pin order retained. J6 now carries the local amplifier output.",
+      "pin_names": {
+        "1": "1",
+        "2": "2",
+        "3": "3"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive"
+      },
+      "include_bom": true,
+      "datasheet": "",
+      "uuid": "0255469a-9d4a-5c64-bd21-f8eb18f46878",
+      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
+    },
+    {
+      "ref": "J2",
+      "value": "dxl mirror",
+      "footprint": "Body:J2_original",
+      "pins": {
+        "1": "GND",
+        "2": "12V",
+        "3": "dynamixel data"
+      },
+      "description": "Original harness pin order retained. J6 now carries the local amplifier output.",
+      "pin_names": {
+        "1": "1",
+        "2": "2",
+        "3": "3"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive"
+      },
+      "include_bom": true,
+      "datasheet": "",
+      "uuid": "8fec6978-a2e3-51c6-a3c1-4a496c89ae77",
+      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
+    },
+    {
+      "ref": "J7",
+      "value": "DA15_Plug_MountingHoles",
+      "footprint": "Body:J7_original",
+      "pins": {
+        "0": "GND",
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": "AUDIO_RETURN",
+        "5": "photo sensor output",
+        "6": "microphone output",
+        "7": "12V",
+        "8": "GND",
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": "LINE_IN",
+        "13": "neopixel input",
+        "14": "dynamixel data",
+        "15": "5V"
+      },
+      "description": "Original harness pin order retained. J6 now carries the local amplifier output.",
+      "pin_names": {
+        "0": "0",
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6",
+        "7": "7",
+        "8": "8",
+        "9": "9",
+        "10": "10",
+        "11": "11",
+        "12": "12",
+        "13": "13",
+        "14": "14",
+        "15": "15"
+      },
+      "pin_types": {
+        "0": "passive",
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive",
+        "7": "passive",
+        "8": "passive",
+        "9": "passive",
+        "10": "passive",
+        "11": "passive",
+        "12": "passive",
+        "13": "passive",
+        "14": "passive",
+        "15": "passive"
+      },
+      "include_bom": true,
+      "datasheet": "",
+      "uuid": "36a2740d-80d2-5166-b897-4ad8d6ea9254",
+      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
+    },
+    {
+      "ref": "J3",
+      "value": "microphone",
+      "footprint": "Body:J3_original",
+      "pins": {
+        "1": "GND",
+        "2": "5V",
+        "3": "microphone output"
+      },
+      "description": "Original harness pin order retained. J6 now carries the local amplifier output.",
+      "pin_names": {
+        "1": "1",
+        "2": "2",
+        "3": "3"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive"
+      },
+      "include_bom": true,
+      "datasheet": "",
+      "uuid": "6ee58782-f0ff-598c-a812-8e96808be0b1",
+      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
+    },
+    {
+      "ref": "J5",
+      "value": "neopixel",
+      "footprint": "Body:J5_original",
+      "pins": {
+        "1": "GND",
+        "2": "5V",
+        "3": "neopixel input"
+      },
+      "description": "Original harness pin order retained. J6 now carries the local amplifier output.",
+      "pin_names": {
+        "1": "1",
+        "2": "2",
+        "3": "3"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive"
+      },
+      "include_bom": true,
+      "datasheet": "",
+      "uuid": "13c4232e-789b-5428-be69-2a6e52d114c0",
+      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
+    },
+    {
+      "ref": "J6",
+      "value": "Speaker",
+      "footprint": "Body:J6_original",
+      "pins": {
+        "1": "AMP_OUT_P",
+        "2": "AMP_OUT_N"
+      },
+      "description": "Original harness pin order retained. J6 now carries the local amplifier output.",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "include_bom": true,
+      "datasheet": "",
+      "uuid": "57a0eb1e-b870-5c17-a430-98423fced943",
+      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
+    },
+    {
+      "ref": "JA1",
+      "value": "GF1002 wire connections",
+      "footprint": "Body:GF1002_WirePads_2x03",
+      "pins": {
+        "1": "5V",
+        "2": "GND",
+        "3": "AMP_INPUT",
+        "4": "AUDIO_RETURN",
+        "5": "AMP_OUT_P",
+        "6": "AMP_OUT_N"
+      },
+      "description": "Short individually identified wires to module VDD, supply GND, Audio, input GND, ROUT+, ROUT-. Pad order is carrier-defined; verify module contacts.",
+      "pin_names": {
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive"
+      },
+      "include_bom": true,
+      "datasheet": "",
+      "uuid": "29bcba0b-d69c-5e02-9d74-7694cf41aa27",
+      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
+    },
+    {
+      "ref": "R1",
+      "value": "22K",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "pins": {
+        "1": "LINE_IN",
+        "2": "AMP_INPUT"
+      },
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "include_bom": true,
+      "datasheet": "",
+      "uuid": "5ab10795-3a3c-5641-b55e-4cc2c59f2f77",
+      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
+    },
+    {
+      "ref": "R2",
+      "value": "3K3",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "pins": {
+        "1": "AMP_INPUT",
+        "2": "AUDIO_RETURN"
+      },
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "include_bom": true,
+      "datasheet": "",
+      "uuid": "2120866e-90b8-5197-8f97-ef8719d463f7",
+      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
+    },
+    {
+      "ref": "C1",
+      "value": "220uF 10V / provisional",
+      "footprint": "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm",
+      "pins": {
+        "1": "5V",
+        "2": "GND"
+      },
+      "description": "Provisional local reservoir; verify actual amplifier transients and rail sag before release.",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "include_bom": true,
+      "datasheet": "",
+      "uuid": "0f99035d-8755-51af-9ad5-3011f797641b",
+      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
+    },
+    {
+      "ref": "C2",
+      "value": "100nF",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "pins": {
+        "1": "5V",
+        "2": "GND"
+      },
+      "description": "",
+      "pin_names": {
+        "1": "1",
+        "2": "2"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive"
+      },
+      "include_bom": true,
+      "datasheet": "",
+      "uuid": "d9af44db-f758-5a07-b5f3-38dc8d1b8fec",
+      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
+    },
+    {
+      "ref": "M1",
+      "value": "GF1002 direct module",
+      "footprint": "Body:GF1002_Module_Direct",
+      "pins": {},
+      "description": "No perfboard. Photo-derived 20x30mm module, held by two insulating edge clamps; 3mm underside clearance.",
+      "pin_names": {},
+      "pin_types": {},
+      "include_bom": true,
+      "datasheet": "",
+      "uuid": "c21ea9ec-dc20-55da-85e6-9a4b91528e63",
+      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
+    },
+    {
+      "ref": "H1",
+      "value": "M2 insulating clamp",
+      "footprint": "Body:GF1002_Clamp_Left",
+      "pins": {},
+      "description": "Provisional edge clamp. No drilling of amplifier module; check actual fit.",
+      "pin_names": {},
+      "pin_types": {},
+      "include_bom": false,
+      "datasheet": "",
+      "uuid": "b9fc50fb-c234-5d2d-b5e0-b2b71a7a9cb3",
+      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
+    },
+    {
+      "ref": "H2",
+      "value": "M2 insulating clamp",
+      "footprint": "Body:GF1002_Clamp_Right",
+      "pins": {},
+      "description": "Provisional edge clamp. No drilling of amplifier module; check actual fit.",
+      "pin_names": {},
+      "pin_types": {},
+      "include_bom": false,
+      "datasheet": "",
+      "uuid": "55bc3395-e8f4-57d9-8e3e-524fbe9c85ac",
+      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
+    }
+  ],
+  "positions": {
+    "J7": [
+      40.61,
+      34.84,
+      180
+    ],
+    "J2": [
+      62,
+      47,
+      0
+    ],
+    "J4": [
+      62,
+      60,
+      0
+    ],
+    "J5": [
+      62,
+      73,
+      0
+    ],
+    "J3": [
+      62,
+      86,
+      0
+    ],
+    "J6": [
+      63,
+      95,
+      0
+    ],
+    "JA1": [
+      31,
+      91,
+      0
+    ],
+    "R1": [
+      56,
+      81,
+      90
+    ],
+    "R2": [
+      56,
+      84,
+      90
+    ],
+    "C1": [
+      41,
+      91,
+      0
+    ],
+    "C2": [
+      38,
+      88,
+      0
+    ],
+    "M1": [
+      31,
+      55,
+      0
+    ],
+    "H1": [
+      28.5,
+      74.5,
+      0
+    ],
+    "H2": [
+      53.5,
+      74.5,
+      0
+    ]
+  },
+  "module_origin_mm": [
+    31,
+    55
+  ],
+  "clamp_centres_mm": [
+    [
+      28.5,
+      74.5
+    ],
+    [
+      53.5,
+      74.5
+    ]
+  ],
+  "module_underside_gap_mm": 3,
+  "module_dimensions_mm": [
+    20,
+    30
+  ],
+  "module_dimensions_verified": false,
+  "original": "female base"
+}

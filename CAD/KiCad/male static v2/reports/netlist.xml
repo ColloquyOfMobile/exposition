@@ -1,0 +1,692 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="E">
+  <design>
+    <source>C:\workspace\workspace2\Colloquy\exposition\CAD\KiCad\male static v2\male-static-v2.kicad_sch</source>
+    <date>2026-10-09T08:40:40+0200</date>
+    <tool>Eeschema 9.0.7</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title>Colloquy male static — directly mounted GF1002</title>
+        <company>Colloquy of Mobiles</company>
+        <rev>B-direct-amplifier</rev>
+        <date>2026-10-09</date>
+        <source>male-static-v2.kicad_sch</source>
+        <comment number="1" value="Prototype: verify harness polarity and sensor values before connection"/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="C1">
+      <value>220uF 10V / provisional</value>
+      <footprint>Capacitor_THT:CP_Radial_D6.3mm_P2.50mm</footprint>
+      <description>Provisional local reservoir; verify actual amplifier transients and rail sag before release.</description>
+      <fields>
+        <field name="Footprint">Capacitor_THT:CP_Radial_D6.3mm_P2.50mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional local reservoir; verify actual amplifier transients and rail sag before release.</field>
+      </fields>
+      <libsource lib="Colloquy" part="C1" description="Provisional local reservoir; verify actual amplifier transients and rail sag before release."/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>5319beff-ea77-5afe-ac05-24871434d4aa</tstamps>
+    </comp>
+    <comp ref="C2">
+      <value>100nF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="C2" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>f706564a-1e53-505f-a083-eacda3a444e4</tstamps>
+    </comp>
+    <comp ref="H1">
+      <value>M2 insulating clamp</value>
+      <footprint>Body:GF1002_Clamp_Left</footprint>
+      <description>Provisional edge clamp. No drilling of amplifier module; check actual fit.</description>
+      <fields>
+        <field name="Footprint">Body:GF1002_Clamp_Left</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional edge clamp. No drilling of amplifier module; check actual fit.</field>
+      </fields>
+      <libsource lib="Colloquy" part="H1" description="Provisional edge clamp. No drilling of amplifier module; check actual fit."/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>e16d62c1-555f-5196-8323-181bdb886491</tstamps>
+    </comp>
+    <comp ref="H2">
+      <value>M2 insulating clamp</value>
+      <footprint>Body:GF1002_Clamp_Right</footprint>
+      <description>Provisional edge clamp. No drilling of amplifier module; check actual fit.</description>
+      <fields>
+        <field name="Footprint">Body:GF1002_Clamp_Right</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional edge clamp. No drilling of amplifier module; check actual fit.</field>
+      </fields>
+      <libsource lib="Colloquy" part="H2" description="Provisional edge clamp. No drilling of amplifier module; check actual fit."/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>86f3b0a0-c2cc-5e81-9c34-ec1a07fd890f</tstamps>
+    </comp>
+    <comp ref="J1">
+      <value>photosensor</value>
+      <footprint>Body:J1_original</footprint>
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Footprint">Body:J1_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <libsource lib="Colloquy" part="J1" description="Original harness pin order retained. J6 now carries the local amplifier output."/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>81626cc2-9614-595c-ba29-6ac652b1871e</tstamps>
+    </comp>
+    <comp ref="J2">
+      <value>dxl male</value>
+      <footprint>Body:J2_original</footprint>
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Footprint">Body:J2_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <libsource lib="Colloquy" part="J2" description="Original harness pin order retained. J6 now carries the local amplifier output."/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>c116c61b-fa07-5d98-83fd-edc8d02cc438</tstamps>
+    </comp>
+    <comp ref="J3">
+      <value>microphone</value>
+      <footprint>Body:J3_original</footprint>
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Footprint">Body:J3_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <libsource lib="Colloquy" part="J3" description="Original harness pin order retained. J6 now carries the local amplifier output."/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>fb62813c-6b2c-5419-b21d-f6585bcb2e22</tstamps>
+    </comp>
+    <comp ref="J4">
+      <value>photosensor</value>
+      <footprint>Body:J4_original</footprint>
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Footprint">Body:J4_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <libsource lib="Colloquy" part="J4" description="Original harness pin order retained. J6 now carries the local amplifier output."/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>ecb9ae79-d409-5e6d-b72a-fd4e1f887911</tstamps>
+    </comp>
+    <comp ref="J5">
+      <value>body neopixel</value>
+      <footprint>Body:J5_original</footprint>
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Footprint">Body:J5_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <libsource lib="Colloquy" part="J5" description="Original harness pin order retained. J6 now carries the local amplifier output."/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>37c163a9-a413-593f-8357-ec3454b0cb1f</tstamps>
+    </comp>
+    <comp ref="J6">
+      <value>Speaker</value>
+      <footprint>Body:J6_original</footprint>
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Footprint">Body:J6_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <libsource lib="Colloquy" part="J6" description="Original harness pin order retained. J6 now carries the local amplifier output."/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>55538f1a-5fb7-52ec-b87d-17bacaa18da6</tstamps>
+    </comp>
+    <comp ref="J7">
+      <value>DA15_Plug_MountingHoles</value>
+      <footprint>Body:J7_original</footprint>
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Footprint">Body:J7_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <libsource lib="Colloquy" part="J7" description="Original harness pin order retained. J6 now carries the local amplifier output."/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b0890eaa-0d87-579d-b691-75cd1dc62e55</tstamps>
+    </comp>
+    <comp ref="J8">
+      <value>photosensor</value>
+      <footprint>Body:J8_original</footprint>
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Footprint">Body:J8_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <libsource lib="Colloquy" part="J8" description="Original harness pin order retained. J6 now carries the local amplifier output."/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>c77e04ad-697c-5179-aca1-9853708835d4</tstamps>
+    </comp>
+    <comp ref="J9">
+      <value>photosensor</value>
+      <footprint>Body:J9_original</footprint>
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Footprint">Body:J9_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <libsource lib="Colloquy" part="J9" description="Original harness pin order retained. J6 now carries the local amplifier output."/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>24c03b3e-83b8-5192-9121-dbfe5c7228d1</tstamps>
+    </comp>
+    <comp ref="J10">
+      <value>State LED</value>
+      <footprint>Body:J10_original</footprint>
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Footprint">Body:J10_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <libsource lib="Colloquy" part="J10" description="Original harness pin order retained. J6 now carries the local amplifier output."/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>2bc88b75-cdc0-5ba3-ae2c-f088e832024c</tstamps>
+    </comp>
+    <comp ref="J11">
+      <value>bar neopixel</value>
+      <footprint>Body:J11_original</footprint>
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Footprint">Body:J11_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <libsource lib="Colloquy" part="J11" description="Original harness pin order retained. J6 now carries the local amplifier output."/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>d593d7c9-fe4e-5bbd-80c1-d72e9cc394ee</tstamps>
+    </comp>
+    <comp ref="JA1">
+      <value>GF1002 wire connections</value>
+      <footprint>Body:GF1002_WirePads_2x03</footprint>
+      <description>Short individually identified wires to module VDD, supply GND, Audio, input GND, ROUT+, ROUT-. Pad order is carrier-defined; verify module contacts.</description>
+      <fields>
+        <field name="Footprint">Body:GF1002_WirePads_2x03</field>
+        <field name="Datasheet"/>
+        <field name="Description">Short individually identified wires to module VDD, supply GND, Audio, input GND, ROUT+, ROUT-. Pad order is carrier-defined; verify module contacts.</field>
+      </fields>
+      <libsource lib="Colloquy" part="JA1" description="Short individually identified wires to module VDD, supply GND, Audio, input GND, ROUT+, ROUT-. Pad order is carrier-defined; verify module contacts."/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>e4d2f734-dad4-50da-842e-7736ae263c54</tstamps>
+    </comp>
+    <comp ref="M1">
+      <value>GF1002 direct module</value>
+      <footprint>Body:GF1002_Module_Direct</footprint>
+      <description>No perfboard. Photo-derived 20x30mm module, held by two insulating edge clamps; 3mm underside clearance.</description>
+      <fields>
+        <field name="Footprint">Body:GF1002_Module_Direct</field>
+        <field name="Datasheet"/>
+        <field name="Description">No perfboard. Photo-derived 20x30mm module, held by two insulating edge clamps; 3mm underside clearance.</field>
+      </fields>
+      <libsource lib="Colloquy" part="M1" description="No perfboard. Photo-derived 20x30mm module, held by two insulating edge clamps; 3mm underside clearance."/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>0929ecd0-7a66-5b07-b29e-74fdedc40d71</tstamps>
+    </comp>
+    <comp ref="R1">
+      <value>22K</value>
+      <footprint>Resistor_SMD:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="R1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>8cf6ff78-7af3-5815-a63e-e38d3f2757f0</tstamps>
+    </comp>
+    <comp ref="R2">
+      <value>3K3</value>
+      <footprint>Resistor_SMD:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="R2" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>c3d7991b-b602-5a29-9308-ac8653b92e2f</tstamps>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="Colloquy" part="C1">
+      <description>Provisional local reservoir; verify actual amplifier transients and rail sag before release.</description>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">220uF 10V / provisional</field>
+        <field name="Footprint">Capacitor_THT:CP_Radial_D6.3mm_P2.50mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional local reservoir; verify actual amplifier transients and rail sag before release.</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="C2">
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">100nF</field>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="H1">
+      <description>Provisional edge clamp. No drilling of amplifier module; check actual fit.</description>
+      <fields>
+        <field name="Reference">H</field>
+        <field name="Value">M2 insulating clamp</field>
+        <field name="Footprint">Body:GF1002_Clamp_Left</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional edge clamp. No drilling of amplifier module; check actual fit.</field>
+      </fields>
+    </libpart>
+    <libpart lib="Colloquy" part="H2">
+      <description>Provisional edge clamp. No drilling of amplifier module; check actual fit.</description>
+      <fields>
+        <field name="Reference">H</field>
+        <field name="Value">M2 insulating clamp</field>
+        <field name="Footprint">Body:GF1002_Clamp_Right</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional edge clamp. No drilling of amplifier module; check actual fit.</field>
+      </fields>
+    </libpart>
+    <libpart lib="Colloquy" part="J1">
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">photosensor</field>
+        <field name="Footprint">Body:J1_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="J10">
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">State LED</field>
+        <field name="Footprint">Body:J10_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="J11">
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">bar neopixel</field>
+        <field name="Footprint">Body:J11_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="J2">
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">dxl male</field>
+        <field name="Footprint">Body:J2_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="J3">
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">microphone</field>
+        <field name="Footprint">Body:J3_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="J4">
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">photosensor</field>
+        <field name="Footprint">Body:J4_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="J5">
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">body neopixel</field>
+        <field name="Footprint">Body:J5_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="J6">
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Speaker</field>
+        <field name="Footprint">Body:J6_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="J7">
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">DA15_Plug_MountingHoles</field>
+        <field name="Footprint">Body:J7_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <pins>
+        <pin num="0" name="0" type="passive"/>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+        <pin num="4" name="4" type="passive"/>
+        <pin num="5" name="5" type="passive"/>
+        <pin num="6" name="6" type="passive"/>
+        <pin num="7" name="7" type="passive"/>
+        <pin num="8" name="8" type="passive"/>
+        <pin num="9" name="9" type="passive"/>
+        <pin num="10" name="10" type="passive"/>
+        <pin num="11" name="11" type="passive"/>
+        <pin num="12" name="12" type="passive"/>
+        <pin num="13" name="13" type="passive"/>
+        <pin num="14" name="14" type="passive"/>
+        <pin num="15" name="15" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="J8">
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">photosensor</field>
+        <field name="Footprint">Body:J8_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="J9">
+      <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">photosensor</field>
+        <field name="Footprint">Body:J9_original</field>
+        <field name="Datasheet"/>
+        <field name="Description">Original harness pin order retained. J6 now carries the local amplifier output.</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="JA1">
+      <description>Short individually identified wires to module VDD, supply GND, Audio, input GND, ROUT+, ROUT-. Pad order is carrier-defined; verify module contacts.</description>
+      <fields>
+        <field name="Reference">JA</field>
+        <field name="Value">GF1002 wire connections</field>
+        <field name="Footprint">Body:GF1002_WirePads_2x03</field>
+        <field name="Datasheet"/>
+        <field name="Description">Short individually identified wires to module VDD, supply GND, Audio, input GND, ROUT+, ROUT-. Pad order is carrier-defined; verify module contacts.</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+        <pin num="4" name="4" type="passive"/>
+        <pin num="5" name="5" type="passive"/>
+        <pin num="6" name="6" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="M1">
+      <description>No perfboard. Photo-derived 20x30mm module, held by two insulating edge clamps; 3mm underside clearance.</description>
+      <fields>
+        <field name="Reference">M</field>
+        <field name="Value">GF1002 direct module</field>
+        <field name="Footprint">Body:GF1002_Module_Direct</field>
+        <field name="Datasheet"/>
+        <field name="Description">No perfboard. Photo-derived 20x30mm module, held by two insulating edge clamps; 3mm underside clearance.</field>
+      </fields>
+    </libpart>
+    <libpart lib="Colloquy" part="R1">
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">22K</field>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="R2">
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">3K3</field>
+        <field name="Footprint">Resistor_SMD:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="Colloquy">
+      <uri>C:\workspace\workspace2\Colloquy\exposition\CAD\KiCad\male static v2/Colloquy.kicad_sym</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="5V" class="Default">
+      <node ref="C1" pin="1" pintype="passive"/>
+      <node ref="C2" pin="1" pintype="passive"/>
+      <node ref="J1" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="J11" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="J3" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="J4" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="J5" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="J7" pin="9" pinfunction="9" pintype="passive"/>
+      <node ref="J8" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="J9" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="JA1" pin="1" pinfunction="1" pintype="passive"/>
+    </net>
+    <net code="2" name="12V" class="Default">
+      <node ref="J2" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="J7" pin="2" pinfunction="2" pintype="passive"/>
+    </net>
+    <net code="3" name="AMP_INPUT" class="Default">
+      <node ref="JA1" pin="3" pinfunction="3" pintype="passive"/>
+      <node ref="R1" pin="2" pintype="passive"/>
+      <node ref="R2" pin="1" pintype="passive"/>
+    </net>
+    <net code="4" name="AMP_OUT_N" class="Power">
+      <node ref="J6" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="JA1" pin="6" pinfunction="6" pintype="passive"/>
+    </net>
+    <net code="5" name="AMP_OUT_P" class="Power">
+      <node ref="J6" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="JA1" pin="5" pinfunction="5" pintype="passive"/>
+    </net>
+    <net code="6" name="AUDIO_RETURN" class="Default">
+      <node ref="J7" pin="7" pinfunction="7" pintype="passive"/>
+      <node ref="JA1" pin="4" pinfunction="4" pintype="passive"/>
+      <node ref="R2" pin="2" pintype="passive"/>
+    </net>
+    <net code="7" name="GND" class="Power">
+      <node ref="C1" pin="2" pintype="passive"/>
+      <node ref="C2" pin="2" pintype="passive"/>
+      <node ref="J1" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J10" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J11" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J2" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J3" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J4" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J5" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J7" pin="0" pinfunction="0" pintype="passive"/>
+      <node ref="J7" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J8" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J9" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="JA1" pin="2" pinfunction="2" pintype="passive"/>
+    </net>
+    <net code="8" name="LINE_IN" class="Default">
+      <node ref="J7" pin="14" pinfunction="14" pintype="passive"/>
+      <node ref="R1" pin="1" pintype="passive"/>
+    </net>
+    <net code="9" name="bar neopixel male input" class="Default">
+      <node ref="J11" pin="3" pinfunction="3" pintype="passive"/>
+      <node ref="J7" pin="15" pinfunction="15" pintype="passive"/>
+    </net>
+    <net code="10" name="body neopixel male input" class="Default">
+      <node ref="J5" pin="3" pinfunction="3" pintype="passive"/>
+      <node ref="J7" pin="11" pinfunction="11" pintype="passive"/>
+    </net>
+    <net code="11" name="dynamixel data" class="Default">
+      <node ref="J2" pin="3" pinfunction="3" pintype="passive"/>
+      <node ref="J7" pin="10" pinfunction="10" pintype="passive"/>
+    </net>
+    <net code="12" name="microphone male output" class="Default">
+      <node ref="J3" pin="3" pinfunction="3" pintype="passive"/>
+      <node ref="J7" pin="3" pinfunction="3" pintype="passive"/>
+    </net>
+    <net code="13" name="photo sensor male output a" class="Default">
+      <node ref="J7" pin="4" pinfunction="4" pintype="passive"/>
+      <node ref="J9" pin="3" pinfunction="3" pintype="passive"/>
+    </net>
+    <net code="14" name="photo sensor male output b" class="Default">
+      <node ref="J7" pin="12" pinfunction="12" pintype="passive"/>
+      <node ref="J8" pin="3" pinfunction="3" pintype="passive"/>
+    </net>
+    <net code="15" name="photo sensor male output c" class="Default">
+      <node ref="J1" pin="3" pinfunction="3" pintype="passive"/>
+      <node ref="J7" pin="5" pinfunction="5" pintype="passive"/>
+    </net>
+    <net code="16" name="photo sensor male output d" class="Default">
+      <node ref="J4" pin="3" pinfunction="3" pintype="passive"/>
+      <node ref="J7" pin="13" pinfunction="13" pintype="passive"/>
+    </net>
+    <net code="17" name="state LED male output" class="Default">
+      <node ref="J10" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="J7" pin="6" pinfunction="6" pintype="passive"/>
+    </net>
+    <net code="18" name="unconnected-(J7-Pad8)" class="Default">
+      <node ref="J7" pin="8" pinfunction="8" pintype="passive+no_connect"/>
+    </net>
+  </nets>
+</export>

@@ -1,0 +1,105 @@
+(footprint "GF1002_Module_Direct"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" ""
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(uuid "1092958c-d0e1-4690-a0d5-b14dadf00c9f")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "ab468ca3-1ae5-44f8-896c-1deacd75e2e5")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "18fa6e36-b094-4ae9-91d0-d382b2052ada")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2303057e-2cc7-4f46-abe7-ec73beaa19f2")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr exclude_from_pos_files)
+	(fp_line
+		(start 0 0)
+		(end 20 0)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "Dwgs.User")
+		(uuid "953c2454-a66d-4552-8d80-b12c5130fc4b")
+	)
+	(fp_line
+		(start 0 30)
+		(end 0 0)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "Dwgs.User")
+		(uuid "5b1948eb-7329-4dd6-ba17-f8c5a9ed18eb")
+	)
+	(fp_line
+		(start 20 0)
+		(end 20 30)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "Dwgs.User")
+		(uuid "f00513df-0881-46b4-8ec9-0bdcf67af0d9")
+	)
+	(fp_line
+		(start 20 30)
+		(end 0 30)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "Dwgs.User")
+		(uuid "505f962a-f68c-472e-bf1c-3b35ec223697")
+	)
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/3dmodels/module_assembly.wrl"
+		(offset
+			(xyz 0 0 4.6)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

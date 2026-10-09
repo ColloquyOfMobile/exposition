@@ -1,0 +1,2 @@
+(fp_lib_table (version 7)
+ (lib (name "Body")(type "KiCad")(uri "${KIPRJMOD}/Body.pretty")(options "")(descr "Preserved harness footprints and provisional GF1002 clamps")))

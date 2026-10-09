@@ -1,0 +1,14 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-09T08:43:17+0200",
+    "kicad_version": "9.0.7",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/3c3a1eba-aee4-5f63-9472-4e4300e66b7a",
+            "violations": []
+        }
+    ],
+    "source": "male-static-v2.kicad_sch"
+}
