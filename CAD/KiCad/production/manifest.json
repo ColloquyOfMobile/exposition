@@ -1,0 +1,319 @@
+{
+  "boards": [
+    {
+      "id": "backplane",
+      "title": "Shields backplane",
+      "what": "the main board: harness connectors, power entry and the shield slots",
+      "group": "The main board and its shields",
+      "quantity": 1,
+      "source": "shields/backplane/backplane.kicad_pcb",
+      "read first": [
+        "shields/README.md",
+        "shields/REVIEW.md",
+        "shields/ASSEMBLY.md"
+      ],
+      "assembly": [
+        "shields/backplane/bom.csv",
+        "shields/backplane/positions.csv"
+      ],
+      "source sha256": "ecc01205be4ff3fba7f385bc9f2744d947bda580f11cb73eeff2f0d3731a2723",
+      "exported at": "2026-10-11T21:15:10",
+      "exported with": "KiCad 9.0.7",
+      "copper layers": 4,
+      "size mm": [
+        210.0,
+        297.0
+      ],
+      "thickness mm": 1.6,
+      "smallest drill mm": 0.3,
+      "drc": {
+        "errors": 0,
+        "warnings": 0,
+        "unconnected": 0
+      },
+      "files": [
+        "backplane-B_Cu.gbl",
+        "backplane-B_Mask.gbs",
+        "backplane-B_Paste.gbp",
+        "backplane-B_Silkscreen.gbo",
+        "backplane-Edge_Cuts.gm1",
+        "backplane-F_Cu.gtl",
+        "backplane-F_Mask.gts",
+        "backplane-F_Paste.gtp",
+        "backplane-F_Silkscreen.gto",
+        "backplane-In1_Cu.g1",
+        "backplane-In2_Cu.g2",
+        "backplane-NPTH.drl",
+        "backplane-PTH.drl"
+      ]
+    },
+    {
+      "id": "teensy-adapter",
+      "title": "Teensy 4.1 adapter",
+      "what": "a Teensy 4.1 in the backplane's Mega slot",
+      "group": "The main board and its shields",
+      "quantity": 1,
+      "source": "shields/teensy-adapter/teensy-adapter.kicad_pcb",
+      "read first": [
+        "shields/README.md",
+        "shields/REVIEW.md",
+        "shields/ASSEMBLY.md"
+      ],
+      "assembly": [
+        "shields/teensy-adapter/bom.csv",
+        "shields/teensy-adapter/positions.csv"
+      ],
+      "source sha256": "e65af9ba8b57f4ee54b4360bbb5116cc5b0f4ad504dd2a39aa6bd397d8e41d1a",
+      "exported at": "2026-10-11T21:15:12",
+      "exported with": "KiCad 9.0.7",
+      "copper layers": 4,
+      "size mm": [
+        53.34,
+        101.6
+      ],
+      "thickness mm": 1.6,
+      "smallest drill mm": 0.3,
+      "drc": {
+        "errors": 0,
+        "warnings": 0,
+        "unconnected": 0
+      },
+      "files": [
+        "teensy-adapter-B_Cu.gbl",
+        "teensy-adapter-B_Mask.gbs",
+        "teensy-adapter-B_Paste.gbp",
+        "teensy-adapter-B_Silkscreen.gbo",
+        "teensy-adapter-Edge_Cuts.gm1",
+        "teensy-adapter-F_Cu.gtl",
+        "teensy-adapter-F_Mask.gts",
+        "teensy-adapter-F_Paste.gtp",
+        "teensy-adapter-F_Silkscreen.gto",
+        "teensy-adapter-In1_Cu.g1",
+        "teensy-adapter-In2_Cu.g2",
+        "teensy-adapter-NPTH.drl",
+        "teensy-adapter-PTH.drl"
+      ]
+    },
+    {
+      "id": "voice-thomas",
+      "title": "Voice card",
+      "what": "Thomas's RC output filter, one per body",
+      "group": "The main board and its shields",
+      "quantity": 5,
+      "source": "shields/voice-thomas/voice-thomas.kicad_pcb",
+      "read first": [
+        "shields/README.md",
+        "shields/REVIEW.md",
+        "shields/ASSEMBLY.md"
+      ],
+      "assembly": [
+        "shields/voice-thomas/bom.csv",
+        "shields/voice-thomas/positions.csv",
+        "shields/voice-thomas/variants.csv"
+      ],
+      "source sha256": "0ed2f0eb7e077d730d598f3af986fb3a863f60ce2aa2f30efa70d675e478c568",
+      "exported at": "2026-10-11T21:15:14",
+      "exported with": "KiCad 9.0.7",
+      "copper layers": 2,
+      "size mm": [
+        30.0,
+        42.0
+      ],
+      "thickness mm": 1.6,
+      "smallest drill mm": 0.8,
+      "drc": {
+        "errors": 0,
+        "warnings": 0,
+        "unconnected": 0
+      },
+      "files": [
+        "voice-thomas-B_Cu.gbl",
+        "voice-thomas-B_Mask.gbs",
+        "voice-thomas-B_Paste.gbp",
+        "voice-thomas-B_Silkscreen.gbo",
+        "voice-thomas-Edge_Cuts.gm1",
+        "voice-thomas-F_Cu.gtl",
+        "voice-thomas-F_Mask.gts",
+        "voice-thomas-F_Paste.gtp",
+        "voice-thomas-F_Silkscreen.gto",
+        "voice-thomas-NPTH.drl",
+        "voice-thomas-PTH.drl"
+      ]
+    },
+    {
+      "id": "analyser-carrier",
+      "title": "Analyser carrier",
+      "what": "carries the five DFRobot audio analyser modules",
+      "group": "The main board and its shields",
+      "quantity": 1,
+      "source": "shields/analyser-carrier/analyser-carrier.kicad_pcb",
+      "read first": [
+        "shields/README.md",
+        "shields/REVIEW.md",
+        "shields/analyser-carrier/README.md"
+      ],
+      "assembly": [
+        "shields/analyser-carrier/bom.csv",
+        "shields/analyser-carrier/positions.csv",
+        "shields/analyser-carrier/socket-assembly.csv"
+      ],
+      "source sha256": "e78812d97e97dae8204b170f4b6208cd800f0c9f8939b5430a32d56205de39cd",
+      "exported at": "2026-10-11T21:15:16",
+      "exported with": "KiCad 9.0.7",
+      "copper layers": 2,
+      "size mm": [
+        150.0,
+        55.0
+      ],
+      "thickness mm": 1.6,
+      "smallest drill mm": 0.3,
+      "drc": {
+        "errors": 0,
+        "warnings": 0,
+        "unconnected": 0
+      },
+      "files": [
+        "analyser-carrier-B_Cu.gbl",
+        "analyser-carrier-B_Mask.gbs",
+        "analyser-carrier-B_Paste.gbp",
+        "analyser-carrier-B_Silkscreen.gbo",
+        "analyser-carrier-Edge_Cuts.gm1",
+        "analyser-carrier-F_Cu.gtl",
+        "analyser-carrier-F_Mask.gts",
+        "analyser-carrier-F_Paste.gtp",
+        "analyser-carrier-F_Silkscreen.gto",
+        "analyser-carrier-NPTH.drl",
+        "analyser-carrier-PTH.drl"
+      ]
+    },
+    {
+      "id": "microphone",
+      "title": "Microphone holder",
+      "what": "holds a MAX9814 module on a body's extrusion, one per body and a spare",
+      "group": "The main board and its shields",
+      "quantity": 6,
+      "source": "shields/microphone/microphone.kicad_pcb",
+      "read first": [
+        "shields/README.md",
+        "shields/REVIEW.md",
+        "shields/ASSEMBLY.md"
+      ],
+      "assembly": [
+        "shields/microphone/bom.csv",
+        "shields/microphone/positions.csv"
+      ],
+      "source sha256": "176708f8665a2dfb5078a81dd422e2474577b1730f7a8941903f2f0b4568a6aa",
+      "exported at": "2026-10-11T21:15:18",
+      "exported with": "KiCad 9.0.7",
+      "copper layers": 2,
+      "size mm": [
+        20.0,
+        62.0
+      ],
+      "thickness mm": 1.6,
+      "smallest drill mm": 0.3,
+      "drc": {
+        "errors": 0,
+        "warnings": 0,
+        "unconnected": 0
+      },
+      "files": [
+        "microphone-B_Cu.gbl",
+        "microphone-B_Mask.gbs",
+        "microphone-B_Paste.gbp",
+        "microphone-B_Silkscreen.gbo",
+        "microphone-Edge_Cuts.gm1",
+        "microphone-F_Cu.gtl",
+        "microphone-F_Mask.gts",
+        "microphone-F_Paste.gtp",
+        "microphone-F_Silkscreen.gto",
+        "microphone-NPTH.drl",
+        "microphone-PTH.drl"
+      ]
+    },
+    {
+      "id": "female-base-v2",
+      "title": "Female base v2",
+      "what": "inside each female, with her amplifier module mounted on it",
+      "group": "The boards inside the bodies",
+      "quantity": 3,
+      "source": "female base v2/female-base-v2.kicad_pcb",
+      "read first": [
+        "female base v2/README.md"
+      ],
+      "assembly": [
+        "female base v2/bom.csv"
+      ],
+      "source sha256": "618358a13d6eccfba04b10abd46c0e2f9d44cbe65a32e0b24fa0f30bf99d314c",
+      "exported at": "2026-10-11T21:15:20",
+      "exported with": "KiCad 9.0.7",
+      "copper layers": 2,
+      "size mm": [
+        50.0,
+        80.0
+      ],
+      "thickness mm": 1.6,
+      "smallest drill mm": 0.3,
+      "drc": {
+        "errors": 0,
+        "warnings": 0,
+        "unconnected": 0
+      },
+      "files": [
+        "female-base-v2-B_Cu.gbl",
+        "female-base-v2-B_Mask.gbs",
+        "female-base-v2-B_Paste.gbp",
+        "female-base-v2-B_Silkscreen.gbo",
+        "female-base-v2-Edge_Cuts.gm1",
+        "female-base-v2-F_Cu.gtl",
+        "female-base-v2-F_Mask.gts",
+        "female-base-v2-F_Paste.gtp",
+        "female-base-v2-F_Silkscreen.gto",
+        "female-base-v2-NPTH.drl",
+        "female-base-v2-PTH.drl"
+      ]
+    },
+    {
+      "id": "male-static-v2",
+      "title": "Male static v2",
+      "what": "inside each male, with his amplifier module mounted on it",
+      "group": "The boards inside the bodies",
+      "quantity": 2,
+      "source": "male static v2/male-static-v2.kicad_pcb",
+      "read first": [
+        "male static v2/README.md"
+      ],
+      "assembly": [
+        "male static v2/bom.csv"
+      ],
+      "source sha256": "adae7121472d09a18f7d5e7b2774da70ff30ab9e71944fcfbf93a4e69218c331",
+      "exported at": "2026-10-11T21:15:21",
+      "exported with": "KiCad 9.0.7",
+      "copper layers": 2,
+      "size mm": [
+        50.0,
+        90.0
+      ],
+      "thickness mm": 1.6,
+      "smallest drill mm": 0.3,
+      "drc": {
+        "errors": 0,
+        "warnings": 0,
+        "unconnected": 0
+      },
+      "files": [
+        "male-static-v2-B_Cu.gbl",
+        "male-static-v2-B_Mask.gbs",
+        "male-static-v2-B_Paste.gbp",
+        "male-static-v2-B_Silkscreen.gbo",
+        "male-static-v2-Edge_Cuts.gm1",
+        "male-static-v2-F_Cu.gtl",
+        "male-static-v2-F_Mask.gts",
+        "male-static-v2-F_Paste.gtp",
+        "male-static-v2-F_Silkscreen.gto",
+        "male-static-v2-NPTH.drl",
+        "male-static-v2-PTH.drl"
+      ]
+    }
+  ]
+}
