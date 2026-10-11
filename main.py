@@ -130,22 +130,36 @@ def colloquy1(*args):
         # (colloquy/hardware/main_pcb/). Opening either port would fail somewhere
         # down in pyserial, saying something about COM4, which is a poor
         # way to be told a board is missing. Say it here instead and come
-        # up anyway: the page still works, and it carries the command to
-        # say the board is back.
+        # up anyway.
+        #
+        # Nothing under `drivers` is opened, started or reachable in this
+        # state: the server answers with the standby page instead of the
+        # tree (colloquy/server2/standby.py), which offers the files for
+        # the boards that replace this one and the press that says a
+        # board is back - and that press restarts into the branch above.
         since = colloquy.hardware.main_pcb.unmounted_at or "unknown"
         print(
             f"The main PCB is noted as UNMOUNTED (since {since}).\n"
-            "The Arduino and the U2D2 have not been opened, so nothing can "
-            "move or light up.\n"
-            "When the board is back: /app/hardware/main pcb -> "
-            "'the main PCB is back', then restart."
+            "The Arduino and the U2D2 have not been opened and the drivers "
+            "are off, so nothing can move or light up.\n"
+            "The front page offers the Gerbers and the KiCad projects of "
+            "the boards that replace it.\n"
+            "When a board is back in the rack: press 'the new PCB is "
+            "mounted' on the front page."
         )
 
     # Watch origin for commits the other computer has pushed. Started
     # here rather than waiting for somebody to click it, because the
-    # whole point is that nobody remembers to look. It only ever fetches;
-    # pulling stays a link on the page.
+    # whole point is that nobody remembers to look. Everywhere but the
+    # installation's own laptop it only ever fetches, and pulling stays a
+    # link on the page; that one machine pulls what it finds and has the
+    # server restart onto it (colloquy/repository/).
     colloquy.repository.start()
+    if colloquy.repository.auto_update:
+        print(
+            "This is the installation's laptop: it pulls what origin has "
+            "and restarts onto it by itself."
+        )
 
     # And watch the clock, but only if somebody has switched a schedule
     # on. The note lives in params.json so it survives a restart; with no

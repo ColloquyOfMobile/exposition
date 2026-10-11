@@ -331,3 +331,97 @@ def test_the_default_baudrate_is_the_one_the_sketch_sets():
     from colloquy.drivers.arduino import firmware
 
     assert DEFAULTS["arduino"]["baudrate"] == firmware.sketch_baudrate()
+
+
+# --- v7: on the installation, the main PCB is out -------------------------
+#
+# Not a change of shape. The board came out of the rack on 2026-10-11 to be
+# replaced, and the note that says so is written by a press nobody can be
+# relied on to have made before pulling two USB leads. So the first time
+# this version reads the installation's own file it brings the note in
+# line with the rack - once, there only, and only ever in that direction.
+
+V6 = {
+    "params version": 6,
+    "main pcb": {"mounted": True, "unmounted at": ""},
+}
+
+
+def v6(**main_pcb):
+    data = json.loads(json.dumps(V6))
+    data["main pcb"].update(main_pcb)
+    return data
+
+
+def test_the_installation_learns_its_board_is_out():
+    migrated = migrate(v6(), on_installation=True)
+
+    assert migrated["main pcb"]["mounted"] is False
+    assert migrated["main pcb"]["unmounted at"] == "2026-10-11"
+    assert migrated["params version"] == PARAMS_VERSION
+
+
+def test_no_other_machine_is_told_anything_about_its_board():
+    """Every other machine's note is about a rack that is not this one."""
+    migrated = migrate(v6(), on_installation=False)
+
+    assert migrated["main pcb"]["mounted"] is True
+    assert migrated["main pcb"]["unmounted at"] == ""
+
+
+def test_a_board_already_noted_as_out_keeps_its_own_date():
+    """Somebody did press unmount, and when they did is a fact."""
+    migrated = migrate(
+        v6(mounted=False, **{"unmounted at": "2026-10-09T17:30:00"}),
+        on_installation=True,
+    )
+
+    assert migrated["main pcb"]["unmounted at"] == "2026-10-09T17:30:00"
+
+
+def test_it_happens_once():
+    """The press on the standby page writes mounted into a file that is
+    already at this version. Deciding the board was out again at the next
+    start would undo the one press that is allowed to say it is in."""
+    remounted = migrate(v6(), on_installation=True)
+    remounted["main pcb"]["mounted"] = True
+    remounted["main pcb"]["unmounted at"] = ""
+
+    again = migrate(json.loads(json.dumps(remounted)), on_installation=True)
+
+    assert again["main pcb"]["mounted"] is True
+
+
+def test_a_file_older_than_the_note_itself_gets_it_on_the_installation():
+    migrated = migrate(json.loads(json.dumps(V1)), on_installation=True)
+
+    assert migrated["main pcb"]["mounted"] is False
+    # And the rest of the entry is still filled in beside it.
+    assert migrated["main pcb"]["configuration"]["board"] == "electronic box"
+
+
+def test_which_machine_is_asked_of_the_hostname_unless_said(monkeypatch):
+    from colloquy import machines
+
+    monkeypatch.setattr(machines, "hostname", lambda: machines.INSTALLATION)
+    assert migrate(v6())["main pcb"]["mounted"] is False
+
+    monkeypatch.setattr(machines, "hostname", lambda: "somebodys-desk")
+    assert migrate(v6())["main pcb"]["mounted"] is True
+
+
+def test_the_migration_does_not_write_into_the_defaults():
+    """`_fill_missing` hands out the defaults' own nested dicts, so a
+    step that edited one in place would mark every later load as out."""
+    migrate(json.loads(json.dumps(V1)), on_installation=True)
+
+    assert DEFAULTS["main pcb"]["mounted"] is True
+
+
+def test_nothing_ever_decides_by_itself_that_a_board_is_in():
+    for on_installation in (True, False):
+        migrated = migrate(
+            v6(mounted=False, **{"unmounted at": "2026-10-09"}),
+            on_installation=on_installation,
+        )
+        assert migrated["main pcb"]["mounted"] is False

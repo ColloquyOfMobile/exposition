@@ -195,7 +195,7 @@ def missing_files(board: Board) -> tuple[str, ...]:
 def missing_layers(board: Board) -> tuple[str, ...]:
     """Layers a fab needs that the manifest does not list at all."""
     suffixes = {Path(name).suffix.lower() for name in board.files}
-    wanted = REQUIRED_SUFFIXES
+    wanted: tuple[str, ...] = REQUIRED_SUFFIXES
     if board.copper_layers >= 4:
         wanted = wanted + INNER_SUFFIXES
     missing = [suffix for suffix in wanted if suffix not in suffixes]

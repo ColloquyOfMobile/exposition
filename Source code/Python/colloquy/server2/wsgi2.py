@@ -7,6 +7,8 @@ from colloquy.utils import (
 )
 from colloquy.base import Base
 from colloquy.drivers.arduino.errors import ArduinoError
+from colloquy.hardware.pcb_files import gerbers, kicad_projects
+from colloquy.server2 import standby, updates
 from colloquy.server2.remedies import remedy_html
 from colloquy.ui.tree import CommandFailed
 from wsgiref.simple_server import WSGIRequestHandler
@@ -22,6 +24,11 @@ WSGIRequestHandler.log_message = lambda *args, **kwargs: None
 _STATIC_ROOTS = {
     "static": Path(__file__).parent / "static",
 }
+# Where the zip of the KiCad projects is built and kept between
+# downloads. Under local/, like every other piece of working state: it is
+# a hundred megabytes that can be made again from the checkout.
+DOWNLOADS_FOLDER = Path("local/downloads")
+
 _STATIC_CONTENT_TYPES = {
     ".js": "application/javascript; charset=utf-8",
     ".css": "text/css; charset=utf-8",
@@ -68,7 +75,12 @@ class WSGI2(Base):
 
     def __iter__(self):
         self._start_response(self._status, self._headers)
-        yield self._content
+        if isinstance(self._content, bytes):
+            yield self._content
+            return
+        # A download too big to hold whole (the KiCad projects) arrives
+        # as an iterable of pieces rather than as bytes.
+        yield from self._content
 
     @property
     def shutdown_event(self):
@@ -92,10 +104,20 @@ class WSGI2(Base):
     def _parse(self):
         args = self._parse_path()
 
+        # With the main PCB out of the rack the tree is not served at
+        # all - see `_board_is_out`. Everything that does not go through
+        # the tree is answered as usual, which is what leaves the
+        # downloads, the restart and the way back all reachable.
+        board_is_out = self._board_is_out()
+
         if self._environ.get("REQUEST_METHOD") == "POST":
+            if board_is_out:
+                return self._redirect("/")
             return self._parse_post(*args)
 
         if not args:
+            if board_is_out:
+                return self._parse_standby()
             return self._parse_app()
 
         key, *leftovers = args
@@ -108,6 +130,15 @@ class WSGI2(Base):
         if key == "unmount-main-pcb":
             return self._parse_unmount_main_pcb(*leftovers)
 
+        if key == "mount-main-pcb":
+            return self._parse_mount_main_pcb(*leftovers)
+
+        if key == "update-status":
+            return self._parse_update_status(*leftovers)
+
+        if key == "download":
+            return self._parse_download(*leftovers)
+
         if key == "virtual-panel":
             return self._parse_virtual_panel(*leftovers)
 
@@ -115,6 +146,11 @@ class WSGI2(Base):
             return self._parse_restart(*leftovers)
 
         if key == self._root.name:
+            if board_is_out:
+                # One address for the one page there is. A bookmark or a
+                # tab left open on a node lands here rather than on a 404
+                # about a tree that is deliberately not being served.
+                return self._redirect("/")
             return self._parse_app(*leftovers)
 
         if key in _STATIC_ROOTS:
@@ -403,6 +439,16 @@ class WSGI2(Base):
                         with tag("div", style=""):
                             doc.asis(self._html_virtual_panel_link())
 
+                # What an automatic update is doing, on every page - it
+                # is about to restart the server under all of them. Empty
+                # on a machine that does not update itself.
+                doc.asis(
+                    updates.banner_html(
+                        self.colloquy.repository,
+                        back=f"/{(self._root / self._base_path).as_posix()}",
+                    )
+                )
+
                 doc.asis(
                     self._html_navigation(
                         to_render=to_render,
@@ -441,6 +487,8 @@ class WSGI2(Base):
 
                 with tag("script", src="/static/svg_zoom.js"):
                     pass
+
+                doc.asis(updates.script_html(self.colloquy.repository))
 
         html = doc.getvalue()
         html = indent(html)
@@ -969,6 +1017,14 @@ class WSGI2(Base):
         """
         main_pcb = self.colloquy.hardware.main_pcb
 
+        if not main_pcb.is_mounted:
+            # A stale link, or this page loaded again. The board is
+            # already noted as out, and running the sequence a second
+            # time would do exactly one thing: stop the server, on a
+            # machine whose front page is now the downloads and whose
+            # updates only arrive while it is up.
+            return self._redirect("/")
+
         with self.colloquy.hold_commands() as held:
             arrived = main_pcb.unmount()
 
@@ -991,8 +1047,9 @@ class WSGI2(Base):
         lines.append("It is now safe to disconnect the Arduino and the U2D2.")
         lines.append("")
         lines.append(
-            "When the board is back: start the app again, then hardware > "
-            'main pcb > "the main PCB is back", and restart once more.'
+            "Start the app again for the Gerbers and the KiCad projects of "
+            "the boards that replace it. When a board is back in the rack: "
+            'press "the new PCB is mounted" on that front page.'
         )
         lines.append("")
         lines.append("Goodbye!")
@@ -1067,3 +1124,165 @@ class WSGI2(Base):
         content = html.encode()
 
         return status, headers, content
+
+    # --- while the main PCB is out ---------------------------------------
+
+    def _redirect(self, location):
+        return "303 See Other", [("Location", location)], b""
+
+    def _board_is_out(self):
+        """Is the main PCB noted as out of the rack?
+
+        Then the tree is not served, and that is the whole of what keeps
+        the drivers from being activated: there is no Arduino and no
+        servo bus to drive, and with no page that reaches a node there is
+        no link that can start one. `main.py` skips opening the hardware
+        on the same note, and the exposition schedule refuses to start
+        against it, so nothing starts by itself either.
+
+        Asked of the note and not of the hostname. The note is what
+        `main.py` read at startup, so the page and the process agree by
+        construction - and a development machine can be put in this state
+        to look at it.
+        """
+        return not self.colloquy.hardware.main_pcb.is_mounted
+
+    def _parse_standby(self):
+        """The front page with the board out: the two downloads and the
+        way back. See `standby.py`."""
+        headers = [("Content-Type", "text/html; charset=utf-8")]
+        return "200 OK", headers, standby.page(self.colloquy)
+
+    def _parse_mount_main_pcb(self, *_ignored):
+        """Note the board as back, and restart onto the usual page.
+
+        A route, for `/unmount-main-pcb`'s reason turned round: it ends
+        with the server restarting, and the last thing it says has to be
+        that. It is also not a command anybody could reach - the tree is
+        not served while the board is out.
+
+        The restart is what "activates the drivers". Both ports are
+        opened once, by `main.py` at startup, and a process that came up
+        with the board out never opened them; re-running is the one
+        sequence that is known to leave everything in the state a normal
+        start leaves it in.
+
+        **Nothing starts moving.** The piece is started from the page or
+        by the schedule, as on any other start - a board that has never
+        been powered in this rack is the last thing to hand to a clock.
+        """
+        main_pcb = self.colloquy.hardware.main_pcb
+        if main_pcb.is_mounted:
+            # A stale link, or this page loaded again after the restart
+            # it caused. Nothing to do, and certainly not a second
+            # restart.
+            return self._redirect("/")
+
+        main_pcb.remount()
+
+        self.colloquy.shutdown()
+        self.colloquy.join_all()
+        self.shutdown_event.set()
+        self.restart_event.set()
+
+        headers = [("Content-Type", "text/html; charset=utf-8")]
+        content = standby.restarting_page(
+            self.colloquy.repository,
+            "The new PCB is noted as mounted",
+            (
+                "The server is restarting to open the Arduino and the U2D2. "
+                "The usual page comes back in a few seconds.",
+                "If either link does not open, that page says which and why "
+                "under 'startup problems'. Nothing starts moving by itself.",
+            ),
+        )
+        return "200 OK", headers, content
+
+    def _parse_update_status(self, *_ignored):
+        """What the update banner should say now, for the script that
+        keeps it true on an open page. Reads a handful of fields off the
+        repository and nothing else - never the tree, so it answers while
+        a command holds the lock, and while the board is out."""
+        headers = [
+            ("Content-Type", "application/json; charset=utf-8"),
+            ("Cache-Control", "no-store"),
+        ]
+        return "200 OK", headers, updates.status_json(self.colloquy.repository)
+
+    def _parse_download(self, *parts):
+        """The Gerbers, or the KiCad projects, as a zip.
+
+        Routes rather than tree commands because the answer is a file. It
+        also means neither touches the command lock, so a hundred
+        megabytes being sent holds up nothing.
+
+        **Nothing raised in here may leave.** Outside a command an
+        exception reaches `Server2.wsgi`'s catch-all, which emergency-
+        stops the installation and shuts the server down - over a zip.
+        The reasoning that answers a failed command with a page applies
+        whole: saying what went wrong keeps the loop, and with it the
+        page somebody would press EMERGENCY STOP on.
+        """
+        try:
+            if parts == ("gerbers",):
+                return self._download_gerbers()
+            if len(parts) == 2 and parts[0] == "gerbers":
+                return self._download_board(parts[1])
+            if parts == ("kicad",):
+                return self._download_kicad()
+        except gerbers.PackageError as error:
+            return self._download_unavailable("404 Not Found", str(error))
+        except Exception as error:  # noqa: BLE001 - see the docstring
+            self.log(f"Download {'/'.join(parts)} failed: {error!r}")
+            return self._download_unavailable(
+                "500 Internal Server Error", f"{type(error).__name__}: {error}"
+            )
+        return self._download_unavailable(
+            "404 Not Found", f"there is no download called {'/'.join(parts)!r}"
+        )
+
+    def _commit(self):
+        """The short hash this process is running, for a file name."""
+        running = self.colloquy.repository.running or ""
+        return running.split(" ")[0]
+
+    def _attachment(self, name, length):
+        return [
+            ("Content-Type", "application/zip"),
+            ("Content-Disposition", f'attachment; filename="{name}"'),
+            ("Content-Length", str(length)),
+            ("Cache-Control", "no-store"),
+        ]
+
+    def _download_gerbers(self):
+        commit = self._commit()
+        content = gerbers.package_zip(gerbers.load(), commit)
+        name = f"colloquy-gerbers-{commit}.zip" if commit else "colloquy-gerbers.zip"
+        return "200 OK", self._attachment(name, len(content)), content
+
+    def _download_board(self, board_id):
+        board = gerbers.find(gerbers.load(), board_id)
+        content = gerbers.board_zip(board)
+        return "200 OK", self._attachment(board.zip_name, len(content)), content
+
+    def _download_kicad(self):
+        listed = kicad_projects.files(self.colloquy.repository.git.tracked)
+        path = kicad_projects.archive(DOWNLOADS_FOLDER, listed)
+        commit = self._commit()
+        name = f"colloquy-kicad-{commit}.zip" if commit else path.name
+        headers = self._attachment(name, path.stat().st_size)
+        return "200 OK", headers, kicad_projects.chunks(path)
+
+    def _download_unavailable(self, status, sentence):
+        doc, tag, text = Doc().tagtext()
+        with tag("div"):
+            with tag("strong"):
+                text("That download is not available.")
+        with tag("div"):
+            text(sentence)
+        with tag("div"):
+            with tag("a", href="/"):
+                text("home")
+
+        headers = [("Content-Type", "text/html; charset=utf-8")]
+        return status, headers, doc.getvalue().encode()

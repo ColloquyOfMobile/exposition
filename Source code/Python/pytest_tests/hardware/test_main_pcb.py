@@ -156,6 +156,18 @@ def test_the_state_is_readable_at_a_glance():
     assert "not opened at startup" in states["what that means"]["value"]
 
 
+def test_the_files_for_its_replacement_are_offered_either_way():
+    """The two downloads the standby page carries while the board is out,
+    here so that they do not disappear the day one goes back in. Anchors,
+    since each goes to a route and comes back as a zip."""
+    path = ("hardware", "main pcb")
+
+    for mounted in (True, False):
+        markup = make_pcb(mounted=mounted)._snapshot_if_opened(path)["downloads"]["html"]
+        assert 'href="/download/gerbers"' in markup
+        assert 'href="/download/kicad"' in markup
+
+
 def test_an_unmounted_board_with_no_recorded_date_still_reads():
     states = make_pcb(mounted=False, unmounted_at="")._snapshot_if_opened(
         ("hardware", "main pcb")

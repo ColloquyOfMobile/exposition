@@ -11,12 +11,15 @@ terminal and type `git fetch`.
 
 Two rules shape all of it:
 
-- **Only `fetch` runs by itself.** Fetching writes nothing but
-  `.git/refs/remotes` - it cannot touch a file in the working tree, so it
-  is safe to do every few minutes behind somebody's back. Merging is not,
-  so `pull` is a link somebody clicks, and it is `--ff-only`: it either
-  winds the branch forward or refuses, and there is no third outcome
-  where it leaves a half-merged tree in the gallery.
+- **Only `fetch` runs by itself**, on every machine but one. Fetching
+  writes nothing but `.git/refs/remotes` - it cannot touch a file in the
+  working tree, so it is safe to do every few minutes behind somebody's
+  back. Merging is not, so `pull` is a link somebody clicks, and it is
+  `--ff-only`: it either winds the branch forward or refuses, and there
+  is no third outcome where it leaves a half-merged tree in the gallery.
+  The one machine is the installation's laptop, which pulls for itself
+  (see `Repository`) - and that is only tolerable *because* of the
+  `--ff-only`: the same command, run by nobody.
 - **Nothing here raises out of a loop.** A laptop in an exhibition space
   is off the network as often as not, and a fetch that cannot reach
   GitHub is an ordinary Tuesday, not a fault in the installation. Every
@@ -79,6 +82,12 @@ class Status(NamedTuple):
     ahead: int
     dirty: int
     newest: str
+    # The commit checked out here, written the way `newest` is. Last, and
+    # defaulted, because it arrived after the other six: what it is for
+    # is noticing that the checkout has moved under a running process,
+    # which nothing needed to know until a pull could happen with nobody
+    # at the page.
+    head: str = ""
 
     @property
     def is_behind(self) -> bool:
@@ -191,6 +200,19 @@ class Git:
         """Origin's newest commit, as the page would like to read it."""
         return self.run("log", "-1", "--format=%h %s", upstream)
 
+    def head(self) -> str:
+        """The commit checked out here, in the same form."""
+        return self.run("log", "-1", "--format=%h %s", "HEAD")
+
+    def tracked(self, folder: str) -> list[str]:
+        """Every file git tracks under a folder, relative to the repo.
+
+        NUL-separated, so a name with a space in it - and `CAD/KiCad` is
+        full of them - arrives as one name and unquoted.
+        """
+        listed = self.run("ls-files", "-z", "--", folder)
+        return [name for name in listed.split(chr(0)) if name]
+
     # --- the two things it does ----------------------------------------
 
     def fetch(self) -> None:
@@ -211,6 +233,7 @@ class Git:
             ahead=ahead,
             dirty=self.dirty(),
             newest=self.newest(upstream),
+            head=self.head(),
         )
 
     def pull(self) -> str:

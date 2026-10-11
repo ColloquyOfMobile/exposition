@@ -76,6 +76,12 @@ files = [
     # what comes in is a hand-editable params entry that may be none of
     # them. The node beside it (configuration/__init__.py) stays off.
     "Source code/Python/colloquy/hardware/main_pcb/configuration/table.py",
+    # The two downloads: a manifest somebody else's script wrote in, zips
+    # out. A board's width, height, thickness and smallest drill are four
+    # floats in millimetres that go into an order form, and a path
+    # relative to CAD/KiCad reads exactly like one relative to the repo.
+    # Stdlib only - nothing here imports the tree.
+    "Source code/Python/colloquy/hardware/pcb_files",
 ]
 mypy_path = "Source code/Python"
 

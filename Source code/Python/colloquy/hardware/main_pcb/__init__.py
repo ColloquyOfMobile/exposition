@@ -23,8 +23,19 @@ saying something about COM4. With the note written, `main.py` skips
 opening them and says plainly what it is doing.
 
 Nothing clears the note by itself. A board that is out stays out until
-somebody presses `the main PCB is back`, because the alternative is an
-installation that quietly decides it has hardware when it has not.
+somebody says it is back, because the alternative is an installation
+that quietly decides it has hardware when it has not.
+
+**While the note says out, the page is a different page.** The server
+stops serving the tree altogether and answers with `server2/standby.py`:
+the Gerbers and the KiCad projects of the boards that replace this one,
+and one press, `the new PCB is mounted` (`/mount-main-pcb`), which calls
+`remount()` here and restarts. That is what keeps the drivers from being
+activated with nothing to drive - no node under them can be reached -
+and it is why saying the board is back is a route: it ends in a restart,
+and there is no tree to hang a command on. `the main PCB is back` below
+is the same note written without the restart, kept for whatever walks
+the tree with no server in front of it.
 
 **On where this lives.** Under `hardware`, not under `drivers`. The
 difference is the one the 2026-08-21 rename drew: `drivers` is the layer
@@ -138,6 +149,21 @@ class MainPCB(Base):
         # Named for what it says rather than after the child it summarises:
         # a leaf with a child's name replaces the child's link.
         leaf("board", self._configuration.summary)
+
+        # Anchors, for `taking it out`'s reason: they go to routes, and
+        # the answer to each is a zip rather than a page. The same two
+        # the standby page offers while the board is out, here so that
+        # they do not disappear the day a board goes back in - the next
+        # order is placed from the usual page.
+        states["downloads"] = leaves.html(
+            path,
+            "downloads",
+            "<p>The files the boards that replace this one are made from.</p>"
+            '<p><a href="/download/gerbers"><strong>the PCB production '
+            "Gerbers</strong></a> - for PCBWay or JLCPCB, a zip per board</p>"
+            '<p><a href="/download/kicad"><strong>the full KiCad projects'
+            "</strong></a> - everything under CAD/KiCad</p>",
+        )
 
         if self.is_mounted:
             leaf("state", "mounted")

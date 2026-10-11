@@ -1,9 +1,11 @@
 import json
 from pathlib import Path
 
+from . import machines
+
 # Bumped whenever the shape or the units of this file change, so an older
 # file can be recognised and converted rather than misread. See migrate().
-PARAMS_VERSION = 6
+PARAMS_VERSION = 7
 
 DEFAULTS = {
     "params version": PARAMS_VERSION,
@@ -411,8 +413,55 @@ def _to_v6(data):
     return data
 
 
-def migrate(data):
-    """Bring a file read off disk up to the current shape."""
+# The day the main PCB came out of the installation to be replaced.
+_V7_BOARD_OUT_SINCE = "2026-10-11"
+
+
+def _to_v7(data, on_installation):
+    """On the installation, and only there: the main PCB is out.
+
+    Not a change of shape or of units - a fact about the rack that the
+    file on that one machine may not hold. The board was taken out on
+    2026-10-11 to be replaced by a new one, and the note that says so is
+    written by a press (`/unmount-main-pcb`) that nobody can be relied on
+    to have made before pulling two USB leads. Without the note the next
+    start reaches for both ports, reports two failures under `startup
+    problems`, and serves the whole driving page for an installation
+    that has nothing to drive.
+
+    So the first time this version of the program reads that machine's
+    file, it brings the note in line with the rack. Once: the version is
+    bumped, so a board later noted as mounted - by the press on the
+    standby page, which is the only thing that should - stays mounted.
+
+    **It only ever goes this way.** A file already saying the board is
+    out keeps its own date. And nothing here, or anywhere, may decide by
+    itself that a board is *in*: an installation that concludes it has
+    hardware it has not got opens ports and drives servos that are not
+    there, which is the mistake the note exists to prevent. Deciding it
+    has none costs one press to undo.
+
+    Every other machine keeps whatever its own file says.
+    """
+    if on_installation:
+        main_pcb = data.setdefault("main pcb", {})
+        if main_pcb.get("mounted", True):
+            main_pcb["mounted"] = False
+            main_pcb["unmounted at"] = _V7_BOARD_OUT_SINCE
+
+    data["params version"] = 7
+    return data
+
+
+def migrate(data, on_installation=None):
+    """Bring a file read off disk up to the current shape.
+
+    `on_installation` is which machine this is, for the one step that
+    depends on it (`_to_v7`). Asked of the hostname unless a caller says.
+    """
+    if on_installation is None:
+        on_installation = machines.is_installation()
+
     if data.get("params version", 1) < 2:
         data = _to_v2(data)
     if data["params version"] < 3:
@@ -423,6 +472,8 @@ def migrate(data):
         data = _to_v5(data)
     if data["params version"] < 6:
         data = _to_v6(data)
+    if data["params version"] < 7:
+        data = _to_v7(data, on_installation)
     return _fill_missing(data, DEFAULTS)
 
 

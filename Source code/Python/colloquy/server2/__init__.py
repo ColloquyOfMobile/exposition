@@ -86,6 +86,13 @@ class Server2(Base):
             while True:
                 httpd.handle_request()
 
+                # Asked here, twice a second, because nothing in the tree
+                # can restart the server and nothing should be able to:
+                # the repository says when a restart is due and this loop
+                # is what acts on it. See restart_for_update().
+                if self.update_wants_a_restart():
+                    self.restart_for_update()
+
                 if self.shutdown_event.is_set():
                     print("Shutdown event!")
                     break
@@ -124,6 +131,38 @@ class Server2(Base):
             # Bare, so this is still the original exception rather than
             # anything that happened while handling it.
             raise
+
+    def update_wants_a_restart(self):
+        """Has the repository pulled new code and counted down to it?
+
+        Only ever True on the installation's laptop, and there only when
+        nothing that drives the piece is running - see
+        `Repository.restart_is_due`, which holds every condition. Once a
+        stop is already under way there is nothing further to decide.
+        """
+        if self.shutdown_event.is_set():
+            return False
+        return self.colloquy.repository.restart_is_due
+
+    def restart_for_update(self):
+        """Restart onto the code the repository has just pulled.
+
+        `/restart` with nobody pressing it: the same two calls and the
+        same two events, on the accept loop instead of in a request. It
+        waits for a command in flight the way `/shutdown` does, since
+        this is the one restart no person chose the moment of.
+
+        The page has been saying it was coming for `RESTART_NOTICE`
+        seconds (`server2/updates.py`), and the repository leaves a note
+        for the next process to say that it happened.
+        """
+        print("An update was pulled - restarting to run it.")
+        self.colloquy.repository.restarting()
+        with self.colloquy.hold_commands():
+            self.colloquy.shutdown()
+            self.colloquy.join_all()
+        self.shutdown_event.set()
+        self.restart_event.set()
 
     def restart_process(self):
         """Start this process again, exactly as it was started.

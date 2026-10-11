@@ -68,7 +68,9 @@ class FakeGit:
 
 def make_repository(git):
     owner = SimpleNamespace(owners=[], path=REPO_FOLDER, name="colloquy")
-    return Repository(owner=owner, git=git)
+    # Never the installation's automatic mode, whichever machine the suite
+    # is run on: that one has its own file, test_automatic_update.py.
+    return Repository(owner=owner, git=git, auto_update=False)
 
 
 # --- Status ---------------------------------------------------------------
@@ -241,7 +243,7 @@ def test_pull_hands_the_network_half_to_the_loop():
     page in the tree answers. It must not happen there."""
     git = FakeGit(status=status(behind=3))
     owner = SimpleNamespace(owners=[], path=REPO_FOLDER, name="colloquy")
-    repository = StartedRepository(owner=owner, git=git)
+    repository = StartedRepository(owner=owner, git=git, auto_update=False)
     repository.check()
 
     report = repository.pull()
@@ -260,7 +262,7 @@ def test_a_refusal_still_answers_immediately():
     straight away why nothing is going to happen."""
     git = FakeGit(status=status(behind=3, dirty=2))
     owner = SimpleNamespace(owners=[], path=REPO_FOLDER, name="colloquy")
-    repository = StartedRepository(owner=owner, git=git)
+    repository = StartedRepository(owner=owner, git=git, auto_update=False)
     repository.check()
 
     assert "not committed" in repository.pull()
@@ -276,7 +278,7 @@ def test_a_handed_off_pull_re_checks_before_it_runs():
     whole node exists to prevent."""
     git = FakeGit(status=status(behind=3))
     owner = SimpleNamespace(owners=[], path=REPO_FOLDER, name="colloquy")
-    repository = StartedRepository(owner=owner, git=git)
+    repository = StartedRepository(owner=owner, git=git, auto_update=False)
     repository.check()
     repository.pull()
 
