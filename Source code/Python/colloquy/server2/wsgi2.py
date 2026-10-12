@@ -29,6 +29,12 @@ _STATIC_ROOTS = {
 # a hundred megabytes that can be made again from the checkout.
 DOWNLOADS_FOLDER = Path("local/downloads")
 
+# The most that goes to the socket in one write. A connection has
+# `CONNECTION_TIMEOUT` (server2/__init__.py) for each write to leave, so
+# the size of a write is a floor under the link it will work over: the
+# Gerber package in a single one wants 75 KB/s, and in these, six.
+PIECE = 1 << 16
+
 _STATIC_CONTENT_TYPES = {
     ".js": "application/javascript; charset=utf-8",
     ".css": "text/css; charset=utf-8",
@@ -76,7 +82,13 @@ class WSGI2(Base):
     def __iter__(self):
         self._start_response(self._status, self._headers)
         if isinstance(self._content, bytes):
-            yield self._content
+            # In pieces though it is all in hand - see PIECE. Anything
+            # that fits in one goes out exactly as it always did.
+            if len(self._content) <= PIECE:
+                yield self._content
+                return
+            for start in range(0, len(self._content), PIECE):
+                yield self._content[start : start + PIECE]
             return
         # A download too big to hold whole (the KiCad projects) arrives
         # as an iterable of pieces rather than as bytes.

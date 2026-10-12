@@ -6,6 +6,7 @@ from threading import Event
 from wsgiref.simple_server import make_server, WSGIRequestHandler, WSGIServer
 
 # from .wsgi import WSGI
+from . import network
 from .wsgi2 import WSGI2
 
 WSGIRequestHandler.log_message = lambda *args, **kwargs: None
@@ -13,6 +14,47 @@ WSGIRequestHandler.log_message = lambda *args, **kwargs: None
 # How often the accept loop below wakes to look at shutdown_event. Only
 # ever costs an idle wakeup twice a second; see run().
 ACCEPT_TIMEOUT = 0.5
+
+# How long a connection may sit without a byte moving before it is
+# dropped. See RequestHandler: this is what keeps a peer that has gone
+# quiet from holding up a restart, not a limit on how long a request may
+# take - a command runs for as long as it runs.
+CONNECTION_TIMEOUT = 10.0
+
+
+class RequestHandler(WSGIRequestHandler):
+    """A connection that goes quiet is dropped instead of waited on.
+
+    `server_close()` joins every connection still in flight (see
+    ThreadingWSGIServer), and a handler with no timeout sits in its first
+    read until the other end speaks or hangs up. On localhost that was
+    always one or the other: a browser that dies takes its sockets with
+    it. Across a network it is neither - a phone that falls asleep, a
+    laptop carried out of range of the access point - and then that read
+    never returns, `server_close()` never returns, and a shutdown or a
+    restart stops for good with the listening socket already closed.
+    Measured: one silent connection was still holding `server_close()`
+    when the test gave up waiting, and it returns the moment this fires.
+    On a machine that restarts itself unattended (`restart_for_update`)
+    that is the installation with no server until somebody walks over.
+
+    The timeout is on the socket, so it only ever measures the other end:
+    a command that takes a minute is not waiting on the socket while it
+    runs. A download is sent in pieces and each has this long to leave,
+    which a link that is moving at all manages.
+    """
+
+    timeout = CONNECTION_TIMEOUT
+
+    def handle(self):
+        try:
+            super().handle()
+        except TimeoutError:
+            # Nothing to answer and nobody to answer it to. Left to
+            # propagate it reaches socketserver, which prints a traceback
+            # for what is an ordinary event - a browser opens connections
+            # it never uses.
+            pass
 
 
 class ThreadingWSGIServer(ThreadingMixIn, WSGIServer):
@@ -45,6 +87,19 @@ class ThreadingWSGIServer(ThreadingMixIn, WSGIServer):
 class Server2(Base):
     DEFAULT_PORT = 8087
 
+    # Every interface, so the page answers from another computer on the
+    # same network and not only on this machine - which is what a laptop
+    # handing out Gerbers is for, and how the piece is looked after from
+    # somewhere other than the chair in front of it. It was "localhost".
+    #
+    # **Nothing on the page asks who is asking.** There is no login, and
+    # every link is a GET that does what it says, so whoever can reach
+    # this port can do everything the page can: shut the installation
+    # down, unmount its board, flash its Arduino. What stands between
+    # that and the building is the network this machine is on and its
+    # firewall, and neither is this program's to answer for.
+    BIND_ADDRESS = ""
+
     def __init__(self, colloquy, port=None):
         super().__init__(
             owner=None,
@@ -66,13 +121,26 @@ class Server2(Base):
     def restart_event(self):
         return self._restart_event
 
+    def listen(self, port):
+        """The listening server, bound and not yet serving."""
+        return make_server(
+            self.BIND_ADDRESS,
+            port,
+            self.wsgi,
+            server_class=ThreadingWSGIServer,
+            handler_class=RequestHandler,
+        )
+
     def run(self, port=DEFAULT_PORT):
-        hostname = "localhost"  # socket.gethostname()
-        with make_server(
-            "localhost", port, self.wsgi, server_class=ThreadingWSGIServer
-        ) as httpd:
+        with self.listen(port) as httpd:
             WSGIRequestHandler.log_message = lambda *args, **kwargs: None
-            print(f"Accessible at http://{hostname}:{port}/")
+            print(f"Accessible at http://localhost:{port}/")
+            elsewhere = network.urls(port)
+            if elsewhere:
+                print(
+                    "From another computer on this network: "
+                    + " or ".join(elsewhere)
+                )
 
             # handle_request() otherwise blocks in accept() forever.
             # Serving one request at a time that was harmless: /shutdown
