@@ -1,6 +1,6 @@
 # Colloquy shield PCB set
 
-Updated for SHIELDS.md revision 79e994b (2026-10-08) and MICROPHONE_BOARD.md.
+Updated for SHIELDS.md revision d076edc (2026-10-13) and MICROPHONE_BOARD.md.
 All current KiCad 9 projects and their shared library are in this folder.
 
 | Project | Function | Quantity |
@@ -34,8 +34,15 @@ Routing: scripts/route.py with Freerouting 2.4.1. After routing, run labels.py,
 finish.py, planes.py, check.py and verify.py. Preserve mechanical holes and
 validated connector positions when regenerating. Historical migration scripts
 are one-time tools, not general rebuild commands. Router files stay in tmp/.
-positions.csv contains SMD-only placements; fit THT parts manually from BOMs
+positions.csv contains front SMD placements for outsourced boards; fit THT parts manually from BOMs
 and assembly views. Filter all populations by their selected BOM.
+
+All SMD parts are on the front. The adapter's CM1-CM5 are beside the Teensy
+socket, clear of its body. Outsource front SMD assembly for the backplane,
+adapter and microphone holder. Order voice cards bare and hand-solder all
+parts, including R3 (100K 0603). Voice-card and analyser-carrier manufacturing
+ZIPs omit machine-placement and stencil files; all-component positions and
+BOMs remain manual assembly references.
 
 ## Front computing slot and servo supply — 2026-10-08
 

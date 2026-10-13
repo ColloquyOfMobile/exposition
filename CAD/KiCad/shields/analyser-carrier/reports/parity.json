@@ -1,6 +1,8 @@
 {
   "connected_pins": 66,
   "parity_differences": [],
+  "front_smd_components": 0,
+  "back_smd_components": 0,
   "erc_violations": 0,
   "drc_violations": 0,
   "unconnected_items": 0,

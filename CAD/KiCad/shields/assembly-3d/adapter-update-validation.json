@@ -1,0 +1,15 @@
+{
+  "revision": "2026-10-13 front SMD reservoirs",
+  "files": {
+    "teensy-configuration.blend": {
+      "sha256": "c3fa6b9b9b7896d588909f8c876fa9b39108e9d9143d68b145a301e2f08b7519",
+      "reopened": true,
+      "placement_preserved": true
+    },
+    "shield-configurations.blend": {
+      "sha256": "b40f2db2cffedd3b9f145c034175b04941b65e0caeb183a57e08e5121173941e",
+      "reopened": true,
+      "placement_preserved": true
+    }
+  }
+}

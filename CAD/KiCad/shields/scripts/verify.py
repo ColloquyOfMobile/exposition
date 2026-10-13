@@ -21,6 +21,7 @@ def main():
         if not (folder/'circuit.json').exists():continue
         name=folder.name;data=json.loads((folder/'circuit.json').read_text());board=p.LoadBoard(str(folder/(name+'.kicad_pcb')))
         loaded[name]=board;actual=pads(board)
+        assert all(fp.GetLayer()==p.F_Cu for fp in board.GetFootprints() if fp.GetAttributes() & p.FP_SMD), (name, 'SMD assembly face')
         expected={(c['ref'],pin):net for c in data['components'] for pin,net in c['pins'].items() if net}
         native=s.parse((folder/'reports/schematic.net').read_text());schematic={}
         for n in s.children(s.children(native,'nets')[0],'net'):
@@ -41,6 +42,8 @@ def main():
             if net and not net.startswith('unconnected-') and key not in expected:diffs.append(['unexpected pcb net',key,net])
         erc=json.loads((folder/'reports/erc.json').read_text());drc=json.loads((folder/'reports/drc.json').read_text())
         result={'connected_pins':len(expected),'parity_differences':diffs,
+                'front_smd_components':sum(bool(fp.GetAttributes() & p.FP_SMD) for fp in board.GetFootprints()),
+                'back_smd_components':0,
                 'erc_violations':sum(len(sh['violations']) for sh in erc['sheets']),
                 'drc_violations':len(drc['violations']),'unconnected_items':len(drc['unconnected_items']),
                 'copper_layers':board.GetCopperLayerCount(),'tracks_and_vias':len(list(board.GetTracks())),

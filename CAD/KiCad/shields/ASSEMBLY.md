@@ -7,7 +7,9 @@ R1/R2 are axial metal film, 1%, 0.25W, 7.62mm lead pitch. C1/C2 are radial
 PET/PP film, 5%, >=50V, 5mm pitch; the reserved body envelope is 7 x 6.5mm.
 Select actual capacitors within this envelope (including 470nF). No ceramic
 substitution. Optional machine-pin sockets use the same holes. R3 is 100K
-0603. Slot +5V is unused. Write pitch/body on front and tick the back table.
+0603, soldered by hand with the through-hole parts. Order voice cards as bare
+boards; no outsourced assembly is needed. Slot +5V is unused. Write pitch/body
+on front and tick the back table.
 
 Test headers are individual gold 1x1 2.54mm pins: 26 backplane, 3 adapter,
 2 per voice card. The microphone holder adds separate MICOUT/GND pins. Backplane
@@ -26,7 +28,10 @@ Keep the frame isolated. See microphone/README.md for dry-fit checks.
 
 Use gold contacts on mating headers; remove male key 6/22 and block the
 matching socket cavity. Voice sockets are on B.Cu. Teensy input caps CM1-CM5
-are on B.Cu; microphone components are all on F.Cu. Use insulated M3 standoffs
+are on F.Cu beside the Teensy socket, clear of its body. Every SMD part on
+every active shield is on F.Cu. The board maker places front SMD on the
+backplane, adapter and microphone holder; fit all through-hole parts by hand.
+The analyser carrier has no SMD parts to place. Use insulated M3 standoffs
 for shield retention. Computing USB and rack power switch together; unplug
 both before swapping cards. Verify numbering and rail isolation before power.
 

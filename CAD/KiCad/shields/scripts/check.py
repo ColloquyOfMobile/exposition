@@ -24,11 +24,14 @@ def run(folder):
     commands=[['sch','erc','--format','json','-o',str(reports/'erc.json'),str(sch)],
               ['sch','export','netlist','-o',str(reports/'schematic.net'),str(sch)],
               ['pcb','drc','--format','json','-o',str(reports/'drc.json'),str(board)],
-              ['pcb','export','pos','--format','csv','--side','both','--units','mm','--smd-only','-o',str(folder/'positions.csv'),str(board)],
               ['sch','export','svg','-o',str(reports/'schematic'),str(sch)],
               ['pcb','export','svg','--layers','F.Cu,F.Silkscreen,Edge.Cuts','--page-size-mode','2','--exclude-drawing-sheet','-o',str(reports/'board.svg'),str(board)],
               ['pcb','export','svg','--layers','F.Fab,F.Silkscreen,Edge.Cuts,Dwgs.User','--page-size-mode','2','--exclude-drawing-sheet','-o',str(reports/'assembly-front.svg'),str(board)],
               ['pcb','export','svg','--layers','B.Fab,B.Silkscreen,Edge.Cuts','--page-size-mode','2','--exclude-drawing-sheet','-o',str(reports/'assembly-back.svg'),str(board)]]
+    if name in ('backplane','teensy-adapter','microphone'):
+        commands.append(['pcb','export','pos','--format','csv','--side','front','--units','mm','--smd-only','-o',str(folder/'positions.csv'),str(board)])
+    else:
+        (folder/'positions.csv').unlink(missing_ok=True)
     logs=[]
     for cmd in commands:
         result=subprocess.run([str(CLI)]+cmd,capture_output=True,text=True)

@@ -1,6 +1,9 @@
 {
   "references_on_assembly_layer_due_to_space": [
     "CA24",
+    "CM1",
+    "CM3",
+    "CM5",
     "JM1",
     "JT1",
     "RA23",
@@ -16,6 +19,7 @@
     "RD11",
     "RD12",
     "RD2",
+    "RD29",
     "RD31",
     "RD32",
     "RD4",

@@ -1047,8 +1047,8 @@ the cards and the backplane are the same for both processors.
   copper at >=2 mm. The adapter is unchanged. Computing-slot hardware
   needs <=4 mm OD round spacers/posts on the front and screw heads on the
   rear to clear the nearby headers; see the PCB assembly notes.
-- The adapter in `CAD/KiCad/shields/` predates section 8a: its five 1 nF
-  (`CM1`–`CM5`) are on the back, the only SMD parts there. Until it is
-  re-routed, leave them out of the assembly order and solder them by
-  hand; sent as drawn, it is a double-sided job for five capacitors.
-  The voice card's files likewise still list its 100 K for placement.
+- The adapter artwork was updated for section 8a on 2026-10-13:
+  `CM1`–`CM5` are on the front beside the Teensy socket, clear of its
+  body. All active shields have front SMD only. Voice-card manufacturing
+  packages specify bare boards and hand assembly, including the 100 K;
+  they supply no machine-placement file or stencil.

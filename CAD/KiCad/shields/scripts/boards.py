@@ -108,8 +108,7 @@ def placements(name,old):
             x=151+i%6*7;y=132+i//6*9
             out[f'RA{pin}']=(x,y,90);out[f'RB{pin}']=(x+3,y,90);out[f'CA{pin}']=(x,y+4,0)
         for i,pin in enumerate([0,1,3,33,36,37,40,41]):out[f'TP{pin}']=(162+i*4,120,0)
-        for i in range(1,6):out[f'CM{i}']=(178.4,87.48-(i-1)*2.54,0)
-        out['CM5']=(178.4,74.5,0)
+        for i in range(1,6):out[f'CM{i}']=(172.4,90-(i-1)*3.5,90)
         out['TPG']=(185.666666,124.666666,0)
         return out
     raise ValueError(name)
@@ -177,7 +176,7 @@ def main(only=None):
                 fp=p.FootprintLoad(str(path),fpname)
                 if not fp:raise RuntimeError(f'Missing {path}/{fpname}')
             board.Add(fp);fp.SetReference(ref);fp.SetValue(c['value'])
-            if fpname.startswith('Socket_') or (name=='teensy-adapter' and ref.startswith('CM')):fp.Flip(fp.GetPosition(),True)
+            if fpname.startswith('Socket_'):fp.Flip(fp.GetPosition(),True)
             if ref!='JM1':
                 x,y,angle=places[ref];fp.SetOrientationDegrees(angle);fp.SetPosition(xy(x,y))
             if name=='backplane' and ref=='A1':

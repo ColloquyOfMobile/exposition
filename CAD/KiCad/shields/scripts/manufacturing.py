@@ -30,6 +30,9 @@ def build(name):
     quality=payload/'checks';quality.mkdir()
     inputs=stage/'input';inputs.mkdir()
     board=p.LoadBoard(str(source))
+    smd=[fp for fp in board.GetFootprints() if fp.GetAttributes() & p.FP_SMD]
+    assert all(fp.GetLayer()==p.F_Cu for fp in smd),f'{name}: SMD parts must be on the front'
+    outsourced=name in ('backplane','teensy-adapter','microphone')
     p.ZONE_FILLER(board).Fill(board.Zones())
     exported=inputs/source.name
     p.SaveBoard(str(exported),board)
@@ -51,12 +54,14 @@ def build(name):
          '--excellon-separate-th','--generate-map','--map-format','svg','-o',str(payload)+'/',exported])
     for mapfile in list(payload.glob('*-drl_map.svg')):
         shutil.move(str(mapfile),str(assembly/mapfile.name))
-    stencil=assembly/'stencil';stencil.mkdir()
-    run(['pcb','export','gerbers','--layers','F.Paste,B.Paste','-o',str(stencil)+'/',exported])
+    if outsourced:
+        stencil=assembly/'stencil';stencil.mkdir()
+        run(['pcb','export','gerbers','--layers','F.Paste','-o',str(stencil)+'/',exported])
     run(['pcb','export','pos','--format','csv','--side','both','--units','mm','--exclude-dnp',
          '-o',assembly/'positions-all.csv',exported])
-    run(['pcb','export','pos','--format','csv','--side','both','--units','mm','--smd-only','--exclude-dnp',
-         '-o',assembly/'positions-smd.csv',exported])
+    if outsourced:
+        run(['pcb','export','pos','--format','csv','--side','front','--units','mm','--smd-only','--exclude-dnp',
+             '-o',assembly/'positions-smd.csv',exported])
     for side in ('F','B'):
         run(['pcb','export','svg','--layers',f'{side}.Fab,{side}.Silkscreen,Edge.Cuts',
              '--page-size-mode','2','--exclude-drawing-sheet','-o',assembly/f'{side}-assembly.svg',exported])
@@ -85,8 +90,12 @@ stack-up are not specified here: confirm these quotation options before ordering
 No controlled-impedance fabrication requirement is declared in this package.
 Quantity and panelisation are order choices; one unpanelised board is supplied.
 
-assembly/ contains BOM, all-component and SMD-only placement CSVs, top/bottom
-assembly drawings, stencil paste Gerbers, drill maps, and project assembly notes.
+Assembly policy: {'board maker places front SMD only; fit every through-hole part by hand' if outsourced else 'order bare boards; fit every part by hand' }.
+{'Voice cards: solder the single 100K 0603 pull-down by hand with the pitch parts. No machine placement file or stencil is supplied.' if name=='voice-thomas' else 'Analyser carrier: no SMD parts to place; fit sockets and modified modules by hand.' if name=='analyser-carrier' else 'Only front SMD placement and front paste files are supplied for outsourced assembly.'}
+
+assembly/ contains BOM, an all-component placement reference, top/bottom
+assembly drawings, drill maps, and project assembly notes. Outsourced boards
+also include a front SMD placement CSV and front stencil paste Gerber.
 These are assembly references, not a fully procurement-qualified PCBA order:
 some BOM MPNs are blank or descriptive, and purchased modules/composite socket
 footprints require manual interpretation. Confirm exact parts, DNP/variant
@@ -118,6 +127,7 @@ The source KiCad PCB was not modified by packaging.
         drill=payload/(name+'-'+suffix+'.drl')
         assert drill.exists() and 'M30' in drill.read_text()
     manifest={'project':name,'source_sha256':source_hash,'exported_pcb_sha256':hashlib.sha256(exported.read_bytes()).hexdigest(),
+              'assembly_policy':'front_smd_only' if outsourced else 'hand_assembled_bare_board',
               'copper_layers_top_to_bottom':copper,'thickness_mm':thickness,'drc_errors':len(errors),
               'drc_warnings':len(drc['violations'])-len(errors),'unconnected':0,'files':files}
     (payload/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
@@ -133,6 +143,7 @@ The source KiCad PCB was not modified by packaging.
     (out/'README.md').write_text(f'# Manufacturing package\n\nUpload `{archive.name}` for this PCB. Read the enclosed\n`README-manufacturing.md` before ordering or requesting assembly.\n\nRegenerate all active projects using KiCad Python with\n`scripts/manufacturing.py` from the shields directory.\n')
     print(name,archive.stat().st_size,'bytes;',len(files)+1,'files;',len(copper),'copper layers; DRC errors',len(errors),flush=True)
     return {'project':name,'zip':str(archive.relative_to(ROOT)),'sha256':hashlib.sha256(archive.read_bytes()).hexdigest(),
+            'assembly_policy':'front_smd_only' if outsourced else 'hand_assembled_bare_board',
             'files':len(files)+1,'copper_layers':len(copper),'drc_errors':len(errors),'drc_warnings':len(drc['violations'])-len(errors),'unconnected':0}
 
 if __name__=='__main__':

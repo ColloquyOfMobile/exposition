@@ -106,6 +106,11 @@ scene edits is intended. The subsequent carrier correction is validated in
 [carrier-update-validation.json](carrier-update-validation.json), which supersedes
 the previous carrier mismatch and affected Blender hashes. Regenerate that
 geometry in edited Blender files with `update_carrier_geometry.py`.
+The 2026-10-13 front-SMD adapter update is recorded in
+[adapter-update-validation.json](adapter-update-validation.json). Its hashes
+supersede earlier hashes of the Teensy and combined Blender files.
+`update_adapter_geometry.py` replaces the adapter geometry while preserving
+assembly transforms and scene edits; the adapter STEP/GLB exports are refreshed.
 Imported Arduino, Teensy and KiCad component geometry retains its original
 licensing and attribution; see the linked reference-project notes and their
 retained source/license files.

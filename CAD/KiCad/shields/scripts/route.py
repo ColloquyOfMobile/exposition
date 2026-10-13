@@ -53,7 +53,7 @@ def route(folder,args):
          '--gui.enabled=false','--api_server.enabled=false','--mcp_server.enabled=false','--profile.allow_telemetry=false',
          '--usage_and_diagnostic_data.disable_analytics=true','-da','-l','en',
          '--user_data_path='+str(work/'settings'),'--logging.file.location='+str(work),
-         '--router.optimizer.max_passes=2','-mp','40','-mt','1','-de',str(dsn),'-do',str(ses)]
+         '--router.optimizer.max_passes=2','-mp',str(args.max_passes),'-mt','1','-de',str(dsn),'-do',str(ses)]
     with (work/'router.log').open('w') as log:
         result=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT,cwd=work)
     if result.returncode or not ses.exists():raise RuntimeError(f'{name}: routing failed; see {work}/router.log')
@@ -75,6 +75,7 @@ if __name__=='__main__':
     parser.add_argument('--work',type=Path,required=True);parser.add_argument('--only',nargs='*')
     parser.add_argument('--from-routed',action='store_true');parser.add_argument('--rip-net',nargs='*')
     parser.add_argument('--rip-violations',action='store_true')
+    parser.add_argument('--max-passes',type=int,default=40)
     args=parser.parse_args();args.jar=args.jar.resolve();args.work=args.work.resolve()
     folders=[f for f in ROOT.iterdir() if (f/'circuit.json').exists() and (not args.only or f.name in args.only)]
     # pcbnew serialization is kept sequential; router jobs can be run separately.

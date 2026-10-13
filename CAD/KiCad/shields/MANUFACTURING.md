@@ -13,9 +13,17 @@ its own `manufacturing` directory containing a ZIP and short instructions.
 
 Each ZIP includes Gerber X2 copper/mask/silkscreen/outline files, the Gerber job
 file, separate metric PTH/NPTH Excellon drills (including slots), drill maps,
-stencil paste Gerbers, BOM, placement CSVs, assembly SVGs, applicable project
+BOM, assembly reference CSVs, assembly SVGs, applicable project
 notes and variant BOMs, a fresh DRC report, and checksums.
 Gerbers and drills use the same absolute origin. Board thickness is 1.6 mm.
+
+The board maker places front SMD only on the backplane, Teensy adapter and
+microphone holder. Their packages include front paste and front SMD placement
+files. Every through-hole part is fitted by hand. Order all Thomas voice
+cards bare and solder their single 100K 0603 by hand with the pitch parts;
+their packages omit stencil and machine-placement files. The analyser carrier
+also needs no machine assembly. All-component CSVs and BOMs are assembly
+references for manual fitting, not machine-placement orders.
 
 All five freshly refilled export boards passed native KiCad DRC with zero
 violations and zero unconnected items. ZIP integrity and archived file hashes

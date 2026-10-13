@@ -1,4 +1,4 @@
-# Native KiCad validation — 2026-10-08
+# Native KiCad validation — 2026-10-13
 
 KiCad 9.0.7 reports zero ERC violations, zero DRC violations and zero
 unconnected items on all five current routed boards. No new DRC exclusions
@@ -35,7 +35,22 @@ with the mirrored v2 coordinates and all four computing mounts with the
 unchanged adapter. The slim-front mounting footprints require <=4mm OD
 front posts/spacers and rear screw heads; hardware fit remains a dry-fit check.
 
-The focused specification tests pass: 37 tests (test_shields.py and
+The 2026-10-13 revision moves CM1-CM5 to the adapter front, beside and clear
+of the Teensy socket courtyard, with rerouted microphone branches and ground
+returns. All five active boards again pass native ERC/DRC with zero violations,
+zero unconnected items and zero schematic/PCB parity differences. Independent
+verification now rejects any SMD footprint on the back. Front assembly artwork
+was visually inspected. Manufacturer ZIPs were regenerated and their archived
+file hashes and integrity checked; voice cards and the analyser carrier contain
+no machine-placement file or stencil. Only front paste and front SMD placements
+are supplied for the three outsourced boards. Production adapter Gerbers were
+also regenerated from the checked PCB.
+
+The 2026-10-13 focused and full pytest runs could not collect: the available
+Python 3.10 test environment lacks pandas (full run: 65 collection errors).
+No application or firmware behavior was changed.
+
+The previous focused specification tests passed: 37 tests (test_shields.py and
 test_microphone_board.py). No application or firmware code was changed.
 The full repository pytest suite also passes: 1,665 tests on 2026-10-08.
 Front/back assembly views were inspected for voice/microphone layouts;
