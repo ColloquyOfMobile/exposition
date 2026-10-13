@@ -1,0 +1,52 @@
+[
+  {
+    "project": "backplane",
+    "zip": "backplane\\manufacturing\\backplane-manufacturing.zip",
+    "sha256": "79eb6c2deb07762d2e25d821335a09deb59bd6fee3a357dd6905625f01443d70",
+    "files": 27,
+    "copper_layers": 4,
+    "drc_errors": 0,
+    "drc_warnings": 0,
+    "unconnected": 0
+  },
+  {
+    "project": "teensy-adapter",
+    "zip": "teensy-adapter\\manufacturing\\teensy-adapter-manufacturing.zip",
+    "sha256": "32e5d419ac51ec5665f01bc4a3eab02b17f0a45f5a4240b1280f5101458b2089",
+    "files": 27,
+    "copper_layers": 4,
+    "drc_errors": 0,
+    "drc_warnings": 0,
+    "unconnected": 0
+  },
+  {
+    "project": "voice-thomas",
+    "zip": "voice-thomas\\manufacturing\\voice-thomas-manufacturing.zip",
+    "sha256": "05c3943a3079cf964320d59db1705309df24d1093b968616e6cc797b5817490d",
+    "files": 62,
+    "copper_layers": 2,
+    "drc_errors": 0,
+    "drc_warnings": 0,
+    "unconnected": 0
+  },
+  {
+    "project": "analyser-carrier",
+    "zip": "analyser-carrier\\manufacturing\\analyser-carrier-manufacturing.zip",
+    "sha256": "5d9f934b1bb02f4b15eb98030e6513aa37a59fd4b35036f26ef5cf12158d3745",
+    "files": 29,
+    "copper_layers": 2,
+    "drc_errors": 0,
+    "drc_warnings": 0,
+    "unconnected": 0
+  },
+  {
+    "project": "microphone",
+    "zip": "microphone\\manufacturing\\microphone-manufacturing.zip",
+    "sha256": "ffcd5cd14218a2d84f6b8f30966d28886d87aad5a7c2af812b3d586fa1b6d20d",
+    "files": 27,
+    "copper_layers": 2,
+    "drc_errors": 0,
+    "drc_warnings": 0,
+    "unconnected": 0
+  }
+]
