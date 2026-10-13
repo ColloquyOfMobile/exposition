@@ -14,7 +14,9 @@ another solution is changing a shield.
 
 Written 2026-10-03; **simplified 2026-10-04**; **direct microphones,
 Thomas's filter on every card and his analyser modules 2026-10-05**;
-**the Mega on the DSUB face and +12 V on an outer layer 2026-10-08**. The people building it are qualified, so this says what to
+**the Mega on the DSUB face and +12 V on an outer layer 2026-10-08**;
+**every SMD part on one face and the cards built by hand 2026-10-13**
+(section 8a). The people building it are qualified, so this says what to
 build, in what order, and how to tell the pieces apart, and leaves out
 what a competent hand does anyway. **There is no shield identification in
 hardware: the silkscreen does that job** (section 6). It is the sixth
@@ -500,7 +502,7 @@ a labelled pad.
 | Mega-pattern headers | female: five 1×8, one 1×10, one 2×18 | THT | |
 | translators ×4 | SN74LV4T125 | TSSOP-14 | `VCC` from `VIN`; `OE` to GND; spare input to GND; partial-power-down outputs (TI) |
 | translator input pull-downs ×15 | 100 K | 0603 | low while the Teensy boots or is absent |
-| microphone reservoirs ×5 | 1 nF C0G, Teensy pin to GND | 0603 | section 4a |
+| microphone reservoirs ×5 | 1 nF C0G, Teensy pin to GND | 0603 | section 4a; on the front with every other SMD part (8a) |
 | photosensor dividers ×11 | 100 K series, 150 K to GND, 10 nF C0G at the pin | 0603 | 5.25 V becomes 3.15 V |
 | `VIN` to `MEGA_5V` | Schottky, 1N5819HW | SOD-123 | |
 | decoupling | 100 nF per IC; 10 µF on `VIN` and on 3.3 V | 0603, 0805 | |
@@ -628,9 +630,11 @@ Teensy alike. **The four parts that set the pitch are through-hole**:
 metal-film resistors and film capacitors, so a card is re-valued with a
 soldering iron, or with machine-pin sockets in the same holes if the
 parts are to be changed by hand. The rest is SMD: 100 K from the tone to
-GND, so an undriven slot idles at 0 V. A card per slot, so one body's
-pitch changes without touching the others; 30 × 42 mm, a 2 × 3 socket
-beneath and one M3 screw. Slot pin 5 (`+5V`) is not used by the card.
+GND, so an undriven slot idles at 0 V — one 0603, soldered by hand with
+the others, because the cards are not sent for assembly (8a). A card per
+slot, so one body's pitch changes without touching the others;
+30 × 42 mm, a 2 × 3 socket beneath and one M3 screw. Slot pin 5 (`+5V`)
+is not used by the card.
 
 Every card has a pad on its tone input and two 1-pin headers, `LINE` and
 `AGND`, 2.54 mm apart, so a powered speaker or a scope plugs straight on
@@ -692,7 +696,7 @@ which the body divider was sized for.
 |---|---|---|
 | R1, R2 | from the tables, metal film, 1 %, 0.25 W | **THT**, axial, 7.62 mm pitch |
 | C1, C2 | from the tables, film (PET or PP), 5 %, 50 V or more | **THT**, radial, 5 mm pitch |
-| tone pull-down | 100 K | 0603 |
+| tone pull-down | 100 K | 0603, by hand (8a) |
 | test pins | `LINE`, `AGND` | 1 × 1 header, THT |
 
 **Film capacitors only, never ceramic**: each corner sits at its own
@@ -930,6 +934,35 @@ otherwise only for connectors and sockets:
 **Slot contacts gold on both halves**; the socket's cavity at the key is
 plugged.
 
+### 8a. What the board maker places, and what is soldered by hand
+
+**The SMD parts are placed by whoever makes the boards (PCBWay or
+JLCPCB); every through-hole part is fitted by hand.** Two rules follow,
+both added 2026-10-13, when the drawn boards were read for what they ask
+of an assembly line:
+
+- **Every SMD part of a board is on one face: the front.** Parts on both
+  faces are two passes and two stencils, and at JLCPCB the difference
+  between *Economic* assembly, which places one side only, and
+  *Standard* (their assembly capabilities page, read 2026-10-13). On
+  these boards all of that would be bought by five capacitors: the
+  adapter's 1 nF reservoirs (3b, 4a), which were drawn on the back.
+  **They go on the front**, each beside its Teensy socket pin and clear
+  of the socket's body.
+- **The voice cards are not sent for assembly.** A card has one SMD
+  part, its 100 K pull-down, beside four through-hole parts that are
+  soldered by hand whatever happens. An assembly order of its own — a
+  setup, a stencil, a parts list and a placement file to prepare and
+  check — for one 0603 on five boards is more work than five resistors.
+  **Order the cards as bare boards and solder the 100 K with the rest**;
+  a card for a new pitch is built the same way.
+
+| Assembly | Boards | SMD |
+|---|---|---|
+| placed by the board maker | backplane, Teensy adapter, and the microphone board (its own document) | front face only |
+| by hand, on a bare board | every voice card | one 0603, front |
+| nothing to place | analyser carrier | none |
+
 ---
 
 ## 9. Placement
@@ -1014,3 +1047,8 @@ the cards and the backplane are the same for both processors.
   copper at >=2 mm. The adapter is unchanged. Computing-slot hardware
   needs <=4 mm OD round spacers/posts on the front and screw heads on the
   rear to clear the nearby headers; see the PCB assembly notes.
+- The adapter in `CAD/KiCad/shields/` predates section 8a: its five 1 nF
+  (`CM1`–`CM5`) are on the back, the only SMD parts there. Until it is
+  re-routed, leave them out of the assembly order and solder them by
+  hand; sent as drawn, it is a double-sided job for five capacitors.
+  The voice card's files likewise still list its 100 K for placement.
