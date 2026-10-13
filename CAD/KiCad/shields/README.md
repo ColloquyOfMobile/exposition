@@ -3,6 +3,13 @@
 Updated for SHIELDS.md revision d076edc (2026-10-13) and MICROPHONE_BOARD.md.
 All current KiCad 9 projects and their shared library are in this folder.
 
+Matching functional pinouts show signal origins and destinations around a
+rectangle, with processor pins in its centre:
+[Arduino Mega](<../../../Source code/Python/colloquy/server2/static/hardware/shields-mega-pinout.svg>)
+and [Teensy](<../../../Source code/Python/colloquy/server2/static/hardware/shields-teensy-pinout.svg>).
+`SHIELDS.md` section 1a shows both. Regenerate from the repository root with
+`py export_shields_pinout.py`; the generator checks its mapping against the PCBs.
+
 | Project | Function | Quantity |
 |---|---|---|
 | backplane | Harness, power, shield slots, eight LEDs and 26 test headers | 1 |

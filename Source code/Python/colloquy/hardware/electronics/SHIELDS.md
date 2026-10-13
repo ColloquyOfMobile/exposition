@@ -252,6 +252,26 @@ all five.
 
 ---
 
+### 1a. Compare the processor connections
+
+The two functional pinouts use the same signal rectangle and row order:
+**origins on the left, processor pins in the centre, destinations on the
+right**. Each line names its signal path, including the analyser, dividers,
+translators and voice filters. Numbers are processor pin labels.
+
+![Arduino Mega signal origins, processor pins and destinations](/static/hardware/shields-mega-pinout.svg)
+
+![Teensy signal origins, processor pins and destinations](/static/hardware/shields-teensy-pinout.svg)
+
+The Mega reads the MSGEQ7 outputs on A0–A4; the Teensy reads the microphones
+directly on 14–18 / A0–A4. The Mega's direct microphone taps on D26–D30 are
+unused by firmware 4. Reset and strobe have no adapter connection because
+the Teensy configuration leaves the analyser slot empty.
+
+Regenerate with `py export_shields_pinout.py`. Signal connections are read
+from the backplane and adapter PCBs; adapter socket GPIO names come from
+its circuit manifest, checked against every connected PCB pad.
+
 ## 2. The backplane
 
 **Every connection to the harness is the v2 board's**, pin for pin: same

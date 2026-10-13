@@ -1,0 +1,189 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1160" viewBox="0 0 1800 1160" role="img" aria-labelledby="title desc">
+<title id="title">Teensy 4.1: shield signal pinout</title>
+<desc id="desc">Signal origins on the left, processor pins in the middle, signal destinations on the right. Matching rows compare the Mega and Teensy configurations.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="context-stroke"/></marker></defs>
+<rect width="1800" height="1160" fill="#fff"/>
+<style>text{font-family:Arial,sans-serif;fill:#243343}.signal{font-family:Consolas,monospace;font-size:17px}.path{font-size:14px}.pin{font-family:Consolas,monospace;font-size:21px;font-weight:bold}</style>
+<text x="35" y="48" font-size="32" text-anchor="start" class="">Teensy 4.1 · signal connections</text>
+<text x="35" y="79" font-size="18" text-anchor="start" class="">SHIELDS configuration · matching signal order in both diagrams · functional pinout</text>
+<rect x="20" y="105" width="1760" height="860" rx="10" fill="#f8fafc" stroke="#93a4b5" stroke-width="2"/>
+<rect x="760" y="205" width="280" height="725" rx="9" fill="#eaf0f6" stroke="#354e68" stroke-width="2"/>
+<text x="35" y="145" font-size="20" text-anchor="start" class="">INPUTS · origin</text>
+<text x="900" y="145" font-size="23" text-anchor="middle" class="">Teensy 4.1</text>
+<text x="1765" y="145" font-size="20" text-anchor="end" class="">OUTPUTS · destination</text>
+<text x="565" y="185" font-size="16" text-anchor="middle" class="">signal path into processor</text>
+<text x="900" y="185" font-size="16" text-anchor="middle" class="">PROCESSOR PINS</text>
+<text x="1225" y="185" font-size="16" text-anchor="middle" class="">signal path out of processor</text>
+<text x="35" y="256" font-size="17" text-anchor="start" class="signal" style="fill:#b34478">female1/microphone</text>
+<text x="781" y="257" font-size="17" text-anchor="start" class="pin">14 / A0</text>
+<path d="M340,250 H760" fill="none" stroke="#b34478" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="760" cy="250" r="4" fill="#b34478"/>
+<text x="550.0" y="241" font-size="17" text-anchor="middle" class="path" style="fill:#b34478">4.7K series · 1M to AGND · 1nF to GND</text>
+<text x="35" y="296" font-size="17" text-anchor="start" class="signal" style="fill:#b34478">female2/microphone</text>
+<text x="781" y="297" font-size="17" text-anchor="start" class="pin">15 / A1</text>
+<path d="M340,290 H760" fill="none" stroke="#b34478" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="760" cy="290" r="4" fill="#b34478"/>
+<text x="550.0" y="281" font-size="17" text-anchor="middle" class="path" style="fill:#b34478">4.7K series · 1M to AGND · 1nF to GND</text>
+<text x="35" y="336" font-size="17" text-anchor="start" class="signal" style="fill:#b34478">female3/microphone</text>
+<text x="781" y="337" font-size="17" text-anchor="start" class="pin">16 / A2</text>
+<path d="M340,330 H760" fill="none" stroke="#b34478" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="760" cy="330" r="4" fill="#b34478"/>
+<text x="550.0" y="321" font-size="17" text-anchor="middle" class="path" style="fill:#b34478">4.7K series · 1M to AGND · 1nF to GND</text>
+<text x="35" y="376" font-size="17" text-anchor="start" class="signal" style="fill:#b34478">male1/microphone</text>
+<text x="781" y="377" font-size="17" text-anchor="start" class="pin">17 / A3</text>
+<path d="M340,370 H760" fill="none" stroke="#b34478" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="760" cy="370" r="4" fill="#b34478"/>
+<text x="550.0" y="361" font-size="17" text-anchor="middle" class="path" style="fill:#b34478">4.7K series · 1M to AGND · 1nF to GND</text>
+<text x="35" y="416" font-size="17" text-anchor="start" class="signal" style="fill:#b34478">male2/microphone</text>
+<text x="781" y="417" font-size="17" text-anchor="start" class="pin">18 / A4</text>
+<path d="M340,410 H760" fill="none" stroke="#b34478" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="760" cy="410" r="4" fill="#b34478"/>
+<text x="550.0" y="401" font-size="17" text-anchor="middle" class="path" style="fill:#b34478">4.7K series · 1M to AGND · 1nF to GND</text>
+<text x="35" y="456" font-size="17" text-anchor="start" class="signal" style="fill:#976410">female1/photosensor</text>
+<text x="781" y="457" font-size="17" text-anchor="start" class="pin">19 / A5</text>
+<path d="M340,450 H760" fill="none" stroke="#976410" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="760" cy="450" r="4" fill="#976410"/>
+<text x="550.0" y="441" font-size="17" text-anchor="middle" class="path" style="fill:#976410">100K / 150K divider · 10nF at pin</text>
+<text x="35" y="496" font-size="17" text-anchor="start" class="signal" style="fill:#976410">female2/photosensor</text>
+<text x="781" y="497" font-size="17" text-anchor="start" class="pin">20 / A6</text>
+<path d="M340,490 H760" fill="none" stroke="#976410" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="760" cy="490" r="4" fill="#976410"/>
+<text x="550.0" y="481" font-size="17" text-anchor="middle" class="path" style="fill:#976410">100K / 150K divider · 10nF at pin</text>
+<text x="35" y="536" font-size="17" text-anchor="start" class="signal" style="fill:#976410">female3/photosensor</text>
+<text x="781" y="537" font-size="17" text-anchor="start" class="pin">21 / A7</text>
+<path d="M340,530 H760" fill="none" stroke="#976410" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="760" cy="530" r="4" fill="#976410"/>
+<text x="550.0" y="521" font-size="17" text-anchor="middle" class="path" style="fill:#976410">100K / 150K divider · 10nF at pin</text>
+<text x="35" y="576" font-size="17" text-anchor="start" class="signal" style="fill:#976410">male1/photosensor/A</text>
+<text x="781" y="577" font-size="17" text-anchor="start" class="pin">22 / A8</text>
+<path d="M340,570 H760" fill="none" stroke="#976410" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="760" cy="570" r="4" fill="#976410"/>
+<text x="550.0" y="561" font-size="17" text-anchor="middle" class="path" style="fill:#976410">100K / 150K divider · 10nF at pin</text>
+<text x="35" y="616" font-size="17" text-anchor="start" class="signal" style="fill:#976410">male1/photosensor/B</text>
+<text x="781" y="617" font-size="17" text-anchor="start" class="pin">23 / A9</text>
+<path d="M340,610 H760" fill="none" stroke="#976410" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="760" cy="610" r="4" fill="#976410"/>
+<text x="550.0" y="601" font-size="17" text-anchor="middle" class="path" style="fill:#976410">100K / 150K divider · 10nF at pin</text>
+<text x="35" y="656" font-size="17" text-anchor="start" class="signal" style="fill:#976410">male1/photosensor/C</text>
+<text x="781" y="657" font-size="17" text-anchor="start" class="pin">24 / A10</text>
+<path d="M340,650 H760" fill="none" stroke="#976410" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="760" cy="650" r="4" fill="#976410"/>
+<text x="550.0" y="641" font-size="17" text-anchor="middle" class="path" style="fill:#976410">100K / 150K divider · 10nF at pin</text>
+<text x="35" y="696" font-size="17" text-anchor="start" class="signal" style="fill:#976410">male1/photosensor/D</text>
+<text x="781" y="697" font-size="17" text-anchor="start" class="pin">25 / A11</text>
+<path d="M340,690 H760" fill="none" stroke="#976410" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="760" cy="690" r="4" fill="#976410"/>
+<text x="550.0" y="681" font-size="17" text-anchor="middle" class="path" style="fill:#976410">100K / 150K divider · 10nF at pin</text>
+<text x="35" y="736" font-size="17" text-anchor="start" class="signal" style="fill:#976410">male2/photosensor/A</text>
+<text x="781" y="737" font-size="17" text-anchor="start" class="pin">26 / A12</text>
+<path d="M340,730 H760" fill="none" stroke="#976410" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="760" cy="730" r="4" fill="#976410"/>
+<text x="550.0" y="721" font-size="17" text-anchor="middle" class="path" style="fill:#976410">100K / 150K divider · 10nF at pin</text>
+<text x="35" y="776" font-size="17" text-anchor="start" class="signal" style="fill:#976410">male2/photosensor/B</text>
+<text x="781" y="777" font-size="17" text-anchor="start" class="pin">27 / A13</text>
+<path d="M340,770 H760" fill="none" stroke="#976410" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="760" cy="770" r="4" fill="#976410"/>
+<text x="550.0" y="761" font-size="17" text-anchor="middle" class="path" style="fill:#976410">100K / 150K divider · 10nF at pin</text>
+<text x="35" y="816" font-size="17" text-anchor="start" class="signal" style="fill:#976410">male2/photosensor/C</text>
+<text x="781" y="817" font-size="17" text-anchor="start" class="pin">38 / A14</text>
+<path d="M340,810 H760" fill="none" stroke="#976410" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="760" cy="810" r="4" fill="#976410"/>
+<text x="550.0" y="801" font-size="17" text-anchor="middle" class="path" style="fill:#976410">100K / 150K divider · 10nF at pin</text>
+<text x="35" y="856" font-size="17" text-anchor="start" class="signal" style="fill:#976410">male2/photosensor/D</text>
+<text x="781" y="857" font-size="17" text-anchor="start" class="pin">39 / A15</text>
+<path d="M340,850 H760" fill="none" stroke="#976410" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="760" cy="850" r="4" fill="#976410"/>
+<text x="550.0" y="841" font-size="17" text-anchor="middle" class="path" style="fill:#976410">100K / 150K divider · 10nF at pin</text>
+<text x="1440" y="256" font-size="17" text-anchor="start" class="signal" style="fill:#2864a2">female1/tone</text>
+<text x="1019" y="257" font-size="17" text-anchor="end" class="pin">2</text>
+<path d="M1040,250 H1420" fill="none" stroke="#2864a2" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="1040" cy="250" r="4" fill="#2864a2"/>
+<text x="1230.0" y="241" font-size="17" text-anchor="middle" class="path" style="fill:#2864a2">3.3V → 5V translator · RC voice card → body line out</text>
+<text x="1440" y="296" font-size="17" text-anchor="start" class="signal" style="fill:#2864a2">female2/tone</text>
+<text x="1019" y="297" font-size="17" text-anchor="end" class="pin">4</text>
+<path d="M1040,290 H1420" fill="none" stroke="#2864a2" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="1040" cy="290" r="4" fill="#2864a2"/>
+<text x="1230.0" y="281" font-size="17" text-anchor="middle" class="path" style="fill:#2864a2">3.3V → 5V translator · RC voice card → body line out</text>
+<text x="1440" y="336" font-size="17" text-anchor="start" class="signal" style="fill:#2864a2">female3/tone</text>
+<text x="1019" y="337" font-size="17" text-anchor="end" class="pin">5</text>
+<path d="M1040,330 H1420" fill="none" stroke="#2864a2" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="1040" cy="330" r="4" fill="#2864a2"/>
+<text x="1230.0" y="321" font-size="17" text-anchor="middle" class="path" style="fill:#2864a2">3.3V → 5V translator · RC voice card → body line out</text>
+<text x="1440" y="376" font-size="17" text-anchor="start" class="signal" style="fill:#2864a2">male1/tone</text>
+<text x="1019" y="377" font-size="17" text-anchor="end" class="pin">6</text>
+<path d="M1040,370 H1420" fill="none" stroke="#2864a2" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="1040" cy="370" r="4" fill="#2864a2"/>
+<text x="1230.0" y="361" font-size="17" text-anchor="middle" class="path" style="fill:#2864a2">3.3V → 5V translator · RC voice card → body line out</text>
+<text x="1440" y="416" font-size="17" text-anchor="start" class="signal" style="fill:#2864a2">male2/tone</text>
+<text x="1019" y="417" font-size="17" text-anchor="end" class="pin">28</text>
+<path d="M1040,410 H1420" fill="none" stroke="#2864a2" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="1040" cy="410" r="4" fill="#2864a2"/>
+<text x="1230.0" y="401" font-size="17" text-anchor="middle" class="path" style="fill:#2864a2">3.3V → 5V translator · RC voice card → body line out</text>
+<text x="1440" y="456" font-size="17" text-anchor="start" class="signal" style="fill:#287653">female1/neopixel</text>
+<text x="1019" y="457" font-size="17" text-anchor="end" class="pin">7</text>
+<path d="M1040,450 H1420" fill="none" stroke="#287653" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="1040" cy="450" r="4" fill="#287653"/>
+<text x="1230.0" y="441" font-size="17" text-anchor="middle" class="path" style="fill:#287653">3.3V → 5V translator · 330R series</text>
+<text x="1440" y="496" font-size="17" text-anchor="start" class="signal" style="fill:#287653">female2/neopixel</text>
+<text x="1019" y="497" font-size="17" text-anchor="end" class="pin">8</text>
+<path d="M1040,490 H1420" fill="none" stroke="#287653" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="1040" cy="490" r="4" fill="#287653"/>
+<text x="1230.0" y="481" font-size="17" text-anchor="middle" class="path" style="fill:#287653">3.3V → 5V translator · 330R series</text>
+<text x="1440" y="536" font-size="17" text-anchor="start" class="signal" style="fill:#287653">female3/neopixel</text>
+<text x="1019" y="537" font-size="17" text-anchor="end" class="pin">9</text>
+<path d="M1040,530 H1420" fill="none" stroke="#287653" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="1040" cy="530" r="4" fill="#287653"/>
+<text x="1230.0" y="521" font-size="17" text-anchor="middle" class="path" style="fill:#287653">3.3V → 5V translator · 330R series</text>
+<text x="1440" y="576" font-size="17" text-anchor="start" class="signal" style="fill:#287653">male1/neopixel</text>
+<text x="1019" y="577" font-size="17" text-anchor="end" class="pin">10</text>
+<path d="M1040,570 H1420" fill="none" stroke="#287653" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="1040" cy="570" r="4" fill="#287653"/>
+<text x="1230.0" y="561" font-size="17" text-anchor="middle" class="path" style="fill:#287653">3.3V → 5V translator · 330R series</text>
+<text x="1440" y="616" font-size="17" text-anchor="start" class="signal" style="fill:#287653">male2/neopixel</text>
+<text x="1019" y="617" font-size="17" text-anchor="end" class="pin">11</text>
+<path d="M1040,610 H1420" fill="none" stroke="#287653" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="1040" cy="610" r="4" fill="#287653"/>
+<text x="1230.0" y="601" font-size="17" text-anchor="middle" class="path" style="fill:#287653">3.3V → 5V translator · 330R series</text>
+<text x="1440" y="656" font-size="17" text-anchor="start" class="signal" style="fill:#287653">male1/bar neopixel</text>
+<text x="1019" y="657" font-size="17" text-anchor="end" class="pin">29</text>
+<path d="M1040,650 H1420" fill="none" stroke="#287653" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="1040" cy="650" r="4" fill="#287653"/>
+<text x="1230.0" y="641" font-size="17" text-anchor="middle" class="path" style="fill:#287653">3.3V → 5V translator · 330R series</text>
+<text x="1440" y="696" font-size="17" text-anchor="start" class="signal" style="fill:#287653">male2/bar neopixel</text>
+<text x="1019" y="697" font-size="17" text-anchor="end" class="pin">12</text>
+<path d="M1040,690 H1420" fill="none" stroke="#287653" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="1040" cy="690" r="4" fill="#287653"/>
+<text x="1230.0" y="681" font-size="17" text-anchor="middle" class="path" style="fill:#287653">3.3V → 5V translator · 330R series</text>
+<text x="1440" y="736" font-size="17" text-anchor="start" class="signal" style="fill:#6556a0">male1/aux</text>
+<text x="1019" y="737" font-size="17" text-anchor="end" class="pin">30</text>
+<path d="M1040,730 H1420" fill="none" stroke="#6556a0" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="1040" cy="730" r="4" fill="#6556a0"/>
+<text x="1230.0" y="721" font-size="17" text-anchor="middle" class="path" style="fill:#6556a0">3.3V → 5V translator · 330R series</text>
+<text x="1440" y="776" font-size="17" text-anchor="start" class="signal" style="fill:#6556a0">male2/aux</text>
+<text x="1019" y="777" font-size="17" text-anchor="end" class="pin">31</text>
+<path d="M1040,770 H1420" fill="none" stroke="#6556a0" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="1040" cy="770" r="4" fill="#6556a0"/>
+<text x="1230.0" y="761" font-size="17" text-anchor="middle" class="path" style="fill:#6556a0">3.3V → 5V translator · 330R series</text>
+<text x="1440" y="816" font-size="17" text-anchor="start" class="signal" style="fill:#6556a0">amp shutdown</text>
+<text x="1019" y="817" font-size="17" text-anchor="end" class="pin">32</text>
+<path d="M1040,810 H1420" fill="none" stroke="#6556a0" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="1040" cy="810" r="4" fill="#6556a0"/>
+<text x="1230.0" y="801" font-size="17" text-anchor="middle" class="path" style="fill:#6556a0">3.3V → 5V translator · reserved · 10K pull-up to USB 5V</text>
+<text x="1440" y="856" font-size="17" text-anchor="start" class="signal" style="fill:#7f8c99">analyser/reset</text>
+<text x="1019" y="857" font-size="17" text-anchor="end" class="pin">—</text>
+<path d="M1040,850 H1420" fill="none" stroke="#7f8c99" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="5 5"/>
+<circle cx="1040" cy="850" r="4" fill="#7f8c99"/>
+<text x="1230.0" y="841" font-size="17" text-anchor="middle" class="path" style="fill:#7f8c99">analyser slot empty · no connection</text>
+<text x="1440" y="896" font-size="17" text-anchor="start" class="signal" style="fill:#7f8c99">analyser/strobe</text>
+<text x="1019" y="897" font-size="17" text-anchor="end" class="pin">—</text>
+<path d="M1040,890 H1420" fill="none" stroke="#7f8c99" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="5 5"/>
+<circle cx="1040" cy="890" r="4" fill="#7f8c99"/>
+<text x="1230.0" y="881" font-size="17" text-anchor="middle" class="path" style="fill:#7f8c99">analyser slot empty · no connection</text>
+<text x="35" y="1004" font-size="18" text-anchor="start" class="">Microphones</text>
+<text x="200" y="1004" font-size="17" text-anchor="start" class="">Pins 14–18 / A0–A4 read raw microphone signals. MSGEQ7 band outputs and reset/strobe have no adapter connection.</text>
+<text x="35" y="1044" font-size="18" text-anchor="start" class="">Power / return</text>
+<text x="200" y="1044" font-size="17" text-anchor="start" class="">USB supplies VIN; Teensy logic/ADC: 3.3V. MEGA_5V reaches the backplane through the adapter Schottky diode.</text>
+<text x="35" y="1084" font-size="18" text-anchor="start" class="">Shared wiring</text>
+<text x="200" y="1084" font-size="17" text-anchor="start" class="">Backplane GND/AGND bond; five RC voice cards; the same harness signals. Dynamixel communication uses the separate U2D2.</text>
+<text x="35" y="1124" font-size="16" text-anchor="start" class="">Pin numbers are processor labels. Signal lines show conditioning along the route; connector positions are in the PCB drawings.</text>
+</svg>
