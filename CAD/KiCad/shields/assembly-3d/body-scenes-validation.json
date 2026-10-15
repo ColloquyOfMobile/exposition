@@ -1,0 +1,109 @@
+{
+  "combined_sha256_before": "b40f2db2cffedd3b9f145c034175b04941b65e0caeb183a57e08e5121173941e",
+  "existing_scenes": [
+    "Mega",
+    "Teensy"
+  ],
+  "bodies": [
+    {
+      "scene": "Female body",
+      "body_source": "female-base-v2",
+      "body_transform_mm": [
+        -50,
+        20,
+        5.0
+      ],
+      "microphone_transform_mm": [
+        -60,
+        -80,
+        5.0
+      ],
+      "microphone_mount_centres_mm": [
+        [
+          -4e-06,
+          -136.000007,
+          5.0
+        ],
+        [
+          -4e-06,
+          -186.000004,
+          5.0
+        ]
+      ],
+      "body_mount_centres_mm": [
+        [
+          0,
+          -27,
+          5.0
+        ],
+        [
+          0,
+          -70,
+          5.0
+        ]
+      ],
+      "profile_dimensions_mm": [
+        25.4,
+        240.0,
+        50.8
+      ],
+      "profile_installed_part_verified": false,
+      "body_meshes": 17
+    },
+    {
+      "scene": "Male body",
+      "body_source": "male-static-v2",
+      "body_transform_mm": [
+        -50,
+        20,
+        5.0
+      ],
+      "microphone_transform_mm": [
+        -60,
+        -80,
+        5.0
+      ],
+      "microphone_mount_centres_mm": [
+        [
+          -4e-06,
+          -136.000007,
+          5.0
+        ],
+        [
+          -4e-06,
+          -186.000004,
+          5.0
+        ]
+      ],
+      "body_mount_centres_mm": [
+        [
+          0,
+          -30,
+          5.0
+        ],
+        [
+          0,
+          -80,
+          5.0
+        ]
+      ],
+      "profile_dimensions_mm": [
+        25.4,
+        240.0,
+        50.8
+      ],
+      "profile_installed_part_verified": false,
+      "body_meshes": 22
+    }
+  ],
+  "combined_sha256_after": "c32e746079180d2b4650ed102354a74317b89809f42f4a1a763b4371a2695927",
+  "existing_scene_objects_and_transforms_preserved": true,
+  "reopened_successfully": true,
+  "source_sha256": {
+    "female-base-v2.glb": "b6209d06b0c08b674139adc4474863668cf728d1f8a94fa6b5d345f969a61cef",
+    "male-static-v2.glb": "7d7d90f1899c4df1a3a2dc7f5c28205cf296bc1f21eced683afb235cb8f0ef88",
+    "microphone.glb": "4c5514dbad6500bfbd357bc773cfd305458492bbd1d4c5a6c3469025f787cee8",
+    "female-base-v2.kicad_pcb": "fd25a282ec7a7d491fa9107ecbaedd8c3784511e6c73f0e3d275c658da1a4887",
+    "male-static-v2.kicad_pcb": "a263f8cfd2b8aca6ae4f32b88261f8b6e7263e93542850c1566f86dcd2c19cf3"
+  }
+}

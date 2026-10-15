@@ -2,9 +2,61 @@
 
 Created 2026-10-08 from the current shield PCB files. Open
 [shield-configurations.blend](shield-configurations.blend) in Blender (5.2).
-Use the **Scene selector at the top right** to switch between **Mega** and
-**Teensy**. Repeated geometry is shared; each scene keeps its own objects,
+Use the **Scene selector at the top right** to switch between **Mega**,
+**Teensy**, **Female body** and **Male body**. Repeated rack geometry is shared; each scene keeps its own objects,
 placements, visibility and camera. The file opens on Mega.
+
+## Female and male body mounting studies — 2026-10-15
+
+The combined file also contains **Female body** and **Male body** scenes.
+Select a scene at the top right and use its camera view (Numpad 0) for the
+overview. Each contains the current routed v2 body PCB, its directly mounted
+GF1002 amplifier with both insulating edge clamps, and the socketed MAX9814
+microphone holder assembly on a separate part of an aluminium profile.
+Components and reference hardware remain individually selectable. The
+original Mega and Teensy scenes and their object placements are preserved.
+Previews: [Female](female-body-preview.png), [Male](male-body-preview.png).
+
+**TJ's installed extrusion has not been identified.** Searches covered the
+repository CAD and text, its mechanical-document history, and the local TJ
+documentation. The earlier 20-series description was a video-based estimate;
+the user identifies the installed profile as an American standard. These
+scenes therefore use an explicitly unconfirmed **1 × 2 inch (25.4 × 50.8 mm)**
+imperial envelope, with the six-slot arrangement described for
+[80/20 1020](https://8020.net/1020.html). This is a comparison reference, not
+evidence that TJ used 80/20 or this part number. Slot cavities, lips, corners
+and solid internal core are simplified. No manufacturer CAD is reproduced.
+The **240 mm length**, board-to-board spacing, orientation on the narrow face,
+and body-board **5 mm underside gap** are display assumptions. Body fixing
+centres follow the source cutouts: female 43 mm apart, male hole/slot 50 mm
+apart. Body spacers are illustrative Ø12/Ø8 × 5 mm insulating supports;
+the original artwork's screw and spacer specifications remain unconfirmed.
+
+Microphone mounting follows the documented 50 mm hole spacing and separate
+Ø10/Ø5.5 × 5 mm frame spacers; its existing seated-module geometry retains
+the provisional 11.04 mm gap. All frame fixings lie on the profile's narrow
+face centreline. T-nuts, screws, amplifier hookup wires and microphone leads
+are omitted: their selection/routing needs the actual installation. The
+microphone's distance from the speaker is not established by this study.
+These views do not validate vibration isolation or actual frame/fastener fit.
+
+Regenerate the two current body exports with KiCad Python:
+
+```powershell
+& 'C:/Program Files/KiCad/9.0/bin/python.exe' 'CAD/KiCad/shields/assembly-3d/export_body_boards.py'
+```
+
+Then run `add_body_scenes.py` with Blender's background Python. On a combined
+file already containing these scenes, pass `-- --replace-body-scenes` to
+replace only the generated body scenes. This deliberately discards edits to
+those two scenes; edits to the rack scenes are retained and checked.
+The script saves a backup under `tmp/body-model/`, stages and reopens the
+result, verifies the original scenes' object membership, local transforms,
+parents, camera and top-level collection visibility, checks frame dimensions
+and microphone mounting alignment, then renders both new views.
+`body-scenes-validation.json` records these checks and the current combined
+file hash, superseding earlier combined-file hashes. Other assembly files
+are not changed. PCB sources and amplifier/clamp models are not regenerated.
 
 The original individual files are also retained:
 
