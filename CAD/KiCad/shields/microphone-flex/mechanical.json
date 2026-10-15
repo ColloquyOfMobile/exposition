@@ -1,0 +1,76 @@
+{
+  "revision": "C orientation prototype",
+  "board_mm": [
+    32,
+    62
+  ],
+  "outline_origin_mm": [
+    44,
+    50
+  ],
+  "artwork_slot_centres_mm": [
+    [
+      16,
+      6
+    ],
+    [
+      16,
+      56
+    ]
+  ],
+  "artwork_slot_size_mm": [
+    12,
+    5.5
+  ],
+  "artwork_slot_axis": "X / across profile",
+  "artwork_slot_centre_travel_mm": 6.5,
+  "artwork_slot_keepout_mm": [
+    18.5,
+    12
+  ],
+  "positions": [
+    "left",
+    "right",
+    "up"
+  ],
+  "population": "Exactly one module. Parallel sockets; shared gain/AR straps.",
+  "module_source": "max9814-reference",
+  "side_support_base_centres_pcb_mm": [
+    [
+      46.5,
+      66
+    ],
+    [
+      46.5,
+      90
+    ],
+    [
+      73.5,
+      66
+    ],
+    [
+      73.5,
+      90
+    ]
+  ],
+  "side_socket_centres_pcb_mm": {
+    "left": [
+      56,
+      74,
+      0
+    ],
+    "right": [
+      64,
+      84.16,
+      180
+    ]
+  },
+  "side_socket_physical_pin_order": [
+    "AR",
+    "Out",
+    "Gain",
+    "Vdd",
+    "GND"
+  ],
+  "physical_fit_verified": false
+}

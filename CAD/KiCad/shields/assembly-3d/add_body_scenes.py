@@ -19,7 +19,8 @@ ROOT = Path(__file__).resolve().parent
 WORK = ROOT.parents[3] / 'tmp' / 'body-model'
 WORK.mkdir(parents=True, exist_ok=True)
 OUTPUT = ROOT / 'shield-configurations.blend'
-SCENES = ('Female body', 'Male body')
+SCENES = tuple(kind+' body'+('' if orientation=='up' else ' - mic '+orientation)
+               for kind in ('Female','Male') for orientation in ('up','left','right'))
 PROFILE_LENGTH = 240.0  # Display length only; not the installed member length.
 FRAME_GAP = 5.0
 MM = .001
@@ -157,19 +158,21 @@ def label(collection, name, message, position, size, mat):
     obj.data.materials.append(mat)
 
 
-def build(kind):
-    scene = bpy.data.scenes.new(kind + ' body')
+def build(kind, orientation='up'):
+    scene = bpy.data.scenes.new(kind + ' body'+('' if orientation=='up' else ' - mic '+orientation))
     bpy.context.window.scene = scene
     scene.unit_settings.system = 'METRIC'
     scene.unit_settings.length_unit = 'MILLIMETERS'
     scene.unit_settings.scale_length = 1
     scene['reference_only'] = True
+    scene['microphone_revision'] = 'C'
     scene['profile_status'] = 'Imperial 1 x 2 in reference only; TJ installed part number not found.'
     scene['mounting_status'] = 'Display placement. 5 mm frame gap; body standoff and board spacing provisional.'
-    scene['microphone_status'] = 'Existing seated MAX9814 holder export, nominal 11.04 mm module gap.'
+    scene['microphone_status'] = 'Rev C 32x62 slotted holder; ONE module facing '+orientation+'. Provisional support geometry.'
     stem = 'female-base-v2' if kind == 'Female' else 'male-static-v2'
     body, coll = board(scene, stem, kind + ' v2 PCB + GF1002 + insulating edge clamps', (-50, 20, FRAME_GAP))
-    mic, _ = board(scene, 'microphone', kind + ' microphone holder + seated MAX9814', (-60, -80, FRAME_GAP))
+    mic_source = 'microphone-flex-'+orientation
+    mic, _ = board(scene, mic_source, kind + ' microphone holder + ONE MAX9814 facing '+orientation, (-60, -80, FRAME_GAP))
     hardware = bpy.data.collections.new(kind + ' frame and insulating spacer references')
     scene.collection.children.link(hardware)
     metal = material(kind + ' satin aluminium reference', (.48, .53, .58), .8)
@@ -184,9 +187,9 @@ def build(kind):
         spacer(hardware, f'{kind} microphone M5 frame spacer {i+1} - 5 mm high', 0, y, 10, 5.5, nylon)
     annotations = bpy.data.collections.new(kind + ' mounting study annotations')
     scene.collection.children.link(annotations)
-    label(annotations, kind+' title', kind.upper()+' BODY\nPCB + amplifier + microphone', (-63, 28, 8), 5, ink)
+    label(annotations, kind+' title', kind.upper()+' BODY\nMicrophone facing '+orientation.upper(), (-63, 28, 8), 5, ink)
     label(annotations, kind+' amp note', 'GF1002\nDirect-mounted\ninsulating clamps', (42, -43, 8), 3.2, ink)
-    label(annotations, kind+' mic note', 'MAX9814 module\nSocketed holder\n5 mm frame spacers', (30, -150, 12), 3.2, ink)
+    label(annotations, kind+' mic note', 'MAX9814 / '+orientation.upper()+'\n32 x 62 mm holder\n12 x 5.5 mm slots', (30, -150, 12), 3.2, ink)
     label(annotations, kind+' profile note', 'IMPERIAL REFERENCE ONLY\n1 x 2 in / 25.4 x 50.8 mm\nTJ part number unconfirmed', (-63, -216, 5), 3.1, amber)
     studio = bpy.data.collections.new(kind + ' body studio'); scene.collection.children.link(studio)
     target = Vector((.006, -.100, -.003))
@@ -210,7 +213,7 @@ def build(kind):
     bpy.ops.object.select_all(action='DESELECT')
     bpy.context.view_layer.update()
     # Validate both PCB mounting centre lines against the frame's narrow-face slot.
-    micdata = json.loads((ROOT / 'exports/microphone.json').read_text())['footprints']
+    micdata = json.loads((ROOT / 'exports' / (mic_source+'.json')).read_text())['footprints']
     mount_positions = []
     for ref in ('H1', 'H2'):
         x, y = micdata[ref]['xy']
@@ -224,7 +227,9 @@ def build(kind):
     meshes = [o for o in coll.all_objects if o.type == 'MESH']
     assert len([o for o in meshes if 'M1' in o.name]) == 1
     assert len([o for o in meshes if 'H1' in o.name or 'H2' in o.name]) == 2
-    return {'scene': scene.name, 'body_source': stem, 'body_transform_mm': [-50,20,FRAME_GAP],
+    return {'scene': scene.name, 'body_source': stem, 'microphone_source':mic_source,
+            'microphone_orientation':orientation,'module_population':1,
+            'body_transform_mm': [-50,20,FRAME_GAP],
             'microphone_transform_mm': [-60,-80,FRAME_GAP], 'microphone_mount_centres_mm': mount_positions,
             'body_mount_centres_mm': [[0,y,FRAME_GAP] for y in body_ys],
             'profile_dimensions_mm': [25.4,PROFILE_LENGTH,50.8], 'profile_installed_part_verified': False,
@@ -236,6 +241,11 @@ def main():
     bpy.ops.wm.open_mainfile(filepath=str(OUTPUT))
     for name in SCENES:
         if name in bpy.data.scenes:
+            if bpy.data.scenes[name].get('microphone_revision') != 'C':
+                # The user can have edited the earlier body mounting study.
+                # Keep that complete scene rather than destroying those edits.
+                bpy.data.scenes[name].name = name+' - Rev B reference'
+                continue
             if '--replace-body-scenes' not in sys.argv:
                 raise RuntimeError('Generated body scenes already exist; use --replace-body-scenes intentionally.')
             old = bpy.data.scenes[name]
@@ -247,7 +257,8 @@ def main():
     original = {s.name: snapshot(s) for s in bpy.data.scenes}
     report = {'combined_sha256_before': before_hash, 'existing_scenes': list(original), 'bodies': []}
     for kind in ('Female', 'Male'):
-        report['bodies'].append(build(kind))
+        for orientation in ('up','left','right'):
+            report['bodies'].append(build(kind,orientation))
     for name, expected in original.items():
         assert snapshot(bpy.data.scenes[name]) == expected, name
     # Preserve the original opening scene and its viewport setup.
@@ -268,15 +279,18 @@ def main():
     report['existing_scene_objects_and_transforms_preserved'] = True
     report['reopened_successfully'] = True
     report['source_sha256'] = {}
-    for source in ['female-base-v2', 'male-static-v2', 'microphone']:
+    for source in ['female-base-v2', 'male-static-v2', 'microphone-flex-up','microphone-flex-left','microphone-flex-right']:
         report['source_sha256'][source+'.glb'] = sha(ROOT / 'exports' / (source+'.glb'))
     for source in ['female-base-v2', 'male-static-v2']:
         report['source_sha256'][source+'.kicad_pcb'] = json.loads((ROOT/'exports'/(source+'.json')).read_text())['sha256']
     (ROOT/'body-scenes-validation.json').write_text(json.dumps(report,indent=2)+'\n')
     for kind in ('Female', 'Male'):
-        scene = bpy.data.scenes[kind+' body']; bpy.context.window.scene = scene
-        scene.render.filepath = str(ROOT / (kind.lower()+'-body-preview.png'))
-        bpy.ops.render.render(write_still=True)
+        for orientation in ('up','left','right'):
+            scene = bpy.data.scenes[kind+' body'+('' if orientation=='up' else ' - mic '+orientation)]
+            bpy.context.window.scene = scene
+            suffix='' if orientation=='up' else '-'+orientation
+            scene.render.filepath = str(ROOT / (kind.lower()+'-body'+suffix+'-preview.png'))
+            bpy.ops.render.render(write_still=True)
     print('BODY SCENES COMPLETE', json.dumps(report), flush=True)
 
 

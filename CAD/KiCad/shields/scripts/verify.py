@@ -18,6 +18,9 @@ def position(pad):return tuple(p.ToMM(pad.GetPosition()))
 def main():
     loaded={};summary={}
     for folder in ROOT.iterdir():
+        # Rev C orientation study has its own layout/pin-order validation;
+        # it is not a current rack fabrication input.
+        if folder.name=='microphone-flex':continue
         if not (folder/'circuit.json').exists():continue
         name=folder.name;data=json.loads((folder/'circuit.json').read_text());board=p.LoadBoard(str(folder/(name+'.kicad_pcb')))
         loaded[name]=board;actual=pads(board)

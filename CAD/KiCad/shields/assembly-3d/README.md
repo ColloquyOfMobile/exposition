@@ -6,6 +6,16 @@ Use the **Scene selector at the top right** to switch between **Mega**,
 **Teensy**, **Female body** and **Male body**. Repeated rack geometry is shared; each scene keeps its own objects,
 placements, visibility and camera. The file opens on Mega.
 
+The 2026-10-15 **Rev C microphone** study adds `Female body - mic left/right`
+and `Male body - mic left/right`; the plain body scenes show the upward option.
+These use the [32 × 62 mm slotted three-orientation holder](../microphone-flex/README.md).
+Exactly one module is fitted in each scene. Select the scene and press Numpad 0
+for its camera view. The prior edited body scenes are retained with
+`Rev B reference` in their names. The following original body-study description
+still documents their nominal frame assumptions; current body views use Rev C.
+The [three-position preview](microphone-positions-preview.png) compares the
+left, right and upward module choices on the same holder.
+
 ## Female and male body mounting studies — 2026-10-15
 
 The combined file also contains **Female body** and **Male body** scenes.

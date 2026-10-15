@@ -1,0 +1,60 @@
+{
+  "left": {
+    "module_rotation": [
+      [
+        0,
+        0,
+        -1
+      ],
+      [
+        0,
+        -1,
+        0
+      ],
+      [
+        -1,
+        0,
+        0
+      ]
+    ],
+    "module_translation_mm": [
+      43.43,
+      -86.319,
+      25.273
+    ],
+    "module_hole_height_above_carrier_top_mm": 23.241,
+    "support_arms": 2,
+    "support_material": "insulating polymer, provisional",
+    "support_module_intersection_mm3": 0,
+    "physical_fit_verified": false
+  },
+  "right": {
+    "module_rotation": [
+      [
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        -1,
+        0,
+        0
+      ]
+    ],
+    "module_translation_mm": [
+      76.57,
+      -71.841,
+      25.273
+    ],
+    "module_hole_height_above_carrier_top_mm": 23.241,
+    "support_arms": 2,
+    "support_material": "insulating polymer, provisional",
+    "support_module_intersection_mm3": 0,
+    "physical_fit_verified": false
+  }
+}
