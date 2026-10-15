@@ -1,376 +1,144 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code in this repository. This is the compact version; the long form, with the incident behind each rule, is in git history: `git show 0b8b7b6:CLAUDE.md`.
 
 ## What this is
 
-"Colloquy of Mobiles" is a kinetic art installation (currently being prepared for exhibition at ZKM). Anthropomorphic "male" and "female" mobiles move along a motorized bar, driven by Dynamixel servos and controlled through an Arduino for LEDs/light sensors. This repo holds the control software (Python), the Arduino firmware, and CAD/electronics design files (KiCad/Eagle/FreeCAD/Blender). Most day-to-day code work happens under `Source code/Python`.
+"Colloquy of Mobiles" is a kinetic art installation being prepared for exhibition at ZKM. Three "female" and two "male" mobiles plus a motorized bar, driven by Dynamixel servos (through a U2D2) and an Arduino Mega (NeoPixels, light sensors, voices, microphone analysers). The repo holds the Python control software (`Source code/Python`, where most work happens), Arduino sketches (`Source code/Arduino`), and CAD/electronics (`CAD/`: KiCad, Eagle, FreeCAD, Blender).
 
-## Running the software
+## Commands (from the repo root)
 
-From the repo root:
+- `py main.py` - the installation. Builds `Colloquy`, opens the U2D2 (`COM4`) and the Arduino, blinks every NeoPixel once, starts `Server2` on port 8087 **on every interface** (both URLs printed at startup).
+- `py mock_ui.py` - the UI mock on port 8088 (localhost only), against `colloquy/ui/mock.py`; no hardware.
+- `py -m pytest "Source code/Python/pytest_tests"` - unit suite, ~2s. **Run it after changing anything under `colloquy/`.**
+- `py -m mypy` - scoped type check (see below).
+- Generators, rerun after changing their source: `export_gerbers.py` (needs KiCad), `next_pcb.py`, `export_mega_pinout.py`, `export_shields_diagram.py`, `extract_hardware_photos.py` (needs `pymupdf`). Most outputs are held to their source by a pytest test that fails when they go stale.
+- `test_process.py` is a dev file-watcher that restarts `main.py` on save - not pytest. `process_csv.py` is a dev helper with hardcoded paths.
+- No build step. `requirements.txt` is incomplete (`pyserial`, `watchdog`, ... are imported but unpinned); check imports.
 
-```
-py main.py
-```
+**Startup never dies on hardware.** `open_the_hardware()` reports every failure to `colloquy/startup/` and carries on, because the page that explains a fault and the command that fixes it live in the server. The `startup problems` node appears on the root only when it has something to say. Arduino, servo bus and each servo fail independently. Only the six wired servos (`U2D2.body_dxls`) are initialised - nothing enables torque on a mirror unasked. `Colloquy.servos_were_opened` asks `U2D2.ever_opened`, not just the port name.
 
-This calls `colloquy1()` in `main.py`, which:
-1. Builds a `Colloquy` object (`Source code/Python/colloquy/__init__.py`)
-2. Opens the U2D2 (Dynamixel USB adapter) on `COM4` and the Arduino serial port, and initializes every Dynamixel servo
-3. Blinks all NeoPixels once (Arduino reboot can leave LEDs on in a random state)
-4. Starts `Server2`, a blocking WSGI server on `http://localhost:8087/` — and, since 2026-10-12, on every interface, so also `http://<this machine's name>:8087/` from another computer on the same network (both are printed at startup)
+If the main PCB is noted as out, the hardware steps are skipped and a standby page is served instead of the tree (see Hardware).
 
-**With the main PCB noted as out, steps 2 and 3 are skipped and step 4
-serves a different page** - the Gerbers, the KiCad projects, and the press
-that says a board is back - instead of the tree. See `hardware/main_pcb/`
-below. On `Colloquy-Laptop` the first start of this version writes that
-note for itself (params v7), and that machine alone also pulls and
-restarts by itself (`repository/`).
+## Machines: simulated vs real
 
-**Steps 2 and 3 cannot stop step 4.** `open_the_hardware()` reports every
-failure to `colloquy/startup/` and carries on, because an installation
-that comes up unable to move is worth far more than one that does not come
-up at all: the page that explains the fault and the command that fixes it
-both live in the server that used to die with it
-(`docs/errors/2026-08-27-01.txt` is both crashes). The `startup problems`
-node is registered on the root **only when it has something to say**, so
-its appearing on the front page *is* the alarm - the same arrangement as
-`Repository`'s pull link. Every problem says what happened, what it means
-for the room, and what to do; a stale Arduino sketch is the one whose
-remedy is a link rather than a sentence, straight to `flash firmware`.
+`colloquy/machines.py` names two machines by exact hostname:
 
-The three halves are independent on purpose - a dead Arduino must not cost
-the servos, a dead bus must not cost the lights, one silent servo must not
-cost the other five - and only the **six wired servos** are woken
-(`U2D2.body_dxls`). Initialising all nine contradicted `Mirror`'s own rule
-that nothing may enable torque on a mirror until somebody asks by hand,
-and an unwired mirror then took the process down on the first write it
-ignored. `Colloquy.servos_were_opened` asks `U2D2.ever_opened` as well as
-the port name, since the name is set *before* the port is opened and a
-named-but-never-opened bus now survives long enough to reach a shutdown.
+- **`Colloquy-Laptop`** - the installation: nine servos, the Arduino. `Base.is_simulated` is False only here. It also auto-pulls and restarts (see Git).
+- **`DESKTOP-MRSLS88`** - the bench: Thomas Erforth's audio subsystem (his Mega 2560, filters, amplifiers, microphones, analysers). `Base.is_bench` is True only here; it is also `is_simulated`.
+- Anywhere else runs entirely on `colloquy/virtual_drivers/` (virtual serial port, packet/port handlers, Dynamixels, a stand-in for Thomas's board).
 
-There is no separate build step (pure Python, no bundler). `requirements.txt` only lists `yattag` (HTML generation) and `dynamixel_sdk`; `pyserial`, `watchdog`, etc. are used but not currently pinned there — check imports if `pip install -r requirements.txt` isn't enough.
+Keep the real/virtual split inside the drivers; never special-case simulation inline. **A board is on a lead, not on a machine**: boards get carried between desks, so whether a link is real is decided by the *chosen port*, not the hostname. `Arduino.is_using_the_stand_in` and `BenchComPort.is_using_the_stand_in` (`colloquy/tests/bench_com_port.py`) both mean "the chosen port is the stand-in". Port pickers list real leads wherever `boards.detect()` finds any, plus the stand-in wherever `is_simulated`. `use_port()` swaps the handler when the kind changes. `BenchBoardLink` (`colloquy/tests/bench_board.py`) is the one link for both audio bench tests. Every node that talks to a board shows a `board` reading saying which it is talking to. Pinned by `pytest_tests/drivers/test_arduino_port_choice.py`.
 
-`process_csv.py` (dev helper, hardcodes local Windows paths) does majority-vote smoothing over a light-sensor CSV column and writes `<name>_averaged.csv` next to the input.
+## Architecture: the `Base` tree
 
-`test_process.py` is a file-watcher dev loop: it restarts `py -u main.py` on every `.py` change under the watched folder (also strips trailing whitespace on save). It is not a pytest suite despite the name.
+Everything in `colloquy/` is a node in one tree rooted at `Colloquy`:
 
-**`main.py` currently has `test_process.py`-adjacent debt**: nothing else in the repo runs it as a module; treat it as the entrypoint but expect rough edges (e.g. `Colloquy.close()` raises `NotImplementedError`).
+- **`Base`** (`base.py`): dict-like node (`_dict`), `owner` pointer, computed `path`, `snapshot()` serialising the tree for the page.
+- **`BaseThread`** (`base_thread/`): `setup()`/`loop()`/`setdown()` in a thread, cooperative stop (`_stop_event`, class-level `_shutdown` shared by all threads), per-node error capture (`ThreadErrors`).
+- **`BaseHTML`** (`base_html.py`): renders a node as an HTML fragment.
 
-## Simulated vs. real hardware
+Dispatch is the same everywhere: split the path, look up the first part in `self`, recurse with the rest; an unknown key raises `NotImplementedError` (= 404). Add a child or command with `self[name] = handler_or_child` in `__init__`; don't invent new dispatch.
 
-**Two machines have hardware, and they have different hardware**, so "is this simulated?" is two questions. Both are exact hostname matches, named in one place — `colloquy/machines.py`:
+- `snapshot_children` is the routing contract: a child drawn but not listed there 404s.
+- **A leaf must not share a name with a child** - both go into one dict and the leaf silently replaces the link.
+- A `BaseThread`'s bare `start` link is popped wherever it would be an ambiguous or dangerous press (flasher, schedule, `test_audio_at_12v`).
 
-- **The installation** (`Colloquy-Laptop`) has the piece: nine Dynamixel servos through a U2D2, and the Arduino carrying every NeoPixel and light sensor. `Base.is_simulated` is False only here.
-- **The bench** (`DESKTOP-MRSLS88`, an office desk) has Thomas's audio subsystem: his Mega 2560, the filter board, the amplifiers, the microphones and the analyser array. `Base.is_bench` is True only here. It has none of the piece, so it is `is_simulated` **and** has real hardware — which is the whole reason the second question exists.
-- **Anything else** (the other dev machine, CI) has neither and runs entirely against `Source code/Python/colloquy/virtual_drivers/` — virtual serial port, virtual packet/port handlers, virtual Dynamixels, and a virtual stand-in for Thomas's board.
+## The web server (`colloquy/server2/`)
 
-So the whole app (including the web UI) can be exercised without hardware attached. When adding hardware-facing code, keep the real/virtual split intact rather than special-casing simulation inline — and pick the *right* question: a device belongs to one machine, and `is_simulated` is not a synonym for "no hardware here". The audio bench tests used to ask `is_simulated`, which sent them at the stand-in while the real Mega sat on the desk beside it, and a stand-in run passes every check.
+`Server2` serves `WSGI2` (`wsgi2.py`); `Colloquy.get_states` delegates to `ui/tree.py`, which walks the tree, calls a command if the path ends in one, and returns a nested dict rendered with `yattag`. It is a generic tree browser, not a dashboard: **new UI = new nodes/commands, not new routes.**
 
-**But the machine was never the right question for a board either, and `is_bench` was the same mistake spelled differently** (fixed 2026-09-01). A board is on a *lead*. Thomas's subsystem gets carried **to the installation's laptop** so `test_audio_at_12v` can be run beside the piece — the supply it measures is the piece's own — and there `is_bench` is False, so the picker offered one stand-in, the link opened the simulator, and two passes came out differing by nothing, which reads exactly like a rail change that bought you nothing. `colloquy/tests/bench_board.py`'s `BenchBoardLink` is now the one link for both audio bench tests (it replaced two verbatim copies): `board_is_real`, `port_handler` and `use_port` all follow `BenchComPort.is_using_the_stand_in`, which reads the chosen port out of params. Exactly `Arduino.is_using_the_stand_in`, and for the same reason — the two learned it travelling in opposite directions.
+**Concurrency is two halves; never change one alone.** `ThreadingWSGIServer` gives a thread per connection (so the EMERGENCY STOP stays reachable), and `get_states` holds `_command_lock` around the whole walk (so commands never overlap). Off the lock: `/emergency-stop`, `/shutdown`, `/restart/<app path>`, `/static/`, `/download/`, `/update-status`, `/mount-main-pcb`, `/unmount-main-pcb`, `/virtual-panel/<show|hide>/<app path>` (see `wsgi2._parse`).
 
-**The Arduino asks a third question, and it is about the lead rather than the machine.** `Arduino.is_using_the_stand_in` is simply "is the chosen port the stand-in", so `drivers/arduino/com port` lists the real leads **wherever `boards.detect()` finds any** — the installation, the bench, anywhere — and offers the stand-in as well wherever the piece is simulated. `Arduino.port_handler` builds a real `serial.Serial` or the virtual port to match, and `use_port()` replaces (and closes) the handler when the kind changes. Nothing on the installation moves: there `is_simulated` is False and there is no stand-in to offer.
+- `/shutdown` takes the lock via `Colloquy.hold_commands` (bounded at 10s, then proceeds and says so). `/emergency-stop` waits for nothing.
+- Load-bearing: `httpd.timeout` (wakes the accept loop), `RequestHandler.timeout` = 10s (a sleeping phone must not hang `server_close()`), `daemon_threads=False`/`block_on_close=True`. Responses go out in 64 KiB pieces; a response may be an iterable. `pytest_tests/test_command_lock.py`.
+- Long-running commands go off the request thread (pattern: `Repository.pull`, the flasher).
+- **No authentication**: anyone who can reach port 8087 can stop, flash or unmount. The network and firewall are the protection. `server2/network.py` must never raise. Tests bind 127.0.0.1 only (binding all interfaces raises a firewall dialog).
+- Static files carry `ETag` + `Last-Modified` + `Cache-Control: no-cache` (they change while the server runs).
 
-This exists because the main PCB gets carried off to a desk to be debugged, and the desk is the bench — `is_simulated`, with the board plugged into it. While the driver asked only about the machine, that afternoon was spent on the stand-in: every `speaker > on` reported "sounding", every sweep returned plausible numbers, and a whole `test_audio_bringup` run came out clean. So the Arduino node, `test_audio_bringup` and `test_audio_loop` each carry a `board` reading naming which of the two it is talking to, and the flasher already worked this way — its refusals ask whether the chosen port is a plausible Arduino on this machine, never whether the machine is the installation. `pytest_tests/drivers/test_arduino_port_choice.py` pins the lot. Everything else in the sound channel (speaker, microphone, `all audio`, both installation audio tests) is silent on `is_simulated` and reaches the board through this one link, so this property is the whole of what "real" means for a voice.
+**Errors.** An exception inside a command becomes a `CommandFailed` page (`ui/tree.get_states`), with a next click from `server2/remedies.py` only when it is *known*. An exception anywhere else - the walk, a render, a parse - still emergency-stops the installation. So **a render must never raise**: read hand-editable params defensively. `NotImplementedError` stays the 404. `pytest_tests/test_command_failed_page.py`.
 
-**`colloquy/tests/test_audio_subsystem`** follows from that: it is offered only when `is_simulated` (so never in the gallery — the installation will never have Thomas's boards), its page says which of the two it is talking to, and it refuses a port remembered from a different machine rather than opening it. **`test_audio_at_12v` is the one bench test that is *not* gated**, because it is the one you carry the board over for.
+**Tree commands cannot have a last word**: `ui/tree.update()` discards a command's return value and re-renders its node. Anything that must end on its own page or stop the server (unmounting, mounting, the panel toggle, downloads) is a route.
 
-`BenchComPort` (`colloquy/tests/bench_com_port.py`) is the picker both share, and it now mirrors the Arduino's: real leads **wherever `boards.detect()` finds any**, named by the chip bridging them to USB so the U2D2's FTDI lead is visibly not a Mega, plus the stand-in last wherever the piece is simulated. `ports` returns COM names (what gets stored, and what `_why_not_open` checks a remembered name against) while `snapshot_children` draws the labels. `set()` writes params first and then asks its owner to `use_port()`, because which handler is right is read back out of params.
+**`/emergency-stop` never homes; `/shutdown` does** (via `power_down()`); `/restart` re-execs without homing.
 
-## Architecture: the `Base` object tree
+### Two web UIs, deliberately independent
 
-Nearly everything in `colloquy/` is a node in one big tree rooted at the `Colloquy` object, built from two base classes:
+- **Installation** (`server2/`): runs the exhibition, keeps its old inline-styled look and the red EMERGENCY STOP. Leave it working.
+- **Mock** (`ui/wsgi.py`, `ui/server.py`): a styling-free fork (2026-08-19) where the page is being rebuilt from bare markup with `name="..."` hooks and renderer classes; no stylesheet, no emergency stop.
 
-- **`Base`** (`colloquy/base.py`): dict-like node (`__getitem__`/`__setitem__`/`__contains__`/`__iter__` over an internal `_dict`) with an `owner` (parent) pointer, a computed `path` (slash-joined name chain to the root), and a `snapshot(path, focus_path)` method that recursively serializes the tree into a dict the web UI renders. Nodes register their children/commands into themselves (`self["some name"] = some_child_or_callable`) rather than using a separate registry.
-- **`BaseThread`** (`colloquy/base_thread/__init__.py`), extends `Base`: anything that runs its own background loop (hardware controllers, search behaviors, drives, the whole `Colloquy` object). Subclasses implement `setup()`, `loop()`, `setdown()`; the base class runs them in a `Thread` via `start()`/`stop()`/`join()` with cooperative shutdown (`_stop_event`, class-level `_shutdown` Event shared by all threads) and per-node error capture (`ThreadErrors`) that halts the thread's loop without crashing the process.
-- **`BaseHTML`** (`colloquy/base_html.py`): wraps a `Base`/`BaseThread` node to render it as an HTML fragment for the web UI.
+A page change is made twice, or on the mock alone. They serve their own `static/`. They share the snapshot vocabulary in `ui/leaves.py` - `value`, `html`, `svg`, `image`, `pre`, `editor`, plus `into(states, path)`. Build leaves with those constructors; a kind not in `leaves.KINDS` is not drawn. `pytest_tests/ui/test_leaves.py` renders every kind through both.
 
-Both `Base.__call__`-style dispatch and the web request router work the same way throughout the codebase: a request path is split into `Path(request).parts`, the first part is looked up as a key in `self`, and dispatch recurses (`self[key](request="/".join(leftover))`); an unmatched key raises `NotImplementedError`. This pattern repeats near-verbatim across `Drivers`, `Arduino`, `U2D2`, `Female`, `DXL`, `VirtualDrivers`, etc. — when adding a new command/child node, register it in `__init__` via `self[name] = handler_or_child` rather than inventing a new dispatch mechanism.
+- The root gates the `virtual drivers` panel and the `code documentation` node on `is_simulated`. The panel's show/hide is a route (`VirtualDrivers.panel_is_open`, separate from the node's own open state).
+- Markdown documents (`colloquy/markdown_document.py`): `MarkdownDocument` = view/`edit`/`save`; `GeneratedDocument` has no `edit` and renders from its generator on every view.
+- **Charts: `ui/graph_view.py` only** - no JavaScript, server keeps the data and the view. Page size (samples in the window) vs points (drawn); y range from the whole run; `marks=` as `(seconds, label)` with a `marks` child node; `Columns` is a lazy view, so nothing is copied and only the page is read. Emit as `leaves.image`, never `leaves.svg` (that one gets browser-side zoom). `pytest_tests/ui/test_graph_view.py`.
 
-## The web UI / server (`server2`, `wsgi2.py`)
+## Scenarios
 
-`Server2` (`colloquy/server2/__init__.py`) runs `wsgiref.simple_server` on port 8087 and hands each request to `WSGI2` (`colloquy/server2/wsgi2.py`), which:
-- Parses the URL path into `app/...`, `shutdown`, or `restart`
-- Calls `colloquy.get_states(*args)` (defined in `colloquy/__init__.py`) which walks the `Base` tree via `snapshot_children`/`snapshot`, optionally executing an update (calling a command) if the path resolves to a callable leaf
-- Renders the resulting nested-dict "state" recursively as clickable HTML (`yattag`) — every node is a link that opens/closes it or calls it; this is effectively a generic tree browser/REPL for the whole hardware+behavior graph, not a purpose-built dashboard
-- `/shutdown` stops all threads, homes the bodies/bar, disables torque, and sets a shutdown event; `/restart` re-execs the process (`os.execl`) after shutdown. The `restart` link carries the page it is on (`/restart/<app path>`, the `/virtual-panel/` shape), so the `reload` it answers with lands back there rather than on the front page; a bare `/restart` (the emergency-stop page's) reloads `/`. Both UIs; `pytest_tests/test_restart_link.py`
+A **scenario** is the artist's term for what the piece visibly does in the room, second by second. Only that: hardware tests are never "scenarios", and `CODE_DOCUMENTATION.md` describes code, not the piece.
 
-There is no templating framework beyond `yattag`; new UI is added by adding `snapshot_children` / registering new command names on the relevant `Base` node, not by writing new routes.
+- Every `BaseThread` declares `scenario_names`; `_snapshot_if_opened` hangs a `scenarios` child beside `start`/`stop`. Names are behaviours (all females' `search` → `female-looking`). Whole-piece ones sit on `Colloquy`. Hardware tests have them too. Not gated by `is_simulated`.
+- Files live in `colloquy/scenarios/`: `<seconds> <description>` per line, a leading `#` title block, `-> other[: label]` to start a child concurrently. `scenario_browser/rendering.py` flattens onto one clock.
+- `pytest_tests/test_scenarios.py`: every name has a file, every file is claimed, and `WITHOUT_SCENARIOS` is a ratchet (`Repository`, `ExpositionSchedule`, `Scope`, `read_pattern`, `blink` stay on it on purpose).
 
-**The server runs a thread per connection, and the tree runs one command at a time.** These are two halves of one arrangement, and changing either alone breaks it:
+## Drivers (`colloquy/drivers/`)
 
-- `ThreadingWSGIServer` (`server2/__init__.py`) is `ThreadingMixIn` over wsgiref's `WSGIServer`. Plain `wsgiref.simple_server` serves strictly serially, which made the red EMERGENCY STOP unreachable for as long as *any* request was busy — including the requests most likely to be busy, since a command that drives a servo runs inside one. `Colloquy.emergency_stop`'s docstring was written around that constraint. Measured: a request that used to queue 1.22s behind a slow one now answers in 0.01s.
-- `Colloquy.get_states` holds `_command_lock` around the whole walk. Serving serially *was* an accidental lock around the application, and plenty of the tree quietly relied on it — `tree.get_states` both renders and **calls**, so overlapping requests would mean overlapping commands. The bus locks under `u2d2`/`arduino` make single transactions safe; they say nothing about a command as a whole.
+Naming: **`drivers`** is the software layer that drives the piece (`/app/drivers`, sim twin `virtual drivers`); **`drives`** are a body's O/P appetite states (`drivers/drive/`); **`hardware`** is the physical equipment (`/app/hardware`).
 
-So concurrency lands exactly where it was wanted: everything that does **not** go through the tree — `/emergency-stop`, `/shutdown`, `/restart`, `/static/…`, `/vendor/…`, and since 2026-10-11 `/download/…`, `/update-status` and `/mount-main-pcb` (see `wsgi2._parse`) — is answered without ever touching that lock. A response may also be an iterable of pieces rather than bytes (`WSGI2.__iter__`), which is how a hundred-megabyte zip is sent without being held. Verified on the real server: `/emergency-stop` answers in 0.02s while a command holds the tree.
+- `Drivers` owns `Arduino`, `U2D2`, 3 `Female`, 2 `Male`, `Bar`, `AllNeopixels`, `Bodies`. Each body has its `DXL`, `Drives`, `Search`, `Neopixels`, `LightSensor`.
+- `U2D2` wraps `dynamixel_sdk` with nine `DXL`s (`female1-3`, `male1-2`, `bar`, three mirrors on ids 2/4/6). `DXL` registers are `RegisterHanlder` children; `handle_error` retries and logs. All servos run in **extended position mode**; positions read `signed=True`.
+- **Angles, never servo units**, outside `drivers/angle/` and `drivers/dxl/`. Each moving thing has an `Angle` in degrees of the body, zero at its calibrated origin. `angle/conversion.py`: 4096 units/turn; bodies and bar turn 3x slower than their servo, mirrors 1:1.
+- `Mirror`: plain `Base`, not initialised at startup, jog/calibrate only. Its 81.211° range is TJ's firmware (512 units = 45°); its `dxl origin` must be measured at the rig.
+- **Behaviour**: each body starts *and stops* its own search in its own `loop()`. The `Bar` wanders only while some male's `search.is_started` is set. `is_satisfied()` = both appetites down (`not drives.which_is_frustated()`).
+- **Arduino**: JSON lines (`{"path": ...}\n`) at 1 Mbaud to `Source code/Arduino/colloquy_of_mobiles/colloquy_of_mobiles.ino`. A new pixel group or sensor needs an `.ino` handler **and** a matching `NeopixelCommand`/`LightSensorCommand` entry. The sketch is the source of truth: `drivers/arduino/firmware.py` reads `SERIAL_BAUDRATE`/`FIRMWARE_VERSION` out of the `.ino`; `params` only copies the baud rate. `wait_for_reboot()` refuses a greeting older than `MINIMUM_FIRMWARE_VERSION`; `_diagnose_silence()` probes old rates then lists USB devices.
+- `drivers/arduino/boards.py`: identifies boards by USB bridge VID/PID without opening them (`KNOWN_DEVICES`, which also keeps the U2D2's FTDI lead off the Arduino picker).
+- **Flasher** (`drivers/arduino/flasher/`): shells out to the `arduino-cli` bundled with the Arduino IDE, which needs `--config-file ~/.arduinoIDE/arduino-cli.yaml`. One `compile --upload`. A one-job thread (off the lock). Refuses, instantly: unmounted PCB, no/absent/implausible port, anything under `drivers`/`tests` running (filtered by tree path so `Repository` doesn't block it). Ends by reopening the link as the check. `flasher/base.py` is the shared shape; subclasses (`Flasher`, `SamplerFlasher`, `PlotterFlasher`) supply `_check_the_board()` and `_extra_refusals()`.
 
-**Every static file can change while the server is up**, so `_parse_static` sends a validator rather than a promise: an `ETag` off the file's mtime-in-nanoseconds and size, `Last-Modified`, and `Cache-Control: no-cache` — which means store it and *check first*, not "do not store". It said `public, max-age=3600` with nothing to validate against, which tells a browser not to ask for an hour: replacing Thomas's four board photographs on disk left the page drawing the old ones while the server served the new bytes to anything that requested them. Revalidation is a conditional request over a socket to this same machine, answered with a 304 and no body, which is what the max-age was ever saving. The same is true of the SVGs a hardware test writes beside its CSV and of any stylesheet being edited on the mock. `pytest_tests/test_static_files.py` runs it through both UIs.
+### Stopping, and the calibration it protects
 
-Two consequences worth knowing before editing any of it:
+Extended position mode keeps the turn count in volatile memory and the bar travels 2.4 servo turns, so powering down away from home corrupts the calibration.
 
-- **`httpd.timeout` is load-bearing.** `handle_request()` otherwise blocks in `accept()` forever; `/shutdown` is now set by a worker thread while the accept loop is already back in `accept()`, so without a wakeup the process would sit there until somebody happened to load one more page. The inherited `daemon_threads=False` / `block_on_close=True` are equally deliberate — `server_close()` joins in-flight workers so the goodbye finishes being written. `pytest_tests/test_command_lock.py` pins all of it.
-- **`/shutdown` takes the lock via `Colloquy.hold_commands`**, so it cannot home every body and cut torque while another tab's command is still driving one. Bounded (`COMMAND_WAIT`, 10s) and it proceeds anyway on timeout, saying so — a shutdown blockable indefinitely by a stuck command would be worse than one that overlaps it. `/emergency-stop` deliberately waits for nothing at all; that is the whole difference between the two.
+- `Colloquy.power_down()` = threads down, lights off, everything home, torque off; returns whether everything arrived. Used by `/shutdown` and unmounting. `HOMING_TIMEOUT` is 90s (a full bar crossing takes ~32s).
+- Every step survives hardware that was never opened; "nothing to home" is success, not failure. `shutdown_neopixels`/`silence_speakers` swallow and log.
+- `emergency_stop` is `try/finally` around `shutdown()`, and `Server2.wsgi` wraps it the same way: a handler must not fail like what it handles.
+- `pytest_tests/test_power_down.py`.
 
-A long-running command still belongs off the request thread regardless — see `Repository.pull` for the pattern.
+## Hardware (`colloquy/hardware/`, `/app/hardware`)
 
-**The server answers from the network, and nothing on the page asks who is asking** (2026-10-12; `Server2.BIND_ADDRESS` is the empty string, it was `"localhost"`). A laptop handing out Gerbers is for another computer to fetch them from, and the piece is looked after from somewhere other than the chair in front of it. There is no login, and every link is a GET that does what it says — so whoever can reach port 8087 can shut the installation down, unmount its board or flash its Arduino, and so can a page open in any browser on that network. What stands between that and the building is the network the machine is on and its firewall (Windows asks once per `python.exe`, and answering *Cancel* leaves a block rule that never asks again). `server2/network.py` works out what to type on the other computer — the machine's name first, since a DHCP lease moves — and may not raise: it is asked on the way to starting the server, on a machine that is off the network as often as not. **The mock still listens on localhost alone.**
+Belongs here if it would still be true with the software off. Not gated by `is_simulated`.
 
-- **`RequestHandler.timeout` (`CONNECTION_TIMEOUT`, 10s) came with it and is load-bearing for the same reason `httpd.timeout` is.** `server_close()` joins every connection in flight, and a handler with no timeout sits in its first read until the other end speaks or hangs up. On localhost it was always one or the other; across a network a phone that falls asleep does neither, and a shutdown or an automatic restart then stops for good with the listening socket already closed. It is a timeout on the *socket*, so it measures the peer and never a command. But it is per *write*, so the size of a write became a floor under the link speed — which is why `WSGI2.__iter__` now hands even an answer it holds whole to the socket in 64 KiB pieces (`wsgi2.PIECE`): the Gerber package in one write would want 75 KB/s. `handle()` swallows the `TimeoutError`, because `WSGIRequestHandler.handle` — unlike the `BaseHTTPRequestHandler` method it replaces — lets one through to socketserver, which prints a traceback for a browser's unused spare connection. `pytest_tests/test_network_exposure.py`, which listens on 127.0.0.1 only: binding every interface from a test raises the firewall's dialog on whichever machine runs the suite first.
+**`main_pcb/`** - the board carrying both serial links.
 
-**A command that fails is answered with a page, not with an emergency stop.** `ui/tree.get_states` wraps anything a command raises in `CommandFailed` (naming which command), and both roots' `_parse_app` draw that instead of letting it reach the catch-all. The reasoning is the catch-all's own: it exists because an exception kills the HTTP loop and a running thread would then go on moving with no page left to stop it — so answering, which *keeps* the loop and the EMERGENCY STOP on it, removes the thing it protects against. Twice in two days the cure was worse than the fault: a board on last month's sketch (`FirmwareTooOld` out of `hold male1`) and a COM number remembered from another machine (`SerialException` out of `test audio subsystem`) each took the whole server down along with `flash firmware` and the port picker, which are the pages that fix them.
+- `/unmount-main-pcb` (a route) writes `params["main pcb"]["mounted"] = False` **first**, then `power_down()`, then a goodbye page saying what can be unplugged. Nothing clears the note except a deliberate press.
+- **While noted out, the server serves `server2/standby.py` instead of the tree**: `/` is the standby page and every `/app` address 303s to it. That gate (`wsgi2._board_is_out`, asked of the note not the hostname), `main.py` skipping the hardware, and the schedule's refusal are what keep the drivers inactive. The page offers the Gerbers (`/download/gerbers[/<board>]`), the KiCad projects (`/download/kicad`) and `the new PCB is mounted` (`/mount-main-pcb` → `MainPCB.remount()` + restart; nothing starts moving). No EMERGENCY STOP there (it would latch `_shutdown` and end the `Repository` watch). Nothing on it, or in a download, may raise. Installation UI only. `pytest_tests/test_standby.py`.
+- Gerbers are plotted on a machine with KiCad and committed (`py export_gerbers.py` → `CAD/KiCad/production/<board>/` + `manifest.json`), refusing any board that fails DRC. The manifest stores line-ending-normalised digests of each `.kicad_pcb`, so a stale plot is detected without KiCad (`pytest_tests/hardware/test_pcb_files.py`). **Re-run after changing any board in its table.** The table is deliberately the shields set plus the two v2 body boards only. `hardware/pcb_files/` is stdlib-only.
+- `configuration/` records which board is in the rack and what fills its slots (`params["main pcb"]["configuration"]`, kept per board). It drives nothing: consequences are shown, and the two hand-kept records (a body's card vs `audio > wired bodies`) are compared, never reconciled. `configuration/table.py` is the pure half.
 
-The limit is unchanged and load-bearing: `NotImplementedError` is still the routing miss (a 404), and anything raised **outside** a command — the walk, the render, the parse — still propagates and still emergency-stops, because there the process really is somewhere nobody can describe. `server2/remedies.py` adds a next click where one is knowable (an old sketch → `flash firmware`, an absent port → what is actually on the USB bus); the rule for adding a remedy is that the next click must be *known*, since a guess sends somebody the wrong way with more confidence than the raw exception did. The mock draws the same page with no remedies — nothing is plugged into it. `pytest_tests/test_command_failed_page.py` pins the behaviour and its limit; `colloquy/ui/mock.py`'s `fail on purpose` button is the same thing to look at.
+**`motors/`** - unplugging the Dynamixel chain. Deliberately does **not** call `power_down()` (that latches the class-level `_shutdown`, after which nothing can start): it stops what drives the piece by tree path, homes, cuts torque, and leaves the process usable. `params["motors"]["plugged in"]` is written first (for the next start); `were_unplugged_this_run` is latched after homing (read by `Colloquy.servos_can_be_commanded`). `pytest_tests/hardware/test_motors.py`.
 
-The root application declares what the page may offer it: `is_simulated` gates the `virtual drivers` panel, and the same test gates the **code documentation** node — `colloquy/CODE_DOCUMENTATION.md`, rendered and editable straight from the front page, but only off the installation's own machine. `colloquy/ui/mock.py` answers False, so neither is drawn there.
+**`electronics/`** - documents describing what the boards do. The `.md` files sit with their nodes; read the relevant one before touching a design:
 
-**The panel can be put away, and its control is a route rather than a
-tree command** (2026-09-10). It is 38ch down the side of *every* page and
-was permanently there: `is_simulated` decided whether it existed and
-nothing decided whether it was in the way. `VirtualDrivers.panel_is_open`
-is that state, with `open_panel`/`close_panel`, and it is deliberately
-**not** `Base._is_opened` - the node's own open and shut is its listing in
-the tree, and sharing one flag would mean opening the node moved a column
-of the page while putting the column away closed a node somebody was
-reading. In memory, like every other open and shut in this tree.
+- `as built` (current PCB, from the KiCad netlist; `mega-pinout.svg`), `dirty rework` (cuts and jumpers adding Thomas's audio), `next pcb` (replacement, with generated `netlist`/`bill of materials`/`mechanical` under it), `harness` (generated from the four harness boards' `.kicad_pcb`), `cad boards` (index of `CAD/`).
+- Alternative architectures: `one board per body`, `opencm and pro minis` (dropped 2026-09-30, the U2D2 stays), `ad9833 dual mode` (chosen for the voices), `sound options`, `thomas or teensy`, `shields` (the backplane + shields design; step 1 - Mega, MSGEQ7 carrier, Thomas cards - is the only one the exhibition depends on), `microphone board`.
+- Generated, not written: `next_pcb.py` builds the next board from `drivers/audio.py` (placement and routing deliberately not generated); `shields.py` and `microphone_board.py` compute every figure in their documents. Tests hold each to the spec and to the copper.
+- Facts worth knowing before touching the board: `J4`/`J8`/`J10` are a 1:1 breakout of D0-D21 (every cut is one stroke); `J11`/`J12` are break points (body wire on the odd pin, ADC on the even). The shields backplane's former speaker pair is line out/audio return, and its DC jack is centre-positive.
+- **Amplifier rail**: the fitted module's rating is a recorded fact (`params["audio"]["amplifier module"]`, `"amplifier max supply volts"` = 5.0), and `test_audio_at_12v` refuses any pass above it. A GF1002 was destroyed on an unsourced "4.5-15 V". **A requirement on a part to buy is not a property of the part in hand; every hard number needs a source** (a `#define`, TJ's firmware, the copper, a datasheet).
+- **Importing the `colloquy` package wipes `local/logs`.** Export scripts and scratch scripts load the modules they need by file path.
 
-`/virtual-panel/<show|hide>/<the app path to come back to>` is the route,
-answering a 303 to that path. It cannot be a command in the tree because
-the walk answers with a re-render of the node the command hangs on, so
-the link could only have lived on one node's page - and this one is drawn
-beside every page and has to come back to the one it was pressed on. It
-is page furniture, and it sits with `refresh` and `restart` in
-`server commands` rather than on the panel, because it has to be
-pressable when the panel is not there to carry it. Two verbs rather than
-one toggle, so a stale link does what it says. Gated on `is_simulated`
-like the panel, and it matters more on the route: `Colloquy.virtual_drivers`
-*builds* the simulation on first access, so an installation answering it
-at all would construct nine fake servos to be told about a column it
-never draws. The `Location` header is percent-encoded, unlike the hrefs
-the page emits - a space is fine in a link the browser encodes and
-malformed in a header value. Made in **both** UIs, and
-`pytest_tests/test_virtual_panel.py` runs the route and the link through
-each.
+## Light patterns (male identity signal)
 
-Markdown documents on the page share one node, `colloquy/markdown_document.py`: a rendered read view, `edit` for a textarea, `save` to write it back. There are two, and where each **hangs** is the whole of what separates them. `CodeDocumentation` is on the root and gated as above. `HardwareSetup` (`colloquy/tests/test_audio_subsystem/HARDWARE_SETUP.md`) hangs off the audio bench test and is **not** gated — it says how to wire the one thing that test measures, and a bench is exactly where it is wanted. Its photographs and its schematic are served from `server2/static/hardware/`; both UIs know image content types, and `pytest_tests/test_documents.py` walks every image link in it to check the file is there and that the server will serve rather than download it. **The four board photographs are rendered page regions of Thomas's PDF, not the images embedded in it** — his pin labels (`IN: 160 400 1K 2K5 6K25`, `GND / VDD / AOUT`, `ROUT+ / ROUT-`) are text drawn *over* the photographs, so pulling the embedded raster gets the board and loses the one thing that says which pin is which. `extract_hardware_photos.py` at the repo root regenerates them (needs `pip install pymupdf`, a dev dependency of that script alone) and carries the clip boxes.
+Each male sends a 10-bit pattern on his ring encoding which male he is and which drive he wants (tables in `Colloquy.light_patterns`; `()` is his `R`). Timing in `light_pattern_timing.py` (TJ's numbers): 0.2s/bit, 2s burst, every 4.35s; **the silence frames the message**. `Blink.loop()` reads the pattern once per burst. `ReadPattern` (`drivers/female/search/read_pattern/`) samples the light sensor and matches every offset and rotation with majority vote. A female's `Search` starts `read_pattern` (`started_by=self`).
 
-## Scenarios (`colloquy/scenarios/`, `colloquy/scenario_browser/`)
+Light tests (`colloquy/tests/`):
 
-A **scenario** is a description of what the artwork does, second by second, in what is visible in the room — lights, colours, movement, and how long each takes. The word means *only* this: it is the artist's own term for the piece's behaviour, and nothing in `colloquy/tests/` may be called one (those are hardware tests). The document describing the *code* is `CODE_DOCUMENTATION.md`; a scenario describes the *piece*, and the two are checked differently — one by reading source, the other by standing in front of the installation with a stopwatch.
+- `test_light_sensor_values/*` log raw values and pulse durations, not pattern decoding. `test_for_false_positives` (all lights off, reading vs angle); `test_seeing_male1_as_the_bar_turns` (reading vs alignment offset, plus a 2-D map); `test_with_everything_moving` (rings steady ON). Results via the shared `results` node.
+- `test_read_pattern` stages a pair face to face (failure mode: wrong decode); `test_search` stages nothing (only it can produce a **miss**: two send cycles, `events.MISS_AFTER` = 8.7s). Drives are the tester's to set. One CSV row per episode, not per sample. **No commas in CSV event sentences.**
+- `test_reinforcement` stages the find and runs only the exchange; it also logs the real analysers beside the emulated ears.
+- **The simulator cannot settle geometry or produce a miss** - it models exactly the rule being tested. Only hardware answers those.
 
-**The rule they are filed by: wherever the page offers a `start()`, it also says what will happen.** Every `BaseThread` declares its own in a class-level `scenario_names` tuple, and `BaseThread._snapshot_if_opened` — the one place that adds the `start`/`stop` link — hangs a `scenarios` child beside it. No node lists them in `snapshot_children`. Names are of *behaviours*, not of nodes, so female1/2/3 all point their `search` at `female-looking`; a thread may declare several, since one action is not one scenario. The whole-piece ones (`switching-on`, `a-male-calls-a-female`, `two-males-call-at-once`, `the-satisfaction-moment`, `an-answer-in-sound`) sit on `Colloquy` itself, because no single thread starts an encounter — it happens when a wandering bar and a turning female line up. Unlike the code documentation, scenarios are **not** gated by `is_simulated`: they describe the piece in the exhibition, which is exactly where they are wanted.
+## The sound channel
 
-**The hardware tests under `colloquy/tests/` have them too**, for the same reason: they are startable from the page like anything else, and what one does to the room for the next forty minutes is exactly what somebody standing in front of the installation needs told. `test_light_sensor_values` has no behaviour of its own, so its scenario is the six it runs, pulled in as sub-scenarios with `->` and flattened onto one clock (41min 30s end to end).
-
-`pytest_tests/test_scenarios.py` holds the rule to account in both directions — every declared name has a file, every file is claimed by some thread — plus a ratchet: `WITHOUT_SCENARIOS` lists the threads nobody has described yet, so a new thread can only join them deliberately. It is down to six, two of which stay empty on purpose (`read_pattern` and `blink` have no appearance of their own in the room).
-
-The file format is `<seconds> <description>` per line, a leading `#` block for the title, and `-> other-scenario[: label]` to start a child scenario concurrently at that point; `scenario_browser/rendering.py` expands the includes, flattens every concurrent thread onto one absolute clock and sorts (`switching-on` expands to 173 rows across four real minutes). Both UIs render it through `leaves.html`, styled by the `scenario-*` classes.
-
-**There are two web UIs, and they are deliberately independent.** The installation's (`colloquy/server2/`) is the one that runs the exhibition: it keeps the look it has always had — inline `style=` throughout, the `<style>` block, the red EMERGENCY STOP — and should go on working untouched through the prep. The mock's (`colloquy/ui/wsgi.py` + `colloquy/ui/server.py`) is a fork of it taken on 2026-08-19, with the styling stripped out, and it is where the page is being rebuilt from bare markup: structure plus the hooks to hang CSS on — `name="..."` attributes on every div (`server commands`, `navigation`, `split`, `commands`, `title`, `open`, `name`) and the classes the markdown and scenario renderers emit (`md-content`, `scenario-row`, `scenario-time`, …). No stylesheet is linked at all: uPlot's was the only one, and it went with uPlot on 2026-09-09.
-
-So **a change to the page has to be made twice, or made on the mock alone** — nothing done for the mock reaches the installation. They also serve their own copies of `static/` and `vendor/`, and the mock has no emergency stop at all (no link, and `/emergency-stop` is simply not a route it knows). What they still share is the snapshot vocabulary: `pytest_tests/ui/test_leaves.py` renders every leaf kind through **both**, so a kind neither may quietly stop drawing.
-
-**`colloquy/ui/graph_view.py` is the whole of the page's charting, and there is no script in it at all** — uPlot was retired on 2026-09-09, and with it `leaves.chart`, `uplot_chart.js`, the vendored library, the `/vendor/` static root, and `test graph zoom`, which existed to be the other half of a comparison. Every control is an `href`, one link is one action, and the server draws a fresh SVG each time. The state is the node's rather than the URL's, which is what the tree's `call` convention already gives: a command mutates, `update()` re-renders. **The point is not that it works without JavaScript — it is that the server keeps hold of the data.**
-
-**Two numbers move the x axis, and they are different questions**: the **page size**, in samples, is how much of the run is in the window; the **points** are how many of that page get drawn. Set the page at or below the points and every sample in it is drawn one for one — full density, a few hundred points on the wire — which is the whole reason the page size is a control rather than a constant, and the page says `every sample on this page is drawn` outright rather than leaving two numbers to be compared. `smaller page`/`bigger page` step the size; `first`/`previous`/`next`/`last page` walk along, and that **is** the x scrolling (there is no separate x zoom or pan). Resizing anchors on the first row on screen, not the page *number*, so the reader stays where they were looking. A size at or above the whole run is never offered — it is the view "everything" already is, so a press landing on one would look like nothing happening. Only y keeps a continuous zoom, and its range is the **whole** run's, scanned once and cached, so a peak means the same thing on page 3 as on page 1.
-
-**Marks are moments worth coming back to** — `marks=` is `(seconds, label)` pairs, drawn as a dashed rule across the picture with its name at the top. They are how you find something in a run rather than paging past it: `next mark`/`previous mark` step from this page's edge to the next mark either way, and a **`marks` child node** carries one link per mark that turns straight to its page. That listing is its own node because a run can carry a great many and the controls pressed on every view must not be buried in a list of moments pressed once; the whole lot — node, links and the two commands — is absent when there are no marks. A mark is a time and a page is a range of rows, so `_row_at` **bisects** to turn one into the other: a linear search would read the run to find a mark, which is the cost the paging exists to avoid. Only the marks on the page are drawn, and a label that would sit on top of its neighbour is dropped with its line kept. With the whole run on one page there is nowhere to jump to, and the reading says which press changes that rather than leaving a link that looks broken. Both demos carry `dummy_marks()` — one on each of the dummy data's pulses.
-
-**Nothing is copied and only the page is materialised.** A series is any sequence of `(x, y)` — a list, or `Columns`, a lazy view over two arrays that already exist elsewhere. So `test_with_everything_moving`'s `full measurement` (three females' sensors over a several-minute run, and the only real graph in the tree) hands over `Columns` onto the run's own dataframe and the log is not held twice; each render reads only the few hundred rows it will draw. Pages are **index** ranges applied to every line at once, since every line comes off one clock — row *n* is the same moment on all of them — and a line that runs out early is simply not drawn rather than taking the others off the picture. `_placer` computes the window once per picture: `x_window` reads rows to find the page's edges, and asking it per point turned one render into a thousand reads.
-
-**Several lines**: `series=` is label-to-points and each gets a colour off matplotlib's tab10, the same colours the matplotlib SVGs use, so female2 is the same orange in every picture of her; a legend is drawn only when lines are labelled, and a single unlabelled line keeps `currentColor` and the page's theme. The points asked for are a density **per line**, not a budget split between them.
-
-**Its picture goes out as `leaves.image`, not `leaves.svg`, and that is the difference between the two kinds**: an `svg` leaf carries a `data-svg-zoom` handle and `static/svg_zoom.js` binds a wheel-zoom, a drag-pan and a double-click-reset to it, which is right for a matplotlib plot the server will never redraw and wrong here — browser-side zoom scales the *picture* while the page stays put, so the readings beside it would name a window nobody was looking at. One of the two has to own the view; here it is the server. It is registered **twice**: on `colloquy/ui/mock.py` for `py mock_ui.py`, and on the installation's page as **`tests > test graph`** (renamed from `test graph without script` when the thing it was "without" in contrast to went away). Both draw three lines of deterministic dummy data — a slow sweep, pulses, noise, structure at three scales so paging in has something to find. `pytest_tests/ui/test_graph_view.py` pins the paging arithmetic, that a page no bigger than the points draws every sample, that no row is read that is not going to be drawn, and that no markup it emits contains a script.
-
-**Working on the UI**: `py mock_ui.py` serves the mock's own server and renderer against `colloquy/ui/mock.py` — a handful of nodes covering every kind of leaf and link, with no servos, Arduino, threads or params behind them. It listens on **8088**, not the installation's 8087, so it can run alongside `main.py`. `colloquy.ui.mock.request(path)` drives the same thing from a test with no socket at all (see `pytest_tests/ui/test_mock_app.py`), and `colloquy/ui/tree.py` is the path-walk both roots share — `Colloquy.get_states()` is a one-line delegation to it.
-
-The snapshot dict is the **whole contract** between the tree and the page, and `colloquy/ui/leaves.py` is where its vocabulary is defined — one constructor per kind of thing the page can draw (`value`, `html`, `svg`, `image`, `pre`, `editor` — there was a `chart` until uPlot was retired), plus `into(states, path)` for a node with several readings to show. Build leaves with those rather than hand-writing `{"path": ..., "name": ..., "value": ...}`; a kind that isn't in `leaves.KINDS` is one the renderer will not draw. Two things in a snapshot are *not* leaves: child nodes (from `snapshot_children`) and commands (bare callables, rendered as links that call them through the `call` path segment).
-
-## Drivers domain model (`colloquy/drivers/`)
-
-**On the name.** This layer is called `drivers` because that is what it does — it drives the piece — and the page says so: the root node is `drivers`, its simulated counterpart is `virtual drivers`, and the URL is `/app/drivers/...`. It was called `hardware` until 2026-08-21. Do not confuse it with `drives`, which is a different thing entirely and three levels down: `female1/drives`, `male1/drives` are the O/P **drive states** (`drivers/drive/__init__.py`), the appetite counters that make a body search. The word "hardware" is still correct — and still used — for the physical thing: the machines that have it (`is_simulated`), the interactive **hardware tests** under `colloquy/tests/`, `HARDWARE_SETUP.md` and its photographs under `server2/static/hardware/`, and `DXL.init_hardware()`.
-
-- `Drivers` (`drivers/__init__.py`) owns: `Arduino`, `U2D2` (Dynamixel bus), 3 `Female` bodies, 2 `Male` bodies, a `Bar` (the rail the mobiles ride on), `AllNeopixels`, `Bodies` (groups males+females for bulk operations like homing).
-- `U2D2` wraps `dynamixel_sdk` (`PortHandler`/`PacketHandler`) and owns 9 `DXL` servo objects, mapped by name: `female1/2/3`, `male1/2`, `bar` (see `dxl_ids`/`_dxls` in `drivers/__init__.py` and `u2d2/__init__.py`). Real vs. virtual `PacketHandler`/`PortHandler` is selected via `is_simulated`.
-- `DXL` (`drivers/dxl/__init__.py`) models one Dynamixel servo's registers (`position`, `goal_position`, `torque_enabled`, `profile_velocity`, etc.) as individual `RegisterHanlder` children read/written through `U2D2.read_1_byte`/`write_4_bytes`/etc. `handle_error` (in `u2d2/__init__.py`) wraps every raw SDK call with retry + logging on comm/servo errors. Position registers are read **signed** (`signed=True` on the register): every servo runs in extended position mode, where positions either side of the servo's zero are normal, and the SDK reads them back as an unsigned dword.
-- **Angles, not servo units** (`drivers/angle/`): nothing outside `drivers/angle/` and `drivers/dxl/` should compute a servo position. Each moving thing owns an `Angle` node — `female1.angle`, `male1.angle`, `bar.angle`, `female1.mirror1.angle` — measured in **degrees of the body itself**, zero at its calibrated origin, signed. `angle/conversion.py` holds the two facts it needs: 4096 units to a servo turn, and the reduction (`REDUCTIONS`: a female, a male and the bar all turn **three times slower** than their servo; only a mirror turns with its own). So the same 2000 servo units are 58.6° of any body but 175.8° of a mirror — write degrees and that stops mattering. The male's reduction was written here as 1:1 until it was measured; `params.py`'s v3 migration is that correction taken back out of an existing calibration. Bodies keep `turn_to_origin()`/`turn_to_max_position()`/`toggle_position()`, now expressed as angles (`Female._sweep`, `Bar._travel`), plus `turn_to(degrees)`.
-- `Mirror` (`drivers/mirror/`): one per female (`female1.mirror1`), on the dxl ids the females and males leave free (2, 4, 6). Nothing drives it yet — it exists to be calibrated and jogged. It is a plain `Base`, not a thread, and nothing initialises it at startup, so unwired mirror servos cost nothing. **Its motion range is TJ's and did not need measuring**: his unit boards only sent the mirror a stop and a two-bit state, and the OpenCM controller behind them — all ten deployed versions of it — carries `goal_position_mirror_MAX/MIN = (1023 ± 512) ∓ 50` with the comment `//512==45`, i.e. 4096 to a turn, our own convention. `ticks_to_degrees(512, 1)` returns exactly 45.0, which is the check that the two agree; 924 units at 1:1 is **81.211°**, now the params default *and* a v5 migration — `_fill_missing` only adds keys a file predates, so every existing installation would have kept its 0.0 without one. Only a 0.0 moves: a range somebody measured at the rig outranks a number read off somebody else's firmware, the same rule v4 applied to a deliberately-typed baud rate. The `dxl origin` is *not* transferable — his centre is 1023 because that is where his servo sat in his mechanism — and is still a measurement at the rig. `pytest_tests/test_mirror_range.py` keeps the two apart.
-- **Who supervises whose search.** Each body decides for itself, in its own `loop()`, and each decision runs **both ways** — start *and* stop. A `Male` calls while he wants something and goes quiet the moment he is inert; a `Female` looks on the same terms. The **`Bar` is the one that decides whether the bar wanders**, and it decides by watching the males' `search.is_started` flags: the rail has no appetite of its own and exists to carry a calling male past a female, so with nobody calling there is nothing to carry and it stops where it stands. It reads the *flag* rather than `is_satisfied()` on purpose, so it stays in step with a search thread that is still winding down. Only the starting halves existed before 2026-08-25, which is why the piece could never come to rest (CODE_DOCUMENTATION 1.2 / 4.1).
-- **`is_satisfied()` means inert, and inert means *both* appetites are down.** It is `not drives.which_is_frustated()` on both sexes, which is TJ's `internal_drive_state == 1 [Neither]` (`internal.ino`: `LL > O && LL > P`). It said `or` until 2026-08-25 — so a body with one appetite full and one empty would not search while `which_is_frustated()` one file over said it wanted the full one, and a male in that state blinked asking for something he had decided not to look for (CODE_DOCUMENTATION 8.9).
-- `Female`/`Male` (`drivers/female/`, `drivers/male/`) each own their `DXL`, `Drives` (behavioral state — "O drive"/"P drive", see `light_patterns` in `colloquy/__init__.py` for the blink-pattern encoding used during search), `Search` (seeking behavior), `Neopixels`, and a `LightSensor`.
-- `Arduino` (`drivers/arduino/__init__.py`) talks over a JSON-line serial protocol (`{"path": ..., ...}\n`, response parsed as JSON) at **1 Mbaud** to a single `.ino` sketch (`Source code/Arduino/colloquy_of_mobiles/colloquy_of_mobiles.ino`) that fans out to NeoPixel strips (per-body head/bodyO/bodyP/feet/ring/up-ring segments) and analog light sensors. Each addressable strip segment / sensor is a `NeopixelCommand`/`LightSensorCommand` child registered by `arduino_path` (e.g. `"f1/head"`, `"m1/light sensor/a"`) — when the firmware gains a new pixel group or sensor, add both the `.ino`-side handler and a matching `*Command` entry here.
-- **The sketch is the source of truth for the link itself.** `SERIAL_BAUDRATE` and `FIRMWARE_VERSION` are `#define`s in `colloquy_of_mobiles.ino`, and `drivers/arduino/firmware.py` reads them straight out of the file (the same trick `virtual_serial_port.py` uses for the path list) rather than restating them. `params.json`'s `arduino.baudrate` is only a copy, so the port can be opened before the board has said anything — `Arduino.open()` refuses to open a link where the two disagree, and the params v4 migration moved an existing 57600 up with the firmware. The board greets on reboot with a JSON line naming its firmware and its rate; `wait_for_reboot()` refuses anything older than `MINIMUM_FIRMWARE_VERSION`, because an old sketch answers an unknown path with an empty line and the only symptom is a female who never reads a pattern. When nothing legible comes back, `_diagnose_silence()` reopens at every rate the sketch has ever used (reopening toggles DTR, so the board reboots and greets again) and then falls back to naming what is on the USB bus.
-- **Board detection without opening anything** (`drivers/arduino/boards.py`): the thing that enumerates on USB is the bridge chip (ATmega16U2 on an official Mega, CH340 on a clone), not the processor running the sketch, so a board with an *empty flash* still shows up by name — the same reason the Arduino IDE can list it. `KNOWN_DEVICES` maps VID/PID to a name plus "would it be sane to open this as the Arduino", which is what keeps the U2D2's FTDI lead off the Arduino's port picker. It cannot tell you whether the *right* sketch is on it; that is what the greeting is for. Both are on the page under `drivers/arduino` (`usb boards`, `com port`, and an `in sync` reading).
-
-- **`drivers/arduino/flasher/` puts the sketch on the board**, which is what `in sync: NO` used to leave you unable to act on. It shells out to **`arduino-cli`**, and the copy it usually finds is the one **inside the Arduino IDE** — the IDE ships one, and anybody who has flashed this board before already has it along with the AVR core and both libraries. The catch, and the reason `toolchain.config_file()` exists: the bundled binary needs `--config-file ~/.arduinoIDE/arduino-cli.yaml` or it reports a perfectly correct "arduino:avr is not installed" about a machine that plainly has it. Compile and upload are **one** `arduino-cli compile --upload`, so the image that reaches the board was necessarily built from this sketch just now.
-- **It is a thread whose whole life is one job**, for `Repository.pull`'s reason: a compile is most of a minute and `Colloquy.get_states` holds one lock around the application, so the click accepts or refuses instantly and the work happens elsewhere. The bare `start` link every BaseThread draws is popped — it would be an unlabelled button that reflashes the installation — leaving `compile only` (no refusals; it touches nothing but a temp folder) and `flash the board`, which appears only when it would actually work.
-- **The refusals are the safety**, all instant and all reading last-known state. It will not flash an unmounted PCB, an unchosen port, a port this machine does not have, **a port that is not a plausible Arduino** (reusing `boards.KNOWN_DEVICES`, so avrdude never meets the U2D2's FTDI lead), or while anything under `drivers`/`tests` is running. That last filter is by tree path on purpose: filtering on *all* threads hid the flash link on the installation permanently, since `main.py` starts `Repository` on every run.
-- **A flash ends by reopening the port**, and that is the check rather than tidiness: `Arduino.open()` waits for the greeting and refuses a version it was not written for, so the outcome line is the board saying in its own words which firmware it is now running.
-- **`flasher/base.py` is all of that with the installation taken out of it** (2026-09-21), because three other nodes wanted the same job for a different sketch on a different lead. What is shared is the *shape*, not the board: the thread, the toolchain calls, three of the four refusals (they are about a **port**, which every one of these has), and the page. What is **not** shared is the link, and that is the one thing a flash can be checked by — so `_check_the_board()` is a hook. `Flasher` closes and reopens `Arduino`; `SamplerFlasher` runs its owner's handshake; `PlotterFlasher` deliberately **cannot** ask, and says so rather than passing avrdude's word off as the board's. An owner's own refusals go in `_extra_refusals()` — the main PCB being out of the rack is not a question about a port.
-
-**Stopping the installation, and the calibration it protects.** Every servo runs in extended position mode, where the count of whole turns lives in **volatile** memory. The bar's travel is 293° of bar = **2.4 turns of its servo**, so a bar powered down at the far end wakes up believing it is somewhere else and its `dxl origin` is then a lie. So the orderly stop homes everything *before* torque is cut:
-
-- **`Colloquy.power_down()`** is the sequence — threads down, lights off, everything home, then torque off — shared by `/shutdown` and by the unmount command below. It returns whether everything actually arrived, and both callers pass that on: a bar that did not get home has silently lost its turn count.
-- **`HOMING_TIMEOUT` is 90s, not the old 30.** A full bar crossing takes ~32s at the `profile_velocity` of 20 every servo is initialised with (4.58 rev/min at the servo, a third of that at the bar), so 30s was *under* the worst case — and the worst case (bar at the far end) is exactly when homing matters most. `move_to_origin()` also used to throw the wait's answer away and cut torque mid-travel without a word.
-- **Every step of the sequence survives hardware that was never opened.** The U2D2's port name is set only by `main.py`'s `open_the_hardware()`, which is skipped when the main PCB is noted as unmounted — so `Colloquy.servos_were_opened` asks the *port name*, not `is_open` (which flickers, since `U2D2.__enter__`/`__exit__` open and close around a transaction that finds the port closed). Nothing to home returns True, because "there was nothing to bring home" is not "it failed to get home", and the goodbye page has a third line for it rather than claiming everything reached its origin. `shutdown_neopixels` and `silence_speakers` swallow and log instead: failing to turn a light off must never be what stops an installation being stopped.
-- **`emergency_stop` is `try/finally` around `shutdown()`, and `Server2.wsgi` wraps `emergency_stop` the same way.** Both were found by one traceback: `U2D2.open`'s bare `assert self.port_name` (no message, and gone under `python -O`) raised out of `disable_torque`, so the emergency stop never signalled the threads — and the handler that called it never reached `shutdown_event.set()`, so what reached wsgiref was the second exception with the first nowhere in it. The assert is a `U2D2Error` now, which `Drivers.disable_torque` already catches per servo. A handler that can fail the same way as the thing it is handling is not a handler.
-- **`/emergency-stop` never homes, and that is the whole difference.** Commanding more movement is the opposite of what it is for. `pytest_tests/test_power_down.py` tests the two side by side, with a double that has no `turn_to_origin` at all so reaching for one raises.
-- **`/restart` does not home either**, deliberately: it re-execs the process, the servos stay powered, and nothing is lost.
-
-## `hardware/` — the physical installation
-
-A root section (`/app/hardware`), and **not** the same thing as `drivers/`. The 2026-08-21 rename drew that line rather than blurring it: `drivers` is the layer that *drives* the piece — servos, the bus, bodies, behaviours — and `hardware` is the equipment itself, which is what the word always still meant here (`is_simulated`, the hardware tests, `HARDWARE_SETUP.md`, `DXL.init_hardware()`). The test for what belongs: **would it still be true with the software switched off?** A servo's goal position would not. Whether the main PCB is screwed into the rack would. Not gated by `is_simulated` — the machine with the boards actually in it is the one place none of it is hypothetical.
-
-**`hardware/main_pcb/`** is for taking the board out. Both serial links land on one PCB, so unmounting it disconnects the Arduino and the U2D2 together — which is also why it belongs to neither of them. `MainPCB.unmount()` writes `params["main pcb"]["mounted"] = False` **first** (so a power-down that fails halfway still leaves the next start knowing), then runs `power_down()`. `main.py` reads that flag and skips opening both ports, saying so plainly, instead of failing somewhere down in pyserial talking about COM4. Nothing clears it on its own — saying a board is back is a deliberate press (`the new PCB is mounted`, below), because the alternative is an installation that quietly decides it has hardware when it has not.
-
-**While the note says out, the page is a different page** (2026-10-11, `server2/standby.py`). The board came out to be replaced, and an installation with no Arduino and no servo bus has nothing for the usual page to drive — so `wsgi2._parse` does not serve the tree at all (`_board_is_out`): `/` answers with the standby page, and every address under `/app`, GET or POST, is a 303 to it. **That gate is the whole of what keeps the drivers from being activated** — not a guard on each node but there being no page that reaches one — together with `main.py` skipping `open_the_hardware()` and the exposition schedule refusing to start against the same note. It is asked of the *note*, not of the hostname, so the page and the process agree by construction and a development machine can be put in the state to look at it. The page carries three things and nothing else:
-
-1. **the PCB production Gerbers** (`/download/gerbers`, and `/download/gerbers/<board>` for one), for PCBWay or JLCPCB;
-2. **the full KiCad projects** (`/download/kicad`);
-3. **`the new PCB is mounted`** (`/mount-main-pcb`), which calls `MainPCB.remount()` and restarts — the restart is what "activates the drivers", since both ports are opened once, by `main.py`, and a process that came up with the board out never opened them. **Nothing starts moving**: the piece is started from the page or by the schedule as on any other start.
-
-All three are routes, for `/unmount-main-pcb`'s reason: two answer with a zip and one ends in a restart, and there is no tree to hang a command on anyway. Each is idempotent where a stale link could hurt — mounting a mounted board and unmounting an unmounted one are both a 303 home, the second because it would otherwise do exactly one thing: stop the server on a machine whose updates only arrive while it is up. **No EMERGENCY STOP is drawn there**, and that is not an omission: nothing can move, and the press latches `BaseThread._shutdown`, which would silently end the `Repository` watch. **Nothing on that page may raise** — it is the front page for weeks, so each section reads its own files and reports a failure as a sentence in its own place — and nothing raised inside a download may leave `_parse_download`, since outside a command an exception emergency-stops the installation over a zip. `hardware > main pcb` carries the same two download anchors on the usual page, so they do not vanish the day a board goes back in. Installation-side only: the mock has no board to take out. `pytest_tests/test_standby.py`.
-
-**The Gerbers are plotted on a machine that has KiCad and committed** (`py export_gerbers.py` → `CAD/KiCad/production/<board>/` + `manifest.json`), because the machine that hands them out is the installation's laptop, which has none and gets them by pulling. The script runs `kicad-cli` with what both fabs ask for (Protel extensions, RS-274X without X2, mask subtracted from silk, Excellon in mm with PTH and NPTH apart) and **refuses a board that fails KiCad's design rule check**. The manifest keeps each `.kicad_pcb`'s digest — taken with line endings removed, since `core.autocrlf` makes one commit's board file different bytes on the machine that plotted it and the machine that pulled it — so a package plotted from an older layout is recognisable *without* KiCad: it is said on the page, written into the README inside the download, and `pytest_tests/hardware/test_pcb_files.py` fails on it. **Re-run the script after any change to a board in its table.** That table is where "which boards" is decided: the five of the shields set and the two v2 body boards, and deliberately *not* the two other candidates for the main board (`colloquy-control-v2`, `thomas-or-teensy`) — a download offering three main boards gets three ordered. **A plot is not a release**: every one of those designs lists physical checks still open in its own README, and those documents travel inside the package. `colloquy/hardware/pcb_files/` is the reading half (`gerbers.py`, and `kicad_projects.py`, which zips everything git tracks under `CAD/KiCad` — 295 MB down to about 100 — once into `local/downloads/` and streams it); both are stdlib-only so the export script can load them by path without importing the package, and both are on mypy's `files`.
-
-**Unmounting is a route (`/unmount-main-pcb`), not a tree command, and that is not incidental.** It ends with the server stopped, and a tree command cannot say so: `ui/tree.py`'s `update()` **discards a command's return value**, then re-renders the node it was called on. Whatever the command had to say would be thrown away, and the reader left looking at an ordinary node page — navigation links and all — served by a server in the act of stopping. The one thing somebody standing over a screwdriver needs is a page saying it is safe to disconnect, and that has to be the *last* page. So the route mirrors `_parse_shutdown` (same `hold_commands`, same plain-text terminal page, same "Goodbye!") with the note written first and a closing line naming what can now be unplugged. The node offers it as an `html` leaf carrying a real anchor, since a command link would go into the tree instead.
-
-That is also why `Colloquy` has no `attach_server`/`request_stop`: they existed only so a *command* could stop the server, and the route reaches `shutdown_event` directly the way `/shutdown` always has.
-
-**`hardware/main_pcb/configuration/` says *which* board is in the rack and what is plugged into it** (2026-10-08), kept exactly like the mounted flag: a note in `params["main pcb"]["configuration"]`, written by a press, cleared by nothing but another press. It has to be a record because **nothing in the hardware can answer it** — `shields` says outright that the silkscreen is a shield's only identification, so the page holds what the silkscreen box holds and somebody who has just changed a shield writes it in both. **The rack is a slot too**: `board` takes one of four (`electronic box`, the one in service and the default; `colloquy control v2`; `thomas or teensy`, with its `mode shunt` THOMAS/TEENSY and its `teensy socket`; `shields backplane`, with its `computing slot` Mega 2560/Teensy 4.1 adapter/empty, its `analyser slot` MSGEQ7 carrier/empty, and `JV1 female1`…`JV5 male2` Thomas card/re-valued card/empty). Each slot is one node offering a press only for what it could hold *instead*, and a board's slots are drawn only while it is the board in the rack — but `fitted` is kept **per board**, so a board taken out keeps its shields. An unrecorded slot reads as its document's first step (`shields` step 1: Mega, carrier, five Thomas cards) and `recorded` says `never` rather than pass a default off as something somebody said.
-
-**It drives nothing, and what follows is said rather than done.** Recording a Teensy does not stop `main.py` reaching for a Mega, and recording an empty voice slot does not touch `audio > wired bodies`. Each consequence is a reading taken from the board's own document — the Mega with JA1 empty cannot hear, the Teensy never reads the carrier, an empty JV slot is a silent body, a re-valued card under a Mega filters a pitch it was not valued for, TEENSY with an empty socket is silence — and the two hand-kept records of one fact (a body's card against `wired bodies`) are **compared, never reconciled**: a body also needs its amplifier in, which no slot records. `configuration/table.py` is the pure half (on mypy's `files`); every value it reads from params is read defensively, since params.json is hand-edited and a render that raises emergency-stops the installation. JV slot N is body N, read out of `SHIELDS.md` §2d by `pytest_tests/hardware/test_main_pcb_configuration.py`, which also holds the shunt's positions to `THOMAS_OR_TEENSY.md` and every linked document to `electronics`.
-
-**`shields-configurations.svg` is the picture of it** (`py export_shields_diagram.py`, drawn by `colloquy/hardware/electronics/shields_diagram.py`): the backplane three times, to scale — slots empty and named, `SHIELD_STEPS`' step 1 (Mega, carrier, five Thomas cards) and step 2 (Teensy adapter, analyser slot empty) — and a key of what each slot can hold. `SHIELDS.md` §0 shows it, and so does the configuration node while the shields backplane is in the rack, beside a `step` reading naming the documented step a record matches. Every position is read out of `CAD/KiCad/shields/`; the one thing worked out — each shield placed by its connector meeting the slot's header — is held by `test_shields_diagram.py` to the holes that must then line up (card and carrier retention holes, the adapter's four on the slot's four). The slots and choices are `configuration/table.py`'s, so it imports through the package, and the export script dodges the `local/logs` wipe by loading the four modules it needs **by path under their own full names** — a `from colloquy.x.y import z` then finds `z`'s module already in `sys.modules` and never runs an `__init__` above it. The script asserts `colloquy` itself was never imported. The test fails when a board changes and the file was not regenerated.
-
-**`hardware/motors/`** is the other state, and it is about the *other*
-cable. Unplugging the Dynamixel chain - to take the U2D2's 12 V
-somewhere else, say - was always survivable by the software: the U2D2 is
-a USB adapter whose bridge chip enumerates with nothing behind it, so
-the port opens and only the six `init_hardware()` calls fail, one at a
-time, into `colloquy/startup/`. **The calibration is what is at risk**,
-which is the whole reason the node exists: extended position mode keeps
-the turn count in volatile memory and the bar's travel is 2.4 turns of
-its servo, so a chain pulled at the far end wakes somewhere else and its
-`dxl origin` is a lie only a trip to the rig undoes.
-
-**It deliberately does not call `power_down()`.** That opens with
-`BaseThread.shutdown()`, which latches the **class-level** `_shutdown`
-event, after which every `start()` in the process returns immediately -
-right for `/shutdown` and for unmounting the main PCB, both of which end
-with the server stopped, and precisely wrong here, since the reason to
-unplug the motors is to power something else and go on testing it from
-the same page. So it stops what drives the piece (by tree path, the
-flasher's `IN_THE_WAY` filter, so `Repository` survives), homes, cuts
-torque, and leaves the process as able to run a test as before.
-
-**Two notes, two lifetimes, and they cannot be one thing.**
-`params["motors"]["plugged in"]` is for the *next* start - `main.py`
-then does not open the bus at all, which leaves `servos_were_opened`
-False and every guard downstream already correct - and is written
-*first*, for `main_pcb.unmount`'s reason. `were_unplugged_this_run` is
-an instance latch set *after* the homing, because the note is written
-before the move and a guard reading the note would skip the very move
-that protects the turn count; it is what
-`Colloquy.servos_can_be_commanded` asks, so a later `/shutdown` does not
-spend `HOMING_TIMEOUT`'s ninety seconds commanding servos on a bench and
-then warn about a bar that was walked home on purpose.
-`pytest_tests/hardware/test_motors.py` pins the order and the omission.
-
-**`hardware/electronics/`** is the other half of the section, and the split from `main_pcb` is state versus description: `main_pcb` says whether the board is in the rack, `electronics` says what it *does*. Three `MarkdownDocument`s, because they answer three questions that get confused the moment they share a page — `as built` (the current PCB, read out of the KiCad netlist pin by pin), `dirty rework` (the cuts and jumpers that put Thomas's audio subsystem into it), `next pcb` (what should replace it). Not gated by `is_simulated`: the machine with the board in it is where none of it is hypothetical, and the machine somebody is holding a scalpel over is likely to be the other one.
-
-**Three more hang under `next pcb`**, and the difference is visible on the page rather than only stated in the files: `netlist`, `bill of materials` and `mechanical` are `GeneratedDocument`s (`colloquy/markdown_document.py`) and have **no `edit`**. An edit button on a generated file offers a change the next `py next_pcb.py` silently throws away. They hang *under* the specification rather than beside it because that is what they are — it is the reasoning and they are what it produces, so a reader who has not opened `next pcb` has no use for its netlist; as siblings each also had to carry `next pcb` at the front of its own name, a namespace spelled out three times in the one place the tree already provides one. That took `MarkdownDocument._snapshot_if_opened` starting from `Base`'s: it returned its own dict outright, so a document could never have a child — the walk would reach one and opening the parent would list none of them. They are also rendered from the generator on every view rather than from the file it writes, so the page cannot show a copy from before the last change to the design and be convincing about it; each carries a `file` reading saying where the on-disk copy is, for whoever wants it beside a schematic editor. Their `source` is a callable so the import happens on open - the mechanical one parses a 1.7 MB board file and nothing should pay for that at startup.
-
-**The next board's wiring is generated, not written.** `NEXT_PCB.md` is
-the specification and the reasoning; `colloquy/hardware/electronics/next_pcb.py`
-is the board as data - every part, every net, every terminal - and
-`py next_pcb.py` at the repo root writes `NETLIST.md`, `BOM.md`,
-`MECHANICAL.md` and **`next_pcb.net`** into
-`CAD/KiCad/electronic box v2/` - the last being the same wiring in
-the form Pcbnew imports (File > Import Netlist), so 113 footprints
-arrive with a ratsnest that came out of `drivers/audio.py`.
-**Placement and routing are deliberately not generated**: one analogue
-ground region under the filters joined to power ground at a single
-point, with class-D and NeoPixel current kept out of it, is judgement
-on a physical thing. `next_pcb_kicad.py` also holds the pad map - the
-design names terminals and a footprint numbers pads, and the MSGEQ7's
-stay named, so its five chips are placed and left unwired rather than
-having numbers invented for them - plus `audit()`, which reads this
-machine's own footprint libraries and reports any footprint it cannot
-find and any pad the netlist names that does not exist. Footprints are
-**lifted from the board that exists** wherever it has one, the same
-way the envelope is. The mechanical one
-is read out of the *old* board's `.kicad_pcb`
-(`next_pcb_mechanical.py`) rather than restated, because the enclosure
-was cut for that board: outline (A4, 210x297, 5 mm corners), the seven
-placements the panel has a hole for, and the room the five departing
-amplifiers free. It also turned up that the board has **no mounting
-holes at all** - empty NPTH drill file, no MountingHole footprint. It is generated because it **reads
-`drivers/audio.py`**: which body speaks at which pitch, out of which timer
-pin, into which analyser module is one table that the firmware and four
-Python nodes already share, so a channel cannot be laid out against a pin
-the sketch does not drive. Same arrangement as `arduino/firmware.py`
-reading the baud rate out of the `.ino`. `pytest_tests/hardware/test_next_pcb.py`
-holds it to the spec - no Mega pin on two signals, no net with one end, no
-tone into a filter cut for another frequency - and it earned that on the
-first run, catching a reference collision where `R301` was both female3's
-filter resistor and the shutdown pull-up. Two groups of values are
-deliberately absent and kept in their own BOM section: the MSGEQ7's
-support network and whatever is fitted across `J11`/`J12`, neither of
-which is recorded anywhere in this repo.
-
-**Every decision that moves a track is taken; the amplifier rail is not one of them and is reopened** (2026-09-01). male2's supply was never the blocker — `B-J4` carries one spare conductor and GND only on its shell, so male2 is fed through `center` on whichever rail the board offers and decides nothing for the other four. The current argument still points at **+12 V**: 40% of the current for the same acoustic power, on a conductor the NeoPixels do not touch, with the 2026-08-28 brown-out as field evidence for what sharing costs (that was the same mistake one level up, and `MEGA_5V` being a separate net from `+5V` is the rack-end half of the same lesson).
-
-**What reopened it was a fried amplifier, and the lesson is about documents rather than about volts.** §5 specified the module by its supply *range* — "4.5–15 V" — a requirement on a part still to be bought. `SUPPLY_SETUP.md` then restated it as a fact about the GF1002s already on Thomas's bench, and `test audio at 12v` destroyed one the instant the rail came up (`docs/errors/2026-09-01-01.txt`). **A specification for a part you intend to buy and a description of the part in your hand read identically and are opposite in kind**: one is a requirement you impose, the other is a property you have to go and check. Nothing in this repo knows the GF1002's actual rating, and the number had no source — unlike every other hard number here, which is traced to a `#define`, to TJ's firmware, or to the KiCad copper.
-
-So the rating is now a recorded fact about the module fitted (`params["audio"]["amplifier module"]` / `"amplifier max supply volts"`, shipping as `GF1002` / `5.0` — the rail it is known to *survive*, explicitly not a datasheet figure), and `test_audio_at_12v` refuses any pass above it, instantly, reading only that. `measure at 5 V` still runs. Raising the number is a deliberate press against a datasheet, never against another document in this repo. No copper depends on the rail — `center` carries both to every body it feeds — so §5 can stay open until a part is chosen; a 5 V module would change the body-end 470 µF reservoir's value, not the topology. The other three measurements are unchanged: the `J11`/`J12` fitment, male2's local supply, and whether 2.5 Vpp survives a full-length body cable.
-
-**`one board per body` is a second full solution, not a variant.** Same fixed harness, five Arduino Pro Minis instead of one Mega — one in each body, on the `female base`/`male static` boards, with that body's filter, divider and MSGEQ7 beside it. It is TJ's own architecture given back (`local/Code/Code/Units/logic35_systems/` is one sketch per unit with `UNIT_ID` at compile time, and its use of `A6`/`A7` is what says the board was a Pro Mini rather than an Uno). The case for it is arithmetic on the harness: a female's nine conductors become five and a male's fourteen become five or six, **no analogue leaves a body at all**, and two named open questions die — whether 2.5 Vpp survives the cable (`next pcb` §3) and where the bit clock lives (CODE_DOCUMENTATION §9), since a processor in the body samples its own sensor the way TJ's did. It costs five firmwares, five flashings onto boards that have no USB, and five places to look when something is quiet. **The recommendation is to build `next pcb` for the exhibition and let §3's measurement decide whether this is needed** — and the two are cheap to keep open, because every part in a body is the same in both and only the filters, the analysers and the processor count differ.
-
-**`opencm and pro minis` was the third solution, and it was dropped on 2026-09-30: the U2D2 stays.** The OpenCM 9.04 is out of stock at ROBOTIS and listed as discontinued by retailers (ROBOTIS offers the OpenRB-150 instead), and the -C variant's servo connectors are the XL-320's rather than the JST EH this harness uses. What went with it is what it promised: one USB lead instead of two, a stop that does not need the PC, and a piece that runs with the computer off. None of the three exists today, so nothing working was lost. The document carries a banner saying so and is kept as the record. What it proposed, for the record: it was `one board per body` with the rack tidied. The U2D2 and the bridge collapse into one **OpenCM 9.04** — a programmable STM32F1 with USB that drives a Dynamixel bus natively, where those two are an adapter and a relay. It masters the servo bus on `Serial1`, the five Pro Minis on `Serial2` through an RS-485 transceiver, and the driver's JSON lines over its own USB, so `drivers/u2d2/` goes and one USB lead leaves the rack instead of two. **TJ needed six of these** (one per body plus the bar, `deploy*_OCM` in his archive) because each had its own local bus; this harness puts all nine servos on one conductor, which is why one does. Two things it wins beyond a smaller board: **an emergency stop that does not need the PC** — and this repo has a traceback where that path was itself what failed — and the bar's wander rule moving back down, which was his to begin with. **No Mega is needed**: the listening is five Goertzel bins on each body's own processor. The one thing that would change that is a measurement, not a guess — whether a Pro Mini can sample while it writes a NeoPixel strip. It does not displace the recommendation: build `next pcb` for the exhibition, and if §3's harness measurement fails, this is the tidier of the two distributed answers.
-
-**`cad boards` is the index of `CAD/`** (`CAD_BOARDS.md`, 2026-09-30): every board designed there (the rack board, the four harness boards, the v2 project, SparkFun's TPA2005D1 breakout in Eagle), how many of each the piece has, where each sits, and which document holds its pinouts. It restates no pinout on purpose. Its facts were read with KiCad's bundled `pcbnew` and its four pictures are `kicad-cli pcb render` output in `server2/static/hardware/board-*.jpg`, so a changed board wants re-rendering. Two things it established: **no board fills in its title block** (git is the only revision history), and **a female's body servo is tapped on `female static`, her mirror's on `female base`**, while a male's is on `male static`.
-
-**`ad9833 dual mode` is the fourth solution, and the one chosen for the voices** (`AD9833_DUAL_MODE.md`, 2026-09-30). One set of boards runs the piece two ways, changed by fitting the Pro Minis, moving shunt jumpers and reflashing the Mega, never by soldering. **The U2D2 masters the servos in both modes**, so `drivers/u2d2/` never changes. **Central mode** is `next pcb` with its five passive filters replaced by AD9833 voice channels (module + a gain-4 buffer to the same 2.5 Vpp line level), driven over SPI on D51/D52 with **the five old tone pins as the five chip selects**, so `drivers/audio.py`'s body-to-pin row survives and only the pitch stops being fixed; the MSGEQ7s stay, so a pitch is free *within its band*. **Distributed mode** is `one board per body` with **the Mega as its bridge**: a Pro Mini per body with its own voice channel, and the RS-485 body bus runs on **the line-out/return pair** every body already has, which is why female3 and male1 need no spare conductor. The bridge is a build of the Mega's sketch on **Serial1** (`D18`/`D19`, with `D22` for driver enable), the only hardware port the 2026-08-27 NeoPixel moves left whole; it is flashed with the existing `flash firmware`, and its greeting has to say which build it is. The Python program is unchanged as long as the Pro Minis answer the paths the Mega answers today. The AD9833 and transceiver figures in it are marked *check* because none has been read off a datasheet.
-
-**`sound options` compares five ways to make the voices** (`SOUND_OPTIONS.md`, 2026-09-29): TJ's `tone()` per body, Thomas's chain as built, five AD9833 DDS chips, a Teensy 4.1, and a USB 7.1 card - on price, effort, board complexity, reliability and distance from TJ. It exists because the question changed: with the analysis on the computer the pitches no longer have to fit the MSGEQ7's bands, and **the hearing side decides it** - only the Teensy both frees the pitches and gets five microphones to the computer. Its first two columns come from this repo; the other three are from general knowledge of the parts and say so, for `next pcb` §5's reason. It is about the sound channel alone, so it sits beside the three solutions rather than being a fourth.
-
-**`thomas or teensy` is the fifth solution, and it tests rather than chooses** (`THOMAS_OR_TEENSY.md`, 2026-10-01). One main PCB that runs Thomas's chain or a Teensy 4.1 chain, **never both at once**: one shunt drives one net, which moves three SMD DPDT signal relays - one contact per body, between each filter's output and its 100 R build-out. **Released is Thomas mode**, so with the Teensy socket empty the board is the v2 project electrically and firmware 4 runs unmodified. Relays rather than an analogue-switch IC because the PCM5102A's output is centred on 0 V and a single-supply switch cannot pass it without a re-bias the body divider's 25 kΩ would pull down. Teensy mode is `AudioOutputI2SHex` (data on 7, 32, 9; BCLK 21, LRCLK 20; MCLK 23 driven and left unconnected) into three PCM5102A for five voices and a bench output, and the five microphones teeing into a 10.7 kHz Sallen-Key buffer each onto Teensy pins 14-18 - `A0`-`A4` in body order, like the Mega's, and inside 14-23, the range both of the Teensy's ADCs reach. DC-coupled, so the MAX9814's bias is a reading. Everything that touches a Teensy pin is powered from the Teensy; MODE and a reserved Mega Serial1-to-Teensy link cross power domains only through partial-power-down buffers; the Mega gains `D18`, `D19` and `D30`, all free on v2 and in firmware 4 (and `D18`/`D19` collide with `ad9833 dual mode`'s RS-485 bridge, which the document says how to resolve). SMD everywhere except connectors, module sockets and fixed footprints: the MSGEQ7 as `MSGEQ7N` (SOIC-8, in its own datasheet's ordering table), filter capacitors C0G or PPS film and never X7R, since each corner sits at its own tone. `pytest_tests/hardware/test_thomas_or_teensy.py` holds its connector and Mega-pin tables to the v2 project's `circuit.json`, which is how "every connection to the harness is kept" is checked rather than claimed.
-
-**`shields` is the sixth solution, and the main board in it carries no solution at all** (`SHIELDS.md`, 2026-10-03; **simplified 2026-10-04** at the artist's request - the builders are qualified, so it says what to build, in what order, and how to tell the pieces apart; **microphones direct, Thomas's filter on every card and his analyser modules 2026-10-05**). The v2 board becomes a **backplane** - harness connectors, power entry, the passives that belong to the harness (`RN1`-`RN7`, `RP1`-`RP11`, the 100 R build-outs, `JP1`-`JP6`), and **slots** - and everything that differs between solutions is a shield: the **U2D2**, a **computing shield** (the Mega itself, since the computing slot *is* the Mega footprint, or a **Teensy 4.1 adapter** in that footprint), the **MSGEQ7 analyser shield** (`JA1`, 2x11: a through-hole carrier for **Thomas's five DFRobot "Audio Analyzer V2.0" modules (DFR0126)**, the ones already bought, on `MEGA_5V` and wired as his proto board is - the Mega's ear only, the slot empty with the Teensy; DFRobot publishes only "5 V, 30 x 20 mm", so the carrier is drawn from one module measured on the bench) and five **voice cards** (`JV1`-`JV5`, 2x3, slot N is body N), which are the output filters. **The Teensy has no analyser shield: each microphone conductor branches on the backplane through 4.7 K (1 M to AGND after it) to footprint pins `D26`-`D30`**, unused inputs on a Mega, which the adapter takes to Teensy A0-A4 with 1 nF at the pin. `test goertzel ear` had already proved a MAX9814 straight into a Mega's `A0` works, and the MAX9814 datasheet bounds it: 1.23 V bias, 1.40 Vpp under its AGC, 2.0 Vpp at most, 2.45 V highest (specified at a 3.3 V supply; the module measured the same on 5 V) - so it fits the Teensy's fixed 3.3 V reference (`analogReference()` is empty on a Teensy 4) with 0.85 V of headroom, using 61 % of the range with no gain stage; section 4c checks every analogue signal against both processors' references. The 4.7 K is fault protection, the 1 M makes an unplugged microphone read 0 V instead of ghosting its neighbour. There is no `IOREF` and **no shield identification in hardware - the silkscreen does that job**, and section 6 specifies its exact text for every board, along with **eight LEDs** (three rails and a `TONE` LED per voice slot, all on the backplane so a swapped shield never takes one away; firmware 5 also toggles the processor's own LED on every command) and the important test points as **single 1x1 pin headers a Dupont female plugs onto** (26 on the backplane in three rows each with its own ground, 3 on the adapter, `LINE`/`AGND` on each card). It opens with **priorities**: step 1 (backplane, Mega, MSGEQ7 shield, Thomas cards = v2 electrically, firmware 4 unmodified) is the only one the exhibition depends on. **The rack supply and the computing USB go on and off together** - series resistors limit current into an unpowered side, they do not isolate it. **Every voice card is Thomas's passive filter** (two RC sections, R1 = R2, C1 = C2) for both processors, and **the four parts that set its pitch are through-hole** (metal-film R, film C; never ceramic) so a card is re-valued by hand. The rule is his own ratio, the tone three times above the corner: **R x C = 0.179 / f**, R kept in 1 K-4.7 K. A card valued for a pitch lets the Teensy move it a quarter octave either way in software with the level within 1.7 dB and the third harmonic at least 21.1 dB down - Thomas's own quality - so cards valued half an octave apart cover 149 Hz-13.5 kHz. (An active fourth-order card was specified on 2026-10-03 and dropped on 2026-10-05 at the artist's request: Thomas's RC is enough.) **The Teensy port's silent traps**: greet *and* go quiet on each `Serial.dtr()` edge (a Teensy does not reboot when its port opens); **134 baud reboots a Teensy into its bootloader**, so `firmware.PROBE_BAUDRATES` must never contain it (tested); light-sensor counts are scaled back to Mega counts. **Every figure is computed by `colloquy/hardware/electronics/shields.py`** (on mypy's `files`; load it by file path in a scratch script - importing through the `colloquy` package wipes `local/logs`), and `pytest_tests/hardware/test_shields.py` holds the tables to it, to `circuit.json` and to the sketch. **`CAD/KiCad/shields/` is level with the spec as of 2026-10-08** - its `README.md` names the `SHIELDS.md` revision it was drawn to - which a sentence here went on denying until 2026-10-13: the direct microphone path is in the copper (`RM1`-`RM5` and `RMD1`-`RMD5` on the backplane to `D26`-`D30`, `CM1`-`CM5` on the adapter), `JA1` 19 is `MEGA_5V` with 20 and 21 `GND`, the footprint's `IOREF` pin carries nothing, the bare-chip analyser is under `obsolete/`, and the computing slot is on the DSUB face - the Mega footprint mirrored about x = 167.83 mm, so a Mega goes on face down and the adapter fits as drawn. **Its interconnections were checked against the boards already built on 2026-10-13, from the copper** (each `.kicad_pcb` through KiCad's `pcbnew`, not `circuit.json`): the four D-subs are the built `electronic box`'s pad for pad - footprint, face, position and the signal on all sixty pins - every conductor followed through `center`, `female static` and both generations of body board reaches its JST pin on all five bodies, and each slot agrees net for net with what plugs into it. `scripts/verify.py` could not have said the first of those: it holds the backplane to the v2 *design*, never to the board in the rack. Two things kept their pin and changed in kind, and both want knowing before a cable goes in: **the former speaker pair is line out and audio return** (silent into an old body board, and a v2 body board must never meet the old rack's amplifiers), and **the DC jack is centre-positive in copper** (v2's `CIRCUIT_NOTES.md`), where the built board takes its polarity from whatever is fitted across the screw bridge `J6` - so measure the plug before the first power-up. **Two assembly rules joined the spec the same day (section 8a), and the artwork now follows them**: every SMD part of a board is on its front, including the adapter's `CM1`-`CM5` beside the Teensy socket; voice cards are ordered bare and built by hand, including their one 100 K 0603. Manufacturing packages supply front paste and front SMD placements only for the backplane, adapter and microphone holder; voice-card and analyser-carrier packages omit machine-placement and stencil files.
-
-**`microphone board` is a board, not a solution: one per body, the MAX9814 screwed to the body's aluminium extrusion** (`MICROPHONE_BOARD.md`, 2026-10-05). It replaces Thomas's purple breakout on its hand-wired carrier with one assembled PCB, keeping the chip, his straps (`GAIN` 40 dB, `A/R` 1:500, now on 1x3 headers with shunts) and the JST EH 3 order of the harness boards' microphone sockets (pin 1 GND, 2 +5V, 3 OUT, read out of `female base`/`male static` `J3`). **No drawing of the frame is in the repository**: the extrusion was read off `local/videos/` (a female's arms show two stacked slots on their cut ends, so 20 x 40; the spine the same face width - the **20 mm series, 6 mm slot, M5**) and off the harness boards' own holes (8 mm, always on one centreline - boards held by T-nuts along a single slot). A caliper check is the first open item. The board is made so the profile only decides the nut: **M5 screws, and M5 T-nuts exist for 6, 8 and 10 mm slots**; 20 x 62 mm, two 5.5 mm non-plated holes 50 mm apart on the centreline with a 12 mm copper keep-out, so no screw ever joins a body's ground to the frame (one frame through every body would be a hum loop); a 5 mm nylon spacer under each hole, which is also the vibration break (rubber if a servo-noise recording says so). The circuit is the datasheet's typical application plus a 33 R/22 uF supply filter (the harness 5 V feeds NeoPixels too), a 470 R output build-out (the MAX9814 drives at most 200 pF and a body cable is that alone), a 5V LED and `OUT`/`GND` test pins; **the output stays DC-coupled** on purpose, since the 1.23 V bias is the reading the shield backplane and the Teensy rely on, and the 150 K/100 K threshold holds it at 1.6 Vpp. Figures are computed by `colloquy/hardware/electronics/microphone_board.py` (on mypy's `files`), and `pytest_tests/hardware/test_microphone_board.py` holds the connector to the harness copper, the existing boards' hole facts to their outlines, and every figure to the module.
-
-**`harness` is the fourth document, and it is generated** (`colloquy/hardware/electronics/harness.py`). Four small PCBs sit between the electronic box and the bodies — `center` on the bar, `female static` at a female's joint, `female base` inside her, `male static` inside a male — and none of them has an active component: connectors and copper, turning the rack's two shared DSUBs into one cable per body and then into one JST per thing in the body. Every pinout is parsed out of `CAD/KiCad/*/*.kicad_pcb` on each view, for `next_pcb_mechanical.py`'s reason. It hangs directly under `electronics` rather than under any of the three written documents, because all three describe themselves *against* it. **It closed `next pcb`'s longest-standing open item**: male2's 5 V does not come from "somewhere off these files" — it comes off `A-J3` pin 9, split three ways by `center`, which hands male 1 and male 2 a DSUB-15 each carrying both rails. So all five amplifiers run from +12 V on one module, and what is left is a current question rather than a missing wire. `pytest_tests/hardware/test_harness.py` checks every finding against the copper.
-
-**`as built` also carries `mega-pinout.svg`**, the Mega to scale with the signal written beside every header pin around it. It exists because only `J11` and `J12` have their names printed on the board, so at the rack the pin table names headers nobody can see. `py export_mega_pinout.py` regenerates it from `electronic box.kicad_pcb` (`colloquy/hardware/electronics/mega_pinout.py`). The module imports `harness` without going through the `colloquy` package, because importing the package wipes `local/logs` under a running server. The one thing it does not read from the board is the five tracks the rework cut, and `pytest_tests/hardware/test_mega_pinout.py` holds that list to `DIRTY_REWORK.md`. The same test checks that the SVG on disk still matches the board file and that the microphone table in `AS_BUILT.md` matches the copper.
-
-Two findings in `as built` are why the rework is small, and both are worth knowing before touching the board:
-
-- **`J4`, `J8` and `J10` are a straight 1:1 breakout of D0–D21.** The shield pads run down one column at x = 191.96 mm and the header pins down another at x = 200.85 mm, joined by one 1 mm front-copper track each with nothing else touching the pad. So every disconnection is one scalpel stroke in that 8.89 mm gap, with a solderable pad on each side — which is what makes the whole rework five cuts and fourteen wires on the board.
-- **`J11` and `J12` are break points, not headers.** Each row is *two separate nets* — the body's wire off the DSUB on the odd pin, the Mega's ADC pin on the even one — joined only by whatever is physically fitted across it. So the analyser array goes *into the gap* and the whole hearing side needs no cut at all. The files do not say whether what is fitted is a shunt or a resistor; look before pulling one out.
-
-## Male blink pattern / female pattern reading (morse-code identity signal)
-
-Each male sends his ring a 10-bit on/off pattern — a morse-code-like signal encoding (a) which male he is (`male1`/`male2`) and (b) which drive state he currently wants (`O`, `P`, both, or neither) — then holds the ring dark until the next one is due. The 4 reference sequences per male live in `Colloquy.light_patterns` (`colloquy/__init__.py`); the clock they are sent on lives in `colloquy/light_pattern_timing.py`, which carries TJ's numbers and where each one comes from: 0.2s per bit, so a 2s burst, repeating every 4.35s and leaving 2.35s of silence. **The silence is part of the message** — it frames the burst, so a reading that straddles it fails instead of decoding as some rotation of the pattern. Write side: `drivers/male/__init__.py`'s `Male.get_blink_pattern()` picks the sequence for `self.drives.which_is_frustated()`, and `drivers/male/search/blink/__init__.py`'s `Blink.loop()` reads it **once per burst** (a drive state that changes mid-burst takes effect at the next burst, never mid-pattern), writing each bit to `male.ring` as it changes. Read side: `drivers/female/search/read_pattern/__init__.py`'s `ReadPattern` samples the female's light sensor as a boolean, buffers samples, and tries every sub-step sample offset and circular rotation of each candidate against `colloquy.light_patterns` (majority vote per bin, tolerating `max_mismatches` bit errors) to decode which male + requested drive state she's facing.
-
-`drivers/female/search/__init__.py`'s `Search.loop()` sways the female (mirroring `Male.search`'s toggle-position loop) and `setup()` starts `read_pattern` (`started_by=self`, so it stops automatically when `search` stops) — this is what `Female.loop()` triggers whenever a female becomes unsatisfied, so pattern-reading now runs autonomously as part of the live app, not just standalone. `ReadPattern` can still be started/stopped independently via its own web-UI node for isolated testing (see `colloquy/tests/test_read_pattern`). Also note the `colloquy/tests/test_light_sensor_values/*` hardware tests do **not** exercise this decode logic — they log/plot raw analog light-sensor values and threshold-crossing pulse durations, a proxy for body-alignment/visibility timing, not pattern-decode accuracy. The exceptions in kind are the two that hold everything still but one thing and plot the reading against a geometry rather than against time. `test_for_false_positives` runs with **every light off** and plots each female's reading against the angle she was pointing at — it asks whether the room itself can make her read "light", which is the input side of that same threshold (CODE_DOCUMENTATION 5.6, 8.2). `test_seeing_male1_as_the_bar_turns` is its complement: male1 alone parked at his origin with his ring lit, every other light off, and both of the angles that decide whether she can see him sweeping — the bar over its whole travel, each female over her own. It draws each female twice. First her reading against the **alignment offset** — the bar's angle measured from *her own* `interaction_origins` meeting angle, less her own aim, so zero is the two of them lined up for all three females rather than only for female1, whose meeting angle happens to be the bar's origin. Second a **map** of the two angles against each other with the reading as colour, which is there because that subtraction assumes her sway and the bar's travel add up: a bright diagonal says they do and the first graph is the right way to read her, a bright rectangle says they are two independent windows and the first graph is smeared by the width of both, and a diagonal the other way says the offset wants a plus where it has a minus. Note the **simulator cannot settle that question** — `virtual_serial_port._sensor_value` models exactly the conjunction (`|bar - meeting| < threshold` **and** `|her angle| < threshold`), so a simulated run always draws the rectangle; only real hardware can show which it is. Both write one SVG per female next to the run's CSV and both expose them through the shared `results` node (`test_light_sensor_values/results.py`), which is the only way to see them without opening `local/test results/` by hand. `test_with_everything_moving` specifically holds male rings at a **constant steady ON** (not blinking any pattern) — treat its results as "how long is a female facing a lit male," not "can she read his pattern."
-
-**`test_reinforcement` starts where both reading tests stop.** They end at recognition; this one asserts the find rather than waiting for it — no search, no blink, no decode — stages the pair face to face and runs only the exchange, so a failure here is a failure in the exchange. It refuses a pair whose shared appetite is already satisfied (there would be nothing to take down and the first round would look like success), and `make them both hungry` is offered rather than done, for `test_search`'s reason. **Every row also reads the real analysers** and writes the seven bands beside what the emulated ears did: today it is a measurement nobody acts on, and it is the column that replaces the emulation when the microphones are trusted. A body singing whose own band never rises means the behaviour is right and the hardware is not. Same CSV rule as `test_search` — the `singing` column joins two names with a plus, never a comma, since both singing at once is ordinary here.
-
-**The two reading tests are a pair, and the difference is the point.** `test_read_pattern` stages one male and one female, brings them face to face and holds them there — it answers *can she read him at all*, and its failure mode is a wrong decode. `test_search` (`colloquy/tests/test_search/`) stages nothing: it sets every body searching, lets the `Bar` decide for itself whether to wander, and measures reading while all of it moves. That is the only one of the two that can produce a **miss** — a blinking male plainly in her view and nothing decoded — because the staged test holds the pair still until she succeeds.
-
-- **Drives are the tester's to set and the run never sets them.** Every body's `drives` hangs off the test, plus two presets. `set males asking O, females wanting P` is the one for measuring reading: everything is clear of the inert floor so everything moves, and a *correct* read can never overlap what a female wants — so every `found` event under it is a misread by construction, an independent second count of the thing being measured. A body left inert is warned about at startup rather than silently doing nothing.
-- **Events, not samples.** One row per *episode*: `read_pattern` decodes ~15 times a second and holds its answer for two send cycles, so a row per decode writes one fact fifty times. A row is written when what she is holding *changes*.
-- **A miss is two full send cycles** (`events.MISS_AFTER`, 8.7s) of a blinking male in view with nothing decoded — long enough that she cannot merely have arrived during his 2.35s of darkness.
-- **"In view" is the simulator's own rule** (she near her origin, he near his, bar within a threshold of their meeting angle). Which means the **simulator cannot produce a miss**: it *is* that rule, so the prediction is true by construction there. Only real hardware makes the column mean anything — the same caveat as `test_seeing_male1_as_the_bar_turns`.
-- **Beware the expected-male column on a fast crossing.** The burst she decoded was sent up to 4.35s before she reported it and the bar has moved since, so the male named as "in view" may not be the one she heard.
-- No commas in any event sentence — each is the last column of a CSV, and `test_read_pattern` already lost a column to `('O', 'P')` once. `test_search_events.py` holds every `describe_*` to it.
-
-## The sound channel (`drivers/audio.py`, `speaker/`, `microphone/`, `all_audio/`)
-
-Every body has a **voice** and an **ear**, and both are real hardware as of 2026-08-26: five tones on five AVR hardware timers, five MSGEQ7 analyser modules read through one commoned strobe. Thomas Erforth's boards, driven by the installation's own Arduino rather than by his bench Mega. Firmware 4.
-
-**`drivers/audio.py` is the one table**, and it is wanted in four places (speaker, microphone, the loop test, the simulator) — so a row out of step with the firmware is silent: a tone still comes out, a band still rises, and only the *judging* is wrong. None of its numbers are ours to choose.
+Every body has a voice (hardware timer tone) and an ear (MSGEQ7 analyser module); firmware 4. **`drivers/audio.py` is the one table**, shared by speaker, microphone, tests and simulator:
 
 | body | pitch | timer | pin | analyser module |
 |---|---|---|---|---|
@@ -380,452 +148,77 @@ Every body has a **voice** and an **ear**, and both are real hardware as of 2026
 | male1 | 160 Hz | T1 | D11 | 3 (A3) |
 | male2 | 400 Hz | T3 | D5 | 4 (A4) |
 
-**The males have the two low voices and the females the three high ones** (changed 2026-08-27; it ran the other way before, and TJ's firmware ran this way). A pitch cannot be moved to a body on its own: the pitch belongs to the *timer*, Thomas's OCR values are indexed by timer, and 6250 Hz is on T2 because T2 is the 8-bit one — at its prescaler of 8 it cannot reach 160 Hz at all. So the pitches stayed on their timers and the **bodies moved across the pins**. Every OCR value and every filter channel is untouched; what changed is which body's amplifier each filter output feeds — the "five re-jumperings, not a rebuild" `dirty rework` predicted. It is **firmware 4**, because a driver judging a firmware-3 board by this table gets every verdict wrong while a tone still comes out and a band still rises.
-
-**`audio.BODIES` and `audio.BODIES_BY_PITCH` are no longer the same order**, and that matters: `BODIES` is body order, which is module order, which is A0–A4 and how the firmware's thirty-five numbers arrive. They were identical until this change, and the coincidence had already hidden a bug — `AllAudio.read_all` said "in body order" in its docstring and iterated the pitch-ordered tuple, which after the flip would have handed every body another body's ear.
-
-- **The pitches are Thomas's**, chosen so each lands in a *different* one of the MSGEQ7's seven bands — so the pitch itself says who is speaking. TJ's five all sat inside band 4 and carried nothing, which is why CODE_DOCUMENTATION 9.10's table does not survive. 63 Hz and 16 kHz are unused on purpose (an electret mic is specified 100 Hz–10 kHz).
-- **The pins are fixed by silicon.** Timer n toggles its own `OCnA` pin and no other, so a body's pitch and its pin are one decision. **That is the whole reason four NeoPixel lines moved to D14–D17**: a NeoPixel line is bit-banged and can be any pin, a tone pin cannot, so when they collided the lights moved and the tones did not. `pytest_tests/drivers/test_audio.py` reads the `#define`s straight out of the `.ino` and holds the two sets apart.
-- **Module N is body N** because the box already had `female1…male2/microphone/2` on A0–A4 and the analysers took their places. Luck rather than design, and worth keeping: one number then identifies a body all the way round the loop.
-
-**Hardware timers rather than `tone()`, and two consequences.** The compare output toggles its pin in hardware, so (a) `NeoPixel.show()` disabling interrupts cannot tear a tone — CODE_DOCUMENTATION 9.13's mute-around-every-pixel-write is void, which is as well since `set` is strapped high on all five amps and there is no mute line to pull — and (b) five voices can sound at once, which `tone()` (one timer, one pin) could not, and which a piece with three females and two males needs.
-
-**`AllAudio` is not `AllNeopixels` for sound.** The five analysers share one strobe, so reading five microphones one at a time takes five times as long *and* reads them at five different moments — the one thing you must not do when comparing what two bodies heard of the same sound. Use `drivers/all audio > read every microphone`. Likewise `silence every speaker` is one firmware command (`speakers/off`), because `power_down()` and `emergency_stop()` both call it and neither is in a position to send five and check five replies. `Colloquy.silence_speakers()` swallows its exception on purpose: the emergency stop cuts torque *before* signalling the threads, so anything raising in between would leave every thread running — and a dead link is also a link making no sound.
-
-**Five tests, and the differences are the point.** `test_audio_subsystem` drives **Thomas's** Mega over **his** serial menu and asks *are the five boards any good* — a bench question, answerable in an office with the piece nowhere near. `test_audio_loop` drives **the installation's own** board and asks *are they wired into the piece the right way round*: only it can catch a body singing down another body's filter channel, because only it knows which body is which — and a low-pass passes anything below its corner, so a misrouted tone still comes out, still lands in its own band and still reports "heard". `test_audio_bringup` asks the same question as the loop test and then answers **which link is broken**, which is what you want while channels are still going in one pair at a time.
-
-**`test_microphone_signal` is the fifth, and it is the only one that does not read the analyser** — which is why the other four could not answer the question it is for. All three of the above judge a body's hearing by seven band values out of an MSGEQ7, so a microphone producing nothing and a microphone whose signal never reaches the MSGEQ7 are the same reading; `diagnosis.py` says so about itself. It cuts the chain at the analyser's input instead, which is possible only because of two facts about this board: the microphone wire lands on `J11`'s **odd** pin with nothing fitted between it and the DSUB (`as built` §6, "no microphone conditioning of any kind"), and the MSGEQ7's own support network is the one part of the design recorded nowhere in this repo — likeliest to be wrong, least likely to be caught by anything reading its output. **The instrument is the Arduino IDE's Serial Plotter**, so the trace is on a port this process deliberately does not hold: `Source code/Arduino/microphone_plotter/` streams one ADC pin as `min`/`max`/`mean` against a flat reference at 256 (the MAX9814's 1.25 V bias read against 5 V), with a `WAVE` mode for telling a tone from hum. Music from a phone paints a shape in a second that no arrangement of band values does. **What the run itself contributes is the other half of the split**: it silences every speaker and reads all five modules twice a second, so plotter-moves-and-bands-move is a working chain, plotter-moves-and-bands-flat puts the fault between the microphone wire and the MSGEQ7, and both flat is the microphone. Nothing is written down — half the measurement is on a screen this software cannot see, and a file of the other half would record the half that was never in doubt. `plotter setup` (`MICROPHONE_PLOTTER.md`) hangs off it for `SUPPLY_SETUP.md`'s reason and carries **three** wiring routes, picked by one question — is the analyser array in the rack? **A**: a second Arduino clipped to the `J11` odd pin, which touches nothing on the installation and is the best one while the array is in. **B**: with the array *out*, the microphone **straight onto `A0`** — `A0`–`A4` are the five analyser outputs, so with nothing driving them there is nothing to unsolder, no shunt to lift off `J11`, no photosensor borrowed, and nothing to edit in the sketch, which already ships `#define MIC_PIN A0`. **C**: the installation's own Mega borrowing a female's photosensor ADC pin, the invasive one and now the last choice. B and C both give up the analyser half by construction — C because the plotter sketch drives neither strobe nor reset, B for that *and* because there are no analysers to strobe — so the page draws "the other half" as `none on this route` when nothing is wired rather than promising bands that cannot come. **B's one hazard is that `A0` is analyser module 0's output**, so the microphone comes off before the array goes back on, and that is the first line of "putting it back".
-
-Both B and C leave `microphone_plotter` on the installation's Mega, and until firmware 4 is back the driver will not open the link at all — so **`flash colloquy firmware back` is a command on the test itself**, not a paragraph pointing three levels away at `drivers > arduino > flash firmware`. It *delegates* to that one flasher rather than restating any of its five refusals (only the flasher knows what is on the USB bus) and returns its sentence verbatim, so a press it will not act on is answered with the reason in the same request. The last of those refusals catches this very test if it is still running, which is right — the board spends twenty seconds in its bootloader — and on route B it will have stopped itself already, because a run that cannot read the analysers says so and stops. The node also draws `board says` and `last flash` (a new public `Flasher.outcome`) so the whole round trip is readable without leaving the page, plus a `plotter sketch` reading — pin, mode and rate read straight out of `microphone_plotter.ino` by `plotter_sketch.py`, the same trick `arduino/firmware.py` uses, because a sketch left on `A5` from route C plots a floating pin and nothing else would say so. The **outward** trip is a node of its own now (`flash the plotter sketch`, `plotter_flasher.py`) — see the testing section; it is named for its direction rather than `flash firmware`, since this one board has two sketches that belong on it at different moments and a link named for neither is the one press here somebody could get backwards.
-
-**`test_audio_at_12v` is the fourth, the only one a person has to stay for, and the only bench test offered on the installation.** It asks *how much louder is a higher rail*. **It is also the one test that has broken the hardware it measures** — 2026-09-01, one GF1002, on a voltage claim with no source — so every pass is now refused above `params["audio"]["amplifier max supply volts"]`, which makes `measure at 12 V` unavailable until a module rated for the rail is fitted and recorded. The refusal is instant and reads only that number. It drives Thomas's board over his own menu (borrowing `test_audio_subsystem`'s `protocol` whole) in **two passes with a screwdriver between them**: `measure at 5 V`, change the supply, `measure at 12 V`, and no comparison at all until both are in. The bare `start` is popped for the flasher's reason — it would run one of two passes without saying which, and the label is the entire content of the measurement.
-
-**The MAX9814's AGC is the whole difficulty, and it is why there are two numbers.** The gain control exists to hold its output constant against exactly the change being measured, so a flat reading is *not* evidence that nothing changed — and a test reporting only a band level would talk somebody out of a decision taken on better grounds. So each tone carries `rise` (the band over its own silence, direct, and the one the AGC flattens) and `share` (that band as a fraction of all seven, which largely survives it: the AGC holds the *total* near constant, so a genuinely louder tone takes a larger slice while the room noise in the other six bands is turned down with it). **A share that climbs while the rise does not is the expected pass.** Neither is a sound pressure measurement and the page says so — the ear settles it, which is what the hold-a-tone commands are for. One row per tone rather than the sibling's twenty-five: the question is five amplifiers on one rail, and which module heard what is `test_audio_subsystem`'s business. `pytest_tests/hardware_tests/test_audio_at_12v.py` pins the judging, and that the installation is offered it — the supply being changed is the piece's, so the board comes to the laptop rather than the other way round, and a hostname gate hid the test on the one machine somebody would be standing at with a screwdriver.
-
-**`SUPPLY_SETUP.md` hangs off it**, beside its scenario, for `HARDWARE_SETUP.md`'s reason — the moment somebody needs telling is the moment they are about to press one of the two buttons. It is the one document in this tree whose mistakes cost hardware rather than a bad number, so it opens with `hardware > motors > unplug the motors` (the 12 V comes off the Dynamixel supply) and spends most of itself on the seven ways to destroy something: 12 V into a 5 V pin, grounds joined first and parted last, reverse polarity, never grounding a class-D output (both terminals are driven), fusing a rail that can deliver amps, changing the supply cold, and turning the pot down before the first run at the higher rail — the 22K/3K3 divider was sized for the amp's maximum input at 5 V.
-
-**`test_goertzel_ear` is the sixth, it has no analyser chip in it, and as of 2026-09-09 it is split across three places** — the tone comes out of **this computer's speakers**, the samples come from a **Mega that only samples** (`Source code/Arduino/microphone_sampler/`, `A0` and a ground, nothing else), and the **Goertzel runs in Python** (`tests/test_goertzel_ear/goertzel.py`, which is on mypy's `files`). It was one board doing all three; moving two of them off it is not tidying. A sound card makes a *sine*, where a compare output can only toggle — and a square's third harmonic at 6250 Hz folds back off an unfiltered 19.2 kSPS ADC onto ~480 Hz, which is another of the five bins, so a tone would appear at a pitch nobody played (`tone.py`; `one board per body`'s "a square wave suits it better" is about a body's *amplifier* and reaches the opposite conclusion for reasons that do not apply here). One capture is measured at **all five pitches at once**, so the five readings are of the same instant. And the arithmetic can finally be checked — against a signal generated in a unit test, which it never could on an AVR.
-
-**A tone is heard on a *multiple* of its own silence, not on a difference
-from it** (2026-09-10, `goertzel.HEARD_RATIO` = 8, clamped by
-`QUIET_FLOOR` = 0.01). The first real run of the whole chain across a room
-called five plainly audible tones unheard: every one landed in its own bin
-and nowhere else, 0.3-0.5s after its own mark, and the largest rise
-measured was 1.9 where the absolute margin carried over from the board
-wanted 4.0. Six inches from a speaker is not a room, and that number was a
-fact about the first arrangement being read as a fact about the second -
-`SUPPLY_SETUP.md`'s lesson in a cheaper place. A multiple is also the
-right shape for the question: the MAX9814's gain control moves the whole
-scale, and in that one run the floor differed by three times between
-pitches, so "louder than the room" is a ratio and never was a difference.
-The five tones reached 12x to 160x their floors and the loudest silent
-block reached 6.3x, so 8 sits between them. The clamp is the median silent
-reading of that run and is a description of one measured room on one
-microphone, not a datasheet figure. **The sketch still judges on an
-absolute 4.0 and that is not drift** - it is a closed loop with the
-speaker six inches from the microphone; a level means the same thing in
-both, and what a level must reach to be believed is a property of the
-arrangement. The run itself is pinned in
-`pytest_tests/hardware_tests/test_goertzel_ear.py`, so a later change to
-either constant has to fail against a run somebody stood through and
-watched work. **Where the ratio is weakest is a loud room** - a noisy
-floor is a bigger number to be a multiple of - and a verdict here was
-never the measurement anyway: somebody hearing the tone is, which is why
-this is a manual test.
-
-**The pitches moved to sit around a kilohertz, and one pair is a border
-case on purpose** (2026-09-10). `PITCHES` is `(750, 1000, 1050, 1250,
-1500)`, which is not the installation's five and never was obliged to be -
-this does not import `drivers/audio.py`, because it is a bench instrument
-and can be pointed anywhere. Spread from 160 Hz to 6250 Hz, most of what
-it measured was the **laptop's speakers**: 160 Hz came back sixteen times
-weaker than 6250 Hz and block by block overlapped its own silence, because
-a small driver cannot move air at 160 Hz. Between 750 and 1500 Hz both
-ends of the room are flat, so the five readings are comparable with each
-other and a weak one is a fact about the microphone. **1000 and 1050 are
-one bin apart** - a bin is `sample_rate / count`, about 37.6 Hz - so a
-press on either lifts the other, and that is the finding rather than a
-fault. It lives in the pitch list rather than only in a unit test because
-only a room can say whether two tones that close are two tones.
-
-**What the border case turned out to be about is not distance.**
-`goertzel.leakage(hz, into_hz, ...)` is the Dirichlet kernel of the
-window, and the measurement it encodes is that a rectangular window is
-orthogonal only at its own basis frequencies: a tone sitting **on** a bin
-centre puts nothing anywhere else, and one half a bin off smears into
-every bin there is. So 1000 Hz, which lands 0.38 of a bin below centre
-here, spills 5.7% into a pitch **seven** bins away, while 1050 Hz, which
-lands almost exactly on a centre, spills 0.9% into one five bins away.
-Counting bins is the obvious rule and it is wrong; the offset is what
-decides. The page's `border case` reading is computed from this on the
-block in hand - a bin belongs to the capture, not to the pair - and
-`LEAK_LIMIT` falls out of the two verdict constants rather than being a
-third (`HEARD_RATIO / LOUD_TONE`, so a tone at the loudest measured puts
-exactly the heard threshold into a bin at the limit). Analytic because the
-page asks it of every pair on every view; `pytest_tests` checks it against
-a generated signal, where the two agree to about a point.
-
-**A press sounds for ten seconds and then stops itself**
-(`PLAY_SECONDS`), which was the half that was missing. Held tones ran back
-to back in the first real run, so a floor was taken only before the first
-press and after the last: every rise after the first was measured against
-a silence from minutes earlier, through a gain control that had moved in
-between. A tone that stops leaves silence behind it and `_score` retakes
-the floor from it, so each pitch is measured against the room as it was
-moments before. It also makes two runs comparable - every window is the
-same length, so a weaker reading is a weaker reading and not a shorter
-press. The timer is checked at the top of `loop()`, before the read
-interval, or a window would stretch by up to a quarter of a second and by
-a different amount each time; the end is marked `<hz> Hz off`, with
-`silence` kept for the press that stops one early.
-
-**It moved to `manual tests` in the same change, and the reason is the room.** The old loop was closed on one board, a speaker and a microphone six inches apart with nothing else plugged in — walk away, read the CSV. This one is open across a room with a volume knob in it, and a muted output, a wrong default device or a volume at nothing all read exactly like a deaf microphone. Somebody hearing the tone is the measurement, and no file holds it — which is why it kept nothing at all until 2026-09-10, and why the file it keeps now says on every run what is not in it (see below); `is_bench` is gone (it is one Mega on one lead and it travels; the question is which lead, `test_audio_at_12v`'s lesson again). Still **no stand-in**: one that answered "yes" is the precise false confidence it exists against. **`Source code/Arduino/goertzel_ear/` is kept** and is not dead code — it answers the *other* question, whether an AVR can run five bins in time, which is `one board per body` §4 and is a fact about a processor. A green run of the node is not evidence for it. The tone needs **`sounddevice`** (now in `requirements.txt`): `winsound` cannot loop from memory at all (CPython refuses `SND_MEMORY | SND_ASYNC`) and is Windows-only, which is a platform gate on an acoustic question.
-
-**The run is recorded and drawn, and the marks are what make it worth
-drawing** (2026-09-09). A rise is a comparison between two moments and the
-readings beside the links are one moment, so the numbers alone can only
-ever show half of it. `recording.py` keeps a row per block - the seconds
-since the run began, and each of the five pitches' levels - and writes
-down every moment somebody pressed one of these links (`1000 Hz on`,
-`silence`, `floors forgotten`), which is known exactly here rather than
-inferred from the numbers, because this end is what started the sound.
-When the run stops that becomes a `recording` `GraphView` with those
-moments as dashed rules across it, so the claim of the whole test is a
-shape: one line lifts at the rule carrying its own pitch and the other
-four do not. All five pitches are drawn including any nobody played - a
-flat line under a rule is the evidence that the tone went where it was
-meant to and nowhere else. Built at the end rather than as blocks arrive,
-for two reasons that are both about a graph being a thing somebody reads:
-`GraphView` takes its marks **once**, when it is constructed, so one built
-at the first block would carry none of the presses that came after it, and
-it holds which page you are on, which is worth nothing in a view
-repaginating four times a second.
-
-**And the run is kept** (2026-09-10). One CSV per run under
-`local/test results/test goertzel ear/`, written at `setdown` from what is
-in memory, and a `results` node listing them newest first that draws any
-of them through the same `GraphView`. It kept nothing for a day and a
-half on the grounds that the half of the measurement that matters -
-somebody hearing the tone - is not a thing a file can hold; that is still
-true, and what changed is that there is now something worth filing. While
-a run held one best-rise number per pitch there was nothing to compare;
-a few hundred rows with the presses marked on them answer the questions
-actually asked *between* runs - is the 1500 Hz bin always the weak one,
-did moving the microphone help, is it worse than last week - and none of
-those can be answered from the one run that happens to be in memory,
-which is all there ever was (`setup()` clears the recording, and a restart
-takes it anyway). Same arrangement as `test_reinforcement`'s analyser
-columns: worth recording before it is worth acting on. **What a file
-cannot hold is still not in it, and each run says so** - a
-`not in this file` reading naming the thing, because a file outlives the
-person who knows how it was made.
-
-Two things about the format, both in `recording.py`. **A mark gets a row
-of its own**, with the level columns empty and its name in the last one:
-a mark's whole value is that its time is exact - known at the press
-rather than inferred from the numbers - and hanging it on the next block
-would blur it by up to a quarter of a second, which is the distance being
-looked at. Rows are in time order, so the two kinds interleave and the
-file reads the way the run went. And **the pitches come out of the header
-on the way back in**, not out of `protocol.PITCHES`, so a pitch list that
-moves later cannot relabel an old measurement. A run's graph is built from
-its file only when the run is opened, and kept once built, because a
-`GraphView` holds which page the reader is on.
-Written at the end rather than a row at a time as blocks arrive, for a
-threading reason: a press lands on the request thread while blocks are
-read on the loop thread, and two threads on one file handle is a real
-hazard where losing the last quarter-second of a killed run is not -
-`setdown` runs in `_run_in_context`'s `finally`, so a stop, an error and a
-refusal all reach it. `pytest_tests/hardware_tests/test_goertzel_ear_results.py`
-pins the file's shape and the listing.
-
-**`scope` is the seventh, it asks nothing, and that is what it is for**
-(2026-09-16, `colloquy/tests/scope/`). Press start, it records **A0 and
-A1** as fast as the lead will carry them; press stop and the recording
-becomes a `GraphView` of both against one clock, to page through and
-zoom. Every sibling in `tests/` asks a
-question and reports an answer - is this microphone deaf, is this body
-wired to its own filter, can she read his pattern - and this one asks
-none, which is why it is not called `test_*`: naming it `test scope`
-would promise a verdict deliberately not here. It is an instrument in the
-sense a scope on a bench is, pointed at a wire *because* nobody yet knows
-what they are looking for, which is exactly where a test that has already
-chosen its question is no use. It is a **manual test** by `group.py`'s own
-rule rather than in spite of it: what it makes is a picture, and the
-instrument that reads a picture is an eye.
-
-**Two channels because one trace cannot answer the question that gets
-asked of it.** A microphone producing nothing looks exactly like a quiet
-room, and a trace with a small wobble is either a dead capsule or a still
-afternoon - nothing in the picture says which. A second microphone in the
-same room makes the comparison itself: whatever the two are biased at, one
-swinging while the other does not is a fact about a microphone and not
-about the room. So each channel carries its own extent and **`swing`**
-(peak to peak), and a `compared` line gives the *ratio* - never a verdict,
-because the quiet one may be dead, unplugged, unpowered, on a pin that is
-not connected, or simply further from the noise, and this end cannot tell
-those apart. What it does say is the one move that separates a dead
-microphone from a dead channel and which nobody here can make: swap the
-leads and see if the quiet one follows.
-
-**And an `independent` reading, because a copy of a working microphone
-looks exactly like a working microphone** (2026-09-17). An unconnected ADC
-pin does not read silence: its sample capacitor comes up holding the
-charge of the channel converted just before it, so it reports its
-neighbour. A real run with A1 physically unplugged came back with both
-channels showing the same 400 Hz tone at the same strength, and `compared`
-said *"both are hearing the room"*. `trace.coupling_of` is the check -
-correlation at the best of three one-sample alignments, since a ghost is
-its neighbour offset by one conversion (+0.95 as sampled, **+0.998**
-shifted). It is **named, not judged**, with a band between 0.9 and 0.99
-that says the number cannot settle it: two microphones 5 cm apart on one
-tone honestly reach 0.93, and two half a wavelength apart - 43 cm at
-400 Hz - are honestly near -1. The test that does settle it is in the
-text: unplug one lead and see whether the other changes.
-
-**Which channel is the copy is decided by order, and `ghost_of` is there
-because reading it by hand got it backwards.** r is symmetric - "A0 copies
-A1" and "A1 copies A0" are one statement about the numbers - so the
-direction has to come from the clock. A pair is converted first channel
-then second, so in time the samples run `A0[0] A1[0] A0[1] A1[1]`, and a
-floating pin holds the charge of the conversion *immediately before it*:
-the copy is always the **later** of the two, because the converter cannot
-see the future. So the first channel floating peaks at shift -1 and the
-second at shift 0, while shift +1 has no ghost reading at all and is left
-unnamed rather than guessed at. The shift 0 case says out loud that it is
-the weak one, since two microphones genuinely in phase peak there too.
-
-Two things decide whether that check works, they are separate, and each
-was found by getting it wrong on a real recording. **Within a capture,
-never across one** - stitching the flat arrays lets each capture's own DC
-level count as signal (-0.970 within, -0.852 stitched). **Spread along the
-run, not taken off the end** - a run whose tone was switched off before it
-was stopped ends in silence, and two channels with no signal cannot be
-correlated whatever is wired where (+0.998 spread, +0.821 over the last
-twenty captures). The second is the bigger error, and the one that would
-have called a disconnected microphone fine.
-
-**The sketch grew a command, not a channel** (firmware 2). `b` and its
-`block` reply are untouched to the last byte, because that is what
-`test_goertzel_ear` asks for and it runs five Goertzel bins over what comes
-back - interleaving a second microphone into it would not fail, it would
-answer *wrongly*, about a frequency nobody played. `d` fills the same
-buffer with interleaved pairs: the same 512 conversions, the same 27 ms
-window, the same reply size, and what is halved is how many each channel
-gets (about 9.6 kSPS apiece). Its reply has a keyword of its own, `pair`,
-so neither parser can accept the other's line. **The two halves of a pair
-are one conversion apart**, about 52 us - one converter behind a
-multiplexer, so simultaneous is not on offer at any price; it costs
-nothing here and would matter to anything measuring phase, which nothing
-does. A truncated reply is dropped rather than read short, and here that
-matters more than for one channel: on an odd truncation the channels come
-apart and every A1 lands where an A0 belongs, which is a silently swapped
-pair of microphones - the exact fault this is used to find.
-
-**An old board is not a missing lead, and saying so cost a real hour.**
-Firmware 1 knows A0 and nothing else; asked for two channels it does not
-go quiet, it answers `error commands: b | ?` - a perfectly good reply to a
-question it has never had. That parses as "not a capture", which the loop
-read as silence and reported as *"the board stopped answering - check the
-lead is still plugged in"*: the wrong fault, pointing at a cable that was
-never the problem, while the board was answering the whole time. So the
-greeting's `firmware=` is read when the port opens and an old board is
-refused **before** it records anything (otherwise it answers every capture
-with a refusal, for as long as somebody leaves it running), the board's own
-refusal is recognised rather than counted as silence, and the version is a
-reading of its own on the page - because a recording with one flat line is
-exactly what an old board looks like from the graph, which is the other
-thing it can be mistaken for. `GraphView` needed nothing: it has drawn
-several labelled lines with a legend since it replaced uPlot, and a page
-carrying two says `2 lines:` in its `points` reading.
-
-**That reading only ever arrived too late, which is what `ask the board`
-fixed** (2026-09-21). The greeting comes on reboot, opening the port is
-what reboots the board, and the port opens at `setup()` - so the version
-was unknown until a run was already going, and by then the fault is a
-recording with a flat line in it. Now it is a press: open the lead, read
-the line, put the lead back. Shared with `test goertzel ear`, which asks
-less of the same board - see the testing section.
-
-`microphone_sampler` still *times* its own captures, so what arrives
-carries the rate it was really taken at. **Blocks, and the gaps between them**, are the
-whole of the design: the board will not sample and send at once (a UART
-write inside a capture would stretch the window and put a step in the
-signal), so a recording is a row of 26.6 ms windows about 20 ms apart, and
-`trace.py` places each capture at the moment it was **asked for** rather
-than laying them end to end. Both channels share one clock - carrying that
-52 us would mean a second array of doubles to move a line by a twentieth
-of a millisecond, on a picture whose x positions come from a `time()`
-taken on this end before the command went out. End to end is the tempting mistake and the
-one thing that must not be done - it would draw a continuous trace, be
-wrong about when everything after the first block happened, and at a
-steady tone show a phase jump at every boundary, a fault that is not in
-the wire. So the gaps are drawn, `duty` says what fraction of the clock is
-really in the recording, and the page says outright that the line across a
-gap joins two moments and is not a signal. `array`s (`d` for the clock, one `h` of counts per
-channel - twelve bytes a pair against a Python int's twenty-eight each)
-handed to the graph as a labelled `series`, so the two lines get tab10
-colours and a legend, nothing is copied, and `MAX_SAMPLES` caps a run at
-about twelve megabytes; it stops and says so rather than
-dropping the oldest, which would turn a recording somebody believed was
-whole into its last minute. **It is independent of `test goertzel ear`**
-though the same board suits both - separate params section, so choosing a
-lead for one cannot move the other's - and since only one may hold a port,
-starting it against a lead the other is reading is refused in a sentence
-naming which, rather than left to come back as a pyserial error.
-
-That is also what earned `GraphView` an **adaptive x axis**. It carried
-one decimal, right for a run and wrong the moment anybody pages *in*: at
-19 kSPS the smallest page is a few milliseconds, where six ticks of
-`{:.1f}s` all read `0.0s` and the axis has quietly stopped saying where
-you are. `_decimals` takes the fewest that tell the six ticks apart, so a
-wide view is unchanged. Paging in is what the page size is *for*, so an
-axis that stops working when you do it is the axis being wrong rather than
-the reader. `pytest_tests/hardware_tests/test_scope.py` pins where the
-samples land (the gaps hardest), the duty arithmetic, every refusal,
-and one thing worth knowing before adding a reading to any node in
-this tree: **a leaf may not be named after a child**. Both are written
-into the same dict - `Base._snapshot_if_opened` fills it from
-`snapshot_children` and the override then adds leaves to it - so a
-`trace` leaf beside a `trace` node replaced the link with a sentence
-describing the link, reachable by URL and by nothing on the page. It
-is silent, because a reading in the right place saying the right thing
-is what a working page looks like. So the state of the picture is said
-on the `recording` line instead. Nothing else in the tree does it
-(168 files scanned), and no guard was added in `leaves.into`: it would
-have to raise inside a *render*, which is outside a command and so
-emergency-stops the installation.
-
-`Scope` is on `WITHOUT_SCENARIOS` beside `Repository`, because listening
-to a pin changes nothing in the room.
-
-**`diagnosing a microphone` hangs off it** (`DIAGNOSING_A_MICROPHONE.md`),
-for `HARDWARE_SETUP.md`'s reason: nobody goes looking for a document about
-diagnosing microphones until they are already at the bench with a quiet
-one, which is where the scope is. It is a method *and* the investigation
-that produced it, in that order - two MAX9814s over seven runs on
-2026-09-17, ending in a module that was powered at 5.000 V, driving its
-pin at a low impedance, and dead anyway: bias stuck 475 mV low, gain
-absent, AGC inert where the good module reached peak-to-peak 294 in
-silence. Every rule in it carries the run that earned it, because a number
-with no source is what this repository has been bitten by before. The
-three readings that were **wrong during it** are in there too - an
-unplugged channel called "both are hearing the room", a 5 V rail called
-"nothing is driving the pin", and page controls that answered while the
-node under them was rebuilt - since a page that has been confidently wrong
-is worth recording as carefully as one that was right.
-
-**`params["audio"]["wired bodies"]` is read by both installation tests**, and it is not a convenience: an unwired analyser input is a floating ADC pin, and a floating pin does not read silence — it reads garbage. A five-channel sweep on a two-channel board reports twenty-one fictional failures with the two real answers buried among them. Add a body to the list the moment its amplifier and its analyser are in; nothing else changes, since the pitch, the pin and the module are already decided for all five.
-
-**How `test_audio_bringup/diagnosis.py` takes a nine-link chain apart.** Not by measuring harder — by arranging for the faults to have different *shapes*. Every ear hears every voice, so a tone heard by nobody is a speaking fault while an ear that hears nothing when another hears everything is a hearing fault; and a tone lands in a *band*, which is frequency rather than geometry, so it survives a bench where everything is 30 cm apart. Two rules keep the report usable: **the most specific finding returns outright and silences the general ones** (a crossed pair makes every pair in the grid read silent, so listing symptoms opens with two walls of "scope this pin" and buries the one sentence that explains them), and **a voice that peaked in any band is never sent to a scope** — it is plainly being generated, and only its band mapping is wrong. Both of those were found by injecting the faults into the simulator and reading what came out, not by reasoning about the code.
-
-**Where it stops and says so.** Three faults it cannot separate, each of which a person separates in a second: a tone not generated vs. a tone into a dead amplifier (both silence — so it asks you to *listen* while the tone is held, and says what each answer means), and nothing arriving vs. a strobe that never pulses (both flat — there is a partial tell, `_mux_looks_frozen`: if the overall level rises but no band stands clear of its own mean, sound is arriving and the bands are not separating, which is D4/D3 and is never one ear).
-
-**The message layer is built** (2026-08-29). `drivers/sing/` is `Blink` writing a speaker instead of a ring — same ten-bit tables, same 200 ms bit, same burst-and-gap, because in TJ's firmware a sound message *is* a light message. `drivers/female/reinforcement/` and `drivers/male/reinforcement/` are the second half of the interaction: she stops, sings **his own pattern back**, he stops calling, lights his ring steady white and sings his `R` (the empty-tuple entry in `light_patterns`, which is exactly TJ's `com_pattern_I_R`), and every round takes 20 off the appetite they share until it is zeroed and a six-second satisfaction moment begins. **A round is one burst, not one tick** — the loop runs every few milliseconds and a burst sounds for two seconds, so it counts the rising edge and nothing again until the silence that frames it has passed; found by running it, where a full appetite went to nothing in four seconds. Her patience (10.25 s) and that moment (6 s) are TJ's 205 and 120 ticks of his 50 ms clock. `Male._answered_by` is the test that starts his half: his own identity, naming an appetite he is still short of, and nothing else.
-
-**`drivers/hearing/` is emulated, and the page says so.** The sounding half is real hardware; the listening half is not, because the microphones are not in service — so it reads what the five `Sing` threads are transmitting and hands each body what it would hear. Two rules, both TJ's: nobody listens to their own voice (9.12), and there is no geometry, since sound in that room reaches everybody and the pitch is what separates the voices. A reinforcement that works here is evidence the *behaviour* is right, not that a microphone would have heard it; `is_emulated` is one property and one reading, to be flipped the day the other half is trusted. **One divergence is knowingly unported**: TJ's male decides the exchange is working by counting his own lamp light returned by her wiggling mirror, and nothing drives a mirror here yet — so his half runs on the sound channel too, and moves back to light when a mirror moves.
-
-## The exposition schedule (`colloquy/exposition/schedule/`)
-
-`Exposition` is the thread that *is* the piece running — its `setup()` starts `drivers`, and its `loop()` stops it when they stop. `exposition > schedule` is when that happens without anybody pressing anything, and it is the only thing in this repo that starts the installation with nobody in the room.
-
-**The default is no schedule, and that is a state rather than a gap.** A fresh `params.json` gets an empty run, an empty week and the switch off, which is exactly the behaviour this repo has always had: somebody opens the page and presses start. Everything here is opt-in.
-
-A schedule is four facts: a **run** (start and end date), a **week** (per weekday, the hours the piece is live — an empty list is a closing day), **exceptionally running dates** (live though the weekday says not, with their own hours) and **exceptionally standby dates** (dark though the weekday says otherwise). Four files, split by what they know: `rules.py` (what a schedule is, and the two directions between its text form and `params.json`), `solver.py` (the rules worked out into one row per date), `rendering.py` (those rows as markup), and `__init__.py` (the node: switch, editor, clock, and the one call that starts the piece).
-
-**It is edited as text, because nothing else in this tree can be.** `ValueSetter2`'s digit drill-down is right for a servo origin and hopeless for seven pairs of times and a list of dates, and the params page renders strings and lists **read-only**. So the schedule uses `leaves.editor` — a textarea and a `save`, the same view/edit/save shape as `MarkdownDocument` — over a small line format (`from`/`to`, a weekday and its windows, `open <date> <hours>`, `closed <date>`, `#` comments). The **structure** is what lives in `params.json` under `"exposition schedule"`; the text is a view onto it, which costs comments and line order on every round trip. `parse` refuses on the first line it cannot read and names the line number, and a schedule that fails to parse is kept in the box rather than replaced by the canonical form of the old one.
-
-**The solver is the point of the whole node.** Nobody can read a week plus two exceptions and be sure what happens on a given date — that arithmetic in somebody's head is what a schedule is meant to replace — so `full schedule` expands the run into one row per date with its hours *and which rule gave them*. Same move `scenario_browser/rendering.py` makes: what somebody has to check is not what anybody would write. Two dark days for two different reasons are the same outcome and completely different facts, and the one being checked is nearly always the exception, so the reason is a column and the exceptions are coloured. `MAX_DAYS` (800) truncates and says so, because a mistyped year is 36,000 rows rendered inside the one command lock.
-
-Three behaviours carry the safety, and each is quiet rather than loud when wrong:
-
-- **One switch.** The bare `start`/`stop` a `BaseThread` draws are popped (the flasher's reason): they would be a second, unlabelled way to say `enable`, and a way to have the clock starting the piece while the page read "disabled". `enable` writes the note *and* starts the watch, refuses an unreadable schedule and refuses one with no run — a schedule with no end date never says stop. `main.py` calls `start_if_enabled()`, so the note in params is what survives a restart. Saving hours can never switch it on: `to_params` deliberately does not carry `enabled`.
-- **It stops only what it started.** A person who started the show by hand outside opening hours is making a decision, and a clock should not overrule it — the page says which hand started it. The other direction *is* guaranteed: nothing the schedule started is left running past closing. `disable` likewise does not stop a running show.
-- **It refuses to start against the hardware notes.** Unmounting the main PCB latches `BaseThread._shutdown`, so nothing could start after it anyway — but unplugging the motors deliberately does **not** (`hardware/motors/`, so the bench stays useful), which would leave an enabled schedule calling `start` at a bus that was never opened, every twenty seconds, for as long as the chain was out. Both notes are read before acting and named on the page. A refusal never blocks a *stop*.
-
-Everything is naive local time on this machine's own clock — a gallery's opening hours are local by definition — and the one place it shows is a daylight-saving change. `CHECK_INTERVAL` is 20s; the check is arithmetic on a handful of dates with no I/O, so `check now` runs inside the request rather than handing off to the loop thread the way `Repository.check_now` must. `ExpositionSchedule` is on `WITHOUT_SCENARIOS` beside `Repository`: looking at a clock does nothing in the room, and what happens when it starts the piece is `switching-on`, already written and already hanging off `Colloquy`. `rules.py` and `solver.py` are on mypy's `files`; the node is not. `pytest_tests/exposition/` holds the lot (100 tests).
-
-## Parameters and persisted state (`local/`)
-
-- `"exposition schedule"` is when the piece runs itself — the run, the week, and the two kinds of exception day, plus the `enabled` switch. Written by `exposition/schedule/`, read by `main.py` (which starts the watch only if enabled). Empty and switched off by default, so it changes nothing until somebody writes one. Its dates are `YYYY-MM-DD` strings and its hours `"HH:MM-HH:MM"` strings, both parsed on every read, since `params.json` is hand-editable and a bad value has to arrive as a sentence on the schedule's page rather than a `ValueError` out of a request. No version bump needed, for `"main pcb"`'s reason.
-- `"motors"` records whether the Dynamixel chain is plugged into the U2D2 (`{"plugged in": ..., "unplugged at": ...}`). Written by `hardware/motors/`, read by `main.py`, which then does not open the servo bus at all — which is what leaves `Colloquy.servos_were_opened` False and every homing and torque guard downstream already correct. No version bump needed, for the same reason as `"main pcb"` below.
-- `"main pcb"` records whether the board carrying the Arduino and the U2D2 is physically in the installation (`{"mounted": ..., "unmounted at": ...}`). Written by `hardware/main_pcb/`, read by `main.py` at startup and by `wsgi2._board_is_out` on every request. **The v7 migration is the one place the program writes it without a press, and it only ever writes "out"**: on `Colloquy-Laptop` alone, the first load of an older file notes the board as unmounted since 2026-10-11, the day it came out to be replaced — because the press that should have said so cannot be relied on to have been made before two USB leads were pulled. Once (the version is bumped, so a later `the new PCB is mounted` stays), there only (`migrate(data, on_installation=...)`), and a file already saying "out" keeps its own date. Nothing may ever decide by itself that a board is *in*. Its `"configuration"` (`{"board": ..., "fitted": {<board>: {<slot>: <what>}}, "recorded at": ...}`) is which board that is and what is in its slots, written by `hardware/main_pcb/configuration/` and read by nothing else. It needed no version bump: `migrate()` ends in `_fill_missing(data, DEFAULTS)`, which recurses into nested dicts, so an existing `params.json` gains the key on its next load.
-- `colloquy/params.py`'s `Params` is a `dict` subclass that auto-persists to JSON on every mutation (`local/params.json`), recursively wrapping nested dicts so deep edits also trigger a save. `DEFAULTS` in the same file documents the expected shape (servo origins per body, bar interaction origins per male/female pair, arduino baud rate, sensor thresholds).
-- **Units in `params.json`**: `"dxl origin"` is in raw servo units — it is the reading a body gives when it points where it should. *Everything else is in degrees of the body*: `"motion range"` (how far it travels end to end — a body sways half of it either side of its origin, the bar runs from its origin to the far end), the bar's `interaction_origins` and `"motion range around female1"`, and the simulator's `near origin threshold` (written per kind so one can be narrowed alone, though every body is geared alike). Ranges are read from params on every use, so editing one on the params page takes effect on the next sway rather than at the next restart.
-- The file is **versioned** (`"params version"`, `PARAMS_VERSION`). `Params.load()` runs `migrate()`, which converts an older file (backing it up as `local/params.json.v<n>.bak` first — it is the calibration of a physical installation) and fills in any key the file predates. Add a new key to `DEFAULTS` and existing installations get it; changing the *meaning* of a key needs a version bump and a branch in `migrate()`.
-- `local/` also holds runtime logs (`local/logs/<thread-name>.log`, rotated at ~2000 lines by `colloquy/logger.py`, whose log folder is **wiped on process start**), recorded test data, and video captures — all git-ignored working state, not source.
-
-## Old/inactive code: the `#`-prefixed convention
-
-Several directories and files are prefixed with `#` (e.g. `Source code/Python/# app2/`, `colloquy/# threads/`, `colloquy/tests/# test2.py`). A leading `#` makes the path an invalid Python identifier, so these are inert by construction — they are archived previous implementations kept for reference during the ongoing refactor, not dead code to silently delete or partially resurrect. Don't import from them; if functionality is missing versus a `#`-prefixed sibling, treat it as intentionally not-yet-ported rather than a bug.
-
-## Git workflow: two computers, keep in sync
-
-The user works on this repo from two different computers. Uncommitted or unpushed work from the other machine is easy to accidentally shadow or lose.
-
-- **Before starting any work in a session**, run `git status` and `git fetch` and compare local `HEAD` to `origin/<current-branch>`. If the remote has commits not present locally, pull (merge or rebase, whichever keeps history clean — ask the user if a conflict would result) before making edits, so you're never editing on top of a stale tree.
-- **Periodically re-check** (e.g. before starting a new task within a long session), since the other computer may push while this session is running.
-- **After every edit you make**, commit it — don't let changes accumulate uncommitted across a session. Use small, focused commits with clear messages describing the "why", following the repo's existing commit style (see `git log`).
-- **Push after committing** so the other computer can pick up the change, unless the user says otherwise.
-- If `git status` shows unexpected local changes at the start of a session (likely from the other computer's uncommitted work, e.g. synced via a shared drive), do not discard them — stash or commit them first, and flag it to the user.
-
-**The running program watches origin for you** (`colloquy/repository/`). `Repository` is a `BaseThread` on the root node — `/app/repository`, started by `main.py` rather than by a click, since a watch nobody switches on reports nothing. Every 5 minutes (`CHECK_INTERVAL`) it runs `git fetch` and re-reads where the checkout stands, and the page says so: `summary` ("3 commits to pull from origin/Refactor"), branch, behind/ahead, working tree, origin's newest commit subject, when it last looked. Deliberately **not** gated by `is_simulated` — the machine most likely to be sitting on a fortnight-old checkout is the installation's own laptop.
-
-The split between what it does by itself and what it asks for is the whole design:
-
-- **Only `fetch` is automatic — on every machine but the installation's laptop** (see below). It writes nothing but `.git/refs/remotes`, so it cannot disturb a running exhibition.
-- **`pull` is a link, and it appears only when origin actually has something** — that appearing *is* the proposal. It is `--ff-only` (`git.py`), and it refuses for itself over a dirty working tree (which may be the other computer's uncommitted work) or a diverged branch, with one line of prose instead of git's wall of it. The **refusals are instant** (they only read the last status) and answer in the request; the **network half is handed to the loop thread**, exactly as `check_now` does, because `Colloquy.get_states` holds one lock for the whole application and a minute spent on a dead connection inside a request is a minute in which no page in the tree answers. `_pull_now` re-checks before it runs, since the ask and the doing are on different threads and the tree can be edited while the click is in the air.
-- **Nothing raises out of the loop.** A gallery laptop is off the network as often as not; every failure comes back as a `GitError` shown as a reading, and a failed check keeps the previous status rather than blanking it. `git.py` also forces `GIT_TERMINAL_PROMPT=0` and empty askpass vars, because git otherwise blocks *forever* on a credential prompt nobody is at the keyboard to answer.
-- **A pull does not change the code that is running** — Python read the modules at startup. After a pull that moved, the node says so and points at the page's existing `restart`.
-
-**On `Colloquy-Laptop`, and nowhere else, the pull and the restart are done for it** (2026-10-11; `Repository.auto_update`, which is `machines.is_installation()` and has no switch on the page — a switch would be a way to turn automatic pulls on over somebody's working tree). That machine is the one nobody edits on and nobody sits at, and with the main PCB out the files it hands out are only as new as its last pull. So there it looks every 60s instead of every 300 (`AUTO_CHECK_INTERVAL`), pulls the moment origin has something it can fast-forward to, and has the server restart onto it. What keeps that from being the accident the node was built to prevent:
-
-- **It is still `--ff-only`**, the same command the link runs; a diverged branch is not pulled by anybody. It does *not* refuse over a dirty tree the way the link does, and that is not a relaxation: `--ff-only` never overwrites an uncommitted change — where one is in the way git refuses the whole pull — so the refusal only ever bought a person a better sentence, and would cost an unattended laptop its updates the first time a stray file appeared.
-- **It never restarts under a running piece.** A restart stops every thread and starts none. `restart_is_due` waits for everything under `drivers` and `tests` to be idle (the flasher's `IN_THE_WAY`, by tree path, so this watch and the schedule's do not hold it off for ever), and it is False once `_shutdown` is latched — a server that restarted itself after an EMERGENCY STOP would be undoing the one press that means nothing starts until a person says so.
-- **The server asks; the tree does not tell.** Nothing in the tree can restart the server (`Colloquy` has had no `request_stop` since unmounting became a route), so `Server2`'s accept loop — which wakes twice a second anyway — asks `repository.restart_is_due` and runs `restart_for_update()`: `/restart`'s two calls, under `hold_commands`, since nobody chose the moment of this one.
-- **"Needs a restart" is a comparison, not a flag**: the checkout's `HEAD` is no longer the commit this process first saw (`Status.head` against `Repository.running`). So somebody typing `git pull` in a terminal on the laptop is the same fact and gets the same answer.
-
-**It says what it is doing while it does it** (`server2/updates.py`, `static/update_watch.js`). `Repository.notice` is one sentence — `pulling`, `restarting` (announced `RESTART_NOTICE` = 15s before it happens), `waiting` (naming what is running), `stopped`, `blocked`, and for ten minutes afterwards `updated`, which the old process hands the new one in an environment variable because nothing else survives an exec. The banner is drawn into every page when it is rendered, so it works with no script; the script keeps it true on a page that is just sitting open by asking `/update-status` (off the command lock) every few seconds, and when the `boot` token that comes back is not the one the page was drawn under, the page loads its own node again — never a `/call/...`, and never a page with a `textarea` on it, which is told instead of reloaded. Neither is sent on a machine that does not update itself. `pytest_tests/test_automatic_update.py`.
-
-**What it cannot survive is a commit that does not start.** The new process is this repository's own code; one that raises on import leaves the laptop with no server and so no watch, and somebody has to pull a fix by hand. Run the suite before pushing to the branch that machine tracks.
-
-`Repository` is on `WITHOUT_SCENARIOS` in `pytest_tests/test_scenarios.py` on purpose, alongside `read_pattern` and `blink`: a scenario describes what the piece does in the room, and a git fetch does nothing in the room at all.
-
-## Type annotations: scoped on purpose
-
-The repo is almost entirely unannotated (~1300 parameters, a handful of annotations) and that is **not** a backlog to burn down. The rule is: **annotate where a type is a fact worth stating, and check what you annotate.**
-
-- **`py -m mypy`** runs it. Config is `[tool.mypy]` in `pyproject.toml`; mypy is a dev tool, not a runtime dependency, so it is not in `requirements.txt` — `pip install mypy`.
-- **`files` is a deliberate list, and adding to it is the decision.** Only the pure-logic edges are on it: `drivers/angle/`, `repository/`, `drivers/arduino/boards.py`, `scenario_browser/rendering.py`, `drivers/audio.py`. These take ordinary values and return ordinary values, and their confusions are real ones — degrees vs servo units, counts vs prose, a VID that may not exist. The last one earned its place on the first run: `VOICES` was inferred as `dict[str, object]`, and a pitch in hertz, an index into `BANDS_HZ` and a module number are three small ints that read alike. It is a `TypedDict` now.
-- **The `Base` tree is deliberately off it.** `self["name"] = child_or_callable`, `__getitem__` routing, `snapshot()` returning dicts whose payload *key* is the type — a checker has little true to say there, and turning it loose repo-wide produced **202 errors across 58 files** on a first run. Same reasoning as `[tool.ruff]`, which is narrow for the same reason.
-- **`follow_imports = "silent"` is load-bearing.** Without it `files` only scopes what mypy *leads* with; it still walks every import and reports what it finds out in the tree.
-- **`disallow_untyped_defs` is deliberately NOT set.** An unannotated helper beside an annotated one is not an error. Partial annotation is the intended end state, not a waypoint.
-
-The point is that an annotation nothing checks is a comment that can lie, and this repo had one: `ScenarioEntry.label: str = None` said "always a string" while defaulting to `None`. That is what prompted the config. Annotating more of the tree is fine; putting it under the checker is what needs a reason.
-
-Modules that are **all constants** (`light_pattern_timing.py`) are left alone on purpose — `SAMPLE_INTERVAL: float = 0.05` documents nothing the literal doesn't, and the `_SAMPLES`/`_DURATION`/`_INTERVAL` naming already carries the units.
+- Pitches are Thomas's, one per MSGEQ7 band. A pitch belongs to its timer and a timer to its pin (silicon), so bodies move across pins, never pitches across timers. NeoPixel lines moved to D14-D17 to free tone pins.
+- **`audio.BODIES` (body = module = A0-A4 order) ≠ `audio.BODIES_BY_PITCH`.** Iterate the right one.
+- Hardware timers, so NeoPixel writes don't tear tones and five voices sound at once.
+- `AllAudio` (`all audio`) reads every microphone on one strobe - never read five one at a time to compare them. `silence every speaker` is one firmware command; `Colloquy.silence_speakers()` swallows exceptions.
+- `params["audio"]["wired bodies"]`: an unwired analyser input floats and reads garbage. Add a body when its amplifier and analyser are in.
+- `drivers/sing/` is `Blink` for a speaker. `drivers/*/reinforcement/` is the exchange (she sings his pattern back; each round takes 20 off the shared appetite; a round is one burst, counted on its rising edge). **`drivers/hearing/` is emulated** (`is_emulated`): no one hears their own voice, no geometry. The male's mirror-light half is knowingly unported.
+
+Audio tests, each answering a different question:
+
+- `test_audio_subsystem` - Thomas's board over his serial menu: are the five boards good. Gated on `is_simulated`.
+- `test_audio_loop` - the installation's board: is each body wired to its own channel.
+- `test_audio_bringup` - same question, and which link is broken (`diagnosis.py`: most specific finding wins; a voice that peaked anywhere is never sent to a scope; says when it needs a person to listen).
+- `test_microphone_signal` - cuts the chain at the analyser input, using the Arduino IDE Serial Plotter with `Source code/Arduino/microphone_plotter/` (routes A/B/C in `MICROPHONE_PLOTTER.md`). Has `flash the plotter sketch` and `flash colloquy firmware back`.
+- `test_audio_at_12v` - louder on a higher rail? Two passes with a supply change between (`measure at 5 V`, `measure at 12 V`), each tone judged by `rise` and `share` (the MAX9814 AGC flattens rise). Not gated. `SUPPLY_SETUP.md` hangs off it.
+- `test_goertzel_ear` - PC speakers (`sounddevice`) → a Mega running `microphone_sampler` → Goertzel in Python (`goertzel.py`). Heard = a multiple of its own silence (`HEARD_RATIO` 8, `QUIET_FLOOR` 0.01, pinned to a real run). Pitches 750-1500 Hz; 1000/1050 are a deliberate border case (`goertzel.leakage`). A press sounds for `PLAY_SECONDS` = 10. Runs are recorded with marks and saved as CSV under `local/test results/test goertzel ear/`. No stand-in. `Source code/Arduino/goertzel_ear/` is kept for a different question.
+- `scope` (not `test_*`: it asks nothing) - records A0 and A1 from `microphone_sampler` firmware 2 (`d` command, `pair` reply; `b`/`block` untouched). Draws the gaps between captures, never end to end. `swing`, `compared`, and `independent` (`trace.coupling_of`, `ghost_of`: a floating pin copies the earlier channel), computed within captures and spread along the run. Old firmware is refused before recording. `DIAGNOSING_A_MICROPHONE.md` hangs off it.
+
+## Exposition schedule (`colloquy/exposition/schedule/`)
+
+`Exposition` is the piece running; `exposition > schedule` starts and stops it by the clock, the only thing that does so with nobody in the room. **Default: no schedule, switched off.**
+
+- A schedule is a run (dates), a week (hours per weekday), exceptionally-running dates and exceptionally-standby dates. `rules.py` (format and params round trip), `solver.py` (one row per date with the rule that gave it; `MAX_DAYS` 800), `rendering.py`, `__init__.py` (node).
+- Edited as text through `leaves.editor`; the structure is what's stored in `params["exposition schedule"]`. `parse` names the bad line.
+- One switch: `enable`/`disable` (bare start/stop popped). `enable` refuses an unreadable schedule or one with no run; saving never enables. `main.py` calls `start_if_enabled()`.
+- It stops only what it started; it refuses to start against the main-PCB or motors notes (never blocks a stop). Naive local time. `CHECK_INTERVAL` 20s. `pytest_tests/exposition/`.
+
+## Parameters (`local/params.json`)
+
+- `colloquy/params.py`'s `Params`: dict that persists on every mutation, nested dicts included. `DEFAULTS` documents the shape.
+- Versioned (`PARAMS_VERSION`); `migrate()` backs up to `local/params.json.v<n>.bak` and `_fill_missing` adds new keys recursively. **A new key needs only `DEFAULTS`; a changed meaning needs a version bump and a branch in `migrate()`.** It is the calibration of a physical installation: where a migration can, it leaves a value somebody measured or typed alone (v4, v5).
+- Units: `dxl origin` in raw servo units; everything else (`motion range`, `interaction_origins`, thresholds) in degrees of the body, read on every use.
+- Notes written by presses and read at startup: `"main pcb"` (`mounted`, `configuration`), `"motors"` (`plugged in`), `"exposition schedule"`. v7 is the one migration that writes one: on `Colloquy-Laptop` only, it notes the board out. **Nothing may ever decide by itself that a board is in.**
+- `local/` is git-ignored working state: logs (`local/logs/`, wiped on process start), test results, videos, downloads.
+
+## `#`-prefixed paths
+
+Directories and files starting with `#` (`# app2/`, `colloquy/# threads/`, `colloquy/tests/# test2.py`) are archived implementations, unimportable by construction. Don't import from them, delete them, or partially resurrect them; missing functionality versus them is not-yet-ported, not a bug.
+
+## Git workflow: two computers
+
+The user works from two machines, and the installation's laptop pulls by itself.
+
+- **At the start of a session** (and before each new task in a long one): `git status`, `git fetch`, compare `HEAD` to `origin/<branch>`, and pull first if behind (ask if a conflict would result).
+- **Commit after every edit** - small, focused, "why"-style messages matching `git log` - **and push**, unless told otherwise.
+- Unexpected local changes at session start may be the other machine's: stash or commit, never discard, and flag them.
+- Mixed line endings (`core.autocrlf=true`, no `.gitattributes`): edit with the Edit tool; check `git diff --stat` after any scripted edit.
+
+**`colloquy/repository/`** watches origin: `Repository` (started by `main.py`, not gated) fetches every 5 min and shows the status. Elsewhere, `pull` is a link that appears only when origin has something; it is `--ff-only`, refuses a dirty tree or diverged branch, and runs on the loop thread. A pull doesn't change running code; use `restart`.
+
+**On `Colloquy-Laptop` only** (`Repository.auto_update`), it checks every 60s, pulls (still `--ff-only`) and restarts itself - only when nothing under `drivers`/`tests` is running and never after an EMERGENCY STOP. The server's accept loop asks `restart_is_due`. Progress shows as a banner (`server2/updates.py`, `static/update_watch.js`, `/update-status`). **A commit that fails on import strands the laptop with no server: run the suite before pushing to the branch it tracks.** `pytest_tests/test_automatic_update.py`.
+
+## Type annotations
+
+Annotate where a type is a fact worth stating, and check what you annotate. `py -m mypy` checks only the `files` list in `pyproject.toml` - pure-logic modules (angles, audio table, boards, schedule rules/solver, repository, electronics calculators, ...). **Adding a file to that list is the decision.** The `Base` tree stays off it (dynamic dispatch). `follow_imports = "silent"` is load-bearing; `disallow_untyped_defs` is deliberately unset. Constant-only modules stay unannotated.
 
 ## Testing
 
-There are two separate things called tests here, and they do not overlap.
+Two unrelated things are called tests:
 
-**`Source code/Python/pytest_tests/`** is a real pytest suite (~200 pure-logic unit tests, runs in ~2s: `py -m pytest "Source code/Python/pytest_tests"` from the repo root). It never touches hardware, threads or the filesystem — read `pytest_tests/conftest.py` first, it states the rules (never `.start()` a `BaseThread`, never build the real `Colloquy`/`Drivers` object graph, prefer small duck-typed doubles or unbound-method calls). **Run it after changing anything under `colloquy/`** — several of these tests pin behaviour that is easy to break from a distance, e.g. the light-pattern tables and `ReadPattern`'s decode.
+- **`Source code/Python/pytest_tests/`** - pure-logic pytest suite. Read `conftest.py` first: never `.start()` a `BaseThread`, never build the real `Colloquy`/`Drivers`, prefer duck-typed doubles or unbound-method calls.
+- **`colloquy/tests/`** - interactive **hardware tests**, nodes in the tree run from the page (`BaseThread` + `snapshot_children`). Check for an existing one before writing another. Never call them "scenarios".
 
-**`colloquy/tests/`** is the other kind: interactive **hardware tests** exposed as nodes in the same `Base` tree and driven through the web UI like any other hardware command — they exercise real or virtual hardware over time (e.g. logging light sensor values while bodies move) rather than asserting pure functions. When asked to "test" something in this codebase, check whether an existing hardware test under `colloquy/tests/` already covers it before writing a new one, and follow the same `BaseThread`/`snapshot_children` pattern. **Do not call these "scenarios"** — that word means something else here, see below.
+Hardware tests are filed by **who does the perceiving** (`colloquy/tests/group.py`, `TestGroup`):
 
-**Wherever a test needs a sketch, its own page can flash it and ask what came back** (2026-09-21). Fifteen of them do, and they fail the same way against a stale one, which is the failure this repo keeps being bitten by: **the board answers cheerfully and is wrong**. `Arduino.open()` refusing a version it was not written for is what turns that into a legible failure, and then leaves somebody at a test page with the fix three levels away. That was `test microphone signal`'s argument, made once; it is the same argument for all of them. Three kinds, because the boards are three:
+- **`autotests`** reach and record their own answer: `test_light_sensor_values`, `test_read_pattern`, `test_reinforcement`, `test_search`, `test_female_search`, `test_movements`, `test_audio_subsystem`, `test_audio_loop`, `test_audio_bringup`.
+- **`manual tests`** need a person's eye, ear or hand: `test_drive_light_values`, `test_male_patterns`, `test_neopixels`, `test_sensors`, `test_microphone_signal`, `test_goertzel_ear`, `test_audio_at_12v`, `scope`.
+- The graph demos (`test graph`) sit directly under `tests`, in neither group. `TestGroup` forwards `colloquy`/`drivers`/`params`/`workspace` to its owner and holds the `is_simulated` gate (only `test_audio_subsystem`).
 
-- **The eleven that drive the piece** (`test_neopixels`, `test_sensors`, `test_drive_light_values`, `test_male_patterns`, `test_light_sensor_values`, `test_read_pattern`, `test_search`, `test_female_search`, `test_reinforcement`, `test_audio_loop`, `test_audio_bringup`) get `flash firmware` from the `NeedsColloquyFirmware` mixin (`colloquy/tests/colloquy_firmware.py`). It is a **view on the one flasher, not a second one** — there is one board and one lead, so every refusal is the real flasher's and the `outcome` is *shared*, which is right: two pages claiming private knowledge of one board would be a lie about the hardware. `in sync` is drawn beside the presses, being the reading that says whether pressing is necessary. Hung through `_with_firmware()` in each test's own `snapshot_children` rather than folded in centrally, for `_with_scenarios`'s stated reason — that dict is the routing contract, and a child drawn but not listed 404s.
-- **`test_goertzel_ear` and `scope`**, which share one `microphone_sampler` on their own leads, get a real `SamplerFlasher` plus **`ask the board`** (`colloquy/tests/sampler_board.py`). The handshake is the half that was missing: the greeting arrives on reboot, opening the port is what reboots the board, and the port opens at `setup()` — so nothing could be known until a run was already under way, and a run that came back flat was equally a dead microphone, a missing lead and an old sketch. It opens the lead, reads the line, and **puts the lead back**, since only one of the two may hold it. **The version is judged against what the *asking* test needs**: `b` is unchanged since firmware 1 and `d` arrived in 2, so a board fine for the Goertzel ear is useless to the scope. Older-than-this-repo and too-old-to-work are different facts and only one is a reason to find a USB lead — reporting the other as a fault teaches people to ignore the reading. `sampler_sketch.py` reads the version, the rate and both pins out of the `.ino`, `firmware.py`'s arrangement.
-- **`test_microphone_signal` gets the direction it never had.** Both routes that use the installation's own board need `microphone_plotter` put on it first, and only the way back was on the page; the outward trip was four steps in the Arduino IDE, all four of which this page already knew. `flash the plotter sketch` is named for its direction, not `flash firmware`, because this board has two sketches that belong on it at different moments. **There is no handshake on it and that is the honest answer rather than a gap** — the plotter greets with nothing — and its `_check_the_board` deliberately does **not** reopen the driver's link: `Arduino.open()` would report a failure that is the expected outcome of a successful flash.
+Firmware on test pages (`pytest_tests/hardware_tests/test_colloquy_firmware.py` holds membership):
 
-Three tests deliberately have none, and the rule they fail is "needs a sketch **this repo** can flash" rather than "is a hardware test". `test_movements` moves servos and touches no board. `test_audio_subsystem` and `test_audio_at_12v` drive **Thomas's** Mega, whose code is `Source code/Thomas/*.cpp` — not a sketch folder arduino-cli can be pointed at, so a flash link there would be a press that cannot work. `pytest_tests/hardware_tests/test_colloquy_firmware.py` holds the membership of all three groups, since a test that quietly joins or leaves the set would otherwise be noticed at a rack.
-
-**They are filed in two groups, and the rule is not what it first looks like** (`colloquy/tests/group.py`). A flat list of fourteen said the only thing worth knowing about a test was its name; the first thing anybody actually wants to know, standing at the rack with twenty minutes, is *whether they have to stay for it*. So:
-
-- **`autotests`** reach their answer on their own and write it down — a CSV, an SVG, a grid of verdicts, a diagnosis. `test_light_sensor_values`, `test_read_pattern`, `test_reinforcement`, `test_search`, `test_female_search`, `test_movements`, `test_audio_subsystem`, `test_audio_loop`, `test_audio_bringup`.
-- **`manual tests`** turn on a person: light, sound, movement, and the instrument that records the answer is somebody’s eye, ear or hand. Some of them still write a file (`test_goertzel_ear`'s bins over time, `test_audio_at_12v`'s two passes) - what no file holds is the *perceiving*, which is the whole of the distinction below. `test_drive_light_values`, `test_male_patterns`, `test_neopixels`, `test_sensors`, `test_microphone_signal`, `test_goertzel_ear`, `test_audio_at_12v`, `scope` (the one that is not a `test_*`, and says why).
-
-The line is deliberately **not** how long a run takes, how much hardware it touches, or whether the code happens to open a results file — it is **who does the perceiving**, because that is the one distinction that changes what you do next. The two graph demos stay outside both groups as direct children of `tests`: they are not tests of the piece at all, and filing them under either heading would make the heading mean less.
-
-`TestGroup` is one class rather than two, it forwards `colloquy`/`drivers`/`params`/`workspace` to its owner (inserting a node between `Tests` and a test must not change what a test can reach), and it is where the `is_simulated` gate on bench-only tests now lives — keyed on **names**, not object identity. Only `test_audio_subsystem` is gated now; `manual tests` gates nothing at all, since `test_audio_at_12v` stopped being bench-only and `test_goertzel_ear` joined it there (2026-09-09). That move was a gain: the gate used to be checked by `inspect.getsource` on `Tests.snapshot_children`, because building the real thing needs the whole hardware graph, and a `TestGroup` is a plain `Base` that can simply be built and asked.
+- The eleven that drive the piece get `flash firmware` + `in sync` from `NeedsColloquyFirmware` (`colloquy/tests/colloquy_firmware.py`), a view on the one shared flasher, hung via `_with_firmware()` in each test's own `snapshot_children`.
+- `test_goertzel_ear` and `scope` get a `SamplerFlasher` and `ask the board` (`colloquy/tests/sampler_board.py`), judging the version against what *that* test needs.
+- `test_microphone_signal` gets `flash the plotter sketch` (no handshake possible).
+- `test_movements`, `test_audio_subsystem`, `test_audio_at_12v` have none (no board, or Thomas's code, which isn't a sketch folder).
