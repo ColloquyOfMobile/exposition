@@ -108,7 +108,6 @@
       ],
       "assembly": [
         "shields/voice-thomas/bom.csv",
-        "shields/voice-thomas/positions.csv",
         "shields/voice-thomas/variants.csv"
       ],
       "source sha256": "0ed2f0eb7e077d730d598f3af986fb3a863f60ce2aa2f30efa70d675e478c568",
@@ -154,7 +153,6 @@
       ],
       "assembly": [
         "shields/analyser-carrier/bom.csv",
-        "shields/analyser-carrier/positions.csv",
         "shields/analyser-carrier/socket-assembly.csv"
       ],
       "source sha256": "e78812d97e97dae8204b170f4b6208cd800f0c9f8939b5430a32d56205de39cd",

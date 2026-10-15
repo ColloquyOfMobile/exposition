@@ -92,9 +92,11 @@ BOARDS = (
         "quantity": 5,
         "source": "shields/voice-thomas/voice-thomas.kicad_pcb",
         "read first": ["shields/README.md", "shields/REVIEW.md", "shields/ASSEMBLY.md"],
+        # No positions.csv here or on the analyser carrier: both are
+        # ordered bare and built by hand (shields/ASSEMBLY.md), so there
+        # is nothing for a machine to place.
         "assembly": [
             "shields/voice-thomas/bom.csv",
-            "shields/voice-thomas/positions.csv",
             "shields/voice-thomas/variants.csv",
         ],
     },
@@ -112,7 +114,6 @@ BOARDS = (
         ],
         "assembly": [
             "shields/analyser-carrier/bom.csv",
-            "shields/analyser-carrier/positions.csv",
             "shields/analyser-carrier/socket-assembly.csv",
         ],
     },
@@ -355,17 +356,26 @@ def main():
             print(f"{entry['id']:20} {state}")
         return 1 if stale else 0
 
-    if not stale:
+    # A board whose file has not changed keeps its plot but takes this
+    # table's descriptions afresh. Otherwise a document added to or
+    # dropped from "assembly" never reaches the manifest, since only a
+    # changed board file makes a board stale.
+    refreshed = {
+        entry["id"]: {**recorded[entry["id"]], **entry}
+        for entry in BOARDS if entry not in stale
+    }
+    if not stale and list(refreshed.values()) == list(recorded.values()):
         print("every board's package is current - nothing to plot")
         return 0
 
-    cli = find_kicad_cli()
-    version = run(cli, "version").strip()
+    if stale:
+        cli = find_kicad_cli()
+        version = run(cli, "version").strip()
     failed = 0
     entries = []
     for entry in BOARDS:
         if entry not in stale:
-            entries.append(recorded[entry["id"]])
+            entries.append(refreshed[entry["id"]])
             print(f"{entry['id']:20} current")
             continue
         try:
