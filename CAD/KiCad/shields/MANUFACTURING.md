@@ -1,6 +1,7 @@
 # Manufacturer ZIPs
 
-Generated from the current active PCB designs on 2026-10-13. Each project has
+Generated from the active PCB designs on 2026-10-13; analyser carrier refreshed
+on 2026-10-19 for microphone-on-L / converted-R output. Each project has
 its own `manufacturing` directory containing a ZIP and short instructions.
 
 | Project | Copper layers | Manufacturer package |

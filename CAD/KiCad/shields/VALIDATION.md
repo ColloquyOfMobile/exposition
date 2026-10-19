@@ -1,4 +1,4 @@
-# Native KiCad validation — 2026-10-13
+# Native KiCad validation — carrier updated 2026-10-19
 
 KiCad 9.0.7 reports zero ERC violations, zero DRC violations and zero
 unconnected items on all five current routed boards. No new DRC exclusions
@@ -26,10 +26,10 @@ unconnected counts are all zero, with 64 tracks/vias and no exclusions.
 The carrier's JA1 and retention coordinates match the backplane. All five
 module socket pinouts, photo-derived pad coordinates and round/slot drilling
 geometry pass independent checks. The carrier now requires modified modules:
-remove R4 and jumper L to OUT; there are no module-to-carrier cables.
-(That is the copper validated here. On 2026-10-19 the specification moved
-the microphone to L, with R3 removed and R jumpered to OUT; the carrier is
-re-routed and re-validated for it before ordering.)
+remove R3 and jumper R to OUT, with the microphone on L; there are no
+module-to-carrier cables. The carrier was re-routed and its native ERC/DRC
+and schematic/PCB parity rechecked on 2026-10-19: zero violations and zero
+unconnected items. Existing pad positions and mechanical geometry are preserved.
 Actual module fit is photo-derived and remains a physical check.
 
 The updated backplane also passes native housing pad/via keepouts and +12V
@@ -52,6 +52,11 @@ also regenerated from the checked PCB.
 The 2026-10-13 focused and full pytest runs could not collect: the available
 Python 3.10 test environment lacks pandas (full run: 65 collection errors).
 No application or firmware behavior was changed.
+
+On 2026-10-19 the full suite passed: **1,796 tests** with pandas supplied
+from temporary test dependencies. Local socket and temporary archive tests
+were run outside the sandbox. Both carrier fabrication packages match the
+new source digest; ZIP payload hashes and refreshed 1:1 print scale bars pass.
 
 The previous focused specification tests passed: 37 tests (test_shields.py and
 test_microphone_board.py). No application or firmware code was changed.

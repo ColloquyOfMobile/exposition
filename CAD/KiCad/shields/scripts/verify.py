@@ -179,6 +179,11 @@ def main():
                 x,y=position(pad);sx,sy=p.ToMM(pad.GetSize())
                 assert ((x-gx)**2+(y-gy)**2)**.5-max(sx,sy)/2>=3,(ref,f.GetReference(),'module spacer keepout')
     carrier=loaded['analyser-carrier'];cp=pads(carrier)
+    silk=[t.GetText() for t in carrier.GetDrawings()
+          if isinstance(t,p.PCB_TEXT) and t.GetLayer() in (p.F_SilkS,p.B_SilkS)]
+    assert 'MODULE: REMOVE R3 / LINK R TO OUT' in silk
+    assert silk.count('MIC + - OUT + -')==4 and silk.count('- + OUT - + MIC')==1
+    assert not any('REMOVE R4' in text or 'LINK L TO OUT' in text for text in silk)
     assert ('JA1','22') not in cp
     for pin in range(1,22):
         a,b=position(cp[('JA1',str(pin))]),position(back[('JA1',str(pin))])
@@ -188,7 +193,7 @@ def main():
         a=position(cf[ref]);bb=next(f for f in loaded['backplane'].GetFootprints() if f.GetReference()==backref)
         assert all(near(x,y) for x,y in zip((a[0]+25,a[1]+215),position(bb)))
     for i,body in enumerate(BODY,1):
-        nets=[body+'/analyser out','MEGA_5V','AGND',body+'/microphone','MEGA_5V','AGND','analyser/reset','analyser/strobe']
+        nets=[body+'/microphone','MEGA_5V','AGND',body+'/analyser out','MEGA_5V','AGND','analyser/reset','analyser/strobe']
         module=cf[f'M{i}'];origin=position(module);angle=module.GetOrientationDegrees()
         sign=-1 if near(abs(angle),180) else 1
         grid=[(3.81+j*2.54,-5.08) for j in range(6)]+[(16.51,17.78),(19.05,17.78)]

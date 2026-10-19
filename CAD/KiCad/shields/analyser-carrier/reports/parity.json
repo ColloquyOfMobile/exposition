@@ -7,16 +7,16 @@
   "drc_violations": 0,
   "unconnected_items": 0,
   "copper_layers": 2,
-  "tracks_and_vias": 765,
+  "tracks_and_vias": 337,
   "sha256": {
-    "analyser-carrier.kicad_pcb": "73693394f7118769394455aa5838876c0096ae174b630d5a875798cff249ca4e",
+    "analyser-carrier.kicad_pcb": "60865066594c376e08733a0f9be754a277abc0163d77eac56159fb4cfb8b6f1d",
     "analyser-carrier.kicad_pro": "6f212188a8d5f0aa25123207bb806c6e34d1bb07144d647de5dcda07fc8c94f4",
     "analyser-carrier.kicad_sch": "4ede15f49610245c5700b41a3ae86cf49d1196c99a7c36fa2b71b4a420dd14db",
-    "female1.kicad_sch": "9799416a878abe3aa716298d28ae24fdbf10124e0869565ff5c304ae132c0563",
-    "female2.kicad_sch": "464b032c3e9068901b869444cfd670699271bf0623d7c79fb90b3eb72b6e70e6",
-    "female3.kicad_sch": "ca7abe62d9edf67839a1d5f28147d056bdfd88df90236ea8f8e31e75ecef1ffd",
+    "female1.kicad_sch": "0c602ba519a47718637316e007d1b1540c70a5f40f6752e9c943895a84ce7fe4",
+    "female2.kicad_sch": "fb96ee7026083c1ff4bf3e7f8678625da138d52ff9b6b9240863a2aa7d7fef2e",
+    "female3.kicad_sch": "d0df4417622b8cbc567cad2e489a33d3ebc7e027c3d751b8feb625cd103b2823",
     "interface.kicad_sch": "6f7c0bd47a34e29b19a7d06de5e4fd0c0b8389a7a39b321c50e6cad7bd9648b5",
-    "male1.kicad_sch": "bffc2942035e45e903df7b3d401511a69e197658e4b71e8b08c9cf3e078ffa45",
-    "male2.kicad_sch": "c155a748979a70bf2b51c6eecac68accae515454c8ba4b89096ddbba2391d734"
+    "male1.kicad_sch": "f494b004d8cc54a4da8c67c84af30cb50bccd93e01d4ffdd61cd509991d6dc3e",
+    "male2.kicad_sch": "36071dd89e65760b85a8d0edf511a92fcd91ff6bc5eb0e0c4cfaa59ff9c21f21"
   }
 }

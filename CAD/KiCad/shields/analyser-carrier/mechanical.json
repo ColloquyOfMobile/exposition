@@ -50,7 +50,7 @@
     215
   ],
   "short_leads": false,
-  "module_modification": "Remove R4; link isolated L to OUT; downward headers",
+  "module_modification": "Remove R3; link isolated R to OUT; microphone on L; downward headers",
   "socket_grid_mm": [
     [
       1,

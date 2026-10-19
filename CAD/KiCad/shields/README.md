@@ -55,9 +55,9 @@ BOMs remain manual assembly references.
 
 Each DFRobot module now takes its microphone on L, so the conversion moves to
 the right channel: remove R3 (the right-input 22K) and jumper the isolated R
-to OUT. SHIELDS.md 4b and analyser-carrier/README.md say so. The carrier's
-copper, silkscreen and manufacturing package still have the earlier
-assignment; they are re-routed before ordering (RELEASE_REVIEW.md F7).
+to OUT. The carrier schematic, routed copper, silkscreen and fabrication
+packages now follow SHIELDS.md 4b and analyser-carrier/README.md
+(RELEASE_REVIEW.md F7, resolved). All module and retention positions are preserved.
 
 ## Front computing slot and servo supply — 2026-10-08
 

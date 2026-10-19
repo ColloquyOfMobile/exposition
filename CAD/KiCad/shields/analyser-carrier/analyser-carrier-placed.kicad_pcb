@@ -704,7 +704,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 11 "male1{slash}analyser out")
+			(net 12 "male1{slash}microphone")
 			(thermal_bridge_angle 45)
 			(uuid "f92b6314-2eb2-4d25-8af2-6e2f346c0c64")
 		)
@@ -734,7 +734,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 12 "male1{slash}microphone")
+			(net 11 "male1{slash}analyser out")
 			(thermal_bridge_angle 45)
 			(uuid "9a5b07a0-cc58-44b6-b8d3-e22707c11254")
 		)
@@ -1223,7 +1223,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 9 "female3{slash}analyser out")
+			(net 10 "female3{slash}microphone")
 			(thermal_bridge_angle 45)
 			(uuid "c6b09589-ada4-4b1b-92b4-4351dd0ea010")
 		)
@@ -1253,7 +1253,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 10 "female3{slash}microphone")
+			(net 9 "female3{slash}analyser out")
 			(thermal_bridge_angle 45)
 			(uuid "5b4591d1-81e0-4e6f-8f73-86bba16da820")
 		)
@@ -1839,7 +1839,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 5 "female1{slash}analyser out")
+			(net 6 "female1{slash}microphone")
 			(thermal_bridge_angle 45)
 			(uuid "ec827c9e-7c22-46d2-8723-afff7b40f92d")
 		)
@@ -1869,7 +1869,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 6 "female1{slash}microphone")
+			(net 5 "female1{slash}analyser out")
 			(thermal_bridge_angle 45)
 			(uuid "ac30d528-f324-40bf-a6f5-073343a3cc99")
 		)
@@ -2358,7 +2358,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 13 "male2{slash}analyser out")
+			(net 14 "male2{slash}microphone")
 			(thermal_bridge_angle 45)
 			(uuid "ae86ac76-c561-4595-b1fc-1f54b60097ba")
 		)
@@ -2388,7 +2388,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 14 "male2{slash}microphone")
+			(net 13 "male2{slash}analyser out")
 			(thermal_bridge_angle 45)
 			(uuid "c57d3b3f-19f0-4635-963a-246b9d377577")
 		)
@@ -3370,7 +3370,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 7 "female2{slash}analyser out")
+			(net 8 "female2{slash}microphone")
 			(thermal_bridge_angle 45)
 			(uuid "6cfb4ebe-c25b-4fdd-be97-cb9bbe3e8555")
 		)
@@ -3400,7 +3400,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 8 "female2{slash}microphone")
+			(net 7 "female2{slash}analyser out")
 			(thermal_bridge_angle 45)
 			(uuid "e6308cf1-4180-48e6-b914-6542df6a6ff7")
 		)
@@ -4036,7 +4036,7 @@
 			)
 		)
 	)
-	(gr_text "OUT + - MIC + -"
+	(gr_text "MIC + - OUT + -"
 		(at 126 59.5 0)
 		(layer "F.SilkS")
 		(uuid "408a3f2f-bf95-44e0-8bec-c7be8b53ab7f")
@@ -4058,7 +4058,7 @@
 			)
 		)
 	)
-	(gr_text "OUT + - MIC + -"
+	(gr_text "MIC + - OUT + -"
 		(at 184 59.5 0)
 		(layer "F.SilkS")
 		(uuid "5fde2c25-d4bb-4648-8dc8-01fdb02f67a3")
@@ -4113,7 +4113,7 @@
 			)
 		)
 	)
-	(gr_text "- + MIC - + OUT"
+	(gr_text "- + OUT - + MIC"
 		(at 68 96 0)
 		(layer "F.SilkS")
 		(uuid "78a70b67-8279-4893-8299-291f256b66aa")
@@ -4135,7 +4135,7 @@
 			)
 		)
 	)
-	(gr_text "OUT + - MIC + -"
+	(gr_text "MIC + - OUT + -"
 		(at 97 59.5 0)
 		(layer "F.SilkS")
 		(uuid "8d72f2fa-63c1-4e9c-99f4-86fe3d356f67")
@@ -4146,7 +4146,7 @@
 			)
 		)
 	)
-	(gr_text "OUT + - MIC + -"
+	(gr_text "MIC + - OUT + -"
 		(at 155 59.5 0)
 		(layer "F.SilkS")
 		(uuid "8e7e99ab-b9f6-43ec-80c7-ec7fca8dad75")
@@ -4212,7 +4212,7 @@
 			)
 		)
 	)
-	(gr_text "MODULE: REMOVE R4 / LINK L TO OUT"
+	(gr_text "MODULE: REMOVE R3 / LINK R TO OUT"
 		(at 125 82 0)
 		(layer "B.SilkS")
 		(uuid "1e669997-1bd6-495d-a9db-6dda4922f06f")

@@ -35,7 +35,7 @@
   {
     "project": "analyser-carrier",
     "zip": "analyser-carrier\\manufacturing\\analyser-carrier-manufacturing.zip",
-    "sha256": "deb26ab6d89a72f5dfc2f8ddbc3f96daa9f7cdca028daf0ff4f42a7719a128fd",
+    "sha256": "0bf1489d2e39f6c8fc8adfd89efba2f0261c806d56a93df18282a857fc594de8",
     "assembly_policy": "hand_assembled_bare_board",
     "files": 25,
     "copper_layers": 2,

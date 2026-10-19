@@ -56,10 +56,9 @@ The old bare-chip analyser is not an approved substitute.
 ## Direct-plug carrier revision — 2026-10-07
 
 The analyser carrier now uses female sockets beneath modified modules. No
-module-to-carrier leads remain. Each module requires removal of its left-input
-22K resistor R4, an on-module jumper from isolated L to OUT, and downward
-male headers. **Since 2026-10-19 the microphone goes into L instead: remove
-R3 and jumper the isolated R to OUT.** The carrier's copper does not follow
-that yet; do not fit modules converted this way until it is re-routed.
+module-to-carrier leads remain. Each module requires removal of its right-input
+22K resistor R3, an on-module jumper from isolated R to OUT, and downward
+male headers. The microphone goes into L (carrier revision 2026-10-19).
+Older carrier artwork uses the opposite conversion; do not mix revisions.
 Read analyser-carrier/README.md before assembly. Socket positions
 are photo-derived; check all contacts against the updated 1:1 template.

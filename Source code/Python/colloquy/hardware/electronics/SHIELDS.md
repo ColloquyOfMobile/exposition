@@ -608,9 +608,8 @@ into the MSGEQ7's `IN` (DFRobot's V2 schematic), so which one carries the
 microphone changes nothing in what the analyser hears.
 `analyser-carrier/README.md` has the steps.
 
-The carrier's copper still has the earlier assignment (microphone on `R`,
-`L` converted, `R4` removed) and is re-routed before ordering
-(`RELEASE_REVIEW.md` F7).
+The 2026-10-19 carrier schematic, copper and silkscreen follow this
+assignment at all five module sites (`RELEASE_REVIEW.md` F7, resolved).
 
 **Measure one module before drawing the carrier.** DFRobot gives only
 "5 V, 30 × 20 mm"; the hole spacing and where its headers sit decide

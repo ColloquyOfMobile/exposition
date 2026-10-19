@@ -155,8 +155,8 @@
         "shields/analyser-carrier/bom.csv",
         "shields/analyser-carrier/socket-assembly.csv"
       ],
-      "source sha256": "e78812d97e97dae8204b170f4b6208cd800f0c9f8939b5430a32d56205de39cd",
-      "exported at": "2026-10-11T21:15:16",
+      "source sha256": "eaef123db3b28f2ac098f2e9b077cf5631b98ef781c273948c8de1805891102b",
+      "exported at": "2026-10-19T13:18:54",
       "exported with": "KiCad 9.0.7",
       "copper layers": 2,
       "size mm": [

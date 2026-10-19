@@ -15,9 +15,9 @@ def circuit():
  for i,body in enumerate(BODY):
   n=i+1
   d.add(f'M{n}','DFR0126 MODIFIED / PLUG-IN','Shields:DFR0126_PlugIn_Photo',
-        {'1':body+'/analyser out','2':'MEGA_5V','3':'AGND','4':body+'/microphone','5':'MEGA_5V','6':'AGND','7':'analyser/reset','8':'analyser/strobe'},body,
-        names={'1':'L_REPURPOSED_OUT','2':'+5V','3':'GND','4':'R_MIC','5':'+5V','6':'GND','7':'RESET','8':'STROBE'},
-        description='Modified module: remove module R4 (left-input 22K), jumper isolated L to OUT, fit downward 2.54mm headers. Carrier sockets: one 1x6 and one 1x2. Photo-derived geometry.',mpn='DFR0126 + 1x6/1x2 sockets',ds='https://wiki.dfrobot.com/dfr0126/')
+        {'1':body+'/microphone','2':'MEGA_5V','3':'AGND','4':body+'/analyser out','5':'MEGA_5V','6':'AGND','7':'analyser/reset','8':'analyser/strobe'},body,
+        names={'1':'L_MIC','2':'+5V','3':'GND','4':'R_REPURPOSED_OUT','5':'+5V','6':'GND','7':'RESET','8':'STROBE'},
+        description='Modified module: remove module R3 (right-input 22K), jumper isolated R to OUT, microphone on L, fit downward 2.54mm headers. Carrier sockets: one 1x6 and one 1x2. Photo-derived geometry.',mpn='DFR0126 + 1x6/1x2 sockets',ds='https://wiki.dfrobot.com/dfr0126/')
   d.tp(f'TPA{i}',body+'/analyser out',body)
  d.tp('TPG','AGND','interface');d.tp('TP5','MEGA_5V','interface')
  return d
@@ -37,7 +37,7 @@ def footprint():
   pad.SetDrillShape(p.PAD_DRILL_SHAPE_OBLONG if slot else p.PAD_DRILL_SHAPE_CIRCLE)
   pad.SetSize(xy(5.74 if slot else 3.2,3.2));pad.SetDrillSize(xy(5.74 if slot else 3.2,3.2));pad.SetLayerSet(p.LSET.AllCuMask());f.Add(pad)
  # Component-side projection: six inline L/+/-/R/+/- contacts and R/S control.
- # Module L is isolated by removing R4 and rewired to its output before fitting.
+ # Module R is isolated by removing R3 and rewired to its output before fitting.
  for number,x,y in [(i+1,3.81+i*2.54,-5.08) for i in range(6)]+[(7,16.51,17.78),(8,19.05,17.78)]:
   pad=p.PAD(f);pad.SetNumber(str(number));pad.SetAttribute(p.PAD_ATTRIB_PTH);pad.SetShape(p.PAD_SHAPE_RECT if number in [1,7] else p.PAD_SHAPE_OVAL)
   pad.SetPosition(xy(x,y));pad.SetSize(xy(1.7,1.7));pad.SetDrillSize(xy(1,1));layers=p.LSET.AllCuMask();layers.AddLayer(p.F_Mask);layers.AddLayer(p.B_Mask);pad.SetLayerSet(layers);f.Add(pad)
@@ -55,11 +55,11 @@ def footprint():
 
 def operating_labels(b):
  text(b,'DFROBOT PLUG-IN CARRIER - MODIFIED MODULES ONLY',125,51.5,.9)
- text(b,'MODULE: REMOVE R4 / LINK L TO OUT',125,82,.9,p.B_SilkS)
+ text(b,'MODULE: REMOVE R3 / LINK R TO OUT',125,82,.9,p.B_SilkS)
  for i,body in enumerate(['F1','F2','F3','M1','M2']):
   x=68+i*29
   text(b,f'MODULE {i} - {body}',x,56,.9)
-  text(b,'OUT + - MIC + -' if i else '- + MIC - + OUT',x,61 if i else 96,.8)
+  text(b,'MIC + - OUT + -' if i else '- + OUT - + MIC',x,61 if i else 96,.8)
   text(b,'R  S' if i else 'S  R',x+8.89 if i else x-8.89,89 if i else 67.5,.8)
   text(b,f'ANA {i}',x-6,100,.8)
   text(b,'PHOTO GRID / VERIFY FIT',x,75,.8,p.F_Fab)
@@ -90,6 +90,6 @@ def main():
  operating_labels(b)
  b.BuildConnectivity();p.SaveBoard(str(folder/'analyser-carrier-placed.kicad_pcb'),b);project(folder,'analyser-carrier')
  (folder/'fp-lib-table').write_text('(fp_lib_table (version 7) (lib (name "Shields") (type "KiCad") (uri "${KIPRJMOD}/../Shields.pretty") (options "") (descr "Local footprints")))')
- (folder/'mechanical.json').write_text(json.dumps({'basis':'User-authorized photo inference on assumed 2.54mm grid, 2026-10-07; not a measured manufacturer drawing','hole_spacing_mm':HOLE_SPACING,'round_hole_mm':3.2,'slot_mm':[5.74,3.2],'nominal_spacing_range_mm':[19.05,21.59],'module_reserved_envelope_mm':[29,32],'board_mm':[150,55],'module_origins_mm':[[78.16,88,180]]+[[68+i*29-HOLE_SPACING/2,68,0] for i in range(1,5)],'carrier_to_backplane_translation_mm':[25,215],'short_leads':False,'module_modification':'Remove R4; link isolated L to OUT; downward headers','socket_grid_mm':[[i+1,3.81+i*2.54,-5.08] for i in range(6)]+[[7,16.51,17.78],[8,19.05,17.78]],'physical_fit_verified':False},indent=2)+'\n')
+ (folder/'mechanical.json').write_text(json.dumps({'basis':'User-authorized photo inference on assumed 2.54mm grid, 2026-10-07; not a measured manufacturer drawing','hole_spacing_mm':HOLE_SPACING,'round_hole_mm':3.2,'slot_mm':[5.74,3.2],'nominal_spacing_range_mm':[19.05,21.59],'module_reserved_envelope_mm':[29,32],'board_mm':[150,55],'module_origins_mm':[[78.16,88,180]]+[[68+i*29-HOLE_SPACING/2,68,0] for i in range(1,5)],'carrier_to_backplane_translation_mm':[25,215],'short_leads':False,'module_modification':'Remove R3; link isolated R to OUT; microphone on L; downward headers','socket_grid_mm':[[i+1,3.81+i*2.54,-5.08] for i in range(6)]+[[7,16.51,17.78],[8,19.05,17.78]],'physical_fit_verified':False},indent=2)+'\n')
  print('analyser-carrier: generated',len(d['components']),'components')
 if __name__=='__main__':main()

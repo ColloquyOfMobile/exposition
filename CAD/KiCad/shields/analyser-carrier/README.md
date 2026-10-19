@@ -12,14 +12,11 @@ following conversion. The user chose L for the microphone on 2026-10-19;
 until then the conversion was the mirror image (R4 removed, L to OUT,
 microphone on R). The white output connector can remain fitted but is unused.
 
-> **The copper does not follow this yet.** `scripts/carrier.py`, the routed
-> board, its silkscreen, `mechanical.json`, `mounting-template.svg` and the
-> manufacturing package still have the earlier assignment: contact 1 =
-> `analyser out` (converted L), contact 4 = `microphone` (R). Contacts 1 and
-> 4 swap at all five sites, and the carrier is re-routed, before it is
-> ordered (`../RELEASE_REVIEW.md` F7). **Never plug a module converted as
-> below into a carrier made from the current files**: the microphone would
-> drive the MSGEQ7's OUT, and the Mega's ADC pin would sit on the L input.
+The 2026-10-19 carrier revision follows this assignment at all five sites:
+contact 1 = `microphone` (L), contact 4 = `analyser out` (converted R).
+Schematic, copper, silkscreen, mechanical notes and fabrication packages
+use the same mapping. Older carrier artwork requires the earlier module
+conversion; do not mix revisions. Physical socket fit still needs checking.
 
 ## Convert each module
 
@@ -73,9 +70,8 @@ Coordinates are **photo-derived assumptions**, not a manufacturer land pattern.
 | 8 | 19.05 | 17.78 | S strobe |
 
 All module +5V contacts use MEGA_5V; all module grounds use AGND. No digital
-GND bond is added. The microphone signal feeds the L input. This table is
-the specification; the current copper still has contacts 1 and 4 the other
-way round (see the note at the top).
+GND bond is added. The microphone signal feeds the L input. This table
+matches the current schematic and copper.
 ANA0-4, AGND and MEGA5V probe pads remain accessible. Leave the carrier out
 when the Teensy adapter is fitted.
 
