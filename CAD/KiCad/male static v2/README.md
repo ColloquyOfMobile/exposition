@@ -27,6 +27,36 @@ parts are in `3dmodels/`. Use insulating clamps and M2 fixings. Confirm
 module dimensions, underside clearance, slot fit, screw length and room for
 the knob/cables inside the male body before making mating hardware.
 
+## Fit requirements for the GF1002's contact row (2026-10-19)
+
+The reference module had its contacts in the wrong place. The module's nine
+contacts are **one row along its right-hand long edge**, opposite the shaft
+(`../shields/gf1002-reference/README.md`). On this board that row lies at
+about **X = 58.55 mm, Y = 56.2 + 2.54·n mm** (n = 0 to 10, with n = 3 and 6
+empty). From the pot end: input R, G, L, then supply +, −, then the LOUT
+pair, then the ROUT pair. These values come from a photo and are good to
+about 0.5 mm.
+
+**As drawn, this board does not fit the module.** Clamp H2 at (62.5, 74.5)
+reaches 1.5 mm onto the module across Y = 73.75 to 75.25, so its lip lands
+on the contact row at the first LOUT contact (Y ≈ 74.0). The next revision
+must meet the requirements in `../female base v2/README.md`, at this
+board's coordinates:
+
+1. Nothing over the module's right-hand 3.5 mm (X = 56.5 to 60) along its
+   full length.
+2. H1 stays on the shaft edge. The second fixing goes on the short edge
+   away from the pot (Y = 85), or the module is held by its own contact row.
+   Check R1, R2, C1 and C2 around (50 to 58, 88 to 93) against a clamp
+   there.
+3. Either cut the module's pins flush, or add a matching 1 × 11, 2.54 mm
+   row of plated holes under the contact row, which can carry JA1's
+   connections instead of wires.
+4. If wires stay, JA1 moves from (43, 91) to beside the contact row. Audio
+   goes to the R input, with the speaker on ROUT.
+5. Measure one module first, then lay it on a 1:1 print of the revised
+   board.
+
 Small connectors have moved to leave room for the module and shaft. J9 is
 rotated 90 degrees; its pad order is retained. J3 remains microphone; J1,
 J4, J8 and J9 remain the four photosensors; J5 is body NeoPixel, J11 is bar

@@ -35,6 +35,47 @@ knob dimensions and clamp fit need measuring on the physical GF1002.
 The clamp's nominal 1.6 mm slot is provisional; adjust fit/tolerance and
 support geometry after measurement. No module solder-pad pitch is assumed.
 
+## Fit requirements for the GF1002's contact row (2026-10-19)
+
+The reference module had its contacts in the wrong place. The module's nine
+contacts are **one row along its right-hand long edge**, opposite the shaft
+(`../shields/gf1002-reference/README.md`). On this board that row lies at
+about **X = 49.55 mm, Y = 56.2 + 2.54·n mm** (n = 0 to 10, with n = 3 and 6
+empty). From the pot end: input R, G, L, then supply +, −, then the LOUT
+pair, then the ROUT pair. These values come from a photo and are good to
+about 0.5 mm.
+
+**As drawn, this board does not fit the module.** Clamp H2 at (53.5, 74.5)
+reaches 1.5 mm onto the module across Y = 73.75 to 75.25, so its lip lands
+on the contact row at the first LOUT contact (Y ≈ 74.0). Solder joints and
+any pin ends stand proud of the module there. The next revision must meet
+these requirements:
+
+1. **Contact strip clear.** Nothing may sit over the module's right-hand
+   3.5 mm (X = 47.5 to 51) along its full length: no clamp, lip, screw
+   head or wire pad.
+2. **Hold the module elsewhere.** H1, on the shaft edge, stays. The second
+   fixing goes on the short edge away from the pot (Y = 85; the last
+   contact is about 3.4 mm inside it), or the module is held by its own
+   contact row (item 3). C1 at (41, 91) and C2 at (38, 88) are in the way
+   of a clamp centred on that edge.
+3. **Under the row.** The modules on Thomas's carriers have pins soldered
+   through these contacts. Either the pins are cut flush, or the board
+   gets a matching 1 × 11, 2.54 mm row of plated holes under the contact
+   row. That row can then carry JA1's six connections instead of wires, as
+   Thomas's perfboard does, and the header's plastic sets the 3 mm gap.
+4. **Short wires, on the contact side.** If wires stay, JA1 moves beside
+   the row rather than below the module at (31, 91): Thomas's document asks
+   for short class-D leads. Audio goes to the R input, with the speaker on
+   ROUT, as on Thomas's carrier.
+5. **Measure one module first.** Check the width and length (a listing
+   gives 20.2 × 29.5 mm; the clamp towers leave 0.25 mm at 20 mm), the
+   row's distance from the right edge (≈ 1.45 mm), the first contact's
+   distance from the pot end (≈ 1.2 mm), the pin length below the module,
+   and the pot body's overhang past the left edge (≈ 3 mm in the photo; the
+   model has 1 mm). Then lay the module on a 1:1 print of the revised board
+   before ordering it.
+
 The smaller JST connectors have moved to clear the module. Their references,
 pin orders, drills and electrical purposes are retained: J2 mirror servo,
 J4 photosensor, J5 NeoPixel, J3 microphone and J6 speaker. Consult the

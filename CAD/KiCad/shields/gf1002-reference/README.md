@@ -16,8 +16,58 @@ These are **photo-derived mechanical studies, not fabrication designs**.
 Thomas calls the module **GF1002**; the photographed IC marking is not legible
 enough to identify its chip. No electrical schematic, nets, routing, operating
 voltage, gain or component values have been reconstructed. The small component
-footprints and four lower-edge contacts are illustrative; their electrical
-functions and precise positions remain unknown. Perfboard pads have no nets.
+footprints are illustrative. **The four lower-edge contacts are wrong**: see
+the correction below. Perfboard pads have no nets.
+
+## Correction, 2026-10-19: the module's contacts
+
+The module's contacts are **nine pads in one row along its right-hand long
+edge**, the edge opposite the volume shaft, on a 2.54 mm grid of eleven
+positions. They are read from Thomas's photo (`source/reference-photo.jpg`),
+where they sit in the perfboard's holes, so the pitch is the perfboard's.
+The three groups agree with a PAM8403 board of the same kind
+([Protosupplies](https://protosupplies.com/product/pam8403-mini-stereo-audio-amp/):
+input L/G/R, power −/+, speakers ROUT−/ROUT+/LOUT−/LOUT+).
+
+Coordinates are from the module's corner at the pot end, on the side away
+from the shaft: Y along the edge, away from the pot. The row is about
+**1.45 mm in from the edge**. Read from the photo, so each value is good to
+about 0.5 mm.
+
+| Position | Contact | Y, mm (1.2 + 2.54 per position) | Photo, mm |
+|---:|---|---:|---:|
+| 1 | input R | 1.2 | 1.2 |
+| 2 | input G | 3.7 | 3.7 |
+| 3 | input L | 6.3 | 6.4 |
+| 4 | none | 8.8 | |
+| 5 | power + | 11.4 | 11.6 |
+| 6 | power − | 13.9 | 14.2 |
+| 7 | none | 16.4 | |
+| 8, 9 | LOUT pair | 19.0, 21.5 | 19.0, 21.5 |
+| 10, 11 | ROUT pair | 24.1, 26.6 | 24.3, 27.1 |
+
+The silkscreen reads `R G L` under `input`, `power` with `+` on the input
+side, then `Lout` and `rout`. Polarity within the two output pairs is not
+legible in the photo. Thomas's speaker is on the ROUT pair (his Figure 6);
+on a stereo board of this kind that pair is driven from the R input.
+
+**Size**: 29.5 × 20.2 mm, 15 mm overall
+([Tindie listing that names the model GF1002](https://www.tindie.com/products/robotart/pam8403-mini-5v-digital-amplifier-board/):
+"Dimensions: 29.5 * 20.2 * 15mm"). The model's 20 × 30 mm is within 0.5 mm
+of that. In the photo the pot body overhangs the shaft-side edge by about
+3 mm; the model has 1 mm.
+
+These are seller listings and a photo, not a datasheet: **measure one
+module** before a footprint depends on them (row offset, first contact,
+pin length below the board, pot overhang).
+
+**Not yet regenerated**: `build_reference.py` still draws the four lower-edge
+contacts, and so do this folder's STEP models and previews, the
+`gf1002-reference` sheet in the 1:1 fit-check pack, and the body scenes in
+`../assembly-3d/`. The two body boards built from this model do not fit the
+real contact row: `../../female base v2/README.md` and
+`../../male static v2/README.md` state what their next revision must leave
+clear (`../RELEASE_REVIEW.md` F8).
 
 ## Geometry and uncertainty
 
@@ -28,7 +78,7 @@ No dimensions have been confirmed on a physical sample.
 
 | Feature | Reference value | Basis |
 |---|---:|---|
-| Module outline | 20 × 30 mm | Photo estimate |
+| Module outline | 20 × 30 mm | Photo estimate; a listing gives 20.2 × 29.5 mm (correction above) |
 | Carrier outline | 40 × 60 mm | Photo estimate |
 | Both PCB thicknesses | 1.6 mm | Assumed |
 | Carrier perfboard grid | 16 × 23 positions, 2.54 mm pitch | Representative standard grid |
