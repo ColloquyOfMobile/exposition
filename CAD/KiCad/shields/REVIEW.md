@@ -55,5 +55,7 @@ component-selection notes for obsolete circuits are archived under obsolete/.
 The analyser carrier now uses female sockets beneath modified modules. No
 module-to-carrier leads remain. Each module requires removal of its left-input
 22K resistor R4, an on-module jumper from isolated L to OUT, and downward
-male headers. Read analyser-carrier/README.md before assembly. Socket positions
+male headers (superseded 2026-10-19: the microphone goes into L, R3 is
+removed and R jumpered to OUT; see README.md). Read
+analyser-carrier/README.md before assembly. Socket positions
 are photo-derived; check all contacts against the updated 1:1 template.

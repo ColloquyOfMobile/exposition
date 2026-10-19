@@ -42,7 +42,10 @@ approximate move to X=70.825 mm. The carrier's two-pin sockets have now also
 moved 1.27 mm to match, including their attached tracks. The STEP exporter uses this
 origin (its Cartesian Y axis is opposite the PCB editor's downward Y axis).
 
-R4 is omitted for the previously documented L-to-OUT plug-in modification.
+R4 is omitted for the L-to-OUT plug-in modification as it stood until
+2026-10-19. The microphone now goes into L, so the conversion removes R3
+and jumpers R to OUT instead; the model has not been rebuilt for it. The
+difference is one small resistor and does not change the fit.
 The tiny insulated jumper is not modelled. See the carrier README for electrical
 conversion instructions. No schematic, tracks or fabrication outputs were
 created for this mechanical study.

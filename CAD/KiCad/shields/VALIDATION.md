@@ -27,6 +27,9 @@ The carrier's JA1 and retention coordinates match the backplane. All five
 module socket pinouts, photo-derived pad coordinates and round/slot drilling
 geometry pass independent checks. The carrier now requires modified modules:
 remove R4 and jumper L to OUT; there are no module-to-carrier cables.
+(That is the copper validated here. On 2026-10-19 the specification moved
+the microphone to L, with R3 removed and R jumpered to OUT; the carrier is
+re-routed and re-validated for it before ordering.)
 Actual module fit is photo-derived and remains a physical check.
 
 The updated backplane also passes native housing pad/via keepouts and +12V

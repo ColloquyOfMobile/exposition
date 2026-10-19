@@ -57,6 +57,7 @@ Found, and still open:
 | F4 | **The documents disagree about release.** `README.md` says "no fabrication release or Gerber order package"; MANUFACTURING.md describes the packages; REVIEW.md is dated 2026-10-08 (basis `79e994b`) and predates the 2026-10-13 changes | the order must rest on one stated basis |
 | F5 | **Fit is unproven where it was inferred**: DFRobot socket positions are photo-derived; the clone MAX9814's pin and hole grid and seated height; the Mega's USB-B shell against the 11 mm stack; HM1-HM4 spacers of 4 mm OD at most; every height against the enclosure | a board that does not fit is a re-order; each needs the real part on a 1:1 print |
 | F6 | Board-setup minimums are 0 on the analyser carrier (clearance, track) and the voice card (track) | DRC there checks netclass values only, not what the fab can make |
+| F7 | **Blocker, 2026-10-19: the carrier's copper still puts the microphone on R.** The spec now puts it on L (R3 removed, R jumpered to OUT: SHIELDS.md 4b, `analyser-carrier/README.md`). `scripts/carrier.py` and `verify.py`, the routed board, its silkscreen (`OUT + - MIC + -`, `MODULE: REMOVE R4 / LINK L TO OUT`), `mechanical.json`, `mounting-template.svg`, both Gerber packages and the 1:1 fit-check pack still have contact 1 = `analyser out`, contact 4 = `microphone` | a module converted to the spec, on a carrier made from these files, drives the MSGEQ7's OUT with the microphone and puts the Mega's ADC pin on L. Swap contacts 1 and 4 at all five sites, re-route, re-run check/verify, re-plot both packages |
 
 ## 1. Scope of this order (project manager)
 
@@ -142,8 +143,9 @@ holder, then the adapter if it is in the order.
       50 mm scale bar, and lay **one converted module** on it: all eight
       pins and both holes. Do this before ordering (README there).
 - [ ] Module 0 is rotated 180 degrees: the silkscreen shows it.
-- [ ] The module conversion (R4 removed, L jumpered to OUT) is written
-      where the person fitting it will read it.
+- [ ] The module conversion (R3 removed, R jumpered to OUT, microphone
+      on L) is written where the person fitting it will read it, and the
+      carrier's silkscreen says the same (F7).
 
 ### 2.5 Microphone holder
 

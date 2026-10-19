@@ -6,28 +6,42 @@ Five modified DFR0126 Audio Analyzer V2.0 modules plug directly into this
 mate with them; no module-to-carrier cables are used. The carrier's keyed
 JA1 connector and two retention holes still match the backplane.
 
-**Unmodified modules must not be plugged in.** The output is brought to the
-unused left-input header by the following conversion, authorized by the user.
-The white output connector can remain fitted but is unused.
+**Unmodified modules must not be plugged in.** The microphone feeds the
+module's L input. The output is brought to the R-input header by the
+following conversion. The user chose L for the microphone on 2026-10-19;
+until then the conversion was the mirror image (R4 removed, L to OUT,
+microphone on R). The white output connector can remain fitted but is unused.
+
+> **The copper does not follow this yet.** `scripts/carrier.py`, the routed
+> board, its silkscreen, `mechanical.json`, `mounting-template.svg` and the
+> manufacturing package still have the earlier assignment: contact 1 =
+> `analyser out` (converted L), contact 4 = `microphone` (R). Contacts 1 and
+> 4 swap at all five sites, and the carrier is re-routed, before it is
+> ordered (`../RELEASE_REVIEW.md` F7). **Never plug a module converted as
+> below into a carrier made from the current files**: the microphone would
+> drive the MSGEQ7's OUT, and the Mega's ADC pin would sit on the L input.
 
 ## Convert each module
 
-1. With power disconnected, remove **module R4, the 22K left-input summing
+1. With power disconnected, remove **module R3, the 22K right-input summing
    resistor**. This is on the DFRobot module, not the carrier. If reference
-   markings differ, identify the resistor between L and the input summing
-   node from the schematic/continuity before removing it. Leave R3 (right
-   input) and the MSGEQ7 clock/reference parts in place.
-2. Link the now-isolated **L signal terminal to OUT**, using a short insulated
+   markings differ, identify the resistor between R and the input summing
+   node from the schematic/continuity before removing it. Leave R4 (left
+   input, the microphone's path) and the MSGEQ7 clock/reference parts in place.
+2. Link the now-isolated **R signal terminal to OUT**, using a short insulated
    jumper on the module's component side. OUT is MSGEQ7 pin 3 and the signal
    contact of the white output connector. Do not connect it to +5V or GND.
-   R4 must be removed first; otherwise this feeds output back into the input.
+   R3 must be removed first; otherwise this feeds output back into the input.
 3. Refit the input connector positions as a downward-facing 1x6 male header
    (or two aligned 1x3 headers) and the control connector as a downward-facing
-   1x2 male header. All eight mating pins point toward the carrier. Mark L as
-   OUT permanently. The L input is no longer available for audio.
-4. Before power, check continuity OUT-to-converted-L, supply polarity at the
-   mating pins, and isolation of converted L from the removed R4 summing-side
-   pad. Check there is no solder bridge between +5V and ground.
+   1x2 male header. All eight mating pins point toward the carrier. Mark R as
+   OUT permanently. The R input is no longer available for audio.
+4. Before power, check continuity OUT-to-converted-R, continuity from L to
+   R4, supply polarity at the mating pins, and isolation of converted R from
+   the removed R3 summing-side pad. Check there is no solder bridge between
+   +5V and ground. Confirm with the meter that the header pin reaching R4 sits
+   at contact 1 and the one reaching R3 at contact 4: the L-then-R order of
+   the two groups is photo-derived (below).
 5. Seat the module fully in both sockets, then select nylon standoffs/shims
    matching that seated PCB gap. Do not force a predetermined spacer height
    against the sockets. M3 hardware retains the module; it does not pull the
@@ -36,6 +50,9 @@ The white output connector can remain fitted but is unused.
 DFRobot's V2 schematic identifies R4 as the left branch, R3 as the right,
 and U1.3 as OUT:
 https://dfimg.dfrobot.com/wiki/17648/DFR0126_msgeq7-spectrum-analyzer-module_schematics_V1.pdf
+Both branches are 22K into one node, then C4 (0.01 uF) into MSGEQ7 IN, so
+L and R are electrically interchangeable: the choice only decides which
+header pin carries the microphone.
 
 ## Socket mapping
 
@@ -46,17 +63,19 @@ Coordinates are **photo-derived assumptions**, not a manufacturer land pattern.
 
 | Contact | Local X mm | Local Y mm | Signal / module marking |
 |---|---:|---:|---|
-| 1 | 3.81 | -5.08 | OUT, formerly L |
+| 1 | 3.81 | -5.08 | L microphone input |
 | 2 | 6.35 | -5.08 | +5V (left group) |
 | 3 | 8.89 | -5.08 | GND (left group) |
-| 4 | 11.43 | -5.08 | R microphone input |
+| 4 | 11.43 | -5.08 | OUT, formerly R |
 | 5 | 13.97 | -5.08 | +5V (right group) |
 | 6 | 16.51 | -5.08 | GND (right group) |
 | 7 | 16.51 | 17.78 | R reset |
 | 8 | 19.05 | 17.78 | S strobe |
 
 All module +5V contacts use MEGA_5V; all module grounds use AGND. No digital
-GND bond is added. The original microphone signal still feeds the R input.
+GND bond is added. The microphone signal feeds the L input. This table is
+the specification; the current copper still has contacts 1 and 4 the other
+way round (see the note at the top).
 ANA0-4, AGND and MEGA5V probe pads remain accessible. Leave the carrier out
 when the Teensy adapter is fitted.
 

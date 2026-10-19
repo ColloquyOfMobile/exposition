@@ -51,6 +51,14 @@ parts, including R3 (100K 0603). Voice-card and analyser-carrier manufacturing
 ZIPs omit machine-placement and stencil files; all-component positions and
 BOMs remain manual assembly references.
 
+## Microphone on the module's L input — 2026-10-19
+
+Each DFRobot module now takes its microphone on L, so the conversion moves to
+the right channel: remove R3 (the right-input 22K) and jumper the isolated R
+to OUT. SHIELDS.md 4b and analyser-carrier/README.md say so. The carrier's
+copper, silkscreen and manufacturing package still have the earlier
+assignment; they are re-routed before ordering (RELEASE_REVIEW.md F7).
+
 ## Front computing slot and servo supply — 2026-10-08
 
 The 2026-10-08 backplane also puts the computing slot on the DSUB/front face,
@@ -65,5 +73,6 @@ rules and independent verification.
 The analyser carrier now uses female sockets beneath modified modules. No
 module-to-carrier leads remain. Each module requires removal of its left-input
 22K resistor R4, an on-module jumper from isolated L to OUT, and downward
-male headers. Read analyser-carrier/README.md before assembly. Socket positions
+male headers (since 2026-10-19: R3 and R instead, above). Read
+analyser-carrier/README.md before assembly. Socket positions
 are photo-derived; check all contacts against the updated 1:1 template.

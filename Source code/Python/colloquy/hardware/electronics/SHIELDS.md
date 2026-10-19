@@ -588,17 +588,29 @@ timing capacitor).
 (DFR0126) already bought and on Thomas's array**: each one an MSGEQ7
 with its own clock, reference and input parts, and its own `PWR` LED. The
 shield is a plain carrier for them, through-hole only: it holds the five
-on M3 nylon standoffs through their own mounting holes and wires them as
-Thomas's proto board does, with nothing between a microphone and its
-module.
+on M3 nylon standoffs through their own mounting holes and wires each
+microphone straight to its module, with nothing between them.
 
 | Per module | Connects to | As on Thomas's array |
 |---|---|---|
-| input header `R` (right channel) | its body's `microphone` | the microphone goes into `R`; `L` is unused |
+| input header `L` (left channel) | its body's `microphone` | **no**: his microphones go into `R`. Here they go into `L` (decided 2026-10-19) |
 | input header `+` and `−` | `MEGA_5V` and AGND | the module's supply: the rail the Mega reads against |
 | control `S` | `analyser/strobe` | commoned across all five |
 | control `R` (reset) | `analyser/reset` | commoned across all five |
-| output connector | its `analyser out` net | the module's own 3-pin lead |
+| input header `R`, converted to the output | its `analyser out` net | **no**: his output leaves on the module's own 3-pin lead |
+
+**The output comes down on `R`.** The module plugs into the carrier by its
+headers alone, and the white output connector has no socket there, so each
+module is converted: remove `R3` (the right input's 22K) and jumper the
+isolated `R` pin to `OUT` (MSGEQ7 pin 3). `R` is then the output, and `L`
+is the only input. Both inputs are the same 22K into one node, then 0.01 µF
+into the MSGEQ7's `IN` (DFRobot's V2 schematic), so which one carries the
+microphone changes nothing in what the analyser hears.
+`analyser-carrier/README.md` has the steps.
+
+The carrier's copper still has the earlier assignment (microphone on `R`,
+`L` converted, `R4` removed) and is re-routed before ordering
+(`RELEASE_REVIEW.md` F7).
 
 **Measure one module before drawing the carrier.** DFRobot gives only
 "5 V, 30 × 20 mm"; the hole spacing and where its headers sit decide
@@ -822,7 +834,8 @@ Covered once a shield is in, and read when one is going in.
 
 `ANALYSER CARRIER · 5 × DFROBOT AUDIO ANALYZER · MEGA ONLY`; at each site
 `MODULE 0 · F1` … `MODULE 4 · M2`, and beside its connections
-`IN R ← MIC · + 5V · − GND` and `R RESET · S STROBE`. Test pads `ANA 0`–
+`L ← MIC · R → OUT · + 5V · − GND` and `R RESET · S STROBE`, and on the
+back `MODULE: REMOVE R3 / LINK R TO OUT`. Test pads `ANA 0`–
 `ANA 4`, `MEGA 5V`, `AGND`.
 
 ### Voice cards
