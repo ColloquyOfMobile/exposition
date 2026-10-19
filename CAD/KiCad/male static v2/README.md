@@ -4,11 +4,37 @@ Open `male-static-v2.kicad_pro` in KiCad 9. This new project includes the
 schematic, routed PCB, assembled STEP model, previews, BOM and verification
 reports. The original `../male static/` files are preserved.
 
-The **GF1002 module itself** mounts on the main board using two insulating
-M2 edge clamps. Thomas's perforated prototype carrier is absent. Short
-individually identified wires connect the module to JA1; an assumed module
-solder-pin pattern is not used. The board is an engineering prototype,
-subject to physical module and installation measurements.
+The **GF1002 module itself** mounts on the main board; Thomas's perforated
+prototype carrier is absent. **Specification (revision D, 2026-10-19): the
+module plugs into a 1 × 11 female socket through male header pins on its
+contact row**, as on the female base. The board files here are still
+**revision C**: two insulating M2 edge clamps, and six hand wires to JA1.
+They are regenerated to revision D before ordering. The board is an
+engineering prototype, subject to physical module and installation
+measurements.
+
+## Revision D specification: plug-in on header pins (2026-10-19)
+
+Everything in `../female base v2/README.md` under revision D applies: the
+socket, the module's headers, the pin-to-net table, height, supports, what
+is removed, schematic and checks, the routing rules and the measurements
+before ordering. At this board's coordinates:
+
+- **Socket**: centre line at X = 58.55 mm (module origin (40, 55) + 18.55).
+  Pin 1 is at the pot end at Y = 56.2 mm, and pin n at 56.2 + 2.54·(n − 1).
+- **Supports**: H1 (37.5, 74.5) and H2 (50.1, 87.5) become supports at the
+  measured stack height, about 11 mm. The pot then stands about **28 mm**
+  above the board, 8 mm higher than revision C, and the shaft rises with
+  it. Check both inside the male body.
+- **Output**: J6, the speaker, sits at (66.5, 47), about 33 mm from socket
+  pins 10 and 11. Bring it closer if the layout allows; either way, the
+  ROUT pair runs side by side. Revision C runs the output 9.4 mm alongside
+  `AUDIO_RETURN` and 4.3 mm alongside `AMP_INPUT`, within 2 mm on the same
+  layer; the routing rules forbid both.
+- **Supply**: C2 sits directly beside socket pins 5 and 6 and C1 close by;
+  revision C has C2 about 28 mm away, at (40.5, 88).
+- **Input**: R1 and R2 move beside socket pins 1 and 2; revision C has
+  them at (58, 90) and (58, 94).
 
 ## Mechanical interface
 
@@ -22,7 +48,8 @@ STEP assemblies reopen with valid geometry; previews inspected.
 - Original DSUB position, pad centres, drills and harness pin order retained.
 - Provisional module outline: (40,55) to (60.2,85) mm.
 - New Ø2.2 mm clamp holes: (37.5,74.5) and (50.1,87.5) mm.
-- Module underside gap: 3 mm; module PCB top: 4.6 mm above main PCB.
+- Module underside gap: 3 mm; module PCB top: 4.6 mm above main PCB
+  (revision C; about 11 mm in revision D).
 - Shaft points left, approximately **7 mm beyond the main board edge**.
 - Reference height above carrier top: approximately **20 mm** at the pot.
 
@@ -32,7 +59,7 @@ parts are in `3dmodels/`. Use insulating clamps and M2 fixings. Confirm
 module dimensions, underside clearance, slot fit, screw length and room for
 the knob/cables inside the male body before making mating hardware.
 
-## Contact-row clearance revision C (2026-10-19)
+## Contact-row clearance revision C (2026-10-19), as drawn now; superseded by D
 
 The GF1002 reference now shows nine contacts along the long edge opposite
 the shaft, on an eleven-position 2.54 mm grid with positions 4 and 7 empty.
@@ -82,7 +109,7 @@ former speaker pair. Disconnect its original class-D output from that pair
 before using this board. J6 now goes only to the local GF1002 output:
 pin 1 ROUT+, pin 2 ROUT−, with neither terminal connected to ground.
 
-JA1's six solder pads connect by short wires: **1 VDD/5V, 2 supply GND,
+In revision C (replaced by the socket in revision D), JA1's six solder pads connect by short wires: **1 VDD/5V, 2 supply GND,
 3 divided Audio, 4 input GND/AUDIO_RETURN, 5 ROUT+, 6 ROUT−**. This is the
 carrier's pad order; identify the physical module contacts independently.
 The reference module's illustrative contacts do not define this wiring.
