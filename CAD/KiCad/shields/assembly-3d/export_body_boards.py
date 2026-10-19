@@ -2,13 +2,12 @@
 from pathlib import Path
 import hashlib
 import json
-import subprocess
 
 import pcbnew as p
+from visual_exports import export_visual
 
 ROOT = Path(__file__).resolve().parent
 CAD = ROOT.parent.parent
-CLI = Path('C:/Program Files/KiCad/9.0/bin/kicad-cli.exe')
 
 
 def main():
@@ -38,11 +37,7 @@ def main():
                 for fp in board.GetFootprints()
             },
         }
-        subprocess.run([
-            str(CLI), 'pcb', 'export', 'glb', '--force', '--subst-models',
-            '--user-origin', '0x0mm', '--include-pads', '--include-silkscreen',
-            '-o', str(ROOT / 'exports' / (name + '.glb')), str(source),
-        ], check=True)
+        data['visual_export'] = export_visual(source, ROOT / 'exports' / (name + '.glb'))
         (ROOT / 'exports' / (name + '.json')).write_text(json.dumps(data, indent=2) + '\n')
         print(name, 'exported with existing amplifier and both clamps', flush=True)
 

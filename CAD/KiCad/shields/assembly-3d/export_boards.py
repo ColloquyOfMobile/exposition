@@ -3,6 +3,7 @@ from pathlib import Path
 import json, math, re, shutil, subprocess, sys
 import numpy as np
 import pcbnew as p
+from visual_exports import export_visual
 ROOT=Path(__file__).resolve().parent
 SHIELDS=ROOT.parent
 LIB=Path('C:/Program Files/KiCad/9.0/share/kicad')
@@ -65,12 +66,13 @@ def main(name):
     meta={'source':str(source.relative_to(SHIELDS)),'extra_header_models':added,'unmodelled_bodies':missing,
           'footprints':{f.GetReference():{'xy':list(map(float,p.ToMM(f.GetPosition()))),'angle':f.GetOrientationDegrees(),
           'pads':{q.GetNumber():list(map(float,p.ToMM(q.GetPosition()))) for q in f.Pads() if q.GetNumber()}} for f in original}}
-    (ROOT/'exports'/(name+'.json')).write_text(json.dumps(meta,indent=2))
-    for fmt in ['step','glb']:
+    for fmt in ['step']:
         cmd=[str(CLI),'pcb','export',fmt,'--force','--subst-models','--user-origin','0x0mm','-o',str(ROOT/'exports'/(name+'.'+fmt))]
         if fmt=='glb':cmd+=['--include-pads','--include-silkscreen']
         with (ROOT/'logs'/(name+'-'+fmt+'.log')).open('w') as log:
             subprocess.run(cmd+[str(dest)],stdout=log,stderr=subprocess.STDOUT,check=True)
+    meta['visual_export']=export_visual(dest,ROOT/'exports'/(name+'.glb'),source)
+    (ROOT/'exports'/(name+'.json')).write_text(json.dumps(meta,indent=2)+'\n')
     print(name,'STEP/GLB exported;',len(added),'added connector bodies;',len(missing),'body proxies pending',flush=True)
 
 if __name__=='__main__':

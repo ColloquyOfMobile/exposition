@@ -420,5 +420,243 @@
         ]
       }
     }
+  },
+  "visual_export": {
+    "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
+    "source": "CAD/KiCad/shields/analyser-carrier/analyser-carrier.kicad_pcb",
+    "source_sha256": "60865066594c376e08733a0f9be754a277abc0163d77eac56159fb4cfb8b6f1d",
+    "visual_input_sha256": "786de84a65b87bdd3087ff380267af385765fd347a6eada0b1b53fff245629fb",
+    "native_vrml_sha256": "c0ff9ae7ec8c0c88c6302c95743e94a39b8a3fbb6a47f3ba77ee231032832ad0",
+    "models": [
+      {
+        "ref": "DFR_M3_control_VISUAL",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x02_P2.54mm_Vertical.step",
+        "sha256": "2ba6aa82de97b2d4407494139b38eca040f254144e7fec2dd853e04cc27e9860",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "DFR_M1_input_VISUAL",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x06_P2.54mm_Vertical.step",
+        "sha256": "e2c12b7d840a927c9ecbbc30b30daffec4c4c3c2bb950dda98a971dc59fdc0f4",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "DFR_M1_control_VISUAL",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x02_P2.54mm_Vertical.step",
+        "sha256": "2ba6aa82de97b2d4407494139b38eca040f254144e7fec2dd853e04cc27e9860",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "DFR_M4_control_VISUAL",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x02_P2.54mm_Vertical.step",
+        "sha256": "2ba6aa82de97b2d4407494139b38eca040f254144e7fec2dd853e04cc27e9860",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "DFR_M5_input_VISUAL",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x06_P2.54mm_Vertical.step",
+        "sha256": "e2c12b7d840a927c9ecbbc30b30daffec4c4c3c2bb950dda98a971dc59fdc0f4",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "DFR_M2_control_VISUAL",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x02_P2.54mm_Vertical.step",
+        "sha256": "2ba6aa82de97b2d4407494139b38eca040f254144e7fec2dd853e04cc27e9860",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "DFR_M5_control_VISUAL",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x02_P2.54mm_Vertical.step",
+        "sha256": "2ba6aa82de97b2d4407494139b38eca040f254144e7fec2dd853e04cc27e9860",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "DFR_M3_input_VISUAL",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x06_P2.54mm_Vertical.step",
+        "sha256": "e2c12b7d840a927c9ecbbc30b30daffec4c4c3c2bb950dda98a971dc59fdc0f4",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "DFR_M4_input_VISUAL",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x06_P2.54mm_Vertical.step",
+        "sha256": "e2c12b7d840a927c9ecbbc30b30daffec4c4c3c2bb950dda98a971dc59fdc0f4",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "DFR_M2_input_VISUAL",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x06_P2.54mm_Vertical.step",
+        "sha256": "e2c12b7d840a927c9ecbbc30b30daffec4c4c3c2bb950dda98a971dc59fdc0f4",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "JA1_VISUAL",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_2x11_P2.54mm_Vertical.step",
+        "sha256": "8dbcdd1769620126fb5b80683f4ee65eed0124c115da78b6b477669e98ea3da3",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    ],
+    "pcb_underside_z_mm": 0,
+    "mesh_counts": {
+      "models": 11,
+      "board_meshes": 7,
+      "vertices": 48842,
+      "faces": 39106,
+      "materials": 6
+    },
+    "glb_sha256": "f97354c389223816174a4c2f1b826398fd117f67327bffc674492a38c585630e"
   }
 }

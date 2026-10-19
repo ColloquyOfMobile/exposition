@@ -985,82 +985,6 @@
 			)
 		)
 	)
-	(footprint ""
-		(layer "F.Cu")
-		(uuid "2be99a04-b925-48df-8fd5-d98e1902e3f9")
-		(at 0 0)
-		(property "Reference" "VISUAL_MODULE_LEFT"
-			(at 0 0 0)
-			(layer "F.SilkS")
-			(hide yes)
-			(uuid "65cdefac-8a2a-4539-8ef5-758ae914ff57")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Value" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "e6033b82-706e-4317-ba6d-1dc3e50d8594")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "d322da41-675a-44aa-b307-6640368436d9")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "534737d9-e9e1-4f68-b81d-581369ca91c2")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(embedded_fonts no)
-		(model "C:/workspace/workspace2/Colloquy/exposition/CAD/KiCad/shields/microphone-flex/3dmodels/module-left.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-		(model "C:/workspace/workspace2/Colloquy/exposition/CAD/KiCad/shields/microphone-flex/3dmodels/supports-left.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-	)
 	(footprint "Shields:Flex_Socket_Side"
 		(layer "F.Cu")
 		(uuid "32dcbb5c-5e31-4802-bea1-94712040ea60")
@@ -1963,6 +1887,82 @@
 		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint ""
+		(layer "F.Cu")
+		(uuid "49063f38-cd3e-49cd-993b-3a997c9c05a1")
+		(at 0 0)
+		(property "Reference" "VISUAL_MODULE_LEFT"
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "0eefa70b-c59a-4ca5-8570-df60bf9d6143")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Value" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "cb5edd12-4e3d-4597-b158-79f3deb2c123")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f605fab1-976a-45f8-9b77-c5b9d95dea65")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "37530108-7dc1-4c64-87e9-88410d4ee3e3")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(embedded_fonts no)
+		(model "C:/workspace/workspace2/Colloquy/exposition/CAD/KiCad/shields/microphone-flex/3dmodels/module-left.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+		(model "C:/workspace/workspace2/Colloquy/exposition/CAD/KiCad/shields/microphone-flex/3dmodels/supports-left.step"
 			(offset
 				(xyz 0 0 0)
 			)

@@ -281,5 +281,263 @@
         ]
       }
     }
+  },
+  "visual_export": {
+    "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
+    "source": "CAD/KiCad/shields/dfrobot-module/dfrobot-module.kicad_pcb",
+    "source_sha256": "7e682edcf761faa1d2e4612960a97d42e1d59f44f535175ce02a5b95c4cc97d7",
+    "visual_input_sha256": "5847476aa17621370547cd82588e12164393fb8675c43a336f6d022218553823",
+    "native_vrml_sha256": "669687e9c019f6fedcabc4e65917e07ef0fd3c64490b7b6d7f7c9a9d8dae6d4b",
+    "models": [
+      {
+        "ref": "D1",
+        "file": "CAD/KiCad/shields/dfrobot-module/3dmodels/LED_0805_2012Metric.step",
+        "sha256": "0aa8b791804f5d72a2fc7d1bf231dd9959207d83df8ad801176fbc459f575b98",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C1",
+        "file": "CAD/KiCad/shields/dfrobot-module/3dmodels/C_0805_2012Metric.step",
+        "sha256": "9a669c1a2f1ea25b88b401acef6efeaa80a067bd7da9db6993de719a7fbe155c",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C2",
+        "file": "CAD/KiCad/shields/dfrobot-module/3dmodels/C_0805_2012Metric.step",
+        "sha256": "9a669c1a2f1ea25b88b401acef6efeaa80a067bd7da9db6993de719a7fbe155c",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "J1",
+        "file": "CAD/KiCad/shields/dfrobot-module/3dmodels/SMD_3pin_reference.step",
+        "sha256": "6f5c7509596ebd6038f1805ea93e5d2c9f54c066cf88d356cb54ed0a4c5a6070",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C3",
+        "file": "CAD/KiCad/shields/dfrobot-module/3dmodels/C_0805_2012Metric.step",
+        "sha256": "9a669c1a2f1ea25b88b401acef6efeaa80a067bd7da9db6993de719a7fbe155c",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C4",
+        "file": "CAD/KiCad/shields/dfrobot-module/3dmodels/C_0805_2012Metric.step",
+        "sha256": "9a669c1a2f1ea25b88b401acef6efeaa80a067bd7da9db6993de719a7fbe155c",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "R3",
+        "file": "CAD/KiCad/shields/dfrobot-module/3dmodels/R_0805_2012Metric.step",
+        "sha256": "ded342cdb394fb45395227beaaa75cc390613cf2581b29cd6d22c12abd6103b2",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "R2",
+        "file": "CAD/KiCad/shields/dfrobot-module/3dmodels/R_0805_2012Metric.step",
+        "sha256": "ded342cdb394fb45395227beaaa75cc390613cf2581b29cd6d22c12abd6103b2",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "U1",
+        "file": "CAD/KiCad/shields/dfrobot-module/3dmodels/DIP-8_W7.62mm.step",
+        "sha256": "4a377a56a8d9e9c0b86c095ef9ecc1869ac19e7f5069a3247b294250bf4f235d",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "R1",
+        "file": "CAD/KiCad/shields/dfrobot-module/3dmodels/R_0805_2012Metric.step",
+        "sha256": "ded342cdb394fb45395227beaaa75cc390613cf2581b29cd6d22c12abd6103b2",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "J2J3",
+        "file": "CAD/KiCad/shields/dfrobot-module/3dmodels/PinHeader_1x06_P2.54mm_Vertical.step",
+        "sha256": "d6113af109a14a67c50dcefd1cfc7b43b59b59afa85d808b2319e2452da91318",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "J4",
+        "file": "CAD/KiCad/shields/dfrobot-module/3dmodels/PinHeader_1x02_P2.54mm_Vertical.step",
+        "sha256": "ea4d0799007ebdd3945072bf255d673d2fe87eb05fda85fd8d7993ad9397da41",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    ],
+    "pcb_underside_z_mm": 0,
+    "mesh_counts": {
+      "models": 12,
+      "board_meshes": 8,
+      "vertices": 15210,
+      "faces": 12661,
+      "materials": 13
+    },
+    "glb_sha256": "71bb260bc7be97072b20989e29e12bed07853874554b4205f0cafeab48de2f2c"
   }
 }

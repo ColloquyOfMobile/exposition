@@ -2,15 +2,16 @@
 from pathlib import Path
 import hashlib
 import json
-import subprocess
+import sys
 
 import pcbnew as p
 
 ROOT=Path(__file__).resolve().parent
 ASSEMBLY=ROOT.parent/'assembly-3d'
+sys.path.insert(0,str(ASSEMBLY))
+from visual_exports import export_visual
 WORK=ROOT/'variants'
 WORK.mkdir(parents=True,exist_ok=True)
-CLI='C:/Program Files/KiCad/9.0/bin/kicad-cli.exe'
 
 
 def attach(fp,path):
@@ -36,10 +37,9 @@ def main():
             attach(dummy,ROOT/'3dmodels'/f'supports-{orientation}.step')
         staged=WORK/(orientation+'.kicad_pcb');p.SaveBoard(str(staged),board,True)
         dest=ASSEMBLY/'exports'/('microphone-flex-'+orientation+'.glb')
-        subprocess.run([CLI,'pcb','export','glb','--force','--subst-models','--user-origin','0x0mm',
-                        '--include-pads','--include-silkscreen','-o',str(dest),str(staged)],check=True)
+        visual=export_visual(staged,dest,source)
         meta={'source':'microphone-flex/microphone-flex.kicad_pcb','source_sha256':source_hash,
-              'orientation':orientation,'module_population':1,'physical_fit_verified':False,
+              'orientation':orientation,'module_population':1,'physical_fit_verified':False,'visual_export':visual,
               'footprints':{fp.GetReference():{'xy':list(map(float,p.ToMM(fp.GetPosition()))),
                   'angle':fp.GetOrientationDegrees(),
                   'pads':{q.GetNumber():list(map(float,p.ToMM(q.GetPosition()))) for q in fp.Pads() if q.GetNumber()}}

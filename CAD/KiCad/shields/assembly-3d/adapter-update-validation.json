@@ -11,5 +11,6 @@
       "reopened": true,
       "placement_preserved": true
     }
-  }
+  },
+  "superseded_by": "visual-geometry-validation.json (current Blender/export hashes, saved geometry and materials)"
 }

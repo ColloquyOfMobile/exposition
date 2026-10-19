@@ -11,7 +11,8 @@ and `Male body - mic left/right`; the plain body scenes show the upward option.
 These use the [32 × 62 mm slotted three-orientation holder](../microphone-flex/README.md).
 Exactly one module is fitted in each scene. Select the scene and press Numpad 0
 for its camera view. The prior edited body scenes are retained with
-`Rev B reference` in their names. The following original body-study description
+`ARCHIVE - ... Rev B reference` in their names. These retain their historical
+geometry and must not be used to compare with current KiCad boards. The following original body-study description
 still documents their nominal frame assumptions; current microphone views use Rev C and body boards use Rev D.
 The [three-position preview](microphone-positions-preview.png) compares the
 left, right and upward module choices on the same holder.
@@ -22,6 +23,41 @@ adjustable insulating supports match it. No hand wires or flush-cut tails
 are used. J6 and the analogue parts follow the paired, separated routing.
 Rack scenes and retained Rev B references remain unchanged. The nominal
 stack, pot height and actual module fit still require measurement.
+
+### Visual parity audit — 2026-10-19
+
+The earlier file-hash check did not establish visual parity. The GLB exporter
+substituted an uncoloured STEP compound for KiCad's coloured GF1002 WRL model,
+and omitted routed copper layers. All thirteen current board exports now use
+KiCad's native VRML visual export, including its model choices, colours, copper,
+mask and silkscreen. Engineering STEP exports are retained separately. The PCB
+underside remains Z=0 in the assembly exports; no board placement is changed.
+
+All current board instances in the combined, Mega and Teensy Blender files are
+refreshed in place. The two historical Rev B body scenes retain their geometry
+under explicit `ARCHIVE` names. Use **Female body**, **Male body**, or their
+left/right microphone variants for the current revision D boards.
+[visual-geometry-validation.json](visual-geometry-validation.json) supersedes
+earlier Blender/export hashes. It records a comparison after saving and reopening:
+actual vertices, face topology, assigned material colours, board transforms,
+scene populations, PCB hashes and individual model dependency hashes. This
+checks synchronization with the saved KiCad design, not manufactured fit.
+
+To refresh all current geometry while preserving assembly placements and edits,
+run from the repository root:
+
+```powershell
+& 'C:/Program Files/KiCad/9.0/bin/python.exe' 'CAD/KiCad/shields/assembly-3d/export_boards.py'
+& 'C:/Program Files/KiCad/9.0/bin/python.exe' 'CAD/KiCad/shields/assembly-3d/export_body_boards.py'
+& 'C:/Program Files/KiCad/9.0/bin/python.exe' 'CAD/KiCad/shields/microphone-flex/export_variants.py'
+& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python-exit-code 1 --python 'CAD/KiCad/shields/assembly-3d/update_visual_geometry.py' -- --render
+```
+
+`visual_exports.py` prepares native visual data and fingerprints its dependencies;
+`kicad_vrml.py` converts KiCad's tessellated visual data into coloured GLB.
+`update_visual_geometry.py` backs up the original assemblies under ignored
+`tmp/model-audit/backups/`, replaces current meshes, and performs the saved-file
+comparison. These scripts do not edit source PCB routing or the production plots.
 
 ## Female and male body mounting studies — 2026-10-15
 

@@ -325,5 +325,6 @@
     "microphone-flex-right.glb": "3f3ba7506f5aa26128b5ec9901469e3fd761da712eb3e9c192b63e9b820d825f",
     "female-base-v2.kicad_pcb": "9d100054129bbdc00c3563ded6f393557d96be755044040a6835b063c997ba4b",
     "male-static-v2.kicad_pcb": "e4923f711e8b0233549fd43cf6b9de5159f2515814c596a85696582bfd2c90ea"
-  }
+  },
+  "superseded_by": "visual-geometry-validation.json (current Blender/export hashes, saved geometry and materials)"
 }

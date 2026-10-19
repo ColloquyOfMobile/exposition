@@ -2651,5 +2651,1163 @@
       "angle": 0.0,
       "pads": {}
     }
+  },
+  "visual_export": {
+    "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
+    "source": "CAD/KiCad/shields/arduino-mega-reference/arduino-mega-reference.kicad_pcb",
+    "source_sha256": "c805cd7640893d15dcc2c7ef1a21ae8fc709f6f9ed4d0caefadd598fe67afef6",
+    "visual_input_sha256": "b50f443b1360cad8a33c7f122bdaa3a7fc21e45d0420faa3674f658777a4a3f2",
+    "native_vrml_sha256": "acc05cbe81b276e3eda34800ca560d683b14d6c86ea563e51c1e04d462496230",
+    "models": [
+      {
+        "ref": "C3_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "R2_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/R_0603_1608Metric.step",
+        "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C2_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C12_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "ON_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/LED_0805_2012Metric.step",
+        "sha256": "0aa8b791804f5d72a2fc7d1bf231dd9959207d83df8ad801176fbc459f575b98",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "T1_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/SOT-23.step",
+        "sha256": "dd5d1711204e1d8d26cd11490923bd84340820baa69538c385a4300ec2539bc0",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "TX_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/LED_0805_2012Metric.step",
+        "sha256": "0aa8b791804f5d72a2fc7d1bf231dd9959207d83df8ad801176fbc459f575b98",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "ADCH_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/PinSocket_1x08_P2.54mm_Vertical.step",
+        "sha256": "ea08834e672b1f96115f4d51e8db44b9d653dd2798afb956a0277425663d5832",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "RN4_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/R_Array_Convex_4x0603.step",
+        "sha256": "bec072c4d44e4c5ff693e18ede4078c7e66e7a670d53b00a20edd2c0aecdf3c2",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C8_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "COMMUNICATION_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/PinSocket_1x08_P2.54mm_Vertical.step",
+        "sha256": "ea08834e672b1f96115f4d51e8db44b9d653dd2798afb956a0277425663d5832",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "RN2_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/R_Array_Convex_4x0603.step",
+        "sha256": "bec072c4d44e4c5ff693e18ede4078c7e66e7a670d53b00a20edd2c0aecdf3c2",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "ICSP1_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/PinHeader_2x03_P2.54mm_Vertical.step",
+        "sha256": "30c87dd7aa515b02055124826d8c4054084971d49d819c644cd6b21295ac52c8",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "XIO_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/PinSocket_2x18_P2.54mm_Vertical.step",
+        "sha256": "2c93d8c20740a8279be1b6c9c84fbb4cb7bcf9cd2d6e64fae0263907a4a0b10d",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "Y2_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/QS_envelope.step",
+        "sha256": "fc98008dbf676fe2ecb34c905e7260ea99edb7dfd51548fd581fd3e152e798d2",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C1_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "R1_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/R_0603_1608Metric.step",
+        "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C14_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "POWER_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/PinSocket_1x08_P2.54mm_Vertical.step",
+        "sha256": "ea08834e672b1f96115f4d51e8db44b9d653dd2798afb956a0277425663d5832",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "D1_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/D_SMB.step",
+        "sha256": "029466277d91e9f5492556be93e46611049e07115c7913880c547afa96058ed4",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "D3_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/D_MiniMELF.step",
+        "sha256": "bab3a3356a14efb0438caca9adf53472dea34425715606e933f092f87f73f650",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C9_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C15_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "RN3_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/R_Array_Convex_4x0603.step",
+        "sha256": "bec072c4d44e4c5ff693e18ede4078c7e66e7a670d53b00a20edd2c0aecdf3c2",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "IC4_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/MLF32_envelope.step",
+        "sha256": "d621669edf4de15e2defa26ab591c3c5fa548e2f1386b60c75f2324b4e101592",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "L1_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/L_0805_2012Metric.step",
+        "sha256": "751a8ae26d20698bfe8303aa2fc7ec986a8b9a7154699b94bf2a13d4ad401425",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "F1_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/L1812_envelope.step",
+        "sha256": "5565505242ae5016119fd734304e5381c7fd5c3853dc6d64db0758949f130d91",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C6_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "Z1_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/R_0603_1608Metric.step",
+        "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "X2_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/PN61729_envelope.step",
+        "sha256": "5bd1c2734d38e74d2c7418e69c7956c3c24a7343086a80e9075ce9dbcf7030f5",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C16_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "IC3_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/TQFP-100_14x14mm_P0.5mm.step",
+        "sha256": "99d530be126138ea024746562f1110203db0273456e99932e7e1930dc9f5fba5",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "L2_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/L_0805_2012Metric.step",
+        "sha256": "751a8ae26d20698bfe8303aa2fc7ec986a8b9a7154699b94bf2a13d4ad401425",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "PC1_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/CP_Elec_6.3x5.8.step",
+        "sha256": "887e13de4f738fc711dad723623bb52ad8f0688a7e6c9319c5394b960618fff2",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C11_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "X1_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/BarrelJack_Horizontal.step",
+        "sha256": "53f1b2714ed169b5e314b9b42cc9943303769e29e0debdfb4ef7a0e2c4f369dd",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "RN5_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/R_Array_Convex_4x0603.step",
+        "sha256": "bec072c4d44e4c5ff693e18ede4078c7e66e7a670d53b00a20edd2c0aecdf3c2",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "IC6_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/SOT-23-5.step",
+        "sha256": "720a6eab0024069bbee68e7cb4c3ff1149468a34611225cdc852662c5d0ec2b7",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "D2_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/D_MiniMELF.step",
+        "sha256": "bab3a3356a14efb0438caca9adf53472dea34425715606e933f092f87f73f650",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "RN1_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/R_Array_Convex_4x0603.step",
+        "sha256": "bec072c4d44e4c5ff693e18ede4078c7e66e7a670d53b00a20edd2c0aecdf3c2",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C5_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "IC7_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/MSOP-8_3x3mm_P0.65mm.step",
+        "sha256": "847c4c5023fe1603fbd36900a5dcc4bd3901ba473f71d42c9a469f0236eaadf3",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C13_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "Z2_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/R_0603_1608Metric.step",
+        "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C4_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "Y1_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/RESONATOR_envelope.step",
+        "sha256": "ce25dbc86f85c5bac5a467198b504c60456218d64ab7c51a0d97e774e5fa1689",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C10_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "RX_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/LED_0805_2012Metric.step",
+        "sha256": "0aa8b791804f5d72a2fc7d1bf231dd9959207d83df8ad801176fbc459f575b98",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "PWML_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/PinSocket_1x08_P2.54mm_Vertical.step",
+        "sha256": "ea08834e672b1f96115f4d51e8db44b9d653dd2798afb956a0277425663d5832",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "JP6_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/PinSocket_1x10_P2.54mm_Vertical.step",
+        "sha256": "5a6ea3a16f7d7f68235527b0fca32147d1211714626ce9253e95275b0bf8a2b5",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "IC1_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/SOT-223.step",
+        "sha256": "77ad6dbacc493cb619c728f26d2ddcf461eb0feb6b977b47d01d51e67016f654",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "RESET_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/TS42_envelope.step",
+        "sha256": "5bc3eea1ad4a0a7a11c07b7f4bcd6ffd16d4d21943644d5668ae987fc11e66ef",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "ADCL_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/PinSocket_1x08_P2.54mm_Vertical.step",
+        "sha256": "ea08834e672b1f96115f4d51e8db44b9d653dd2798afb956a0277425663d5832",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "L_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/LED_0805_2012Metric.step",
+        "sha256": "0aa8b791804f5d72a2fc7d1bf231dd9959207d83df8ad801176fbc459f575b98",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C7_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "PC2_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/CP_Elec_6.3x5.8.step",
+        "sha256": "887e13de4f738fc711dad723623bb52ad8f0688a7e6c9319c5394b960618fff2",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "ICSP_3D",
+        "file": "CAD/KiCad/shields/arduino-mega-reference/3dmodels/PinHeader_2x03_P2.54mm_Vertical.step",
+        "sha256": "30c87dd7aa515b02055124826d8c4054084971d49d819c644cd6b21295ac52c8",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    ],
+    "pcb_underside_z_mm": 0,
+    "mesh_counts": {
+      "models": 57,
+      "board_meshes": 7,
+      "vertices": 121376,
+      "faces": 102507,
+      "materials": 19
+    },
+    "glb_sha256": "a57107cabe79ff4086f23f9e8942bb0ddd6ab3e388cd487a04428048e8f59673"
   }
 }

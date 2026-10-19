@@ -490,5 +490,83 @@
         ]
       }
     }
+  },
+  "visual_export": {
+    "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
+    "source": "CAD/KiCad/shields/teensy41-reference/teensy41-reference.kicad_pcb",
+    "source_sha256": "27d93e48803ee8e4ec5bcd634c5f7e20fb2116c97854604c8c80946c03954a33",
+    "visual_input_sha256": "db4a15279ba2274103f296ae6e3d288f8eea4e9b5189879aedd377d170a907f6",
+    "native_vrml_sha256": "09c74d8d884a8ee7b04c77fee3370a3030d5f22b7ccc86b821e36174885629e4",
+    "models": [
+      {
+        "ref": "Teensy41",
+        "file": "CAD/KiCad/shields/teensy41-reference/3dmodels/Teensy41_components.step",
+        "sha256": "da2310440aba9e09e8367c99013f7300011fe8492f8a47da3afc09fe0bb78344",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "J1",
+        "file": "CAD/KiCad/shields/teensy41-reference/3dmodels/PinHeader_1x24_P2.54mm_Vertical.step",
+        "sha256": "fc127bba8dbdcfc0818688fd688984cb3fd2dc0ba4dc4cae14a569be0126b0bf",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "J2",
+        "file": "CAD/KiCad/shields/teensy41-reference/3dmodels/PinHeader_1x24_P2.54mm_Vertical.step",
+        "sha256": "fc127bba8dbdcfc0818688fd688984cb3fd2dc0ba4dc4cae14a569be0126b0bf",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    ],
+    "pcb_underside_z_mm": 0,
+    "mesh_counts": {
+      "models": 3,
+      "board_meshes": 7,
+      "vertices": 36101,
+      "faces": 28565,
+      "materials": 7
+    },
+    "glb_sha256": "924ccd87846b869778654b2de19dac9a17d70868f91af7f8e998fc8812b1dc74"
   }
 }

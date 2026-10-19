@@ -17,5 +17,6 @@
   },
   "mesh_datablocks_shared_between_scenes": 44,
   "size_bytes": 16357920,
-  "sha256": "3151db65520dbf7b6083fbfbacf0d088a37321210320fe339500e4f0e0e06539"
+  "sha256": "3151db65520dbf7b6083fbfbacf0d088a37321210320fe339500e4f0e0e06539",
+  "superseded_by": "visual-geometry-validation.json (current Blender/export hashes, saved geometry and materials)"
 }
