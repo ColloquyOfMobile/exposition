@@ -1,0 +1,14 @@
+{
+  "source_sha256": "aaea46a53571869cf7121ec6d04a91e1025abd3ee7b1fb5b82de42a1f802da93",
+  "original_outline_and_dsub_geometry": "PASS",
+  "harness_nets_and_pad_drills": "PASS",
+  "contact_strip_clearance": "PASS",
+  "shaft_and_short_edge_clamps": "PASS",
+  "wire_pads_on_contact_side": "PASS",
+  "erc_violations": 0,
+  "drc_violations": 0,
+  "unconnected_items": 0,
+  "schematic_parity_differences": 0,
+  "physical_module_fit_verified": false,
+  "module_pins_must_be_flush": true
+}

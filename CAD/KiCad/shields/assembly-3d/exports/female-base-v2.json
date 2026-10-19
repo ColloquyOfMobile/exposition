@@ -1,6 +1,6 @@
 {
   "source": "female base v2/female-base-v2.kicad_pcb",
-  "sha256": "fd25a282ec7a7d491fa9107ecbaedd8c3784511e6c73f0e3d275c658da1a4887",
+  "sha256": "aaea46a53571869cf7121ec6d04a91e1025abd3ee7b1fb5b82de42a1f802da93",
   "outline_mm": [
     25.0,
     20.0,
@@ -8,24 +8,64 @@
     80.0
   ],
   "footprints": {
-    "H2": {
+    "R2": {
       "xy": [
-        53.5,
-        74.5
+        56.0,
+        84.0
       ],
-      "angle": 0.0,
+      "angle": 90.0,
       "models": [
-        "${KIPRJMOD}/3dmodels/clamp_right.step"
+        "${KIPRJMOD}/3dmodels/R_0603_1608Metric.step"
       ]
     },
-    "H1": {
+    "J4": {
       "xy": [
-        28.5,
-        74.5
+        62.0,
+        60.0
       ],
       "angle": 0.0,
       "models": [
+        "${KIPRJMOD}/3dmodels/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.step"
+      ]
+    },
+    "H2": {
+      "xy": [
+        41.1,
+        87.5
+      ],
+      "angle": 90.0,
+      "models": [
         "${KIPRJMOD}/3dmodels/clamp_left.step"
+      ]
+    },
+    "J2": {
+      "xy": [
+        62.0,
+        47.0
+      ],
+      "angle": 0.0,
+      "models": [
+        "${KIPRJMOD}/3dmodels/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.step"
+      ]
+    },
+    "C1": {
+      "xy": [
+        35.5,
+        94.0
+      ],
+      "angle": 0.0,
+      "models": [
+        "${KIPRJMOD}/3dmodels/CP_Radial_D6.3mm_P2.50mm.step"
+      ]
+    },
+    "J5": {
+      "xy": [
+        62.0,
+        73.0
+      ],
+      "angle": 0.0,
+      "models": [
+        "${KIPRJMOD}/3dmodels/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.step"
       ]
     },
     "M1": {
@@ -38,30 +78,10 @@
         "${KIPRJMOD}/3dmodels/module_assembly.wrl"
       ]
     },
-    "C1": {
-      "xy": [
-        41.0,
-        91.0
-      ],
-      "angle": 0.0,
-      "models": [
-        "${KIPRJMOD}/3dmodels/CP_Radial_D6.3mm_P2.50mm.step"
-      ]
-    },
-    "R2": {
-      "xy": [
-        56.0,
-        84.0
-      ],
-      "angle": 90.0,
-      "models": [
-        "${KIPRJMOD}/3dmodels/R_0603_1608Metric.step"
-      ]
-    },
     "C2": {
       "xy": [
-        38.0,
-        88.0
+        32.0,
+        89.0
       ],
       "angle": 0.0,
       "models": [
@@ -78,15 +98,13 @@
         "${KIPRJMOD}/3dmodels/DSUB-15_Socket_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm.step"
       ]
     },
-    "R1": {
+    "JA1": {
       "xy": [
-        56.0,
-        81.0
+        54.5,
+        66.5
       ],
-      "angle": 90.0,
-      "models": [
-        "${KIPRJMOD}/3dmodels/R_0603_1608Metric.step"
-      ]
+      "angle": 0.0,
+      "models": []
     },
     "J3": {
       "xy": [
@@ -98,44 +116,6 @@
         "${KIPRJMOD}/3dmodels/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.step"
       ]
     },
-    "J4": {
-      "xy": [
-        62.0,
-        60.0
-      ],
-      "angle": 0.0,
-      "models": [
-        "${KIPRJMOD}/3dmodels/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.step"
-      ]
-    },
-    "J2": {
-      "xy": [
-        62.0,
-        47.0
-      ],
-      "angle": 0.0,
-      "models": [
-        "${KIPRJMOD}/3dmodels/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.step"
-      ]
-    },
-    "J5": {
-      "xy": [
-        62.0,
-        73.0
-      ],
-      "angle": 0.0,
-      "models": [
-        "${KIPRJMOD}/3dmodels/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.step"
-      ]
-    },
-    "JA1": {
-      "xy": [
-        31.0,
-        91.0
-      ],
-      "angle": 0.0,
-      "models": []
-    },
     "J6": {
       "xy": [
         63.0,
@@ -144,6 +124,26 @@
       "angle": 0.0,
       "models": [
         "${KIPRJMOD}/3dmodels/JST_EH_B2B-EH-A_1x02_P2.50mm_Vertical.step"
+      ]
+    },
+    "H1": {
+      "xy": [
+        28.5,
+        74.5
+      ],
+      "angle": 0.0,
+      "models": [
+        "${KIPRJMOD}/3dmodels/clamp_left.step"
+      ]
+    },
+    "R1": {
+      "xy": [
+        56.0,
+        81.0
+      ],
+      "angle": 90.0,
+      "models": [
+        "${KIPRJMOD}/3dmodels/R_0603_1608Metric.step"
       ]
     }
   }

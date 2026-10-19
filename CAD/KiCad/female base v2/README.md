@@ -15,8 +15,9 @@ GF1002 reference, not a physically qualified production release.
 The original **50 × 80 mm** outline, rounded corners, two Ø8 mm artwork
 fixing cutouts and DSUB footprint/pad positions are retained exactly.
 The artwork fixing centres remain (50,47) and (50,90) mm in PCB coordinates.
-The module outline runs from (31,55) to (51,85) mm. New Ø2.2 mm clamp screw
-holes are at (28.5,74.5) and (53.5,74.5) mm. All coordinates here use the
+The conservative module envelope runs from (31,55) to (51.2,85) mm.
+New Ø2.2 mm clamp screw holes are at (28.5,74.5) and (41.1,87.5) mm;
+H2 points towards the short edge, away from the contacts. All coordinates here use the
 PCB editor's +X right, +Y down; the outline's upper-left extent is (25,20).
 
 The module has a provisional **3 mm underside gap** above the main PCB.
@@ -26,55 +27,44 @@ shown in 3D, and provisional STEP/STL bodies are in `3dmodels/`. Use insulating
 M2 screws, nuts and clamps; determine screw length from the actual stack.
 The artwork's existing fixings remain separate from these two new fixings.
 
-The volume shaft faces left and extends approximately **14 mm beyond the
+The volume shaft faces left and extends approximately **16 mm beyond the
 main board's left edge**. The reference assembly needs approximately
 **20 mm above the carrier top** at the volume-control body. Check these
 clearances inside the actual female body, together with cable access and
-artwork fastener access. Module size (20 × 30 mm), underside components,
+artwork fastener access. Module envelope (20.2 × 30 mm), underside components,
 knob dimensions and clamp fit need measuring on the physical GF1002.
 The clamp's nominal 1.6 mm slot is provisional; adjust fit/tolerance and
-support geometry after measurement. No module solder-pad pitch is assumed.
+support geometry after measurement. No mating solder footprint is assumed.
 
-## Fit requirements for the GF1002's contact row (2026-10-19)
+## Contact-row clearance revision C (2026-10-19)
 
-The reference module had its contacts in the wrong place. The module's nine
-contacts are **one row along its right-hand long edge**, opposite the shaft
-(`../shields/gf1002-reference/README.md`). On this board that row lies at
-about **X = 49.55 mm, Y = 56.2 + 2.54·n mm** (n = 0 to 10, with n = 3 and 6
-empty). From the pot end: input R, G, L, then supply +, −, then the LOUT
-pair, then the ROUT pair. These values come from a photo and are good to
-about 0.5 mm.
+The GF1002 reference now shows nine contacts along the long edge opposite
+the shaft, on an eleven-position 2.54 mm grid with positions 4 and 7 empty.
+Its contact coordinates are photo estimates with about 0.5 mm uncertainty.
+The 20.2 × 30 mm module envelope conservatively allows the seller's
+20.2 × 29.5 mm size. Physical dimensions remain unverified.
 
-**As drawn, this board does not fit the module.** Clamp H2 at (53.5, 74.5)
-reaches 1.5 mm onto the module across Y = 73.75 to 75.25, so its lip lands
-on the contact row at the first LOUT contact (Y ≈ 74.0). Solder joints and
-any pin ends stand proud of the module there. The next revision must meet
-these requirements:
+H1 stays at (28.5, 74.5). H2 has moved to (41.1, 87.5), rotated 90 degrees to retain
+the short edge away from the pot. The contact-side strip is clear of
+clamps, screws, components and hookup pads along the full module length.
+Native rule areas exclude pads and vias from that strip. The nearby
+reservoir and bypass components have moved to clear the new clamp.
 
-1. **Contact strip clear.** Nothing may sit over the module's right-hand
-   3.5 mm (X = 47.5 to 51) along its full length: no clamp, lip, screw
-   head or wire pad.
-2. **Hold the module elsewhere.** H1, on the shaft edge, stays. The second
-   fixing goes on the short edge away from the pot (Y = 85; the last
-   contact is about 3.4 mm inside it), or the module is held by its own
-   contact row (item 3). C1 at (41, 91) and C2 at (38, 88) are in the way
-   of a clamp centred on that edge.
-3. **Under the row.** The modules on Thomas's carriers have pins soldered
-   through these contacts. Either the pins are cut flush, or the board
-   gets a matching 1 × 11, 2.54 mm row of plated holes under the contact
-   row. That row can then carry JA1's six connections instead of wires, as
-   Thomas's perfboard does, and the header's plastic sets the 3 mm gap.
-4. **Short wires, on the contact side.** If wires stay, JA1 moves beside
-   the row rather than below the module at (31, 91): Thomas's document asks
-   for short class-D leads. Audio goes to the R input, with the speaker on
-   ROUT, as on Thomas's carrier.
-5. **Measure one module first.** Check the width and length (a listing
-   gives 20.2 × 29.5 mm; the clamp towers leave 0.25 mm at 20 mm), the
-   row's distance from the right edge (≈ 1.45 mm), the first contact's
-   distance from the pot end (≈ 1.2 mm), the pin length below the module,
-   and the pot body's overhang past the left edge (≈ 3 mm in the photo; the
-   model has 1 mm). Then lay the module on a 1:1 print of the revised board
-   before ordering it.
+JA1 is beside the contact row at (54.5, 66.5), keeping the six individual hookup
+wires short. Connect AMP_INPUT to the module's **R input**, input return
+to **G**, and the speaker to **ROUT**. Confirm +/− within the ROUT pair
+on the actual module: the photo does not establish pair polarity.
+No guessed mating header or through-hole pattern has been added.
+
+**Cut existing module pin tails flush before mounting.** The retained
+3 mm underside gap is for this assembly choice; long pins must not be
+pressed against the carrier. Use insulating clamps and hardware.
+
+Before ordering, measure the module width/length, row offset and first
+contact, pin protrusion, pot overhang and clamp slot fit. Dry-fit the
+real module on the updated 1:1 print. This revision resolves the drawn
+contact/clamp conflict; it does not establish physical fit or release the
+board for production (RELEASE_REVIEW.md F8).
 
 The smaller JST connectors have moved to clear the module. Their references,
 pin orders, drills and electrical purposes are retained: J2 mirror servo,
@@ -150,6 +140,11 @@ assemblies were reopened and checked; top and underside previews inspected.
 Physical fit, electrical performance and installation clearances remain
 unverified. The schematic models the GF1002 as a wire-connected module,
 so ERC does not validate its undocumented internal circuit or solder pads.
+
+Revision C validation (2026-10-19): native ERC/DRC/unconnected/parity 0/0/0/0;
+independent contact-strip, clamp-position, harness and original-geometry
+checks pass (`reports/validation.json`). The full repository suite passes
+1,796 tests. STEP assemblies reopen with valid geometry; previews inspected.
 
 Sources: original repository body-board designs; Thomas's documentation
 and the photo-derived `../shields/gf1002-reference/` model. Generic KiCad

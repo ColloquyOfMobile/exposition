@@ -1,5 +1,5 @@
 {
-  "combined_sha256_before": "89184dd5bc426dc205ba69d0ae25acb65cf41aefcc3839f129efcda68e54510c",
+  "combined_sha256_before": "8778866ddcb9e722ad1072faadbcdb2395cbc2eb96ab1045e5364721ec8028e1",
   "existing_scenes": [
     "Female body - Rev B reference",
     "Male body - Rev B reference",
@@ -296,16 +296,16 @@
       "body_meshes": 22
     }
   ],
-  "combined_sha256_after": "8778866ddcb9e722ad1072faadbcdb2395cbc2eb96ab1045e5364721ec8028e1",
+  "combined_sha256_after": "cfc2860bf09116c5905f3dc6da9283ce3959c79689d80fbd6debf4da4bf7e13f",
   "existing_scene_objects_and_transforms_preserved": true,
   "reopened_successfully": true,
   "source_sha256": {
-    "female-base-v2.glb": "b6209d06b0c08b674139adc4474863668cf728d1f8a94fa6b5d345f969a61cef",
-    "male-static-v2.glb": "7d7d90f1899c4df1a3a2dc7f5c28205cf296bc1f21eced683afb235cb8f0ef88",
+    "female-base-v2.glb": "b58dce59b548698baa6f5efe911b2499711d2c701f3b9a25ffeef67a7d31ffe9",
+    "male-static-v2.glb": "8c7b93703e3503fc789fa286da0175c60aa720e3c55e4d3704002fda15a74613",
     "microphone-flex-up.glb": "30b99193264a97686723d89e5a59036109174d280c7e30ace2966e4211d54137",
     "microphone-flex-left.glb": "1f8fbeaaec8c1b3dd22c2c5b1942f6933b41f4be9346037f0c268c7f867eafff",
     "microphone-flex-right.glb": "3f3ba7506f5aa26128b5ec9901469e3fd761da712eb3e9c192b63e9b820d825f",
-    "female-base-v2.kicad_pcb": "fd25a282ec7a7d491fa9107ecbaedd8c3784511e6c73f0e3d275c658da1a4887",
-    "male-static-v2.kicad_pcb": "a263f8cfd2b8aca6ae4f32b88261f8b6e7263e93542850c1566f86dcd2c19cf3"
+    "female-base-v2.kicad_pcb": "aaea46a53571869cf7121ec6d04a91e1025abd3ee7b1fb5b82de42a1f802da93",
+    "male-static-v2.kicad_pcb": "00afb15493887e2036e7d78d1275a06f555cfcfecc1900d2003eed0eea075f6b"
   }
 }

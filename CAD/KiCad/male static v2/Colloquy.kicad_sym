@@ -158,7 +158,7 @@
 (property "Value" "GF1002 wire connections" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
 (property "Footprint" "Body:GF1002_WirePads_2x03" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Datasheet" "" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
-(property "Description" "Short individually identified wires to module VDD, supply GND, Audio, input GND, ROUT+, ROUT-. Pad order is carrier-defined; verify module contacts." (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
+(property "Description" "Short wires to module VDD, supply GND, R input, input GND, ROUT+, ROUT-. Verify output pair polarity on the actual module; photo does not establish it." (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (symbol "JA1_1_1"
 (rectangle (start -15.24 15.24) (end 15.24 -15.24) (stroke (width 0.254) (type default)) (fill (type background)))
 (pin passive line (at 20.32 12.7 180) (length 5.08) (name "1" (effects (font (size 1.016 1.016))  )) (number "1" (effects (font (size 0.889 0.889))  )))
@@ -224,7 +224,7 @@
 (property "Value" "GF1002 direct module" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
 (property "Footprint" "Body:GF1002_Module_Direct" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Datasheet" "" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
-(property "Description" "No perfboard. Photo-derived 20x30mm module, held by two insulating edge clamps; 3mm underside clearance." (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
+(property "Description" "No perfboard. Provisional 20.2x30mm envelope; shaft-edge and short-end insulating clamps. Cut module pin tails flush; 3mm underside gap. Physical fit unverified." (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (symbol "M1_1_1"
 (rectangle (start -20.32 10.16) (end 20.32 -10.16) (stroke (width 0.254) (type default)) (fill (type background)))
 )
@@ -242,7 +242,7 @@
 (symbol "H2" (pin_names (offset 1.27)) (exclude_from_sim no) (in_bom no) (on_board yes)
 (property "Reference" "H" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
 (property "Value" "M2 insulating clamp" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
-(property "Footprint" "Body:GF1002_Clamp_Right" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
+(property "Footprint" "Body:GF1002_Clamp_End" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Datasheet" "" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Description" "Provisional edge clamp. No drilling of amplifier module; check actual fit." (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (symbol "H2_1_1"

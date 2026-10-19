@@ -2,14 +2,14 @@
 <export version="E">
   <design>
     <source>C:\workspace\workspace2\Colloquy\exposition\CAD\KiCad\male static v2\male-static-v2.kicad_sch</source>
-    <date>2026-10-09T08:40:40+0200</date>
+    <date>2026-10-19T13:54:39+0200</date>
     <tool>Eeschema 9.0.7</tool>
     <sheet number="1" name="/" tstamps="/">
       <title_block>
         <title>Colloquy male static — directly mounted GF1002</title>
         <company>Colloquy of Mobiles</company>
-        <rev>B-direct-amplifier</rev>
-        <date>2026-10-09</date>
+        <rev>C-contact-clearance</rev>
+        <date>2026-10-19</date>
         <source>male-static-v2.kicad_sch</source>
         <comment number="1" value="Prototype: verify harness polarity and sensor values before connection"/>
         <comment number="2" value=""/>
@@ -71,10 +71,10 @@
     </comp>
     <comp ref="H2">
       <value>M2 insulating clamp</value>
-      <footprint>Body:GF1002_Clamp_Right</footprint>
+      <footprint>Body:GF1002_Clamp_End</footprint>
       <description>Provisional edge clamp. No drilling of amplifier module; check actual fit.</description>
       <fields>
-        <field name="Footprint">Body:GF1002_Clamp_Right</field>
+        <field name="Footprint">Body:GF1002_Clamp_End</field>
         <field name="Datasheet"/>
         <field name="Description">Provisional edge clamp. No drilling of amplifier module; check actual fit.</field>
       </fields>
@@ -253,13 +253,13 @@
     <comp ref="JA1">
       <value>GF1002 wire connections</value>
       <footprint>Body:GF1002_WirePads_2x03</footprint>
-      <description>Short individually identified wires to module VDD, supply GND, Audio, input GND, ROUT+, ROUT-. Pad order is carrier-defined; verify module contacts.</description>
+      <description>Short wires to module VDD, supply GND, R input, input GND, ROUT+, ROUT-. Verify output pair polarity on the actual module; photo does not establish it.</description>
       <fields>
         <field name="Footprint">Body:GF1002_WirePads_2x03</field>
         <field name="Datasheet"/>
-        <field name="Description">Short individually identified wires to module VDD, supply GND, Audio, input GND, ROUT+, ROUT-. Pad order is carrier-defined; verify module contacts.</field>
+        <field name="Description">Short wires to module VDD, supply GND, R input, input GND, ROUT+, ROUT-. Verify output pair polarity on the actual module; photo does not establish it.</field>
       </fields>
-      <libsource lib="Colloquy" part="JA1" description="Short individually identified wires to module VDD, supply GND, Audio, input GND, ROUT+, ROUT-. Pad order is carrier-defined; verify module contacts."/>
+      <libsource lib="Colloquy" part="JA1" description="Short wires to module VDD, supply GND, R input, input GND, ROUT+, ROUT-. Verify output pair polarity on the actual module; photo does not establish it."/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -268,13 +268,13 @@
     <comp ref="M1">
       <value>GF1002 direct module</value>
       <footprint>Body:GF1002_Module_Direct</footprint>
-      <description>No perfboard. Photo-derived 20x30mm module, held by two insulating edge clamps; 3mm underside clearance.</description>
+      <description>No perfboard. Provisional 20.2x30mm envelope; shaft-edge and short-end insulating clamps. Cut module pin tails flush; 3mm underside gap. Physical fit unverified.</description>
       <fields>
         <field name="Footprint">Body:GF1002_Module_Direct</field>
         <field name="Datasheet"/>
-        <field name="Description">No perfboard. Photo-derived 20x30mm module, held by two insulating edge clamps; 3mm underside clearance.</field>
+        <field name="Description">No perfboard. Provisional 20.2x30mm envelope; shaft-edge and short-end insulating clamps. Cut module pin tails flush; 3mm underside gap. Physical fit unverified.</field>
       </fields>
-      <libsource lib="Colloquy" part="M1" description="No perfboard. Photo-derived 20x30mm module, held by two insulating edge clamps; 3mm underside clearance."/>
+      <libsource lib="Colloquy" part="M1" description="No perfboard. Provisional 20.2x30mm envelope; shaft-edge and short-end insulating clamps. Cut module pin tails flush; 3mm underside gap. Physical fit unverified."/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="male-static-v2.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -352,7 +352,7 @@
       <fields>
         <field name="Reference">H</field>
         <field name="Value">M2 insulating clamp</field>
-        <field name="Footprint">Body:GF1002_Clamp_Right</field>
+        <field name="Footprint">Body:GF1002_Clamp_End</field>
         <field name="Datasheet"/>
         <field name="Description">Provisional edge clamp. No drilling of amplifier module; check actual fit.</field>
       </fields>
@@ -534,13 +534,13 @@
       </pins>
     </libpart>
     <libpart lib="Colloquy" part="JA1">
-      <description>Short individually identified wires to module VDD, supply GND, Audio, input GND, ROUT+, ROUT-. Pad order is carrier-defined; verify module contacts.</description>
+      <description>Short wires to module VDD, supply GND, R input, input GND, ROUT+, ROUT-. Verify output pair polarity on the actual module; photo does not establish it.</description>
       <fields>
         <field name="Reference">JA</field>
         <field name="Value">GF1002 wire connections</field>
         <field name="Footprint">Body:GF1002_WirePads_2x03</field>
         <field name="Datasheet"/>
-        <field name="Description">Short individually identified wires to module VDD, supply GND, Audio, input GND, ROUT+, ROUT-. Pad order is carrier-defined; verify module contacts.</field>
+        <field name="Description">Short wires to module VDD, supply GND, R input, input GND, ROUT+, ROUT-. Verify output pair polarity on the actual module; photo does not establish it.</field>
       </fields>
       <pins>
         <pin num="1" name="1" type="passive"/>
@@ -552,13 +552,13 @@
       </pins>
     </libpart>
     <libpart lib="Colloquy" part="M1">
-      <description>No perfboard. Photo-derived 20x30mm module, held by two insulating edge clamps; 3mm underside clearance.</description>
+      <description>No perfboard. Provisional 20.2x30mm envelope; shaft-edge and short-end insulating clamps. Cut module pin tails flush; 3mm underside gap. Physical fit unverified.</description>
       <fields>
         <field name="Reference">M</field>
         <field name="Value">GF1002 direct module</field>
         <field name="Footprint">Body:GF1002_Module_Direct</field>
         <field name="Datasheet"/>
-        <field name="Description">No perfboard. Photo-derived 20x30mm module, held by two insulating edge clamps; 3mm underside clearance.</field>
+        <field name="Description">No perfboard. Provisional 20.2x30mm envelope; shaft-edge and short-end insulating clamps. Cut module pin tails flush; 3mm underside gap. Physical fit unverified.</field>
       </fields>
     </libpart>
     <libpart lib="Colloquy" part="R1">
@@ -594,7 +594,7 @@
     </library>
   </libraries>
   <nets>
-    <net code="1" name="5V" class="Default">
+    <net code="1" name="5V" class="Power">
       <node ref="C1" pin="1" pintype="passive"/>
       <node ref="C2" pin="1" pintype="passive"/>
       <node ref="J1" pin="2" pinfunction="2" pintype="passive"/>
@@ -607,7 +607,7 @@
       <node ref="J9" pin="2" pinfunction="2" pintype="passive"/>
       <node ref="JA1" pin="1" pinfunction="1" pintype="passive"/>
     </net>
-    <net code="2" name="12V" class="Default">
+    <net code="2" name="12V" class="Power">
       <node ref="J2" pin="2" pinfunction="2" pintype="passive"/>
       <node ref="J7" pin="2" pinfunction="2" pintype="passive"/>
     </net>

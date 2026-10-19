@@ -58,9 +58,9 @@ def export(name, items):
 
 
 # Local Cartesian origin is module upper-left; -Y follows PCB-editor +Y.
-pot = [box(-1, -11, 3, 16, 13, 12, '.08 .38 .21'),
-       cylinder(-7, -4.5, 9, 3.5, 6, 'x', '.6 .6 .6'),
-       cylinder(-20, -4.5, 9, 3, 13, 'x', '.65 .65 .65')]
+pot = [box(-3, -11, 3, 16, 13, 12, '.08 .38 .21'),
+       cylinder(-9, -4.5, 9, 3.5, 6, 'x', '.6 .6 .6'),
+       cylinder(-22, -4.5, 9, 3, 13, 'x', '.65 .65 .65')]
 cap = [cylinder(0, 0, 0, 3.2, 7, 'z', '.18 .18 .18'),
        cylinder(0, 0, 7, 3.2, .15, 'z', '.7 .7 .7')]
 chip = [box(-5, -2, .2, 10, 4, 1.5, '.04 .04 .04')]
@@ -77,10 +77,14 @@ def moved(items, dx, dy, dz):
             for kind, v, c in items]
 
 
-assembly = [box(0, -30, -1.6, 20, 30, 1.6, '.025 .32 .13')]
+assembly = [box(0, -30, -1.6, 20.2, 30, 1.6, '.025 .32 .13')]
 assembly += pot + moved(cap, 12, -13, 0) + moved(chip, 11, -23, 0)
 for x, y in [(3, -13), (3, -18), (3, -23), (3, -28), (11, -28), (17, -28)]:
     assembly.append(box(x-1, y-.6, .1, 2, 1.2, .6, '.5 .37 .2'))
+# Pads and short solder-joint envelopes; actual tails must be measured/cut flush.
+for number in (1,2,3,5,6,8,9,10,11):
+    y = -(1.2+2.54*(number-1))
+    assembly.append(cylinder(18.55,y,-1.9,.65,2.2,'z','.72 .62 .28'))
 export('module_assembly', assembly)
 terminal = [box(-2.54, -4, 0, 10.16, 8, 8, '.025 .3 .65')]
 for x in (0, 5.08):

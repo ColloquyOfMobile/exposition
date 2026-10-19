@@ -58,7 +58,7 @@ Found, and still open:
 | F5 | **Fit is unproven where it was inferred**: DFRobot socket positions are photo-derived; the clone MAX9814's pin and hole grid and seated height; the Mega's USB-B shell against the 11 mm stack; HM1-HM4 spacers of 4 mm OD at most; every height against the enclosure | a board that does not fit is a re-order; each needs the real part on a 1:1 print |
 | F6 | Board-setup minimums are 0 on the analyser carrier (clearance, track) and the voice card (track) | DRC there checks netclass values only, not what the fab can make |
 | F7 | **Resolved, 2026-10-19:** carrier contacts 1 and 4 swapped at all five sites (microphone on L, R3 removed and R linked to OUT). Schematic, generators, routed board, silkscreen, mechanical notes, template, both Gerber packages and fit-check pack refreshed | Native ERC/DRC and unconnected counts 0/0/0; independent schematic/PCB and mating checks pass. Physical module fit remains F5. |
-| F8 | **Blocker for the two body boards, 2026-10-19: the GF1002 reference had its contacts in the wrong place.** The module's nine contacts are one row along its right-hand long edge, opposite the shaft, not four along the lower edge (`gf1002-reference/README.md`). On female-base-v2 and male-static-v2 the right-hand clamp H2's lip lands on that row. The reference's STEP and previews, the 1:1 `gf1002-reference` template and the 3D body scenes still show the old contacts | female-base-v2 and male-static-v2 cannot be ordered as drawn; their READMEs list what the next revision must leave clear. No shields board holds the GF1002, so the shields set is not affected |
+| F8 | **Layout corrected, physical fit still blocks the two body boards (2026-10-19).** GF1002 now has nine contacts along the long edge; both H2 clamps moved to the short edge, JA1 moved beside the row, and nearby components moved clear. STEP/VRML, previews, body scenes, Gerbers and 1:1 templates refreshed. Native ERC/DRC/parity and contact-strip clearance checks pass | User authorized documented estimates for this prototype. Measure a real module, verify ROUT pair polarity, cut pin tails flush and dry-fit before ordering. No shield board holds the GF1002, so the shields set is not affected |
 
 ## 1. Scope of this order (project manager)
 
@@ -72,7 +72,7 @@ it can be ordered on its own.
 | analyser-carrier, 2 layers | 1 | 1 | | |
 | microphone holder, 2 layers | 6 | (decide) | | |
 | teensy-adapter, 4 layers | 1 | 2 | | |
-| female-base-v2, male-static-v2 | 3, 2 | not shields; do not order as drawn (F8) | | |
+| female-base-v2, male-static-v2 | 3, 2 | not shields; physical fit pending (F8) | | |
 
 - [ ] Decide what goes in this order. The adapter is step 2 and can wait.
       The microphone holders belong to no step yet.

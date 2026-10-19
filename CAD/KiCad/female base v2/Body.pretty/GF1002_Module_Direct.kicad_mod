@@ -6,7 +6,7 @@
 	(property "Reference" ""
 		(at 0 0 0)
 		(layer "F.SilkS")
-		(uuid "1092958c-d0e1-4690-a0d5-b14dadf00c9f")
+		(uuid "e0fc0db5-a5a6-40ab-89a9-602aaf84149e")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -17,7 +17,7 @@
 	(property "Value" ""
 		(at 0 0 0)
 		(layer "F.Fab")
-		(uuid "ab468ca3-1ae5-44f8-896c-1deacd75e2e5")
+		(uuid "d065d66b-ede6-4483-a526-b41419c9c526")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -29,7 +29,7 @@
 		(at 0 0 0)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "18fa6e36-b094-4ae9-91d0-d382b2052ada")
+		(uuid "2390c3fa-1e1a-4e55-9149-867f553e4cda")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -41,7 +41,7 @@
 		(at 0 0 0)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "2303057e-2cc7-4f46-abe7-ec73beaa19f2")
+		(uuid "386608a0-85aa-45a2-b692-a6d2f1e4ff20")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -52,13 +52,13 @@
 	(attr exclude_from_pos_files)
 	(fp_line
 		(start 0 0)
-		(end 20 0)
+		(end 20.2 0)
 		(stroke
 			(width 0.1)
 			(type default)
 		)
 		(layer "Dwgs.User")
-		(uuid "953c2454-a66d-4552-8d80-b12c5130fc4b")
+		(uuid "bd3df5c0-6d61-43a4-9a5e-ba22fe75f001")
 	)
 	(fp_line
 		(start 0 30)
@@ -68,27 +68,181 @@
 			(type default)
 		)
 		(layer "Dwgs.User")
-		(uuid "5b1948eb-7329-4dd6-ba17-f8c5a9ed18eb")
+		(uuid "fca35769-ab9f-49e1-84df-864b56ee5e99")
 	)
 	(fp_line
-		(start 20 0)
-		(end 20 30)
+		(start 20.2 0)
+		(end 20.2 30)
 		(stroke
 			(width 0.1)
 			(type default)
 		)
 		(layer "Dwgs.User")
-		(uuid "f00513df-0881-46b4-8ec9-0bdcf67af0d9")
+		(uuid "4c67afca-b8d2-4cec-90ef-34952a750636")
 	)
 	(fp_line
-		(start 20 30)
+		(start 20.2 30)
 		(end 0 30)
 		(stroke
 			(width 0.1)
 			(type default)
 		)
 		(layer "Dwgs.User")
-		(uuid "505f962a-f68c-472e-bf1c-3b35ec223697")
+		(uuid "3118667f-9ffa-4ca9-a83e-2ca208d52717")
+	)
+	(fp_line
+		(start 17.9 1.2)
+		(end 19.2 1.2)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "2059ddf7-fa04-40e4-a34c-a31de400a0fa")
+	)
+	(fp_line
+		(start 17.9 3.74)
+		(end 19.2 3.74)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "95f85ea2-07d2-4a6b-a527-5d051641b48b")
+	)
+	(fp_line
+		(start 17.9 6.28)
+		(end 19.2 6.28)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "c4af0dec-c074-43c5-bfd5-97fb582049aa")
+	)
+	(fp_line
+		(start 17.9 11.36)
+		(end 19.2 11.36)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "7c7902b3-fdf3-4ebb-83c8-a2d5936bca3f")
+	)
+	(fp_line
+		(start 17.9 13.899999)
+		(end 19.2 13.899999)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "53b6db94-8f43-4238-a5ce-c6ee746baf8d")
+	)
+	(fp_line
+		(start 17.9 18.98)
+		(end 19.2 18.98)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "0de59cc4-3530-4616-ab22-ddd6f5098681")
+	)
+	(fp_line
+		(start 17.9 21.52)
+		(end 19.2 21.52)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "3adefc9a-2312-436c-8f8d-5e326b15e712")
+	)
+	(fp_line
+		(start 17.9 24.06)
+		(end 19.2 24.06)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "652c2ee5-5243-420f-977d-2781bae1086f")
+	)
+	(fp_line
+		(start 17.9 26.599999)
+		(end 19.2 26.599999)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "a42467af-7a58-45d6-b789-c6f1b496bb79")
+	)
+	(zone
+		(net 0)
+		(net_name "")
+		(layer "F.Cu")
+		(uuid "48454f41-0fd3-4212-a6ef-c48a1cb04b8f")
+		(hatch edge 0.5)
+		(connect_pads
+			(clearance 0)
+		)
+		(min_thickness 0.25)
+		(filled_areas_thickness no)
+		(keepout
+			(tracks allowed)
+			(vias not_allowed)
+			(pads not_allowed)
+			(copperpour allowed)
+			(footprints allowed)
+		)
+		(placement
+			(enabled no)
+			(sheetname "")
+		)
+		(fill
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+		)
+		(polygon
+			(pts
+				(xy 16.5 0) (xy 20.2 0) (xy 20.2 30) (xy 16.5 30)
+			)
+		)
+	)
+	(zone
+		(net 0)
+		(net_name "")
+		(layer "B.Cu")
+		(uuid "d2997330-8b43-426a-bd1d-07135fba7ad2")
+		(hatch edge 0.5)
+		(connect_pads
+			(clearance 0)
+		)
+		(min_thickness 0.25)
+		(filled_areas_thickness no)
+		(keepout
+			(tracks allowed)
+			(vias not_allowed)
+			(pads not_allowed)
+			(copperpour allowed)
+			(footprints allowed)
+		)
+		(placement
+			(enabled no)
+			(sheetname "")
+		)
+		(fill
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+		)
+		(polygon
+			(pts
+				(xy 16.5 0) (xy 20.2 0) (xy 20.2 30) (xy 16.5 30)
+			)
+		)
 	)
 	(embedded_fonts no)
 	(model "${KIPRJMOD}/3dmodels/module_assembly.wrl"

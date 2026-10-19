@@ -16,8 +16,8 @@ These are **photo-derived mechanical studies, not fabrication designs**.
 Thomas calls the module **GF1002**; the photographed IC marking is not legible
 enough to identify its chip. No electrical schematic, nets, routing, operating
 voltage, gain or component values have been reconstructed. The small component
-footprints are illustrative. **The four lower-edge contacts are wrong**: see
-the correction below. Perfboard pads have no nets.
+footprints are illustrative. The corrected nine-contact row is described below; its locations remain
+photo-derived. Perfboard pads have no nets.
 
 ## Correction, 2026-10-19: the module's contacts
 
@@ -61,13 +61,14 @@ These are seller listings and a photo, not a datasheet: **measure one
 module** before a footprint depends on them (row offset, first contact,
 pin length below the board, pot overhang).
 
-**Not yet regenerated**: `build_reference.py` still draws the four lower-edge
-contacts, and so do this folder's STEP models and previews, the
-`gf1002-reference` sheet in the 1:1 fit-check pack, and the body scenes in
-`../assembly-3d/`. The two body boards built from this model do not fit the
-real contact row: `../../female base v2/README.md` and
-`../../male static v2/README.md` state what their next revision must leave
-clear (`../RELEASE_REVIEW.md` F8).
+**Regenerated 2026-10-19:** reference PCB, STEP/VRML envelopes, previews,
+body-board assemblies, Blender body scenes and 1:1 templates now use the
+nine-contact row. Contact numbers retain the eleven grid positions (4 and
+7 absent). LOUT/ROUT contacts are labelled A/B because polarity is unreadable.
+The conservative envelope is 20.2 × 30 mm; the contact X remains the photo
+estimate 18.55 mm (1.65 mm from that envelope's edge). Pot overhang is now
+3 mm. Body boards use wires and flush-cut tails rather than a mating footprint.
+Physical fit is still unverified; see the body-board READMEs and F8.
 
 ## Geometry and uncertainty
 
@@ -78,7 +79,7 @@ No dimensions have been confirmed on a physical sample.
 
 | Feature | Reference value | Basis |
 |---|---:|---|
-| Module outline | 20 × 30 mm | Photo estimate; a listing gives 20.2 × 29.5 mm (correction above) |
+| Module envelope | 20.2 × 30 mm | Conservative allowance for seller size 20.2 × 29.5 mm; unmeasured |
 | Carrier outline | 40 × 60 mm | Photo estimate |
 | Both PCB thicknesses | 1.6 mm | Assumed |
 | Carrier perfboard grid | 16 × 23 positions, 2.54 mm pitch | Representative standard grid |
@@ -133,7 +134,7 @@ From the repository root on the Windows CAD machine:
 reloads both PCBs, verifies that their 3D assets resolve locally, and checks
 that there are no tracks or zones. Custom envelope solids are checked for
 validity by FreeCAD. Exported STEP assemblies were reopened in FreeCAD and
-validated (29 solids for the module, 40 for the carrier assembly). Top and
+validated for CAD consistency. Top and
 underside renders were inspected. These checks establish CAD consistency only; physical fit
 and electrical operation have not been validated. Existing installation
 and shield designs were not modified.

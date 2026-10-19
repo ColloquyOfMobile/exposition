@@ -1,13 +1,31 @@
 {
   "basis": "Thomas PDF Figure 6; photo scale assumes 2.54 mm perfboard pitch",
   "module_outline_mm": [
-    20,
+    20.2,
     30
   ],
   "carrier_outline_mm": [
     40,
     60
   ],
+  "module_length_basis": "Conservative 30mm envelope; seller lists 29.5mm; unmeasured",
+  "contact_row_x_mm": 18.55,
+  "contact_first_y_mm": 1.2,
+  "contact_pitch_mm": 2.54,
+  "contacts": {
+    "1": "R IN",
+    "2": "G IN",
+    "3": "L IN",
+    "5": "V+",
+    "6": "V-",
+    "8": "LOUT A",
+    "9": "LOUT B",
+    "10": "ROUT A",
+    "11": "ROUT B"
+  },
+  "contact_position_uncertainty_mm": 0.5,
+  "output_pair_polarity_verified": false,
+  "pot_overhang_mm": 3,
   "pcb_thickness_mm": 1.6,
   "carrier_module_top_offset_mm": 5,
   "module_carrier_xy_mm": [

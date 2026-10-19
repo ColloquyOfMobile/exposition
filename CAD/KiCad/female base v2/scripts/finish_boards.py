@@ -5,7 +5,9 @@ import pcbnew as p
 CAD=Path(__file__).resolve().parents[2]
 for folder,stem,bottom in [('female base v2','female-base-v2',100),('male static v2','male-static-v2',110)]:
     path=CAD/folder/(stem+'.kicad_pcb'); board=p.LoadBoard(str(path))
-    for zone in list(board.Zones()):
+    # Keep removed SWIG wrappers alive while adding the replacement zones.
+    old_zones=list(board.Zones())
+    for zone in old_zones:
         if not zone.GetIsRuleArea(): board.Remove(zone)
     for layer in (p.F_Cu,p.B_Cu):
         zone=p.ZONE(board); zone.SetZoneName('LOCAL_SUPPLY_GND')

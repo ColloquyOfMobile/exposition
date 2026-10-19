@@ -12,13 +12,18 @@ subject to physical module and installation measurements.
 
 ## Mechanical interface
 
+Revision C validation (2026-10-19): native ERC/DRC/unconnected/parity 0/0/0/0;
+independent contact-strip, clamp-position, harness and original-geometry checks
+pass (`reports/validation.json`). The full repository suite passes 1,796 tests.
+STEP assemblies reopen with valid geometry; previews inspected.
+
 - Original **50 × 90 mm** outline, rounded corners, Ø8 mm artwork fixing
   at (50,50) mm and lower open artwork slot are retained exactly.
 - Original DSUB position, pad centres, drills and harness pin order retained.
-- Provisional module outline: (40,55) to (60,85) mm.
-- New Ø2.2 mm clamp holes: (37.5,74.5) and (62.5,74.5) mm.
+- Provisional module outline: (40,55) to (60.2,85) mm.
+- New Ø2.2 mm clamp holes: (37.5,74.5) and (50.1,87.5) mm.
 - Module underside gap: 3 mm; module PCB top: 4.6 mm above main PCB.
-- Shaft points left, approximately **5 mm beyond the main board edge**.
+- Shaft points left, approximately **7 mm beyond the main board edge**.
 - Reference height above carrier top: approximately **20 mm** at the pot.
 
 Coordinates are PCB-editor +X right/+Y down; outline upper-left is (25,20).
@@ -27,35 +32,35 @@ parts are in `3dmodels/`. Use insulating clamps and M2 fixings. Confirm
 module dimensions, underside clearance, slot fit, screw length and room for
 the knob/cables inside the male body before making mating hardware.
 
-## Fit requirements for the GF1002's contact row (2026-10-19)
+## Contact-row clearance revision C (2026-10-19)
 
-The reference module had its contacts in the wrong place. The module's nine
-contacts are **one row along its right-hand long edge**, opposite the shaft
-(`../shields/gf1002-reference/README.md`). On this board that row lies at
-about **X = 58.55 mm, Y = 56.2 + 2.54·n mm** (n = 0 to 10, with n = 3 and 6
-empty). From the pot end: input R, G, L, then supply +, −, then the LOUT
-pair, then the ROUT pair. These values come from a photo and are good to
-about 0.5 mm.
+The GF1002 reference now shows nine contacts along the long edge opposite
+the shaft, on an eleven-position 2.54 mm grid with positions 4 and 7 empty.
+Its contact coordinates are photo estimates with about 0.5 mm uncertainty.
+The 20.2 × 30 mm module envelope conservatively allows the seller's
+20.2 × 29.5 mm size. Physical dimensions remain unverified.
 
-**As drawn, this board does not fit the module.** Clamp H2 at (62.5, 74.5)
-reaches 1.5 mm onto the module across Y = 73.75 to 75.25, so its lip lands
-on the contact row at the first LOUT contact (Y ≈ 74.0). The next revision
-must meet the requirements in `../female base v2/README.md`, at this
-board's coordinates:
+H1 stays at (37.5, 74.5). H2 has moved to (50.1, 87.5), rotated 90 degrees to retain
+the short edge away from the pot. The contact-side strip is clear of
+clamps, screws, components and hookup pads along the full module length.
+Native rule areas exclude pads and vias from that strip. The nearby
+reservoir and bypass components have moved to clear the new clamp.
 
-1. Nothing over the module's right-hand 3.5 mm (X = 56.5 to 60) along its
-   full length.
-2. H1 stays on the shaft edge. The second fixing goes on the short edge
-   away from the pot (Y = 85), or the module is held by its own contact row.
-   Check R1, R2, C1 and C2 around (50 to 58, 88 to 93) against a clamp
-   there.
-3. Either cut the module's pins flush, or add a matching 1 × 11, 2.54 mm
-   row of plated holes under the contact row, which can carry JA1's
-   connections instead of wires.
-4. If wires stay, JA1 moves from (43, 91) to beside the contact row. Audio
-   goes to the R input, with the speaker on ROUT.
-5. Measure one module first, then lay it on a 1:1 print of the revised
-   board.
+JA1 is beside the contact row at (63.5, 74), keeping the six individual hookup
+wires short. Connect AMP_INPUT to the module's **R input**, input return
+to **G**, and the speaker to **ROUT**. Confirm +/− within the ROUT pair
+on the actual module: the photo does not establish pair polarity.
+No guessed mating header or through-hole pattern has been added.
+
+**Cut existing module pin tails flush before mounting.** The retained
+3 mm underside gap is for this assembly choice; long pins must not be
+pressed against the carrier. Use insulating clamps and hardware.
+
+Before ordering, measure the module width/length, row offset and first
+contact, pin protrusion, pot overhang and clamp slot fit. Dry-fit the
+real module on the updated 1:1 print. This revision resolves the drawn
+contact/clamp conflict; it does not establish physical fit or release the
+board for production (RELEASE_REVIEW.md F8).
 
 Small connectors have moved to leave room for the module and shaft. J9 is
 rotated 90 degrees; its pad order is retained. J3 remains microphone; J1,

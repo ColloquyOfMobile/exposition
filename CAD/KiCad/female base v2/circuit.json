@@ -199,7 +199,7 @@
         "5": "AMP_OUT_P",
         "6": "AMP_OUT_N"
       },
-      "description": "Short individually identified wires to module VDD, supply GND, Audio, input GND, ROUT+, ROUT-. Pad order is carrier-defined; verify module contacts.",
+      "description": "Short wires to module VDD, supply GND, R input, input GND, ROUT+, ROUT-. Verify output pair polarity on the actual module; photo does not establish it.",
       "pin_names": {
         "1": "1",
         "2": "2",
@@ -314,7 +314,7 @@
       "value": "GF1002 direct module",
       "footprint": "Body:GF1002_Module_Direct",
       "pins": {},
-      "description": "No perfboard. Photo-derived 20x30mm module, held by two insulating edge clamps; 3mm underside clearance.",
+      "description": "No perfboard. Provisional 20.2x30mm envelope; shaft-edge and short-end insulating clamps. Cut module pin tails flush; 3mm underside gap. Physical fit unverified.",
       "pin_names": {},
       "pin_types": {},
       "include_bom": true,
@@ -338,7 +338,7 @@
     {
       "ref": "H2",
       "value": "M2 insulating clamp",
-      "footprint": "Body:GF1002_Clamp_Right",
+      "footprint": "Body:GF1002_Clamp_End",
       "pins": {},
       "description": "Provisional edge clamp. No drilling of amplifier module; check actual fit.",
       "pin_names": {},
@@ -381,8 +381,8 @@
       0
     ],
     "JA1": [
-      31,
-      91,
+      54.5,
+      66.5,
       0
     ],
     "R1": [
@@ -396,13 +396,13 @@
       90
     ],
     "C1": [
-      41,
-      91,
+      35.5,
+      94,
       0
     ],
     "C2": [
-      38,
-      88,
+      32,
+      89,
       0
     ],
     "M1": [
@@ -416,9 +416,9 @@
       0
     ],
     "H2": [
-      53.5,
-      74.5,
-      0
+      41.1,
+      87.5,
+      90
     ]
   },
   "module_origin_mm": [
@@ -431,15 +431,25 @@
       74.5
     ],
     [
-      53.5,
-      74.5
+      41.1,
+      87.5
     ]
   ],
   "module_underside_gap_mm": 3,
   "module_dimensions_mm": [
-    20,
+    20.2,
     30
   ],
   "module_dimensions_verified": false,
-  "original": "female base"
+  "original": "female base",
+  "contact_strip_local_mm": [
+    16.5,
+    0,
+    20.2,
+    30
+  ],
+  "module_pins_must_be_flush": true,
+  "amplifier_input": "R",
+  "speaker_output": "ROUT",
+  "output_polarity_verified": false
 }

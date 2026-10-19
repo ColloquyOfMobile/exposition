@@ -92,16 +92,21 @@ def save(board, stem):
     return loaded
 
 
-module = p.BOARD(); outline(module, 20, 30)
+module = p.BOARD(); outline(module, 20.2, 30)
 custom(module, 'RV1', 0, 0, 'volume_control')
 custom(module, 'C1', 12, 13, 'capacitor')
 custom(module, 'U1', 11, 23, 'unknown_16pin_ic')
 for i, (x, y) in enumerate([(3, 13), (3, 18), (3, 23), (3, 28), (11, 28), (17, 28)], 1):
     library(module, 'Resistor_SMD', 'R_0805_2012Metric', 'P'+str(i), x, y)
-# Visible contacts along the lower edge: positions illustrative, functions unknown.
+# Photo-derived nine contacts on an eleven-position perfboard grid.
+# Pair polarity is unreadable: retain neutral A/B labels, with no inferred nets.
 contacts = custom(module, 'CONTACTS', 0, 0)
-for i, x in enumerate((5, 7.54, 10.08, 12.62), 1):
-    pad(contacts, x, 29, i, .8, 1.3)
+contact_names = {1:'R IN',2:'G IN',3:'L IN',5:'V+',6:'V-',
+                 8:'LOUT A',9:'LOUT B',10:'ROUT A',11:'ROUT B'}
+for number, name in contact_names.items():
+    y = 1.2 + 2.54*(number-1)
+    pad(contacts, 18.55, y, number, .8, 1.3)
+    label(module, name, 22.8, y, .55, p.Dwgs_User)
 label(module, 'GF1002 REF', 10, 17, .7)
 save(module, 'gf1002-reference')
 
@@ -139,7 +144,11 @@ label(carrier, 'THOMAS - REF ONLY', 20, 58.5, .65)
 save(carrier, 'thomas-amplifier-carrier-reference')
 (ROOT/'mechanical.json').write_text(json.dumps({
     'basis': 'Thomas PDF Figure 6; photo scale assumes 2.54 mm perfboard pitch',
-    'module_outline_mm': [20, 30], 'carrier_outline_mm': [40, 60],
+    'module_outline_mm': [20.2, 30], 'carrier_outline_mm': [40, 60],
+    'module_length_basis': 'Conservative 30mm envelope; seller lists 29.5mm; unmeasured',
+    'contact_row_x_mm':18.55, 'contact_first_y_mm':1.2, 'contact_pitch_mm':2.54,
+    'contacts':contact_names, 'contact_position_uncertainty_mm':.5,
+    'output_pair_polarity_verified':False, 'pot_overhang_mm':3,
     'pcb_thickness_mm': 1.6, 'carrier_module_top_offset_mm': 5,
     'module_carrier_xy_mm': [-5, 9],
     'confirmed_dimensions': [], 'electrical_connectivity': 'not reconstructed',

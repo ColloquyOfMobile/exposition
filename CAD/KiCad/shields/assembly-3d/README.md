@@ -16,6 +16,18 @@ still documents their nominal frame assumptions; current body views use Rev C.
 The [three-position preview](microphone-positions-preview.png) compares the
 left, right and upward module choices on the same holder.
 
+The 2026-10-19 body-board update replaces the current six body scenes with
+the corrected nine-contact GF1002 reference, the short-edge H2 clamp and
+the adjacent hookup pads. Rack scenes and retained Rev B reference scenes
+are preserved. Body dimensions remain estimates; pin tails must be cut flush
+and actual module fit checked before ordering. See the body-board READMEs.
+
+The 2026-10-19 body-board update replaces the current six body scenes with
+the corrected nine-contact GF1002 reference, the short-edge H2 clamp and
+the adjacent hookup pads. Rack scenes and retained Rev B reference scenes
+are preserved. Body dimensions remain estimates; pin tails must be cut flush
+and actual module fit checked before ordering. See the body-board READMEs.
+
 ## Female and male body mounting studies — 2026-10-15
 
 The combined file also contains **Female body** and **Male body** scenes.
