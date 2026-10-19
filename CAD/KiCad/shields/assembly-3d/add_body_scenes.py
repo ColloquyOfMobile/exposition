@@ -170,7 +170,8 @@ def build(kind, orientation='up'):
     scene['mounting_status'] = 'Display placement. 5 mm frame gap; body standoff and board spacing provisional.'
     scene['microphone_status'] = 'Rev C 32x62 slotted holder; ONE module facing '+orientation+'. Provisional support geometry.'
     stem = 'female-base-v2' if kind == 'Female' else 'male-static-v2'
-    body, coll = board(scene, stem, kind + ' v2 PCB + GF1002 + insulating edge clamps', (-50, 20, FRAME_GAP))
+    scene['body_board_revision']='D'
+    body, coll = board(scene, stem, kind + ' v2 PCB + socketed GF1002 + adjustable supports', (-50, 20, FRAME_GAP))
     mic_source = 'microphone-flex-'+orientation
     mic, _ = board(scene, mic_source, kind + ' microphone holder + ONE MAX9814 facing '+orientation, (-60, -80, FRAME_GAP))
     hardware = bpy.data.collections.new(kind + ' frame and insulating spacer references')
@@ -188,7 +189,7 @@ def build(kind, orientation='up'):
     annotations = bpy.data.collections.new(kind + ' mounting study annotations')
     scene.collection.children.link(annotations)
     label(annotations, kind+' title', kind.upper()+' BODY\nMicrophone facing '+orientation.upper(), (-63, 28, 8), 5, ink)
-    label(annotations, kind+' amp note', 'GF1002\nDirect-mounted\ninsulating clamps', (42, -43, 8), 3.2, ink)
+    label(annotations, kind+' amp note', 'GF1002 / PLUG-IN\n11 mm nominal stack\nadjustable supports', (42, -43, 8), 3.2, ink)
     label(annotations, kind+' mic note', 'MAX9814 / '+orientation.upper()+'\n32 x 62 mm holder\n12 x 5.5 mm slots', (30, -150, 12), 3.2, ink)
     label(annotations, kind+' profile note', 'IMPERIAL REFERENCE ONLY\n1 x 2 in / 25.4 x 50.8 mm\nTJ part number unconfirmed', (-63, -216, 5), 3.1, amber)
     studio = bpy.data.collections.new(kind + ' body studio'); scene.collection.children.link(studio)
@@ -223,12 +224,13 @@ def build(kind, orientation='up'):
     assert sorted(round(pos[1]) for pos in mount_positions) == [-186, -136], mount_positions
     frame_size = [max(v.co[i] for v in frame.data.vertices)-min(v.co[i] for v in frame.data.vertices) for i in range(3)]
     assert all(abs(a/MM-b)<.001 for a,b in zip(frame_size, [25.4,PROFILE_LENGTH,50.8]))
-    # Verify that each carrier contains exactly the supplied amplifier and both clamps.
+    # One amplifier assembly has five M1 meshes: socket, module and 3 headers.
     meshes = [o for o in coll.all_objects if o.type == 'MESH']
-    assert len([o for o in meshes if 'M1' in o.name]) == 1
+    assert len([o for o in meshes if 'M1' in o.name]) == 5
     assert len([o for o in meshes if 'H1' in o.name or 'H2' in o.name]) == 2
     return {'scene': scene.name, 'body_source': stem, 'microphone_source':mic_source,
-            'microphone_orientation':orientation,'module_population':1,
+            'microphone_orientation':orientation,'module_population':1,'body_board_revision':'D',
+            'amplifier_assembly_meshes':5,'module_underside_gap_mm_nominal':11,
             'body_transform_mm': [-50,20,FRAME_GAP],
             'microphone_transform_mm': [-60,-80,FRAME_GAP], 'microphone_mount_centres_mm': mount_positions,
             'body_mount_centres_mm': [[0,y,FRAME_GAP] for y in body_ys],

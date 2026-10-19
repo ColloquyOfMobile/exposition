@@ -18,6 +18,9 @@ for folder,stem in [('female base v2','female-base-v2'),('male static v2','male-
     root=CAD/folder
     work=REPO/'tmp/body-amplifier-route'/stem; work.mkdir(parents=True,exist_ok=True)
     board=p.LoadBoard(str(root/(stem+('' if args.from_routed else '-placed')+'.kicad_pcb')))
+    if not args.from_routed:
+        from analogue_routes import prepare
+        prepare(board,stem)
     # Keep removed SWIG wrappers alive through DSN/SES import and serialization.
     old_zones=list(board.Zones())
     for zone in old_zones:

@@ -1,14 +1,36 @@
 {
-  "source_sha256": "aaea46a53571869cf7121ec6d04a91e1025abd3ee7b1fb5b82de42a1f802da93",
+  "source_sha256": "9d100054129bbdc00c3563ded6f393557d96be755044040a6835b063c997ba4b",
   "original_outline_and_dsub_geometry": "PASS",
   "harness_nets_and_pad_drills": "PASS",
+  "revision": "D",
+  "socket_pinout_and_reference_alignment": "PASS",
   "contact_strip_clearance": "PASS",
-  "shaft_and_short_edge_clamps": "PASS",
-  "wire_pads_on_contact_side": "PASS",
+  "adjustable_support_positions": "PASS",
+  "module_underside_gap_mm_nominal": 11,
+  "c2_distance_to_supply_pins_mm": [
+    4.796,
+    3.327
+  ],
+  "c1_distance_to_supply_pin_mm": 5.952,
+  "routing": {
+    "output_lengths_mm": {
+      "AMP_OUT_P": 18.153,
+      "AMP_OUT_N": 19.191
+    },
+    "output_copper_layer": "F.Cu",
+    "output_minimum_width_mm": 0.8,
+    "amp_input_total_length_mm": 7.265,
+    "paired_incoming_line_return_overlap_mm": 19.324,
+    "parallel_sensitive_runs_within_2p5mm": 0,
+    "minimum_parallel_sensitive_centre_spacing_mm": 17.241,
+    "sensitive_crossings": [],
+    "ground_guard": "PASS"
+  },
   "erc_violations": 0,
   "drc_violations": 0,
   "unconnected_items": 0,
   "schematic_parity_differences": 0,
   "physical_module_fit_verified": false,
-  "module_pins_must_be_flush": true
+  "stack_height_verified": false,
+  "output_polarity_verified": false
 }

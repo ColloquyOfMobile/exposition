@@ -1,4 +1,4 @@
-"""Build both body boards with directly clamped, wire-connected GF1002 modules.
+"""Build both body boards with socketed GF1002 modules (revision D).
 
 Run with KiCad 9 Python. Original artwork outlines and DSUB geometry are retained.
 Outputs are engineering prototypes; module dimensions are photo estimates.
@@ -71,47 +71,41 @@ def local_footprints(folder, original):
         if source:
             for model in source.Models(): f.Add3DModel(model)
         io.FootprintSave(str(local), f)
-    # Six separate labelled hookup pads, not a presumed module header pinout.
-    board = p.BOARD(); f = p.FOOTPRINT(board); board.Add(f)
-    f.SetFPID(p.LIB_ID('Body', 'GF1002_WirePads_2x03'))
-    for i in range(6):
-        pad = p.PAD(f); pad.SetNumber(str(i+1)); pad.SetAttribute(p.PAD_ATTRIB_PTH)
-        pad.SetShape(p.PAD_SHAPE_CIRCLE); pad.SetSize(xy(2, 2)); pad.SetDrillSize(xy(1, 1))
-        layers = p.LSET.AllCuMask(); layers.AddLayer(p.F_Mask); layers.AddLayer(p.B_Mask)
-        pad.SetLayerSet(layers); pad.SetPosition(xy(i%3*2.54, i//3*2.54)); f.Add(pad)
-    for layer in (p.F_CrtYd, p.B_CrtYd):
-        for a, b in [((-1.5,-1.5),(6.58,-1.5)),((6.58,-1.5),(6.58,4.04)),
-                     ((6.58,4.04),(-1.5,4.04)),((-1.5,4.04),(-1.5,-1.5))]:
-            graphic(f, a, b, layer, .05)
-    io.FootprintSave(str(local), f)
     for side in ('Left', 'End'):
         f = p.FootprintLoad(str(LIB/'footprints/MountingHole.pretty'), 'MountingHole_2.2mm_M2')
-        f.SetFPID(p.LIB_ID('Body', 'GF1002_Clamp_'+side))
-        f.Models().clear(); keepout(f, (0, 0), 2.5)
-        # End clamp uses the left clamp rotated 90 degrees towards the short edge.
-        model = p.FP_3DMODEL(); model.m_Filename = '${KIPRJMOD}/3dmodels/clamp_left.step'
+        f.SetFPID(p.LIB_ID('Body', 'GF1002_Support_'+side))
+        f.Models().clear(); keepout(f, (0, 0), 3)
+        model = p.FP_3DMODEL(); model.m_Filename = '${KIPRJMOD}/3dmodels/support_left.step'
         f.Add3DModel(model); io.FootprintSave(str(local), f)
-    f = p.FOOTPRINT(board); board.Add(f)
-    f.SetFPID(p.LIB_ID('Body', 'GF1002_Module_Direct'))
-    f.SetAttributes(p.FP_EXCLUDE_FROM_POS_FILES)
+    f=p.FootprintLoad(str(LIB/'footprints/Connector_PinSocket_2.54mm.pretty'),
+                     'PinSocket_1x11_P2.54mm_Vertical')
+    f.SetFPID(p.LIB_ID('Body', 'GF1002_PlugIn_1x11'))
     for a,b in [((0,0),(20.2,0)),((20.2,0),(20.2,30)),((20.2,30),(0,30)),((0,30),(0,0))]:
-        graphic(f,a,b,p.Dwgs_User)
-    # No plated mating footprint is inferred from the photo. These are fit marks.
-    for n in (0,1,2,4,5,7,8,9,10):
-        y=1.2+2.54*n
-        graphic(f,(17.9,y),(19.2,y),p.F_Fab)
+        graphic(f,(a[0]-18.55,a[1]-1.2),(b[0]-18.55,b[1]-1.2),p.Dwgs_User)
     for layer in (p.F_Cu,p.B_Cu):
-        z=p.ZONE(f); z.SetIsRuleArea(True); z.SetLayer(layer)
-        z.SetDoNotAllowPads(True); z.SetDoNotAllowVias(True)
-        z.SetDoNotAllowTracks(False); z.SetDoNotAllowCopperPour(False)
-        z.SetDoNotAllowFootprints(False); z.Outline().NewOutline()
-        for x,y in ((16.5,0),(20.2,0),(20.2,30),(16.5,30)):
-            z.Outline().Append(p.FromMM(x),p.FromMM(y))
-        f.Add(z)
+        zone=p.ZONE(f); zone.SetIsRuleArea(True); zone.SetLayer(layer)
+        zone.SetDoNotAllowVias(True); zone.SetDoNotAllowPads(False)
+        zone.SetDoNotAllowTracks(False); zone.SetDoNotAllowCopperPour(False)
+        zone.SetDoNotAllowFootprints(False); zone.Outline().NewOutline()
+        for x,y in ((-2.05,-1.2),(1.65,-1.2),(1.65,28.8),(-2.05,28.8)):
+            zone.Outline().Append(p.FromMM(x),p.FromMM(y))
+        f.Add(zone)
+    # Reference models follow the nominal 8.5mm socket + 2.5mm header stack.
+    for model in f.Models():
+        source=LIB/'3dmodels'/model.m_Filename.split('}/')[-1]
+        shutil.copy2(source,folder/'3dmodels'/source.name)
+        model.m_Filename='${KIPRJMOD}/3dmodels/'+source.name
     model=p.FP_3DMODEL(); model.m_Filename='${KIPRJMOD}/3dmodels/module_assembly.wrl'
-    model.m_Offset.z=4.6  # 3 mm insulating gap plus module PCB's 1.6 mm.
+    model.m_Offset.x=-18.55; model.m_Offset.y=1.2; model.m_Offset.z=12.6
     f.Add3DModel(model); io.FootprintSave(str(local), f)
-    (folder/'fp-lib-table').write_text('(fp_lib_table (version 7)\n (lib (name "Body")(type "KiCad")(uri "${KIPRJMOD}/Body.pretty")(options "")(descr "Preserved harness footprints and provisional GF1002 clamps")))\n')
+    for first,count in ((1,3),(5,2),(8,4)):
+        name=f'PinHeader_1x{count:02d}_P2.54mm_Vertical.step'
+        shutil.copy2(LIB/'3dmodels/Connector_PinHeader_2.54mm.3dshapes'/name,folder/'3dmodels'/name)
+        model=p.FP_3DMODEL(); model.m_Filename='${KIPRJMOD}/3dmodels/'+name
+        model.m_Offset.y=-(first-1)*2.54; model.m_Offset.z=11; model.m_Rotation.y=180
+        f.Add3DModel(model)
+    io.FootprintSave(str(local),f)
+    (folder/'fp-lib-table').write_text('(fp_lib_table (version 7)\n (lib (name "Body")(type "KiCad")(uri "${KIPRJMOD}/Body.pretty")(options "")(descr "Preserved harness footprints and socketed GF1002")))\n')
 
 
 def make(original_name, stem, positions, module_origin, clamps, extra):
@@ -135,19 +129,19 @@ def make(original_name, stem, positions, module_origin, clamps, extra):
             pins[pad.GetNumber()]=net
         add(f.GetReference(),f.GetValue(),'Body:'+f.GetReference()+'_original',pins,
             'Original harness pin order retained. J6 now carries the local amplifier output.')
-    add('JA1','GF1002 wire connections','Body:GF1002_WirePads_2x03',
-        {1:'/5V',2:'GND',3:'AMP_INPUT',4:'AUDIO_RETURN',5:'AMP_OUT_P',6:'AMP_OUT_N'},
-        'Short wires to module VDD, supply GND, R input, input GND, ROUT+, ROUT-. Verify output pair polarity on the actual module; photo does not establish it.')
     add('R1','22K','Resistor_SMD:R_0603_1608Metric',{1:'LINE_IN',2:'AMP_INPUT'})
     add('R2','3K3','Resistor_SMD:R_0603_1608Metric',{1:'AMP_INPUT',2:'AUDIO_RETURN'})
     add('C1','220uF 10V / provisional','Capacitor_THT:CP_Radial_D6.3mm_P2.50mm',{1:'/5V',2:'GND'},
         'Provisional local reservoir; verify actual amplifier transients and rail sag before release.')
     add('C2','100nF','Capacitor_SMD:C_0603_1608Metric',{1:'/5V',2:'GND'})
-    add('M1','GF1002 direct module','Body:GF1002_Module_Direct',{},
-        'No perfboard. Provisional 20.2x30mm envelope; shaft-edge and short-end insulating clamps. Cut module pin tails flush; 3mm underside gap. Physical fit unverified.')
+    add('M1','GF1002 / 1x11 female socket','Body:GF1002_PlugIn_1x11',
+        {1:'AMP_INPUT',2:'AUDIO_RETURN',3:None,4:None,5:'/5V',6:'GND',7:None,8:None,9:None,10:'AMP_OUT_P',11:'AMP_OUT_N'},
+        'Plug-in module: 1x3, 1x2 and 1x4 downward male headers in an 11-pin female socket. Nominal underside gap 11mm. Pin 10=ROUT+, 11=ROUT- is provisional: verify module polarity before ordering.')
+    parts['M1']['pin_names']={str(n):name for n,name in enumerate(
+        ('R_IN','INPUT_G','L_IN_NC','GAP_NC','VDD','SUPPLY_GND','GAP_NC','LOUT_A_NC','LOUT_B_NC','ROUT_P_VERIFY','ROUT_N_VERIFY'),1)}
     for i,side in enumerate(('Left','End'),1):
-        add('H'+str(i),'M2 insulating clamp','Body:GF1002_Clamp_'+side,{},
-            'Provisional edge clamp. No drilling of amplifier module; check actual fit.',False)
+        add('H'+str(i),'M2 insulating support / 11mm','Body:GF1002_Support_'+side,{},
+            'Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack.',False)
     # Use explicit global names without a leading slash (KiCad escapes slashes).
     for part in parts.values():
         part['pins']={pin:(net.lstrip('/') if net else net) for pin,net in part['pins'].items()}
@@ -155,10 +149,10 @@ def make(original_name, stem, positions, module_origin, clamps, extra):
     root=s.uid('sheetfile/'+stem)
     for part in parts.values(): part['sheet_path']='/'+root
     sheet=s.Sheet(stem,'Colloquy '+original_name+' — directly mounted GF1002',parts,1)
-    sheet.text('V2 ENGINEERING PROTOTYPE / DIRECT GF1002 / NO PERFBOARD',15,12,2,True)
+    sheet.text('REV D ENGINEERING PROTOTYPE / SOCKETED GF1002 / 11mm NOMINAL STACK',15,12,2,True)
     sheet.text('Harness speaker pair becomes LINE_IN / AUDIO_RETURN. Rack must be converted first.',15,20)
-    sheet.text('JA1: 1=5V, 2=GND, 3=R INPUT, 4=Audio GND, 5=ROUT+, 6=ROUT-. Verify ROUT polarity on module.',15,26)
-    sheet.text('Insulating edge clamps: do not drill the module. Only harness +5V feeds the amplifier; 12V remains servo-only.',15,32)
+    sheet.text('M1: 1=R IN, 2=audio return, 5=5V, 6=GND, 10/11=ROUT+/-. Verify output polarity and ground bond on module.',15,26)
+    sheet.text('No output is grounded. Audio return and supply ground meet only on the module. Insulating adjustable supports.',15,32)
     # DSUB's 17 pins need a tall block; use separate columns for original branches.
     def place(ref,x,y):
         sheet.place(ref,round(x/1.27)*1.27,round(y/1.27)*1.27)
@@ -167,10 +161,10 @@ def make(original_name, stem, positions, module_origin, clamps, extra):
     for i,ref in enumerate(others):
         col=i//5; row=i%5
         place(ref,145+col*95,60+row*42)
-    place('M1',340,275); place('H1',240,275); place('H2',290,275)
+    place('M1',340,210); place('H1',240,275); place('H2',290,275)
     sheet.save()
     sch=folder/(stem+'.kicad_sch')
-    sch.write_text(sch.read_text().replace('2026-10-05','2026-10-19').replace('A-prototype','C-contact-clearance'))
+    sch.write_text(sch.read_text().replace('2026-10-05','2026-10-19').replace('A-prototype','D-plug-in'))
     (folder/'Colloquy.kicad_sym').write_text('(kicad_symbol_lib (version 20241209) (generator "kicad_symbol_editor")\n'+
         '\n'.join(s.lib_symbol(part,external=True) for part in parts.values())+'\n)\n')
     (folder/'sym-lib-table').write_text('(sym_lib_table (version 7) (lib (name "Colloquy")(type "KiCad")(uri "${KIPRJMOD}/Colloquy.kicad_sym")(options "")(descr "Body v2 harness and wire interface")))\n')
@@ -186,12 +180,12 @@ def make(original_name, stem, positions, module_origin, clamps, extra):
     for centre in ([(50,47),(50,90)] if original_name=='female base' else [(50,50),(50,100)]):
         keepout(board,centre,4.5)
     board.GetTitleBlock().SetTitle('Colloquy '+original_name+' / direct GF1002')
-    board.GetTitleBlock().SetRevision('C-prototype'); board.GetTitleBlock().SetDate('2026-10-19')
+    board.GetTitleBlock().SetRevision('D-prototype'); board.GetTitleBlock().SetDate('2026-10-19')
     nets={}
     for name in sorted(set(pin_nets.values())):
         n=p.NETINFO_ITEM(board,name); board.Add(n); nets[name]=n
     positions=dict(positions); positions.update(extra)
-    positions.update(M1=(*module_origin,0),H1=(*clamps[0],0),H2=(*clamps[1],90))
+    positions.update(M1=(module_origin[0]+18.55,module_origin[1]+1.2,0),H1=(*clamps[0],0),H2=(*clamps[1],90))
     for ref,part in parts.items():
         lib,name=part['footprint'].split(':')
         fp=p.FootprintLoad(str(folder/'Body.pretty' if lib=='Body' else LIB/'footprints'/(lib+'.pretty')),name)
@@ -214,15 +208,14 @@ def make(original_name, stem, positions, module_origin, clamps, extra):
     for ref in positions:
         if ref.startswith('J') and ref!='J7':
             x,y,_=positions[ref]
-            if ref=='JA1': continue
             if ref=='J9' and original_name=='male static': text(board,ref,26,78,.8)
-            else: text(board,ref,73 if x>60 else 26.3,y,.8)
+            else: text(board,ref,73 if x>60 else 26.3,y,.8,p.F_Fab if x>=65 else p.F_SilkS)
     text(board,stem.upper(),50,40,.85)
-    text(board,'GF1002 / DIRECT / NO PERFBOARD',module_origin[0]+10,module_origin[1]+31,.8,p.Dwgs_User)
-    text(board,'5 G R-IN',positions['JA1'][0]+2.54,positions['JA1'][1]-2,.8)
-    text(board,'R O+ O-',positions['JA1'][0]+2.54,positions['JA1'][1]+4.3,.8)
+    text(board,'GF1002 / PLUG-IN / 11mm STACK',module_origin[0]+10,module_origin[1]+31,.8,p.Dwgs_User)
+    text(board,'R IN',positions['M1'][0]+3,positions['M1'][1],.65,p.Dwgs_User)
+    text(board,'ROUT +/- VERIFY',positions['M1'][0]+5,positions['M1'][1]+25.4,.65,p.Dwgs_User)
     text(board,'LINE INPUT ONLY',50,41.5,.8,p.B_SilkS)
-    text(board,'TRIM MODULE PINS FLUSH / VERIFY FIT',50,43,.65,p.Dwgs_User)
+    text(board,'FIT HEADERS / VERIFY STACK AND POLARITY',50,43,.65,p.Dwgs_User)
     for ref in ('J7','J6'):
         f=next(f for f in board.GetFootprints() if f.GetReference()==ref)
         for pad in f.Pads():
@@ -245,8 +238,9 @@ def make(original_name, stem, positions, module_origin, clamps, extra):
     pro['net_settings']['netclass_patterns']=[{'netclass':'Power','pattern':n} for n in ('5V','12V','GND','AMP_OUT_P','AMP_OUT_N')]
     (folder/(stem+'.kicad_pro')).write_text(json.dumps(pro,indent=2)+'\n')
     data={'name':stem,'components':list(parts.values()),'positions':positions,'module_origin_mm':module_origin,'clamp_centres_mm':clamps,
-          'module_underside_gap_mm':3,'module_dimensions_mm':[20.2,30],'module_dimensions_verified':False,'original':original_name,
-          'contact_strip_local_mm':[16.5,0,20.2,30],'module_pins_must_be_flush':True,
+          'revision':'D','module_underside_gap_mm':11,'module_dimensions_mm':[20.2,30],'module_dimensions_verified':False,'original':original_name,
+          'contact_strip_local_mm':[16.5,0,20.2,30],'module_pins_must_be_flush':False,
+          'socket_pin1_mm':positions['M1'][:2],'support_adjustment_mm':.5,'stack_height_verified':False,
           'amplifier_input':'R','speaker_output':'ROUT','output_polarity_verified':False}
     (folder/'circuit.json').write_text(json.dumps(data,indent=2)+'\n')
     with (folder/'bom.csv').open('w',newline='') as stream:
@@ -258,11 +252,11 @@ def make(original_name, stem, positions, module_origin, clamps, extra):
 
 if __name__=='__main__':
     make('female base','female-base-v2',
-        {'J7':(40.61,34.84,180),'J2':(62,47,0),'J4':(62,60,0),'J5':(62,73,0),'J3':(62,86,0),'J6':(63,95,0)},
+        {'J7':(40.61,34.84,180),'J2':(62,47,0),'J4':(63,57.5,0),'J5':(63,74.5,0),'J3':(34,94,0),'J6':(64,88,-90)},
         (31,55),((28.5,74.5),(41.1,87.5)),
-        {'JA1':(54.5,66.5,0),'R1':(56,81,90),'R2':(56,84,90),'C1':(35.5,94,0),'C2':(32,89,0)})
+        {'R1':(44,56.2,0),'R2':(45.8,58.74,0),'C1':(55.5,66.5,0),'C2':(45.7,67.63,0)})
     make('male static','male-static-v2',
         {'J7':(40.305,34.84,180),'J3':(31,47,0),'J9':(30,74,90),'J8':(31,82,0),'J1':(31,92,0),'J4':(31,102,0),
-         'J6':(66.5,47,0),'J10':(66.5,58,0),'J11':(64,66,0),'J5':(64,85,0),'J2':(64,98,0)},
+         'J6':(67,90,-90),'J10':(66.5,47,0),'J11':(65,60,0),'J5':(65,98,0),'J2':(65,106,0)},
         (40,55),((37.5,74.5),(50.1,87.5)),
-        {'JA1':(63.5,74,0),'R1':(58,90,90),'R2':(58,94,90),'C1':(43.5,93,0),'C2':(40.5,88,0)})
+        {'R1':(53,56.2,0),'R2':(54.8,58.74,0),'C1':(65,71,0),'C2':(54.7,67.63,0)})

@@ -1,5 +1,5 @@
 {
-  "combined_sha256_before": "8778866ddcb9e722ad1072faadbcdb2395cbc2eb96ab1045e5364721ec8028e1",
+  "combined_sha256_before": "cfc2860bf09116c5905f3dc6da9283ce3959c79689d80fbd6debf4da4bf7e13f",
   "existing_scenes": [
     "Female body - Rev B reference",
     "Male body - Rev B reference",
@@ -13,6 +13,9 @@
       "microphone_source": "microphone-flex-up",
       "microphone_orientation": "up",
       "module_population": 1,
+      "body_board_revision": "D",
+      "amplifier_assembly_meshes": 5,
+      "module_underside_gap_mm_nominal": 11,
       "body_transform_mm": [
         -50,
         20,
@@ -53,7 +56,7 @@
         50.8
       ],
       "profile_installed_part_verified": false,
-      "body_meshes": 17
+      "body_meshes": 21
     },
     {
       "scene": "Female body - mic left",
@@ -61,6 +64,9 @@
       "microphone_source": "microphone-flex-left",
       "microphone_orientation": "left",
       "module_population": 1,
+      "body_board_revision": "D",
+      "amplifier_assembly_meshes": 5,
+      "module_underside_gap_mm_nominal": 11,
       "body_transform_mm": [
         -50,
         20,
@@ -101,7 +107,7 @@
         50.8
       ],
       "profile_installed_part_verified": false,
-      "body_meshes": 17
+      "body_meshes": 21
     },
     {
       "scene": "Female body - mic right",
@@ -109,6 +115,9 @@
       "microphone_source": "microphone-flex-right",
       "microphone_orientation": "right",
       "module_population": 1,
+      "body_board_revision": "D",
+      "amplifier_assembly_meshes": 5,
+      "module_underside_gap_mm_nominal": 11,
       "body_transform_mm": [
         -50,
         20,
@@ -149,7 +158,7 @@
         50.8
       ],
       "profile_installed_part_verified": false,
-      "body_meshes": 17
+      "body_meshes": 21
     },
     {
       "scene": "Male body",
@@ -157,6 +166,9 @@
       "microphone_source": "microphone-flex-up",
       "microphone_orientation": "up",
       "module_population": 1,
+      "body_board_revision": "D",
+      "amplifier_assembly_meshes": 5,
+      "module_underside_gap_mm_nominal": 11,
       "body_transform_mm": [
         -50,
         20,
@@ -197,7 +209,7 @@
         50.8
       ],
       "profile_installed_part_verified": false,
-      "body_meshes": 22
+      "body_meshes": 26
     },
     {
       "scene": "Male body - mic left",
@@ -205,6 +217,9 @@
       "microphone_source": "microphone-flex-left",
       "microphone_orientation": "left",
       "module_population": 1,
+      "body_board_revision": "D",
+      "amplifier_assembly_meshes": 5,
+      "module_underside_gap_mm_nominal": 11,
       "body_transform_mm": [
         -50,
         20,
@@ -245,7 +260,7 @@
         50.8
       ],
       "profile_installed_part_verified": false,
-      "body_meshes": 22
+      "body_meshes": 26
     },
     {
       "scene": "Male body - mic right",
@@ -253,6 +268,9 @@
       "microphone_source": "microphone-flex-right",
       "microphone_orientation": "right",
       "module_population": 1,
+      "body_board_revision": "D",
+      "amplifier_assembly_meshes": 5,
+      "module_underside_gap_mm_nominal": 11,
       "body_transform_mm": [
         -50,
         20,
@@ -293,19 +311,19 @@
         50.8
       ],
       "profile_installed_part_verified": false,
-      "body_meshes": 22
+      "body_meshes": 26
     }
   ],
-  "combined_sha256_after": "cfc2860bf09116c5905f3dc6da9283ce3959c79689d80fbd6debf4da4bf7e13f",
+  "combined_sha256_after": "907ec1a1560a010aca7d330c54bd849b7e1c79bfb8cfa255ae778bcc6b2c53ab",
   "existing_scene_objects_and_transforms_preserved": true,
   "reopened_successfully": true,
   "source_sha256": {
-    "female-base-v2.glb": "b58dce59b548698baa6f5efe911b2499711d2c701f3b9a25ffeef67a7d31ffe9",
-    "male-static-v2.glb": "8c7b93703e3503fc789fa286da0175c60aa720e3c55e4d3704002fda15a74613",
+    "female-base-v2.glb": "cb177ada5ee071b7ac501cc16c32a69564c78875484f7b47c6f980cb6cc754af",
+    "male-static-v2.glb": "db37079c1c4ecf3b60edd747cf8220e969c19114c9d864954dcb22d8956488b0",
     "microphone-flex-up.glb": "30b99193264a97686723d89e5a59036109174d280c7e30ace2966e4211d54137",
     "microphone-flex-left.glb": "1f8fbeaaec8c1b3dd22c2c5b1942f6933b41f4be9346037f0c268c7f867eafff",
     "microphone-flex-right.glb": "3f3ba7506f5aa26128b5ec9901469e3fd761da712eb3e9c192b63e9b820d825f",
-    "female-base-v2.kicad_pcb": "aaea46a53571869cf7121ec6d04a91e1025abd3ee7b1fb5b82de42a1f802da93",
-    "male-static-v2.kicad_pcb": "00afb15493887e2036e7d78d1275a06f555cfcfecc1900d2003eed0eea075f6b"
+    "female-base-v2.kicad_pcb": "9d100054129bbdc00c3563ded6f393557d96be755044040a6835b063c997ba4b",
+    "male-static-v2.kicad_pcb": "e4923f711e8b0233549fd43cf6b9de5159f2515814c596a85696582bfd2c90ea"
   }
 }

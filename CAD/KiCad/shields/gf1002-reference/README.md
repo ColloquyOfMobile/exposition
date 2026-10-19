@@ -67,9 +67,10 @@ nine-contact row. Contact numbers retain the eleven grid positions (4 and
 7 absent). LOUT/ROUT contacts are labelled A/B because polarity is unreadable.
 The conservative envelope is 20.2 × 30 mm; the contact X remains the photo
 estimate 18.55 mm (1.65 mm from that envelope's edge). Pot overhang is now
-3 mm. The body boards as drawn (revision C) use wires and flush-cut tails
-rather than a mating footprint. Their revision D specification plugs the
-module into a 1 × 11 female socket through header pins on this contact row.
+3 mm. The revision D body boards now plug the module into a 1 × 11
+female socket through male headers on this contact row. The body-board
+assembly adds the socket, three male-header groups and the nominal 11 mm
+stack; the standalone module reference retains its bare contact pads.
 Physical fit is still unverified; see the body-board READMEs and F8.
 
 ## Geometry and uncertainty

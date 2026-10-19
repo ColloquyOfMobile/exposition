@@ -188,40 +188,6 @@
       "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
     },
     {
-      "ref": "JA1",
-      "value": "GF1002 wire connections",
-      "footprint": "Body:GF1002_WirePads_2x03",
-      "pins": {
-        "1": "5V",
-        "2": "GND",
-        "3": "AMP_INPUT",
-        "4": "AUDIO_RETURN",
-        "5": "AMP_OUT_P",
-        "6": "AMP_OUT_N"
-      },
-      "description": "Short wires to module VDD, supply GND, R input, input GND, ROUT+, ROUT-. Verify output pair polarity on the actual module; photo does not establish it.",
-      "pin_names": {
-        "1": "1",
-        "2": "2",
-        "3": "3",
-        "4": "4",
-        "5": "5",
-        "6": "6"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive",
-        "3": "passive",
-        "4": "passive",
-        "5": "passive",
-        "6": "passive"
-      },
-      "include_bom": true,
-      "datasheet": "",
-      "uuid": "29bcba0b-d69c-5e02-9d74-7694cf41aa27",
-      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
-    },
-    {
       "ref": "R1",
       "value": "22K",
       "footprint": "Resistor_SMD:R_0603_1608Metric",
@@ -311,12 +277,48 @@
     },
     {
       "ref": "M1",
-      "value": "GF1002 direct module",
-      "footprint": "Body:GF1002_Module_Direct",
-      "pins": {},
-      "description": "No perfboard. Provisional 20.2x30mm envelope; shaft-edge and short-end insulating clamps. Cut module pin tails flush; 3mm underside gap. Physical fit unverified.",
-      "pin_names": {},
-      "pin_types": {},
+      "value": "GF1002 / 1x11 female socket",
+      "footprint": "Body:GF1002_PlugIn_1x11",
+      "pins": {
+        "1": "AMP_INPUT",
+        "2": "AUDIO_RETURN",
+        "3": null,
+        "4": null,
+        "5": "5V",
+        "6": "GND",
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": "AMP_OUT_P",
+        "11": "AMP_OUT_N"
+      },
+      "description": "Plug-in module: 1x3, 1x2 and 1x4 downward male headers in an 11-pin female socket. Nominal underside gap 11mm. Pin 10=ROUT+, 11=ROUT- is provisional: verify module polarity before ordering.",
+      "pin_names": {
+        "1": "R_IN",
+        "2": "INPUT_G",
+        "3": "L_IN_NC",
+        "4": "GAP_NC",
+        "5": "VDD",
+        "6": "SUPPLY_GND",
+        "7": "GAP_NC",
+        "8": "LOUT_A_NC",
+        "9": "LOUT_B_NC",
+        "10": "ROUT_P_VERIFY",
+        "11": "ROUT_N_VERIFY"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive",
+        "4": "passive",
+        "5": "passive",
+        "6": "passive",
+        "7": "passive",
+        "8": "passive",
+        "9": "passive",
+        "10": "passive",
+        "11": "passive"
+      },
       "include_bom": true,
       "datasheet": "",
       "uuid": "c21ea9ec-dc20-55da-85e6-9a4b91528e63",
@@ -324,10 +326,10 @@
     },
     {
       "ref": "H1",
-      "value": "M2 insulating clamp",
-      "footprint": "Body:GF1002_Clamp_Left",
+      "value": "M2 insulating support / 11mm",
+      "footprint": "Body:GF1002_Support_Left",
       "pins": {},
-      "description": "Provisional edge clamp. No drilling of amplifier module; check actual fit.",
+      "description": "Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack.",
       "pin_names": {},
       "pin_types": {},
       "include_bom": false,
@@ -337,10 +339,10 @@
     },
     {
       "ref": "H2",
-      "value": "M2 insulating clamp",
-      "footprint": "Body:GF1002_Clamp_End",
+      "value": "M2 insulating support / 11mm",
+      "footprint": "Body:GF1002_Support_End",
       "pins": {},
-      "description": "Provisional edge clamp. No drilling of amplifier module; check actual fit.",
+      "description": "Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack.",
       "pin_names": {},
       "pin_types": {},
       "include_bom": false,
@@ -361,53 +363,48 @@
       0
     ],
     "J4": [
-      62,
-      60,
+      63,
+      57.5,
       0
     ],
     "J5": [
-      62,
-      73,
+      63,
+      74.5,
       0
     ],
     "J3": [
-      62,
-      86,
-      0
-    ],
-    "J6": [
-      63,
-      95,
-      0
-    ],
-    "JA1": [
-      54.5,
-      66.5,
-      0
-    ],
-    "R1": [
-      56,
-      81,
-      90
-    ],
-    "R2": [
-      56,
-      84,
-      90
-    ],
-    "C1": [
-      35.5,
+      34,
       94,
       0
     ],
+    "J6": [
+      64,
+      88,
+      -90
+    ],
+    "R1": [
+      44,
+      56.2,
+      0
+    ],
+    "R2": [
+      45.8,
+      58.74,
+      0
+    ],
+    "C1": [
+      55.5,
+      66.5,
+      0
+    ],
     "C2": [
-      32,
-      89,
+      45.7,
+      67.63,
       0
     ],
     "M1": [
-      31,
-      55,
+      49.55,
+      56.2,
       0
     ],
     "H1": [
@@ -435,7 +432,8 @@
       87.5
     ]
   ],
-  "module_underside_gap_mm": 3,
+  "revision": "D",
+  "module_underside_gap_mm": 11,
   "module_dimensions_mm": [
     20.2,
     30
@@ -448,7 +446,13 @@
     20.2,
     30
   ],
-  "module_pins_must_be_flush": true,
+  "module_pins_must_be_flush": false,
+  "socket_pin1_mm": [
+    49.55,
+    56.2
+  ],
+  "support_adjustment_mm": 0.5,
+  "stack_height_verified": false,
   "amplifier_input": "R",
   "speaker_output": "ROUT",
   "output_polarity_verified": false

@@ -242,8 +242,8 @@
       "assembly": [
         "female base v2/bom.csv"
       ],
-      "source sha256": "893f98944047cd18a2b505768913e04d0c7051b6ed96b61fc475423fbcf9c324",
-      "exported at": "2026-10-19T13:57:20",
+      "source sha256": "16ffaa8dc85527a40092c602b95f1e4f3ac6a123b068e3bb1a501c09a2b0327b",
+      "exported at": "2026-10-19T14:46:10",
       "exported with": "KiCad 9.0.7",
       "copper layers": 2,
       "size mm": [
@@ -284,8 +284,8 @@
       "assembly": [
         "male static v2/bom.csv"
       ],
-      "source sha256": "5a8fdeb876445fe469b9c14d1d8be908a6ce105210fc99f9e36b8008d2ed26a7",
-      "exported at": "2026-10-19T13:57:23",
+      "source sha256": "8b1b911b99720c41e2e8035e226cb74b89a922da2937a7bdb8f54bbb4e131fa7",
+      "exported at": "2026-10-19T14:46:12",
       "exported with": "KiCad 9.0.7",
       "copper layers": 2,
       "size mm": [

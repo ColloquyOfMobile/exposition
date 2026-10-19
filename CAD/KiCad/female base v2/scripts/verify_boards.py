@@ -3,6 +3,7 @@ from pathlib import Path
 import hashlib
 import json
 import pcbnew as p
+from routing_checks import check as check_routing
 
 CAD=Path(__file__).resolve().parents[2]
 for original,stem in [('female base','female-base-v2'),('male static','male-static-v2')]:
@@ -32,12 +33,30 @@ for original,stem in [('female base','female-base-v2'),('male static','male-stat
             if 'speaker' in net: net='LINE_IN' if '+' in net else 'AUDIO_RETURN'
             if f.GetReference()=='J6': net='AMP_OUT_P' if pad.GetNumber()=='1' else 'AMP_OUT_N'
             assert pad.GetNetname()==net,(original,f.GetReference(),pad.GetNumber(),pad.GetNetname(),net)
-    amp={a.GetNumber():a.GetNetname() for a in footprints['JA1'].Pads()}
-    assert amp=={'1':'5V','2':'GND','3':'AMP_INPUT','4':'AUDIO_RETURN','5':'AMP_OUT_P','6':'AMP_OUT_N'}
-    assert not list(footprints['M1'].Pads()), 'Reference is not a verified solder footprint'
-    assert abs(footprints['M1'].Models()[0].m_Offset.z-4.6)<.001
-    module=footprints['M1']; mx,my=p.ToMM(module.GetPosition())
-    # Reserve the full contact-side strip, including the conservative 0.2mm width.
+    assert 'JA1' not in footprints
+    metadata=json.loads((root/'circuit.json').read_text())
+    assert metadata['revision']=='D' and not metadata['module_pins_must_be_flush']
+    assert metadata['module_underside_gap_mm']==11 and not metadata['stack_height_verified']
+    module=footprints['M1']; mx,my=metadata['module_origin_mm']
+    socket={a.GetNumber():a for a in module.Pads()}
+    assert len(socket)==11
+    expected={1:'AMP_INPUT',2:'AUDIO_RETURN',5:'5V',6:'GND',10:'AMP_OUT_P',11:'AMP_OUT_N'}
+    reference=p.LoadBoard(str(CAD/'shields/gf1002-reference/gf1002-reference.kicad_pcb'))
+    contacts={a.GetNumber():a for f in reference.GetFootprints() if f.GetReference()=='CONTACTS' for a in f.Pads()}
+    for number in range(1,12):
+        pad=socket[str(number)]; x,y=p.ToMM(pad.GetPosition())
+        assert abs(x-(mx+18.55))<.001 and abs(y-(my+1.2+2.54*(number-1)))<.001
+        if str(number) in contacts:
+            rx,ry=p.ToMM(contacts[str(number)].GetPosition())
+            assert abs(x-(mx+rx-50))<.001 and abs(y-(my+ry-50))<.001
+        if number in expected:assert pad.GetNetname()==expected[number]
+        else:
+            assert not pad.GetNetname() or pad.GetNetname().startswith('unconnected-')
+            assert not any(t.GetNetCode()==pad.GetNetCode() for t in b.GetTracks())
+    module_model=next(m for m in module.Models() if m.m_Filename.endswith('module_assembly.wrl'))
+    assert abs(module_model.m_Offset.z-12.6)<.001
+    assert abs(module_model.m_Offset.x+18.55)<.001 and abs(module_model.m_Offset.y-1.2)<.001
+    assert len(list(module.Models()))==5  # socket, module and three male header groups
     strip=(mx+16.5,my,mx+20.2,my+30)
     def overlaps(a,b):
         return a[0]<b[2] and b[0]<a[2] and a[1]<b[3] and b[1]<a[3]
@@ -46,8 +65,8 @@ for original,stem in [('female base','female-base-v2'),('male static','male-stat
     assert abs(hx-(mx+10.1))<.001 and abs(hy-(my+32.5))<.001
     assert footprints['H2'].GetOrientationDegrees()==90
     # H1 lip extends +X; H2 is the same clamp rotated towards -Y.
-    assert not overlaps((mx-1,my+18.75,mx+1.5,my+20.25),strip)
-    assert not overlaps((hx-.75,hy-4,hx+.75,hy-1.5),strip)
+    assert not overlaps((mx-1,my+18.25,mx+2,my+20.75),strip)
+    assert not overlaps((hx-1.25,hy-4.5,hx+1.25,hy-1.5),strip)
     for ref,fp in footprints.items():
         if ref=='M1':continue
         for pad in fp.Pads():
@@ -57,10 +76,23 @@ for original,stem in [('female base','female-base-v2'),('male static','male-stat
             box=fp.GetBoundingBox(False,False)
             bounds=tuple(p.ToMM(v) for v in (box.GetLeft(),box.GetTop(),box.GetRight(),box.GetBottom()))
             assert not overlaps(bounds,strip),(original,ref,'component over contact strip')
-    ja=footprints['JA1'].GetPosition()
-    assert mx+20.2<p.ToMM(ja.x)<mx+25 and my<p.ToMM(ja.y)<my+30
-    metadata=json.loads((root/'circuit.json').read_text())
-    assert metadata['module_pins_must_be_flush'] and not metadata['module_dimensions_verified']
+    for via in (t for t in b.GetTracks() if isinstance(t,p.PCB_VIA)):
+        x,y=p.ToMM(via.GetPosition())
+        assert not overlaps((x-.001,y-.001,x+.001,y+.001),strip),'Via in module contact strip'
+    def pad_at(ref,pin):
+        return next(a for a in footprints[ref].Pads() if a.GetNumber()==str(pin))
+    def distance(a,b):
+        ax,ay=p.ToMM(a.GetPosition()); bx,by=p.ToMM(b.GetPosition())
+        return ((ax-bx)**2+(ay-by)**2)**.5
+    c2_distances=[distance(pad_at('C2',n),socket[str(s)]) for n,s in ((1,5),(2,6))]
+    assert max(c2_distances)<5,c2_distances
+    c1_distance=distance(pad_at('C1',1),socket['5'])
+    assert c1_distance<9,c1_distance
+    for number in (5,6):
+        pos=socket[str(number)].GetPosition()
+        assert any(not isinstance(t,p.PCB_VIA) and (t.GetStart()==pos or t.GetEnd()==pos)
+                   and p.ToMM(t.GetWidth())>=.799 for t in b.GetTracks())
+    assert not metadata['module_dimensions_verified']
     assert metadata['amplifier_input']=='R' and metadata['speaker_output']=='ROUT'
     for f in footprints.values():
         for model in f.Models():
@@ -72,11 +104,15 @@ for original,stem in [('female base','female-base-v2'),('male static','male-stat
     assert not drc['schematic_parity'], drc['schematic_parity']
     erc=json.loads((root/'reports/erc.json').read_text())
     assert all(not sheet['violations'] for sheet in erc['sheets'])
+    routing=check_routing(b)
     result={'source_sha256':hashlib.sha256((root/(stem+'.kicad_pcb')).read_bytes()).hexdigest(),
             'original_outline_and_dsub_geometry':'PASS','harness_nets_and_pad_drills':'PASS',
-            'contact_strip_clearance':'PASS','shaft_and_short_edge_clamps':'PASS',
-            'wire_pads_on_contact_side':'PASS','erc_violations':0,'drc_violations':0,
+            'revision':'D','socket_pinout_and_reference_alignment':'PASS',
+            'contact_strip_clearance':'PASS','adjustable_support_positions':'PASS',
+            'module_underside_gap_mm_nominal':11,'c2_distance_to_supply_pins_mm':[round(d,3) for d in c2_distances],
+            'c1_distance_to_supply_pin_mm':round(c1_distance,3),'routing':routing,
+            'erc_violations':0,'drc_violations':0,
             'unconnected_items':0,'schematic_parity_differences':0,
-            'physical_module_fit_verified':False,'module_pins_must_be_flush':True}
+            'physical_module_fit_verified':False,'stack_height_verified':False,'output_polarity_verified':False}
     (root/'reports/validation.json').write_text(json.dumps(result,indent=2)+'\n')
-    print(stem+': outline/fixings/DSUB geometry and harness nets verified; 5V amplifier supply; ERC/DRC/parity clean; local models resolve.')
+    print(stem+': Rev D socket, supports, decoupling and routing verified; ERC/DRC/parity clean.',routing)

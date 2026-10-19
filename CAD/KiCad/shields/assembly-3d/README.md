@@ -12,28 +12,23 @@ These use the [32 × 62 mm slotted three-orientation holder](../microphone-flex/
 Exactly one module is fitted in each scene. Select the scene and press Numpad 0
 for its camera view. The prior edited body scenes are retained with
 `Rev B reference` in their names. The following original body-study description
-still documents their nominal frame assumptions; current body views use Rev C.
+still documents their nominal frame assumptions; current microphone views use Rev C and body boards use Rev D.
 The [three-position preview](microphone-positions-preview.png) compares the
 left, right and upward module choices on the same holder.
 
-The 2026-10-19 body-board update replaces the current six body scenes with
-the corrected nine-contact GF1002 reference, the short-edge H2 clamp and
-the adjacent hookup pads. Rack scenes and retained Rev B reference scenes
-are preserved. Body dimensions remain estimates; pin tails must be cut flush
-and actual module fit checked before ordering. See the body-board READMEs.
-
-The 2026-10-19 body-board update replaces the current six body scenes with
-the corrected nine-contact GF1002 reference, the short-edge H2 clamp and
-the adjacent hookup pads. Rack scenes and retained Rev B reference scenes
-are preserved. Body dimensions remain estimates; pin tails must be cut flush
-and actual module fit checked before ordering. See the body-board READMEs.
+The 2026-10-19 revision D updates the six current body scenes: M1 is an 11-pin socket with three male-header groups,
+the module sits at an approximately 11 mm underside height, and the two
+adjustable insulating supports match it. No hand wires or flush-cut tails
+are used. J6 and the analogue parts follow the paired, separated routing.
+Rack scenes and retained Rev B references remain unchanged. The nominal
+stack, pot height and actual module fit still require measurement.
 
 ## Female and male body mounting studies — 2026-10-15
 
 The combined file also contains **Female body** and **Male body** scenes.
 Select a scene at the top right and use its camera view (Numpad 0) for the
 overview. Each contains the current routed v2 body PCB, its directly mounted
-GF1002 amplifier with both insulating edge clamps, and the socketed MAX9814
+GF1002 amplifier with an 11-pin socket and two adjustable insulating supports, and the socketed MAX9814
 microphone holder assembly on a separate part of an aluminium profile.
 Components and reference hardware remain individually selectable. The
 original Mega and Teensy scenes and their object placements are preserved.

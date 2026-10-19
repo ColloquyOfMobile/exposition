@@ -5,9 +5,8 @@ J7,DA15_Plug_MountingHoles,Body:J7_original,Original harness pin order retained.
 J3,microphone,Body:J3_original,Original harness pin order retained. J6 now carries the local amplifier output.
 J5,neopixel,Body:J5_original,Original harness pin order retained. J6 now carries the local amplifier output.
 J6,Speaker,Body:J6_original,Original harness pin order retained. J6 now carries the local amplifier output.
-JA1,GF1002 wire connections,Body:GF1002_WirePads_2x03,"Short wires to module VDD, supply GND, R input, input GND, ROUT+, ROUT-. Verify output pair polarity on the actual module; photo does not establish it."
 R1,22K,Resistor_SMD:R_0603_1608Metric,
 R2,3K3,Resistor_SMD:R_0603_1608Metric,
 C1,220uF 10V / provisional,Capacitor_THT:CP_Radial_D6.3mm_P2.50mm,Provisional local reservoir; verify actual amplifier transients and rail sag before release.
 C2,100nF,Capacitor_SMD:C_0603_1608Metric,
-M1,GF1002 direct module,Body:GF1002_Module_Direct,No perfboard. Provisional 20.2x30mm envelope; shaft-edge and short-end insulating clamps. Cut module pin tails flush; 3mm underside gap. Physical fit unverified.
+M1,GF1002 / 1x11 female socket,Body:GF1002_PlugIn_1x11,"Plug-in module: 1x3, 1x2 and 1x4 downward male headers in an 11-pin female socket. Nominal underside gap 11mm. Pin 10=ROUT+, 11=ROUT- is provisional: verify module polarity before ordering."
