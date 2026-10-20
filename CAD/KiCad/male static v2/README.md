@@ -1,5 +1,42 @@
 # Male static v2 — directly mounted GF1002 amplifier
 
+## Manual placement reroute (2026-10-20)
+
+`male-static-v2.kicad_pcb` is routed from the user's updated
+`male-static-v2-placed.kicad_pcb`. All component positions, rotations, pad
+nets and the artwork outline are retained. The socket runs horizontally;
+the speaker connector is at (48.5, 89) mm. The 0.8 mm front-copper speaker
+pair bends around C1, and photosensors C/D use reserved back-copper paths
+along the left edge. Supply GND pours are refilled on both copper layers;
+AUDIO_RETURN stays a separate net.
+
+Native DRC reports **zero violations and zero unconnected items**. Schematic
+parity reports the two supports H1/H2 missing, as in the edited placement;
+they remain in the schematic. They have not been restored or relocated.
+The placement's distant R1/R2/C2 positions are also retained: the earlier
+short-input and close-decoupling geometry checks below do not describe this
+layout. Physical fit, amplifier stability and noise have not been checked.
+
+Current results are in `reports/validation.json` and `reports/drc.json`.
+`preview.png`, `underside.png`, the STEP model, assembly SVG and production
+Gerbers have been refreshed. The previous revision D notes below are design
+history; their coordinates, support layout and route lengths are superseded.
+`circuit.json` also records that earlier generated placement.
+
+To reproduce this routing, run from the repository root:
+
+```powershell
+& 'C:/Program Files/KiCad/9.0/bin/python.exe' 'CAD/KiCad/male static v2/scripts/route_placement.py'
+& 'C:/Program Files/KiCad/9.0/bin/python.exe' export_gerbers.py
+```
+
+The route script uses the local Freerouting jar in `tmp/shields-tools/`.
+The shared `build_boards.py`, `route_boards.py` and `verify_boards.py` still
+describe the earlier generated revision D placement; rebuilding with them
+would overwrite the manual placement or assert the earlier geometry.
+
+## Earlier revision D design notes
+
 All eleven connectors now have names on the front silkscreen: microphone,
 DXL BODY, speaker, state LED, body/bar NeoPixels, harness, and photosensors
 A/B/C/D (J9/J8/J1/J4). See

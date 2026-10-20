@@ -1,38 +1,33 @@
 {
-  "source_sha256": "c8e0ec75d4a90fb03abc97ff67137d3c62376d6c610f0e3ff6edaa4dcbd029d5",
-  "original_outline_and_dsub_geometry": "PASS",
-  "harness_nets_and_pad_drills": "PASS",
-  "all_connector_names_on_front_silkscreen": "PASS",
-  "revision": "D",
-  "c1_smd_footprint_and_polarity": "PASS",
-  "socket_pinout_and_reference_alignment": "PASS",
-  "contact_strip_clearance": "PASS",
-  "adjustable_support_positions": "PASS",
-  "module_underside_gap_mm_nominal": 11,
-  "c2_distance_to_supply_pins_mm": [
-    4.796,
-    3.327
-  ],
-  "c1_distance_to_supply_pin_mm": 8.357,
-  "routing": {
-    "output_lengths_mm": {
-      "AMP_OUT_P": 15.582,
-      "AMP_OUT_N": 16.597
-    },
-    "output_copper_layer": "F.Cu",
-    "output_minimum_width_mm": 0.8,
-    "amp_input_total_length_mm": 7.265,
-    "paired_incoming_line_return_overlap_mm": 18.775,
-    "parallel_sensitive_runs_within_2p5mm": 0,
-    "minimum_parallel_sensitive_centre_spacing_mm": 23.304,
-    "sensitive_crossings": [],
-    "ground_guard": "PASS"
-  },
-  "erc_violations": 0,
+  "source_sha256": "54679c0808152b8f7bb86007bfc54a492216110ab05349565d3c06a81fd68858",
+  "placement_sha256": "ac5baa4b8fbd5c098a03c7bc97908d856efc16f553406f91ece08a3a54103c73",
+  "placement_and_pad_nets_preserved": "PASS",
   "drc_violations": 0,
   "unconnected_items": 0,
-  "schematic_parity_differences": 0,
-  "physical_module_fit_verified": false,
-  "stack_height_verified": false,
-  "output_polarity_verified": false
+  "schematic_parity": [
+    {
+      "description": "Missing footprint H1 (M2 insulating support / 11mm)",
+      "items": [],
+      "severity": "warning",
+      "type": "missing_footprint"
+    },
+    {
+      "description": "Missing footprint H2 (M2 insulating support / 11mm)",
+      "items": [],
+      "severity": "warning",
+      "type": "missing_footprint"
+    }
+  ],
+  "routing_lengths_mm": {
+    "AMP_OUT_P": 29.918,
+    "AMP_OUT_N": 39.763,
+    "AMP_INPUT": 39.887,
+    "LINE_IN": 33.717,
+    "AUDIO_RETURN": 57.645
+  },
+  "speaker_layer": "F.Cu",
+  "speaker_minimum_width_mm": 0.8,
+  "ground_pours": "F.Cu and B.Cu, supply GND only",
+  "hardware_validation": "Not performed",
+  "previous_revision_D_routing_geometry_checks": "Superseded by manual placement; not asserted"
 }

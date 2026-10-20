@@ -284,8 +284,8 @@
       "assembly": [
         "male static v2/bom.csv"
       ],
-      "source sha256": "6fbc0e256a109297ece48113e8b684c477f0244013d3cb4285b72de01483fd4e",
-      "exported at": "2026-10-20T13:09:31",
+      "source sha256": "54679c0808152b8f7bb86007bfc54a492216110ab05349565d3c06a81fd68858",
+      "exported at": "2026-10-20T13:34:20",
       "exported with": "KiCad 9.0.7",
       "copper layers": 2,
       "size mm": [
