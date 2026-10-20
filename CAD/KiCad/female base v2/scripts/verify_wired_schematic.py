@@ -11,6 +11,7 @@ import pcbnew
 
 HERE = Path(__file__).resolve().parents[1]
 WIRED = HERE/'wired'
+STEM = 'female-base-v2'
 CLI = Path(sys.executable).parent/'kicad-cli.exe'
 
 
@@ -30,7 +31,7 @@ def main():
     unused={frozenset([(p['ref'],pin)]) for p in parts for pin,net in p['pins'].items() if net is None}
     results=[]
     with tempfile.TemporaryDirectory() as temp:
-        for stem,source in [('original',HERE/'female-base-v2.kicad_sch'),('wired',WIRED/'female-base-v2-wired.kicad_sch')]:
+        for stem,source in [('original',HERE/(STEM+'.kicad_sch')),('wired',WIRED/(STEM+'-wired.kicad_sch'))]:
             target=Path(temp)/(stem+'.xml')
             subprocess.run([str(CLI),'sch','export','netlist','--format','kicadxml','-o',str(target),str(source)],check=True)
             actual=groups(target)
@@ -40,14 +41,14 @@ def main():
             assert components == {p['ref']:p['value'] for p in parts}
             results.append(actual)
         assert results[0]==results[1], 'Source and reading copy differ'
-    board=pcbnew.LoadBoard(str(HERE/'female-base-v2.kicad_pcb'))
+    board=pcbnew.LoadBoard(str(HERE/(STEM+'.kicad_pcb')))
     actual=defaultdict(set)
     for fp in board.GetFootprints():
         for pad in fp.Pads():
             if pad.GetNetname() and not pad.GetNetname().startswith('unconnected-'):
                 actual[pad.GetNetname()].add((fp.GetReference(),pad.GetNumber()))
     assert dict(actual)==dict(expected), 'PCB differs from circuit manifest'
-    source=WIRED/'female-base-v2-wired.kicad_sch'
+    source=WIRED/(STEM+'-wired.kicad_sch')
     raw=source.read_text(encoding='utf-8')
     assert all(token not in raw for token in ['(label ','(global_label ','(hierarchical_label '])
     subprocess.run([str(CLI),'sch','erc','--format','json','--exit-code-violations','-o',str(WIRED/'erc.json'),str(source)],check=True)
@@ -57,7 +58,7 @@ def main():
                 components=len(parts),connected_pins=sum(map(len,expected.values())),electrical_nets=len(expected),
                 erc_violations=0,electrical_labels=0,
                 sha256={str(p.relative_to(HERE)):hashlib.sha256(p.read_bytes()).hexdigest()
-                        for p in [source,HERE/'female-base-v2.kicad_sch',HERE/'female-base-v2.kicad_pcb',HERE/'circuit.json']})
+                        for p in [source,HERE/(STEM+'.kicad_sch'),HERE/(STEM+'.kicad_pcb'),HERE/'circuit.json']})
     (WIRED/'validation.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2))
 

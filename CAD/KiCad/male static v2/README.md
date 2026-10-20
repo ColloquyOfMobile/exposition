@@ -1,5 +1,11 @@
 # Male static v2 — directly mounted GF1002 amplifier
 
+A second, continuous-wire schematic is available in
+[`wired/male-static-v2-wired.pdf`](wired/male-static-v2-wired.pdf), with an
+editable KiCad project beside it. It preserves revision D's circuit without
+electrical labels. [`wired/comparison.md`](wired/comparison.md) explains each
+element added since the original male static board and whether it is necessary.
+
 Open `male-static-v2.kicad_pro` in KiCad 9. This new project includes the
 schematic, routed PCB, assembled STEP model, previews, BOM and verification
 reports. The original `../male static/` files are preserved.
