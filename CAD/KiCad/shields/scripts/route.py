@@ -26,17 +26,18 @@ def route(folder,args):
     for track in list(board.GetTracks()):
         if track.GetNetname().replace('{slash}','/') in (args.rip_net or []) or track.m_Uuid.AsString() in violations:board.Delete(track)
     ns=board.GetDesignSettings().m_NetSettings
-    ns.ClearNetclasses();ns.ClearNetclassPatternAssignments();ns.ClearNetclassLabelAssignments()
     microphone_holder=name in ('microphone','microphone-flex')
-    for cls,width in [('Default',.15 if microphone_holder else .25),('Power',1.5 if name=='backplane' else .25 if name=='microphone-flex' else .5)]:
-        nc=p.NETCLASS(cls);nc.SetClearance(p.FromMM(.15 if microphone_holder else .2));nc.SetTrackWidth(p.FromMM(width))
-        nc.SetViaDiameter(p.FromMM(.6));nc.SetViaDrill(p.FromMM(.3))
-        if cls=='Default':ns.SetDefaultNetclass(nc)
-        else:
-            ns.SetNetclass(cls,nc)
-            for net in (['+5V'] if name=='backplane' else ['+5V','+12V']):ns.SetNetclassPatternAssignment(net,cls)
-    ns.ClearAllCaches();board.SynchronizeNetsAndNetClasses(False)
-    if name=='backplane':
+    if not args.preserve_netclasses:
+        ns.ClearNetclasses();ns.ClearNetclassPatternAssignments();ns.ClearNetclassLabelAssignments()
+        for cls,width in [('Default',.15 if microphone_holder else .25),('Power',1.5 if name=='backplane' else .25 if name=='microphone-flex' else .5)]:
+            nc=p.NETCLASS(cls);nc.SetClearance(p.FromMM(.15 if microphone_holder else .2));nc.SetTrackWidth(p.FromMM(width))
+            nc.SetViaDiameter(p.FromMM(.6));nc.SetViaDrill(p.FromMM(.3))
+            if cls=='Default':ns.SetDefaultNetclass(nc)
+            else:
+                ns.SetNetclass(cls,nc)
+                for net in (['+5V'] if name=='backplane' else ['+5V','+12V']):ns.SetNetclassPatternAssignment(net,cls)
+        ns.ClearAllCaches();board.SynchronizeNetsAndNetClasses(False)
+    if name=='backplane' and not args.preserve_netclasses:
         nc=p.NETCLASS('Servo12V');nc.SetClearance(p.FromMM(.2));nc.SetTrackWidth(p.FromMM(2))
         nc.SetViaDiameter(p.FromMM(1.2));nc.SetViaDrill(p.FromMM(.6))
         ns.SetNetclass('Servo12V',nc);ns.SetNetclassPatternAssignment('+12V','Servo12V')
@@ -75,6 +76,8 @@ if __name__=='__main__':
     parser.add_argument('--java',type=Path,default=Path(r'C:\Program Files\Android\Android Studio\jbr\bin\java.exe'))
     parser.add_argument('--work',type=Path,required=True);parser.add_argument('--only',nargs='*')
     parser.add_argument('--from-routed',action='store_true');parser.add_argument('--rip-net',nargs='*')
+    parser.add_argument('--preserve-netclasses',action='store_true',
+                        help='Use the source project routing widths and clearances without replacing its netclasses')
     parser.add_argument('--rip-violations',action='store_true')
     parser.add_argument('--max-passes',type=int,default=40)
     args=parser.parse_args();args.jar=args.jar.resolve();args.work=args.work.resolve()

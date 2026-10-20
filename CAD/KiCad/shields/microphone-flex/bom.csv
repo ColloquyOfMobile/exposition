@@ -11,5 +11,5 @@ TP1,MICOUT,Shields:TestPin_1x01_P2.54mm,,fit
 TP2,GND,Shields:TestPin_1x01_P2.54mm,,fit
 JP1,GAIN SELECT / HEADER + SHUNT,Shields:Flex_Gain_Selector,Gold plated 1x03 2.54mm vertical header + removable 1x02 shunt,fit
 JP2,AR SELECT / HEADER + SHUNT,Shields:Flex_AR_Selector,Gold plated 1x03 2.54mm vertical header + removable 1x02 shunt,fit
-J2,LEFT / 1x05 RIGHT ANGLE,Shields:Flex_Socket_Side,1x05 P2.54mm horizontal female socket; verify purchased dimensions,fit
-J3,RIGHT / 1x05 RIGHT ANGLE,Shields:Flex_Socket_Side,1x05 P2.54mm horizontal female socket; verify purchased dimensions,fit
+J2,LEFT / 1x05 RIGHT ANGLE,Shields:Flex_Socket_Left_Overhang,1x05 P2.54mm horizontal female socket; verify purchased dimensions,fit
+J3,RIGHT / 1x05 RIGHT ANGLE,Shields:Flex_Socket_Right_Overhang,1x05 P2.54mm horizontal female socket; verify purchased dimensions,fit

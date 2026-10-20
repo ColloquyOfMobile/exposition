@@ -23,7 +23,11 @@ POSITIONS.update(J2=(56, 74, 0), J3=(64, 84.16, 180),
                  R4=(49, 97, 0),
                  C7=(47.8, 61.5, 90), C6=(68, 95, 90), R5=(58.5, 88.3, 0),
                  R6=(70.5, 97, 90), TP1=(68, 64, 0), TP2=(52, 64, 0))
-POSITIONS.update(JP1=(51.2, 88, 0), JP2=(68.8, 88, 0), C6=(68, 96.5, 90))
+POSITIONS.update(M1=(65,89.11,270), J2=(49.12,70.05,0), J3=(70.64,80.65,180),
+                 JP1=(47.23,89.6,0), JP2=(72.83,89.99,0),
+                 C6=(70.5,99.675,90), C7=(60.3,71.27,90),
+                 R4=(46.945,101.15,0), R5=(59.945,84.15,0), R6=(73,100.175,90),
+                 TP1=(72.9,53.88,0), TP2=(47.32,53.88,0))
 for obsolete in ('R1','R2'):
     POSITIONS.pop(obsolete)
 
@@ -103,16 +107,17 @@ def circuit():
     # a conventional right-angle socket. Document and verify this explicitly.
     nets={1:'AR',2:'MICOUT',3:'GAIN',4:'VDD',5:'GND'}
     for ref, direction in [('J2','LEFT'),('J3','RIGHT')]:
-        d.add(ref,direction+' / 1x05 RIGHT ANGLE','Shields:Flex_Socket_Side',nets,'module',
+        d.add(ref,direction+' / 1x05 RIGHT ANGLE',
+              'Shields:Flex_Socket_'+direction.title()+'_Overhang',nets,'module',
               names={str(i):n for i,n in nets.items()},
               description='Alternative socket; AR / Out / Gain / Vdd / GND in physical pad order. One module only.',
               mpn='1x05 P2.54mm horizontal female socket; verify purchased dimensions')
     for ref in ('H1','H2'):
         d.parts[ref]['footprint']='Shields:Flex_M5_Slot12x5.5_Keepout'
         d.parts[ref]['value']='M5 SLOT 12x5.5 / TRANSVERSE'
-    for ref in ('H3','H4'): d.parts[ref]['footprint']='Shields:Flex_M2_Top'
-    for i in range(5,9):
-        d.add('H'+str(i),'M2 SIDE SUPPORT BASE','Shields:Flex_M2_Base',{},'mechanical')
+    # User's 2026-10-20 placement retains only the two frame slots.
+    for ref in ('H3','H4'):
+        del d.parts[ref]
     return d
 
 
@@ -182,8 +187,8 @@ def main():
     settings_path=FOLDER/(NAME+'.kicad_pro')
     settings=json.loads(settings_path.read_text())
     for cls in settings['net_settings']['classes']:
-        cls['clearance']=.15
-        cls['track_width']=.25 if cls['name']=='Power' else .15
+        cls['clearance']=.2
+        cls['track_width']=.25 if cls['name']=='Power' else .2
     settings_path.write_text(json.dumps(settings,indent=2)+'\n')
     shutil.copyfile(FOLDER/(NAME+'.kicad_pro'),FOLDER/(NAME+'-placed.kicad_pro'))
     (FOLDER/'reports').mkdir(exist_ok=True)
@@ -195,8 +200,10 @@ def main():
         'population':'Exactly one module. Parallel sockets; shared removable gain/AR selectors.',
         'selectors':{'JP1':{'pads':['GND','GAIN','VDD'],'initial_shunt':'2-3','open_gain_db':60},
                      'JP2':{'pads':['GND','AR','VDD'],'initial_shunt':'1-2','open_ar_ratio':'1:4000'}},
-        'module_source':'max9814-reference','side_support_base_centres_pcb_mm':[[46.5,66],[46.5,90],[73.5,66],[73.5,90]],
-        'side_socket_centres_pcb_mm':{'left':[56,74,0],'right':[64,84.16,180]},
+        'module_source':'max9814-reference','module_support_holes':[],
+        'placement_source':'User-approved microphone-flex-placed.kicad_pcb, 2026-10-20',
+        'component_positions_mm':{c['ref']:list(POSITIONS[c['ref']]) for c in data['components']},
+        'side_socket_centres_pcb_mm':{'left':list(POSITIONS['J2']),'right':list(POSITIONS['J3'])},
         'side_socket_physical_pin_order':['AR','Out','Gain','Vdd','GND'],
         'physical_fit_verified':False},indent=2)+'\n')
     print('Rev C microphone-flex: 32x62, 12x5.5 transverse slots, three sockets; one module only.')

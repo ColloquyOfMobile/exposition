@@ -291,38 +291,6 @@
       "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/ed1e5076-8af5-506b-a755-97e4cb4f7015"
     },
     {
-      "ref": "H3",
-      "value": "M2 MODULE / INSULATING SPACER",
-      "footprint": "Shields:Flex_M2_Top",
-      "pins": {},
-      "sheet": "mechanical",
-      "description": "",
-      "pin_names": {},
-      "pin_types": {},
-      "assembly": "fit",
-      "include_bom": false,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "52115dbb-7fb3-5afb-bb88-1cbada67279d",
-      "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/ed1e5076-8af5-506b-a755-97e4cb4f7015"
-    },
-    {
-      "ref": "H4",
-      "value": "M2 MODULE / INSULATING SPACER",
-      "footprint": "Shields:Flex_M2_Top",
-      "pins": {},
-      "sheet": "mechanical",
-      "description": "",
-      "pin_names": {},
-      "pin_types": {},
-      "assembly": "fit",
-      "include_bom": false,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "e8e906ec-9586-5f7f-946a-d2dd57632e9f",
-      "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/ed1e5076-8af5-506b-a755-97e4cb4f7015"
-    },
-    {
       "ref": "JP1",
       "value": "GAIN SELECT / HEADER + SHUNT",
       "footprint": "Shields:Flex_Gain_Selector",
@@ -381,7 +349,7 @@
     {
       "ref": "J2",
       "value": "LEFT / 1x05 RIGHT ANGLE",
-      "footprint": "Shields:Flex_Socket_Side",
+      "footprint": "Shields:Flex_Socket_Left_Overhang",
       "pins": {
         "1": "AR",
         "2": "MICOUT",
@@ -415,7 +383,7 @@
     {
       "ref": "J3",
       "value": "RIGHT / 1x05 RIGHT ANGLE",
-      "footprint": "Shields:Flex_Socket_Side",
+      "footprint": "Shields:Flex_Socket_Right_Overhang",
       "pins": {
         "1": "AR",
         "2": "MICOUT",
@@ -445,70 +413,6 @@
       "datasheet": "",
       "uuid": "33afa107-784a-504f-a459-34fa2d445c36",
       "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/a12f91a6-d5c6-5b04-b05b-0b13ecfaa013"
-    },
-    {
-      "ref": "H5",
-      "value": "M2 SIDE SUPPORT BASE",
-      "footprint": "Shields:Flex_M2_Base",
-      "pins": {},
-      "sheet": "mechanical",
-      "description": "",
-      "pin_names": {},
-      "pin_types": {},
-      "assembly": "fit",
-      "include_bom": false,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "d178b26d-3781-5c9e-80ff-0061e81b762c",
-      "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/ed1e5076-8af5-506b-a755-97e4cb4f7015"
-    },
-    {
-      "ref": "H6",
-      "value": "M2 SIDE SUPPORT BASE",
-      "footprint": "Shields:Flex_M2_Base",
-      "pins": {},
-      "sheet": "mechanical",
-      "description": "",
-      "pin_names": {},
-      "pin_types": {},
-      "assembly": "fit",
-      "include_bom": false,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "b1d0e6c4-75a0-569a-a463-59b665872d67",
-      "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/ed1e5076-8af5-506b-a755-97e4cb4f7015"
-    },
-    {
-      "ref": "H7",
-      "value": "M2 SIDE SUPPORT BASE",
-      "footprint": "Shields:Flex_M2_Base",
-      "pins": {},
-      "sheet": "mechanical",
-      "description": "",
-      "pin_names": {},
-      "pin_types": {},
-      "assembly": "fit",
-      "include_bom": false,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "47bf8f48-0302-521e-991f-157e03acf72e",
-      "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/ed1e5076-8af5-506b-a755-97e4cb4f7015"
-    },
-    {
-      "ref": "H8",
-      "value": "M2 SIDE SUPPORT BASE",
-      "footprint": "Shields:Flex_M2_Base",
-      "pins": {},
-      "sheet": "mechanical",
-      "description": "",
-      "pin_names": {},
-      "pin_types": {},
-      "assembly": "fit",
-      "include_bom": false,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "492e024d-94f8-5809-a604-b949493a2cd9",
-      "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/ed1e5076-8af5-506b-a755-97e4cb4f7015"
     }
   ],
   "production_release": false

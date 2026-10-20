@@ -1,5 +1,10 @@
 # Shield assemblies — Blender / STEP reference
 
+The 2026-10-20 user-approved microphone flex placement is the current source:
+the three sockets and electrical parts follow the saved placement, and only
+the two frame slots remain. Current views follow the relocated socket rows
+and omit the older H3-H8 module-support posts and arms.
+
 Created 2026-10-08 from the current shield PCB files. Open
 [shield-configurations.blend](shield-configurations.blend) in Blender (5.2).
 Use the **Scene selector at the top right** to switch between **Mega**,

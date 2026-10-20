@@ -14,9 +14,38 @@ import schematic_support as schematic
 
 
 def main():
+    placed=p.LoadBoard(str(ROOT/'microphone-flex-placed.kicad_pcb'))
+    def placement(board):
+        return {fp.GetReference():(tuple(p.ToMM(fp.GetPosition())),fp.GetOrientationDegrees(),fp.GetLayer())
+                for fp in board.GetFootprints()}
+    approved=placement(placed)
     finish.finish(ROOT)
     path=ROOT/'microphone-flex.kicad_pcb'
     board=p.LoadBoard(str(path))
+    assert placement(board)==approved,'Routing must retain the approved component placement'
+    # Right-angle socket bodies deliberately overhang the PCB in this placement.
+    # Keep their complete outlines on assembly, with only printable silk on-board.
+    edges=board.GetBoardEdgesBoundingBox()
+    for fp in board.GetFootprints():
+        changed=False
+        for graphic in fp.GraphicalItems():
+            box=graphic.GetBoundingBox()
+            if graphic.GetLayer()==p.F_SilkS and (
+                    box.GetLeft()<edges.GetLeft()+p.FromMM(.3) or
+                    box.GetRight()>edges.GetRight()-p.FromMM(.3) or
+                    box.GetTop()<edges.GetTop()+p.FromMM(.3) or
+                    box.GetBottom()>edges.GetBottom()-p.FromMM(.3)):
+                graphic.SetLayer(p.F_Fab)
+                changed=True
+        if changed and fp.GetReference() in ('J2','J3'):
+            side={'J2':'Left','J3':'Right'}[fp.GetReference()]
+            ident=p.LIB_ID('Shields','Flex_Socket_'+side+'_Overhang')
+            fp.SetFPID(ident)
+            library=fp.Duplicate()
+            library.SetOrientationDegrees(0)
+            library.SetPosition(p.VECTOR2I(0,0))
+            p.PCB_IO_MGR.PluginFind(p.PCB_IO_MGR.KICAD_SEXP).FootprintSave(
+                str(ROOT.parent/'Shields.pretty'),library)
     for z in list(board.Zones()):
         if not z.GetIsRuleArea():board.Delete(z)
     planes.zone(board,'SH_RETURN','GND',p.B_Cu,[(44.5,50.5),(75.5,50.5),(75.5,111.5),(44.5,111.5)])
@@ -62,10 +91,13 @@ def main():
     for side,ref in [('left','J2'),('right','J3')]:
         transform=meta[side];rotation=transform['module_rotation'];translation=transform['module_translation_mm']
         targets={pad.GetNumber():pad for pad in parts[ref].Pads()}
+        baseline_y={'J2':74,'J3':84.16}[ref]
+        delta_y=p.ToMM(parts[ref].GetPosition().y)-baseline_y
         for pad in src.Pads():
             pin=int(pad.GetNumber());x,y=p.ToMM(pad.GetPosition())
             vector=[x-50,-(y-50),0]
             pos=[sum(rotation[i][j]*vector[j] for j in range(3))+translation[i] for i in range(3)]
+            pos[1]-=delta_y
             target=targets[str(6-pin)];tx,ty=p.ToMM(target.GetPosition())
             # Socket mating axis is X. The purchased library proxy puts it at
             # 1.27 mm above the carrier component face; compare row Y and Z.
@@ -76,6 +108,9 @@ def main():
             'outline_mm':[32,62],'slots_mm':[12,5.5],'slot_spacing_mm':50,
             'side_socket_contacts_checked':10,'maximum_contact_row_error_mm':max_error,
             'schematic_pcb_connected_pin_parity':len(expected),
+            'approved_placement_retained':placement(board)==approved,
+            'footprints_in_approved_placement':len(approved),
+            'module_support_holes':[],
             'selectors':{'JP1':{'1-2':'50dB','2-3':'40dB','open':'60dB','initial':'2-3'},
                          'JP2':{'1-2':'1:500','2-3':'1:2000','open':'1:4000','initial':'1-2'}},
             'population':'ONE module only','physical_fit_verified':False}

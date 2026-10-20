@@ -1,5 +1,20 @@
 # Microphone holder Rev C — left, right or upward
 
+## User-approved placement — 2026-10-20
+
+The routed board follows the saved microphone-flex-placed layout exactly:
+all 16 footprint positions, rotations and sides are retained. Routing uses
+the placement project's nominal 0.20 mm track width and clearance, with
+router pad neckdowns subject to the project's minimum-width rules. J2/J3
+overhang the PCB; their off-board outlines are on F.Fab rather than printed
+silkscreen. The left/right footprint variants preserve the same pads and bodies.
+
+Only H1/H2 frame slots remain. H3-H8 module-support mounting holes were removed
+in the user's placement and are absent from the current schematic and views.
+The older support STL/STEP files are retained as reference geometry; they are
+not installed in the current variants. Side module views follow the moved
+socket rows. Module retention requires a separate mechanical arrangement.
+
 ## Removable selectors — 2026-10-20
 
 JP1 and JP2 are gold plated 1x03, 2.54 mm through-hole headers, each supplied
@@ -73,16 +88,16 @@ the actual imperial profile/T-nuts before selecting frame fixings.
 
 | Position | Socket | Module support |
 | --- | --- | --- |
-| Up / position 3 | M1, vertical 1×5 socket | Existing H3/H4 insulating M2 posts; match seated height |
-| Left / position 1 | J2, horizontal 1×5 socket | Two prototype insulating arms on H5/H6 |
-| Right / position 2 | J3, opposing horizontal 1×5 socket | Two prototype insulating arms on H7/H8 |
+| Up / position 3 | M1, vertical 1×5 socket | Separate retention; no PCB support holes |
+| Left / position 1 | J2, horizontal 1×5 socket | Separate retention; no PCB support holes |
+| Right / position 2 | J3, opposing horizontal 1×5 socket | Separate retention; no PCB support holes |
 
 All three socket rows carry the same five signals. **Fit exactly one module.**
 The gain and A/R settings use the removable selectors above. The supply filter,
 output resistor, LED and external J1 pin order are retained from Rev B.
 J1 remains GND / +5V / OUT. SMD parts remain
-on the front. Socket rows may all be populated, but only the selected module
-supports are fitted. Do not force a module into a socket of unverified geometry.
+on the front. Socket rows may all be populated, but fit only one module.
+Do not force a module into a socket of unverified geometry.
 
 The side sockets' **physical pad order is reversed** relative to M1:
 
@@ -103,8 +118,9 @@ socket mouth; the existing 6 mm pin projection gives 3.46 mm nominal insertion.
 Purchased sockets, header seating and the actual violet module must be measured.
 
 The side module rises to approximately 26.9 mm above the holder underside,
-before the separate 5 mm frame gap. Two insulating arms support its original
-M2 mounting holes, 10.033 mm apart; the pin row does not carry the whole load.
+before the separate 5 mm frame gap. The earlier reference study used two
+insulating arms at its M2 mounting holes, 10.033 mm apart. These arms are
+not installed in the current user placement.
 The four arm STL files in `3dmodels/` are **fitting prototypes**, with 2.2 mm
 holes for insulating M2 fixings. Module screw heads must remain no larger than
 4 mm beside the microphone capsule. Frame screws, module screws and cable
@@ -114,7 +130,7 @@ the arms before relying on their dimensions or mechanical stiffness.
 ## Files and 3D views
 
 `microphone-flex.kicad_pro` opens the routed electrical prototype. Its board
-contains the three socket footprints and all alternative support holes.
+contains the three socket footprints and the two frame slots.
 `variants/up.kicad_pcb`, `left.kicad_pcb` and `right.kicad_pcb` are assembled
 viewing copies with identical copper and exactly one seated module. Their
 3D references resolve to local repository models. The shared combined Blender
@@ -135,22 +151,21 @@ Run from the repository root:
 
 ```powershell
 & 'C:/Program Files/KiCad/9.0/bin/python.exe' CAD/KiCad/shields/scripts/microphone_flex.py
-& 'C:/Program Files/FreeCAD 1.0/bin/python.exe' CAD/KiCad/shields/microphone-flex/build_models.py
-& 'C:/Program Files/KiCad/9.0/bin/python.exe' CAD/KiCad/shields/scripts/route.py --only microphone-flex --jar tmp/shields-tools/freerouting-2.4.1.jar --work tmp/microphone-flex-route
+& 'C:/Program Files/KiCad/9.0/bin/python.exe' CAD/KiCad/shields/scripts/route.py --only microphone-flex --preserve-netclasses --jar tmp/shields-tools/freerouting-2.4.1.jar --work tmp/microphone-flex-route
 & 'C:/Program Files/KiCad/9.0/bin/python.exe' CAD/KiCad/shields/microphone-flex/check_layout.py
 & 'C:/Program Files/KiCad/9.0/bin/python.exe' CAD/KiCad/shields/microphone-flex/export_variants.py
-& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python-exit-code 1 --python CAD/KiCad/shields/assembly-3d/add_body_scenes.py -- --replace-body-scenes
+& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python-exit-code 1 --python CAD/KiCad/shields/assembly-3d/update_visual_geometry.py -- --only=shield-configurations.blend --render
 ```
 
-The final command replaces generated Rev C body scenes; preserve any edits
-to those scenes before rerunning. Earlier Rev B scenes are retained rather
-than rebuilt. Backup combined files are saved under `tmp/body-model/`.
+For a newly edited placement, start at the routing command; the first command
+recreates the staging board from the generator's recorded placement. The final
+command refreshes meshes in place while retaining scene edits and placements.
 
 `layout-validation.json`: zero ERC/DRC violations and zero unconnected items;
 all 38 connected pins agree between the native schematic, circuit manifest
 and PCB. Slot geometry and spacing, side pin polarity, and contact alignment
-are independently checked. `support-model-validation.json`: connected, valid
-support solids without module intersection. `variant-validation.json` and
+are independently checked. `support-model-validation.json` describes only the
+older reference support solids, not the current mounting arrangement. `variant-validation.json` and
 the assembly's `body-scenes-validation.json` record source/output hashes.
 Simulation and CAD checks do not establish physical fit, acoustic performance,
 vibration isolation or mechanical strength. No fabrication release is claimed.

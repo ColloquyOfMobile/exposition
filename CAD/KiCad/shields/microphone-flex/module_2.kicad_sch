@@ -18,7 +18,7 @@
 (symbol "Colloquy:J2" (pin_names (offset 1.27)) (exclude_from_sim no) (in_bom yes) (on_board yes)
 (property "Reference" "J" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
 (property "Value" "LEFT / 1x05 RIGHT ANGLE" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
-(property "Footprint" "Shields:Flex_Socket_Side" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
+(property "Footprint" "Shields:Flex_Socket_Left_Overhang" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Datasheet" "" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Description" "Alternative socket; AR / Out / Gain / Vdd / GND in physical pad order. One module only." (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (symbol "J2_1_1"
@@ -51,7 +51,7 @@
 (symbol (lib_id "Colloquy:J2") (at 307.3400 83.8200 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "0bafa027-5ba1-5e33-95ea-b37245a7379d")
 (property "Reference" "J2" (at 307.3400 66.0400 0) (effects (font (size 1.016 1.016))  ))
 (property "Value" "LEFT / 1x05 RIGHT ANGLE" (at 307.3400 68.5800 0) (effects (font (size 1.016 1.016))  ))
-(property "Footprint" "Shields:Flex_Socket_Side" (at 307.3400 83.8200 0) (effects (font (size 1.27 1.27))  (hide yes)))
+(property "Footprint" "Shields:Flex_Socket_Left_Overhang" (at 307.3400 83.8200 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Datasheet" "" (at 307.3400 83.8200 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Description" "Alternative socket; AR / Out / Gain / Vdd / GND in physical pad order. One module only." (at 307.3400 83.8200 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (pin "1" (uuid "8143380b-3dad-5a28-9b50-0f7b0800358e"))

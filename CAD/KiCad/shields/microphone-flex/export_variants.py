@@ -32,7 +32,7 @@ def preview():
     for i,orientation in enumerate(('left','right','up')):
         image=WORK/(orientation+'.png')
         subprocess.run([str(CLI),'pcb','render','--width','800','--height','960',
-                        '--background','opaque','--side','top','--rotate','335,0,20',
+                        '--background','opaque','--side','top','--rotate','335,0,20','--zoom','0.7',
                         '-o',str(image),str(WORK/(orientation+'.kicad_pcb'))],
                        check=True,stdout=subprocess.DEVNULL)
         with Image.open(image) as rendered:
@@ -41,7 +41,9 @@ def preview():
         hashes[orientation]=hashlib.sha256(image.read_bytes()).hexdigest()
     draw.text((30,865),'Generic header/shunt proxies. Physical dimensions and adjustment access require checking.',font=font,fill='black')
     path=ASSEMBLY/'microphone-positions-preview.png'
-    canvas.save(path)
+    staged=path.with_name(path.stem+'-staged.png')
+    canvas.save(staged)
+    staged.replace(path)
     hashes['comparison']=hashlib.sha256(path.read_bytes()).hexdigest()
     return hashes
 
@@ -60,17 +62,26 @@ def main():
                 fp.Add3DModel(model)
         if orientation=='up':
             attach(parts['M1'],ROOT.parent/'microphone/3dmodels/MAX9814_Module_reference.step')
-            for ref in ('H3','H4'):attach(parts[ref],ROOT.parent/'microphone/3dmodels/M2_insulating_support_reference.step')
+            for ref in ('H3','H4'):
+                if ref in parts:
+                    attach(parts[ref],ROOT.parent/'microphone/3dmodels/M2_insulating_support_reference.step')
         else:
             dummy=p.FOOTPRINT(board);board.Add(dummy);dummy.SetReference('VISUAL_MODULE_'+orientation.upper())
             dummy.Reference().SetVisible(False);dummy.Value().SetVisible(False)
+            # The reference STEP uses the original socket coordinates. Follow
+            # the approved socket translation without moving the saved PCB.
+            ref,base={'left':('J2',(56,74)), 'right':('J3',(64,84.16))}[orientation]
+            x,y=p.ToMM(parts[ref].GetPosition())
+            dummy.SetPosition(p.VECTOR2I(p.FromMM(x-base[0]),p.FromMM(y-base[1])))
             attach(dummy,ROOT/'3dmodels'/f'module-{orientation}.step')
-            attach(dummy,ROOT/'3dmodels'/f'supports-{orientation}.step')
+            if all(ref in parts for ref in ('H5','H6','H7','H8')):
+                attach(dummy,ROOT/'3dmodels'/f'supports-{orientation}.step')
         staged=WORK/(orientation+'.kicad_pcb');p.SaveBoard(str(staged),board,True)
         dest=ASSEMBLY/'exports'/('microphone-flex-'+orientation+'.glb')
         visual=export_visual(staged,dest,source)
         meta={'source':'microphone-flex/microphone-flex.kicad_pcb','source_sha256':source_hash,
               'orientation':orientation,'module_population':1,'physical_fit_verified':False,'visual_export':visual,
+              'module_support_holes':[ref for ref in ('H3','H4','H5','H6','H7','H8') if ref in parts],
               'footprints':{fp.GetReference():{'xy':list(map(float,p.ToMM(fp.GetPosition()))),
                   'angle':fp.GetOrientationDegrees(),
                   'pads':{q.GetNumber():list(map(float,p.ToMM(q.GetPosition()))) for q in fp.Pads() if q.GetNumber()}}

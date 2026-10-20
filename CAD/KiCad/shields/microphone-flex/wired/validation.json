@@ -7,15 +7,15 @@
   "erc_violations": 0,
   "electrical_labels": 0,
   "sha256": {
-    "microphone-flex.kicad_pcb": "d6e2aa1c4010032a2ec8e737e6816dca3e95426a4f3a73f85ace6ecc1da652f7",
-    "circuit.json": "995f4441458f125e4a6f08de4f1c28c87ff9b91416d654b6593e5e784113f017",
-    "wired\\microphone-flex-wired.kicad_sch": "d67811617cdff8b011e3eab47e95c5dc6e03584bdbc322f92b87360dd9f10ce0",
+    "microphone-flex.kicad_pcb": "1e8ea5d1dbb78ffc52618212f4ed2d0091d2d19f586190dea68dc6e49da0329a",
+    "circuit.json": "ffe9f21fbe60f6f55ed47fd2be01303ab482b8c5ed9779e003b8539d93f57a9d",
+    "wired\\microphone-flex-wired.kicad_sch": "fe26eec7036a82d8a371bb24d4dcce80f13cf534f27fc2b06c76876ca0ee837e",
     "interface.kicad_sch": "fd3586b01b5d83378c9cc1c3c1f6daed1b3cad365d0a04f30d1754adba375c69",
-    "mechanical.kicad_sch": "49091032cd28b491e60ea9f757667173300be65fcbc22e5494b579fdcc896017",
-    "microphone-flex.kicad_sch": "2a0b26468ef48ecb231cc09968cedaca57afa9b6e0ed788349b02a68410bd363",
+    "mechanical.kicad_sch": "533d42e07f964ad710b1325fc5886c475b30129e10a47a5a7a542376d85d4920",
+    "microphone-flex.kicad_sch": "8bb3c516ba6af29bffb818eb5a7595df8dca675434f0605ade29e236e3da29c3",
     "module.kicad_sch": "1f60ed395aa18b40241940ae025c6d8323c501b88bd545da9e16ca8382acf817",
-    "module_2.kicad_sch": "a805fa5ba0bfd8c3231ca07840298e5c27c6ecc0157c7146e1a54f346953e745",
-    "module_3.kicad_sch": "4660482239ea36effb534d2fe8b55cd2705aee216dfe89160bb5ccb821788d80",
+    "module_2.kicad_sch": "cc982e8e14b5fe47a58c145236fc19e7d3bea2b771afeb2cb4176065833b07a5",
+    "module_3.kicad_sch": "3edd0aaf9e4606e5064b2829948b0633d983711c5c399666502775d37d5dfc78",
     "power.kicad_sch": "eed362d589a5ab9820000e73b1e9d5e010ba7a9646fd1d291219d158771521e9",
     "supplies.kicad_sch": "d864dbedd7a6e0734f377d7ac7dc0f18508bb960c1fe244edc42957216749977"
   }

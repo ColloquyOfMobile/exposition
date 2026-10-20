@@ -175,8 +175,9 @@ def main():
     text('Dots join wires. Crossings without dots are separate. Pins are arranged by signal; numbers match the PCB.',8,101,1.1)
     text('Mounting only:',8,106,1.1)
     for i in range(1,9):
-        place('H'+str(i),29+(i-1)*9,108)
-    text('H1/H2: M5 slots  |  H3/H4: top M2  |  H5-H8: side M2',8,110,1.0)
+        if 'H'+str(i) in parts:
+            place('H'+str(i),29+(i-1)*9,108)
+    text('H1/H2: M5 frame slots. No module-support mounting holes in this placement.',8,110,1.0)
     # Split wires at existing endpoints, never at interior/interior crossings.
     ends = {pt for seg in segments for pt in seg}
     split = set()
