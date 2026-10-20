@@ -27,6 +27,28 @@ The diode, all input divider/filter parts, buffer pulldowns, decoupling capacito
 microphone shunt capacitors and GPIO test points already exist in the original.
 Their presence in this drawing is not a new design recommendation.
 
+## GPIO and signal captions
+
+Functional names are repeated on both sides of every digital buffer and
+photosensor divider, and at the microphone GPIOs. `f1`-`f3` mean female 1-3;
+`m1`-`m2` mean male 1-2. Examples are `GPIO 7 | f1/neopixel` and
+`GPIO 14 / A0 | f1/microphone`. These captions leave electrical net names intact.
+
+The routed `../teensy-adapter.kicad_pcb` also carries the same names on
+**B.Silkscreen**, aligned with all 48 Teensy socket contacts and mirrored to
+read correctly when looking at the physical back. All 31 functional signals
+are included; remaining rows identify power, spare GPIO and the unused pin.
+Text is 0.8-1.0 mm high with 0.12 mm strokes. The longest photosensor captions
+use slightly condensed lettering to stay clear of the solder pads.
+
+`../label_pcb_signals.py` regenerates these labels after a script that replaces
+PCB operating labels. Its named group replaces only these captions on reruns.
+It compares KiCad's serialized board before and after, allowing only board text
+and its group to change: copper, zones, pads, nets and component placement stay
+identical. The PCB DRC reports zero violations and zero unconnected items.
+See `../reports/gpio-silkscreen.json` for the complete socket/contact/GPIO/name
+mapping and `../reports/back-signals.svg` for a view from the back.
+
 ## Independent checks
 
 Run from the repository root with KiCad 9's Python:

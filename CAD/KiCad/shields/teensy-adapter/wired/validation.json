@@ -11,8 +11,8 @@
   "erc_types": [],
   "sha256": {
     "circuit.json": "36b56da32bee453dee32b87e630d72e13308d1ba2d5f773c27da7a0ce2914f89",
-    "teensy-adapter.kicad_pcb": "7dad98de4cfb66d2dca20a79fc67ffa10a2d83c63662b470dc469362b0102207",
-    "wired\\teensy-adapter-wired.kicad_sch": "5fb44e13bb7f5173b7d4d25cfc257e24088c7557d4574d441d587004ac829a15",
+    "teensy-adapter.kicad_pcb": "3f248cab536f22595e5483eb9294b1e2357d1cc543c4f615bb7aac9a11b59ce8",
+    "wired\\teensy-adapter-wired.kicad_sch": "0a4126c848763e0a069876dd66731f0258482bd7ed9b04eb8f048cf8d290d214",
     "controls.kicad_sch": "462ed87071b3c5ab2c948e74063ed58cf9b8f9f4feb4adc89ff649c7c1280a53",
     "mega.kicad_sch": "3be34dd7e0fdf863abf21af8a690adc12b9d8f4095db4eceeee9d746ce54795c",
     "mega_2.kicad_sch": "cd5eb4e406de9d12313e564d8312b48fd3d30ca7c3ae0b2e73316663205ab6eb",

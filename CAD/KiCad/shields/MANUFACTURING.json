@@ -13,7 +13,7 @@
   {
     "project": "teensy-adapter",
     "zip": "teensy-adapter\\manufacturing\\teensy-adapter-manufacturing.zip",
-    "sha256": "e023c39e573cf1d40cc7c8a5c1378745a58a1eb3ca0fcc17ef1136000b591c93",
+    "sha256": "8d4058111025e65c666858d4c3fbf540a7757d891f274a6dda17fd05914b4b4e",
     "assembly_policy": "front_smd_only",
     "files": 26,
     "copper_layers": 4,

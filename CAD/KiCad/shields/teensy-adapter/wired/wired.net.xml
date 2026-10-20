@@ -2,7 +2,7 @@
 <export version="E">
   <design>
     <source>C:\workspace\workspace2\Colloquy\exposition\CAD\KiCad\shields\teensy-adapter\wired\teensy-adapter-wired.kicad_sch</source>
-    <date>2026-10-20T13:04:27+0200</date>
+    <date>2026-10-20T16:36:48+0200</date>
     <tool>Eeschema 9.0.7</tool>
     <sheet number="1" name="/" tstamps="/">
       <title_block>
@@ -374,7 +374,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>edfcd0d6-7440-5b4c-a427-c65bba3f4696 8146062b-6bbb-5177-98f2-dbe37ea0abff 6fb64c37-e3aa-53fb-90b2-cab5d55ba9ab 29592fbd-e3de-5cea-bf4b-f5ed6f5b16e2 c053fe72-3673-5671-be1d-46b3c4cc68e9 60a0ce08-8667-5233-aa50-39df57c1fdbd 04e75b2a-0163-577e-9a60-2b457f722405</tstamps>
+      <tstamps>8146062b-6bbb-5177-98f2-dbe37ea0abff 6fb64c37-e3aa-53fb-90b2-cab5d55ba9ab edfcd0d6-7440-5b4c-a427-c65bba3f4696 29592fbd-e3de-5cea-bf4b-f5ed6f5b16e2 c053fe72-3673-5671-be1d-46b3c4cc68e9 60a0ce08-8667-5233-aa50-39df57c1fdbd 04e75b2a-0163-577e-9a60-2b457f722405</tstamps>
     </comp>
     <comp ref="JT1">
       <value>Teensy 4.1 JT1</value>
@@ -389,7 +389,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>3c72ff4e-b273-5ea8-9598-1f22cb37ff74 2d56d0c8-0b16-573c-b6bf-6c985a21abea 64d30637-2606-54b3-b69b-90716a32c3fa 09b1698c-859d-5bd7-bb7d-a0b38fc25a34</tstamps>
+      <tstamps>2d56d0c8-0b16-573c-b6bf-6c985a21abea 3c72ff4e-b273-5ea8-9598-1f22cb37ff74 64d30637-2606-54b3-b69b-90716a32c3fa 09b1698c-859d-5bd7-bb7d-a0b38fc25a34</tstamps>
     </comp>
     <comp ref="JT2">
       <value>Teensy 4.1 JT2</value>
@@ -404,7 +404,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>dbf1bb38-90de-5744-a8a9-11d109e14e04 7abefeeb-a2b1-577b-b620-b64030ddd412 94f4419d-4333-556d-ae6f-8e4724431396 48942eaa-bdac-5da3-81ff-e8bede4621ed 12cff0f0-4ed0-58e0-b4d1-de4bbd391873</tstamps>
+      <tstamps>874c7b0c-5df4-5460-8f97-8a054e75e5a2 dbf1bb38-90de-5744-a8a9-11d109e14e04 7abefeeb-a2b1-577b-b620-b64030ddd412 94f4419d-4333-556d-ae6f-8e4724431396 48942eaa-bdac-5da3-81ff-e8bede4621ed 12cff0f0-4ed0-58e0-b4d1-de4bbd391873</tstamps>
     </comp>
     <comp ref="RA19">
       <value>100K</value>
@@ -1131,7 +1131,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>aef8a21a-78df-5ab6-a25c-416b75757e7b 6a03bc49-f590-58b6-8e2f-93745f8effc1 b189b229-b56e-5be7-855a-3e8a8e40099f 5c5f5d82-1f1b-5ab9-bc28-89995dbdc10b 026171c1-f380-5e6f-b7e1-5d05c2a9227d</tstamps>
+      <tstamps>6a03bc49-f590-58b6-8e2f-93745f8effc1 aef8a21a-78df-5ab6-a25c-416b75757e7b b189b229-b56e-5be7-855a-3e8a8e40099f 5c5f5d82-1f1b-5ab9-bc28-89995dbdc10b 026171c1-f380-5e6f-b7e1-5d05c2a9227d</tstamps>
     </comp>
     <comp ref="U2">
       <value>SN74LV4T125PWR</value>
@@ -1159,7 +1159,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>3f0e2b14-0f00-5907-9c49-d4137da584a5 9e585812-8cfb-5d94-98e6-63e1a87361ec 4278e0d5-b135-5f5e-8ba7-9891a8eec011 88257b26-2384-5259-bee7-31309201445d 162b0f0b-86d6-5321-86d5-8b1aab78b85e</tstamps>
+      <tstamps>3f0e2b14-0f00-5907-9c49-d4137da584a5 4278e0d5-b135-5f5e-8ba7-9891a8eec011 9e585812-8cfb-5d94-98e6-63e1a87361ec 88257b26-2384-5259-bee7-31309201445d 162b0f0b-86d6-5321-86d5-8b1aab78b85e</tstamps>
     </comp>
     <comp ref="U4">
       <value>SN74LV4T125PWR</value>
@@ -2689,44 +2689,32 @@
       <node ref="RA23" pin="2" pintype="passive"/>
       <node ref="RB23" pin="1" pintype="passive"/>
     </net>
-    <net code="42" name="Net-(JT2A-38)" class="Default">
-      <node ref="CA38" pin="1" pintype="passive"/>
-      <node ref="JT2" pin="19" pinfunction="38" pintype="passive"/>
-      <node ref="RA38" pin="2" pintype="passive"/>
-      <node ref="RB38" pin="1" pintype="passive"/>
-    </net>
-    <net code="43" name="Net-(JT2A-39)" class="Default">
-      <node ref="CA39" pin="1" pintype="passive"/>
-      <node ref="JT2" pin="18" pinfunction="39" pintype="passive"/>
-      <node ref="RA39" pin="2" pintype="passive"/>
-      <node ref="RB39" pin="1" pintype="passive"/>
-    </net>
-    <net code="44" name="Net-(JT2B-14)" class="Default">
+    <net code="42" name="Net-(JT2B-14)" class="Default">
       <node ref="CM1" pin="1" pintype="passive"/>
       <node ref="JM1" pin="D26" pinfunction="D26" pintype="passive"/>
       <node ref="JT2" pin="13" pinfunction="14" pintype="passive"/>
     </net>
-    <net code="45" name="Net-(JT2B-15)" class="Default">
+    <net code="43" name="Net-(JT2B-15)" class="Default">
       <node ref="CM2" pin="1" pintype="passive"/>
       <node ref="JM1" pin="D27" pinfunction="D27" pintype="passive"/>
       <node ref="JT2" pin="12" pinfunction="15" pintype="passive"/>
     </net>
-    <net code="46" name="Net-(JT2B-16)" class="Default">
+    <net code="44" name="Net-(JT2B-16)" class="Default">
       <node ref="CM3" pin="1" pintype="passive"/>
       <node ref="JM1" pin="D28" pinfunction="D28" pintype="passive"/>
       <node ref="JT2" pin="11" pinfunction="16" pintype="passive"/>
     </net>
-    <net code="47" name="Net-(JT2B-17)" class="Default">
+    <net code="45" name="Net-(JT2B-17)" class="Default">
       <node ref="CM4" pin="1" pintype="passive"/>
       <node ref="JM1" pin="D29" pinfunction="D29" pintype="passive"/>
       <node ref="JT2" pin="10" pinfunction="17" pintype="passive"/>
     </net>
-    <net code="48" name="Net-(JT2B-18)" class="Default">
+    <net code="46" name="Net-(JT2B-18)" class="Default">
       <node ref="CM5" pin="1" pintype="passive"/>
       <node ref="JM1" pin="D30" pinfunction="D30" pintype="passive"/>
       <node ref="JT2" pin="9" pinfunction="18" pintype="passive"/>
     </net>
-    <net code="49" name="Net-(JT2C-VIN)" class="Default">
+    <net code="47" name="Net-(JT2C-VIN)" class="Default">
       <node ref="CB1" pin="1" pintype="passive"/>
       <node ref="CB2" pin="1" pintype="passive"/>
       <node ref="CB3" pin="1" pintype="passive"/>
@@ -2740,33 +2728,45 @@
       <node ref="U3" pin="14" pinfunction="VCC" pintype="power_in"/>
       <node ref="U4" pin="14" pinfunction="VCC" pintype="power_in"/>
     </net>
-    <net code="50" name="Net-(JT2D-33)" class="Default">
+    <net code="48" name="Net-(JT2D-33)" class="Default">
       <node ref="JT2" pin="24" pinfunction="33" pintype="passive"/>
       <node ref="TP33" pin="1" pintype="passive"/>
     </net>
-    <net code="51" name="Net-(JT2D-34)" class="Default">
+    <net code="49" name="Net-(JT2D-34)" class="Default">
       <node ref="JT2" pin="23" pinfunction="34" pintype="passive"/>
       <node ref="TP34" pin="1" pintype="passive"/>
     </net>
-    <net code="52" name="Net-(JT2D-35)" class="Default">
+    <net code="50" name="Net-(JT2D-35)" class="Default">
       <node ref="JT2" pin="22" pinfunction="35" pintype="passive"/>
       <node ref="TP35" pin="1" pintype="passive"/>
     </net>
-    <net code="53" name="Net-(JT2D-36)" class="Default">
+    <net code="51" name="Net-(JT2D-36)" class="Default">
       <node ref="JT2" pin="21" pinfunction="36" pintype="passive"/>
       <node ref="TP36" pin="1" pintype="passive"/>
     </net>
-    <net code="54" name="Net-(JT2D-37)" class="Default">
+    <net code="52" name="Net-(JT2D-37)" class="Default">
       <node ref="JT2" pin="20" pinfunction="37" pintype="passive"/>
       <node ref="TP37" pin="1" pintype="passive"/>
     </net>
-    <net code="55" name="Net-(JT2D-40)" class="Default">
+    <net code="53" name="Net-(JT2D-40)" class="Default">
       <node ref="JT2" pin="17" pinfunction="40" pintype="passive"/>
       <node ref="TP40" pin="1" pintype="passive"/>
     </net>
-    <net code="56" name="Net-(JT2D-41)" class="Default">
+    <net code="54" name="Net-(JT2D-41)" class="Default">
       <node ref="JT2" pin="16" pinfunction="41" pintype="passive"/>
       <node ref="TP41" pin="1" pintype="passive"/>
+    </net>
+    <net code="55" name="Net-(JT2F-38)" class="Default">
+      <node ref="CA38" pin="1" pintype="passive"/>
+      <node ref="JT2" pin="19" pinfunction="38" pintype="passive"/>
+      <node ref="RA38" pin="2" pintype="passive"/>
+      <node ref="RB38" pin="1" pintype="passive"/>
+    </net>
+    <net code="56" name="Net-(JT2F-39)" class="Default">
+      <node ref="CA39" pin="1" pintype="passive"/>
+      <node ref="JT2" pin="18" pinfunction="39" pintype="passive"/>
+      <node ref="RA39" pin="2" pintype="passive"/>
+      <node ref="RB39" pin="1" pintype="passive"/>
     </net>
     <net code="57" name="Net-(U1A-Y1)" class="Default">
       <node ref="JM1" pin="D6" pinfunction="D6" pintype="passive"/>

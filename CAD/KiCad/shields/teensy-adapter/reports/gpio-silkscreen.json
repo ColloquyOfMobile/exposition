@@ -1,0 +1,540 @@
+{
+  "back_silkscreen_captions": 48,
+  "functional_signals": 31,
+  "all_text_mirrored_for_back": true,
+  "minimum_text_height_mm": 0.8,
+  "copper_pads_nets_zones_and_placement_unchanged": true,
+  "source_sha256_before": "7dad98de4cfb66d2dca20a79fc67ffa10a2d83c63662b470dc469362b0102207",
+  "source_sha256_after": "3f248cab536f22595e5483eb9294b1e2357d1cc543c4f615bb7aac9a11b59ce8",
+  "pins": [
+    {
+      "socket": "JT1",
+      "contact": "1",
+      "gpio": "GND",
+      "caption": "GND",
+      "position_mm": [
+        151.9,
+        57.0
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "2",
+      "gpio": "0",
+      "caption": "0 spare",
+      "position_mm": [
+        151.9,
+        59.54
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "3",
+      "gpio": "1",
+      "caption": "1 spare",
+      "position_mm": [
+        151.9,
+        62.08
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "4",
+      "gpio": "2",
+      "caption": "2 f1/tone",
+      "position_mm": [
+        151.9,
+        64.62
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "5",
+      "gpio": "3",
+      "caption": "3 spare",
+      "position_mm": [
+        151.9,
+        67.16
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "6",
+      "gpio": "4",
+      "caption": "4 f2/tone",
+      "position_mm": [
+        151.9,
+        69.7
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "7",
+      "gpio": "5",
+      "caption": "5 f3/tone",
+      "position_mm": [
+        151.9,
+        72.24
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "8",
+      "gpio": "6",
+      "caption": "6 m1/tone",
+      "position_mm": [
+        151.9,
+        74.78
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "9",
+      "gpio": "7",
+      "caption": "7 f1/neopixel",
+      "position_mm": [
+        151.9,
+        77.32
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "10",
+      "gpio": "8",
+      "caption": "8 f2/neopixel",
+      "position_mm": [
+        151.9,
+        79.86
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "11",
+      "gpio": "9",
+      "caption": "9 f3/neopixel",
+      "position_mm": [
+        151.9,
+        82.4
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "12",
+      "gpio": "10",
+      "caption": "10 m1/neopixel",
+      "position_mm": [
+        151.9,
+        84.94
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "13",
+      "gpio": "11",
+      "caption": "11 m2/neopixel",
+      "position_mm": [
+        151.9,
+        87.48
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "14",
+      "gpio": "12",
+      "caption": "12 m2/bar/neopixel",
+      "position_mm": [
+        151.9,
+        90.02
+      ],
+      "text_height_mm": 0.8
+    },
+    {
+      "socket": "JT1",
+      "contact": "15",
+      "gpio": "3V3",
+      "caption": "3V3",
+      "position_mm": [
+        151.9,
+        92.56
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "16",
+      "gpio": "24",
+      "caption": "24 m1/photosensor/C",
+      "position_mm": [
+        151.9,
+        95.1
+      ],
+      "text_height_mm": 0.8
+    },
+    {
+      "socket": "JT1",
+      "contact": "17",
+      "gpio": "25",
+      "caption": "25 m1/photosensor/D",
+      "position_mm": [
+        151.9,
+        97.64
+      ],
+      "text_height_mm": 0.8
+    },
+    {
+      "socket": "JT1",
+      "contact": "18",
+      "gpio": "26",
+      "caption": "26 m2/photosensor/A",
+      "position_mm": [
+        151.9,
+        100.18
+      ],
+      "text_height_mm": 0.8
+    },
+    {
+      "socket": "JT1",
+      "contact": "19",
+      "gpio": "27",
+      "caption": "27 m2/photosensor/B",
+      "position_mm": [
+        151.9,
+        102.72
+      ],
+      "text_height_mm": 0.8
+    },
+    {
+      "socket": "JT1",
+      "contact": "20",
+      "gpio": "28",
+      "caption": "28 m2/tone",
+      "position_mm": [
+        151.9,
+        105.26
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "21",
+      "gpio": "29",
+      "caption": "29 m1/bar/neopixel",
+      "position_mm": [
+        151.9,
+        107.8
+      ],
+      "text_height_mm": 0.8
+    },
+    {
+      "socket": "JT1",
+      "contact": "22",
+      "gpio": "30",
+      "caption": "30 m1/aux",
+      "position_mm": [
+        151.9,
+        110.34
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "23",
+      "gpio": "31",
+      "caption": "31 m2/aux",
+      "position_mm": [
+        151.9,
+        112.88
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT1",
+      "contact": "24",
+      "gpio": "32",
+      "caption": "32 amp/shutdown",
+      "position_mm": [
+        151.9,
+        115.42
+      ],
+      "text_height_mm": 0.9
+    },
+    {
+      "socket": "JT2",
+      "contact": "1",
+      "gpio": "VIN",
+      "caption": "VIN",
+      "position_mm": [
+        183.57,
+        57.0
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT2",
+      "contact": "2",
+      "gpio": "GND",
+      "caption": "GND",
+      "position_mm": [
+        183.57,
+        59.54
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT2",
+      "contact": "3",
+      "gpio": "3V3",
+      "caption": "3V3",
+      "position_mm": [
+        183.57,
+        62.08
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT2",
+      "contact": "4",
+      "gpio": "23",
+      "caption": "23 m1/photosensor/B",
+      "position_mm": [
+        183.57,
+        64.62
+      ],
+      "text_height_mm": 0.8
+    },
+    {
+      "socket": "JT2",
+      "contact": "5",
+      "gpio": "22",
+      "caption": "22 m1/photosensor/A",
+      "position_mm": [
+        183.57,
+        67.16
+      ],
+      "text_height_mm": 0.8
+    },
+    {
+      "socket": "JT2",
+      "contact": "6",
+      "gpio": "21",
+      "caption": "21 f3/photosensor",
+      "position_mm": [
+        183.57,
+        69.7
+      ],
+      "text_height_mm": 0.85
+    },
+    {
+      "socket": "JT2",
+      "contact": "7",
+      "gpio": "20",
+      "caption": "20 f2/photosensor",
+      "position_mm": [
+        183.57,
+        72.24
+      ],
+      "text_height_mm": 0.9
+    },
+    {
+      "socket": "JT2",
+      "contact": "8",
+      "gpio": "19",
+      "caption": "19 f1/photosensor",
+      "position_mm": [
+        183.57,
+        74.78
+      ],
+      "text_height_mm": 0.9
+    },
+    {
+      "socket": "JT2",
+      "contact": "9",
+      "gpio": "18",
+      "caption": "18 m2/microphone",
+      "position_mm": [
+        183.57,
+        77.32
+      ],
+      "text_height_mm": 0.9
+    },
+    {
+      "socket": "JT2",
+      "contact": "10",
+      "gpio": "17",
+      "caption": "17 m1/microphone",
+      "position_mm": [
+        183.57,
+        79.86
+      ],
+      "text_height_mm": 0.9
+    },
+    {
+      "socket": "JT2",
+      "contact": "11",
+      "gpio": "16",
+      "caption": "16 f3/microphone",
+      "position_mm": [
+        183.57,
+        82.4
+      ],
+      "text_height_mm": 0.95
+    },
+    {
+      "socket": "JT2",
+      "contact": "12",
+      "gpio": "15",
+      "caption": "15 f2/microphone",
+      "position_mm": [
+        183.57,
+        84.94
+      ],
+      "text_height_mm": 0.95
+    },
+    {
+      "socket": "JT2",
+      "contact": "13",
+      "gpio": "14",
+      "caption": "14 f1/microphone",
+      "position_mm": [
+        183.57,
+        87.48
+      ],
+      "text_height_mm": 0.95
+    },
+    {
+      "socket": "JT2",
+      "contact": "14",
+      "gpio": "13",
+      "caption": "13 unused",
+      "position_mm": [
+        183.57,
+        90.02
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT2",
+      "contact": "15",
+      "gpio": "GND",
+      "caption": "GND",
+      "position_mm": [
+        183.57,
+        92.56
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT2",
+      "contact": "16",
+      "gpio": "41",
+      "caption": "41 spare",
+      "position_mm": [
+        183.57,
+        95.1
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT2",
+      "contact": "17",
+      "gpio": "40",
+      "caption": "40 spare",
+      "position_mm": [
+        183.57,
+        97.64
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT2",
+      "contact": "18",
+      "gpio": "39",
+      "caption": "39 m2/photosensor/D",
+      "position_mm": [
+        183.57,
+        100.18
+      ],
+      "text_height_mm": 0.8
+    },
+    {
+      "socket": "JT2",
+      "contact": "19",
+      "gpio": "38",
+      "caption": "38 m2/photosensor/C",
+      "position_mm": [
+        183.57,
+        102.72
+      ],
+      "text_height_mm": 0.8
+    },
+    {
+      "socket": "JT2",
+      "contact": "20",
+      "gpio": "37",
+      "caption": "37 spare",
+      "position_mm": [
+        183.57,
+        105.26
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT2",
+      "contact": "21",
+      "gpio": "36",
+      "caption": "36 spare",
+      "position_mm": [
+        183.57,
+        107.8
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT2",
+      "contact": "22",
+      "gpio": "35",
+      "caption": "35 spare",
+      "position_mm": [
+        183.57,
+        110.34
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT2",
+      "contact": "23",
+      "gpio": "34",
+      "caption": "34 spare",
+      "position_mm": [
+        183.57,
+        112.88
+      ],
+      "text_height_mm": 1.0
+    },
+    {
+      "socket": "JT2",
+      "contact": "24",
+      "gpio": "33",
+      "caption": "33 spare",
+      "position_mm": [
+        183.57,
+        115.42
+      ],
+      "text_height_mm": 1.0
+    }
+  ],
+  "manufacturing_copper_drills_outline_masks_paste_and_front_silk_unchanged_except_timestamps": true
+}

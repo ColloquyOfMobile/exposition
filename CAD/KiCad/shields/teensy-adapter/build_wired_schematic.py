@@ -9,6 +9,7 @@ import copy
 import json
 import re
 import sys
+from signal_names import gpio_signals, short_signal
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / 'scripts'))
@@ -18,6 +19,7 @@ NAME = 'teensy-adapter-wired'
 OUT = HERE / 'wired'
 ROOT = s.uid('sheetfile/' + NAME)
 parts = {p['ref']: copy.deepcopy(p) for p in json.loads((HERE/'circuit.json').read_text())['components']}
+SIGNALS = gpio_signals(parts)
 for p in parts.values():
     p['sheet_path'] = '/' + ROOT
 # Preserve both ERC-only declarations from the original supplies sheet.
@@ -136,8 +138,8 @@ def main():
         wire((284.48,y),(579.12,y))
         wire((180.34,y+10.16),(signal_ground,y+10.16))
         wire((269.24,y+6.35),(269.24,y+10.16))
-        text(parts[u]['pins'][out].replace('/driven','').replace('/',' / '), 400, y-4.2, 1.6)
-        text('GPIO '+net.split('/')[1], 110, y-4.2, 1.3)
+        text(short_signal(parts[u]['pins'][out]), 400, y-4.2, 1.6)
+        text('GPIO '+net.split('/')[1]+' | '+SIGNALS[net.split('/')[1]], 110, y-4.2, 1.5)
     connector('JT1',1,jt_digital,100.33,80.01,'right')
     connector('JM1',1,jm_digital,579.12,599.44,'left')
     # Spare fourth gate of U4: input/OE grounded, output left unused, as original.
@@ -168,10 +170,12 @@ def main():
         wire((100.33,y),(425.45,y))
         wire((435.61,y),(579.12,y))
         wire((320.04,y+10.16),(signal_ground,y+10.16))
-        text(parts[ref]['pins']['1'].replace('/',' / '),450,y-4.2,1.3)
-        text('ADC '+str(adc),110,y-4.2,1.3)
+        text(short_signal(parts[ref]['pins']['1']),450,y-4.2,1.5)
+        text('GPIO '+str(adc)+' / ADC | '+SIGNALS[str(adc)],110,y-4.2,1.5)
     connector('JT1',2,sensor_jt['JT1'],100.33,80.01,'right')
-    connector('JT2',1,sensor_jt['JT2'],100.33,80.01,'right')
+    # JT2's last two ADCs follow JT1's ADC group; keep their boxes separate.
+    connector('JT2',1,sensor_jt['JT2'][:5],100.33,80.01,'right')
+    connector('JT2',6,sensor_jt['JT2'][5:],100.33,80.01,'right')
     connector('JM1',2,sensor_jm,579.12,599.44,'left')
     text('03  MICROPHONES  /  direct analog input + 1 nF shunt',110,421,2,True)
     jt_mic, jm_mic = [], []
@@ -179,12 +183,15 @@ def main():
         y = 441.96 + i*12.7
         ref = 'CM'+str(i+1)
         net = parts[ref]['pins']['1']
-        jt_mic.append((next(pin for pin,n in parts['JT2']['pins'].items() if n == net),y))
+        jt_pin = next(pin for pin,n in parts['JT2']['pins'].items() if n == net)
+        jt_mic.append((jt_pin,y))
         jm_mic.append((next(pin for pin,n in parts['JM1']['pins'].items() if n == net),y))
         passive(ref,370.84,y+5.08,True)
         wire((100.33,y),(579.12,y))
         wire((370.84,y+10.16),(signal_ground,y+10.16))
-        text(net.replace('/',' / '),478,y-4.2,1.4)
+        text(short_signal(net),478,y-4.2,1.5)
+        gpio = parts['JT2']['pin_names'][jt_pin]
+        text('GPIO '+gpio+' / A'+str(i)+' | '+SIGNALS[gpio],110,y-4.2,1.5)
     connector('JT2',2,jt_mic,100.33,80.01,'right')
     connector('JM1',3,jm_mic,579.12,599.44,'left')
 
@@ -256,7 +263,7 @@ def main():
     connector('JT2',5,[('14',411.48)],787.4,767.08,'right')
     text('Unused Teensy socket contact',716,401,1.3)
     text('U1-U4: SN74LV4T125PWR | RDx: 100K pulldown | PWR_FLAG symbols retained from original; no physical parts.',20,507,1.5)
-    text('No added parts or connections. Plain text captions identify wires; they do not connect them.',20,511,1.5)
+    text('f1-f3 = female 1-3; m1-m2 = male 1-2. Wire captions are plain text, not electrical connections.',20,511,1.5)
 
     s.sym_geometry = lambda p: geometries[p['ref']]
     # Replace diode and vertical resistor artwork while keeping actual pin definitions.
