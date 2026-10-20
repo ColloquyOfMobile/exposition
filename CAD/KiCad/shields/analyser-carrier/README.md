@@ -1,5 +1,10 @@
 # Direct-plug DFRobot analyser carrier
 
+A second [continuous-wire schematic](wired/README.md) is available in `wired/`,
+with an editable KiCad schematic and PDF. It preserves the original circuit,
+uses no electrical net labels, and documents the drawing changes and the
+purpose/necessity of existing test points and module modifications.
+
 Five modified DFR0126 Audio Analyzer V2.0 modules plug directly into this
 150 x 55mm carrier. Each site has one gold 1x6 female socket and one gold
 1x2 female socket, both 2.54mm pitch. Downward male headers on the modules

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://schemas.kicad.org/erc.v1.json",
+  "coordinate_units": "mm",
+  "date": "2026-10-20T14:45:26+0200",
+  "kicad_version": "9.0.7",
+  "sheets": [
+    {
+      "path": "/",
+      "uuid_path": "/e9494dfd-88be-5f75-b24f-b079f6ce1a11",
+      "violations": []
+    }
+  ],
+  "source": "analyser-carrier-wired.kicad_sch"
+}
