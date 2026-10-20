@@ -1,0 +1,14 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-20T14:58:45+0200",
+    "kicad_version": "9.0.7",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/f4c010f7-f446-581c-93d7-f9ba17aaa814",
+            "violations": []
+        }
+    ],
+    "source": "backplane-wired.kicad_sch"
+}
