@@ -1,0 +1,21 @@
+{
+  "connected_pins": 36,
+  "electrical_nets": 8,
+  "matches_original_schematic": true,
+  "matches_circuit_manifest": true,
+  "matches_pcb": true,
+  "erc_violations": 0,
+  "electrical_labels": 0,
+  "sha256": {
+    "microphone-flex.kicad_pcb": "6a6092fa0cf06bdf13d1a8edd0eb4b63762e89bdd055c9633550b878a6acfad4",
+    "circuit.json": "9bba733065826c0138baf462d7d9c7409380127677e933c9caf8c01aa4bc1027",
+    "wired\\microphone-flex-wired.kicad_sch": "ab339a17c726f6126a6730d1b8f7729d46a63b89cf8e9357a07b5202d4aabec1",
+    "interface.kicad_sch": "e1323d58e383be93838bd54972d6e501f34f7073592f68a62b80672a9a69291b",
+    "mechanical.kicad_sch": "e179ae2ec86744586dd629235c37983529640705af08fa7244f36d525653d860",
+    "microphone-flex.kicad_sch": "017488a12e8ce0fcd93e73c37f7308f50a1a1947eff98a12f21fc91a4bc1a0bf",
+    "module.kicad_sch": "9fb0b8e7071974dbd96930bda999379478da93cb34105bffaacc9d04850a9c7c",
+    "module_2.kicad_sch": "7b0e6bf728e79d59766813c871898d8829475cbb79cc746782f4c05939240cc4",
+    "power.kicad_sch": "04b1f1d704352371296f1e07243a594812c73de7750176bd882921885d00f140",
+    "supplies.kicad_sch": "8dc58cd0c441572c65f4eabf1d1c0a44088b8d05c97e0fd8063abce16b66bdbd"
+  }
+}

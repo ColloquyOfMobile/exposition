@@ -1,5 +1,34 @@
 # Microphone holder Rev C — left, right or upward
 
+## Continuous-wire schematic for review
+
+Open wired/microphone-flex-wired.kicad_pro for the separate editable reading
+copy, or wired/microphone-flex-wired.pdf for the single A3 sheet. The SVG and
+PNG preview are alongside it. Every connection is drawn with continuous wires;
+the signal captions are plain text, not electrical labels. Dots mark joined
+wires; crossings without dots are separate.
+
+The three socket symbols align pins by signal for easier tracing. Their
+physical pad numbers are retained, including the reversed J2/J3 numbering.
+J1 also groups its pins by signal rather than physical order. Fit one module
+only. Component references, values, footprints, mounting holes, and electrical
+connections are retained. The original schematic and PCB are unchanged.
+
+Regenerate and validate from the repository root:
+
+~~~powershell
+& 'C:/Program Files/KiCad/9.0/bin/python.exe' CAD/KiCad/shields/microphone-flex/build_wired_schematic.py
+& 'C:/Program Files/KiCad/9.0/bin/python.exe' CAD/KiCad/shields/microphone-flex/verify_wired_schematic.py
+& 'C:/Program Files/KiCad/9.0/bin/kicad-cli.exe' sch export pdf -o CAD/KiCad/shields/microphone-flex/wired/microphone-flex-wired.pdf CAD/KiCad/shields/microphone-flex/wired/microphone-flex-wired.kicad_sch
+& 'C:/Program Files/KiCad/9.0/bin/kicad-cli.exe' sch export svg -o CAD/KiCad/shields/microphone-flex/wired/ CAD/KiCad/shields/microphone-flex/wired/microphone-flex-wired.kicad_sch
+pdftoppm -scale-to 2600 -png -singlefile CAD/KiCad/shields/microphone-flex/wired/microphone-flex-wired.pdf CAD/KiCad/shields/microphone-flex/wired/preview
+~~~
+
+The wired/validation.json report records 36 connected pins across eight nets,
+agreement with the independently exported original schematic, circuit manifest
+and PCB, zero electrical labels, and zero ERC violations. This is a drawing
+change; it does not establish physical hardware performance.
+
 Prototype based on the user's annotated picture, 2026-10-15. The support PCB
 stays on the aluminium profile; **one MAX9814 module** faces left, right or up.
 This is a separate revision study. The current `../microphone/` Rev B board
