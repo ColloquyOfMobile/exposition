@@ -1,0 +1,2976 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="E">
+  <design>
+    <source>C:\workspace\workspace2\Colloquy\exposition\CAD\KiCad\shields\teensy-adapter\wired\teensy-adapter-wired.kicad_sch</source>
+    <date>2026-10-20T13:04:27+0200</date>
+    <tool>Eeschema 9.0.7</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title>Teensy adapter / continuous wiring / reading copy</title>
+        <company>Colloquy of Mobiles</company>
+        <rev>A wired copy</rev>
+        <date>2026-10-20</date>
+        <source>teensy-adapter-wired.kicad_sch</source>
+        <comment number="1" value="Reading copy: same circuit; original schematic and PCB retained"/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="CA19">
+      <value>10nF C0G</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CA19" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>7f266b1a-29df-55a4-ac98-037427d37020</tstamps>
+    </comp>
+    <comp ref="CA20">
+      <value>10nF C0G</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CA20" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>f095a90e-0aa2-5a28-b92c-f1ccbe46250a</tstamps>
+    </comp>
+    <comp ref="CA21">
+      <value>10nF C0G</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CA21" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>3fdf7fd9-26b6-514a-96f5-658593a22c17</tstamps>
+    </comp>
+    <comp ref="CA22">
+      <value>10nF C0G</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CA22" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>538b6f8a-4b8b-5f5c-9b3c-7151f4873190</tstamps>
+    </comp>
+    <comp ref="CA23">
+      <value>10nF C0G</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CA23" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>1741d759-5320-5948-8f5d-af04e5001b2d</tstamps>
+    </comp>
+    <comp ref="CA24">
+      <value>10nF C0G</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CA24" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>0611c4d5-415a-579b-a1d0-23d8c3dd6bbe</tstamps>
+    </comp>
+    <comp ref="CA25">
+      <value>10nF C0G</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CA25" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>07222dde-d416-5faa-b190-98024f424725</tstamps>
+    </comp>
+    <comp ref="CA26">
+      <value>10nF C0G</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CA26" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>0cbd81ff-4f2a-5eba-8c43-c0121accb690</tstamps>
+    </comp>
+    <comp ref="CA27">
+      <value>10nF C0G</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CA27" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>a0522a8b-4794-506b-9786-1ee7ccb119c2</tstamps>
+    </comp>
+    <comp ref="CA38">
+      <value>10nF C0G</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CA38" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>2cbcfc4b-3a7b-5140-882a-f68d85bb13b9</tstamps>
+    </comp>
+    <comp ref="CA39">
+      <value>10nF C0G</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CA39" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>6fbadef1-d3c6-5e59-b098-8071dc93fded</tstamps>
+    </comp>
+    <comp ref="CB1">
+      <value>100nF</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CB1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>a2b69054-17e5-50e4-9900-8c83b505f643</tstamps>
+    </comp>
+    <comp ref="CB2">
+      <value>100nF</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CB2" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>bae72607-6ff2-5e37-a2f6-638c1bc188d9</tstamps>
+    </comp>
+    <comp ref="CB3">
+      <value>100nF</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CB3" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>79848d85-6ca9-5d48-9aed-ce26d9576fb4</tstamps>
+    </comp>
+    <comp ref="CB4">
+      <value>100nF</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CB4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>28406163-9047-52be-bed9-6834da4c717f</tstamps>
+    </comp>
+    <comp ref="CI1">
+      <value>10uF X7R</value>
+      <footprint>Shields:C_0805_2012Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CI1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>ebb1d6f1-42d2-5678-87a9-c5431780e592</tstamps>
+    </comp>
+    <comp ref="CI2">
+      <value>100nF</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CI2" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>ee268462-86f2-5cd3-a520-581266583547</tstamps>
+    </comp>
+    <comp ref="CM1">
+      <value>1nF C0G</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CM1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>6735f419-4a6d-588c-b8c7-ab180fb95b97</tstamps>
+    </comp>
+    <comp ref="CM2">
+      <value>1nF C0G</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CM2" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>427d00d9-ade7-5a22-b651-6d4cbc86e0b1</tstamps>
+    </comp>
+    <comp ref="CM3">
+      <value>1nF C0G</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CM3" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>524ce164-f03a-518c-9fe2-16a31ac7bbf9</tstamps>
+    </comp>
+    <comp ref="CM4">
+      <value>1nF C0G</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CM4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>0a9a916b-1b51-5a21-978e-ca56252abe94</tstamps>
+    </comp>
+    <comp ref="CM5">
+      <value>1nF C0G</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CM5" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>815d66ef-5529-52bd-a53a-73758d3d6ba8</tstamps>
+    </comp>
+    <comp ref="CV1">
+      <value>10uF X7R</value>
+      <footprint>Shields:C_0805_2012Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="CV1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>cfa2d676-6c2a-5ae5-aa6b-84a377001e48</tstamps>
+    </comp>
+    <comp ref="D1">
+      <value>1N5819HW</value>
+      <footprint>Shields:D_SOD-123</footprint>
+      <description>Cathode to MEGA_5V; USB alone supplies VIN</description>
+      <fields>
+        <field name="Footprint">Shields:D_SOD-123</field>
+        <field name="Datasheet"/>
+        <field name="Description">Cathode to MEGA_5V; USB alone supplies VIN</field>
+      </fields>
+      <libsource lib="Colloquy" part="D1" description="Cathode to MEGA_5V; USB alone supplies VIN"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b35c6676-f6b1-5331-9802-ba7c49653f4d</tstamps>
+    </comp>
+    <comp ref="JM1">
+      <value>MEGA PATTERN FEMALE</value>
+      <footprint>Shields:Mega_Female</footprint>
+      <description>Same physical contact coordinates as the v2 computing slot</description>
+      <fields>
+        <field name="Footprint">Shields:Mega_Female</field>
+        <field name="Datasheet"/>
+        <field name="Description">Same physical contact coordinates as the v2 computing slot</field>
+      </fields>
+      <libsource lib="Colloquy" part="JM1" description="Same physical contact coordinates as the v2 computing slot"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>edfcd0d6-7440-5b4c-a427-c65bba3f4696 8146062b-6bbb-5177-98f2-dbe37ea0abff 6fb64c37-e3aa-53fb-90b2-cab5d55ba9ab 29592fbd-e3de-5cea-bf4b-f5ed6f5b16e2 c053fe72-3673-5671-be1d-46b3c4cc68e9 60a0ce08-8667-5233-aa50-39df57c1fdbd 04e75b2a-0163-577e-9a60-2b457f722405</tstamps>
+    </comp>
+    <comp ref="JT1">
+      <value>Teensy 4.1 JT1</value>
+      <footprint>Shields:PinSocket_1x24_P2.54mm_Vertical</footprint>
+      <description>Socket pad 1 at USB end; numbers here are physical socket pads</description>
+      <fields>
+        <field name="Footprint">Shields:PinSocket_1x24_P2.54mm_Vertical</field>
+        <field name="Datasheet"/>
+        <field name="Description">Socket pad 1 at USB end; numbers here are physical socket pads</field>
+      </fields>
+      <libsource lib="Colloquy" part="JT1" description="Socket pad 1 at USB end; numbers here are physical socket pads"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>3c72ff4e-b273-5ea8-9598-1f22cb37ff74 2d56d0c8-0b16-573c-b6bf-6c985a21abea 64d30637-2606-54b3-b69b-90716a32c3fa 09b1698c-859d-5bd7-bb7d-a0b38fc25a34</tstamps>
+    </comp>
+    <comp ref="JT2">
+      <value>Teensy 4.1 JT2</value>
+      <footprint>Shields:PinSocket_1x24_P2.54mm_Vertical</footprint>
+      <description>Socket pad 1 at USB end; numbers here are physical socket pads</description>
+      <fields>
+        <field name="Footprint">Shields:PinSocket_1x24_P2.54mm_Vertical</field>
+        <field name="Datasheet"/>
+        <field name="Description">Socket pad 1 at USB end; numbers here are physical socket pads</field>
+      </fields>
+      <libsource lib="Colloquy" part="JT2" description="Socket pad 1 at USB end; numbers here are physical socket pads"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>dbf1bb38-90de-5744-a8a9-11d109e14e04 7abefeeb-a2b1-577b-b620-b64030ddd412 94f4419d-4333-556d-ae6f-8e4724431396 48942eaa-bdac-5da3-81ff-e8bede4621ed 12cff0f0-4ed0-58e0-b4d1-de4bbd391873</tstamps>
+    </comp>
+    <comp ref="RA19">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RA19" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b668fe9d-0888-5b00-99ab-231beff024cb</tstamps>
+    </comp>
+    <comp ref="RA20">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RA20" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>7389e789-c714-5641-8b6f-a7b26d64a3b6</tstamps>
+    </comp>
+    <comp ref="RA21">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RA21" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>d8b4ce19-df1b-5859-919c-698d54764ff8</tstamps>
+    </comp>
+    <comp ref="RA22">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RA22" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>55eef531-c704-57dd-af35-456aaabc0c6a</tstamps>
+    </comp>
+    <comp ref="RA23">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RA23" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>4e1d823a-6304-586e-83fe-068b8eaa3721</tstamps>
+    </comp>
+    <comp ref="RA24">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RA24" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b2b80056-0144-5d14-a1ca-3bc3b34afe25</tstamps>
+    </comp>
+    <comp ref="RA25">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RA25" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>88844d6f-680f-502a-bb77-851282c6a6a2</tstamps>
+    </comp>
+    <comp ref="RA26">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RA26" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>8011ce19-0b8b-55ae-afeb-008e20dc7304</tstamps>
+    </comp>
+    <comp ref="RA27">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RA27" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b26a59f6-9c86-5ccb-a240-a5ee29f849b5</tstamps>
+    </comp>
+    <comp ref="RA38">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RA38" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>ccc4ed6a-c1a4-5919-9ae5-e1f9d4059d87</tstamps>
+    </comp>
+    <comp ref="RA39">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RA39" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>68739eb7-620f-531c-be19-96f6c6e7778f</tstamps>
+    </comp>
+    <comp ref="RB19">
+      <value>150K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RB19" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>1f59be6b-44d9-552c-9809-3f14a49800ef</tstamps>
+    </comp>
+    <comp ref="RB20">
+      <value>150K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RB20" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>aead01d7-5bc1-547b-84b1-5d272f07d2dc</tstamps>
+    </comp>
+    <comp ref="RB21">
+      <value>150K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RB21" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>d0532c76-9031-58be-bd6d-6305cee905dc</tstamps>
+    </comp>
+    <comp ref="RB22">
+      <value>150K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RB22" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>19878b43-3111-535c-a789-28e0ef04ef2e</tstamps>
+    </comp>
+    <comp ref="RB23">
+      <value>150K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RB23" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>d574bc6e-d102-5590-81d3-c764eee98f25</tstamps>
+    </comp>
+    <comp ref="RB24">
+      <value>150K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RB24" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>70767c8a-0fec-5550-8989-3b60477927c0</tstamps>
+    </comp>
+    <comp ref="RB25">
+      <value>150K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RB25" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>1b50cda4-d699-50c3-a7f8-f8c509d4c414</tstamps>
+    </comp>
+    <comp ref="RB26">
+      <value>150K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RB26" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>cd111e1c-c0c7-513a-bda7-f8f78aab015d</tstamps>
+    </comp>
+    <comp ref="RB27">
+      <value>150K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RB27" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>d14ce976-9bee-5ad8-ab40-bf17059e8324</tstamps>
+    </comp>
+    <comp ref="RB38">
+      <value>150K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RB38" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>df3a0d6e-408c-51d2-a4dc-1c6e8703ef43</tstamps>
+    </comp>
+    <comp ref="RB39">
+      <value>150K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RB39" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>ca456619-d389-5038-91c7-6c2c02f4b28c</tstamps>
+    </comp>
+    <comp ref="RD2">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RD2" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>4b6da0c5-0033-58d7-bd67-de0bf83ae50e</tstamps>
+    </comp>
+    <comp ref="RD4">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RD4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>21bed282-fec8-542b-8c84-8ae51f586eea</tstamps>
+    </comp>
+    <comp ref="RD5">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RD5" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>5dcf282d-2488-5c69-a2eb-0796eedd3ba2</tstamps>
+    </comp>
+    <comp ref="RD6">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RD6" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>a7498513-337f-562c-a72f-645648adf414</tstamps>
+    </comp>
+    <comp ref="RD7">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RD7" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>3176e021-fc60-55a8-8d69-de8feeb72b42</tstamps>
+    </comp>
+    <comp ref="RD8">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RD8" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>f0a24742-aaec-5745-a281-5642cd02d428</tstamps>
+    </comp>
+    <comp ref="RD9">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RD9" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>4b404349-2570-51b3-b644-0897bb0e8c54</tstamps>
+    </comp>
+    <comp ref="RD10">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RD10" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>c76d08b0-efc7-5b93-88f4-c28664cbefb0</tstamps>
+    </comp>
+    <comp ref="RD11">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RD11" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>22671231-07e1-5d5f-8c14-3831b5cdf742</tstamps>
+    </comp>
+    <comp ref="RD12">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RD12" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>cd4397a2-58b6-5b97-8b0c-cb5d5cc11daf</tstamps>
+    </comp>
+    <comp ref="RD28">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RD28" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>7b25df30-eede-5c5e-bd31-754c29f28f27</tstamps>
+    </comp>
+    <comp ref="RD29">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RD29" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>317b006a-e8a2-5784-bd36-d63afef220cf</tstamps>
+    </comp>
+    <comp ref="RD30">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RD30" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>a9af5bbe-f747-56b1-bbd5-9a34dc2ff842</tstamps>
+    </comp>
+    <comp ref="RD31">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RD31" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>84c499a6-c25f-5a27-8a6d-7a1e86c69d4c</tstamps>
+    </comp>
+    <comp ref="RD32">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RD32" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>0ea8f9dd-d803-59b7-ae4d-14e21c712993</tstamps>
+    </comp>
+    <comp ref="TP0">
+      <value>gpio/0</value>
+      <footprint>Shields:TestPoint_Pad_D1.0mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.0mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="TP0" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>3f523dbc-3d8a-5b95-a4d6-de6db605ba4c</tstamps>
+    </comp>
+    <comp ref="TP1">
+      <value>gpio/1</value>
+      <footprint>Shields:TestPoint_Pad_D1.5mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="TP1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>87c4fe82-7491-5a49-bdbf-012789c02044</tstamps>
+    </comp>
+    <comp ref="TP3">
+      <value>gpio/3</value>
+      <footprint>Shields:TestPoint_Pad_D1.5mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="TP3" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>225759a6-ce50-5f3d-bc47-4bec0eb8a2b3</tstamps>
+    </comp>
+    <comp ref="TP33">
+      <value>gpio/33</value>
+      <footprint>Shields:TestPoint_Pad_D1.5mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="TP33" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>659baea9-0baa-5f5f-8e44-2e92d6e96b0e</tstamps>
+    </comp>
+    <comp ref="TP34">
+      <value>gpio/34</value>
+      <footprint>Shields:TestPoint_Pad_D1.5mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="TP34" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>2c342b4e-551a-5964-973b-72317c50ac62</tstamps>
+    </comp>
+    <comp ref="TP35">
+      <value>gpio/35</value>
+      <footprint>Shields:TestPoint_Pad_D1.5mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="TP35" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b4db0ff2-b5c7-5f26-85a9-70230f00aeb5</tstamps>
+    </comp>
+    <comp ref="TP36">
+      <value>gpio/36</value>
+      <footprint>Shields:TestPoint_Pad_D1.5mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="TP36" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>21f467c9-8c49-5c2f-83b5-5c37bfecc129</tstamps>
+    </comp>
+    <comp ref="TP37">
+      <value>gpio/37</value>
+      <footprint>Shields:TestPoint_Pad_D1.5mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="TP37" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b181e6e0-9c9b-563e-b76f-88bcc362cdf8</tstamps>
+    </comp>
+    <comp ref="TP40">
+      <value>gpio/40</value>
+      <footprint>Shields:TestPoint_Pad_D1.5mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="TP40" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b6cd752a-6cbc-5ae1-ae2c-c8d8b3e27c66</tstamps>
+    </comp>
+    <comp ref="TP41">
+      <value>gpio/41</value>
+      <footprint>Shields:TestPoint_Pad_D1.5mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="TP41" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>4d6aa814-aed5-5514-9660-86e5e5e1f06c</tstamps>
+    </comp>
+    <comp ref="TPG">
+      <value>GND</value>
+      <footprint>Shields:TestPin_1x01_P2.54mm</footprint>
+      <description>Single gold 2.54 mm header; Dupont test pin</description>
+      <fields>
+        <field name="Footprint">Shields:TestPin_1x01_P2.54mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Single gold 2.54 mm header; Dupont test pin</field>
+      </fields>
+      <libsource lib="Colloquy" part="TPG" description="Single gold 2.54 mm header; Dupont test pin"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>c59c3e93-fc6f-562e-8a81-cb9020b8c502</tstamps>
+    </comp>
+    <comp ref="TPI">
+      <value>IOREF</value>
+      <footprint>Shields:TestPin_1x01_P2.54mm</footprint>
+      <description>Single gold 2.54 mm header; Dupont test pin</description>
+      <fields>
+        <field name="Footprint">Shields:TestPin_1x01_P2.54mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Single gold 2.54 mm header; Dupont test pin</field>
+      </fields>
+      <libsource lib="Colloquy" part="TPI" description="Single gold 2.54 mm header; Dupont test pin"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>36957ef0-80f5-5728-bdc1-cf01ec31c272</tstamps>
+    </comp>
+    <comp ref="TPV">
+      <value>VIN_USB</value>
+      <footprint>Shields:TestPin_1x01_P2.54mm</footprint>
+      <description>Single gold 2.54 mm header; Dupont test pin</description>
+      <fields>
+        <field name="Footprint">Shields:TestPin_1x01_P2.54mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Single gold 2.54 mm header; Dupont test pin</field>
+      </fields>
+      <libsource lib="Colloquy" part="TPV" description="Single gold 2.54 mm header; Dupont test pin"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>2d0c2ce4-4c78-5ad5-b2e8-e313c0c5170a</tstamps>
+    </comp>
+    <comp ref="U1">
+      <value>SN74LV4T125PWR</value>
+      <footprint>Shields:TSSOP-14_4.4x5mm_P0.65mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:TSSOP-14_4.4x5mm_P0.65mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="U1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>aef8a21a-78df-5ab6-a25c-416b75757e7b 6a03bc49-f590-58b6-8e2f-93745f8effc1 b189b229-b56e-5be7-855a-3e8a8e40099f 5c5f5d82-1f1b-5ab9-bc28-89995dbdc10b 026171c1-f380-5e6f-b7e1-5d05c2a9227d</tstamps>
+    </comp>
+    <comp ref="U2">
+      <value>SN74LV4T125PWR</value>
+      <footprint>Shields:TSSOP-14_4.4x5mm_P0.65mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:TSSOP-14_4.4x5mm_P0.65mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="U2" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>2def5145-b30d-5d52-a6e4-1dd00dde006b 7b15482c-af11-5926-b035-8ce7e4c11a98 15f47913-006f-5b52-9327-b6d197342da2 e75f35cb-d8de-53f0-888c-3f91f99e66da 0fcb127a-92d9-5df9-b97e-04eeb38f79af</tstamps>
+    </comp>
+    <comp ref="U3">
+      <value>SN74LV4T125PWR</value>
+      <footprint>Shields:TSSOP-14_4.4x5mm_P0.65mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:TSSOP-14_4.4x5mm_P0.65mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="U3" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>3f0e2b14-0f00-5907-9c49-d4137da584a5 9e585812-8cfb-5d94-98e6-63e1a87361ec 4278e0d5-b135-5f5e-8ba7-9891a8eec011 88257b26-2384-5259-bee7-31309201445d 162b0f0b-86d6-5321-86d5-8b1aab78b85e</tstamps>
+    </comp>
+    <comp ref="U4">
+      <value>SN74LV4T125PWR</value>
+      <footprint>Shields:TSSOP-14_4.4x5mm_P0.65mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:TSSOP-14_4.4x5mm_P0.65mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="U4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>e5dd9ac4-72c0-5a32-8217-95a4756c7b23 d9f9db1c-1951-5050-b0ab-41e1d726d06f c86e6acd-4be4-515a-a629-3a28a0b093c1 b2cc9fcc-f4e5-574b-814c-f0ef78da6bef 68947e70-6332-5c35-93c2-2d383c74edbe</tstamps>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="Colloquy" part="CA19">
+      <fields>
+        <field name="Reference">CA</field>
+        <field name="Value">10nF C0G</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CA20">
+      <fields>
+        <field name="Reference">CA</field>
+        <field name="Value">10nF C0G</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CA21">
+      <fields>
+        <field name="Reference">CA</field>
+        <field name="Value">10nF C0G</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CA22">
+      <fields>
+        <field name="Reference">CA</field>
+        <field name="Value">10nF C0G</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CA23">
+      <fields>
+        <field name="Reference">CA</field>
+        <field name="Value">10nF C0G</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CA24">
+      <fields>
+        <field name="Reference">CA</field>
+        <field name="Value">10nF C0G</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CA25">
+      <fields>
+        <field name="Reference">CA</field>
+        <field name="Value">10nF C0G</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CA26">
+      <fields>
+        <field name="Reference">CA</field>
+        <field name="Value">10nF C0G</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CA27">
+      <fields>
+        <field name="Reference">CA</field>
+        <field name="Value">10nF C0G</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CA38">
+      <fields>
+        <field name="Reference">CA</field>
+        <field name="Value">10nF C0G</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CA39">
+      <fields>
+        <field name="Reference">CA</field>
+        <field name="Value">10nF C0G</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CB1">
+      <fields>
+        <field name="Reference">CB</field>
+        <field name="Value">100nF</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CB2">
+      <fields>
+        <field name="Reference">CB</field>
+        <field name="Value">100nF</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CB3">
+      <fields>
+        <field name="Reference">CB</field>
+        <field name="Value">100nF</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CB4">
+      <fields>
+        <field name="Reference">CB</field>
+        <field name="Value">100nF</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CI1">
+      <fields>
+        <field name="Reference">CI</field>
+        <field name="Value">10uF X7R</field>
+        <field name="Footprint">Shields:C_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CI2">
+      <fields>
+        <field name="Reference">CI</field>
+        <field name="Value">100nF</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CM1">
+      <fields>
+        <field name="Reference">CM</field>
+        <field name="Value">1nF C0G</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CM2">
+      <fields>
+        <field name="Reference">CM</field>
+        <field name="Value">1nF C0G</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CM3">
+      <fields>
+        <field name="Reference">CM</field>
+        <field name="Value">1nF C0G</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CM4">
+      <fields>
+        <field name="Reference">CM</field>
+        <field name="Value">1nF C0G</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CM5">
+      <fields>
+        <field name="Reference">CM</field>
+        <field name="Value">1nF C0G</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="CV1">
+      <fields>
+        <field name="Reference">CV</field>
+        <field name="Value">10uF X7R</field>
+        <field name="Footprint">Shields:C_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="D1">
+      <description>Cathode to MEGA_5V; USB alone supplies VIN</description>
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">1N5819HW</field>
+        <field name="Footprint">Shields:D_SOD-123</field>
+        <field name="Datasheet"/>
+        <field name="Description">Cathode to MEGA_5V; USB alone supplies VIN</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="JM1">
+      <description>Same physical contact coordinates as the v2 computing slot</description>
+      <fields>
+        <field name="Reference">JM</field>
+        <field name="Value">MEGA PATTERN FEMALE</field>
+        <field name="Footprint">Shields:Mega_Female</field>
+        <field name="Datasheet"/>
+        <field name="Description">Same physical contact coordinates as the v2 computing slot</field>
+      </fields>
+      <pins>
+        <pin num="3V3" name="3V3" type="passive"/>
+        <pin num="5V1" name="5V1" type="passive"/>
+        <pin num="5V3" name="5V3" type="passive"/>
+        <pin num="5V4" name="5V4" type="passive"/>
+        <pin num="A0" name="A0" type="passive"/>
+        <pin num="A1" name="A1" type="passive"/>
+        <pin num="A2" name="A2" type="passive"/>
+        <pin num="A3" name="A3" type="passive"/>
+        <pin num="A4" name="A4" type="passive"/>
+        <pin num="A5" name="A5" type="passive"/>
+        <pin num="A6" name="A6" type="passive"/>
+        <pin num="A7" name="A7" type="passive"/>
+        <pin num="A8" name="A8" type="passive"/>
+        <pin num="A9" name="A9" type="passive"/>
+        <pin num="A10" name="A10" type="passive"/>
+        <pin num="A11" name="A11" type="passive"/>
+        <pin num="A12" name="A12" type="passive"/>
+        <pin num="A13" name="A13" type="passive"/>
+        <pin num="A14" name="A14" type="passive"/>
+        <pin num="A15" name="A15" type="passive"/>
+        <pin num="AREF" name="AREF" type="passive"/>
+        <pin num="D0" name="D0" type="passive"/>
+        <pin num="D1" name="D1" type="passive"/>
+        <pin num="D2" name="D2" type="passive"/>
+        <pin num="D3" name="D3" type="passive"/>
+        <pin num="D4" name="D4" type="passive"/>
+        <pin num="D5" name="D5" type="passive"/>
+        <pin num="D6" name="D6" type="passive"/>
+        <pin num="D7" name="D7" type="passive"/>
+        <pin num="D8" name="D8" type="passive"/>
+        <pin num="D9" name="D9" type="passive"/>
+        <pin num="D10" name="D10" type="passive"/>
+        <pin num="D11" name="D11" type="passive"/>
+        <pin num="D12" name="D12" type="passive"/>
+        <pin num="D13" name="D13" type="passive"/>
+        <pin num="D14" name="D14" type="passive"/>
+        <pin num="D15" name="D15" type="passive"/>
+        <pin num="D16" name="D16" type="passive"/>
+        <pin num="D17" name="D17" type="passive"/>
+        <pin num="D18" name="D18" type="passive"/>
+        <pin num="D19" name="D19" type="passive"/>
+        <pin num="D20" name="D20" type="passive"/>
+        <pin num="D21" name="D21" type="passive"/>
+        <pin num="D22" name="D22" type="passive"/>
+        <pin num="D23" name="D23" type="passive"/>
+        <pin num="D24" name="D24" type="passive"/>
+        <pin num="D25" name="D25" type="passive"/>
+        <pin num="D26" name="D26" type="passive"/>
+        <pin num="D27" name="D27" type="passive"/>
+        <pin num="D28" name="D28" type="passive"/>
+        <pin num="D29" name="D29" type="passive"/>
+        <pin num="D30" name="D30" type="passive"/>
+        <pin num="D31" name="D31" type="passive"/>
+        <pin num="D32" name="D32" type="passive"/>
+        <pin num="D33" name="D33" type="passive"/>
+        <pin num="D34" name="D34" type="passive"/>
+        <pin num="D35" name="D35" type="passive"/>
+        <pin num="D36" name="D36" type="passive"/>
+        <pin num="D37" name="D37" type="passive"/>
+        <pin num="D38" name="D38" type="passive"/>
+        <pin num="D39" name="D39" type="passive"/>
+        <pin num="D40" name="D40" type="passive"/>
+        <pin num="D41" name="D41" type="passive"/>
+        <pin num="D42" name="D42" type="passive"/>
+        <pin num="D43" name="D43" type="passive"/>
+        <pin num="D44" name="D44" type="passive"/>
+        <pin num="D45" name="D45" type="passive"/>
+        <pin num="D46" name="D46" type="passive"/>
+        <pin num="D47" name="D47" type="passive"/>
+        <pin num="D48" name="D48" type="passive"/>
+        <pin num="D49" name="D49" type="passive"/>
+        <pin num="D50" name="D50" type="passive"/>
+        <pin num="D51" name="D51" type="passive"/>
+        <pin num="D52" name="D52" type="passive"/>
+        <pin num="D53" name="D53" type="passive"/>
+        <pin num="GND1" name="GND1" type="passive"/>
+        <pin num="GND2" name="GND2" type="passive"/>
+        <pin num="GND3" name="GND3" type="passive"/>
+        <pin num="GND5" name="GND5" type="passive"/>
+        <pin num="GND6" name="GND6" type="passive"/>
+        <pin num="IORF" name="IORF" type="passive"/>
+        <pin num="RST1" name="RST1" type="passive"/>
+        <pin num="SCL" name="SCL" type="passive"/>
+        <pin num="SDA" name="SDA" type="passive"/>
+        <pin num="VIN" name="VIN" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="JT1">
+      <description>Socket pad 1 at USB end; numbers here are physical socket pads</description>
+      <fields>
+        <field name="Reference">JT</field>
+        <field name="Value">Teensy 4.1 JT1</field>
+        <field name="Footprint">Shields:PinSocket_1x24_P2.54mm_Vertical</field>
+        <field name="Datasheet"/>
+        <field name="Description">Socket pad 1 at USB end; numbers here are physical socket pads</field>
+      </fields>
+      <pins>
+        <pin num="1" name="GND" type="passive"/>
+        <pin num="2" name="0" type="passive"/>
+        <pin num="3" name="1" type="passive"/>
+        <pin num="4" name="2" type="passive"/>
+        <pin num="5" name="3" type="passive"/>
+        <pin num="6" name="4" type="passive"/>
+        <pin num="7" name="5" type="passive"/>
+        <pin num="8" name="6" type="passive"/>
+        <pin num="9" name="7" type="passive"/>
+        <pin num="10" name="8" type="passive"/>
+        <pin num="11" name="9" type="passive"/>
+        <pin num="12" name="10" type="passive"/>
+        <pin num="13" name="11" type="passive"/>
+        <pin num="14" name="12" type="passive"/>
+        <pin num="15" name="3V3" type="passive"/>
+        <pin num="16" name="24" type="passive"/>
+        <pin num="17" name="25" type="passive"/>
+        <pin num="18" name="26" type="passive"/>
+        <pin num="19" name="27" type="passive"/>
+        <pin num="20" name="28" type="passive"/>
+        <pin num="21" name="29" type="passive"/>
+        <pin num="22" name="30" type="passive"/>
+        <pin num="23" name="31" type="passive"/>
+        <pin num="24" name="32" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="JT2">
+      <description>Socket pad 1 at USB end; numbers here are physical socket pads</description>
+      <fields>
+        <field name="Reference">JT</field>
+        <field name="Value">Teensy 4.1 JT2</field>
+        <field name="Footprint">Shields:PinSocket_1x24_P2.54mm_Vertical</field>
+        <field name="Datasheet"/>
+        <field name="Description">Socket pad 1 at USB end; numbers here are physical socket pads</field>
+      </fields>
+      <pins>
+        <pin num="1" name="VIN" type="passive"/>
+        <pin num="2" name="GND" type="passive"/>
+        <pin num="3" name="3V3" type="passive"/>
+        <pin num="4" name="23" type="passive"/>
+        <pin num="5" name="22" type="passive"/>
+        <pin num="6" name="21" type="passive"/>
+        <pin num="7" name="20" type="passive"/>
+        <pin num="8" name="19" type="passive"/>
+        <pin num="9" name="18" type="passive"/>
+        <pin num="10" name="17" type="passive"/>
+        <pin num="11" name="16" type="passive"/>
+        <pin num="12" name="15" type="passive"/>
+        <pin num="13" name="14" type="passive"/>
+        <pin num="14" name="13" type="passive"/>
+        <pin num="15" name="GND" type="passive"/>
+        <pin num="16" name="41" type="passive"/>
+        <pin num="17" name="40" type="passive"/>
+        <pin num="18" name="39" type="passive"/>
+        <pin num="19" name="38" type="passive"/>
+        <pin num="20" name="37" type="passive"/>
+        <pin num="21" name="36" type="passive"/>
+        <pin num="22" name="35" type="passive"/>
+        <pin num="23" name="34" type="passive"/>
+        <pin num="24" name="33" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RA19">
+      <fields>
+        <field name="Reference">RA</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RA20">
+      <fields>
+        <field name="Reference">RA</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RA21">
+      <fields>
+        <field name="Reference">RA</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RA22">
+      <fields>
+        <field name="Reference">RA</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RA23">
+      <fields>
+        <field name="Reference">RA</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RA24">
+      <fields>
+        <field name="Reference">RA</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RA25">
+      <fields>
+        <field name="Reference">RA</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RA26">
+      <fields>
+        <field name="Reference">RA</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RA27">
+      <fields>
+        <field name="Reference">RA</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RA38">
+      <fields>
+        <field name="Reference">RA</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RA39">
+      <fields>
+        <field name="Reference">RA</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RB19">
+      <fields>
+        <field name="Reference">RB</field>
+        <field name="Value">150K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RB20">
+      <fields>
+        <field name="Reference">RB</field>
+        <field name="Value">150K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RB21">
+      <fields>
+        <field name="Reference">RB</field>
+        <field name="Value">150K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RB22">
+      <fields>
+        <field name="Reference">RB</field>
+        <field name="Value">150K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RB23">
+      <fields>
+        <field name="Reference">RB</field>
+        <field name="Value">150K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RB24">
+      <fields>
+        <field name="Reference">RB</field>
+        <field name="Value">150K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RB25">
+      <fields>
+        <field name="Reference">RB</field>
+        <field name="Value">150K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RB26">
+      <fields>
+        <field name="Reference">RB</field>
+        <field name="Value">150K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RB27">
+      <fields>
+        <field name="Reference">RB</field>
+        <field name="Value">150K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RB38">
+      <fields>
+        <field name="Reference">RB</field>
+        <field name="Value">150K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RB39">
+      <fields>
+        <field name="Reference">RB</field>
+        <field name="Value">150K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RD10">
+      <fields>
+        <field name="Reference">RD</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RD11">
+      <fields>
+        <field name="Reference">RD</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RD12">
+      <fields>
+        <field name="Reference">RD</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RD2">
+      <fields>
+        <field name="Reference">RD</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RD28">
+      <fields>
+        <field name="Reference">RD</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RD29">
+      <fields>
+        <field name="Reference">RD</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RD30">
+      <fields>
+        <field name="Reference">RD</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RD31">
+      <fields>
+        <field name="Reference">RD</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RD32">
+      <fields>
+        <field name="Reference">RD</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RD4">
+      <fields>
+        <field name="Reference">RD</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RD5">
+      <fields>
+        <field name="Reference">RD</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RD6">
+      <fields>
+        <field name="Reference">RD</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RD7">
+      <fields>
+        <field name="Reference">RD</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RD8">
+      <fields>
+        <field name="Reference">RD</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RD9">
+      <fields>
+        <field name="Reference">RD</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="TP0">
+      <fields>
+        <field name="Reference">TP</field>
+        <field name="Value">gpio/0</field>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.0mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="TP1">
+      <fields>
+        <field name="Reference">TP</field>
+        <field name="Value">gpio/1</field>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="TP3">
+      <fields>
+        <field name="Reference">TP</field>
+        <field name="Value">gpio/3</field>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="TP33">
+      <fields>
+        <field name="Reference">TP</field>
+        <field name="Value">gpio/33</field>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="TP34">
+      <fields>
+        <field name="Reference">TP</field>
+        <field name="Value">gpio/34</field>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="TP35">
+      <fields>
+        <field name="Reference">TP</field>
+        <field name="Value">gpio/35</field>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="TP36">
+      <fields>
+        <field name="Reference">TP</field>
+        <field name="Value">gpio/36</field>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="TP37">
+      <fields>
+        <field name="Reference">TP</field>
+        <field name="Value">gpio/37</field>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="TP40">
+      <fields>
+        <field name="Reference">TP</field>
+        <field name="Value">gpio/40</field>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="TP41">
+      <fields>
+        <field name="Reference">TP</field>
+        <field name="Value">gpio/41</field>
+        <field name="Footprint">Shields:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="TPG">
+      <description>Single gold 2.54 mm header; Dupont test pin</description>
+      <fields>
+        <field name="Reference">TPG</field>
+        <field name="Value">GND</field>
+        <field name="Footprint">Shields:TestPin_1x01_P2.54mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Single gold 2.54 mm header; Dupont test pin</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="TPI">
+      <description>Single gold 2.54 mm header; Dupont test pin</description>
+      <fields>
+        <field name="Reference">TPI</field>
+        <field name="Value">IOREF</field>
+        <field name="Footprint">Shields:TestPin_1x01_P2.54mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Single gold 2.54 mm header; Dupont test pin</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="TPV">
+      <description>Single gold 2.54 mm header; Dupont test pin</description>
+      <fields>
+        <field name="Reference">TPV</field>
+        <field name="Value">VIN_USB</field>
+        <field name="Footprint">Shields:TestPin_1x01_P2.54mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">Single gold 2.54 mm header; Dupont test pin</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="U1">
+      <docs>https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</docs>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">SN74LV4T125PWR</field>
+        <field name="Footprint">Shields:TSSOP-14_4.4x5mm_P0.65mm</field>
+        <field name="Datasheet">https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</field>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="OE1" type="input"/>
+        <pin num="2" name="A1" type="input"/>
+        <pin num="3" name="Y1" type="output"/>
+        <pin num="4" name="OE2" type="input"/>
+        <pin num="5" name="A2" type="input"/>
+        <pin num="6" name="Y2" type="output"/>
+        <pin num="7" name="GND" type="power_in"/>
+        <pin num="8" name="Y3" type="output"/>
+        <pin num="9" name="A3" type="input"/>
+        <pin num="10" name="OE3" type="input"/>
+        <pin num="11" name="Y4" type="output"/>
+        <pin num="12" name="A4" type="input"/>
+        <pin num="13" name="OE4" type="input"/>
+        <pin num="14" name="VCC" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="U2">
+      <docs>https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</docs>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">SN74LV4T125PWR</field>
+        <field name="Footprint">Shields:TSSOP-14_4.4x5mm_P0.65mm</field>
+        <field name="Datasheet">https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</field>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="OE1" type="input"/>
+        <pin num="2" name="A1" type="input"/>
+        <pin num="3" name="Y1" type="output"/>
+        <pin num="4" name="OE2" type="input"/>
+        <pin num="5" name="A2" type="input"/>
+        <pin num="6" name="Y2" type="output"/>
+        <pin num="7" name="GND" type="power_in"/>
+        <pin num="8" name="Y3" type="output"/>
+        <pin num="9" name="A3" type="input"/>
+        <pin num="10" name="OE3" type="input"/>
+        <pin num="11" name="Y4" type="output"/>
+        <pin num="12" name="A4" type="input"/>
+        <pin num="13" name="OE4" type="input"/>
+        <pin num="14" name="VCC" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="U3">
+      <docs>https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</docs>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">SN74LV4T125PWR</field>
+        <field name="Footprint">Shields:TSSOP-14_4.4x5mm_P0.65mm</field>
+        <field name="Datasheet">https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</field>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="OE1" type="input"/>
+        <pin num="2" name="A1" type="input"/>
+        <pin num="3" name="Y1" type="output"/>
+        <pin num="4" name="OE2" type="input"/>
+        <pin num="5" name="A2" type="input"/>
+        <pin num="6" name="Y2" type="output"/>
+        <pin num="7" name="GND" type="power_in"/>
+        <pin num="8" name="Y3" type="output"/>
+        <pin num="9" name="A3" type="input"/>
+        <pin num="10" name="OE3" type="input"/>
+        <pin num="11" name="Y4" type="output"/>
+        <pin num="12" name="A4" type="input"/>
+        <pin num="13" name="OE4" type="input"/>
+        <pin num="14" name="VCC" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="U4">
+      <docs>https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</docs>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">SN74LV4T125PWR</field>
+        <field name="Footprint">Shields:TSSOP-14_4.4x5mm_P0.65mm</field>
+        <field name="Datasheet">https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</field>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="OE1" type="input"/>
+        <pin num="2" name="A1" type="input"/>
+        <pin num="3" name="Y1" type="output"/>
+        <pin num="4" name="OE2" type="input"/>
+        <pin num="5" name="A2" type="input"/>
+        <pin num="6" name="Y2" type="output"/>
+        <pin num="7" name="GND" type="power_in"/>
+        <pin num="8" name="Y3" type="output"/>
+        <pin num="9" name="A3" type="input"/>
+        <pin num="10" name="OE3" type="input"/>
+        <pin num="11" name="Y4" type="output"/>
+        <pin num="12" name="A4" type="input"/>
+        <pin num="13" name="OE4" type="input"/>
+        <pin num="14" name="VCC" type="power_in"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="Colloquy">
+      <uri>C:\workspace\workspace2\Colloquy\exposition\CAD\KiCad\shields\teensy-adapter\wired/Colloquy.kicad_sym</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="Net-(D1-Pad1)" class="Default">
+      <node ref="D1" pin="1" pintype="passive"/>
+      <node ref="JM1" pin="5V1" pinfunction="5V1" pintype="passive"/>
+      <node ref="JM1" pin="5V3" pinfunction="5V3" pintype="passive"/>
+      <node ref="JM1" pin="5V4" pinfunction="5V4" pintype="passive"/>
+    </net>
+    <net code="2" name="Net-(JM1-PadA5)" class="Default">
+      <node ref="JM1" pin="A5" pinfunction="A5" pintype="passive"/>
+      <node ref="RA19" pin="1" pintype="passive"/>
+    </net>
+    <net code="3" name="Net-(JM1-PadA6)" class="Default">
+      <node ref="JM1" pin="A6" pinfunction="A6" pintype="passive"/>
+      <node ref="RA20" pin="1" pintype="passive"/>
+    </net>
+    <net code="4" name="Net-(JM1-PadA7)" class="Default">
+      <node ref="JM1" pin="A7" pinfunction="A7" pintype="passive"/>
+      <node ref="RA21" pin="1" pintype="passive"/>
+    </net>
+    <net code="5" name="Net-(JM1-PadA8)" class="Default">
+      <node ref="JM1" pin="A8" pinfunction="A8" pintype="passive"/>
+      <node ref="RA22" pin="1" pintype="passive"/>
+    </net>
+    <net code="6" name="Net-(JM1-PadA9)" class="Default">
+      <node ref="JM1" pin="A9" pinfunction="A9" pintype="passive"/>
+      <node ref="RA23" pin="1" pintype="passive"/>
+    </net>
+    <net code="7" name="Net-(JM1-PadA10)" class="Default">
+      <node ref="JM1" pin="A10" pinfunction="A10" pintype="passive"/>
+      <node ref="RA24" pin="1" pintype="passive"/>
+    </net>
+    <net code="8" name="Net-(JM1-PadA11)" class="Default">
+      <node ref="JM1" pin="A11" pinfunction="A11" pintype="passive"/>
+      <node ref="RA25" pin="1" pintype="passive"/>
+    </net>
+    <net code="9" name="Net-(JM1-PadA12)" class="Default">
+      <node ref="JM1" pin="A12" pinfunction="A12" pintype="passive"/>
+      <node ref="RA26" pin="1" pintype="passive"/>
+    </net>
+    <net code="10" name="Net-(JM1-PadA13)" class="Default">
+      <node ref="JM1" pin="A13" pinfunction="A13" pintype="passive"/>
+      <node ref="RA27" pin="1" pintype="passive"/>
+    </net>
+    <net code="11" name="Net-(JM1-PadA14)" class="Default">
+      <node ref="JM1" pin="A14" pinfunction="A14" pintype="passive"/>
+      <node ref="RA38" pin="1" pintype="passive"/>
+    </net>
+    <net code="12" name="Net-(JM1-PadA15)" class="Default">
+      <node ref="JM1" pin="A15" pinfunction="A15" pintype="passive"/>
+      <node ref="RA39" pin="1" pintype="passive"/>
+    </net>
+    <net code="13" name="Net-(JT1A-2)" class="Default">
+      <node ref="JT1" pin="4" pinfunction="2" pintype="passive"/>
+      <node ref="RD2" pin="1" pintype="passive"/>
+      <node ref="U1" pin="2" pinfunction="A1" pintype="input"/>
+    </net>
+    <net code="14" name="Net-(JT1A-4)" class="Default">
+      <node ref="JT1" pin="6" pinfunction="4" pintype="passive"/>
+      <node ref="RD4" pin="1" pintype="passive"/>
+      <node ref="U1" pin="5" pinfunction="A2" pintype="input"/>
+    </net>
+    <net code="15" name="Net-(JT1A-5)" class="Default">
+      <node ref="JT1" pin="7" pinfunction="5" pintype="passive"/>
+      <node ref="RD5" pin="1" pintype="passive"/>
+      <node ref="U1" pin="9" pinfunction="A3" pintype="input"/>
+    </net>
+    <net code="16" name="Net-(JT1A-6)" class="Default">
+      <node ref="JT1" pin="8" pinfunction="6" pintype="passive"/>
+      <node ref="RD6" pin="1" pintype="passive"/>
+      <node ref="U1" pin="12" pinfunction="A4" pintype="input"/>
+    </net>
+    <net code="17" name="Net-(JT1A-7)" class="Default">
+      <node ref="JT1" pin="9" pinfunction="7" pintype="passive"/>
+      <node ref="RD7" pin="1" pintype="passive"/>
+      <node ref="U2" pin="5" pinfunction="A2" pintype="input"/>
+    </net>
+    <net code="18" name="Net-(JT1A-8)" class="Default">
+      <node ref="JT1" pin="10" pinfunction="8" pintype="passive"/>
+      <node ref="RD8" pin="1" pintype="passive"/>
+      <node ref="U2" pin="9" pinfunction="A3" pintype="input"/>
+    </net>
+    <net code="19" name="Net-(JT1A-9)" class="Default">
+      <node ref="JT1" pin="11" pinfunction="9" pintype="passive"/>
+      <node ref="RD9" pin="1" pintype="passive"/>
+      <node ref="U2" pin="12" pinfunction="A4" pintype="input"/>
+    </net>
+    <net code="20" name="Net-(JT1A-10)" class="Default">
+      <node ref="JT1" pin="12" pinfunction="10" pintype="passive"/>
+      <node ref="RD10" pin="1" pintype="passive"/>
+      <node ref="U3" pin="2" pinfunction="A1" pintype="input"/>
+    </net>
+    <net code="21" name="Net-(JT1A-11)" class="Default">
+      <node ref="JT1" pin="13" pinfunction="11" pintype="passive"/>
+      <node ref="RD11" pin="1" pintype="passive"/>
+      <node ref="U3" pin="5" pinfunction="A2" pintype="input"/>
+    </net>
+    <net code="22" name="Net-(JT1A-12)" class="Default">
+      <node ref="JT1" pin="14" pinfunction="12" pintype="passive"/>
+      <node ref="RD12" pin="1" pintype="passive"/>
+      <node ref="U3" pin="9" pinfunction="A3" pintype="input"/>
+    </net>
+    <net code="23" name="Net-(JT1A-28)" class="Default">
+      <node ref="JT1" pin="20" pinfunction="28" pintype="passive"/>
+      <node ref="RD28" pin="1" pintype="passive"/>
+      <node ref="U2" pin="2" pinfunction="A1" pintype="input"/>
+    </net>
+    <net code="24" name="Net-(JT1A-29)" class="Default">
+      <node ref="JT1" pin="21" pinfunction="29" pintype="passive"/>
+      <node ref="RD29" pin="1" pintype="passive"/>
+      <node ref="U3" pin="12" pinfunction="A4" pintype="input"/>
+    </net>
+    <net code="25" name="Net-(JT1A-30)" class="Default">
+      <node ref="JT1" pin="22" pinfunction="30" pintype="passive"/>
+      <node ref="RD30" pin="1" pintype="passive"/>
+      <node ref="U4" pin="2" pinfunction="A1" pintype="input"/>
+    </net>
+    <net code="26" name="Net-(JT1A-31)" class="Default">
+      <node ref="JT1" pin="23" pinfunction="31" pintype="passive"/>
+      <node ref="RD31" pin="1" pintype="passive"/>
+      <node ref="U4" pin="5" pinfunction="A2" pintype="input"/>
+    </net>
+    <net code="27" name="Net-(JT1A-32)" class="Default">
+      <node ref="JT1" pin="24" pinfunction="32" pintype="passive"/>
+      <node ref="RD32" pin="1" pintype="passive"/>
+      <node ref="U4" pin="9" pinfunction="A3" pintype="input"/>
+    </net>
+    <net code="28" name="Net-(JT1B-24)" class="Default">
+      <node ref="CA24" pin="1" pintype="passive"/>
+      <node ref="JT1" pin="16" pinfunction="24" pintype="passive"/>
+      <node ref="RA24" pin="2" pintype="passive"/>
+      <node ref="RB24" pin="1" pintype="passive"/>
+    </net>
+    <net code="29" name="Net-(JT1B-25)" class="Default">
+      <node ref="CA25" pin="1" pintype="passive"/>
+      <node ref="JT1" pin="17" pinfunction="25" pintype="passive"/>
+      <node ref="RA25" pin="2" pintype="passive"/>
+      <node ref="RB25" pin="1" pintype="passive"/>
+    </net>
+    <net code="30" name="Net-(JT1B-26)" class="Default">
+      <node ref="CA26" pin="1" pintype="passive"/>
+      <node ref="JT1" pin="18" pinfunction="26" pintype="passive"/>
+      <node ref="RA26" pin="2" pintype="passive"/>
+      <node ref="RB26" pin="1" pintype="passive"/>
+    </net>
+    <net code="31" name="Net-(JT1B-27)" class="Default">
+      <node ref="CA27" pin="1" pintype="passive"/>
+      <node ref="JT1" pin="19" pinfunction="27" pintype="passive"/>
+      <node ref="RA27" pin="2" pintype="passive"/>
+      <node ref="RB27" pin="1" pintype="passive"/>
+    </net>
+    <net code="32" name="Net-(JT1C-3V3)" class="Default">
+      <node ref="CI1" pin="1" pintype="passive"/>
+      <node ref="CI2" pin="1" pintype="passive"/>
+      <node ref="JT1" pin="15" pinfunction="3V3" pintype="passive"/>
+      <node ref="JT2" pin="3" pinfunction="3V3" pintype="passive"/>
+      <node ref="TPI" pin="1" pintype="passive"/>
+    </net>
+    <net code="33" name="Net-(JT1C-GND)" class="Default">
+      <node ref="CA19" pin="2" pintype="passive"/>
+      <node ref="CA20" pin="2" pintype="passive"/>
+      <node ref="CA21" pin="2" pintype="passive"/>
+      <node ref="CA22" pin="2" pintype="passive"/>
+      <node ref="CA23" pin="2" pintype="passive"/>
+      <node ref="CA24" pin="2" pintype="passive"/>
+      <node ref="CA25" pin="2" pintype="passive"/>
+      <node ref="CA26" pin="2" pintype="passive"/>
+      <node ref="CA27" pin="2" pintype="passive"/>
+      <node ref="CA38" pin="2" pintype="passive"/>
+      <node ref="CA39" pin="2" pintype="passive"/>
+      <node ref="CB1" pin="2" pintype="passive"/>
+      <node ref="CB2" pin="2" pintype="passive"/>
+      <node ref="CB3" pin="2" pintype="passive"/>
+      <node ref="CB4" pin="2" pintype="passive"/>
+      <node ref="CI1" pin="2" pintype="passive"/>
+      <node ref="CI2" pin="2" pintype="passive"/>
+      <node ref="CM1" pin="2" pintype="passive"/>
+      <node ref="CM2" pin="2" pintype="passive"/>
+      <node ref="CM3" pin="2" pintype="passive"/>
+      <node ref="CM4" pin="2" pintype="passive"/>
+      <node ref="CM5" pin="2" pintype="passive"/>
+      <node ref="CV1" pin="2" pintype="passive"/>
+      <node ref="JM1" pin="GND1" pinfunction="GND1" pintype="passive"/>
+      <node ref="JM1" pin="GND2" pinfunction="GND2" pintype="passive"/>
+      <node ref="JM1" pin="GND3" pinfunction="GND3" pintype="passive"/>
+      <node ref="JM1" pin="GND5" pinfunction="GND5" pintype="passive"/>
+      <node ref="JM1" pin="GND6" pinfunction="GND6" pintype="passive"/>
+      <node ref="JT1" pin="1" pinfunction="GND" pintype="passive"/>
+      <node ref="JT2" pin="15" pinfunction="GND" pintype="passive"/>
+      <node ref="JT2" pin="2" pinfunction="GND" pintype="passive"/>
+      <node ref="RB19" pin="2" pintype="passive"/>
+      <node ref="RB20" pin="2" pintype="passive"/>
+      <node ref="RB21" pin="2" pintype="passive"/>
+      <node ref="RB22" pin="2" pintype="passive"/>
+      <node ref="RB23" pin="2" pintype="passive"/>
+      <node ref="RB24" pin="2" pintype="passive"/>
+      <node ref="RB25" pin="2" pintype="passive"/>
+      <node ref="RB26" pin="2" pintype="passive"/>
+      <node ref="RB27" pin="2" pintype="passive"/>
+      <node ref="RB38" pin="2" pintype="passive"/>
+      <node ref="RB39" pin="2" pintype="passive"/>
+      <node ref="RD10" pin="2" pintype="passive"/>
+      <node ref="RD11" pin="2" pintype="passive"/>
+      <node ref="RD12" pin="2" pintype="passive"/>
+      <node ref="RD2" pin="2" pintype="passive"/>
+      <node ref="RD28" pin="2" pintype="passive"/>
+      <node ref="RD29" pin="2" pintype="passive"/>
+      <node ref="RD30" pin="2" pintype="passive"/>
+      <node ref="RD31" pin="2" pintype="passive"/>
+      <node ref="RD32" pin="2" pintype="passive"/>
+      <node ref="RD4" pin="2" pintype="passive"/>
+      <node ref="RD5" pin="2" pintype="passive"/>
+      <node ref="RD6" pin="2" pintype="passive"/>
+      <node ref="RD7" pin="2" pintype="passive"/>
+      <node ref="RD8" pin="2" pintype="passive"/>
+      <node ref="RD9" pin="2" pintype="passive"/>
+      <node ref="TPG" pin="1" pintype="passive"/>
+      <node ref="U1" pin="1" pinfunction="OE1" pintype="input"/>
+      <node ref="U1" pin="10" pinfunction="OE3" pintype="input"/>
+      <node ref="U1" pin="13" pinfunction="OE4" pintype="input"/>
+      <node ref="U1" pin="4" pinfunction="OE2" pintype="input"/>
+      <node ref="U1" pin="7" pinfunction="GND" pintype="power_in"/>
+      <node ref="U2" pin="1" pinfunction="OE1" pintype="input"/>
+      <node ref="U2" pin="10" pinfunction="OE3" pintype="input"/>
+      <node ref="U2" pin="13" pinfunction="OE4" pintype="input"/>
+      <node ref="U2" pin="4" pinfunction="OE2" pintype="input"/>
+      <node ref="U2" pin="7" pinfunction="GND" pintype="power_in"/>
+      <node ref="U3" pin="1" pinfunction="OE1" pintype="input"/>
+      <node ref="U3" pin="10" pinfunction="OE3" pintype="input"/>
+      <node ref="U3" pin="13" pinfunction="OE4" pintype="input"/>
+      <node ref="U3" pin="4" pinfunction="OE2" pintype="input"/>
+      <node ref="U3" pin="7" pinfunction="GND" pintype="power_in"/>
+      <node ref="U4" pin="1" pinfunction="OE1" pintype="input"/>
+      <node ref="U4" pin="10" pinfunction="OE3" pintype="input"/>
+      <node ref="U4" pin="12" pinfunction="A4" pintype="input"/>
+      <node ref="U4" pin="13" pinfunction="OE4" pintype="input"/>
+      <node ref="U4" pin="4" pinfunction="OE2" pintype="input"/>
+      <node ref="U4" pin="7" pinfunction="GND" pintype="power_in"/>
+    </net>
+    <net code="34" name="Net-(JT1D-0)" class="Default">
+      <node ref="JT1" pin="2" pinfunction="0" pintype="passive"/>
+      <node ref="TP0" pin="1" pintype="passive"/>
+    </net>
+    <net code="35" name="Net-(JT1D-1)" class="Default">
+      <node ref="JT1" pin="3" pinfunction="1" pintype="passive"/>
+      <node ref="TP1" pin="1" pintype="passive"/>
+    </net>
+    <net code="36" name="Net-(JT1D-3)" class="Default">
+      <node ref="JT1" pin="5" pinfunction="3" pintype="passive"/>
+      <node ref="TP3" pin="1" pintype="passive"/>
+    </net>
+    <net code="37" name="Net-(JT2A-19)" class="Default">
+      <node ref="CA19" pin="1" pintype="passive"/>
+      <node ref="JT2" pin="8" pinfunction="19" pintype="passive"/>
+      <node ref="RA19" pin="2" pintype="passive"/>
+      <node ref="RB19" pin="1" pintype="passive"/>
+    </net>
+    <net code="38" name="Net-(JT2A-20)" class="Default">
+      <node ref="CA20" pin="1" pintype="passive"/>
+      <node ref="JT2" pin="7" pinfunction="20" pintype="passive"/>
+      <node ref="RA20" pin="2" pintype="passive"/>
+      <node ref="RB20" pin="1" pintype="passive"/>
+    </net>
+    <net code="39" name="Net-(JT2A-21)" class="Default">
+      <node ref="CA21" pin="1" pintype="passive"/>
+      <node ref="JT2" pin="6" pinfunction="21" pintype="passive"/>
+      <node ref="RA21" pin="2" pintype="passive"/>
+      <node ref="RB21" pin="1" pintype="passive"/>
+    </net>
+    <net code="40" name="Net-(JT2A-22)" class="Default">
+      <node ref="CA22" pin="1" pintype="passive"/>
+      <node ref="JT2" pin="5" pinfunction="22" pintype="passive"/>
+      <node ref="RA22" pin="2" pintype="passive"/>
+      <node ref="RB22" pin="1" pintype="passive"/>
+    </net>
+    <net code="41" name="Net-(JT2A-23)" class="Default">
+      <node ref="CA23" pin="1" pintype="passive"/>
+      <node ref="JT2" pin="4" pinfunction="23" pintype="passive"/>
+      <node ref="RA23" pin="2" pintype="passive"/>
+      <node ref="RB23" pin="1" pintype="passive"/>
+    </net>
+    <net code="42" name="Net-(JT2A-38)" class="Default">
+      <node ref="CA38" pin="1" pintype="passive"/>
+      <node ref="JT2" pin="19" pinfunction="38" pintype="passive"/>
+      <node ref="RA38" pin="2" pintype="passive"/>
+      <node ref="RB38" pin="1" pintype="passive"/>
+    </net>
+    <net code="43" name="Net-(JT2A-39)" class="Default">
+      <node ref="CA39" pin="1" pintype="passive"/>
+      <node ref="JT2" pin="18" pinfunction="39" pintype="passive"/>
+      <node ref="RA39" pin="2" pintype="passive"/>
+      <node ref="RB39" pin="1" pintype="passive"/>
+    </net>
+    <net code="44" name="Net-(JT2B-14)" class="Default">
+      <node ref="CM1" pin="1" pintype="passive"/>
+      <node ref="JM1" pin="D26" pinfunction="D26" pintype="passive"/>
+      <node ref="JT2" pin="13" pinfunction="14" pintype="passive"/>
+    </net>
+    <net code="45" name="Net-(JT2B-15)" class="Default">
+      <node ref="CM2" pin="1" pintype="passive"/>
+      <node ref="JM1" pin="D27" pinfunction="D27" pintype="passive"/>
+      <node ref="JT2" pin="12" pinfunction="15" pintype="passive"/>
+    </net>
+    <net code="46" name="Net-(JT2B-16)" class="Default">
+      <node ref="CM3" pin="1" pintype="passive"/>
+      <node ref="JM1" pin="D28" pinfunction="D28" pintype="passive"/>
+      <node ref="JT2" pin="11" pinfunction="16" pintype="passive"/>
+    </net>
+    <net code="47" name="Net-(JT2B-17)" class="Default">
+      <node ref="CM4" pin="1" pintype="passive"/>
+      <node ref="JM1" pin="D29" pinfunction="D29" pintype="passive"/>
+      <node ref="JT2" pin="10" pinfunction="17" pintype="passive"/>
+    </net>
+    <net code="48" name="Net-(JT2B-18)" class="Default">
+      <node ref="CM5" pin="1" pintype="passive"/>
+      <node ref="JM1" pin="D30" pinfunction="D30" pintype="passive"/>
+      <node ref="JT2" pin="9" pinfunction="18" pintype="passive"/>
+    </net>
+    <net code="49" name="Net-(JT2C-VIN)" class="Default">
+      <node ref="CB1" pin="1" pintype="passive"/>
+      <node ref="CB2" pin="1" pintype="passive"/>
+      <node ref="CB3" pin="1" pintype="passive"/>
+      <node ref="CB4" pin="1" pintype="passive"/>
+      <node ref="CV1" pin="1" pintype="passive"/>
+      <node ref="D1" pin="2" pintype="passive"/>
+      <node ref="JT2" pin="1" pinfunction="VIN" pintype="passive"/>
+      <node ref="TPV" pin="1" pintype="passive"/>
+      <node ref="U1" pin="14" pinfunction="VCC" pintype="power_in"/>
+      <node ref="U2" pin="14" pinfunction="VCC" pintype="power_in"/>
+      <node ref="U3" pin="14" pinfunction="VCC" pintype="power_in"/>
+      <node ref="U4" pin="14" pinfunction="VCC" pintype="power_in"/>
+    </net>
+    <net code="50" name="Net-(JT2D-33)" class="Default">
+      <node ref="JT2" pin="24" pinfunction="33" pintype="passive"/>
+      <node ref="TP33" pin="1" pintype="passive"/>
+    </net>
+    <net code="51" name="Net-(JT2D-34)" class="Default">
+      <node ref="JT2" pin="23" pinfunction="34" pintype="passive"/>
+      <node ref="TP34" pin="1" pintype="passive"/>
+    </net>
+    <net code="52" name="Net-(JT2D-35)" class="Default">
+      <node ref="JT2" pin="22" pinfunction="35" pintype="passive"/>
+      <node ref="TP35" pin="1" pintype="passive"/>
+    </net>
+    <net code="53" name="Net-(JT2D-36)" class="Default">
+      <node ref="JT2" pin="21" pinfunction="36" pintype="passive"/>
+      <node ref="TP36" pin="1" pintype="passive"/>
+    </net>
+    <net code="54" name="Net-(JT2D-37)" class="Default">
+      <node ref="JT2" pin="20" pinfunction="37" pintype="passive"/>
+      <node ref="TP37" pin="1" pintype="passive"/>
+    </net>
+    <net code="55" name="Net-(JT2D-40)" class="Default">
+      <node ref="JT2" pin="17" pinfunction="40" pintype="passive"/>
+      <node ref="TP40" pin="1" pintype="passive"/>
+    </net>
+    <net code="56" name="Net-(JT2D-41)" class="Default">
+      <node ref="JT2" pin="16" pinfunction="41" pintype="passive"/>
+      <node ref="TP41" pin="1" pintype="passive"/>
+    </net>
+    <net code="57" name="Net-(U1A-Y1)" class="Default">
+      <node ref="JM1" pin="D6" pinfunction="D6" pintype="passive"/>
+      <node ref="U1" pin="3" pinfunction="Y1" pintype="output"/>
+    </net>
+    <net code="58" name="Net-(U1B-Y2)" class="Default">
+      <node ref="JM1" pin="D46" pinfunction="D46" pintype="passive"/>
+      <node ref="U1" pin="6" pinfunction="Y2" pintype="output"/>
+    </net>
+    <net code="59" name="Net-(U1C-Y3)" class="Default">
+      <node ref="JM1" pin="D10" pinfunction="D10" pintype="passive"/>
+      <node ref="U1" pin="8" pinfunction="Y3" pintype="output"/>
+    </net>
+    <net code="60" name="Net-(U1D-Y4)" class="Default">
+      <node ref="JM1" pin="D11" pinfunction="D11" pintype="passive"/>
+      <node ref="U1" pin="11" pinfunction="Y4" pintype="output"/>
+    </net>
+    <net code="61" name="Net-(U2A-Y1)" class="Default">
+      <node ref="JM1" pin="D5" pinfunction="D5" pintype="passive"/>
+      <node ref="U2" pin="3" pinfunction="Y1" pintype="output"/>
+    </net>
+    <net code="62" name="Net-(U2B-Y2)" class="Default">
+      <node ref="JM1" pin="D14" pinfunction="D14" pintype="passive"/>
+      <node ref="U2" pin="6" pinfunction="Y2" pintype="output"/>
+    </net>
+    <net code="63" name="Net-(U2C-Y3)" class="Default">
+      <node ref="JM1" pin="D7" pinfunction="D7" pintype="passive"/>
+      <node ref="U2" pin="8" pinfunction="Y3" pintype="output"/>
+    </net>
+    <net code="64" name="Net-(U2D-Y4)" class="Default">
+      <node ref="JM1" pin="D8" pinfunction="D8" pintype="passive"/>
+      <node ref="U2" pin="11" pinfunction="Y4" pintype="output"/>
+    </net>
+    <net code="65" name="Net-(U3A-Y1)" class="Default">
+      <node ref="JM1" pin="D9" pinfunction="D9" pintype="passive"/>
+      <node ref="U3" pin="3" pinfunction="Y1" pintype="output"/>
+    </net>
+    <net code="66" name="Net-(U3B-Y2)" class="Default">
+      <node ref="JM1" pin="D15" pinfunction="D15" pintype="passive"/>
+      <node ref="U3" pin="6" pinfunction="Y2" pintype="output"/>
+    </net>
+    <net code="67" name="Net-(U3C-Y3)" class="Default">
+      <node ref="JM1" pin="D17" pinfunction="D17" pintype="passive"/>
+      <node ref="U3" pin="8" pinfunction="Y3" pintype="output"/>
+    </net>
+    <net code="68" name="Net-(U3D-Y4)" class="Default">
+      <node ref="JM1" pin="D16" pinfunction="D16" pintype="passive"/>
+      <node ref="U3" pin="11" pinfunction="Y4" pintype="output"/>
+    </net>
+    <net code="69" name="Net-(U4A-Y1)" class="Default">
+      <node ref="JM1" pin="D24" pinfunction="D24" pintype="passive"/>
+      <node ref="U4" pin="3" pinfunction="Y1" pintype="output"/>
+    </net>
+    <net code="70" name="Net-(U4B-Y2)" class="Default">
+      <node ref="JM1" pin="D25" pinfunction="D25" pintype="passive"/>
+      <node ref="U4" pin="6" pinfunction="Y2" pintype="output"/>
+    </net>
+    <net code="71" name="Net-(U4C-Y3)" class="Default">
+      <node ref="JM1" pin="D2" pinfunction="D2" pintype="passive"/>
+      <node ref="U4" pin="8" pinfunction="Y3" pintype="output"/>
+    </net>
+    <net code="72" name="unconnected-(JM1-Pad3V3)" class="Default">
+      <node ref="JM1" pin="3V3" pinfunction="3V3" pintype="passive+no_connect"/>
+    </net>
+    <net code="73" name="unconnected-(JM1-PadA0)" class="Default">
+      <node ref="JM1" pin="A0" pinfunction="A0" pintype="passive+no_connect"/>
+    </net>
+    <net code="74" name="unconnected-(JM1-PadA1)" class="Default">
+      <node ref="JM1" pin="A1" pinfunction="A1" pintype="passive+no_connect"/>
+    </net>
+    <net code="75" name="unconnected-(JM1-PadA2)" class="Default">
+      <node ref="JM1" pin="A2" pinfunction="A2" pintype="passive+no_connect"/>
+    </net>
+    <net code="76" name="unconnected-(JM1-PadA3)" class="Default">
+      <node ref="JM1" pin="A3" pinfunction="A3" pintype="passive+no_connect"/>
+    </net>
+    <net code="77" name="unconnected-(JM1-PadA4)" class="Default">
+      <node ref="JM1" pin="A4" pinfunction="A4" pintype="passive+no_connect"/>
+    </net>
+    <net code="78" name="unconnected-(JM1-PadAREF)" class="Default">
+      <node ref="JM1" pin="AREF" pinfunction="AREF" pintype="passive+no_connect"/>
+    </net>
+    <net code="79" name="unconnected-(JM1-PadD0)" class="Default">
+      <node ref="JM1" pin="D0" pinfunction="D0" pintype="passive+no_connect"/>
+    </net>
+    <net code="80" name="unconnected-(JM1-PadD1)" class="Default">
+      <node ref="JM1" pin="D1" pinfunction="D1" pintype="passive+no_connect"/>
+    </net>
+    <net code="81" name="unconnected-(JM1-PadD3)" class="Default">
+      <node ref="JM1" pin="D3" pinfunction="D3" pintype="passive+no_connect"/>
+    </net>
+    <net code="82" name="unconnected-(JM1-PadD4)" class="Default">
+      <node ref="JM1" pin="D4" pinfunction="D4" pintype="passive+no_connect"/>
+    </net>
+    <net code="83" name="unconnected-(JM1-PadD12)" class="Default">
+      <node ref="JM1" pin="D12" pinfunction="D12" pintype="passive+no_connect"/>
+    </net>
+    <net code="84" name="unconnected-(JM1-PadD13)" class="Default">
+      <node ref="JM1" pin="D13" pinfunction="D13" pintype="passive+no_connect"/>
+    </net>
+    <net code="85" name="unconnected-(JM1-PadD18)" class="Default">
+      <node ref="JM1" pin="D18" pinfunction="D18" pintype="passive+no_connect"/>
+    </net>
+    <net code="86" name="unconnected-(JM1-PadD19)" class="Default">
+      <node ref="JM1" pin="D19" pinfunction="D19" pintype="passive+no_connect"/>
+    </net>
+    <net code="87" name="unconnected-(JM1-PadD20)" class="Default">
+      <node ref="JM1" pin="D20" pinfunction="D20" pintype="passive+no_connect"/>
+    </net>
+    <net code="88" name="unconnected-(JM1-PadD21)" class="Default">
+      <node ref="JM1" pin="D21" pinfunction="D21" pintype="passive+no_connect"/>
+    </net>
+    <net code="89" name="unconnected-(JM1-PadD22)" class="Default">
+      <node ref="JM1" pin="D22" pinfunction="D22" pintype="passive+no_connect"/>
+    </net>
+    <net code="90" name="unconnected-(JM1-PadD23)" class="Default">
+      <node ref="JM1" pin="D23" pinfunction="D23" pintype="passive+no_connect"/>
+    </net>
+    <net code="91" name="unconnected-(JM1-PadD31)" class="Default">
+      <node ref="JM1" pin="D31" pinfunction="D31" pintype="passive+no_connect"/>
+    </net>
+    <net code="92" name="unconnected-(JM1-PadD32)" class="Default">
+      <node ref="JM1" pin="D32" pinfunction="D32" pintype="passive+no_connect"/>
+    </net>
+    <net code="93" name="unconnected-(JM1-PadD33)" class="Default">
+      <node ref="JM1" pin="D33" pinfunction="D33" pintype="passive+no_connect"/>
+    </net>
+    <net code="94" name="unconnected-(JM1-PadD34)" class="Default">
+      <node ref="JM1" pin="D34" pinfunction="D34" pintype="passive+no_connect"/>
+    </net>
+    <net code="95" name="unconnected-(JM1-PadD35)" class="Default">
+      <node ref="JM1" pin="D35" pinfunction="D35" pintype="passive+no_connect"/>
+    </net>
+    <net code="96" name="unconnected-(JM1-PadD36)" class="Default">
+      <node ref="JM1" pin="D36" pinfunction="D36" pintype="passive+no_connect"/>
+    </net>
+    <net code="97" name="unconnected-(JM1-PadD37)" class="Default">
+      <node ref="JM1" pin="D37" pinfunction="D37" pintype="passive+no_connect"/>
+    </net>
+    <net code="98" name="unconnected-(JM1-PadD38)" class="Default">
+      <node ref="JM1" pin="D38" pinfunction="D38" pintype="passive+no_connect"/>
+    </net>
+    <net code="99" name="unconnected-(JM1-PadD39)" class="Default">
+      <node ref="JM1" pin="D39" pinfunction="D39" pintype="passive+no_connect"/>
+    </net>
+    <net code="100" name="unconnected-(JM1-PadD40)" class="Default">
+      <node ref="JM1" pin="D40" pinfunction="D40" pintype="passive+no_connect"/>
+    </net>
+    <net code="101" name="unconnected-(JM1-PadD41)" class="Default">
+      <node ref="JM1" pin="D41" pinfunction="D41" pintype="passive+no_connect"/>
+    </net>
+    <net code="102" name="unconnected-(JM1-PadD42)" class="Default">
+      <node ref="JM1" pin="D42" pinfunction="D42" pintype="passive+no_connect"/>
+    </net>
+    <net code="103" name="unconnected-(JM1-PadD43)" class="Default">
+      <node ref="JM1" pin="D43" pinfunction="D43" pintype="passive+no_connect"/>
+    </net>
+    <net code="104" name="unconnected-(JM1-PadD44)" class="Default">
+      <node ref="JM1" pin="D44" pinfunction="D44" pintype="passive+no_connect"/>
+    </net>
+    <net code="105" name="unconnected-(JM1-PadD45)" class="Default">
+      <node ref="JM1" pin="D45" pinfunction="D45" pintype="passive+no_connect"/>
+    </net>
+    <net code="106" name="unconnected-(JM1-PadD47)" class="Default">
+      <node ref="JM1" pin="D47" pinfunction="D47" pintype="passive+no_connect"/>
+    </net>
+    <net code="107" name="unconnected-(JM1-PadD48)" class="Default">
+      <node ref="JM1" pin="D48" pinfunction="D48" pintype="passive+no_connect"/>
+    </net>
+    <net code="108" name="unconnected-(JM1-PadD49)" class="Default">
+      <node ref="JM1" pin="D49" pinfunction="D49" pintype="passive+no_connect"/>
+    </net>
+    <net code="109" name="unconnected-(JM1-PadD50)" class="Default">
+      <node ref="JM1" pin="D50" pinfunction="D50" pintype="passive+no_connect"/>
+    </net>
+    <net code="110" name="unconnected-(JM1-PadD51)" class="Default">
+      <node ref="JM1" pin="D51" pinfunction="D51" pintype="passive+no_connect"/>
+    </net>
+    <net code="111" name="unconnected-(JM1-PadD52)" class="Default">
+      <node ref="JM1" pin="D52" pinfunction="D52" pintype="passive+no_connect"/>
+    </net>
+    <net code="112" name="unconnected-(JM1-PadD53)" class="Default">
+      <node ref="JM1" pin="D53" pinfunction="D53" pintype="passive+no_connect"/>
+    </net>
+    <net code="113" name="unconnected-(JM1-PadIORF)" class="Default">
+      <node ref="JM1" pin="IORF" pinfunction="IORF" pintype="passive+no_connect"/>
+    </net>
+    <net code="114" name="unconnected-(JM1-PadRST1)" class="Default">
+      <node ref="JM1" pin="RST1" pinfunction="RST1" pintype="passive+no_connect"/>
+    </net>
+    <net code="115" name="unconnected-(JM1-PadSCL)" class="Default">
+      <node ref="JM1" pin="SCL" pinfunction="SCL" pintype="passive+no_connect"/>
+    </net>
+    <net code="116" name="unconnected-(JM1-PadSDA)" class="Default">
+      <node ref="JM1" pin="SDA" pinfunction="SDA" pintype="passive+no_connect"/>
+    </net>
+    <net code="117" name="unconnected-(JM1-PadVIN)" class="Default">
+      <node ref="JM1" pin="VIN" pinfunction="VIN" pintype="passive+no_connect"/>
+    </net>
+    <net code="118" name="unconnected-(JT2E-13-Pad14)" class="Default">
+      <node ref="JT2" pin="14" pinfunction="13" pintype="passive+no_connect"/>
+    </net>
+    <net code="119" name="unconnected-(U4D-Y4-Pad11)" class="Default">
+      <node ref="U4" pin="11" pinfunction="Y4" pintype="output+no_connect"/>
+    </net>
+  </nets>
+</export>

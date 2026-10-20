@@ -1,0 +1,30 @@
+{
+  "components": 81,
+  "connected_pins": 276,
+  "electrical_nets": 71,
+  "matches_original_schematic": true,
+  "matches_original_components_values_footprints": true,
+  "matches_pcb": true,
+  "matches_manifest": true,
+  "electrical_labels": 0,
+  "erc_violations": 0,
+  "erc_types": [],
+  "sha256": {
+    "circuit.json": "36b56da32bee453dee32b87e630d72e13308d1ba2d5f773c27da7a0ce2914f89",
+    "teensy-adapter.kicad_pcb": "7dad98de4cfb66d2dca20a79fc67ffa10a2d83c63662b470dc469362b0102207",
+    "wired\\teensy-adapter-wired.kicad_sch": "5fb44e13bb7f5173b7d4d25cfc257e24088c7557d4574d441d587004ac829a15",
+    "controls.kicad_sch": "462ed87071b3c5ab2c948e74063ed58cf9b8f9f4feb4adc89ff649c7c1280a53",
+    "mega.kicad_sch": "3be34dd7e0fdf863abf21af8a690adc12b9d8f4095db4eceeee9d746ce54795c",
+    "mega_2.kicad_sch": "cd5eb4e406de9d12313e564d8312b48fd3d30ca7c3ae0b2e73316663205ab6eb",
+    "microphones.kicad_sch": "a08231345762734adfff9117e5b2dc861aa7da75f5f94c989606a2644589fbba",
+    "power.kicad_sch": "3ad06d03b31e3ddc9ebd9c2c7ad3957bed2235b03b8e56d59a42cfcdc60b096c",
+    "sensors.kicad_sch": "61ecfc0536cacaf0082629e0624b7e5819242655841afcc062e77fe595a00110",
+    "sensors_2.kicad_sch": "3d105d02f0038a04bd3f3b57ae01d00154e3ca6e95b014173f94fcfd542ed842",
+    "supplies.kicad_sch": "145b142b098c1cb18ef9f08e2d8b533abc6a4e1b67de097670d007c01846fc97",
+    "teensy-adapter.kicad_sch": "c516a13d22d313cf6906dc90f4b1defca4af004802dee93fd593fe6e7e1fb20a",
+    "teensy.kicad_sch": "9937dd0cbf6de3d41523c4afddfe06e55fd605822969e7d2b8cf4e6dba58a32a",
+    "translators.kicad_sch": "cb0fd70a7ad88eb033a7413928b3db1d34eb1aa59d20b1afa9dc03f8ae620e73",
+    "translators_2.kicad_sch": "d12df1b8478ec32e30a8bf2d0fee146cfa101fd34f5cf5dcdde54116b51b5fb4",
+    "translators_3.kicad_sch": "98f277c1f182044d6c2f9a2b1ca48bd52dd8d93e6259c246f0b4e85c27fa2144"
+  }
+}
