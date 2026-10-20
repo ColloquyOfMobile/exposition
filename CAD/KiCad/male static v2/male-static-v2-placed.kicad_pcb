@@ -6040,63 +6040,129 @@
 		(layer "Edge.Cuts")
 		(uuid "fa747651-b55a-4441-9436-2a9c12f80136")
 	)
-	(gr_text "J1"
-		(at 26.3 92 0)
+	(gr_text "J6 SPEAKER"
+		(at 62.2 90.5 90)
 		(layer "F.SilkS")
-		(uuid "161220d2-32f1-4671-924d-557e6815e5e3")
+		(uuid "00aa936c-9c33-4622-abc0-56057c749353")
 		(effects
 			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
+				(size 0.9 0.9)
+				(thickness 0.15)
 			)
 		)
 	)
-	(gr_text "J8"
-		(at 26.3 82 0)
+	(gr_text "J7 HARNESS"
+		(at 50 38.8 0)
 		(layer "F.SilkS")
-		(uuid "24ab0311-9e9d-4509-8e1d-dc20a43cbbc0")
+		(uuid "16b895ea-2e7e-4eab-8879-67616fb1b38f")
 		(effects
 			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
+				(size 0.9 0.9)
+				(thickness 0.15)
 			)
 		)
 	)
-	(gr_text "J9"
-		(at 26 78 0)
+	(gr_text "J1 PHOTOSENSOR C"
+		(at 33.5 96.3 0)
 		(layer "F.SilkS")
-		(uuid "895d2edc-eb7f-4c87-89b9-8eea4c2c03c3")
+		(uuid "1ede782c-5f32-4294-80d1-dcd6533b617f")
 		(effects
 			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
+				(size 0.85 0.85)
+				(thickness 0.15)
 			)
 		)
 	)
-	(gr_text "J4"
-		(at 26.3 102 0)
+	(gr_text "J10 STATE LED"
+		(at 67.5 51.3 0)
 		(layer "F.SilkS")
-		(uuid "997b5fb5-36e3-45f0-b2fd-c54b1bfa441a")
+		(uuid "1ef7d758-94fd-4920-8b86-5d53bfbd2e58")
 		(effects
 			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
+				(size 0.9 0.9)
+				(thickness 0.15)
 			)
 		)
 	)
-	(gr_text "J3"
-		(at 26.3 47 0)
+	(gr_text "J8 PHOTOSENSOR B"
+		(at 33.5 86.3 0)
 		(layer "F.SilkS")
-		(uuid "e6c0eb2b-c573-4fb1-b7c6-0acd56d66d04")
+		(uuid "31f4a0e5-fdeb-4829-a3c1-d90644fc7b1e")
+		(effects
+			(font
+				(size 0.85 0.85)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "J4 PHOTOSENSOR D"
+		(at 33.5 106.3 0)
+		(layer "F.SilkS")
+		(uuid "5ffb0ec1-2147-4523-b74a-34af42a53f7b")
+		(effects
+			(font
+				(size 0.85 0.85)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "J3 MICROPHONE"
+		(at 33.5 51.3 0)
+		(layer "F.SilkS")
+		(uuid "63506610-e6eb-49a6-b9a0-b393f701d961")
+		(effects
+			(font
+				(size 0.95 0.95)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "J9 PHOTOSENSOR A"
+		(at 33.5 78.4 0)
+		(layer "F.SilkS")
+		(uuid "7212255a-f6a0-478d-b465-9752d6a5df71")
+		(effects
+			(font
+				(size 0.85 0.85)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "J2 DXL BODY"
+		(at 67.5 102.3 0)
+		(layer "F.SilkS")
+		(uuid "735d27eb-95c0-49b2-be3d-7a8b68ea733c")
+		(effects
+			(font
+				(size 0.9 0.9)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "J11 BAR NEOPIXEL"
+		(at 67.5 64.3 0)
+		(layer "F.SilkS")
+		(uuid "cbb3053a-6c43-4fc3-9c1c-8aa8d50276a0")
+		(effects
+			(font
+				(size 0.85 0.85)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "J5 BODY NEOPIXEL"
+		(at 74.05 98 90)
+		(layer "F.SilkS")
+		(uuid "d4feab71-79c6-42f9-a1dd-74ff858faab5")
 		(effects
 			(font
 				(size 0.8 0.8)
-				(thickness 0.12)
+				(thickness 0.15)
 			)
 		)
 	)
 	(gr_text "MALE-STATIC-V2"
-		(at 50 40 0)
+		(at 50 41.2 0)
 		(layer "F.SilkS")
 		(uuid "f05af37c-9da4-43d7-b733-dd0186dcd352")
 		(effects
@@ -6202,61 +6268,6 @@
 		(effects
 			(font
 				(size 0.65 0.65)
-				(thickness 0.12)
-			)
-		)
-	)
-	(gr_text "J11"
-		(at 73 60 0)
-		(layer "F.Fab")
-		(uuid "12a1c223-1d6b-4486-85ea-3efe73936784")
-		(effects
-			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
-			)
-		)
-	)
-	(gr_text "J2"
-		(at 73 106 0)
-		(layer "F.Fab")
-		(uuid "47fb0b31-2040-4566-94b4-cec11538847d")
-		(effects
-			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
-			)
-		)
-	)
-	(gr_text "J6"
-		(at 73 90 0)
-		(layer "F.Fab")
-		(uuid "7c9d6128-806f-4e7f-9741-d6201369babe")
-		(effects
-			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
-			)
-		)
-	)
-	(gr_text "J10"
-		(at 73 47 0)
-		(layer "F.Fab")
-		(uuid "987b7f89-caf0-4ac1-b7f4-4b14fb60fa6c")
-		(effects
-			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
-			)
-		)
-	)
-	(gr_text "J5"
-		(at 73 98 0)
-		(layer "F.Fab")
-		(uuid "fda8e27f-c2d5-4bef-a904-87cf7b81b890")
-		(effects
-			(font
-				(size 0.8 0.8)
 				(thickness 0.12)
 			)
 		)

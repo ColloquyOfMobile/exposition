@@ -4,6 +4,7 @@ import hashlib
 import json
 import pcbnew as p
 from routing_checks import check as check_routing
+from connector_labels import LABELS
 
 CAD=Path(__file__).resolve().parents[2]
 for original,stem in [('female base','female-base-v2'),('male static','male-static-v2')]:
@@ -17,6 +18,9 @@ for original,stem in [('female base','female-base-v2'),('male static','male-stat
                       if isinstance(d,p.PCB_SHAPE) and d.GetLayer()==p.Edge_Cuts)
     assert edges(b)==edges(old), 'Artwork outline/cutouts changed'
     footprints={f.GetReference():f for f in b.GetFootprints()}
+    labels={d.GetText() for d in b.GetDrawings() if isinstance(d,p.PCB_TEXT) and d.GetLayer()==p.F_SilkS}
+    assert set(LABELS[stem])=={ref for ref in footprints if ref.startswith('J')}
+    assert all(caption in labels for caption,*_ in LABELS[stem].values()), 'Missing connector name on front silkscreen'
     for f in old.GetFootprints():
         new=footprints[f.GetReference()]
         if f.GetReference()=='J7':
@@ -112,6 +116,7 @@ for original,stem in [('female base','female-base-v2'),('male static','male-stat
     routing=check_routing(b)
     result={'source_sha256':hashlib.sha256((root/(stem+'.kicad_pcb')).read_bytes()).hexdigest(),
             'original_outline_and_dsub_geometry':'PASS','harness_nets_and_pad_drills':'PASS',
+            'all_connector_names_on_front_silkscreen':'PASS',
             'revision':'D','c1_smd_footprint_and_polarity':'PASS','socket_pinout_and_reference_alignment':'PASS',
             'contact_strip_clearance':'PASS','adjustable_support_positions':'PASS',
             'module_underside_gap_mm_nominal':11,'c2_distance_to_supply_pins_mm':[round(d,3) for d in c2_distances],

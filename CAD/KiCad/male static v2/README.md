@@ -1,5 +1,11 @@
 # Male static v2 — directly mounted GF1002 amplifier
 
+All eleven connectors now have names on the front silkscreen: microphone,
+DXL BODY, speaker, state LED, body/bar NeoPixels, harness, and photosensors
+A/B/C/D (J9/J8/J1/J4). See
+[`reports/connector-names.png`](reports/connector-names.png). Labels are shared
+with the full board builder through `../female base v2/scripts/connector_labels.py`.
+
 **C1 SMD update (2026-10-20).** C1 is now a polarized 220 µF / 10 V SMD
 aluminium electrolytic in `Capacitor_SMD:CP_Elec_6.3x5.8`, centred at
 (68.2, 71) mm. Pad 1 is positive / 5 V; pad 2 is GND. The 6.3 × 5.8 mm case

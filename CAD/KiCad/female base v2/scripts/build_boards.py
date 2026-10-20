@@ -14,6 +14,7 @@ import subprocess
 import uuid
 import xml.etree.ElementTree as ET
 import pcbnew as p
+from connector_labels import apply as apply_connector_labels
 
 CAD = Path(__file__).resolve().parents[2]
 LIB = Path('C:/Program Files/KiCad/9.0/share/kicad')
@@ -205,12 +206,8 @@ def make(original_name, stem, positions, module_origin, clamps, extra):
                 if candidate.exists(): shutil.copy2(candidate,folder/'3dmodels'/candidate.name)
     for suffix in ('.step','.wrl'):
         shutil.copy2(CAD/'shields/gf1002-reference/3dmodels'/('module_assembly'+suffix),folder/'3dmodels'/('module_assembly'+suffix))
-    for ref in positions:
-        if ref.startswith('J') and ref!='J7':
-            x,y,_=positions[ref]
-            if ref=='J9' and original_name=='male static': text(board,ref,26,78,.8)
-            else: text(board,ref,73 if x>60 else 26.3,y,.8,p.F_Fab if x>=65 else p.F_SilkS)
     text(board,stem.upper(),50,40,.85)
+    apply_connector_labels(board,stem)
     text(board,'GF1002 / PLUG-IN / 11mm STACK',module_origin[0]+10,module_origin[1]+31,.8,p.Dwgs_User)
     text(board,'R IN',positions['M1'][0]+3,positions['M1'][1],.65,p.Dwgs_User)
     text(board,'ROUT +/- VERIFY',positions['M1'][0]+5,positions['M1'][1]+25.4,.65,p.Dwgs_User)

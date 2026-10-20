@@ -4307,8 +4307,19 @@
 		(layer "Edge.Cuts")
 		(uuid "fea399e9-4f5e-4170-a4dc-5bc1624b4404")
 	)
+	(gr_text "J7 HARNESS"
+		(at 50 38.8 0)
+		(layer "F.SilkS")
+		(uuid "1736aa71-a797-461c-807d-699be882cb2e")
+		(effects
+			(font
+				(size 0.9 0.9)
+				(thickness 0.15)
+			)
+		)
+	)
 	(gr_text "FEMALE-BASE-V2"
-		(at 50 40 0)
+		(at 50 41.2 0)
 		(layer "F.SilkS")
 		(uuid "1c8fa9fa-a62b-4968-a956-f6b6ee394f8b")
 		(effects
@@ -4318,58 +4329,58 @@
 			)
 		)
 	)
-	(gr_text "J5"
-		(at 73 74.5 0)
+	(gr_text "J4 PHOTOSENSOR"
+		(at 65.5 61.6 0)
 		(layer "F.SilkS")
-		(uuid "8cb1fb20-5561-4deb-8ea0-10bd6bb3c145")
+		(uuid "1db06f23-2767-4aa0-897c-b0b34ca3f2fe")
 		(effects
 			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
+				(size 0.85 0.85)
+				(thickness 0.15)
 			)
 		)
 	)
-	(gr_text "J2"
-		(at 73 47 0)
+	(gr_text "J3 MICROPHONE"
+		(at 36.5 98.2 0)
 		(layer "F.SilkS")
-		(uuid "8eff914c-47f9-426b-a08b-f067381142aa")
+		(uuid "472bc756-40fe-4510-a983-113e731c8ff4")
 		(effects
 			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
+				(size 0.95 0.95)
+				(thickness 0.15)
 			)
 		)
 	)
-	(gr_text "J4"
-		(at 73 57.5 0)
+	(gr_text "J2 DXL MIRROR"
+		(at 64.5 51.3 0)
 		(layer "F.SilkS")
-		(uuid "a2bbd521-603f-4ebf-bd33-00b9cc1dd2d4")
+		(uuid "de6315ce-1a91-422c-b942-6500276ca454")
 		(effects
 			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
+				(size 0.95 0.95)
+				(thickness 0.15)
 			)
 		)
 	)
-	(gr_text "J3"
-		(at 26.3 94 0)
+	(gr_text "J5 NEOPIXEL"
+		(at 65.5 79 0)
 		(layer "F.SilkS")
-		(uuid "bc02d4e0-5cf0-4d76-b1c6-35c9cffe24af")
+		(uuid "e5b4564a-081d-4251-a94a-e119125a5c78")
 		(effects
 			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
+				(size 0.95 0.95)
+				(thickness 0.15)
 			)
 		)
 	)
-	(gr_text "J6"
-		(at 73 88 0)
+	(gr_text "J6 SPEAKER"
+		(at 69 89.3 90)
 		(layer "F.SilkS")
-		(uuid "ddb5ad17-a560-475f-8bbf-f57ea3f39ac3")
+		(uuid "fa0f6bb8-88f4-40c5-9a72-13c120d2da8d")
 		(effects
 			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
+				(size 0.95 0.95)
+				(thickness 0.15)
 			)
 		)
 	)

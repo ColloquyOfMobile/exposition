@@ -1,7 +1,8 @@
 {
-  "source_sha256": "8d3b9878fc3752befc43110e4b71f81f66ab0a37d006ecf7a33a09877516bba7",
+  "source_sha256": "c8e0ec75d4a90fb03abc97ff67137d3c62376d6c610f0e3ff6edaa4dcbd029d5",
   "original_outline_and_dsub_geometry": "PASS",
   "harness_nets_and_pad_drills": "PASS",
+  "all_connector_names_on_front_silkscreen": "PASS",
   "revision": "D",
   "c1_smd_footprint_and_polarity": "PASS",
   "socket_pinout_and_reference_alignment": "PASS",

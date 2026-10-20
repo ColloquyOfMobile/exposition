@@ -1,6 +1,6 @@
 {
   "source": "female base v2/female-base-v2.kicad_pcb",
-  "sha256": "2beb430d58d5c61fd89f90c447336d194ef9b1708fa3cd8c3527aa61814ac7f0",
+  "sha256": "c7ca5bc4b96a0eab96b20a8753cd67810e79fe79f584941ef767b8258400ae5d",
   "outline_mm": [
     25.0,
     20.0,
@@ -146,9 +146,9 @@
   "visual_export": {
     "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
     "source": "CAD/KiCad/female base v2/female-base-v2.kicad_pcb",
-    "source_sha256": "2beb430d58d5c61fd89f90c447336d194ef9b1708fa3cd8c3527aa61814ac7f0",
-    "visual_input_sha256": "2beb430d58d5c61fd89f90c447336d194ef9b1708fa3cd8c3527aa61814ac7f0",
-    "native_vrml_sha256": "615b95bcd96dac7100924ed7fd3f92bd31ab258475c6563a3c4d22578e1bf148",
+    "source_sha256": "c7ca5bc4b96a0eab96b20a8753cd67810e79fe79f584941ef767b8258400ae5d",
+    "visual_input_sha256": "c7ca5bc4b96a0eab96b20a8753cd67810e79fe79f584941ef767b8258400ae5d",
+    "native_vrml_sha256": "f80afbb6116af4c138f75c3425efd34c0f4af67049e4e238f0bd2b18d767eb57",
     "models": [
       {
         "ref": "J4",
@@ -495,10 +495,10 @@
     "mesh_counts": {
       "models": 17,
       "board_meshes": 8,
-      "vertices": 49284,
-      "faces": 39029,
+      "vertices": 53659,
+      "faces": 43335,
       "materials": 24
     },
-    "glb_sha256": "89105a37ad35498195c51b4cbc82c25fc72d5ea52ae5a348f39b569cd8d0c0e6"
+    "glb_sha256": "c8c9cda21aa54512b876129c023cda759ca5b08ada6538244d733225cca5e49f"
   }
 }
