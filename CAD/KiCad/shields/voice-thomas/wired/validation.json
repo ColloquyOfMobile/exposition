@@ -1,0 +1,22 @@
+{
+  "connected_pins": 17,
+  "electrical_nets": 5,
+  "matches_original_schematic": true,
+  "matches_circuit_manifest": true,
+  "matches_pcb": true,
+  "matches_original_component_values_and_footprints": true,
+  "added_components": [],
+  "unconnected_pins": [
+    "JV1.5"
+  ],
+  "erc_violations": 0,
+  "electrical_labels": 0,
+  "sha256": {
+    "voice-thomas.kicad_pcb": "deb23efa738ffa5fff2a142e3a83d8aa4ef8b525ef0f1dfa50cebf37fb3fab6f",
+    "circuit.json": "8851b307136041dcf7008a635b061ed63927d5f1a708d9e04f25c6ff414dbdd1",
+    "wired\\voice-thomas-wired.kicad_sch": "d26bd5854e3f838e5a8f47fdef4db1354a71513bdac2cf8e990c8f5fcb7bc128",
+    "circuit.kicad_sch": "1741969ce5bbef60b8c88c456d43812cda30457fa9cdfdedd04cc6a09e5e2920",
+    "interface.kicad_sch": "b08ab887f951c86935c4778feeef4ee44f01cc0d4998c6c49bb697c487f393b3",
+    "voice-thomas.kicad_sch": "50d47093bf519b387707c39b030c6aafc6140650351ac1267f0a9ae26ec40bef"
+  }
+}
