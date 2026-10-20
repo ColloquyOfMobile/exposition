@@ -68,11 +68,11 @@
     ]
   },
   "side_socket_physical_pin_order": [
-    "AR",
-    "Out",
-    "Gain",
+    "GND",
     "Vdd",
-    "GND"
+    "Gain",
+    "Out",
+    "AR"
   ],
   "physical_fit_verified": false,
   "module_support_holes": [],
@@ -158,5 +158,6 @@
       80.65,
       180
     ]
-  }
+  },
+  "side_module_orientation": "Downward, 180 degrees about the socket insertion axis"
 }

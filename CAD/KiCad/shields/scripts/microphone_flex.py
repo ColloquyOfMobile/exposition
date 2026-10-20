@@ -103,14 +103,14 @@ def circuit():
     d.parts['M1']['footprint']='Shields:Flex_Socket_Up'
     d.parts['M1']['value']='UP / ONE MODULE ONLY'
     d.parts['M1']['description']='One MAX9814 module fitted to M1 OR J2 OR J3. Sockets are parallel; never fit multiple modules.'
-    # The opposing upright modules reverse physical row order relative to
-    # a conventional right-angle socket. Document and verify this explicitly.
-    nets={1:'AR',2:'MICOUT',3:'GAIN',4:'VDD',5:'GND'}
+    # Rotate each side module 180 degrees around the horizontal insertion axis:
+    # its body hangs below the carrier and the five-pin order reverses.
+    nets={1:'GND',2:'VDD',3:'GAIN',4:'MICOUT',5:'AR'}
     for ref, direction in [('J2','LEFT'),('J3','RIGHT')]:
-        d.add(ref,direction+' / 1x05 RIGHT ANGLE',
+        d.add(ref,direction+' / DOWNWARD MODULE',
               'Shields:Flex_Socket_'+direction.title()+'_Overhang',nets,'module',
               names={str(i):n for i,n in nets.items()},
-              description='Alternative socket; AR / Out / Gain / Vdd / GND in physical pad order. One module only.',
+              description='Side module hangs below the PCB, rotated 180 degrees about the insertion axis. GND / Vdd / Gain / Out / AR in physical pad order. One module only.',
               mpn='1x05 P2.54mm horizontal female socket; verify purchased dimensions')
     for ref in ('H1','H2'):
         d.parts[ref]['footprint']='Shields:Flex_M5_Slot12x5.5_Keepout'
@@ -204,7 +204,8 @@ def main():
         'placement_source':'User-approved microphone-flex-placed.kicad_pcb, 2026-10-20',
         'component_positions_mm':{c['ref']:list(POSITIONS[c['ref']]) for c in data['components']},
         'side_socket_centres_pcb_mm':{'left':list(POSITIONS['J2']),'right':list(POSITIONS['J3'])},
-        'side_socket_physical_pin_order':['AR','Out','Gain','Vdd','GND'],
+        'side_socket_physical_pin_order':['GND','Vdd','Gain','Out','AR'],
+        'side_module_orientation':'Downward, 180 degrees about the socket insertion axis',
         'physical_fit_verified':False},indent=2)+'\n')
     print('Rev C microphone-flex: 32x62, 12x5.5 transverse slots, three sockets; one module only.')
 

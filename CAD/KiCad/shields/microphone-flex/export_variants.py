@@ -37,7 +37,7 @@ def preview():
                        check=True,stdout=subprocess.DEVNULL)
         with Image.open(image) as rendered:
             canvas.paste(rendered.convert('RGB').resize((600,720)),(600*i,140))
-        draw.text((600*i+30,105),orientation.upper(),font=heading,fill='black')
+        draw.text((600*i+30,105),orientation.upper()+(' / DOWN' if orientation!='up' else ''),font=heading,fill='black')
         hashes[orientation]=hashlib.sha256(image.read_bytes()).hexdigest()
     draw.text((30,865),'Generic header/shunt proxies. Physical dimensions and adjustment access require checking.',font=font,fill='black')
     path=ASSEMBLY/'microphone-positions-preview.png'
@@ -68,19 +68,15 @@ def main():
         else:
             dummy=p.FOOTPRINT(board);board.Add(dummy);dummy.SetReference('VISUAL_MODULE_'+orientation.upper())
             dummy.Reference().SetVisible(False);dummy.Value().SetVisible(False)
-            # The reference STEP uses the original socket coordinates. Follow
-            # the approved socket translation without moving the saved PCB.
-            ref,base={'left':('J2',(56,74)), 'right':('J3',(64,84.16))}[orientation]
-            x,y=p.ToMM(parts[ref].GetPosition())
-            dummy.SetPosition(p.VECTOR2I(p.FromMM(x-base[0]),p.FromMM(y-base[1])))
-            attach(dummy,ROOT/'3dmodels'/f'module-{orientation}.step')
-            if all(ref in parts for ref in ('H5','H6','H7','H8')):
-                attach(dummy,ROOT/'3dmodels'/f'supports-{orientation}.step')
+            # These models include the current socket translation and the
+            # 180-degree turn around its horizontal insertion axis.
+            attach(dummy,ROOT/'3dmodels'/f'module-{orientation}-down.step')
         staged=WORK/(orientation+'.kicad_pcb');p.SaveBoard(str(staged),board,True)
         dest=ASSEMBLY/'exports'/('microphone-flex-'+orientation+'.glb')
         visual=export_visual(staged,dest,source)
         meta={'source':'microphone-flex/microphone-flex.kicad_pcb','source_sha256':source_hash,
               'orientation':orientation,'module_population':1,'physical_fit_verified':False,'visual_export':visual,
+              'side_module_direction':'downward' if orientation!='up' else 'upward',
               'module_support_holes':[ref for ref in ('H3','H4','H5','H6','H7','H8') if ref in parts],
               'footprints':{fp.GetReference():{'xy':list(map(float,p.ToMM(fp.GetPosition()))),
                   'angle':fp.GetOrientationDegrees(),

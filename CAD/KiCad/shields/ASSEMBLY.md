@@ -17,6 +17,10 @@ Test headers are individual gold 1x1 2.54mm pins: 26 backplane, 3 adapter,
 three green supply indicators and five yellow tone indicators.
 
 Build six microphone holders using the existing violet MAX9814 modules.
+The current flex side modules hang below the PCB after a 180-degree turn
+about the socket insertion axis. J2/J3 pads are now 1=GND, 2=VDD, 3=GAIN,
+4=MICOUT, 5=AR, matching M1. Use the updated carrier routing; the older
+upright-side pin mapping is different. M1 remains the upward option.
 For the current microphone flex holder, use JP1/JP2 removable 1x03, 2.54mm
 selectors, each with one shunt. JP1: 1-2 = 50dB, 2-3 = 40dB, open = 60dB.
 JP2: 1-2 = 1:500, 2-3 = 1:2000, open = 1:4000. Initial assembly is JP1 2-3

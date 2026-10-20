@@ -1,5 +1,14 @@
 # Microphone holder Rev C — left, right or upward
 
+## Side modules hang down — 2026-10-20
+
+J2 and J3 modules are turned 180 degrees about the horizontal socket insertion
+axis, so their bodies hang below the carrier PCB. M1 remains upward.
+The socket footprints and all other component positions are unchanged.
+This turn reverses the module's five-pin order along each side socket;
+J2/J3 are rewired and the carrier is rerouted to match. Do not use the earlier
+side-socket pin mapping with this orientation.
+
 ## User-approved placement — 2026-10-20
 
 The routed board follows the saved microphone-flex-placed layout exactly:
@@ -50,7 +59,7 @@ the signal captions are plain text, not electrical labels. Dots mark joined
 wires; crossings without dots are separate.
 
 The three socket symbols align pins by signal for easier tracing. Their
-physical pad numbers are retained, including the reversed J2/J3 numbering.
+physical pad numbers are retained, including the downward J2/J3 mapping.
 J1 also groups its pins by signal rather than physical order. Fit one module
 only. Component references, values, footprints, mounting holes, and electrical
 connections follow the current source schematic and PCB.
@@ -89,8 +98,8 @@ the actual imperial profile/T-nuts before selecting frame fixings.
 | Position | Socket | Module support |
 | --- | --- | --- |
 | Up / position 3 | M1, vertical 1×5 socket | Separate retention; no PCB support holes |
-| Left / position 1 | J2, horizontal 1×5 socket | Separate retention; no PCB support holes |
-| Right / position 2 | J3, opposing horizontal 1×5 socket | Separate retention; no PCB support holes |
+| Left / down / position 1 | J2, horizontal 1×5 socket | Separate retention; no PCB support holes |
+| Right / down / position 2 | J3, opposing horizontal 1×5 socket | Separate retention; no PCB support holes |
 
 All three socket rows carry the same five signals. **Fit exactly one module.**
 The gain and A/R settings use the removable selectors above. The supply filter,
@@ -99,15 +108,16 @@ J1 remains GND / +5V / OUT. SMD parts remain
 on the front. Socket rows may all be populated, but fit only one module.
 Do not force a module into a socket of unverified geometry.
 
-The side sockets' **physical pad order is reversed** relative to M1:
+With the side modules hanging down, all three sockets have the same physical
+pad-to-signal mapping:
 
 | Physical socket pad | M1 up | J2 left / J3 right |
 | --- | --- | --- |
-| 1 | GND | AR |
-| 2 | Vdd | Out |
+| 1 | GND | GND |
+| 2 | Vdd | Vdd |
 | 3 | Gain | Gain |
-| 4 | Out | Vdd |
-| 5 | AR | GND |
+| 4 | Out | Out |
+| 5 | AR | AR |
 
 This follows the rotations of the original module, rather than assuming
 pin-1-to-pin-1 geometry for a right-angle socket. Independent checks compare
@@ -117,8 +127,10 @@ the holder component face. The side module underside is 2.54 mm outside the
 socket mouth; the existing 6 mm pin projection gives 3.46 mm nominal insertion.
 Purchased sockets, header seating and the actual violet module must be measured.
 
-The side module rises to approximately 26.9 mm above the holder underside,
-before the separate 5 mm frame gap. The earlier reference study used two
+The downward side module extends nominally 22.733 mm below the carrier's
+component face (21.133 mm below its underside). The CAD model clears the
+solid carrier envelope; physical installation and frame clearance still
+require checking. The earlier reference study used two
 insulating arms at its M2 mounting holes, 10.033 mm apart. These arms are
 not installed in the current user placement.
 The four arm STL files in `3dmodels/` are **fitting prototypes**, with 2.2 mm
@@ -151,13 +163,14 @@ Run from the repository root:
 
 ```powershell
 & 'C:/Program Files/KiCad/9.0/bin/python.exe' CAD/KiCad/shields/scripts/microphone_flex.py
+& 'C:/Program Files/FreeCAD 1.0/bin/python.exe' CAD/KiCad/shields/microphone-flex/build_down_modules.py
 & 'C:/Program Files/KiCad/9.0/bin/python.exe' CAD/KiCad/shields/scripts/route.py --only microphone-flex --preserve-netclasses --jar tmp/shields-tools/freerouting-2.4.1.jar --work tmp/microphone-flex-route
 & 'C:/Program Files/KiCad/9.0/bin/python.exe' CAD/KiCad/shields/microphone-flex/check_layout.py
 & 'C:/Program Files/KiCad/9.0/bin/python.exe' CAD/KiCad/shields/microphone-flex/export_variants.py
 & 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python-exit-code 1 --python CAD/KiCad/shields/assembly-3d/update_visual_geometry.py -- --only=shield-configurations.blend --render
 ```
 
-For a newly edited placement, start at the routing command; the first command
+For a newly edited placement, rebuild the downward models before routing; the first command
 recreates the staging board from the generator's recorded placement. The final
 command refreshes meshes in place while retaining scene edits and placements.
 
@@ -165,7 +178,9 @@ command refreshes meshes in place while retaining scene edits and placements.
 all 38 connected pins agree between the native schematic, circuit manifest
 and PCB. Slot geometry and spacing, side pin polarity, and contact alignment
 are independently checked. `support-model-validation.json` describes only the
-older reference support solids, not the current mounting arrangement. `variant-validation.json` and
+older reference support solids, not the current mounting arrangement. The
+side-down-validation.json report verifies the current module transforms,
+negative Z extent and absence of intersection with the carrier envelope. `variant-validation.json` and
 the assembly's `body-scenes-validation.json` record source/output hashes.
 Simulation and CAD checks do not establish physical fit, acoustic performance,
 vibration isolation or mechanical strength. No fabrication release is claimed.

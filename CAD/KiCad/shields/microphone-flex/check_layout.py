@@ -83,7 +83,7 @@ def main():
         assert pad.GetDrillShape()==p.PAD_DRILL_SHAPE_OBLONG
     assert p.ToMM(parts['H2'].GetPosition().y-parts['H1'].GetPosition().y)==50
     # Independent source pad geometry and physical socket row comparison.
-    meta=json.loads((ROOT/'support-model-validation.json').read_text())
+    meta=json.loads((ROOT/'side-down-validation.json').read_text())
     source=p.LoadBoard(str(ROOT.parent/'max9814-reference/max9814-reference.kicad_pcb'))
     src=next(fp for fp in source.GetFootprints() if fp.GetReference()=='J2')
     labels=['GND','VDD','GAIN','MICOUT','AR']
@@ -91,14 +91,11 @@ def main():
     for side,ref in [('left','J2'),('right','J3')]:
         transform=meta[side];rotation=transform['module_rotation'];translation=transform['module_translation_mm']
         targets={pad.GetNumber():pad for pad in parts[ref].Pads()}
-        baseline_y={'J2':74,'J3':84.16}[ref]
-        delta_y=p.ToMM(parts[ref].GetPosition().y)-baseline_y
         for pad in src.Pads():
             pin=int(pad.GetNumber());x,y=p.ToMM(pad.GetPosition())
             vector=[x-50,-(y-50),0]
             pos=[sum(rotation[i][j]*vector[j] for j in range(3))+translation[i] for i in range(3)]
-            pos[1]-=delta_y
-            target=targets[str(6-pin)];tx,ty=p.ToMM(target.GetPosition())
+            target=targets[str(pin)];tx,ty=p.ToMM(target.GetPosition())
             # Socket mating axis is X. The purchased library proxy puts it at
             # 1.27 mm above the carrier component face; compare row Y and Z.
             error=math.hypot(pos[1]+ty,pos[2]-1.27);max_error=max(max_error,error)
@@ -111,6 +108,7 @@ def main():
             'approved_placement_retained':placement(board)==approved,
             'footprints_in_approved_placement':len(approved),
             'module_support_holes':[],
+            'side_module_orientation':'downward / 180 degrees about socket insertion axis',
             'selectors':{'JP1':{'1-2':'50dB','2-3':'40dB','open':'60dB','initial':'2-3'},
                          'JP2':{'1-2':'1:500','2-3':'1:2000','open':'1:4000','initial':'1-2'}},
             'population':'ONE module only','physical_fit_verified':False}

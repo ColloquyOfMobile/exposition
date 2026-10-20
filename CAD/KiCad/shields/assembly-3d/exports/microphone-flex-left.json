@@ -1,15 +1,15 @@
 {
   "source": "microphone-flex/microphone-flex.kicad_pcb",
-  "source_sha256": "1e8ea5d1dbb78ffc52618212f4ed2d0091d2d19f586190dea68dc6e49da0329a",
+  "source_sha256": "1f1834e30b6ea1867cdfcd4531bcb005f3cd29d0d1901de400f896368020f081",
   "orientation": "left",
   "module_population": 1,
   "physical_fit_verified": false,
   "visual_export": {
     "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
     "source": "CAD/KiCad/shields/microphone-flex/microphone-flex.kicad_pcb",
-    "source_sha256": "1e8ea5d1dbb78ffc52618212f4ed2d0091d2d19f586190dea68dc6e49da0329a",
-    "visual_input_sha256": "67afb399f72aaccd70b71d27b05133ecf8736fd0d5c4a1a96fc3dcb3541616f6",
-    "native_vrml_sha256": "c6a908199218b546582d53c6f63304849056006c8b9a69f4ecd1805e2b2cde80",
+    "source_sha256": "1f1834e30b6ea1867cdfcd4531bcb005f3cd29d0d1901de400f896368020f081",
+    "visual_input_sha256": "b7985e79d9c4c2ee2bcce72b8b6aff78b53813d1fb06172fc477d198764a5f29",
+    "native_vrml_sha256": "25ae4974999af280345a09e3cd1a5a16528e643fa2837d43ebbccb5380e2842d",
     "models": [
       {
         "ref": "J1",
@@ -272,9 +272,9 @@
         ]
       },
       {
-        "ref": "VISUAL_MODULE_LEFT",
-        "file": "CAD/KiCad/shields/microphone-flex/3dmodels/module-left.step",
-        "sha256": "4b38ce1df8fbaadf59f4338d5943c08b78aebe6b2df1a11467af4d0926cd7ccd",
+        "ref": "C6",
+        "file": "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step",
+        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
         "offset_mm": [
           0.0,
           0.0,
@@ -292,9 +292,9 @@
         ]
       },
       {
-        "ref": "C6",
-        "file": "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step",
-        "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+        "ref": "VISUAL_MODULE_LEFT",
+        "file": "CAD/KiCad/shields/microphone-flex/3dmodels/module-left-down.step",
+        "sha256": "e9d5f248e0c94928c56fa0aa1045e93656c0d75ba2ad6385a7dfc44eb9b0c21c",
         "offset_mm": [
           0.0,
           0.0,
@@ -356,12 +356,13 @@
     "mesh_counts": {
       "models": 17,
       "board_meshes": 7,
-      "vertices": 28419,
-      "faces": 22797,
+      "vertices": 28583,
+      "faces": 22929,
       "materials": 17
     },
-    "glb_sha256": "3ab624db8296ae0baabd5f9e6ae1f23c6f81d1abc99d39c5e17ffb2bee1c7c4a"
+    "glb_sha256": "c296cb041469236b872b5ed21107f15c11f43802627efede06ca606bc31cf93a"
   },
+  "side_module_direction": "downward",
   "module_support_holes": [],
   "footprints": {
     "H2": {

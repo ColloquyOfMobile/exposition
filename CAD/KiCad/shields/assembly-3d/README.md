@@ -1,5 +1,11 @@
 # Shield assemblies — Blender / STEP reference
 
+Current side microphone modules (2026-10-20) hang below the carrier: left and
+right are rotated 180 degrees about their socket insertion axes. Their pin
+mapping and carrier routing are updated accordingly. The upward option and
+all component placements are retained. The comparison preview and current
+body scenes use these downward models.
+
 The 2026-10-20 user-approved microphone flex placement is the current source:
 the three sockets and electrical parts follow the saved placement, and only
 the two frame slots remain. Current views follow the relocated socket rows

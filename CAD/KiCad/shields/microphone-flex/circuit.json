@@ -348,23 +348,23 @@
     },
     {
       "ref": "J2",
-      "value": "LEFT / 1x05 RIGHT ANGLE",
+      "value": "LEFT / DOWNWARD MODULE",
       "footprint": "Shields:Flex_Socket_Left_Overhang",
       "pins": {
-        "1": "AR",
-        "2": "MICOUT",
+        "1": "GND",
+        "2": "VDD",
         "3": "GAIN",
-        "4": "VDD",
-        "5": "GND"
+        "4": "MICOUT",
+        "5": "AR"
       },
       "sheet": "module",
-      "description": "Alternative socket; AR / Out / Gain / Vdd / GND in physical pad order. One module only.",
+      "description": "Side module hangs below the PCB, rotated 180 degrees about the insertion axis. GND / Vdd / Gain / Out / AR in physical pad order. One module only.",
       "pin_names": {
-        "1": "AR",
-        "2": "MICOUT",
+        "1": "GND",
+        "2": "VDD",
         "3": "GAIN",
-        "4": "VDD",
-        "5": "GND"
+        "4": "MICOUT",
+        "5": "AR"
       },
       "pin_types": {
         "1": "passive",
@@ -382,23 +382,23 @@
     },
     {
       "ref": "J3",
-      "value": "RIGHT / 1x05 RIGHT ANGLE",
+      "value": "RIGHT / DOWNWARD MODULE",
       "footprint": "Shields:Flex_Socket_Right_Overhang",
       "pins": {
-        "1": "AR",
-        "2": "MICOUT",
+        "1": "GND",
+        "2": "VDD",
         "3": "GAIN",
-        "4": "VDD",
-        "5": "GND"
+        "4": "MICOUT",
+        "5": "AR"
       },
       "sheet": "module",
-      "description": "Alternative socket; AR / Out / Gain / Vdd / GND in physical pad order. One module only.",
+      "description": "Side module hangs below the PCB, rotated 180 degrees about the insertion axis. GND / Vdd / Gain / Out / AR in physical pad order. One module only.",
       "pin_names": {
-        "1": "AR",
-        "2": "MICOUT",
+        "1": "GND",
+        "2": "VDD",
         "3": "GAIN",
-        "4": "VDD",
-        "5": "GND"
+        "4": "MICOUT",
+        "5": "AR"
       },
       "pin_types": {
         "1": "passive",

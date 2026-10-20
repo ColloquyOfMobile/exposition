@@ -12,11 +12,12 @@
   ],
   "slot_spacing_mm": 50,
   "side_socket_contacts_checked": 10,
-  "maximum_contact_row_error_mm": 9.999999974752427e-07,
+  "maximum_contact_row_error_mm": 1.0000000116860974e-06,
   "schematic_pcb_connected_pin_parity": 38,
   "approved_placement_retained": true,
   "footprints_in_approved_placement": 16,
   "module_support_holes": [],
+  "side_module_orientation": "downward / 180 degrees about socket insertion axis",
   "selectors": {
     "JP1": {
       "1-2": "50dB",

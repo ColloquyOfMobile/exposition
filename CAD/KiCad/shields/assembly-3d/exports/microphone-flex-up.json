@@ -1,15 +1,15 @@
 {
   "source": "microphone-flex/microphone-flex.kicad_pcb",
-  "source_sha256": "1e8ea5d1dbb78ffc52618212f4ed2d0091d2d19f586190dea68dc6e49da0329a",
+  "source_sha256": "1f1834e30b6ea1867cdfcd4531bcb005f3cd29d0d1901de400f896368020f081",
   "orientation": "up",
   "module_population": 1,
   "physical_fit_verified": false,
   "visual_export": {
     "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
     "source": "CAD/KiCad/shields/microphone-flex/microphone-flex.kicad_pcb",
-    "source_sha256": "1e8ea5d1dbb78ffc52618212f4ed2d0091d2d19f586190dea68dc6e49da0329a",
-    "visual_input_sha256": "9470640bd08f97609a20d98e93380a6460814d04ad1c312c367d4a6940cf6908",
-    "native_vrml_sha256": "1a604cada6a4ea3e0bf3d33b8b7ca665629ab6e364bc783fde43c4af2ecfd04e",
+    "source_sha256": "1f1834e30b6ea1867cdfcd4531bcb005f3cd29d0d1901de400f896368020f081",
+    "visual_input_sha256": "0f83549563ff980fbdfd2d6de3d48e1a2f57cf1322db131d103d04024995d224",
+    "native_vrml_sha256": "a401665f4ff1a9f5ac37d3ec30cc02214a71bdaaf3127b28870a652bb4edcc00",
     "models": [
       {
         "ref": "J1",
@@ -356,12 +356,13 @@
     "mesh_counts": {
       "models": 17,
       "board_meshes": 7,
-      "vertices": 28419,
-      "faces": 22797,
+      "vertices": 28583,
+      "faces": 22929,
       "materials": 17
     },
-    "glb_sha256": "8c95194b9aaffd3b49b8a83caf181aee54b16d220272094088ce0718d29eaaa5"
+    "glb_sha256": "3ce0227904eb9d5cf69484f42440438bc4bc3f16ac60a734fcce291316424177"
   },
+  "side_module_direction": "upward",
   "module_support_holes": [],
   "footprints": {
     "H2": {

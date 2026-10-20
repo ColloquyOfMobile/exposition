@@ -1,16 +1,36 @@
 {
   "source": "microphone-flex/microphone-flex.kicad_pcb",
-  "source_sha256": "1e8ea5d1dbb78ffc52618212f4ed2d0091d2d19f586190dea68dc6e49da0329a",
+  "source_sha256": "1f1834e30b6ea1867cdfcd4531bcb005f3cd29d0d1901de400f896368020f081",
   "orientation": "right",
   "module_population": 1,
   "physical_fit_verified": false,
   "visual_export": {
     "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
     "source": "CAD/KiCad/shields/microphone-flex/microphone-flex.kicad_pcb",
-    "source_sha256": "1e8ea5d1dbb78ffc52618212f4ed2d0091d2d19f586190dea68dc6e49da0329a",
-    "visual_input_sha256": "1069bad2be2df2201bd66395bd26699a74b7728cc99858449d4dcaddccce0b81",
-    "native_vrml_sha256": "63b80dc8b62fabbc7d06bcc941f781226c54c12f2998eef9778cc86d64bf9b8b",
+    "source_sha256": "1f1834e30b6ea1867cdfcd4531bcb005f3cd29d0d1901de400f896368020f081",
+    "visual_input_sha256": "bcdaa96ce400eb9edb520b63c336011d76a7fc67b0d1bba1bef99622a44527ce",
+    "native_vrml_sha256": "4649139833634c8001fce259e22e98bf327d8a6c3d19692a282c9f05a16f9081",
     "models": [
+      {
+        "ref": "VISUAL_MODULE_RIGHT",
+        "file": "CAD/KiCad/shields/microphone-flex/3dmodels/module-right-down.step",
+        "sha256": "35c3427c1d0ad63d4cba08ee4f1ae1e785c754889679158ba606c4c77d15299a",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
       {
         "ref": "J1",
         "file": "${KICAD9_3DMODEL_DIR}/Connector_JST.3dshapes/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.step",
@@ -252,26 +272,6 @@
         ]
       },
       {
-        "ref": "VISUAL_MODULE_RIGHT",
-        "file": "CAD/KiCad/shields/microphone-flex/3dmodels/module-right.step",
-        "sha256": "bd9ccd8d65cede99a476e45e748098f01e4332eedb612db3ed9e3fcf319d122b",
-        "offset_mm": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "rotation_deg": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
-      },
-      {
         "ref": "TP2",
         "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
         "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
@@ -356,12 +356,13 @@
     "mesh_counts": {
       "models": 17,
       "board_meshes": 7,
-      "vertices": 28419,
-      "faces": 22797,
+      "vertices": 28583,
+      "faces": 22929,
       "materials": 17
     },
-    "glb_sha256": "f50b92b1d5f7bf0d007538d8580a208f2dcd5fec59eb09c851122a152079674d"
+    "glb_sha256": "d70fc6a5f8fc0ae71949650a3ccc8846134ffeaf2b0c795ff2b4716fa082eac7"
   },
+  "side_module_direction": "downward",
   "module_support_holes": [],
   "footprints": {
     "H2": {

@@ -553,7 +553,7 @@
 				)
 			)
 		)
-		(property "Value" "LEFT / 1x05 RIGHT ANGLE"
+		(property "Value" "LEFT / DOWNWARD MODULE"
 			(at -4.38 12.93 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -1258,7 +1258,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 2 "AR")
+			(net 4 "GND")
 			(uuid "837bed07-2b9e-44f2-9096-3c6e8a24f120")
 		)
 		(pad "2" thru_hole circle
@@ -1267,7 +1267,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 5 "MICOUT")
+			(net 7 "VDD")
 			(uuid "69f01e16-440e-43bf-aabb-1090eea7b7ff")
 		)
 		(pad "3" thru_hole circle
@@ -1285,7 +1285,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 7 "VDD")
+			(net 5 "MICOUT")
 			(uuid "f75a4c65-a24b-466f-b22d-fbf17dfadb00")
 		)
 		(pad "5" thru_hole circle
@@ -1294,7 +1294,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 4 "GND")
+			(net 2 "AR")
 			(uuid "fa1bd104-98b9-4cbc-8da2-bad3ccea5605")
 		)
 		(embedded_fonts no)
@@ -2176,7 +2176,7 @@
 				)
 			)
 		)
-		(property "Value" "RIGHT / 1x05 RIGHT ANGLE"
+		(property "Value" "RIGHT / DOWNWARD MODULE"
 			(at -4.38 12.93 180)
 			(layer "F.Fab")
 			(hide yes)
@@ -2881,7 +2881,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 2 "AR")
+			(net 4 "GND")
 			(uuid "4b0aa8f8-50ec-4e52-8ffb-3218e98dc79c")
 		)
 		(pad "2" thru_hole circle
@@ -2890,7 +2890,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 5 "MICOUT")
+			(net 7 "VDD")
 			(uuid "886c5c89-b774-46d7-b8ca-e429263f438a")
 		)
 		(pad "3" thru_hole circle
@@ -2908,7 +2908,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 7 "VDD")
+			(net 5 "MICOUT")
 			(uuid "1009be19-4f99-4451-a0f9-8c5ce684b519")
 		)
 		(pad "5" thru_hole circle
@@ -2917,7 +2917,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 4 "GND")
+			(net 2 "AR")
 			(uuid "e947995b-dd41-4a06-8998-f502eddf2266")
 		)
 		(embedded_fonts no)

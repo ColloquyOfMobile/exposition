@@ -1,0 +1,72 @@
+{
+  "left": {
+    "module_rotation": [
+      [
+        0,
+        0,
+        -1
+      ],
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        1,
+        0,
+        0
+      ]
+    ],
+    "module_translation_mm": [
+      36.55,
+      -67.89099999999999,
+      -22.733
+    ],
+    "rotation_from_upright_degrees": 180,
+    "rotation_axis": "socket insertion axis / PCB X",
+    "socket_contact_height_mm": 1.27,
+    "z_bounds_relative_to_carrier_top_mm": [
+      -22.733000000001002,
+      2.6670000000004634
+    ],
+    "carrier_envelope_intersection_mm3": 0.0,
+    "module_support_holes": [],
+    "physical_fit_verified": false,
+    "model_sha256": "e9d5f248e0c94928c56fa0aa1045e93656c0d75ba2ad6385a7dfc44eb9b0c21c"
+  },
+  "right": {
+    "module_rotation": [
+      [
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        -1,
+        0
+      ],
+      [
+        1,
+        0,
+        0
+      ]
+    ],
+    "module_translation_mm": [
+      83.20999999999998,
+      -82.80900000000001,
+      -22.733
+    ],
+    "rotation_from_upright_degrees": 180,
+    "rotation_axis": "socket insertion axis / PCB X",
+    "socket_contact_height_mm": 1.27,
+    "z_bounds_relative_to_carrier_top_mm": [
+      -22.733000000001002,
+      2.6670000000004634
+    ],
+    "carrier_envelope_intersection_mm3": 0.0,
+    "module_support_holes": [],
+    "physical_fit_verified": false,
+    "model_sha256": "35c3427c1d0ad63d4cba08ee4f1ae1e785c754889679158ba606c4c77d15299a"
+  }
+}

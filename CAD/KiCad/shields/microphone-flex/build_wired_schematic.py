@@ -125,7 +125,7 @@ def main():
     text('01  HARNESS & FILTER', 8, 23, 1.5, True)
     text('02  THREE ALTERNATIVE SOCKETS - SHARED SIGNALS', 61, 17, 1.5, True)
     rows = dict(VDD=40, GAIN=48, AR=56, MICOUT=64, GND=72)
-    for ref, x, caption in [('M1', 72, 'UP / vertical'), ('J2', 103, 'LEFT / right angle'), ('J3', 134, 'RIGHT / right angle')]:
+    for ref, x, caption in [('M1', 72, 'UP / vertical'), ('J2', 103, 'LEFT / module below PCB'), ('J3', 134, 'RIGHT / module below PCB')]:
         pins = place(ref, x, 27)
         text(caption, x-10, 24)
         for pin, (px, py) in pins.items():

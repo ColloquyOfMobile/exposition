@@ -3,7 +3,7 @@
   "physical_fit_verified": false,
   "files": {
     "shield-configurations.blend": {
-      "sha256": "a5abb141b739a9d61e68c896b034b0300238bf041d069110f9d61e1af831b755",
+      "sha256": "37506af0b0161f233e293f48bf7f5b28e906a9bf508a2ce88df5318dfa18878a",
       "reopened": true,
       "placements_and_unrelated_objects_preserved": true,
       "boards": [
@@ -13355,42 +13355,23 @@
               "geometry_material_sha256": "1348a98a014e0679868e839e8c885eaf7e3a34fae2ae4d83ddbbe73da829320f"
             },
             {
-              "vertices": 871,
-              "faces": 939,
+              "vertices": 1767,
+              "faces": 1780,
               "bounds_mm": [
                 [
-                  44.0,
-                  76.0
+                  45.72,
+                  74.0817
                 ],
                 [
-                  -112.0,
-                  -50.0
+                  -101.625,
+                  -53.03
                 ],
                 [
-                  -0.0125,
-                  -0.0125
+                  1.6,
+                  1.6
                 ]
               ],
-              "geometry_material_sha256": "1f3617cfa07d24726f594083350d7f24e7f3846045d99a8dc1b2f2ac7b8ebcdf"
-            },
-            {
-              "vertices": 2902,
-              "faces": 2587,
-              "bounds_mm": [
-                [
-                  44.5,
-                  75.5
-                ],
-                [
-                  -111.5,
-                  -50.5
-                ],
-                [
-                  0.0,
-                  0.0
-                ]
-              ],
-              "geometry_material_sha256": "25ad37c18c23175f8d4be823710c53c955a498c05a7178f0e20e7a11811c82eb"
+              "geometry_material_sha256": "17ee006d0add13abb1630b01d4f3f6a5117b8e1f5fbb39dcd9da98dbddd3b9e3"
             },
             {
               "vertices": 240,
@@ -13412,23 +13393,23 @@
               "geometry_material_sha256": "289fde7ad3281881b5380da70a80e149e19863c27db53bb2e3decaa79a4d0ea1"
             },
             {
-              "vertices": 4724,
-              "faces": 4104,
+              "vertices": 871,
+              "faces": 939,
               "bounds_mm": [
                 [
-                  28.455,
-                  42.555
+                  44.0,
+                  76.0
                 ],
                 [
-                  -82.369,
-                  -68.272
+                  -112.0,
+                  -50.0
                 ],
                 [
-                  1.473,
-                  26.873
+                  -0.0125,
+                  -0.0125
                 ]
               ],
-              "geometry_material_sha256": "30142b24b77684490d89c3970e621c4e0fe76340c9362fa056c9cb93c722ed31"
+              "geometry_material_sha256": "35bfd07926e3fb1f735123415548c6bef0a33a865f9db435256e2b73fa136455"
             },
             {
               "vertices": 1068,
@@ -13448,6 +13429,44 @@
                 ]
               ],
               "geometry_material_sha256": "37bf456a45fef43e35155a550b417cda146a0ffb4494ecbdf04eefce2f767912"
+            },
+            {
+              "vertices": 4724,
+              "faces": 4104,
+              "bounds_mm": [
+                [
+                  28.455,
+                  42.555
+                ],
+                [
+                  -81.988,
+                  -67.891
+                ],
+                [
+                  -21.133,
+                  4.267
+                ]
+              ],
+              "geometry_material_sha256": "412d4c819df2363888b97b9b6d18bdf5b37e30d4efbe28f09b88d027ec68b648"
+            },
+            {
+              "vertices": 3049,
+              "faces": 2716,
+              "bounds_mm": [
+                [
+                  44.5,
+                  75.5
+                ],
+                [
+                  -111.5,
+                  -50.5
+                ],
+                [
+                  0.0,
+                  0.0
+                ]
+              ],
+              "geometry_material_sha256": "48b90aae54f6f9abc825e541377435fd4ffa6c736f5d95d7cb4ac71fdc6a4ffb"
             },
             {
               "vertices": 128,
@@ -13488,8 +13507,8 @@
               "geometry_material_sha256": "52ab87e528c894d34fd3470f298481beede5879b470c0efaf6ab42afe5805c87"
             },
             {
-              "vertices": 5072,
-              "faces": 2672,
+              "vertices": 1120,
+              "faces": 1212,
               "bounds_mm": [
                 [
                   44.0,
@@ -13500,11 +13519,11 @@
                   -50.0
                 ],
                 [
-                  0.0125,
-                  1.5875
+                  1.6125,
+                  1.6125
                 ]
               ],
-              "geometry_material_sha256": "606c541109a2f637aafa81e49fd37511d30ba116fa446b529e8858eb67869d5a"
+              "geometry_material_sha256": "68898330c2a57fa3c555f8cb6e64a6b3db4a9dc7421a7699b0014b588b0ec77c"
             },
             {
               "vertices": 4635,
@@ -13524,25 +13543,6 @@
                 ]
               ],
               "geometry_material_sha256": "69a455ceea4e6d3fe1d5553da75cf3184738373af5372cffee495543d2cfaa70"
-            },
-            {
-              "vertices": 1764,
-              "faces": 1777,
-              "bounds_mm": [
-                [
-                  45.72,
-                  74.0817
-                ],
-                [
-                  -101.625,
-                  -53.03
-                ],
-                [
-                  1.6,
-                  1.6
-                ]
-              ],
-              "geometry_material_sha256": "9910d2625ec4ec5bd6bd534cd4aa99afca85231bfa7a87989dca46ae5c7be8d3"
             },
             {
               "vertices": 288,
@@ -13659,6 +13659,25 @@
               "geometry_material_sha256": "c3f3139fb076c26b733f182f1048c2d4f5e186f4435f305ed51440fbd7d88d7b"
             },
             {
+              "vertices": 5072,
+              "faces": 2672,
+              "bounds_mm": [
+                [
+                  44.0,
+                  76.0
+                ],
+                [
+                  -112.0,
+                  -50.0
+                ],
+                [
+                  0.0125,
+                  1.5875
+                ]
+              ],
+              "geometry_material_sha256": "ccda1a088680b8ad35a301fd1e70a0299b56035d5802b3ac2a961a60e5a9eebb"
+            },
+            {
               "vertices": 336,
               "faces": 168,
               "bounds_mm": [
@@ -13695,25 +13714,6 @@
                 ]
               ],
               "geometry_material_sha256": "dddb3aca36527438a99bda6169859a1bdbef36286a35b0da235b8641e875f8ec"
-            },
-            {
-              "vertices": 1120,
-              "faces": 1212,
-              "bounds_mm": [
-                [
-                  44.0,
-                  76.0
-                ],
-                [
-                  -112.0,
-                  -50.0
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "e35dd99f7532822958f271b9dbc4a4185ed972fd496d40716474aee855c092ce"
             },
             {
               "vertices": 296,
@@ -13821,42 +13821,42 @@
               "geometry_material_sha256": "1348a98a014e0679868e839e8c885eaf7e3a34fae2ae4d83ddbbe73da829320f"
             },
             {
-              "vertices": 871,
-              "faces": 939,
+              "vertices": 4724,
+              "faces": 4104,
               "bounds_mm": [
                 [
-                  44.0,
-                  76.0
+                  77.205,
+                  91.305
                 ],
                 [
-                  -112.0,
-                  -50.0
+                  -82.809,
+                  -68.712
                 ],
                 [
-                  -0.0125,
-                  -0.0125
+                  -21.133,
+                  4.267
                 ]
               ],
-              "geometry_material_sha256": "1f3617cfa07d24726f594083350d7f24e7f3846045d99a8dc1b2f2ac7b8ebcdf"
+              "geometry_material_sha256": "1511cc807a97bdb6507659b4c919a25325f857d49d38cba900edf7b0d770578c"
             },
             {
-              "vertices": 2902,
-              "faces": 2587,
+              "vertices": 1767,
+              "faces": 1780,
               "bounds_mm": [
                 [
-                  44.5,
-                  75.5
+                  45.72,
+                  74.0817
                 ],
                 [
-                  -111.5,
-                  -50.5
+                  -101.625,
+                  -53.03
                 ],
                 [
-                  0.0,
-                  0.0
+                  1.6,
+                  1.6
                 ]
               ],
-              "geometry_material_sha256": "25ad37c18c23175f8d4be823710c53c955a498c05a7178f0e20e7a11811c82eb"
+              "geometry_material_sha256": "17ee006d0add13abb1630b01d4f3f6a5117b8e1f5fbb39dcd9da98dbddd3b9e3"
             },
             {
               "vertices": 240,
@@ -13878,6 +13878,25 @@
               "geometry_material_sha256": "289fde7ad3281881b5380da70a80e149e19863c27db53bb2e3decaa79a4d0ea1"
             },
             {
+              "vertices": 871,
+              "faces": 939,
+              "bounds_mm": [
+                [
+                  44.0,
+                  76.0
+                ],
+                [
+                  -112.0,
+                  -50.0
+                ],
+                [
+                  -0.0125,
+                  -0.0125
+                ]
+              ],
+              "geometry_material_sha256": "35bfd07926e3fb1f735123415548c6bef0a33a865f9db435256e2b73fa136455"
+            },
+            {
               "vertices": 1068,
               "faces": 768,
               "bounds_mm": [
@@ -13897,23 +13916,23 @@
               "geometry_material_sha256": "37bf456a45fef43e35155a550b417cda146a0ffb4494ecbdf04eefce2f767912"
             },
             {
-              "vertices": 4724,
-              "faces": 4104,
+              "vertices": 3049,
+              "faces": 2716,
               "bounds_mm": [
                 [
-                  77.205,
-                  91.305
+                  44.5,
+                  75.5
                 ],
                 [
-                  -82.428,
-                  -68.331
+                  -111.5,
+                  -50.5
                 ],
                 [
-                  1.473,
-                  26.873
+                  0.0,
+                  0.0
                 ]
               ],
-              "geometry_material_sha256": "3f37822652cad3ca42eecd46513a70b0dd9e9c6a461f554b046907cd88faae64"
+              "geometry_material_sha256": "48b90aae54f6f9abc825e541377435fd4ffa6c736f5d95d7cb4ac71fdc6a4ffb"
             },
             {
               "vertices": 128,
@@ -13954,8 +13973,8 @@
               "geometry_material_sha256": "52ab87e528c894d34fd3470f298481beede5879b470c0efaf6ab42afe5805c87"
             },
             {
-              "vertices": 5072,
-              "faces": 2672,
+              "vertices": 1120,
+              "faces": 1212,
               "bounds_mm": [
                 [
                   44.0,
@@ -13966,11 +13985,11 @@
                   -50.0
                 ],
                 [
-                  0.0125,
-                  1.5875
+                  1.6125,
+                  1.6125
                 ]
               ],
-              "geometry_material_sha256": "606c541109a2f637aafa81e49fd37511d30ba116fa446b529e8858eb67869d5a"
+              "geometry_material_sha256": "68898330c2a57fa3c555f8cb6e64a6b3db4a9dc7421a7699b0014b588b0ec77c"
             },
             {
               "vertices": 4635,
@@ -13990,25 +14009,6 @@
                 ]
               ],
               "geometry_material_sha256": "69a455ceea4e6d3fe1d5553da75cf3184738373af5372cffee495543d2cfaa70"
-            },
-            {
-              "vertices": 1764,
-              "faces": 1777,
-              "bounds_mm": [
-                [
-                  45.72,
-                  74.0817
-                ],
-                [
-                  -101.625,
-                  -53.03
-                ],
-                [
-                  1.6,
-                  1.6
-                ]
-              ],
-              "geometry_material_sha256": "9910d2625ec4ec5bd6bd534cd4aa99afca85231bfa7a87989dca46ae5c7be8d3"
             },
             {
               "vertices": 288,
@@ -14125,6 +14125,25 @@
               "geometry_material_sha256": "c3f3139fb076c26b733f182f1048c2d4f5e186f4435f305ed51440fbd7d88d7b"
             },
             {
+              "vertices": 5072,
+              "faces": 2672,
+              "bounds_mm": [
+                [
+                  44.0,
+                  76.0
+                ],
+                [
+                  -112.0,
+                  -50.0
+                ],
+                [
+                  0.0125,
+                  1.5875
+                ]
+              ],
+              "geometry_material_sha256": "ccda1a088680b8ad35a301fd1e70a0299b56035d5802b3ac2a961a60e5a9eebb"
+            },
+            {
               "vertices": 336,
               "faces": 168,
               "bounds_mm": [
@@ -14161,25 +14180,6 @@
                 ]
               ],
               "geometry_material_sha256": "dddb3aca36527438a99bda6169859a1bdbef36286a35b0da235b8641e875f8ec"
-            },
-            {
-              "vertices": 1120,
-              "faces": 1212,
-              "bounds_mm": [
-                [
-                  44.0,
-                  76.0
-                ],
-                [
-                  -112.0,
-                  -50.0
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "e35dd99f7532822958f271b9dbc4a4185ed972fd496d40716474aee855c092ce"
             },
             {
               "vertices": 296,
@@ -14287,42 +14287,23 @@
               "geometry_material_sha256": "1348a98a014e0679868e839e8c885eaf7e3a34fae2ae4d83ddbbe73da829320f"
             },
             {
-              "vertices": 871,
-              "faces": 939,
+              "vertices": 1767,
+              "faces": 1780,
               "bounds_mm": [
                 [
-                  44.0,
-                  76.0
+                  45.72,
+                  74.0817
                 ],
                 [
-                  -112.0,
-                  -50.0
+                  -101.625,
+                  -53.03
                 ],
                 [
-                  -0.0125,
-                  -0.0125
+                  1.6,
+                  1.6
                 ]
               ],
-              "geometry_material_sha256": "1f3617cfa07d24726f594083350d7f24e7f3846045d99a8dc1b2f2ac7b8ebcdf"
-            },
-            {
-              "vertices": 2902,
-              "faces": 2587,
-              "bounds_mm": [
-                [
-                  44.5,
-                  75.5
-                ],
-                [
-                  -111.5,
-                  -50.5
-                ],
-                [
-                  0.0,
-                  0.0
-                ]
-              ],
-              "geometry_material_sha256": "25ad37c18c23175f8d4be823710c53c955a498c05a7178f0e20e7a11811c82eb"
+              "geometry_material_sha256": "17ee006d0add13abb1630b01d4f3f6a5117b8e1f5fbb39dcd9da98dbddd3b9e3"
             },
             {
               "vertices": 240,
@@ -14363,6 +14344,25 @@
               "geometry_material_sha256": "346e02466fba5ef627e155bee5e35c410b61329f10344fed0588fbfa69ff91bb"
             },
             {
+              "vertices": 871,
+              "faces": 939,
+              "bounds_mm": [
+                [
+                  44.0,
+                  76.0
+                ],
+                [
+                  -112.0,
+                  -50.0
+                ],
+                [
+                  -0.0125,
+                  -0.0125
+                ]
+              ],
+              "geometry_material_sha256": "35bfd07926e3fb1f735123415548c6bef0a33a865f9db435256e2b73fa136455"
+            },
+            {
               "vertices": 1068,
               "faces": 768,
               "bounds_mm": [
@@ -14380,6 +14380,25 @@
                 ]
               ],
               "geometry_material_sha256": "37bf456a45fef43e35155a550b417cda146a0ffb4494ecbdf04eefce2f767912"
+            },
+            {
+              "vertices": 3049,
+              "faces": 2716,
+              "bounds_mm": [
+                [
+                  44.5,
+                  75.5
+                ],
+                [
+                  -111.5,
+                  -50.5
+                ],
+                [
+                  0.0,
+                  0.0
+                ]
+              ],
+              "geometry_material_sha256": "48b90aae54f6f9abc825e541377435fd4ffa6c736f5d95d7cb4ac71fdc6a4ffb"
             },
             {
               "vertices": 128,
@@ -14420,8 +14439,8 @@
               "geometry_material_sha256": "52ab87e528c894d34fd3470f298481beede5879b470c0efaf6ab42afe5805c87"
             },
             {
-              "vertices": 5072,
-              "faces": 2672,
+              "vertices": 1120,
+              "faces": 1212,
               "bounds_mm": [
                 [
                   44.0,
@@ -14432,11 +14451,11 @@
                   -50.0
                 ],
                 [
-                  0.0125,
-                  1.5875
+                  1.6125,
+                  1.6125
                 ]
               ],
-              "geometry_material_sha256": "606c541109a2f637aafa81e49fd37511d30ba116fa446b529e8858eb67869d5a"
+              "geometry_material_sha256": "68898330c2a57fa3c555f8cb6e64a6b3db4a9dc7421a7699b0014b588b0ec77c"
             },
             {
               "vertices": 4635,
@@ -14456,25 +14475,6 @@
                 ]
               ],
               "geometry_material_sha256": "69a455ceea4e6d3fe1d5553da75cf3184738373af5372cffee495543d2cfaa70"
-            },
-            {
-              "vertices": 1764,
-              "faces": 1777,
-              "bounds_mm": [
-                [
-                  45.72,
-                  74.0817
-                ],
-                [
-                  -101.625,
-                  -53.03
-                ],
-                [
-                  1.6,
-                  1.6
-                ]
-              ],
-              "geometry_material_sha256": "9910d2625ec4ec5bd6bd534cd4aa99afca85231bfa7a87989dca46ae5c7be8d3"
             },
             {
               "vertices": 288,
@@ -14591,6 +14591,25 @@
               "geometry_material_sha256": "c3f3139fb076c26b733f182f1048c2d4f5e186f4435f305ed51440fbd7d88d7b"
             },
             {
+              "vertices": 5072,
+              "faces": 2672,
+              "bounds_mm": [
+                [
+                  44.0,
+                  76.0
+                ],
+                [
+                  -112.0,
+                  -50.0
+                ],
+                [
+                  0.0125,
+                  1.5875
+                ]
+              ],
+              "geometry_material_sha256": "ccda1a088680b8ad35a301fd1e70a0299b56035d5802b3ac2a961a60e5a9eebb"
+            },
+            {
               "vertices": 336,
               "faces": 168,
               "bounds_mm": [
@@ -14627,25 +14646,6 @@
                 ]
               ],
               "geometry_material_sha256": "dddb3aca36527438a99bda6169859a1bdbef36286a35b0da235b8641e875f8ec"
-            },
-            {
-              "vertices": 1120,
-              "faces": 1212,
-              "bounds_mm": [
-                [
-                  44.0,
-                  76.0
-                ],
-                [
-                  -112.0,
-                  -50.0
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "e35dd99f7532822958f271b9dbc4a4185ed972fd496d40716474aee855c092ce"
             },
             {
               "vertices": 296,
@@ -16912,42 +16912,23 @@
               "geometry_material_sha256": "1348a98a014e0679868e839e8c885eaf7e3a34fae2ae4d83ddbbe73da829320f"
             },
             {
-              "vertices": 871,
-              "faces": 939,
+              "vertices": 1767,
+              "faces": 1780,
               "bounds_mm": [
                 [
-                  44.0,
-                  76.0
+                  45.72,
+                  74.0817
                 ],
                 [
-                  -112.0,
-                  -50.0
+                  -101.625,
+                  -53.03
                 ],
                 [
-                  -0.0125,
-                  -0.0125
+                  1.6,
+                  1.6
                 ]
               ],
-              "geometry_material_sha256": "1f3617cfa07d24726f594083350d7f24e7f3846045d99a8dc1b2f2ac7b8ebcdf"
-            },
-            {
-              "vertices": 2902,
-              "faces": 2587,
-              "bounds_mm": [
-                [
-                  44.5,
-                  75.5
-                ],
-                [
-                  -111.5,
-                  -50.5
-                ],
-                [
-                  0.0,
-                  0.0
-                ]
-              ],
-              "geometry_material_sha256": "25ad37c18c23175f8d4be823710c53c955a498c05a7178f0e20e7a11811c82eb"
+              "geometry_material_sha256": "17ee006d0add13abb1630b01d4f3f6a5117b8e1f5fbb39dcd9da98dbddd3b9e3"
             },
             {
               "vertices": 240,
@@ -16969,23 +16950,23 @@
               "geometry_material_sha256": "289fde7ad3281881b5380da70a80e149e19863c27db53bb2e3decaa79a4d0ea1"
             },
             {
-              "vertices": 4724,
-              "faces": 4104,
+              "vertices": 871,
+              "faces": 939,
               "bounds_mm": [
                 [
-                  28.455,
-                  42.555
+                  44.0,
+                  76.0
                 ],
                 [
-                  -82.369,
-                  -68.272
+                  -112.0,
+                  -50.0
                 ],
                 [
-                  1.473,
-                  26.873
+                  -0.0125,
+                  -0.0125
                 ]
               ],
-              "geometry_material_sha256": "30142b24b77684490d89c3970e621c4e0fe76340c9362fa056c9cb93c722ed31"
+              "geometry_material_sha256": "35bfd07926e3fb1f735123415548c6bef0a33a865f9db435256e2b73fa136455"
             },
             {
               "vertices": 1068,
@@ -17005,6 +16986,44 @@
                 ]
               ],
               "geometry_material_sha256": "37bf456a45fef43e35155a550b417cda146a0ffb4494ecbdf04eefce2f767912"
+            },
+            {
+              "vertices": 4724,
+              "faces": 4104,
+              "bounds_mm": [
+                [
+                  28.455,
+                  42.555
+                ],
+                [
+                  -81.988,
+                  -67.891
+                ],
+                [
+                  -21.133,
+                  4.267
+                ]
+              ],
+              "geometry_material_sha256": "412d4c819df2363888b97b9b6d18bdf5b37e30d4efbe28f09b88d027ec68b648"
+            },
+            {
+              "vertices": 3049,
+              "faces": 2716,
+              "bounds_mm": [
+                [
+                  44.5,
+                  75.5
+                ],
+                [
+                  -111.5,
+                  -50.5
+                ],
+                [
+                  0.0,
+                  0.0
+                ]
+              ],
+              "geometry_material_sha256": "48b90aae54f6f9abc825e541377435fd4ffa6c736f5d95d7cb4ac71fdc6a4ffb"
             },
             {
               "vertices": 128,
@@ -17045,8 +17064,8 @@
               "geometry_material_sha256": "52ab87e528c894d34fd3470f298481beede5879b470c0efaf6ab42afe5805c87"
             },
             {
-              "vertices": 5072,
-              "faces": 2672,
+              "vertices": 1120,
+              "faces": 1212,
               "bounds_mm": [
                 [
                   44.0,
@@ -17057,11 +17076,11 @@
                   -50.0
                 ],
                 [
-                  0.0125,
-                  1.5875
+                  1.6125,
+                  1.6125
                 ]
               ],
-              "geometry_material_sha256": "606c541109a2f637aafa81e49fd37511d30ba116fa446b529e8858eb67869d5a"
+              "geometry_material_sha256": "68898330c2a57fa3c555f8cb6e64a6b3db4a9dc7421a7699b0014b588b0ec77c"
             },
             {
               "vertices": 4635,
@@ -17081,25 +17100,6 @@
                 ]
               ],
               "geometry_material_sha256": "69a455ceea4e6d3fe1d5553da75cf3184738373af5372cffee495543d2cfaa70"
-            },
-            {
-              "vertices": 1764,
-              "faces": 1777,
-              "bounds_mm": [
-                [
-                  45.72,
-                  74.0817
-                ],
-                [
-                  -101.625,
-                  -53.03
-                ],
-                [
-                  1.6,
-                  1.6
-                ]
-              ],
-              "geometry_material_sha256": "9910d2625ec4ec5bd6bd534cd4aa99afca85231bfa7a87989dca46ae5c7be8d3"
             },
             {
               "vertices": 288,
@@ -17216,6 +17216,25 @@
               "geometry_material_sha256": "c3f3139fb076c26b733f182f1048c2d4f5e186f4435f305ed51440fbd7d88d7b"
             },
             {
+              "vertices": 5072,
+              "faces": 2672,
+              "bounds_mm": [
+                [
+                  44.0,
+                  76.0
+                ],
+                [
+                  -112.0,
+                  -50.0
+                ],
+                [
+                  0.0125,
+                  1.5875
+                ]
+              ],
+              "geometry_material_sha256": "ccda1a088680b8ad35a301fd1e70a0299b56035d5802b3ac2a961a60e5a9eebb"
+            },
+            {
               "vertices": 336,
               "faces": 168,
               "bounds_mm": [
@@ -17252,25 +17271,6 @@
                 ]
               ],
               "geometry_material_sha256": "dddb3aca36527438a99bda6169859a1bdbef36286a35b0da235b8641e875f8ec"
-            },
-            {
-              "vertices": 1120,
-              "faces": 1212,
-              "bounds_mm": [
-                [
-                  44.0,
-                  76.0
-                ],
-                [
-                  -112.0,
-                  -50.0
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "e35dd99f7532822958f271b9dbc4a4185ed972fd496d40716474aee855c092ce"
             },
             {
               "vertices": 296,
@@ -17378,42 +17378,42 @@
               "geometry_material_sha256": "1348a98a014e0679868e839e8c885eaf7e3a34fae2ae4d83ddbbe73da829320f"
             },
             {
-              "vertices": 871,
-              "faces": 939,
+              "vertices": 4724,
+              "faces": 4104,
               "bounds_mm": [
                 [
-                  44.0,
-                  76.0
+                  77.205,
+                  91.305
                 ],
                 [
-                  -112.0,
-                  -50.0
+                  -82.809,
+                  -68.712
                 ],
                 [
-                  -0.0125,
-                  -0.0125
+                  -21.133,
+                  4.267
                 ]
               ],
-              "geometry_material_sha256": "1f3617cfa07d24726f594083350d7f24e7f3846045d99a8dc1b2f2ac7b8ebcdf"
+              "geometry_material_sha256": "1511cc807a97bdb6507659b4c919a25325f857d49d38cba900edf7b0d770578c"
             },
             {
-              "vertices": 2902,
-              "faces": 2587,
+              "vertices": 1767,
+              "faces": 1780,
               "bounds_mm": [
                 [
-                  44.5,
-                  75.5
+                  45.72,
+                  74.0817
                 ],
                 [
-                  -111.5,
-                  -50.5
+                  -101.625,
+                  -53.03
                 ],
                 [
-                  0.0,
-                  0.0
+                  1.6,
+                  1.6
                 ]
               ],
-              "geometry_material_sha256": "25ad37c18c23175f8d4be823710c53c955a498c05a7178f0e20e7a11811c82eb"
+              "geometry_material_sha256": "17ee006d0add13abb1630b01d4f3f6a5117b8e1f5fbb39dcd9da98dbddd3b9e3"
             },
             {
               "vertices": 240,
@@ -17435,6 +17435,25 @@
               "geometry_material_sha256": "289fde7ad3281881b5380da70a80e149e19863c27db53bb2e3decaa79a4d0ea1"
             },
             {
+              "vertices": 871,
+              "faces": 939,
+              "bounds_mm": [
+                [
+                  44.0,
+                  76.0
+                ],
+                [
+                  -112.0,
+                  -50.0
+                ],
+                [
+                  -0.0125,
+                  -0.0125
+                ]
+              ],
+              "geometry_material_sha256": "35bfd07926e3fb1f735123415548c6bef0a33a865f9db435256e2b73fa136455"
+            },
+            {
               "vertices": 1068,
               "faces": 768,
               "bounds_mm": [
@@ -17454,23 +17473,23 @@
               "geometry_material_sha256": "37bf456a45fef43e35155a550b417cda146a0ffb4494ecbdf04eefce2f767912"
             },
             {
-              "vertices": 4724,
-              "faces": 4104,
+              "vertices": 3049,
+              "faces": 2716,
               "bounds_mm": [
                 [
-                  77.205,
-                  91.305
+                  44.5,
+                  75.5
                 ],
                 [
-                  -82.428,
-                  -68.331
+                  -111.5,
+                  -50.5
                 ],
                 [
-                  1.473,
-                  26.873
+                  0.0,
+                  0.0
                 ]
               ],
-              "geometry_material_sha256": "3f37822652cad3ca42eecd46513a70b0dd9e9c6a461f554b046907cd88faae64"
+              "geometry_material_sha256": "48b90aae54f6f9abc825e541377435fd4ffa6c736f5d95d7cb4ac71fdc6a4ffb"
             },
             {
               "vertices": 128,
@@ -17511,8 +17530,8 @@
               "geometry_material_sha256": "52ab87e528c894d34fd3470f298481beede5879b470c0efaf6ab42afe5805c87"
             },
             {
-              "vertices": 5072,
-              "faces": 2672,
+              "vertices": 1120,
+              "faces": 1212,
               "bounds_mm": [
                 [
                   44.0,
@@ -17523,11 +17542,11 @@
                   -50.0
                 ],
                 [
-                  0.0125,
-                  1.5875
+                  1.6125,
+                  1.6125
                 ]
               ],
-              "geometry_material_sha256": "606c541109a2f637aafa81e49fd37511d30ba116fa446b529e8858eb67869d5a"
+              "geometry_material_sha256": "68898330c2a57fa3c555f8cb6e64a6b3db4a9dc7421a7699b0014b588b0ec77c"
             },
             {
               "vertices": 4635,
@@ -17547,25 +17566,6 @@
                 ]
               ],
               "geometry_material_sha256": "69a455ceea4e6d3fe1d5553da75cf3184738373af5372cffee495543d2cfaa70"
-            },
-            {
-              "vertices": 1764,
-              "faces": 1777,
-              "bounds_mm": [
-                [
-                  45.72,
-                  74.0817
-                ],
-                [
-                  -101.625,
-                  -53.03
-                ],
-                [
-                  1.6,
-                  1.6
-                ]
-              ],
-              "geometry_material_sha256": "9910d2625ec4ec5bd6bd534cd4aa99afca85231bfa7a87989dca46ae5c7be8d3"
             },
             {
               "vertices": 288,
@@ -17682,6 +17682,25 @@
               "geometry_material_sha256": "c3f3139fb076c26b733f182f1048c2d4f5e186f4435f305ed51440fbd7d88d7b"
             },
             {
+              "vertices": 5072,
+              "faces": 2672,
+              "bounds_mm": [
+                [
+                  44.0,
+                  76.0
+                ],
+                [
+                  -112.0,
+                  -50.0
+                ],
+                [
+                  0.0125,
+                  1.5875
+                ]
+              ],
+              "geometry_material_sha256": "ccda1a088680b8ad35a301fd1e70a0299b56035d5802b3ac2a961a60e5a9eebb"
+            },
+            {
               "vertices": 336,
               "faces": 168,
               "bounds_mm": [
@@ -17718,25 +17737,6 @@
                 ]
               ],
               "geometry_material_sha256": "dddb3aca36527438a99bda6169859a1bdbef36286a35b0da235b8641e875f8ec"
-            },
-            {
-              "vertices": 1120,
-              "faces": 1212,
-              "bounds_mm": [
-                [
-                  44.0,
-                  76.0
-                ],
-                [
-                  -112.0,
-                  -50.0
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "e35dd99f7532822958f271b9dbc4a4185ed972fd496d40716474aee855c092ce"
             },
             {
               "vertices": 296,
@@ -17844,42 +17844,23 @@
               "geometry_material_sha256": "1348a98a014e0679868e839e8c885eaf7e3a34fae2ae4d83ddbbe73da829320f"
             },
             {
-              "vertices": 871,
-              "faces": 939,
+              "vertices": 1767,
+              "faces": 1780,
               "bounds_mm": [
                 [
-                  44.0,
-                  76.0
+                  45.72,
+                  74.0817
                 ],
                 [
-                  -112.0,
-                  -50.0
+                  -101.625,
+                  -53.03
                 ],
                 [
-                  -0.0125,
-                  -0.0125
+                  1.6,
+                  1.6
                 ]
               ],
-              "geometry_material_sha256": "1f3617cfa07d24726f594083350d7f24e7f3846045d99a8dc1b2f2ac7b8ebcdf"
-            },
-            {
-              "vertices": 2902,
-              "faces": 2587,
-              "bounds_mm": [
-                [
-                  44.5,
-                  75.5
-                ],
-                [
-                  -111.5,
-                  -50.5
-                ],
-                [
-                  0.0,
-                  0.0
-                ]
-              ],
-              "geometry_material_sha256": "25ad37c18c23175f8d4be823710c53c955a498c05a7178f0e20e7a11811c82eb"
+              "geometry_material_sha256": "17ee006d0add13abb1630b01d4f3f6a5117b8e1f5fbb39dcd9da98dbddd3b9e3"
             },
             {
               "vertices": 240,
@@ -17920,6 +17901,25 @@
               "geometry_material_sha256": "346e02466fba5ef627e155bee5e35c410b61329f10344fed0588fbfa69ff91bb"
             },
             {
+              "vertices": 871,
+              "faces": 939,
+              "bounds_mm": [
+                [
+                  44.0,
+                  76.0
+                ],
+                [
+                  -112.0,
+                  -50.0
+                ],
+                [
+                  -0.0125,
+                  -0.0125
+                ]
+              ],
+              "geometry_material_sha256": "35bfd07926e3fb1f735123415548c6bef0a33a865f9db435256e2b73fa136455"
+            },
+            {
               "vertices": 1068,
               "faces": 768,
               "bounds_mm": [
@@ -17937,6 +17937,25 @@
                 ]
               ],
               "geometry_material_sha256": "37bf456a45fef43e35155a550b417cda146a0ffb4494ecbdf04eefce2f767912"
+            },
+            {
+              "vertices": 3049,
+              "faces": 2716,
+              "bounds_mm": [
+                [
+                  44.5,
+                  75.5
+                ],
+                [
+                  -111.5,
+                  -50.5
+                ],
+                [
+                  0.0,
+                  0.0
+                ]
+              ],
+              "geometry_material_sha256": "48b90aae54f6f9abc825e541377435fd4ffa6c736f5d95d7cb4ac71fdc6a4ffb"
             },
             {
               "vertices": 128,
@@ -17977,8 +17996,8 @@
               "geometry_material_sha256": "52ab87e528c894d34fd3470f298481beede5879b470c0efaf6ab42afe5805c87"
             },
             {
-              "vertices": 5072,
-              "faces": 2672,
+              "vertices": 1120,
+              "faces": 1212,
               "bounds_mm": [
                 [
                   44.0,
@@ -17989,11 +18008,11 @@
                   -50.0
                 ],
                 [
-                  0.0125,
-                  1.5875
+                  1.6125,
+                  1.6125
                 ]
               ],
-              "geometry_material_sha256": "606c541109a2f637aafa81e49fd37511d30ba116fa446b529e8858eb67869d5a"
+              "geometry_material_sha256": "68898330c2a57fa3c555f8cb6e64a6b3db4a9dc7421a7699b0014b588b0ec77c"
             },
             {
               "vertices": 4635,
@@ -18013,25 +18032,6 @@
                 ]
               ],
               "geometry_material_sha256": "69a455ceea4e6d3fe1d5553da75cf3184738373af5372cffee495543d2cfaa70"
-            },
-            {
-              "vertices": 1764,
-              "faces": 1777,
-              "bounds_mm": [
-                [
-                  45.72,
-                  74.0817
-                ],
-                [
-                  -101.625,
-                  -53.03
-                ],
-                [
-                  1.6,
-                  1.6
-                ]
-              ],
-              "geometry_material_sha256": "9910d2625ec4ec5bd6bd534cd4aa99afca85231bfa7a87989dca46ae5c7be8d3"
             },
             {
               "vertices": 288,
@@ -18148,6 +18148,25 @@
               "geometry_material_sha256": "c3f3139fb076c26b733f182f1048c2d4f5e186f4435f305ed51440fbd7d88d7b"
             },
             {
+              "vertices": 5072,
+              "faces": 2672,
+              "bounds_mm": [
+                [
+                  44.0,
+                  76.0
+                ],
+                [
+                  -112.0,
+                  -50.0
+                ],
+                [
+                  0.0125,
+                  1.5875
+                ]
+              ],
+              "geometry_material_sha256": "ccda1a088680b8ad35a301fd1e70a0299b56035d5802b3ac2a961a60e5a9eebb"
+            },
+            {
               "vertices": 336,
               "faces": 168,
               "bounds_mm": [
@@ -18184,25 +18203,6 @@
                 ]
               ],
               "geometry_material_sha256": "dddb3aca36527438a99bda6169859a1bdbef36286a35b0da235b8641e875f8ec"
-            },
-            {
-              "vertices": 1120,
-              "faces": 1212,
-              "bounds_mm": [
-                [
-                  44.0,
-                  76.0
-                ],
-                [
-                  -112.0,
-                  -50.0
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "e35dd99f7532822958f271b9dbc4a4185ed972fd496d40716474aee855c092ce"
             },
             {
               "vertices": 296,
@@ -49778,9 +49778,9 @@
     "microphone-flex-left": {
       "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
       "source": "CAD/KiCad/shields/microphone-flex/microphone-flex.kicad_pcb",
-      "source_sha256": "1e8ea5d1dbb78ffc52618212f4ed2d0091d2d19f586190dea68dc6e49da0329a",
-      "visual_input_sha256": "67afb399f72aaccd70b71d27b05133ecf8736fd0d5c4a1a96fc3dcb3541616f6",
-      "native_vrml_sha256": "c6a908199218b546582d53c6f63304849056006c8b9a69f4ecd1805e2b2cde80",
+      "source_sha256": "1f1834e30b6ea1867cdfcd4531bcb005f3cd29d0d1901de400f896368020f081",
+      "visual_input_sha256": "b7985e79d9c4c2ee2bcce72b8b6aff78b53813d1fb06172fc477d198764a5f29",
+      "native_vrml_sha256": "25ae4974999af280345a09e3cd1a5a16528e643fa2837d43ebbccb5380e2842d",
       "models": [
         {
           "ref": "J1",
@@ -50026,6 +50026,26 @@
           "ref": "TP2",
           "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
           "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "C6",
+          "file": "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step",
+          "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
           "offset_mm": [
             0.0,
             0.0,
@@ -50044,28 +50064,8 @@
         },
         {
           "ref": "VISUAL_MODULE_LEFT",
-          "file": "CAD/KiCad/shields/microphone-flex/3dmodels/module-left.step",
-          "sha256": "4b38ce1df8fbaadf59f4338d5943c08b78aebe6b2df1a11467af4d0926cd7ccd",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "C6",
-          "file": "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step",
-          "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+          "file": "CAD/KiCad/shields/microphone-flex/3dmodels/module-left-down.step",
+          "sha256": "e9d5f248e0c94928c56fa0aa1045e93656c0d75ba2ad6385a7dfc44eb9b0c21c",
           "offset_mm": [
             0.0,
             0.0,
@@ -50127,19 +50127,39 @@
       "mesh_counts": {
         "models": 17,
         "board_meshes": 7,
-        "vertices": 28419,
-        "faces": 22797,
+        "vertices": 28583,
+        "faces": 22929,
         "materials": 17
       },
-      "glb_sha256": "3ab624db8296ae0baabd5f9e6ae1f23c6f81d1abc99d39c5e17ffb2bee1c7c4a"
+      "glb_sha256": "c296cb041469236b872b5ed21107f15c11f43802627efede06ca606bc31cf93a"
     },
     "microphone-flex-right": {
       "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
       "source": "CAD/KiCad/shields/microphone-flex/microphone-flex.kicad_pcb",
-      "source_sha256": "1e8ea5d1dbb78ffc52618212f4ed2d0091d2d19f586190dea68dc6e49da0329a",
-      "visual_input_sha256": "1069bad2be2df2201bd66395bd26699a74b7728cc99858449d4dcaddccce0b81",
-      "native_vrml_sha256": "63b80dc8b62fabbc7d06bcc941f781226c54c12f2998eef9778cc86d64bf9b8b",
+      "source_sha256": "1f1834e30b6ea1867cdfcd4531bcb005f3cd29d0d1901de400f896368020f081",
+      "visual_input_sha256": "bcdaa96ce400eb9edb520b63c336011d76a7fc67b0d1bba1bef99622a44527ce",
+      "native_vrml_sha256": "4649139833634c8001fce259e22e98bf327d8a6c3d19692a282c9f05a16f9081",
       "models": [
+        {
+          "ref": "VISUAL_MODULE_RIGHT",
+          "file": "CAD/KiCad/shields/microphone-flex/3dmodels/module-right-down.step",
+          "sha256": "35c3427c1d0ad63d4cba08ee4f1ae1e785c754889679158ba606c4c77d15299a",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
         {
           "ref": "J1",
           "file": "${KICAD9_3DMODEL_DIR}/Connector_JST.3dshapes/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.step",
@@ -50381,26 +50401,6 @@
           ]
         },
         {
-          "ref": "VISUAL_MODULE_RIGHT",
-          "file": "CAD/KiCad/shields/microphone-flex/3dmodels/module-right.step",
-          "sha256": "bd9ccd8d65cede99a476e45e748098f01e4332eedb612db3ed9e3fcf319d122b",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
           "ref": "TP2",
           "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
           "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
@@ -50485,18 +50485,18 @@
       "mesh_counts": {
         "models": 17,
         "board_meshes": 7,
-        "vertices": 28419,
-        "faces": 22797,
+        "vertices": 28583,
+        "faces": 22929,
         "materials": 17
       },
-      "glb_sha256": "f50b92b1d5f7bf0d007538d8580a208f2dcd5fec59eb09c851122a152079674d"
+      "glb_sha256": "d70fc6a5f8fc0ae71949650a3ccc8846134ffeaf2b0c795ff2b4716fa082eac7"
     },
     "microphone-flex-up": {
       "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
       "source": "CAD/KiCad/shields/microphone-flex/microphone-flex.kicad_pcb",
-      "source_sha256": "1e8ea5d1dbb78ffc52618212f4ed2d0091d2d19f586190dea68dc6e49da0329a",
-      "visual_input_sha256": "9470640bd08f97609a20d98e93380a6460814d04ad1c312c367d4a6940cf6908",
-      "native_vrml_sha256": "1a604cada6a4ea3e0bf3d33b8b7ca665629ab6e364bc783fde43c4af2ecfd04e",
+      "source_sha256": "1f1834e30b6ea1867cdfcd4531bcb005f3cd29d0d1901de400f896368020f081",
+      "visual_input_sha256": "0f83549563ff980fbdfd2d6de3d48e1a2f57cf1322db131d103d04024995d224",
+      "native_vrml_sha256": "a401665f4ff1a9f5ac37d3ec30cc02214a71bdaaf3127b28870a652bb4edcc00",
       "models": [
         {
           "ref": "J1",
@@ -50843,11 +50843,11 @@
       "mesh_counts": {
         "models": 17,
         "board_meshes": 7,
-        "vertices": 28419,
-        "faces": 22797,
+        "vertices": 28583,
+        "faces": 22929,
         "materials": 17
       },
-      "glb_sha256": "8c95194b9aaffd3b49b8a83caf181aee54b16d220272094088ce0718d29eaaa5"
+      "glb_sha256": "3ce0227904eb9d5cf69484f42440438bc4bc3f16ac60a734fcce291316424177"
     },
     "microphone": {
       "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
