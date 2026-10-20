@@ -38,8 +38,11 @@ def geometry(p):
     if ref == 'J1':
         return {1: ([('1', 10*G, -16*G, 180), ('2', 10*G, 16*G, 180),
                      ('3', 10*G, -8*G, 180)], (8*G, 20*G), 'block')}
-    if ref in ('R1', 'R2', 'R5'):
+    if ref == 'R5':
         return {1: ([('2', -2*G, 0, 0), ('1', 2*G, 0, 180)], (G, .4*G), 'resistor')}
+    if ref in ('JP1','JP2'):
+        return {1: ([('3',-4*G,2*G,0),('2',4*G,0,180),('1',-4*G,-2*G,0)],
+                    (2*G,3*G),'block')}
     if ref == 'R6':
         return {1: ([('1', 0, 2*G, 270), ('2', 0, -2*G, 90)], (.4*G, G), 'resistor')}
     if ref == 'D1':
@@ -116,6 +119,9 @@ def main():
     OUT.mkdir(exist_ok=True)
     text('MICROPHONE FLEX / WIRED SCHEMATIC', 8, 7, 2.3, True)
     text('Rev C reading copy  |  Continuous wires  |  Fit ONE MAX9814 module only', 8, 12)
+    text('JP1 GAIN: 1-2 = 50dB / 2-3 = 40dB / no shunt = 60dB',8,16,1.1)
+    text('JP2 A/R: 1-2 = 1:500 / 2-3 = 1:2000 / no shunt = 1:4000',8,18,1.1)
+    text('Initial shunts: JP1 2-3; JP2 1-2. Power off before changing.',8,20,1.1)
     text('01  HARNESS & FILTER', 8, 23, 1.5, True)
     text('02  THREE ALTERNATIVE SOCKETS - SHARED SIGNALS', 61, 17, 1.5, True)
     rows = dict(VDD=40, GAIN=48, AR=56, MICOUT=64, GND=72)
@@ -134,14 +140,14 @@ def main():
     wire((22,64), (33,64))
     wire((37,64), (143,64))
     wire((22,72), (150,72))
-    place('R1', 49, 48)
-    text('0R / 40 dB', 45, 45)
-    wire((44,40), (44,48), (47,48))
-    wire((51,48), (130,48))
-    place('R2', 49, 56)
-    text('0R / A:R 1:500', 44, 53)
-    wire((42,72), (42,56), (47,56))
-    wire((51,56), (134,56))
+    place('JP1', 49, 48)
+    wire((44,40), (44,46), (45,46))
+    wire((42,72), (42,50), (45,50))
+    wire((53,48), (130,48))
+    place('JP2', 49, 57)
+    wire((43,40), (43,55), (45,55))
+    wire((42,58), (42,59), (45,59))
+    wire((53,57), (55,57), (55,56), (134,56))
     text('03  POWER INDICATOR', 14, 77, 1.3, True)
     place('R6', 28, 83)
     text('2K2', 32, 84)
@@ -190,7 +196,7 @@ def main():
     sheet.save()
     path=OUT/(NAME+'.kicad_sch')
     raw=path.read_text(encoding='utf-8').replace(s.uid('sheetfile/'+NAME),ROOT)
-    raw=raw.replace('(date "2026-10-05") (rev "A-prototype")','(date "2026-10-20") (rev "C-wired")')
+    raw=raw.replace('(date "2026-10-05") (rev "A-prototype")','(date "2026-10-20") (rev "C-J wired")')
     raw=raw.replace('Prototype: verify harness polarity and sensor values before connection','Electrical reading copy - original PCB and schematic retained')
     path.write_text(raw,encoding='utf-8')
     (OUT/'Colloquy.kicad_sym').write_text(

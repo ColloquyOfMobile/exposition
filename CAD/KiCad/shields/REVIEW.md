@@ -3,6 +3,13 @@
 Current basis: SHIELDS.md at 79e994b and MICROPHONE_BOARD.md. These are editable
 engineering prototypes; native checks do not constitute fabrication release.
 
+2026-10-20: the current Rev C microphone flex uses removable JP1 gain and JP2
+A/R selectors in place of the fixed R1/R2 links. Each is a 1x03, 2.54mm header
+with one removable shunt. Initial settings are 40dB (JP1 2-3) and 1:500
+(JP2 1-2); open positions and both supply-rail selections remain available.
+See microphone-flex/README.md for the full settings table. The older Rev B
+description below remains historical.
+
 The analyser carrier uses user-authorized photo inference from Thomas's
 2.54mm-grid setup: nominal module mounting pitch 20.32mm, one round hole
 and one tolerance slot. Its 150 x 55mm outline and existing JA1/retention

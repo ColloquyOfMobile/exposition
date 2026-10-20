@@ -1,6 +1,6 @@
 (kicad_sch (version 20250114) (generator "eeschema") (generator_version "9.0")
           (uuid "560eda66-9413-5200-bbcb-04d342b061c1") (paper "A3")
-          (title_block (title "microphone-flex / mechanical") (date "2026-10-05") (rev "A-prototype")
+          (title_block (title "microphone-flex / mechanical") (date "2026-10-20") (rev "C-jumpers")
             (company "Colloquy of Mobiles") (comment 1 "Prototype: verify harness polarity and sensor values before connection"))
           (lib_symbols (symbol "Colloquy:H1" (pin_names (offset 1.27)) (exclude_from_sim no) (in_bom no) (on_board yes)
 (property "Reference" "H" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))

@@ -37,56 +37,6 @@
       "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/4bd88cf2-a664-5934-8e17-346ef4ec0ab5"
     },
     {
-      "ref": "R1",
-      "value": "0R / GAIN VDD 40dB",
-      "footprint": "Shields:R_0603_1608Metric",
-      "pins": {
-        "1": "GAIN",
-        "2": "VDD"
-      },
-      "sheet": "module",
-      "description": "",
-      "pin_names": {
-        "1": "1",
-        "2": "2"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "c2f870c7-d38d-5696-8506-1294dce5406e",
-      "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/4bd88cf2-a664-5934-8e17-346ef4ec0ab5"
-    },
-    {
-      "ref": "R2",
-      "value": "0R / AR GND 1:500",
-      "footprint": "Shields:R_0603_1608Metric",
-      "pins": {
-        "1": "AR",
-        "2": "GND"
-      },
-      "sheet": "module",
-      "description": "",
-      "pin_names": {
-        "1": "1",
-        "2": "2"
-      },
-      "pin_types": {
-        "1": "passive",
-        "2": "passive"
-      },
-      "assembly": "fit",
-      "include_bom": true,
-      "mpn": "",
-      "datasheet": "",
-      "uuid": "b47be3a3-cc13-5cbe-b8d5-119e3a8b24e9",
-      "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/4bd88cf2-a664-5934-8e17-346ef4ec0ab5"
-    },
-    {
       "ref": "R4",
       "value": "33R",
       "footprint": "Shields:R_0603_1608Metric",
@@ -373,6 +323,62 @@
       "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/ed1e5076-8af5-506b-a755-97e4cb4f7015"
     },
     {
+      "ref": "JP1",
+      "value": "GAIN SELECT / HEADER + SHUNT",
+      "footprint": "Shields:Flex_Gain_Selector",
+      "pins": {
+        "1": "GND",
+        "2": "GAIN",
+        "3": "VDD"
+      },
+      "sheet": "module",
+      "description": "Removable 2.54mm selector. 1-2:50dB; 2-3:40dB; open:60dB. Initially 2-3. Power off before moving the shunt.",
+      "pin_names": {
+        "1": "GND",
+        "2": "GAIN",
+        "3": "VDD"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "Gold plated 1x03 2.54mm vertical header + removable 1x02 shunt",
+      "datasheet": "",
+      "uuid": "d2dde162-8118-5ae1-9944-81fe4bbe1bf8",
+      "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/4bd88cf2-a664-5934-8e17-346ef4ec0ab5"
+    },
+    {
+      "ref": "JP2",
+      "value": "AR SELECT / HEADER + SHUNT",
+      "footprint": "Shields:Flex_AR_Selector",
+      "pins": {
+        "1": "GND",
+        "2": "AR",
+        "3": "VDD"
+      },
+      "sheet": "module",
+      "description": "Removable 2.54mm selector. 1-2:1:500; 2-3:1:2000; open:1:4000. Initially 1-2. Power off before moving the shunt.",
+      "pin_names": {
+        "1": "GND",
+        "2": "AR",
+        "3": "VDD"
+      },
+      "pin_types": {
+        "1": "passive",
+        "2": "passive",
+        "3": "passive"
+      },
+      "assembly": "fit",
+      "include_bom": true,
+      "mpn": "Gold plated 1x03 2.54mm vertical header + removable 1x02 shunt",
+      "datasheet": "",
+      "uuid": "59f550e8-67ae-5d21-8a63-dd6513522de2",
+      "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/2d8114f0-91f1-5f81-b7b6-783b8e2a941e"
+    },
+    {
       "ref": "J2",
       "value": "LEFT / 1x05 RIGHT ANGLE",
       "footprint": "Shields:Flex_Socket_Side",
@@ -404,7 +410,7 @@
       "mpn": "1x05 P2.54mm horizontal female socket; verify purchased dimensions",
       "datasheet": "",
       "uuid": "0bafa027-5ba1-5e33-95ea-b37245a7379d",
-      "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/4bd88cf2-a664-5934-8e17-346ef4ec0ab5"
+      "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/2d8114f0-91f1-5f81-b7b6-783b8e2a941e"
     },
     {
       "ref": "J3",
@@ -438,7 +444,7 @@
       "mpn": "1x05 P2.54mm horizontal female socket; verify purchased dimensions",
       "datasheet": "",
       "uuid": "33afa107-784a-504f-a459-34fa2d445c36",
-      "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/2d8114f0-91f1-5f81-b7b6-783b8e2a941e"
+      "sheet_path": "/767eeb75-0bc5-5c78-a7ae-aa35b79c1dd4/a12f91a6-d5c6-5b04-b05b-0b13ecfaa013"
     },
     {
       "ref": "H5",

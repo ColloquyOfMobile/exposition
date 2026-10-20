@@ -67,7 +67,7 @@ def main():
                              *sorted(HERE.glob('*.kicad_sch'))]},
     }
     (WIRED/'validation.json').write_text(json.dumps(report, indent=2)+'\n')
-    print('PASS: 36 connected pins / 8 nets; original schematic, manifest and PCB agree; ERC clean.')
+    print(f'PASS: {report["connected_pins"]} connected pins / {report["electrical_nets"]} nets; original schematic, manifest and PCB agree; ERC clean.')
 
 
 if __name__ == '__main__':

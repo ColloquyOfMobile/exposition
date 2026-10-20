@@ -1,18 +1,218 @@
 {
   "source": "microphone-flex/microphone-flex.kicad_pcb",
-  "source_sha256": "6a6092fa0cf06bdf13d1a8edd0eb4b63762e89bdd055c9633550b878a6acfad4",
+  "source_sha256": "d6e2aa1c4010032a2ec8e737e6816dca3e95426a4f3a73f85ace6ecc1da652f7",
   "orientation": "left",
   "module_population": 1,
   "physical_fit_verified": false,
   "visual_export": {
     "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
     "source": "CAD/KiCad/shields/microphone-flex/microphone-flex.kicad_pcb",
-    "source_sha256": "6a6092fa0cf06bdf13d1a8edd0eb4b63762e89bdd055c9633550b878a6acfad4",
-    "visual_input_sha256": "4b1a7758619a7a72050c40e4948bbc943ae0cee309e260ad1af9685bde2dfa70",
-    "native_vrml_sha256": "80f8adf55935a340b86b1efa03eb16399798d7cc7d7aa452609c27e675910653",
+    "source_sha256": "d6e2aa1c4010032a2ec8e737e6816dca3e95426a4f3a73f85ace6ecc1da652f7",
+    "visual_input_sha256": "2154aa11d65d303216e6ceeb1f274f77a6b050816ac633cfd20ee55f317ebcf0",
+    "native_vrml_sha256": "81a1f222a0f50e144da5781b5cd293eb12918588528bf08d54b7bd08ef17e304",
     "models": [
       {
-        "ref": "R6",
+        "ref": "J1",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_JST.3dshapes/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.step",
+        "sha256": "6af8c9d4b052b4d7b4785c2aa640458d32a1e9b79f9bed72e845352e5d2edad5",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "J2",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Horizontal.step",
+        "sha256": "58bd51f4d5534eb5ef6b913efe90c1bbc61647c23a45db70b01c24dcdf30a121",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "R4",
+        "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
+        "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "TP1",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
+        "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "C7",
+        "file": "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step",
+        "sha256": "9a669c1a2f1ea25b88b401acef6efeaa80a067bd7da9db6993de719a7fbe155c",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "JP2",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step",
+        "sha256": "b91b4ac5acf1a0d28a676703db972d17b8f11ef26a85b58d60786a69246b921b",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "JP2",
+        "file": "CAD/KiCad/shields/microphone-flex/3dmodels/selector-shunt.wrl",
+        "sha256": "307f85e7202fdbad31659499c916ab00339fde795b6e30ae1f935a42c212820e",
+        "offset_mm": [
+          0.0,
+          -1.27,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "J3",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Horizontal.step",
+        "sha256": "58bd51f4d5534eb5ef6b913efe90c1bbc61647c23a45db70b01c24dcdf30a121",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "JP1",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step",
+        "sha256": "b91b4ac5acf1a0d28a676703db972d17b8f11ef26a85b58d60786a69246b921b",
+        "offset_mm": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "JP1",
+        "file": "CAD/KiCad/shields/microphone-flex/3dmodels/selector-shunt.wrl",
+        "sha256": "307f85e7202fdbad31659499c916ab00339fde795b6e30ae1f935a42c212820e",
+        "offset_mm": [
+          0.0,
+          -3.81,
+          0.0
+        ],
+        "rotation_deg": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "ref": "R5",
         "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
         "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
         "offset_mm": [
@@ -52,29 +252,9 @@
         ]
       },
       {
-        "ref": "R2",
-        "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
-        "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
-        "offset_mm": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "rotation_deg": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
-      },
-      {
-        "ref": "J3",
-        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Horizontal.step",
-        "sha256": "58bd51f4d5534eb5ef6b913efe90c1bbc61647c23a45db70b01c24dcdf30a121",
+        "ref": "TP2",
+        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
+        "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
         "offset_mm": [
           0.0,
           0.0,
@@ -172,149 +352,9 @@
         ]
       },
       {
-        "ref": "R1",
+        "ref": "R6",
         "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
         "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
-        "offset_mm": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "rotation_deg": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
-      },
-      {
-        "ref": "TP2",
-        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
-        "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
-        "offset_mm": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "rotation_deg": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
-      },
-      {
-        "ref": "TP1",
-        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
-        "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
-        "offset_mm": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "rotation_deg": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
-      },
-      {
-        "ref": "J1",
-        "file": "${KICAD9_3DMODEL_DIR}/Connector_JST.3dshapes/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.step",
-        "sha256": "6af8c9d4b052b4d7b4785c2aa640458d32a1e9b79f9bed72e845352e5d2edad5",
-        "offset_mm": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "rotation_deg": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
-      },
-      {
-        "ref": "J2",
-        "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Horizontal.step",
-        "sha256": "58bd51f4d5534eb5ef6b913efe90c1bbc61647c23a45db70b01c24dcdf30a121",
-        "offset_mm": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "rotation_deg": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
-      },
-      {
-        "ref": "R5",
-        "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
-        "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
-        "offset_mm": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "rotation_deg": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
-      },
-      {
-        "ref": "R4",
-        "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
-        "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
-        "offset_mm": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "rotation_deg": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
-      },
-      {
-        "ref": "C7",
-        "file": "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step",
-        "sha256": "9a669c1a2f1ea25b88b401acef6efeaa80a067bd7da9db6993de719a7fbe155c",
         "offset_mm": [
           0.0,
           0.0,
@@ -334,212 +374,19 @@
     ],
     "pcb_underside_z_mm": 0,
     "mesh_counts": {
-      "models": 16,
+      "models": 18,
       "board_meshes": 7,
-      "vertices": 27052,
-      "faces": 21853,
-      "materials": 16
+      "vertices": 30621,
+      "faces": 24550,
+      "materials": 17
     },
-    "glb_sha256": "d1bc14ea9274713d56dda92cbb12251613fb785f38462f59f603037149d0d653"
+    "glb_sha256": "5e02b7255428a857d5d510b8b1a4055af899e8286710fd6f1557ad3f5e291b6c"
   },
   "footprints": {
-    "R6": {
-      "xy": [
-        70.5,
-        97.0
-      ],
-      "angle": 90.0,
-      "pads": {
-        "1": [
-          70.5,
-          97.825
-        ],
-        "2": [
-          70.5,
-          96.175
-        ]
-      }
-    },
-    "H8": {
-      "xy": [
-        73.5,
-        90.0
-      ],
-      "angle": 0.0,
-      "pads": {}
-    },
-    "M1": {
-      "xy": [
-        64.8895,
-        91.003
-      ],
-      "angle": -90.0,
-      "pads": {
-        "1": [
-          64.8895,
-          91.003
-        ],
-        "2": [
-          62.3495,
-          91.003
-        ],
-        "3": [
-          59.8095,
-          91.003
-        ],
-        "4": [
-          57.2695,
-          91.003
-        ],
-        "5": [
-          54.7295,
-          91.003
-        ]
-      }
-    },
     "H2": {
       "xy": [
         60.0,
         106.0
-      ],
-      "angle": 0.0,
-      "pads": {}
-    },
-    "R2": {
-      "xy": [
-        59.0,
-        82.0
-      ],
-      "angle": 90.0,
-      "pads": {
-        "1": [
-          59.0,
-          82.825
-        ],
-        "2": [
-          59.0,
-          81.175
-        ]
-      }
-    },
-    "J3": {
-      "xy": [
-        64.0,
-        84.16
-      ],
-      "angle": 180.0,
-      "pads": {
-        "1": [
-          64.0,
-          84.16
-        ],
-        "2": [
-          64.0,
-          81.62
-        ],
-        "3": [
-          64.0,
-          79.08
-        ],
-        "4": [
-          64.0,
-          76.54
-        ],
-        "5": [
-          64.0,
-          74.0
-        ]
-      }
-    },
-    "C6": {
-      "xy": [
-        68.0,
-        95.0
-      ],
-      "angle": 90.0,
-      "pads": {
-        "1": [
-          68.0,
-          95.775
-        ],
-        "2": [
-          68.0,
-          94.225
-        ]
-      }
-    },
-    "D1": {
-      "xy": [
-        60.0,
-        64.0
-      ],
-      "angle": 0.0,
-      "pads": {
-        "1": [
-          59.2125,
-          64.0
-        ],
-        "2": [
-          60.7875,
-          64.0
-        ]
-      }
-    },
-    "R1": {
-      "xy": [
-        61.0,
-        82.0
-      ],
-      "angle": 90.0,
-      "pads": {
-        "1": [
-          61.0,
-          82.825
-        ],
-        "2": [
-          61.0,
-          81.175
-        ]
-      }
-    },
-    "TP2": {
-      "xy": [
-        52.0,
-        64.0
-      ],
-      "angle": 0.0,
-      "pads": {
-        "1": [
-          52.0,
-          64.0
-        ]
-      }
-    },
-    "TP1": {
-      "xy": [
-        68.0,
-        64.0
-      ],
-      "angle": 0.0,
-      "pads": {
-        "1": [
-          68.0,
-          64.0
-        ]
-      }
-    },
-    "H4": {
-      "xy": [
-        54.9835,
-        69.032
-      ],
-      "angle": 0.0,
-      "pads": {}
-    },
-    "H5": {
-      "xy": [
-        46.5,
-        66.0
       ],
       "angle": 0.0,
       "pads": {}
@@ -594,10 +441,65 @@
         ]
       }
     },
-    "H6": {
+    "R4": {
       "xy": [
-        46.5,
-        90.0
+        49.0,
+        97.0
+      ],
+      "angle": 0.0,
+      "pads": {
+        "1": [
+          48.175,
+          97.0
+        ],
+        "2": [
+          49.825,
+          97.0
+        ]
+      }
+    },
+    "TP1": {
+      "xy": [
+        68.0,
+        64.0
+      ],
+      "angle": 0.0,
+      "pads": {
+        "1": [
+          68.0,
+          64.0
+        ]
+      }
+    },
+    "C7": {
+      "xy": [
+        47.8,
+        61.5
+      ],
+      "angle": 90.0,
+      "pads": {
+        "1": [
+          47.8,
+          62.45
+        ],
+        "2": [
+          47.8,
+          60.55
+        ]
+      }
+    },
+    "H3": {
+      "xy": [
+        65.0165,
+        69.032
+      ],
+      "angle": 0.0,
+      "pads": {}
+    },
+    "H1": {
+      "xy": [
+        60.0,
+        56.0
       ],
       "angle": 0.0,
       "pads": {}
@@ -609,6 +511,85 @@
       ],
       "angle": 0.0,
       "pads": {}
+    },
+    "H4": {
+      "xy": [
+        54.9835,
+        69.032
+      ],
+      "angle": 0.0,
+      "pads": {}
+    },
+    "JP2": {
+      "xy": [
+        68.8,
+        88.0
+      ],
+      "angle": 0.0,
+      "pads": {
+        "1": [
+          68.8,
+          88.0
+        ],
+        "2": [
+          68.8,
+          90.54
+        ],
+        "3": [
+          68.8,
+          93.08
+        ]
+      }
+    },
+    "J3": {
+      "xy": [
+        64.0,
+        84.16
+      ],
+      "angle": 180.0,
+      "pads": {
+        "1": [
+          64.0,
+          84.16
+        ],
+        "2": [
+          64.0,
+          81.62
+        ],
+        "3": [
+          64.0,
+          79.08
+        ],
+        "4": [
+          64.0,
+          76.54
+        ],
+        "5": [
+          64.0,
+          74.0
+        ]
+      }
+    },
+    "JP1": {
+      "xy": [
+        51.2,
+        88.0
+      ],
+      "angle": 0.0,
+      "pads": {
+        "1": [
+          51.2,
+          88.0
+        ],
+        "2": [
+          51.2,
+          90.54
+        ],
+        "3": [
+          51.2,
+          93.08
+        ]
+      }
     },
     "R5": {
       "xy": [
@@ -627,53 +608,120 @@
         ]
       }
     },
-    "H1": {
+    "M1": {
       "xy": [
-        60.0,
-        56.0
+        64.8895,
+        91.003
       ],
-      "angle": 0.0,
-      "pads": {}
+      "angle": -90.0,
+      "pads": {
+        "1": [
+          64.8895,
+          91.003
+        ],
+        "2": [
+          62.3495,
+          91.003
+        ],
+        "3": [
+          59.8095,
+          91.003
+        ],
+        "4": [
+          57.2695,
+          91.003
+        ],
+        "5": [
+          54.7295,
+          91.003
+        ]
+      }
     },
-    "H3": {
+    "TP2": {
       "xy": [
-        65.0165,
-        69.032
-      ],
-      "angle": 0.0,
-      "pads": {}
-    },
-    "R4": {
-      "xy": [
-        49.0,
-        97.0
+        52.0,
+        64.0
       ],
       "angle": 0.0,
       "pads": {
         "1": [
-          48.175,
-          97.0
-        ],
-        "2": [
-          49.825,
-          97.0
+          52.0,
+          64.0
         ]
       }
     },
-    "C7": {
+    "C6": {
       "xy": [
-        47.8,
-        61.5
+        68.0,
+        96.5
       ],
       "angle": 90.0,
       "pads": {
         "1": [
-          47.8,
-          62.45
+          68.0,
+          97.275
         ],
         "2": [
-          47.8,
-          60.55
+          68.0,
+          95.725
+        ]
+      }
+    },
+    "H8": {
+      "xy": [
+        73.5,
+        90.0
+      ],
+      "angle": 0.0,
+      "pads": {}
+    },
+    "H6": {
+      "xy": [
+        46.5,
+        90.0
+      ],
+      "angle": 0.0,
+      "pads": {}
+    },
+    "D1": {
+      "xy": [
+        60.0,
+        64.0
+      ],
+      "angle": 0.0,
+      "pads": {
+        "1": [
+          59.2125,
+          64.0
+        ],
+        "2": [
+          60.7875,
+          64.0
+        ]
+      }
+    },
+    "H5": {
+      "xy": [
+        46.5,
+        66.0
+      ],
+      "angle": 0.0,
+      "pads": {}
+    },
+    "R6": {
+      "xy": [
+        70.5,
+        97.0
+      ],
+      "angle": 90.0,
+      "pads": {
+        "1": [
+          70.5,
+          97.825
+        ],
+        "2": [
+          70.5,
+          96.175
         ]
       }
     }

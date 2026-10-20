@@ -3,7 +3,7 @@
   "physical_fit_verified": false,
   "files": {
     "shield-configurations.blend": {
-      "sha256": "0ff88275ef93a79d3b646657e20b97e14df52af395de7c78925e8202ba37f5b2",
+      "sha256": "fd921c2c07d9f2133c271c4521d204ffbbc4c70e921c5750093ab4e289786c65",
       "reopened": true,
       "placements_and_unrelated_objects_preserved": true,
       "boards": [
@@ -13336,42 +13336,23 @@
           "status": "matches fresh KiCad visual export",
           "meshes": [
             {
-              "vertices": 296,
-              "faces": 244,
+              "vertices": 336,
+              "faces": 168,
               "bounds_mm": [
                 [
-                  58.6,
-                  59.4
+                  49.9,
+                  52.5
                 ],
                 [
-                  -82.8,
-                  -81.2
+                  -94.71,
+                  -88.91
                 ],
                 [
-                  1.6,
-                  2.05
+                  4.6,
+                  10.1
                 ]
               ],
-              "geometry_material_sha256": "016ff0e774d6fe134fecccc430274d2588d86300ae4d4e3ef9e37c714f57cb58"
-            },
-            {
-              "vertices": 2963,
-              "faces": 2876,
-              "bounds_mm": [
-                [
-                  45.85,
-                  74.15
-                ],
-                [
-                  -101.9239,
-                  -51.5039
-                ],
-                [
-                  1.675,
-                  1.675
-                ]
-              ],
-              "geometry_material_sha256": "0cbd25e2152fbbff671fba1e7f91ad4d4674e55c38eff1d3c8f6dbdd6a18a7d1"
+              "geometry_material_sha256": "04ba707628067399207eebd0eac7ba80f099281eb80a1cc75ded4f39e48306d9"
             },
             {
               "vertices": 898,
@@ -13393,25 +13374,6 @@
               "geometry_material_sha256": "0cf48900f38a3fd6668c8f0dd69f98c0182a04ef2cf1b6a88760794bc21fd535"
             },
             {
-              "vertices": 1154,
-              "faces": 1254,
-              "bounds_mm": [
-                [
-                  44.0,
-                  76.0
-                ],
-                [
-                  -112.0,
-                  -50.0
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "115faed2e7bffd0a5f53dd9bf283c5284215466a9be3aed01f7f84f97e9af4d7"
-            },
-            {
               "vertices": 1068,
               "faces": 768,
               "bounds_mm": [
@@ -13431,6 +13393,63 @@
               "geometry_material_sha256": "146f6f873d805953961fcae250a12553a552b3d1764f651e6fc77cf932fecd34"
             },
             {
+              "vertices": 336,
+              "faces": 168,
+              "bounds_mm": [
+                [
+                  67.5,
+                  70.1
+                ],
+                [
+                  -92.17,
+                  -86.37
+                ],
+                [
+                  4.6,
+                  10.1
+                ]
+              ],
+              "geometry_material_sha256": "2542184de91a9bb8271cbb6a69572efa13802f03dfcda8cae1a533b69c09c223"
+            },
+            {
+              "vertices": 4689,
+              "faces": 4564,
+              "bounds_mm": [
+                [
+                  45.85,
+                  74.15
+                ],
+                [
+                  -101.9239,
+                  -51.5039
+                ],
+                [
+                  1.675,
+                  1.675
+                ]
+              ],
+              "geometry_material_sha256": "2dba535ae2433124b16963b59eef997e8fbd8487a9c1e5dd56cbb740689f26c1"
+            },
+            {
+              "vertices": 926,
+              "faces": 1002,
+              "bounds_mm": [
+                [
+                  44.0,
+                  76.0
+                ],
+                [
+                  -112.0,
+                  -50.0
+                ],
+                [
+                  -0.0125,
+                  -0.0125
+                ]
+              ],
+              "geometry_material_sha256": "34b77611950b5c4b1a95fd945e2740073a871231a9fb2c761829e98268046ddb"
+            },
+            {
               "vertices": 288,
               "faces": 236,
               "bounds_mm": [
@@ -13439,34 +13458,15 @@
                   68.4
                 ],
                 [
-                  -95.8,
-                  -94.2
+                  -97.3,
+                  -95.7
                 ],
                 [
                   1.6,
                   2.4
                 ]
               ],
-              "geometry_material_sha256": "21edb038ca940d2e2de6b4404961f0b14eb5c99cbf8a5c27d8af541f8d5af2e7"
-            },
-            {
-              "vertices": 320,
-              "faces": 288,
-              "bounds_mm": [
-                [
-                  47.075,
-                  70.975
-                ],
-                [
-                  -98.225,
-                  -60.05
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "22842f5ba3f217ce2d265d515581bb2929b6de6dc167a63eacfd519db0edf241"
+              "geometry_material_sha256": "3a57525930f6d4fdaeb519345fe3eee8b2ae80d407664045ce9dfa2ee3cecee4"
             },
             {
               "vertices": 128,
@@ -13507,23 +13507,23 @@
               "geometry_material_sha256": "4a390f794118bee557f6c3b52c66f83e50f9fac2dcc91719399b6d13b681556c"
             },
             {
-              "vertices": 5072,
-              "faces": 2672,
+              "vertices": 240,
+              "faces": 216,
               "bounds_mm": [
                 [
-                  44.0,
-                  76.0
+                  47.075,
+                  70.975
                 ],
                 [
-                  -112.0,
-                  -50.0
+                  -98.225,
+                  -60.05
                 ],
                 [
-                  0.0125,
-                  1.5875
+                  1.6125,
+                  1.6125
                 ]
               ],
-              "geometry_material_sha256": "6ffe0a74071c3057bb8b1b2b2b2b4e4d96d153f3ce2533c49a490d3b27796ff4"
+              "geometry_material_sha256": "6420d8d9e5c87f94fa0019ea972ab2932018154415c516cbb1c12ddb28d7da44"
             },
             {
               "vertices": 296,
@@ -13545,23 +13545,23 @@
               "geometry_material_sha256": "763d697cbbd5e063638715d3f06fb1118208be87e175702bcc78cdef5caf15ad"
             },
             {
-              "vertices": 1609,
-              "faces": 1618,
+              "vertices": 5552,
+              "faces": 2928,
               "bounds_mm": [
                 [
-                  47.075,
-                  70.975
+                  44.0,
+                  76.0
                 ],
                 [
-                  -98.8633,
-                  -60.05
+                  -112.0,
+                  -50.0
                 ],
                 [
-                  1.6,
-                  1.6
+                  0.0125,
+                  1.5875
                 ]
               ],
-              "geometry_material_sha256": "8b7873ab12394fe038e70b30b09106801b3a642644888aac09fafce59ec4992a"
+              "geometry_material_sha256": "8cf79116be17ec138475d5bcbcce51d42b587af893efcadcb29c22df10adee86"
             },
             {
               "vertices": 4724,
@@ -13583,25 +13583,6 @@
               "geometry_material_sha256": "8d95ccfc81835631b79a67931b1aba71d2740183c04eec5364f8b6064b3772f0"
             },
             {
-              "vertices": 822,
-              "faces": 890,
-              "bounds_mm": [
-                [
-                  44.0,
-                  76.0
-                ],
-                [
-                  -112.0,
-                  -50.0
-                ],
-                [
-                  -0.0125,
-                  -0.0125
-                ]
-              ],
-              "geometry_material_sha256": "9a3f3c87d4f7d54bfc2065c13855ea33276c75cfea4f292775ef15c0446f9a8e"
-            },
-            {
               "vertices": 544,
               "faces": 348,
               "bounds_mm": [
@@ -13619,6 +13600,63 @@
                 ]
               ],
               "geometry_material_sha256": "a2ae9b16c40cd4235b05ad0e2c38661c2a4c864245ce85c1a765ce68915491b0"
+            },
+            {
+              "vertices": 1642,
+              "faces": 1654,
+              "bounds_mm": [
+                [
+                  47.075,
+                  70.975
+                ],
+                [
+                  -98.8633,
+                  -60.05
+                ],
+                [
+                  1.6,
+                  1.6
+                ]
+              ],
+              "geometry_material_sha256": "a4e9cf45461bba654b4306744ad129210a6fd5877b69531114fd2fc5da520bfc"
+            },
+            {
+              "vertices": 3623,
+              "faces": 3145,
+              "bounds_mm": [
+                [
+                  44.5,
+                  75.5
+                ],
+                [
+                  -111.5,
+                  -50.5
+                ],
+                [
+                  0.0,
+                  0.0
+                ]
+              ],
+              "geometry_material_sha256": "aaddc5039781ed1fc64c3a775395469c57851ecd0acd50dd23da37e1ec3880db"
+            },
+            {
+              "vertices": 360,
+              "faces": 220,
+              "bounds_mm": [
+                [
+                  49.93,
+                  52.47
+                ],
+                [
+                  -94.35,
+                  -86.73
+                ],
+                [
+                  -1.4,
+                  10.14
+                ]
+              ],
+              "geometry_material_sha256": "aee70fc7f420ac7f3ac511ef90d1c31a98089585ae71b7d1e075afdb22f81fb7"
             },
             {
               "vertices": 296,
@@ -13659,42 +13697,23 @@
               "geometry_material_sha256": "c4b27c1fd53aa1d71f7d355874bee316870fc20c97ea0ff4418c61ee6e965ca1"
             },
             {
-              "vertices": 296,
-              "faces": 244,
+              "vertices": 1175,
+              "faces": 1275,
               "bounds_mm": [
                 [
-                  60.6,
-                  61.4
+                  44.0,
+                  76.0
                 ],
                 [
-                  -82.8,
-                  -81.2
+                  -112.0,
+                  -50.0
                 ],
                 [
-                  1.6,
-                  2.05
+                  1.6125,
+                  1.6125
                 ]
               ],
-              "geometry_material_sha256": "cdb4593b216c4a988018e6031be06451caaf62131c3c48e7939081e4af5641e6"
-            },
-            {
-              "vertices": 3153,
-              "faces": 2777,
-              "bounds_mm": [
-                [
-                  44.5,
-                  75.5
-                ],
-                [
-                  -111.5,
-                  -50.5
-                ],
-                [
-                  0.0,
-                  0.0
-                ]
-              ],
-              "geometry_material_sha256": "cf79210b16a2ffba97e7bead7b68b8f373e4edceb3133fbd96865151459b1872"
+              "geometry_material_sha256": "cbdd98115d3199cfe567503a9d2a20b4c846da44d744a3a9cc8910db388ea633"
             },
             {
               "vertices": 728,
@@ -13733,6 +13752,25 @@
                 ]
               ],
               "geometry_material_sha256": "e9f642afa1e0581fae93fb4f1399c14db861b52150cdf8b70e68d2c6210cae27"
+            },
+            {
+              "vertices": 360,
+              "faces": 220,
+              "bounds_mm": [
+                [
+                  67.53,
+                  70.07
+                ],
+                [
+                  -94.35,
+                  -86.73
+                ],
+                [
+                  -1.4,
+                  10.14
+                ]
+              ],
+              "geometry_material_sha256": "ee414936f7b4f2bc283016780d71afbe2b16c30beae4f148cfb02fdbe471e6a8"
             },
             {
               "vertices": 128,
@@ -13783,61 +13821,23 @@
           "status": "matches fresh KiCad visual export",
           "meshes": [
             {
-              "vertices": 296,
-              "faces": 244,
+              "vertices": 336,
+              "faces": 168,
               "bounds_mm": [
                 [
-                  58.6,
-                  59.4
+                  49.9,
+                  52.5
                 ],
                 [
-                  -82.8,
-                  -81.2
+                  -94.71,
+                  -88.91
                 ],
                 [
-                  1.6,
-                  2.05
+                  4.6,
+                  10.1
                 ]
               ],
-              "geometry_material_sha256": "016ff0e774d6fe134fecccc430274d2588d86300ae4d4e3ef9e37c714f57cb58"
-            },
-            {
-              "vertices": 2963,
-              "faces": 2876,
-              "bounds_mm": [
-                [
-                  45.85,
-                  74.15
-                ],
-                [
-                  -101.9239,
-                  -51.5039
-                ],
-                [
-                  1.675,
-                  1.675
-                ]
-              ],
-              "geometry_material_sha256": "0cbd25e2152fbbff671fba1e7f91ad4d4674e55c38eff1d3c8f6dbdd6a18a7d1"
-            },
-            {
-              "vertices": 1154,
-              "faces": 1254,
-              "bounds_mm": [
-                [
-                  44.0,
-                  76.0
-                ],
-                [
-                  -112.0,
-                  -50.0
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "115faed2e7bffd0a5f53dd9bf283c5284215466a9be3aed01f7f84f97e9af4d7"
+              "geometry_material_sha256": "04ba707628067399207eebd0eac7ba80f099281eb80a1cc75ded4f39e48306d9"
             },
             {
               "vertices": 1068,
@@ -13859,6 +13859,63 @@
               "geometry_material_sha256": "146f6f873d805953961fcae250a12553a552b3d1764f651e6fc77cf932fecd34"
             },
             {
+              "vertices": 336,
+              "faces": 168,
+              "bounds_mm": [
+                [
+                  67.5,
+                  70.1
+                ],
+                [
+                  -92.17,
+                  -86.37
+                ],
+                [
+                  4.6,
+                  10.1
+                ]
+              ],
+              "geometry_material_sha256": "2542184de91a9bb8271cbb6a69572efa13802f03dfcda8cae1a533b69c09c223"
+            },
+            {
+              "vertices": 4689,
+              "faces": 4564,
+              "bounds_mm": [
+                [
+                  45.85,
+                  74.15
+                ],
+                [
+                  -101.9239,
+                  -51.5039
+                ],
+                [
+                  1.675,
+                  1.675
+                ]
+              ],
+              "geometry_material_sha256": "2dba535ae2433124b16963b59eef997e8fbd8487a9c1e5dd56cbb740689f26c1"
+            },
+            {
+              "vertices": 926,
+              "faces": 1002,
+              "bounds_mm": [
+                [
+                  44.0,
+                  76.0
+                ],
+                [
+                  -112.0,
+                  -50.0
+                ],
+                [
+                  -0.0125,
+                  -0.0125
+                ]
+              ],
+              "geometry_material_sha256": "34b77611950b5c4b1a95fd945e2740073a871231a9fb2c761829e98268046ddb"
+            },
+            {
               "vertices": 288,
               "faces": 236,
               "bounds_mm": [
@@ -13867,34 +13924,15 @@
                   68.4
                 ],
                 [
-                  -95.8,
-                  -94.2
+                  -97.3,
+                  -95.7
                 ],
                 [
                   1.6,
                   2.4
                 ]
               ],
-              "geometry_material_sha256": "21edb038ca940d2e2de6b4404961f0b14eb5c99cbf8a5c27d8af541f8d5af2e7"
-            },
-            {
-              "vertices": 320,
-              "faces": 288,
-              "bounds_mm": [
-                [
-                  47.075,
-                  70.975
-                ],
-                [
-                  -98.225,
-                  -60.05
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "22842f5ba3f217ce2d265d515581bb2929b6de6dc167a63eacfd519db0edf241"
+              "geometry_material_sha256": "3a57525930f6d4fdaeb519345fe3eee8b2ae80d407664045ce9dfa2ee3cecee4"
             },
             {
               "vertices": 128,
@@ -13935,23 +13973,23 @@
               "geometry_material_sha256": "4a390f794118bee557f6c3b52c66f83e50f9fac2dcc91719399b6d13b681556c"
             },
             {
-              "vertices": 5072,
-              "faces": 2672,
+              "vertices": 240,
+              "faces": 216,
               "bounds_mm": [
                 [
-                  44.0,
-                  76.0
+                  47.075,
+                  70.975
                 ],
                 [
-                  -112.0,
-                  -50.0
+                  -98.225,
+                  -60.05
                 ],
                 [
-                  0.0125,
-                  1.5875
+                  1.6125,
+                  1.6125
                 ]
               ],
-              "geometry_material_sha256": "6ffe0a74071c3057bb8b1b2b2b2b4e4d96d153f3ce2533c49a490d3b27796ff4"
+              "geometry_material_sha256": "6420d8d9e5c87f94fa0019ea972ab2932018154415c516cbb1c12ddb28d7da44"
             },
             {
               "vertices": 900,
@@ -13992,27 +14030,8 @@
               "geometry_material_sha256": "763d697cbbd5e063638715d3f06fb1118208be87e175702bcc78cdef5caf15ad"
             },
             {
-              "vertices": 1609,
-              "faces": 1618,
-              "bounds_mm": [
-                [
-                  47.075,
-                  70.975
-                ],
-                [
-                  -98.8633,
-                  -60.05
-                ],
-                [
-                  1.6,
-                  1.6
-                ]
-              ],
-              "geometry_material_sha256": "8b7873ab12394fe038e70b30b09106801b3a642644888aac09fafce59ec4992a"
-            },
-            {
-              "vertices": 822,
-              "faces": 890,
+              "vertices": 5552,
+              "faces": 2928,
               "bounds_mm": [
                 [
                   44.0,
@@ -14023,11 +14042,11 @@
                   -50.0
                 ],
                 [
-                  -0.0125,
-                  -0.0125
+                  0.0125,
+                  1.5875
                 ]
               ],
-              "geometry_material_sha256": "9a3f3c87d4f7d54bfc2065c13855ea33276c75cfea4f292775ef15c0446f9a8e"
+              "geometry_material_sha256": "8cf79116be17ec138475d5bcbcce51d42b587af893efcadcb29c22df10adee86"
             },
             {
               "vertices": 544,
@@ -14047,6 +14066,63 @@
                 ]
               ],
               "geometry_material_sha256": "a2ae9b16c40cd4235b05ad0e2c38661c2a4c864245ce85c1a765ce68915491b0"
+            },
+            {
+              "vertices": 1642,
+              "faces": 1654,
+              "bounds_mm": [
+                [
+                  47.075,
+                  70.975
+                ],
+                [
+                  -98.8633,
+                  -60.05
+                ],
+                [
+                  1.6,
+                  1.6
+                ]
+              ],
+              "geometry_material_sha256": "a4e9cf45461bba654b4306744ad129210a6fd5877b69531114fd2fc5da520bfc"
+            },
+            {
+              "vertices": 3623,
+              "faces": 3145,
+              "bounds_mm": [
+                [
+                  44.5,
+                  75.5
+                ],
+                [
+                  -111.5,
+                  -50.5
+                ],
+                [
+                  0.0,
+                  0.0
+                ]
+              ],
+              "geometry_material_sha256": "aaddc5039781ed1fc64c3a775395469c57851ecd0acd50dd23da37e1ec3880db"
+            },
+            {
+              "vertices": 360,
+              "faces": 220,
+              "bounds_mm": [
+                [
+                  49.93,
+                  52.47
+                ],
+                [
+                  -94.35,
+                  -86.73
+                ],
+                [
+                  -1.4,
+                  10.14
+                ]
+              ],
+              "geometry_material_sha256": "aee70fc7f420ac7f3ac511ef90d1c31a98089585ae71b7d1e075afdb22f81fb7"
             },
             {
               "vertices": 296,
@@ -14087,42 +14163,23 @@
               "geometry_material_sha256": "c4b27c1fd53aa1d71f7d355874bee316870fc20c97ea0ff4418c61ee6e965ca1"
             },
             {
-              "vertices": 296,
-              "faces": 244,
+              "vertices": 1175,
+              "faces": 1275,
               "bounds_mm": [
                 [
-                  60.6,
-                  61.4
+                  44.0,
+                  76.0
                 ],
                 [
-                  -82.8,
-                  -81.2
+                  -112.0,
+                  -50.0
                 ],
                 [
-                  1.6,
-                  2.05
+                  1.6125,
+                  1.6125
                 ]
               ],
-              "geometry_material_sha256": "cdb4593b216c4a988018e6031be06451caaf62131c3c48e7939081e4af5641e6"
-            },
-            {
-              "vertices": 3153,
-              "faces": 2777,
-              "bounds_mm": [
-                [
-                  44.5,
-                  75.5
-                ],
-                [
-                  -111.5,
-                  -50.5
-                ],
-                [
-                  0.0,
-                  0.0
-                ]
-              ],
-              "geometry_material_sha256": "cf79210b16a2ffba97e7bead7b68b8f373e4edceb3133fbd96865151459b1872"
+              "geometry_material_sha256": "cbdd98115d3199cfe567503a9d2a20b4c846da44d744a3a9cc8910db388ea633"
             },
             {
               "vertices": 728,
@@ -14182,6 +14239,25 @@
               "geometry_material_sha256": "ede9410d5176269a335d83169be20fdf80a65f7afcc58747db0abd46a7bffd9a"
             },
             {
+              "vertices": 360,
+              "faces": 220,
+              "bounds_mm": [
+                [
+                  67.53,
+                  70.07
+                ],
+                [
+                  -94.35,
+                  -86.73
+                ],
+                [
+                  -1.4,
+                  10.14
+                ]
+              ],
+              "geometry_material_sha256": "ee414936f7b4f2bc283016780d71afbe2b16c30beae4f148cfb02fdbe471e6a8"
+            },
+            {
               "vertices": 128,
               "faces": 76,
               "bounds_mm": [
@@ -14230,61 +14306,23 @@
           "status": "matches fresh KiCad visual export",
           "meshes": [
             {
-              "vertices": 296,
-              "faces": 244,
+              "vertices": 336,
+              "faces": 168,
               "bounds_mm": [
                 [
-                  58.6,
-                  59.4
+                  49.9,
+                  52.5
                 ],
                 [
-                  -82.8,
-                  -81.2
+                  -94.71,
+                  -88.91
                 ],
                 [
-                  1.6,
-                  2.05
+                  4.6,
+                  10.1
                 ]
               ],
-              "geometry_material_sha256": "016ff0e774d6fe134fecccc430274d2588d86300ae4d4e3ef9e37c714f57cb58"
-            },
-            {
-              "vertices": 2963,
-              "faces": 2876,
-              "bounds_mm": [
-                [
-                  45.85,
-                  74.15
-                ],
-                [
-                  -101.9239,
-                  -51.5039
-                ],
-                [
-                  1.675,
-                  1.675
-                ]
-              ],
-              "geometry_material_sha256": "0cbd25e2152fbbff671fba1e7f91ad4d4674e55c38eff1d3c8f6dbdd6a18a7d1"
-            },
-            {
-              "vertices": 1154,
-              "faces": 1254,
-              "bounds_mm": [
-                [
-                  44.0,
-                  76.0
-                ],
-                [
-                  -112.0,
-                  -50.0
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "115faed2e7bffd0a5f53dd9bf283c5284215466a9be3aed01f7f84f97e9af4d7"
+              "geometry_material_sha256": "04ba707628067399207eebd0eac7ba80f099281eb80a1cc75ded4f39e48306d9"
             },
             {
               "vertices": 1068,
@@ -14306,6 +14344,63 @@
               "geometry_material_sha256": "146f6f873d805953961fcae250a12553a552b3d1764f651e6fc77cf932fecd34"
             },
             {
+              "vertices": 336,
+              "faces": 168,
+              "bounds_mm": [
+                [
+                  67.5,
+                  70.1
+                ],
+                [
+                  -92.17,
+                  -86.37
+                ],
+                [
+                  4.6,
+                  10.1
+                ]
+              ],
+              "geometry_material_sha256": "2542184de91a9bb8271cbb6a69572efa13802f03dfcda8cae1a533b69c09c223"
+            },
+            {
+              "vertices": 4689,
+              "faces": 4564,
+              "bounds_mm": [
+                [
+                  45.85,
+                  74.15
+                ],
+                [
+                  -101.9239,
+                  -51.5039
+                ],
+                [
+                  1.675,
+                  1.675
+                ]
+              ],
+              "geometry_material_sha256": "2dba535ae2433124b16963b59eef997e8fbd8487a9c1e5dd56cbb740689f26c1"
+            },
+            {
+              "vertices": 926,
+              "faces": 1002,
+              "bounds_mm": [
+                [
+                  44.0,
+                  76.0
+                ],
+                [
+                  -112.0,
+                  -50.0
+                ],
+                [
+                  -0.0125,
+                  -0.0125
+                ]
+              ],
+              "geometry_material_sha256": "34b77611950b5c4b1a95fd945e2740073a871231a9fb2c761829e98268046ddb"
+            },
+            {
               "vertices": 288,
               "faces": 236,
               "bounds_mm": [
@@ -14314,34 +14409,15 @@
                   68.4
                 ],
                 [
-                  -95.8,
-                  -94.2
+                  -97.3,
+                  -95.7
                 ],
                 [
                   1.6,
                   2.4
                 ]
               ],
-              "geometry_material_sha256": "21edb038ca940d2e2de6b4404961f0b14eb5c99cbf8a5c27d8af541f8d5af2e7"
-            },
-            {
-              "vertices": 320,
-              "faces": 288,
-              "bounds_mm": [
-                [
-                  47.075,
-                  70.975
-                ],
-                [
-                  -98.225,
-                  -60.05
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "22842f5ba3f217ce2d265d515581bb2929b6de6dc167a63eacfd519db0edf241"
+              "geometry_material_sha256": "3a57525930f6d4fdaeb519345fe3eee8b2ae80d407664045ce9dfa2ee3cecee4"
             },
             {
               "vertices": 128,
@@ -14420,6 +14496,25 @@
               "geometry_material_sha256": "5d0f638957ffe6691dff72eeed2056b1bb60383408aab6ade820e32bb4ed6974"
             },
             {
+              "vertices": 240,
+              "faces": 216,
+              "bounds_mm": [
+                [
+                  47.075,
+                  70.975
+                ],
+                [
+                  -98.225,
+                  -60.05
+                ],
+                [
+                  1.6125,
+                  1.6125
+                ]
+              ],
+              "geometry_material_sha256": "6420d8d9e5c87f94fa0019ea972ab2932018154415c516cbb1c12ddb28d7da44"
+            },
+            {
               "vertices": 4724,
               "faces": 4104,
               "bounds_mm": [
@@ -14437,25 +14532,6 @@
                 ]
               ],
               "geometry_material_sha256": "68ffe1b9f8d1dd3fde7a4bf85349a626b7f4306a02d5d4b792f2c353c239e694"
-            },
-            {
-              "vertices": 5072,
-              "faces": 2672,
-              "bounds_mm": [
-                [
-                  44.0,
-                  76.0
-                ],
-                [
-                  -112.0,
-                  -50.0
-                ],
-                [
-                  0.0125,
-                  1.5875
-                ]
-              ],
-              "geometry_material_sha256": "6ffe0a74071c3057bb8b1b2b2b2b4e4d96d153f3ce2533c49a490d3b27796ff4"
             },
             {
               "vertices": 296,
@@ -14477,27 +14553,8 @@
               "geometry_material_sha256": "763d697cbbd5e063638715d3f06fb1118208be87e175702bcc78cdef5caf15ad"
             },
             {
-              "vertices": 1609,
-              "faces": 1618,
-              "bounds_mm": [
-                [
-                  47.075,
-                  70.975
-                ],
-                [
-                  -98.8633,
-                  -60.05
-                ],
-                [
-                  1.6,
-                  1.6
-                ]
-              ],
-              "geometry_material_sha256": "8b7873ab12394fe038e70b30b09106801b3a642644888aac09fafce59ec4992a"
-            },
-            {
-              "vertices": 822,
-              "faces": 890,
+              "vertices": 5552,
+              "faces": 2928,
               "bounds_mm": [
                 [
                   44.0,
@@ -14508,11 +14565,11 @@
                   -50.0
                 ],
                 [
-                  -0.0125,
-                  -0.0125
+                  0.0125,
+                  1.5875
                 ]
               ],
-              "geometry_material_sha256": "9a3f3c87d4f7d54bfc2065c13855ea33276c75cfea4f292775ef15c0446f9a8e"
+              "geometry_material_sha256": "8cf79116be17ec138475d5bcbcce51d42b587af893efcadcb29c22df10adee86"
             },
             {
               "vertices": 544,
@@ -14532,6 +14589,63 @@
                 ]
               ],
               "geometry_material_sha256": "a2ae9b16c40cd4235b05ad0e2c38661c2a4c864245ce85c1a765ce68915491b0"
+            },
+            {
+              "vertices": 1642,
+              "faces": 1654,
+              "bounds_mm": [
+                [
+                  47.075,
+                  70.975
+                ],
+                [
+                  -98.8633,
+                  -60.05
+                ],
+                [
+                  1.6,
+                  1.6
+                ]
+              ],
+              "geometry_material_sha256": "a4e9cf45461bba654b4306744ad129210a6fd5877b69531114fd2fc5da520bfc"
+            },
+            {
+              "vertices": 3623,
+              "faces": 3145,
+              "bounds_mm": [
+                [
+                  44.5,
+                  75.5
+                ],
+                [
+                  -111.5,
+                  -50.5
+                ],
+                [
+                  0.0,
+                  0.0
+                ]
+              ],
+              "geometry_material_sha256": "aaddc5039781ed1fc64c3a775395469c57851ecd0acd50dd23da37e1ec3880db"
+            },
+            {
+              "vertices": 360,
+              "faces": 220,
+              "bounds_mm": [
+                [
+                  49.93,
+                  52.47
+                ],
+                [
+                  -94.35,
+                  -86.73
+                ],
+                [
+                  -1.4,
+                  10.14
+                ]
+              ],
+              "geometry_material_sha256": "aee70fc7f420ac7f3ac511ef90d1c31a98089585ae71b7d1e075afdb22f81fb7"
             },
             {
               "vertices": 296,
@@ -14572,42 +14686,23 @@
               "geometry_material_sha256": "c4b27c1fd53aa1d71f7d355874bee316870fc20c97ea0ff4418c61ee6e965ca1"
             },
             {
-              "vertices": 296,
-              "faces": 244,
+              "vertices": 1175,
+              "faces": 1275,
               "bounds_mm": [
                 [
-                  60.6,
-                  61.4
+                  44.0,
+                  76.0
                 ],
                 [
-                  -82.8,
-                  -81.2
+                  -112.0,
+                  -50.0
                 ],
                 [
-                  1.6,
-                  2.05
+                  1.6125,
+                  1.6125
                 ]
               ],
-              "geometry_material_sha256": "cdb4593b216c4a988018e6031be06451caaf62131c3c48e7939081e4af5641e6"
-            },
-            {
-              "vertices": 3153,
-              "faces": 2777,
-              "bounds_mm": [
-                [
-                  44.5,
-                  75.5
-                ],
-                [
-                  -111.5,
-                  -50.5
-                ],
-                [
-                  0.0,
-                  0.0
-                ]
-              ],
-              "geometry_material_sha256": "cf79210b16a2ffba97e7bead7b68b8f373e4edceb3133fbd96865151459b1872"
+              "geometry_material_sha256": "cbdd98115d3199cfe567503a9d2a20b4c846da44d744a3a9cc8910db388ea633"
             },
             {
               "vertices": 728,
@@ -14646,6 +14741,25 @@
                 ]
               ],
               "geometry_material_sha256": "e9f642afa1e0581fae93fb4f1399c14db861b52150cdf8b70e68d2c6210cae27"
+            },
+            {
+              "vertices": 360,
+              "faces": 220,
+              "bounds_mm": [
+                [
+                  67.53,
+                  70.07
+                ],
+                [
+                  -94.35,
+                  -86.73
+                ],
+                [
+                  -1.4,
+                  10.14
+                ]
+              ],
+              "geometry_material_sha256": "ee414936f7b4f2bc283016780d71afbe2b16c30beae4f148cfb02fdbe471e6a8"
             },
             {
               "vertices": 128,
@@ -16855,42 +16969,23 @@
           "status": "matches fresh KiCad visual export",
           "meshes": [
             {
-              "vertices": 296,
-              "faces": 244,
+              "vertices": 336,
+              "faces": 168,
               "bounds_mm": [
                 [
-                  58.6,
-                  59.4
+                  49.9,
+                  52.5
                 ],
                 [
-                  -82.8,
-                  -81.2
+                  -94.71,
+                  -88.91
                 ],
                 [
-                  1.6,
-                  2.05
+                  4.6,
+                  10.1
                 ]
               ],
-              "geometry_material_sha256": "016ff0e774d6fe134fecccc430274d2588d86300ae4d4e3ef9e37c714f57cb58"
-            },
-            {
-              "vertices": 2963,
-              "faces": 2876,
-              "bounds_mm": [
-                [
-                  45.85,
-                  74.15
-                ],
-                [
-                  -101.9239,
-                  -51.5039
-                ],
-                [
-                  1.675,
-                  1.675
-                ]
-              ],
-              "geometry_material_sha256": "0cbd25e2152fbbff671fba1e7f91ad4d4674e55c38eff1d3c8f6dbdd6a18a7d1"
+              "geometry_material_sha256": "04ba707628067399207eebd0eac7ba80f099281eb80a1cc75ded4f39e48306d9"
             },
             {
               "vertices": 898,
@@ -16912,25 +17007,6 @@
               "geometry_material_sha256": "0cf48900f38a3fd6668c8f0dd69f98c0182a04ef2cf1b6a88760794bc21fd535"
             },
             {
-              "vertices": 1154,
-              "faces": 1254,
-              "bounds_mm": [
-                [
-                  44.0,
-                  76.0
-                ],
-                [
-                  -112.0,
-                  -50.0
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "115faed2e7bffd0a5f53dd9bf283c5284215466a9be3aed01f7f84f97e9af4d7"
-            },
-            {
               "vertices": 1068,
               "faces": 768,
               "bounds_mm": [
@@ -16950,6 +17026,63 @@
               "geometry_material_sha256": "146f6f873d805953961fcae250a12553a552b3d1764f651e6fc77cf932fecd34"
             },
             {
+              "vertices": 336,
+              "faces": 168,
+              "bounds_mm": [
+                [
+                  67.5,
+                  70.1
+                ],
+                [
+                  -92.17,
+                  -86.37
+                ],
+                [
+                  4.6,
+                  10.1
+                ]
+              ],
+              "geometry_material_sha256": "2542184de91a9bb8271cbb6a69572efa13802f03dfcda8cae1a533b69c09c223"
+            },
+            {
+              "vertices": 4689,
+              "faces": 4564,
+              "bounds_mm": [
+                [
+                  45.85,
+                  74.15
+                ],
+                [
+                  -101.9239,
+                  -51.5039
+                ],
+                [
+                  1.675,
+                  1.675
+                ]
+              ],
+              "geometry_material_sha256": "2dba535ae2433124b16963b59eef997e8fbd8487a9c1e5dd56cbb740689f26c1"
+            },
+            {
+              "vertices": 926,
+              "faces": 1002,
+              "bounds_mm": [
+                [
+                  44.0,
+                  76.0
+                ],
+                [
+                  -112.0,
+                  -50.0
+                ],
+                [
+                  -0.0125,
+                  -0.0125
+                ]
+              ],
+              "geometry_material_sha256": "34b77611950b5c4b1a95fd945e2740073a871231a9fb2c761829e98268046ddb"
+            },
+            {
               "vertices": 288,
               "faces": 236,
               "bounds_mm": [
@@ -16958,34 +17091,15 @@
                   68.4
                 ],
                 [
-                  -95.8,
-                  -94.2
+                  -97.3,
+                  -95.7
                 ],
                 [
                   1.6,
                   2.4
                 ]
               ],
-              "geometry_material_sha256": "21edb038ca940d2e2de6b4404961f0b14eb5c99cbf8a5c27d8af541f8d5af2e7"
-            },
-            {
-              "vertices": 320,
-              "faces": 288,
-              "bounds_mm": [
-                [
-                  47.075,
-                  70.975
-                ],
-                [
-                  -98.225,
-                  -60.05
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "22842f5ba3f217ce2d265d515581bb2929b6de6dc167a63eacfd519db0edf241"
+              "geometry_material_sha256": "3a57525930f6d4fdaeb519345fe3eee8b2ae80d407664045ce9dfa2ee3cecee4"
             },
             {
               "vertices": 128,
@@ -17026,23 +17140,23 @@
               "geometry_material_sha256": "4a390f794118bee557f6c3b52c66f83e50f9fac2dcc91719399b6d13b681556c"
             },
             {
-              "vertices": 5072,
-              "faces": 2672,
+              "vertices": 240,
+              "faces": 216,
               "bounds_mm": [
                 [
-                  44.0,
-                  76.0
+                  47.075,
+                  70.975
                 ],
                 [
-                  -112.0,
-                  -50.0
+                  -98.225,
+                  -60.05
                 ],
                 [
-                  0.0125,
-                  1.5875
+                  1.6125,
+                  1.6125
                 ]
               ],
-              "geometry_material_sha256": "6ffe0a74071c3057bb8b1b2b2b2b4e4d96d153f3ce2533c49a490d3b27796ff4"
+              "geometry_material_sha256": "6420d8d9e5c87f94fa0019ea972ab2932018154415c516cbb1c12ddb28d7da44"
             },
             {
               "vertices": 296,
@@ -17064,23 +17178,23 @@
               "geometry_material_sha256": "763d697cbbd5e063638715d3f06fb1118208be87e175702bcc78cdef5caf15ad"
             },
             {
-              "vertices": 1609,
-              "faces": 1618,
+              "vertices": 5552,
+              "faces": 2928,
               "bounds_mm": [
                 [
-                  47.075,
-                  70.975
+                  44.0,
+                  76.0
                 ],
                 [
-                  -98.8633,
-                  -60.05
+                  -112.0,
+                  -50.0
                 ],
                 [
-                  1.6,
-                  1.6
+                  0.0125,
+                  1.5875
                 ]
               ],
-              "geometry_material_sha256": "8b7873ab12394fe038e70b30b09106801b3a642644888aac09fafce59ec4992a"
+              "geometry_material_sha256": "8cf79116be17ec138475d5bcbcce51d42b587af893efcadcb29c22df10adee86"
             },
             {
               "vertices": 4724,
@@ -17102,25 +17216,6 @@
               "geometry_material_sha256": "8d95ccfc81835631b79a67931b1aba71d2740183c04eec5364f8b6064b3772f0"
             },
             {
-              "vertices": 822,
-              "faces": 890,
-              "bounds_mm": [
-                [
-                  44.0,
-                  76.0
-                ],
-                [
-                  -112.0,
-                  -50.0
-                ],
-                [
-                  -0.0125,
-                  -0.0125
-                ]
-              ],
-              "geometry_material_sha256": "9a3f3c87d4f7d54bfc2065c13855ea33276c75cfea4f292775ef15c0446f9a8e"
-            },
-            {
               "vertices": 544,
               "faces": 348,
               "bounds_mm": [
@@ -17138,6 +17233,63 @@
                 ]
               ],
               "geometry_material_sha256": "a2ae9b16c40cd4235b05ad0e2c38661c2a4c864245ce85c1a765ce68915491b0"
+            },
+            {
+              "vertices": 1642,
+              "faces": 1654,
+              "bounds_mm": [
+                [
+                  47.075,
+                  70.975
+                ],
+                [
+                  -98.8633,
+                  -60.05
+                ],
+                [
+                  1.6,
+                  1.6
+                ]
+              ],
+              "geometry_material_sha256": "a4e9cf45461bba654b4306744ad129210a6fd5877b69531114fd2fc5da520bfc"
+            },
+            {
+              "vertices": 3623,
+              "faces": 3145,
+              "bounds_mm": [
+                [
+                  44.5,
+                  75.5
+                ],
+                [
+                  -111.5,
+                  -50.5
+                ],
+                [
+                  0.0,
+                  0.0
+                ]
+              ],
+              "geometry_material_sha256": "aaddc5039781ed1fc64c3a775395469c57851ecd0acd50dd23da37e1ec3880db"
+            },
+            {
+              "vertices": 360,
+              "faces": 220,
+              "bounds_mm": [
+                [
+                  49.93,
+                  52.47
+                ],
+                [
+                  -94.35,
+                  -86.73
+                ],
+                [
+                  -1.4,
+                  10.14
+                ]
+              ],
+              "geometry_material_sha256": "aee70fc7f420ac7f3ac511ef90d1c31a98089585ae71b7d1e075afdb22f81fb7"
             },
             {
               "vertices": 296,
@@ -17178,42 +17330,23 @@
               "geometry_material_sha256": "c4b27c1fd53aa1d71f7d355874bee316870fc20c97ea0ff4418c61ee6e965ca1"
             },
             {
-              "vertices": 296,
-              "faces": 244,
+              "vertices": 1175,
+              "faces": 1275,
               "bounds_mm": [
                 [
-                  60.6,
-                  61.4
+                  44.0,
+                  76.0
                 ],
                 [
-                  -82.8,
-                  -81.2
+                  -112.0,
+                  -50.0
                 ],
                 [
-                  1.6,
-                  2.05
+                  1.6125,
+                  1.6125
                 ]
               ],
-              "geometry_material_sha256": "cdb4593b216c4a988018e6031be06451caaf62131c3c48e7939081e4af5641e6"
-            },
-            {
-              "vertices": 3153,
-              "faces": 2777,
-              "bounds_mm": [
-                [
-                  44.5,
-                  75.5
-                ],
-                [
-                  -111.5,
-                  -50.5
-                ],
-                [
-                  0.0,
-                  0.0
-                ]
-              ],
-              "geometry_material_sha256": "cf79210b16a2ffba97e7bead7b68b8f373e4edceb3133fbd96865151459b1872"
+              "geometry_material_sha256": "cbdd98115d3199cfe567503a9d2a20b4c846da44d744a3a9cc8910db388ea633"
             },
             {
               "vertices": 728,
@@ -17252,6 +17385,25 @@
                 ]
               ],
               "geometry_material_sha256": "e9f642afa1e0581fae93fb4f1399c14db861b52150cdf8b70e68d2c6210cae27"
+            },
+            {
+              "vertices": 360,
+              "faces": 220,
+              "bounds_mm": [
+                [
+                  67.53,
+                  70.07
+                ],
+                [
+                  -94.35,
+                  -86.73
+                ],
+                [
+                  -1.4,
+                  10.14
+                ]
+              ],
+              "geometry_material_sha256": "ee414936f7b4f2bc283016780d71afbe2b16c30beae4f148cfb02fdbe471e6a8"
             },
             {
               "vertices": 128,
@@ -17302,61 +17454,23 @@
           "status": "matches fresh KiCad visual export",
           "meshes": [
             {
-              "vertices": 296,
-              "faces": 244,
+              "vertices": 336,
+              "faces": 168,
               "bounds_mm": [
                 [
-                  58.6,
-                  59.4
+                  49.9,
+                  52.5
                 ],
                 [
-                  -82.8,
-                  -81.2
+                  -94.71,
+                  -88.91
                 ],
                 [
-                  1.6,
-                  2.05
+                  4.6,
+                  10.1
                 ]
               ],
-              "geometry_material_sha256": "016ff0e774d6fe134fecccc430274d2588d86300ae4d4e3ef9e37c714f57cb58"
-            },
-            {
-              "vertices": 2963,
-              "faces": 2876,
-              "bounds_mm": [
-                [
-                  45.85,
-                  74.15
-                ],
-                [
-                  -101.9239,
-                  -51.5039
-                ],
-                [
-                  1.675,
-                  1.675
-                ]
-              ],
-              "geometry_material_sha256": "0cbd25e2152fbbff671fba1e7f91ad4d4674e55c38eff1d3c8f6dbdd6a18a7d1"
-            },
-            {
-              "vertices": 1154,
-              "faces": 1254,
-              "bounds_mm": [
-                [
-                  44.0,
-                  76.0
-                ],
-                [
-                  -112.0,
-                  -50.0
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "115faed2e7bffd0a5f53dd9bf283c5284215466a9be3aed01f7f84f97e9af4d7"
+              "geometry_material_sha256": "04ba707628067399207eebd0eac7ba80f099281eb80a1cc75ded4f39e48306d9"
             },
             {
               "vertices": 1068,
@@ -17378,6 +17492,63 @@
               "geometry_material_sha256": "146f6f873d805953961fcae250a12553a552b3d1764f651e6fc77cf932fecd34"
             },
             {
+              "vertices": 336,
+              "faces": 168,
+              "bounds_mm": [
+                [
+                  67.5,
+                  70.1
+                ],
+                [
+                  -92.17,
+                  -86.37
+                ],
+                [
+                  4.6,
+                  10.1
+                ]
+              ],
+              "geometry_material_sha256": "2542184de91a9bb8271cbb6a69572efa13802f03dfcda8cae1a533b69c09c223"
+            },
+            {
+              "vertices": 4689,
+              "faces": 4564,
+              "bounds_mm": [
+                [
+                  45.85,
+                  74.15
+                ],
+                [
+                  -101.9239,
+                  -51.5039
+                ],
+                [
+                  1.675,
+                  1.675
+                ]
+              ],
+              "geometry_material_sha256": "2dba535ae2433124b16963b59eef997e8fbd8487a9c1e5dd56cbb740689f26c1"
+            },
+            {
+              "vertices": 926,
+              "faces": 1002,
+              "bounds_mm": [
+                [
+                  44.0,
+                  76.0
+                ],
+                [
+                  -112.0,
+                  -50.0
+                ],
+                [
+                  -0.0125,
+                  -0.0125
+                ]
+              ],
+              "geometry_material_sha256": "34b77611950b5c4b1a95fd945e2740073a871231a9fb2c761829e98268046ddb"
+            },
+            {
               "vertices": 288,
               "faces": 236,
               "bounds_mm": [
@@ -17386,34 +17557,15 @@
                   68.4
                 ],
                 [
-                  -95.8,
-                  -94.2
+                  -97.3,
+                  -95.7
                 ],
                 [
                   1.6,
                   2.4
                 ]
               ],
-              "geometry_material_sha256": "21edb038ca940d2e2de6b4404961f0b14eb5c99cbf8a5c27d8af541f8d5af2e7"
-            },
-            {
-              "vertices": 320,
-              "faces": 288,
-              "bounds_mm": [
-                [
-                  47.075,
-                  70.975
-                ],
-                [
-                  -98.225,
-                  -60.05
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "22842f5ba3f217ce2d265d515581bb2929b6de6dc167a63eacfd519db0edf241"
+              "geometry_material_sha256": "3a57525930f6d4fdaeb519345fe3eee8b2ae80d407664045ce9dfa2ee3cecee4"
             },
             {
               "vertices": 128,
@@ -17454,23 +17606,23 @@
               "geometry_material_sha256": "4a390f794118bee557f6c3b52c66f83e50f9fac2dcc91719399b6d13b681556c"
             },
             {
-              "vertices": 5072,
-              "faces": 2672,
+              "vertices": 240,
+              "faces": 216,
               "bounds_mm": [
                 [
-                  44.0,
-                  76.0
+                  47.075,
+                  70.975
                 ],
                 [
-                  -112.0,
-                  -50.0
+                  -98.225,
+                  -60.05
                 ],
                 [
-                  0.0125,
-                  1.5875
+                  1.6125,
+                  1.6125
                 ]
               ],
-              "geometry_material_sha256": "6ffe0a74071c3057bb8b1b2b2b2b4e4d96d153f3ce2533c49a490d3b27796ff4"
+              "geometry_material_sha256": "6420d8d9e5c87f94fa0019ea972ab2932018154415c516cbb1c12ddb28d7da44"
             },
             {
               "vertices": 900,
@@ -17511,27 +17663,8 @@
               "geometry_material_sha256": "763d697cbbd5e063638715d3f06fb1118208be87e175702bcc78cdef5caf15ad"
             },
             {
-              "vertices": 1609,
-              "faces": 1618,
-              "bounds_mm": [
-                [
-                  47.075,
-                  70.975
-                ],
-                [
-                  -98.8633,
-                  -60.05
-                ],
-                [
-                  1.6,
-                  1.6
-                ]
-              ],
-              "geometry_material_sha256": "8b7873ab12394fe038e70b30b09106801b3a642644888aac09fafce59ec4992a"
-            },
-            {
-              "vertices": 822,
-              "faces": 890,
+              "vertices": 5552,
+              "faces": 2928,
               "bounds_mm": [
                 [
                   44.0,
@@ -17542,11 +17675,11 @@
                   -50.0
                 ],
                 [
-                  -0.0125,
-                  -0.0125
+                  0.0125,
+                  1.5875
                 ]
               ],
-              "geometry_material_sha256": "9a3f3c87d4f7d54bfc2065c13855ea33276c75cfea4f292775ef15c0446f9a8e"
+              "geometry_material_sha256": "8cf79116be17ec138475d5bcbcce51d42b587af893efcadcb29c22df10adee86"
             },
             {
               "vertices": 544,
@@ -17566,6 +17699,63 @@
                 ]
               ],
               "geometry_material_sha256": "a2ae9b16c40cd4235b05ad0e2c38661c2a4c864245ce85c1a765ce68915491b0"
+            },
+            {
+              "vertices": 1642,
+              "faces": 1654,
+              "bounds_mm": [
+                [
+                  47.075,
+                  70.975
+                ],
+                [
+                  -98.8633,
+                  -60.05
+                ],
+                [
+                  1.6,
+                  1.6
+                ]
+              ],
+              "geometry_material_sha256": "a4e9cf45461bba654b4306744ad129210a6fd5877b69531114fd2fc5da520bfc"
+            },
+            {
+              "vertices": 3623,
+              "faces": 3145,
+              "bounds_mm": [
+                [
+                  44.5,
+                  75.5
+                ],
+                [
+                  -111.5,
+                  -50.5
+                ],
+                [
+                  0.0,
+                  0.0
+                ]
+              ],
+              "geometry_material_sha256": "aaddc5039781ed1fc64c3a775395469c57851ecd0acd50dd23da37e1ec3880db"
+            },
+            {
+              "vertices": 360,
+              "faces": 220,
+              "bounds_mm": [
+                [
+                  49.93,
+                  52.47
+                ],
+                [
+                  -94.35,
+                  -86.73
+                ],
+                [
+                  -1.4,
+                  10.14
+                ]
+              ],
+              "geometry_material_sha256": "aee70fc7f420ac7f3ac511ef90d1c31a98089585ae71b7d1e075afdb22f81fb7"
             },
             {
               "vertices": 296,
@@ -17606,42 +17796,23 @@
               "geometry_material_sha256": "c4b27c1fd53aa1d71f7d355874bee316870fc20c97ea0ff4418c61ee6e965ca1"
             },
             {
-              "vertices": 296,
-              "faces": 244,
+              "vertices": 1175,
+              "faces": 1275,
               "bounds_mm": [
                 [
-                  60.6,
-                  61.4
+                  44.0,
+                  76.0
                 ],
                 [
-                  -82.8,
-                  -81.2
+                  -112.0,
+                  -50.0
                 ],
                 [
-                  1.6,
-                  2.05
+                  1.6125,
+                  1.6125
                 ]
               ],
-              "geometry_material_sha256": "cdb4593b216c4a988018e6031be06451caaf62131c3c48e7939081e4af5641e6"
-            },
-            {
-              "vertices": 3153,
-              "faces": 2777,
-              "bounds_mm": [
-                [
-                  44.5,
-                  75.5
-                ],
-                [
-                  -111.5,
-                  -50.5
-                ],
-                [
-                  0.0,
-                  0.0
-                ]
-              ],
-              "geometry_material_sha256": "cf79210b16a2ffba97e7bead7b68b8f373e4edceb3133fbd96865151459b1872"
+              "geometry_material_sha256": "cbdd98115d3199cfe567503a9d2a20b4c846da44d744a3a9cc8910db388ea633"
             },
             {
               "vertices": 728,
@@ -17701,6 +17872,25 @@
               "geometry_material_sha256": "ede9410d5176269a335d83169be20fdf80a65f7afcc58747db0abd46a7bffd9a"
             },
             {
+              "vertices": 360,
+              "faces": 220,
+              "bounds_mm": [
+                [
+                  67.53,
+                  70.07
+                ],
+                [
+                  -94.35,
+                  -86.73
+                ],
+                [
+                  -1.4,
+                  10.14
+                ]
+              ],
+              "geometry_material_sha256": "ee414936f7b4f2bc283016780d71afbe2b16c30beae4f148cfb02fdbe471e6a8"
+            },
+            {
               "vertices": 128,
               "faces": 76,
               "bounds_mm": [
@@ -17749,61 +17939,23 @@
           "status": "matches fresh KiCad visual export",
           "meshes": [
             {
-              "vertices": 296,
-              "faces": 244,
+              "vertices": 336,
+              "faces": 168,
               "bounds_mm": [
                 [
-                  58.6,
-                  59.4
+                  49.9,
+                  52.5
                 ],
                 [
-                  -82.8,
-                  -81.2
+                  -94.71,
+                  -88.91
                 ],
                 [
-                  1.6,
-                  2.05
+                  4.6,
+                  10.1
                 ]
               ],
-              "geometry_material_sha256": "016ff0e774d6fe134fecccc430274d2588d86300ae4d4e3ef9e37c714f57cb58"
-            },
-            {
-              "vertices": 2963,
-              "faces": 2876,
-              "bounds_mm": [
-                [
-                  45.85,
-                  74.15
-                ],
-                [
-                  -101.9239,
-                  -51.5039
-                ],
-                [
-                  1.675,
-                  1.675
-                ]
-              ],
-              "geometry_material_sha256": "0cbd25e2152fbbff671fba1e7f91ad4d4674e55c38eff1d3c8f6dbdd6a18a7d1"
-            },
-            {
-              "vertices": 1154,
-              "faces": 1254,
-              "bounds_mm": [
-                [
-                  44.0,
-                  76.0
-                ],
-                [
-                  -112.0,
-                  -50.0
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "115faed2e7bffd0a5f53dd9bf283c5284215466a9be3aed01f7f84f97e9af4d7"
+              "geometry_material_sha256": "04ba707628067399207eebd0eac7ba80f099281eb80a1cc75ded4f39e48306d9"
             },
             {
               "vertices": 1068,
@@ -17825,6 +17977,63 @@
               "geometry_material_sha256": "146f6f873d805953961fcae250a12553a552b3d1764f651e6fc77cf932fecd34"
             },
             {
+              "vertices": 336,
+              "faces": 168,
+              "bounds_mm": [
+                [
+                  67.5,
+                  70.1
+                ],
+                [
+                  -92.17,
+                  -86.37
+                ],
+                [
+                  4.6,
+                  10.1
+                ]
+              ],
+              "geometry_material_sha256": "2542184de91a9bb8271cbb6a69572efa13802f03dfcda8cae1a533b69c09c223"
+            },
+            {
+              "vertices": 4689,
+              "faces": 4564,
+              "bounds_mm": [
+                [
+                  45.85,
+                  74.15
+                ],
+                [
+                  -101.9239,
+                  -51.5039
+                ],
+                [
+                  1.675,
+                  1.675
+                ]
+              ],
+              "geometry_material_sha256": "2dba535ae2433124b16963b59eef997e8fbd8487a9c1e5dd56cbb740689f26c1"
+            },
+            {
+              "vertices": 926,
+              "faces": 1002,
+              "bounds_mm": [
+                [
+                  44.0,
+                  76.0
+                ],
+                [
+                  -112.0,
+                  -50.0
+                ],
+                [
+                  -0.0125,
+                  -0.0125
+                ]
+              ],
+              "geometry_material_sha256": "34b77611950b5c4b1a95fd945e2740073a871231a9fb2c761829e98268046ddb"
+            },
+            {
               "vertices": 288,
               "faces": 236,
               "bounds_mm": [
@@ -17833,34 +18042,15 @@
                   68.4
                 ],
                 [
-                  -95.8,
-                  -94.2
+                  -97.3,
+                  -95.7
                 ],
                 [
                   1.6,
                   2.4
                 ]
               ],
-              "geometry_material_sha256": "21edb038ca940d2e2de6b4404961f0b14eb5c99cbf8a5c27d8af541f8d5af2e7"
-            },
-            {
-              "vertices": 320,
-              "faces": 288,
-              "bounds_mm": [
-                [
-                  47.075,
-                  70.975
-                ],
-                [
-                  -98.225,
-                  -60.05
-                ],
-                [
-                  1.6125,
-                  1.6125
-                ]
-              ],
-              "geometry_material_sha256": "22842f5ba3f217ce2d265d515581bb2929b6de6dc167a63eacfd519db0edf241"
+              "geometry_material_sha256": "3a57525930f6d4fdaeb519345fe3eee8b2ae80d407664045ce9dfa2ee3cecee4"
             },
             {
               "vertices": 128,
@@ -17939,6 +18129,25 @@
               "geometry_material_sha256": "5d0f638957ffe6691dff72eeed2056b1bb60383408aab6ade820e32bb4ed6974"
             },
             {
+              "vertices": 240,
+              "faces": 216,
+              "bounds_mm": [
+                [
+                  47.075,
+                  70.975
+                ],
+                [
+                  -98.225,
+                  -60.05
+                ],
+                [
+                  1.6125,
+                  1.6125
+                ]
+              ],
+              "geometry_material_sha256": "6420d8d9e5c87f94fa0019ea972ab2932018154415c516cbb1c12ddb28d7da44"
+            },
+            {
               "vertices": 4724,
               "faces": 4104,
               "bounds_mm": [
@@ -17956,25 +18165,6 @@
                 ]
               ],
               "geometry_material_sha256": "68ffe1b9f8d1dd3fde7a4bf85349a626b7f4306a02d5d4b792f2c353c239e694"
-            },
-            {
-              "vertices": 5072,
-              "faces": 2672,
-              "bounds_mm": [
-                [
-                  44.0,
-                  76.0
-                ],
-                [
-                  -112.0,
-                  -50.0
-                ],
-                [
-                  0.0125,
-                  1.5875
-                ]
-              ],
-              "geometry_material_sha256": "6ffe0a74071c3057bb8b1b2b2b2b4e4d96d153f3ce2533c49a490d3b27796ff4"
             },
             {
               "vertices": 296,
@@ -17996,27 +18186,8 @@
               "geometry_material_sha256": "763d697cbbd5e063638715d3f06fb1118208be87e175702bcc78cdef5caf15ad"
             },
             {
-              "vertices": 1609,
-              "faces": 1618,
-              "bounds_mm": [
-                [
-                  47.075,
-                  70.975
-                ],
-                [
-                  -98.8633,
-                  -60.05
-                ],
-                [
-                  1.6,
-                  1.6
-                ]
-              ],
-              "geometry_material_sha256": "8b7873ab12394fe038e70b30b09106801b3a642644888aac09fafce59ec4992a"
-            },
-            {
-              "vertices": 822,
-              "faces": 890,
+              "vertices": 5552,
+              "faces": 2928,
               "bounds_mm": [
                 [
                   44.0,
@@ -18027,11 +18198,11 @@
                   -50.0
                 ],
                 [
-                  -0.0125,
-                  -0.0125
+                  0.0125,
+                  1.5875
                 ]
               ],
-              "geometry_material_sha256": "9a3f3c87d4f7d54bfc2065c13855ea33276c75cfea4f292775ef15c0446f9a8e"
+              "geometry_material_sha256": "8cf79116be17ec138475d5bcbcce51d42b587af893efcadcb29c22df10adee86"
             },
             {
               "vertices": 544,
@@ -18051,6 +18222,63 @@
                 ]
               ],
               "geometry_material_sha256": "a2ae9b16c40cd4235b05ad0e2c38661c2a4c864245ce85c1a765ce68915491b0"
+            },
+            {
+              "vertices": 1642,
+              "faces": 1654,
+              "bounds_mm": [
+                [
+                  47.075,
+                  70.975
+                ],
+                [
+                  -98.8633,
+                  -60.05
+                ],
+                [
+                  1.6,
+                  1.6
+                ]
+              ],
+              "geometry_material_sha256": "a4e9cf45461bba654b4306744ad129210a6fd5877b69531114fd2fc5da520bfc"
+            },
+            {
+              "vertices": 3623,
+              "faces": 3145,
+              "bounds_mm": [
+                [
+                  44.5,
+                  75.5
+                ],
+                [
+                  -111.5,
+                  -50.5
+                ],
+                [
+                  0.0,
+                  0.0
+                ]
+              ],
+              "geometry_material_sha256": "aaddc5039781ed1fc64c3a775395469c57851ecd0acd50dd23da37e1ec3880db"
+            },
+            {
+              "vertices": 360,
+              "faces": 220,
+              "bounds_mm": [
+                [
+                  49.93,
+                  52.47
+                ],
+                [
+                  -94.35,
+                  -86.73
+                ],
+                [
+                  -1.4,
+                  10.14
+                ]
+              ],
+              "geometry_material_sha256": "aee70fc7f420ac7f3ac511ef90d1c31a98089585ae71b7d1e075afdb22f81fb7"
             },
             {
               "vertices": 296,
@@ -18091,42 +18319,23 @@
               "geometry_material_sha256": "c4b27c1fd53aa1d71f7d355874bee316870fc20c97ea0ff4418c61ee6e965ca1"
             },
             {
-              "vertices": 296,
-              "faces": 244,
+              "vertices": 1175,
+              "faces": 1275,
               "bounds_mm": [
                 [
-                  60.6,
-                  61.4
+                  44.0,
+                  76.0
                 ],
                 [
-                  -82.8,
-                  -81.2
+                  -112.0,
+                  -50.0
                 ],
                 [
-                  1.6,
-                  2.05
+                  1.6125,
+                  1.6125
                 ]
               ],
-              "geometry_material_sha256": "cdb4593b216c4a988018e6031be06451caaf62131c3c48e7939081e4af5641e6"
-            },
-            {
-              "vertices": 3153,
-              "faces": 2777,
-              "bounds_mm": [
-                [
-                  44.5,
-                  75.5
-                ],
-                [
-                  -111.5,
-                  -50.5
-                ],
-                [
-                  0.0,
-                  0.0
-                ]
-              ],
-              "geometry_material_sha256": "cf79210b16a2ffba97e7bead7b68b8f373e4edceb3133fbd96865151459b1872"
+              "geometry_material_sha256": "cbdd98115d3199cfe567503a9d2a20b4c846da44d744a3a9cc8910db388ea633"
             },
             {
               "vertices": 728,
@@ -18165,6 +18374,25 @@
                 ]
               ],
               "geometry_material_sha256": "e9f642afa1e0581fae93fb4f1399c14db861b52150cdf8b70e68d2c6210cae27"
+            },
+            {
+              "vertices": 360,
+              "faces": 220,
+              "bounds_mm": [
+                [
+                  67.53,
+                  70.07
+                ],
+                [
+                  -94.35,
+                  -86.73
+                ],
+                [
+                  -1.4,
+                  10.14
+                ]
+              ],
+              "geometry_material_sha256": "ee414936f7b4f2bc283016780d71afbe2b16c30beae4f148cfb02fdbe471e6a8"
             },
             {
               "vertices": 128,
@@ -49702,12 +49930,212 @@
     "microphone-flex-left": {
       "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
       "source": "CAD/KiCad/shields/microphone-flex/microphone-flex.kicad_pcb",
-      "source_sha256": "6a6092fa0cf06bdf13d1a8edd0eb4b63762e89bdd055c9633550b878a6acfad4",
-      "visual_input_sha256": "4b1a7758619a7a72050c40e4948bbc943ae0cee309e260ad1af9685bde2dfa70",
-      "native_vrml_sha256": "80f8adf55935a340b86b1efa03eb16399798d7cc7d7aa452609c27e675910653",
+      "source_sha256": "d6e2aa1c4010032a2ec8e737e6816dca3e95426a4f3a73f85ace6ecc1da652f7",
+      "visual_input_sha256": "2154aa11d65d303216e6ceeb1f274f77a6b050816ac633cfd20ee55f317ebcf0",
+      "native_vrml_sha256": "81a1f222a0f50e144da5781b5cd293eb12918588528bf08d54b7bd08ef17e304",
       "models": [
         {
-          "ref": "R6",
+          "ref": "J1",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_JST.3dshapes/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.step",
+          "sha256": "6af8c9d4b052b4d7b4785c2aa640458d32a1e9b79f9bed72e845352e5d2edad5",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "J2",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Horizontal.step",
+          "sha256": "58bd51f4d5534eb5ef6b913efe90c1bbc61647c23a45db70b01c24dcdf30a121",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "R4",
+          "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
+          "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "TP1",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
+          "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "C7",
+          "file": "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step",
+          "sha256": "9a669c1a2f1ea25b88b401acef6efeaa80a067bd7da9db6993de719a7fbe155c",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "JP2",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step",
+          "sha256": "b91b4ac5acf1a0d28a676703db972d17b8f11ef26a85b58d60786a69246b921b",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "JP2",
+          "file": "CAD/KiCad/shields/microphone-flex/3dmodels/selector-shunt.wrl",
+          "sha256": "307f85e7202fdbad31659499c916ab00339fde795b6e30ae1f935a42c212820e",
+          "offset_mm": [
+            0.0,
+            -1.27,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "J3",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Horizontal.step",
+          "sha256": "58bd51f4d5534eb5ef6b913efe90c1bbc61647c23a45db70b01c24dcdf30a121",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "JP1",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step",
+          "sha256": "b91b4ac5acf1a0d28a676703db972d17b8f11ef26a85b58d60786a69246b921b",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "JP1",
+          "file": "CAD/KiCad/shields/microphone-flex/3dmodels/selector-shunt.wrl",
+          "sha256": "307f85e7202fdbad31659499c916ab00339fde795b6e30ae1f935a42c212820e",
+          "offset_mm": [
+            0.0,
+            -3.81,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "R5",
           "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
           "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
           "offset_mm": [
@@ -49747,29 +50175,9 @@
           ]
         },
         {
-          "ref": "R2",
-          "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
-          "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "J3",
-          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Horizontal.step",
-          "sha256": "58bd51f4d5534eb5ef6b913efe90c1bbc61647c23a45db70b01c24dcdf30a121",
+          "ref": "TP2",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
+          "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
           "offset_mm": [
             0.0,
             0.0,
@@ -49867,149 +50275,9 @@
           ]
         },
         {
-          "ref": "R1",
+          "ref": "R6",
           "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
           "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "TP2",
-          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
-          "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "TP1",
-          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
-          "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "J1",
-          "file": "${KICAD9_3DMODEL_DIR}/Connector_JST.3dshapes/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.step",
-          "sha256": "6af8c9d4b052b4d7b4785c2aa640458d32a1e9b79f9bed72e845352e5d2edad5",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "J2",
-          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Horizontal.step",
-          "sha256": "58bd51f4d5534eb5ef6b913efe90c1bbc61647c23a45db70b01c24dcdf30a121",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "R5",
-          "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
-          "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "R4",
-          "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
-          "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "C7",
-          "file": "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step",
-          "sha256": "9a669c1a2f1ea25b88b401acef6efeaa80a067bd7da9db6993de719a7fbe155c",
           "offset_mm": [
             0.0,
             0.0,
@@ -50029,201 +50297,21 @@
       ],
       "pcb_underside_z_mm": 0,
       "mesh_counts": {
-        "models": 16,
+        "models": 18,
         "board_meshes": 7,
-        "vertices": 27052,
-        "faces": 21853,
-        "materials": 16
+        "vertices": 30621,
+        "faces": 24550,
+        "materials": 17
       },
-      "glb_sha256": "d1bc14ea9274713d56dda92cbb12251613fb785f38462f59f603037149d0d653"
+      "glb_sha256": "5e02b7255428a857d5d510b8b1a4055af899e8286710fd6f1557ad3f5e291b6c"
     },
     "microphone-flex-right": {
       "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
       "source": "CAD/KiCad/shields/microphone-flex/microphone-flex.kicad_pcb",
-      "source_sha256": "6a6092fa0cf06bdf13d1a8edd0eb4b63762e89bdd055c9633550b878a6acfad4",
-      "visual_input_sha256": "b23d57d88c6a19823c2ea4d04bee17b25a65bffd8fae1cf32d8a30a944784344",
-      "native_vrml_sha256": "c7197bd243ccc8412b2e3ad30d0ee87a81f25f708cee06ac81e90746a4342338",
+      "source_sha256": "d6e2aa1c4010032a2ec8e737e6816dca3e95426a4f3a73f85ace6ecc1da652f7",
+      "visual_input_sha256": "0614681ad6925c4d94c3f79642bdfc295908662cefcbe4c0a73e54571e104443",
+      "native_vrml_sha256": "4952fa3bd60e137d19e4c20db8b0bc3c7821f686c5c65bb92196dc00e66d310f",
       "models": [
-        {
-          "ref": "R6",
-          "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
-          "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "M1",
-          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Vertical.step",
-          "sha256": "c65e07a9f21343c3a79efcdc9c439aab14cb7f68bb491c08d95d1fdc007b20e1",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "R2",
-          "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
-          "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "J3",
-          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Horizontal.step",
-          "sha256": "58bd51f4d5534eb5ef6b913efe90c1bbc61647c23a45db70b01c24dcdf30a121",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "C6",
-          "file": "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step",
-          "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "D1",
-          "file": "${KICAD9_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0603_1608Metric.step",
-          "sha256": "98343205ec260ec165026ba2d44329a23096779ac36c553ea84aa7b370242e6d",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "R1",
-          "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
-          "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "TP2",
-          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
-          "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "TP1",
-          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
-          "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
         {
           "ref": "J1",
           "file": "${KICAD9_3DMODEL_DIR}/Connector_JST.3dshapes/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.step",
@@ -50265,7 +50353,7 @@
           ]
         },
         {
-          "ref": "R5",
+          "ref": "R4",
           "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
           "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
           "offset_mm": [
@@ -50285,9 +50373,9 @@
           ]
         },
         {
-          "ref": "R4",
-          "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
-          "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
+          "ref": "TP1",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
+          "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
           "offset_mm": [
             0.0,
             0.0,
@@ -50363,27 +50451,487 @@
             1.0,
             1.0
           ]
+        },
+        {
+          "ref": "JP2",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step",
+          "sha256": "b91b4ac5acf1a0d28a676703db972d17b8f11ef26a85b58d60786a69246b921b",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "JP2",
+          "file": "CAD/KiCad/shields/microphone-flex/3dmodels/selector-shunt.wrl",
+          "sha256": "307f85e7202fdbad31659499c916ab00339fde795b6e30ae1f935a42c212820e",
+          "offset_mm": [
+            0.0,
+            -1.27,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "J3",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Horizontal.step",
+          "sha256": "58bd51f4d5534eb5ef6b913efe90c1bbc61647c23a45db70b01c24dcdf30a121",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "JP1",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step",
+          "sha256": "b91b4ac5acf1a0d28a676703db972d17b8f11ef26a85b58d60786a69246b921b",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "JP1",
+          "file": "CAD/KiCad/shields/microphone-flex/3dmodels/selector-shunt.wrl",
+          "sha256": "307f85e7202fdbad31659499c916ab00339fde795b6e30ae1f935a42c212820e",
+          "offset_mm": [
+            0.0,
+            -3.81,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "R5",
+          "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
+          "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "M1",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Vertical.step",
+          "sha256": "c65e07a9f21343c3a79efcdc9c439aab14cb7f68bb491c08d95d1fdc007b20e1",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "TP2",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
+          "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "C6",
+          "file": "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step",
+          "sha256": "4857b3dc717675bf1fb22edda622ac3b3ae03cf44d81eefaf3fa3ba3a86d84c1",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "D1",
+          "file": "${KICAD9_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0603_1608Metric.step",
+          "sha256": "98343205ec260ec165026ba2d44329a23096779ac36c553ea84aa7b370242e6d",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "R6",
+          "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
+          "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
         }
       ],
       "pcb_underside_z_mm": 0,
       "mesh_counts": {
-        "models": 16,
+        "models": 18,
         "board_meshes": 7,
-        "vertices": 27054,
-        "faces": 21851,
-        "materials": 16
+        "vertices": 30623,
+        "faces": 24548,
+        "materials": 17
       },
-      "glb_sha256": "db02c317ad592b79b95f169b5a89e6d4b671f742d9bd3de29253ca23c0a8e627"
+      "glb_sha256": "98b687abd4b1e8ef8a2ed0d31893ef3de9e8f9c6d7c6a2bb506a60be2a05ea9a"
     },
     "microphone-flex-up": {
       "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
       "source": "CAD/KiCad/shields/microphone-flex/microphone-flex.kicad_pcb",
-      "source_sha256": "6a6092fa0cf06bdf13d1a8edd0eb4b63762e89bdd055c9633550b878a6acfad4",
-      "visual_input_sha256": "af5dc22ac8ff6d065f99a5b6197a1870c5f3b57967ca871cbf3c7646a857a190",
-      "native_vrml_sha256": "4cbc08923ac22a9ed4ae2913e4defa6c10fd5de6ad99369a4a2a7d90f67784e1",
+      "source_sha256": "d6e2aa1c4010032a2ec8e737e6816dca3e95426a4f3a73f85ace6ecc1da652f7",
+      "visual_input_sha256": "5f6e3b8ca669007385c46294a4543d46b5a37d511dfbb01cb578a6c7d6f764e2",
+      "native_vrml_sha256": "3c7a436c0236a836fb5915a9c52e8e037d48df5713a25617f7771cd6b0fbc5e8",
       "models": [
         {
-          "ref": "R6",
+          "ref": "J1",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_JST.3dshapes/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.step",
+          "sha256": "6af8c9d4b052b4d7b4785c2aa640458d32a1e9b79f9bed72e845352e5d2edad5",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "J2",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Horizontal.step",
+          "sha256": "58bd51f4d5534eb5ef6b913efe90c1bbc61647c23a45db70b01c24dcdf30a121",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "R4",
+          "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
+          "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "TP1",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
+          "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "C7",
+          "file": "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step",
+          "sha256": "9a669c1a2f1ea25b88b401acef6efeaa80a067bd7da9db6993de719a7fbe155c",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "H3",
+          "file": "CAD/KiCad/shields/microphone/3dmodels/M2_insulating_support_reference.step",
+          "sha256": "bbe9260fc3060f0eb8a102dabd81908226f449844f184f8f03b57e265fdaeddf",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "H4",
+          "file": "CAD/KiCad/shields/microphone/3dmodels/M2_insulating_support_reference.step",
+          "sha256": "bbe9260fc3060f0eb8a102dabd81908226f449844f184f8f03b57e265fdaeddf",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "JP2",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step",
+          "sha256": "b91b4ac5acf1a0d28a676703db972d17b8f11ef26a85b58d60786a69246b921b",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "JP2",
+          "file": "CAD/KiCad/shields/microphone-flex/3dmodels/selector-shunt.wrl",
+          "sha256": "307f85e7202fdbad31659499c916ab00339fde795b6e30ae1f935a42c212820e",
+          "offset_mm": [
+            0.0,
+            -1.27,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "J3",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Horizontal.step",
+          "sha256": "58bd51f4d5534eb5ef6b913efe90c1bbc61647c23a45db70b01c24dcdf30a121",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "JP1",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step",
+          "sha256": "b91b4ac5acf1a0d28a676703db972d17b8f11ef26a85b58d60786a69246b921b",
+          "offset_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "JP1",
+          "file": "CAD/KiCad/shields/microphone-flex/3dmodels/selector-shunt.wrl",
+          "sha256": "307f85e7202fdbad31659499c916ab00339fde795b6e30ae1f935a42c212820e",
+          "offset_mm": [
+            0.0,
+            -3.81,
+            0.0
+          ],
+          "rotation_deg": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "ref": "R5",
           "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
           "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
           "offset_mm": [
@@ -50443,29 +50991,9 @@
           ]
         },
         {
-          "ref": "R2",
-          "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
-          "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "J3",
-          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Horizontal.step",
-          "sha256": "58bd51f4d5534eb5ef6b913efe90c1bbc61647c23a45db70b01c24dcdf30a121",
+          "ref": "TP2",
+          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
+          "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
           "offset_mm": [
             0.0,
             0.0,
@@ -50523,189 +51051,9 @@
           ]
         },
         {
-          "ref": "R1",
+          "ref": "R6",
           "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
           "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "TP2",
-          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
-          "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "TP1",
-          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step",
-          "sha256": "e8c49ca8dadec0cccdda815f693b649b4eecfea22429e8c3bce881ac3ce235b9",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "H4",
-          "file": "CAD/KiCad/shields/microphone/3dmodels/M2_insulating_support_reference.step",
-          "sha256": "bbe9260fc3060f0eb8a102dabd81908226f449844f184f8f03b57e265fdaeddf",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "J1",
-          "file": "${KICAD9_3DMODEL_DIR}/Connector_JST.3dshapes/JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical.step",
-          "sha256": "6af8c9d4b052b4d7b4785c2aa640458d32a1e9b79f9bed72e845352e5d2edad5",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "J2",
-          "file": "${KICAD9_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x05_P2.54mm_Horizontal.step",
-          "sha256": "58bd51f4d5534eb5ef6b913efe90c1bbc61647c23a45db70b01c24dcdf30a121",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "R5",
-          "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
-          "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "H3",
-          "file": "CAD/KiCad/shields/microphone/3dmodels/M2_insulating_support_reference.step",
-          "sha256": "bbe9260fc3060f0eb8a102dabd81908226f449844f184f8f03b57e265fdaeddf",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "R4",
-          "file": "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step",
-          "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
-          "offset_mm": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "rotation_deg": [
-            0.0,
-            0.0,
-            0.0
-          ],
-          "scale": [
-            1.0,
-            1.0,
-            1.0
-          ]
-        },
-        {
-          "ref": "C7",
-          "file": "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step",
-          "sha256": "9a669c1a2f1ea25b88b401acef6efeaa80a067bd7da9db6993de719a7fbe155c",
           "offset_mm": [
             0.0,
             0.0,
@@ -50725,13 +51073,13 @@
       ],
       "pcb_underside_z_mm": 0,
       "mesh_counts": {
-        "models": 17,
+        "models": 19,
         "board_meshes": 7,
-        "vertices": 26938,
-        "faces": 21739,
-        "materials": 16
+        "vertices": 30507,
+        "faces": 24436,
+        "materials": 17
       },
-      "glb_sha256": "7828edf8e8742468001814dfd048737bf407f003b1c35c65205ceb3434807e83"
+      "glb_sha256": "679bf6e9f9cf62ddba80ac21b075f116a4e9c464f7a1ec271b2dc825b2a5342a"
     },
     "microphone": {
       "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",

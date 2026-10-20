@@ -13,7 +13,21 @@
   "slot_spacing_mm": 50,
   "side_socket_contacts_checked": 10,
   "maximum_contact_row_error_mm": 9.999999974752427e-07,
-  "schematic_pcb_connected_pin_parity": 36,
+  "schematic_pcb_connected_pin_parity": 38,
+  "selectors": {
+    "JP1": {
+      "1-2": "50dB",
+      "2-3": "40dB",
+      "open": "60dB",
+      "initial": "2-3"
+    },
+    "JP2": {
+      "1-2": "1:500",
+      "2-3": "1:2000",
+      "open": "1:4000",
+      "initial": "1-2"
+    }
+  },
   "population": "ONE module only",
   "physical_fit_verified": false
 }

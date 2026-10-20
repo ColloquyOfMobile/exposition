@@ -1,17 +1,23 @@
 {
-  "source_sha256": "6a6092fa0cf06bdf13d1a8edd0eb4b63762e89bdd055c9633550b878a6acfad4",
+  "source_sha256": "d6e2aa1c4010032a2ec8e737e6816dca3e95426a4f3a73f85ace6ecc1da652f7",
   "variants": {
     "up": {
-      "glb_sha256": "7828edf8e8742468001814dfd048737bf407f003b1c35c65205ceb3434807e83",
+      "glb_sha256": "679bf6e9f9cf62ddba80ac21b075f116a4e9c464f7a1ec271b2dc825b2a5342a",
       "one_module_only": true
     },
     "left": {
-      "glb_sha256": "d1bc14ea9274713d56dda92cbb12251613fb785f38462f59f603037149d0d653",
+      "glb_sha256": "5e02b7255428a857d5d510b8b1a4055af899e8286710fd6f1557ad3f5e291b6c",
       "one_module_only": true
     },
     "right": {
-      "glb_sha256": "db02c317ad592b79b95f169b5a89e6d4b671f742d9bd3de29253ca23c0a8e627",
+      "glb_sha256": "98b687abd4b1e8ef8a2ed0d31893ef3de9e8f9c6d7c6a2bb506a60be2a05ea9a",
       "one_module_only": true
     }
+  },
+  "preview_sha256": {
+    "left": "cdec9095d6b0a899ebc9ef84243d088524f94b582e5b031a40bae4444b522c2e",
+    "right": "dcc246c89b8fab46fe1efb8f674bf034936cef82cb3f9e9c3dc08c3b8fb79df1",
+    "up": "f8dd50d3ef222eec51b4a114722d06bc33fadf554a44215f5ef024e875722f84",
+    "comparison": "40d60232e97212c16b120a813220e048c13bccb30bec4f8278d365a7bda68bc0"
   }
 }

@@ -154,7 +154,10 @@ holder, then the adapter if it is in the order.
       spacing, the header offset, and the seated height (11.04 mm
       nominal).
 - [ ] J1 is GND / +5V / OUT, pin 1 to pin 1 with the existing harness.
-- [ ] R1/R2 straps (40 dB gain, AR 1:500) match the modules in use now.
+- [ ] Current flex: JP1/JP2 are removable 1x03 selectors with two shunts
+      supplied; JP1 2-3 = 40 dB and JP2 1-2 = AR 1:500 initially.
+      Check all selectable settings and adjustment access on the real module.
+      R1/R2 fixed links apply only to the older Rev B board.
 - [ ] M5 holes 50 mm apart on the actual artwork profile.
 
 ### 2.6 Teensy adapter (if in this order)

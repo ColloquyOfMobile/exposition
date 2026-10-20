@@ -2,6 +2,7 @@
 from pathlib import Path
 import hashlib
 import json
+import subprocess
 import sys
 
 import pcbnew as p
@@ -9,13 +10,40 @@ import pcbnew as p
 ROOT=Path(__file__).resolve().parent
 ASSEMBLY=ROOT.parent/'assembly-3d'
 sys.path.insert(0,str(ASSEMBLY))
-from visual_exports import export_visual
+from visual_exports import CLI, export_visual
 WORK=ROOT/'variants'
 WORK.mkdir(parents=True,exist_ok=True)
 
 
 def attach(fp,path):
     model=p.FP_3DMODEL();model.m_Filename=path.resolve().as_posix();fp.Add3DModel(model)
+
+
+def preview():
+    """Refresh the orientation comparison from the same saved variant PCBs."""
+    from PIL import Image, ImageDraw, ImageFont
+    canvas=Image.new('RGB',(1800,900),'white')
+    draw=ImageDraw.Draw(canvas)
+    font=ImageFont.truetype('C:/Windows/Fonts/arial.ttf',24)
+    heading=ImageFont.truetype('C:/Windows/Fonts/arialbd.ttf',30)
+    draw.text((30,15),'MICROPHONE FLEX / REMOVABLE GAIN AND A/R SELECTORS',font=heading,fill='black')
+    draw.text((30,55),'Initial shunts: JP1 2-3 = 40 dB; JP2 1-2 = 1:500. Fit one module only.',font=font,fill='black')
+    hashes={}
+    for i,orientation in enumerate(('left','right','up')):
+        image=WORK/(orientation+'.png')
+        subprocess.run([str(CLI),'pcb','render','--width','800','--height','960',
+                        '--background','opaque','--side','top','--rotate','335,0,20',
+                        '-o',str(image),str(WORK/(orientation+'.kicad_pcb'))],
+                       check=True,stdout=subprocess.DEVNULL)
+        with Image.open(image) as rendered:
+            canvas.paste(rendered.convert('RGB').resize((600,720)),(600*i,140))
+        draw.text((600*i+30,105),orientation.upper(),font=heading,fill='black')
+        hashes[orientation]=hashlib.sha256(image.read_bytes()).hexdigest()
+    draw.text((30,865),'Generic header/shunt proxies. Physical dimensions and adjustment access require checking.',font=font,fill='black')
+    path=ASSEMBLY/'microphone-positions-preview.png'
+    canvas.save(path)
+    hashes['comparison']=hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashes
 
 
 def main():
@@ -25,8 +53,11 @@ def main():
     for orientation in ('up','left','right'):
         board=p.LoadBoard(str(source));parts={fp.GetReference():fp for fp in board.GetFootprints()}
         for fp in parts.values():
-            for model in fp.Models():
+            models=list(fp.Models())
+            fp.Models().clear()
+            for model in models:
                 model.m_Filename=model.m_Filename.replace('${KIPRJMOD}',ROOT.as_posix())
+                fp.Add3DModel(model)
         if orientation=='up':
             attach(parts['M1'],ROOT.parent/'microphone/3dmodels/MAX9814_Module_reference.step')
             for ref in ('H3','H4'):attach(parts[ref],ROOT.parent/'microphone/3dmodels/M2_insulating_support_reference.step')
@@ -47,7 +78,8 @@ def main():
         dest.with_suffix('.json').write_text(json.dumps(meta,indent=2)+'\n')
         reports[orientation]={'glb_sha256':hashlib.sha256(dest.read_bytes()).hexdigest(),'one_module_only':True}
     # Variant PCBs are explicit assembled viewing copies, with identical copper.
-    (ROOT/'variant-validation.json').write_text(json.dumps({'source_sha256':source_hash,'variants':reports},indent=2)+'\n')
+    (ROOT/'variant-validation.json').write_text(json.dumps({
+        'source_sha256':source_hash,'variants':reports,'preview_sha256':preview()},indent=2)+'\n')
 
 
 if __name__=='__main__':main()

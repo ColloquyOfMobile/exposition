@@ -17,6 +17,15 @@ Test headers are individual gold 1x1 2.54mm pins: 26 backplane, 3 adapter,
 three green supply indicators and five yellow tone indicators.
 
 Build six microphone holders using the existing violet MAX9814 modules.
+For the current microphone flex holder, use JP1/JP2 removable 1x03, 2.54mm
+selectors, each with one shunt. JP1: 1-2 = 50dB, 2-3 = 40dB, open = 60dB.
+JP2: 1-2 = 1:500, 2-3 = 1:2000, open = 1:4000. Initial assembly is JP1 2-3
+and JP2 1-2. Both centre pins carry the selected signal; pad 1 is GND and
+pad 3 is VDD. R1/R2 are absent from the current flex BOM. Power off before
+changing shunts. Fit exactly one module in M1, J2 or J3, using the selected
+orientation's supports. See microphone-flex/README.md.
+
+The following fixed-link instructions describe the retained older Rev B board:
 M1 is a 1x5 2.54mm female socket; two insulating M2 fixings have 10.033mm
 spacing and <=4mm heads. Match spacer height to the seated socket/header
 (11.04mm nominal model, verify actual parts). R1/R2 are 0R links: Gain to

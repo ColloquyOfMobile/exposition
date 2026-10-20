@@ -1,0 +1,18 @@
+#VRML V2.0 utf8
+# Generic removable 2.54mm shunt proxy; purchased dimensions unverified.
+Transform { scale 0.3937007874 0.3937007874 0.3937007874 children [
+Transform { translation -0.925 -2.36 5.5 children [ Shape { appearance Appearance { material Material { diffuseColor 0.08 0.08 0.08 } } geometry Box { size 0.75 1.0799999999999998 5 } } ] }
+Transform { translation -0.925 -1.27 5.5 children [ Shape { appearance Appearance { material Material { diffuseColor 0.08 0.08 0.08 } } geometry Box { size 0.75 1.1 5 } } ] }
+Transform { translation -0.925 0.0 5.5 children [ Shape { appearance Appearance { material Material { diffuseColor 0.08 0.08 0.08 } } geometry Box { size 0.75 1.44 5 } } ] }
+Transform { translation -0.925 1.27 5.5 children [ Shape { appearance Appearance { material Material { diffuseColor 0.08 0.08 0.08 } } geometry Box { size 0.75 1.1 5 } } ] }
+Transform { translation -0.925 2.36 5.5 children [ Shape { appearance Appearance { material Material { diffuseColor 0.08 0.08 0.08 } } geometry Box { size 0.75 1.0799999999999998 5 } } ] }
+Transform { translation 0.0 -2.36 5.5 children [ Shape { appearance Appearance { material Material { diffuseColor 0.08 0.08 0.08 } } geometry Box { size 1.1 1.0799999999999998 5 } } ] }
+Transform { translation 0.0 0.0 5.5 children [ Shape { appearance Appearance { material Material { diffuseColor 0.08 0.08 0.08 } } geometry Box { size 1.1 1.44 5 } } ] }
+Transform { translation 0.0 2.36 5.5 children [ Shape { appearance Appearance { material Material { diffuseColor 0.08 0.08 0.08 } } geometry Box { size 1.1 1.0799999999999998 5 } } ] }
+Transform { translation 0.925 -2.36 5.5 children [ Shape { appearance Appearance { material Material { diffuseColor 0.08 0.08 0.08 } } geometry Box { size 0.75 1.0799999999999998 5 } } ] }
+Transform { translation 0.925 -1.27 5.5 children [ Shape { appearance Appearance { material Material { diffuseColor 0.08 0.08 0.08 } } geometry Box { size 0.75 1.1 5 } } ] }
+Transform { translation 0.925 0.0 5.5 children [ Shape { appearance Appearance { material Material { diffuseColor 0.08 0.08 0.08 } } geometry Box { size 0.75 1.44 5 } } ] }
+Transform { translation 0.925 1.27 5.5 children [ Shape { appearance Appearance { material Material { diffuseColor 0.08 0.08 0.08 } } geometry Box { size 0.75 1.1 5 } } ] }
+Transform { translation 0.925 2.36 5.5 children [ Shape { appearance Appearance { material Material { diffuseColor 0.08 0.08 0.08 } } geometry Box { size 0.75 1.0799999999999998 5 } } ] }
+Transform { translation 0 0 8.25 children [ Shape { appearance Appearance { material Material { diffuseColor 0.08 0.08 0.08 } } geometry Box { size 2.6 5.8 0.5 } } ] }
+] }

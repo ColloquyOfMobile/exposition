@@ -9,6 +9,11 @@ placements, visibility and camera. The file opens on Mega.
 The 2026-10-15 **Rev C microphone** study adds `Female body - mic left/right`
 and `Male body - mic left/right`; the plain body scenes show the upward option.
 These use the [32 × 62 mm slotted three-orientation holder](../microphone-flex/README.md).
+The 2026-10-20 flex update replaces fixed gain/A/R links with removable JP1/JP2
+selectors. Current orientation exports and body scenes include generic shunt
+proxies at JP1 2-3 (40dB) and JP2 1-2 (1:500). Earlier Rev B references retain
+their fixed links. Header/shunt dimensions and adjustment access require
+physical checking.
 Exactly one module is fitted in each scene. Select the scene and press Numpad 0
 for its camera view. The prior edited body scenes are retained with
 `ARCHIVE - ... Rev B reference` in their names. These retain their historical

@@ -1,5 +1,31 @@
 # Microphone holder Rev C — left, right or upward
 
+## Removable selectors — 2026-10-20
+
+JP1 and JP2 are gold plated 1x03, 2.54 mm through-hole headers, each supplied
+with one removable two-contact shunt. They replace the fixed R1/R2 zero-ohm
+links on the current microphone flex board. The older Rev B microphone board
+is retained as a historical design and is unchanged.
+
+Both headers have pad 1 = GND and pad 3 = filtered VDD. Pad 2 is GAIN on JP1
+and A/R on JP2. Install exactly one shunt per selector, or leave it off for
+the open setting:
+
+| Selector | Shunt 1–2 | Shunt 2–3 | No shunt | Initial assembly |
+| --- | --- | --- | --- | --- |
+| JP1 maximum gain | 50 dB | 40 dB | 60 dB | 2–3: 40 dB |
+| JP2 attack/release | 1:500 | 1:2000 | 1:4000 | 1–2: 1:500 |
+
+The gain figures apply before automatic gain compression. Switch power off
+before moving shunts. The centre signal pins feed all three alternative
+module sockets; only one MAX9814 module is fitted. The initial settings
+preserve the former electrical configuration while allowing later adjustment.
+The schematic shows the three separate selector contacts; the removable
+shunt positions are assembly instructions, not permanent PCB copper bridges.
+The 3D files show generic shunt proxies at the initial positions. Purchased
+header/shunt dimensions, access beneath the module, and physical fit still
+need checking.
+
 ## Continuous-wire schematic for review
 
 Open wired/microphone-flex-wired.kicad_pro for the separate editable reading
@@ -12,7 +38,7 @@ The three socket symbols align pins by signal for easier tracing. Their
 physical pad numbers are retained, including the reversed J2/J3 numbering.
 J1 also groups its pins by signal rather than physical order. Fit one module
 only. Component references, values, footprints, mounting holes, and electrical
-connections are retained. The original schematic and PCB are unchanged.
+connections follow the current source schematic and PCB.
 
 Regenerate and validate from the repository root:
 
@@ -24,10 +50,11 @@ Regenerate and validate from the repository root:
 pdftoppm -scale-to 2600 -png -singlefile CAD/KiCad/shields/microphone-flex/wired/microphone-flex-wired.pdf CAD/KiCad/shields/microphone-flex/wired/preview
 ~~~
 
-The wired/validation.json report records 36 connected pins across eight nets,
+The wired/validation.json report records 38 connected pins across eight nets,
 agreement with the independently exported original schematic, circuit manifest
-and PCB, zero electrical labels, and zero ERC violations. This is a drawing
-change; it does not establish physical hardware performance.
+and PCB, zero electrical labels, and zero ERC violations. The wired copy
+changes the presentation; these checks do not establish physical hardware
+performance.
 
 Prototype based on the user's annotated picture, 2026-10-15. The support PCB
 stays on the aluminium profile; **one MAX9814 module** faces left, right or up.
@@ -51,8 +78,9 @@ the actual imperial profile/T-nuts before selecting frame fixings.
 | Right / position 2 | J3, opposing horizontal 1×5 socket | Two prototype insulating arms on H7/H8 |
 
 All three socket rows carry the same five signals. **Fit exactly one module.**
-The gain and A/R straps, supply filter, output resistor, LED and external J1
-pin order are retained from Rev B. J1 remains GND / +5V / OUT. SMD parts remain
+The gain and A/R settings use the removable selectors above. The supply filter,
+output resistor, LED and external J1 pin order are retained from Rev B.
+J1 remains GND / +5V / OUT. SMD parts remain
 on the front. Socket rows may all be populated, but only the selected module
 supports are fitted. Do not force a module into a socket of unverified geometry.
 
@@ -119,7 +147,7 @@ to those scenes before rerunning. Earlier Rev B scenes are retained rather
 than rebuilt. Backup combined files are saved under `tmp/body-model/`.
 
 `layout-validation.json`: zero ERC/DRC violations and zero unconnected items;
-all 36 connected pins agree between the native schematic, circuit manifest
+all 38 connected pins agree between the native schematic, circuit manifest
 and PCB. Slot geometry and spacing, side pin polarity, and contact alignment
 are independently checked. `support-model-validation.json`: connected, valid
 support solids without module intersection. `variant-validation.json` and

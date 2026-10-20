@@ -33,7 +33,27 @@
     "right",
     "up"
   ],
-  "population": "Exactly one module. Parallel sockets; shared gain/AR straps.",
+  "population": "Exactly one module. Parallel sockets; shared removable gain/AR selectors.",
+  "selectors": {
+    "JP1": {
+      "pads": [
+        "GND",
+        "GAIN",
+        "VDD"
+      ],
+      "initial_shunt": "2-3",
+      "open_gain_db": 60
+    },
+    "JP2": {
+      "pads": [
+        "GND",
+        "AR",
+        "VDD"
+      ],
+      "initial_shunt": "1-2",
+      "open_ar_ratio": "1:4000"
+    }
+  },
   "module_source": "max9814-reference",
   "side_support_base_centres_pcb_mm": [
     [

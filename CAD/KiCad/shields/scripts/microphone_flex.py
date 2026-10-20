@@ -8,6 +8,7 @@ import math
 import shutil
 
 import pcbnew as p
+import schematic_support as s
 
 from design import ROOT, emit
 from boards import LIB, LOCAL, xy, text, project, line
@@ -19,9 +20,12 @@ POSITIONS = dict(old.positions())
 POSITIONS.update(J2=(56, 74, 0), J3=(64, 84.16, 180),
                  H5=(46.5, 66, 0), H6=(46.5, 90, 0),
                  H7=(73.5, 66, 0), H8=(73.5, 90, 0),
-                 R1=(61, 82, 90), R2=(59, 82, 90), R4=(49, 97, 0),
+                 R4=(49, 97, 0),
                  C7=(47.8, 61.5, 90), C6=(68, 95, 90), R5=(58.5, 88.3, 0),
                  R6=(70.5, 97, 90), TP1=(68, 64, 0), TP2=(52, 64, 0))
+POSITIONS.update(JP1=(51.2, 88, 0), JP2=(68.8, 88, 0), C6=(68, 96.5, 90))
+for obsolete in ('R1','R2'):
+    POSITIONS.pop(obsolete)
 
 
 def slot_keepout(fp):
@@ -66,10 +70,32 @@ def footprints():
     fp.SetFPID(p.LIB_ID('Shields','Flex_M2_Top'))
     fp.Models().clear()
     io.FootprintSave(str(LOCAL),fp)
+    # Headers include a removable shunt in the BOM. Separate footprints show the
+    # initial shunt positions without representing the cap as a copper short.
+    for name, centre in [('Flex_Gain_Selector',3.81),('Flex_AR_Selector',1.27)]:
+        fp=p.FootprintLoad(str(LIB/'Connector_PinHeader_2.54mm.pretty'),
+                           'PinHeader_1x03_P2.54mm_Vertical')
+        fp.SetFPID(p.LIB_ID('Shields',name))
+        for model in fp.Models():
+            model.m_Filename=model.m_Filename.replace('${KICAD9_3DMODEL_DIR}', 'C:/Program Files/KiCad/9.0/share/kicad/3dmodels')
+        cap=p.FP_3DMODEL()
+        cap.m_Filename='${KIPRJMOD}/3dmodels/selector-shunt.wrl'
+        cap.m_Offset.y=-centre
+        fp.Add3DModel(cap)
+        io.FootprintSave(str(LOCAL),fp)
 
 
 def circuit():
     d=old.circuit(); d.name=NAME
+    del d.parts['R1']; del d.parts['R2']
+    for ref,signal,fp,setting in [
+            ('JP1','GAIN','Flex_Gain_Selector','1-2:50dB; 2-3:40dB; open:60dB. Initially 2-3.'),
+            ('JP2','AR','Flex_AR_Selector','1-2:1:500; 2-3:1:2000; open:1:4000. Initially 1-2.')]:
+        d.add(ref,signal+' SELECT / HEADER + SHUNT','Shields:'+fp,
+              {1:'GND',2:signal,3:'VDD'},'module',
+              names={'1':'GND','2':signal,'3':'VDD'},
+              description='Removable 2.54mm selector. '+setting+' Power off before moving the shunt.',
+              mpn='Gold plated 1x03 2.54mm vertical header + removable 1x02 shunt')
     d.parts['M1']['footprint']='Shields:Flex_Socket_Up'
     d.parts['M1']['value']='UP / ONE MODULE ONLY'
     d.parts['M1']['description']='One MAX9814 module fitted to M1 OR J2 OR J3. Sockets are parallel; never fit multiple modules.'
@@ -101,14 +127,31 @@ def outline(board):
         arc.SetWidth(p.FromMM(.1));arc.SetLayer(p.Edge_Cuts);board.Add(arc)
 
 
-def main():
-    footprints(); emit(circuit())
-    (FOLDER/'fp-lib-table').write_text('(fp_lib_table (version 7) (lib (name "Shields")(type "KiCad")(uri "${KIPRJMOD}/../Shields.pretty")(options "")(descr "Shared shield footprints")))\n')
-    for name in ('module','module_2','mechanical','mechanical_2','power','interface','supplies',NAME):
+def annotate_schematics():
+    for name in ('module','module_2','module_3','mechanical','mechanical_2','power','interface','supplies',NAME):
         path=FOLDER/(name+'.kicad_sch')
         if path.exists():
             raw=path.read_text(encoding='utf-8').replace('Rev A engineering prototype','Rev C orientation prototype')
+            raw=raw.replace('Rev A prototype - SHIELDS.md direct microphones 2026-10-05 - read ../REVIEW.md',
+                            'Rev C removable selectors - 2026-10-20 - read microphone-flex/README.md')
+            raw=raw.replace('(date "2026-10-05")','(date "2026-10-20")').replace('(rev "A-prototype")','(rev "C-jumpers")')
+            if name==NAME and 'REMOVABLE SELECTORS' not in raw:
+                notes=s.Sheet(NAME+'-selector-notes','',{},1)
+                for value,y in [
+                        ('REMOVABLE SELECTORS / JP1 + JP2 / POWER OFF BEFORE MOVING SHUNTS',180),
+                        ('Pad order: 1 = GND, 2 = selected signal, 3 = filtered VDD. Fit one shunt or leave open.',186),
+                        ('JP1 GAIN: 1-2 = 50dB; 2-3 = 40dB; no shunt = 60dB. Initial: 2-3.',192),
+                        ('JP2 A/R: 1-2 = 1:500; 2-3 = 1:2000; no shunt = 1:4000. Initial: 1-2.',198),
+                        ('Fit one MAX9814 module only, in M1 OR J2 OR J3. R1/R2 fixed links are removed.',204)]:
+                    notes.text(value,20.32,y,1.27)
+                raw=raw.replace('(embedded_fonts no)', '\n'.join(notes.objects)+'\n(embedded_fonts no)')
             path.write_text(raw,encoding='utf-8')
+
+
+def main():
+    footprints(); emit(circuit())
+    (FOLDER/'fp-lib-table').write_text('(fp_lib_table (version 7) (lib (name "Shields")(type "KiCad")(uri "${KIPRJMOD}/../Shields.pretty")(options "")(descr "Shared shield footprints")))\n')
+    annotate_schematics()
     data=json.loads((FOLDER/'circuit.json').read_text())
     board=p.BOARD(); board.SetCopperLayerCount(2);board.GetDesignSettings().SetBoardThickness(p.FromMM(1.6))
     outline(board)
@@ -126,11 +169,14 @@ def main():
         fp.SetPath(ids)
         for pad in fp.Pads():
             net=part['pins'].get(pad.GetNumber());pad.SetNet(nets[net] if net else board.FindNet(0))
-    for value,x,y,size in [('COLLOQUY MIC C',60,52,.8),('ONE MODULE ONLY',60,60,.8),
+    for value,x,y,size in [('COLLOQUY MIC C-J',60,52,.8),('ONE MODULE ONLY',60,60,.8),
                             ('LEFT',48,85.8,.8),('RIGHT',72,85.8,.8),('UP',60,93.2,.8),
-                            ('GND 5V OUT',60,100,.8)]:text(board,value,x,y,size)
+                            ('GND 5V OUT',60,100,.8),
+                            ('JP1 GAIN',51,85.8,.8),('JP2 A/R',69,85.8,.8),
+                            ('50/60/40',51,97,.8),
+                            ('500/4K/2K',70,100,.8)]:text(board,value,x,y,size)
     board.GetTitleBlock().SetTitle('Three-orientation MAX9814 holder / 32x62 / slotted M5')
-    board.GetTitleBlock().SetRevision('C-prototype');board.GetTitleBlock().SetDate('2026-10-15')
+    board.GetTitleBlock().SetRevision('C-jumpers');board.GetTitleBlock().SetDate('2026-10-20')
     board.BuildConnectivity();p.SaveBoard(str(FOLDER/(NAME+'-placed.kicad_pcb')),board,True)
     project(FOLDER,NAME)
     settings_path=FOLDER/(NAME+'.kicad_pro')
@@ -146,7 +192,9 @@ def main():
         'artwork_slot_centres_mm':[[16,6],[16,56]],'artwork_slot_size_mm':[12,5.5],
         'artwork_slot_axis':'X / across profile','artwork_slot_centre_travel_mm':6.5,
         'artwork_slot_keepout_mm':[18.5,12], 'positions':['left','right','up'],
-        'population':'Exactly one module. Parallel sockets; shared gain/AR straps.',
+        'population':'Exactly one module. Parallel sockets; shared removable gain/AR selectors.',
+        'selectors':{'JP1':{'pads':['GND','GAIN','VDD'],'initial_shunt':'2-3','open_gain_db':60},
+                     'JP2':{'pads':['GND','AR','VDD'],'initial_shunt':'1-2','open_ar_ratio':'1:4000'}},
         'module_source':'max9814-reference','side_support_base_centres_pcb_mm':[[46.5,66],[46.5,90],[73.5,66],[73.5,90]],
         'side_socket_centres_pcb_mm':{'left':[56,74,0],'right':[64,84.16,180]},
         'side_socket_physical_pin_order':['AR','Out','Gain','Vdd','GND'],

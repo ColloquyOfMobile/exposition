@@ -39,6 +39,11 @@ def main():
     actual={(fp.GetReference(),pad.GetNumber()):pad.GetNetname() for fp in parts.values() for pad in fp.Pads()
             if pad.GetNumber() and pad.GetNetname()}
     assert from_schematic==expected and actual==expected,'Schematic / PCB pin-net parity'
+    assert 'R1' not in parts and 'R2' not in parts
+    for ref,signal in [('JP1','GAIN'),('JP2','AR')]:
+        assert {pad.GetNumber():pad.GetNetname() for pad in parts[ref].Pads()}=={
+            '1':'GND','2':signal,'3':'VDD'},(ref,'Selector pin order')
+        assert all(pad.GetAttribute()==p.PAD_ATTRIB_PTH for pad in parts[ref].Pads())
     shape=p.SHAPE_POLY_SET();assert board.GetBoardPolygonOutlines(shape)
     box=shape.BBox()
     assert abs(p.ToMM(box.GetWidth())-32)<.001 and abs(p.ToMM(box.GetHeight())-62)<.001
@@ -71,6 +76,8 @@ def main():
             'outline_mm':[32,62],'slots_mm':[12,5.5],'slot_spacing_mm':50,
             'side_socket_contacts_checked':10,'maximum_contact_row_error_mm':max_error,
             'schematic_pcb_connected_pin_parity':len(expected),
+            'selectors':{'JP1':{'1-2':'50dB','2-3':'40dB','open':'60dB','initial':'2-3'},
+                         'JP2':{'1-2':'1:500','2-3':'1:2000','open':'1:4000','initial':'1-2'}},
             'population':'ONE module only','physical_fit_verified':False}
     (ROOT/'layout-validation.json').write_text(json.dumps(report,indent=2)+'\n')
     print('REV C LAYOUT VERIFIED',report)

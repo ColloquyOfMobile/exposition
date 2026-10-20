@@ -1,7 +1,5 @@
 Reference,Value,Footprint,MPN,Assembly
 M1,UP / ONE MODULE ONLY,Shields:Flex_Socket_Up,Existing MAX9814 module + 1x05 2.54mm female socket,fit
-R1,0R / GAIN VDD 40dB,Shields:R_0603_1608Metric,,fit
-R2,0R / AR GND 1:500,Shields:R_0603_1608Metric,,fit
 R4,33R,Shields:R_0603_1608Metric,,fit
 C7,22uF X5R 10V,Shields:C_0805_2012Metric,,fit
 C6,100nF,Shields:C_0603_1608Metric,,fit
@@ -11,5 +9,7 @@ R5,470R,Shields:R_0603_1608Metric,,fit
 J1,GND / +5V / OUT,Shields:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical,B3B-EH-A,fit
 TP1,MICOUT,Shields:TestPin_1x01_P2.54mm,,fit
 TP2,GND,Shields:TestPin_1x01_P2.54mm,,fit
+JP1,GAIN SELECT / HEADER + SHUNT,Shields:Flex_Gain_Selector,Gold plated 1x03 2.54mm vertical header + removable 1x02 shunt,fit
+JP2,AR SELECT / HEADER + SHUNT,Shields:Flex_AR_Selector,Gold plated 1x03 2.54mm vertical header + removable 1x02 shunt,fit
 J2,LEFT / 1x05 RIGHT ANGLE,Shields:Flex_Socket_Side,1x05 P2.54mm horizontal female socket; verify purchased dimensions,fit
 J3,RIGHT / 1x05 RIGHT ANGLE,Shields:Flex_Socket_Side,1x05 P2.54mm horizontal female socket; verify purchased dimensions,fit
