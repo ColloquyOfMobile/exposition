@@ -1,5 +1,11 @@
 # Female base v2 — directly mounted GF1002 amplifier
 
+A second, continuous-wire schematic is available in
+[`wired/female-base-v2-wired.pdf`](wired/female-base-v2-wired.pdf), with an
+editable KiCad project beside it. It has the same circuit as revision D, with
+zero electrical labels. [`wired/comparison.md`](wired/comparison.md) explains
+each component added since the original female base and whether it is necessary.
+
 Open `female-base-v2.kicad_pro` in KiCad 9. The project includes a schematic,
 routed two-layer PCB, assembled STEP model, top/underside previews, BOM and
 CAD verification reports. The original `../female base/` project is preserved.

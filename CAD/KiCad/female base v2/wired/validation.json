@@ -1,0 +1,16 @@
+{
+  "matches_original_v2_schematic": true,
+  "matches_pcb": true,
+  "matches_circuit_manifest": true,
+  "components": 13,
+  "connected_pins": 38,
+  "electrical_nets": 12,
+  "erc_violations": 0,
+  "electrical_labels": 0,
+  "sha256": {
+    "wired\\female-base-v2-wired.kicad_sch": "3d9cd66184a95bcf29834ab52a33c143b24136689bcb109ea7e12804108bb218",
+    "female-base-v2.kicad_sch": "e87f17ce622e652ba1ca124fc2393c2c989303df912ca1f6286bbfa51fd8939e",
+    "female-base-v2.kicad_pcb": "9d100054129bbdc00c3563ded6f393557d96be755044040a6835b063c997ba4b",
+    "circuit.json": "94e1207194791d372e94674a01b93478d6ae4b082bbd6f3c790647824fdc6ed6"
+  }
+}
