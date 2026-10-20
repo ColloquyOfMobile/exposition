@@ -107,12 +107,11 @@ def main():
     wire((165,24),(165,128))
     wire((165,116),(112,116),(112,121))
     text('Shared supply rails',144,12,1.3,True)
-    for ref,x,caption in [('C1',60,'C1  220uF / 10V'),('C2',82,'C2  100nF')]:
+    for ref,x,caption in [('C1',60,'C1  220uF / 10V SMD'),('C2',82,'C2  100nF')]:
         place(ref,x,28)
         wire((x,24),(x,26))
         wire((x,30),(x,32))
         text(caption,x-4,34,1.15)
-    text('+',57,26,1.3,True)
     text('Local amplifier decoupling; C1 value provisional',55,40,1.2)
     text('READING THE DRAWING',55,52,1.6,True)
     text('Dots join wires. Crossings without dots are separate.',55,57,1.3)

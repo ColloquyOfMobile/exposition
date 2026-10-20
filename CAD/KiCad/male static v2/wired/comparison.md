@@ -14,6 +14,12 @@ one A2 landscape sheet. Zoom in or print at A2 for legible pin names.
 
 ## Changes introduced by this reading copy
 
+C1 footprint update (2026-10-20): 220 uF / 10 V **SMD polarized aluminium
+electrolytic**, `Capacitor_SMD:CP_Elec_6.3x5.8`; pad 1 = +5 V, pad 2 = GND.
+The original v2 schematic and PCB now use the same package. The electrical
+value is unchanged; placement and local supply tracks were adjusted. The
+220 uF sizing remains provisional pending bench measurements.
+
 No components, values, pin assignments or electrical connections change.
 Independent KiCad exports match all 18 component references/values, all 57
 connected pins, and all 17 electrical nets against the original v2 schematic.

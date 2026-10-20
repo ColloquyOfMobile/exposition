@@ -116,10 +116,11 @@
 (symbol "C1" (pin_names (offset 1.27)) (exclude_from_sim no) (in_bom yes) (on_board yes)
 (property "Reference" "C" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
 (property "Value" "220uF 10V / provisional" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
-(property "Footprint" "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
+(property "Footprint" "Capacitor_SMD:CP_Elec_6.3x5.8" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Datasheet" "" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Description" "Provisional local reservoir; verify actual amplifier transients and rail sag before release." (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (symbol "C1_1_1"
+(text "+" (at -3.81 2.54 0) (effects (font (size 1.27 1.27))))
 (polyline (pts (xy -2.54 -0.762) (xy 2.54 -0.762)) (stroke (width 0.508) (type default)) (fill (type none)))
 (polyline (pts (xy -2.54 0.762) (xy 2.54 0.762)) (stroke (width 0.508) (type default)) (fill (type none)))
 (pin passive line (at 0 5.08 270) (length 4.318) (name "~" (effects (font (size 1.016 1.016))  )) (number "1" (effects (font (size 0.889 0.889))  )))

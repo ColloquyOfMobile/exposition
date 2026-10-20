@@ -2,7 +2,7 @@
 <export version="E">
   <design>
     <source>C:\workspace\workspace2\Colloquy\exposition\CAD\KiCad\male static v2\male-static-v2.kicad_sch</source>
-    <date>2026-10-19T14:38:02+0200</date>
+    <date>2026-10-20T12:41:21+0200</date>
     <tool>Eeschema 9.0.7</tool>
     <sheet number="1" name="/" tstamps="/">
       <title_block>
@@ -26,10 +26,10 @@
   <components>
     <comp ref="C1">
       <value>220uF 10V / provisional</value>
-      <footprint>Capacitor_THT:CP_Radial_D6.3mm_P2.50mm</footprint>
+      <footprint>Capacitor_SMD:CP_Elec_6.3x5.8</footprint>
       <description>Provisional local reservoir; verify actual amplifier transients and rail sag before release.</description>
       <fields>
-        <field name="Footprint">Capacitor_THT:CP_Radial_D6.3mm_P2.50mm</field>
+        <field name="Footprint">Capacitor_SMD:CP_Elec_6.3x5.8</field>
         <field name="Datasheet"/>
         <field name="Description">Provisional local reservoir; verify actual amplifier transients and rail sag before release.</field>
       </fields>
@@ -300,7 +300,7 @@
       <fields>
         <field name="Reference">C</field>
         <field name="Value">220uF 10V / provisional</field>
-        <field name="Footprint">Capacitor_THT:CP_Radial_D6.3mm_P2.50mm</field>
+        <field name="Footprint">Capacitor_SMD:CP_Elec_6.3x5.8</field>
         <field name="Datasheet"/>
         <field name="Description">Provisional local reservoir; verify actual amplifier transients and rail sag before release.</field>
       </fields>

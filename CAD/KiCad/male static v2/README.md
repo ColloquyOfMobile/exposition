@@ -1,5 +1,14 @@
 # Male static v2 — directly mounted GF1002 amplifier
 
+**C1 SMD update (2026-10-20).** C1 is now a polarized 220 µF / 10 V SMD
+aluminium electrolytic in `Capacitor_SMD:CP_Elec_6.3x5.8`, centred at
+(68.2, 71) mm. Pad 1 is positive / 5 V; pad 2 is GND. The 6.3 × 5.8 mm case
+stays outside the module envelope. Local supply routing and ground fill have
+been adjusted for its surface pads. C2 stays 100 nF / 0603. An example part
+is [Panasonic EEEFN1A221UP](https://industrial.panasonic.com/ww/products/pt/aluminum-cap-smd/models/EEEFN1A221UP);
+match the purchased part's land pattern and assembly requirements. The 220 µF
+value remains provisional pending amplifier/harness measurements.
+
 A second, continuous-wire schematic is available in
 [`wired/male-static-v2-wired.pdf`](wired/male-static-v2-wired.pdf), with an
 editable KiCad project beside it. It preserves revision D's circuit without
@@ -35,7 +44,7 @@ before ordering. At this board's coordinates:
   at (67,92.5). Both 0.8 mm front-copper paths are explicitly paired in
   the lower-right region, with a grounded guard on their input side.
 - **Supply**: C2 is at (54.7,67.63), below socket pins 5 and 6 on the
-  module side; C1 is at (65,71), outside the module envelope.
+  module side; the SMD C1 is at (68.2,71), outside the module envelope.
 - **Input**: R1 is at (53,56.2), R2 at (54.8,58.74). The incoming line
   and return approach together on back copper from the upper board.
 
@@ -54,7 +63,7 @@ The socket's 8.5 mm body and nominal 2.5 mm header plastic put the module
 underside at 11 mm and its PCB top at 12.6 mm above the carrier. Pot height
 is approximately 28 mm; the shaft overhang is approximately 7 mm beyond
 the board's left edge. Confirm both against the installed body.
-Only low-profile divider/bypass parts sit under the module. The tall C1
+Only low-profile divider/bypass parts sit under the module. The SMD C1
 reservoir stays outside its envelope. All eleven socket pins are soldered;
 module male headers populate positions 1–3, 5–6 and 8–11 only.
 

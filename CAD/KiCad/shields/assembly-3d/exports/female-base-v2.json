@@ -1,6 +1,6 @@
 {
   "source": "female base v2/female-base-v2.kicad_pcb",
-  "sha256": "9d100054129bbdc00c3563ded6f393557d96be755044040a6835b063c997ba4b",
+  "sha256": "2beb430d58d5c61fd89f90c447336d194ef9b1708fa3cd8c3527aa61814ac7f0",
   "outline_mm": [
     25.0,
     20.0,
@@ -104,12 +104,12 @@
     },
     "C1": {
       "xy": [
-        55.5,
+        59.1,
         66.5
       ],
       "angle": 0.0,
       "models": [
-        "${KIPRJMOD}/3dmodels/CP_Radial_D6.3mm_P2.50mm.step"
+        "${KIPRJMOD}/3dmodels/CP_Elec_6.3x5.8.step"
       ]
     },
     "H2": {
@@ -146,9 +146,9 @@
   "visual_export": {
     "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
     "source": "CAD/KiCad/female base v2/female-base-v2.kicad_pcb",
-    "source_sha256": "9d100054129bbdc00c3563ded6f393557d96be755044040a6835b063c997ba4b",
-    "visual_input_sha256": "9d100054129bbdc00c3563ded6f393557d96be755044040a6835b063c997ba4b",
-    "native_vrml_sha256": "e586da8a7c66bba5fb522ef8fefc565d6f2ba4dae11b9544c2b207578c7290b2",
+    "source_sha256": "2beb430d58d5c61fd89f90c447336d194ef9b1708fa3cd8c3527aa61814ac7f0",
+    "visual_input_sha256": "2beb430d58d5c61fd89f90c447336d194ef9b1708fa3cd8c3527aa61814ac7f0",
+    "native_vrml_sha256": "615b95bcd96dac7100924ed7fd3f92bd31ab258475c6563a3c4d22578e1bf148",
     "models": [
       {
         "ref": "J4",
@@ -412,8 +412,8 @@
       },
       {
         "ref": "C1",
-        "file": "CAD/KiCad/female base v2/3dmodels/CP_Radial_D6.3mm_P2.50mm.step",
-        "sha256": "39dc7bf95fed00917ab20af81ff9e25a70f8d003bc07cffea11840489a11933e",
+        "file": "CAD/KiCad/female base v2/3dmodels/CP_Elec_6.3x5.8.step",
+        "sha256": "887e13de4f738fc711dad723623bb52ad8f0688a7e6c9319c5394b960618fff2",
         "offset_mm": [
           0.0,
           0.0,
@@ -495,10 +495,10 @@
     "mesh_counts": {
       "models": 17,
       "board_meshes": 8,
-      "vertices": 49516,
-      "faces": 38944,
-      "materials": 26
+      "vertices": 49284,
+      "faces": 39029,
+      "materials": 24
     },
-    "glb_sha256": "bd3133012b49b8ad0855f9ddef4220a99e4adbb4ca2a1737b99d95c43ad19d21"
+    "glb_sha256": "89105a37ad35498195c51b4cbc82c25fc72d5ea52ae5a348f39b569cd8d0c0e6"
   }
 }

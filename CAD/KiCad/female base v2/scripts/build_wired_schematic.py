@@ -104,12 +104,11 @@ def main():
     text('Shared supply rails',88,12,1.2,True)
     text('All crossing wires without a dot are separate.',47,44,1.1)
     text('Dots mark electrical joins; X marks an unused pin.',47,47,1.1)
-    for ref,x,caption in [('C1',50,'C1  220uF / 10V'),('C2',67,'C2  100nF')]:
+    for ref,x,caption in [('C1',50,'C1  220uF / 10V SMD'),('C2',67,'C2  100nF')]:
         place(ref,x,28)
         wire((x,24),(x,26))
         wire((x,30),(x,32),(115,32))
         text(caption,x-4,34,.95)
-    text('+',47,26,1.3,True)
     text('Local amplifier decoupling; C1 value provisional',47,38,1.0)
     text('LOCAL AUDIO AMPLIFIER',42,71,1.4,True)
     place('R1',45,76)

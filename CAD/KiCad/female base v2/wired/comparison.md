@@ -12,6 +12,12 @@ does not. X marks an intentionally unused pin.
 
 ## What changed in this second schematic?
 
+C1 footprint update (2026-10-20): 220 uF / 10 V **SMD polarized aluminium
+electrolytic**, `Capacitor_SMD:CP_Elec_6.3x5.8`; pad 1 = +5 V, pad 2 = GND.
+The original v2 schematic and PCB have been updated to match. Capacitance and
+voltage rating are unchanged; only the package, local placement/routing and
+polarity marking were updated. The 220 uF value remains provisional.
+
 No added parts, removed parts, changed values, or changed electrical connections
 relative to `../female-base-v2.kicad_sch` (revision D).
 The connector symbols are rearranged for reading. M1 is still the existing

@@ -1,8 +1,9 @@
 {
-  "source_sha256": "e4923f711e8b0233549fd43cf6b9de5159f2515814c596a85696582bfd2c90ea",
+  "source_sha256": "8d3b9878fc3752befc43110e4b71f81f66ab0a37d006ecf7a33a09877516bba7",
   "original_outline_and_dsub_geometry": "PASS",
   "harness_nets_and_pad_drills": "PASS",
   "revision": "D",
+  "c1_smd_footprint_and_polarity": "PASS",
   "socket_pinout_and_reference_alignment": "PASS",
   "contact_strip_clearance": "PASS",
   "adjustable_support_positions": "PASS",
@@ -11,7 +12,7 @@
     4.796,
     3.327
   ],
-  "c1_distance_to_supply_pin_mm": 7.946,
+  "c1_distance_to_supply_pin_mm": 8.357,
   "routing": {
     "output_lengths_mm": {
       "AMP_OUT_P": 15.582,

@@ -34,6 +34,11 @@ for original,stem in [('female base','female-base-v2'),('male static','male-stat
             if f.GetReference()=='J6': net='AMP_OUT_P' if pad.GetNumber()=='1' else 'AMP_OUT_N'
             assert pad.GetNetname()==net,(original,f.GetReference(),pad.GetNumber(),pad.GetNetname(),net)
     assert 'JA1' not in footprints
+    c1=footprints['C1']
+    assert str(c1.GetFPID().GetLibNickname())=='Capacitor_SMD'
+    assert str(c1.GetFPID().GetLibItemName())=='CP_Elec_6.3x5.8'
+    assert all(a.GetAttribute()==p.PAD_ATTRIB_SMD and a.GetDrillSize()==p.VECTOR2I(0,0) for a in c1.Pads())
+    assert {a.GetNumber():a.GetNetname() for a in c1.Pads()}=={'1':'5V','2':'GND'}
     metadata=json.loads((root/'circuit.json').read_text())
     assert metadata['revision']=='D' and not metadata['module_pins_must_be_flush']
     assert metadata['module_underside_gap_mm']==11 and not metadata['stack_height_verified']
@@ -107,7 +112,7 @@ for original,stem in [('female base','female-base-v2'),('male static','male-stat
     routing=check_routing(b)
     result={'source_sha256':hashlib.sha256((root/(stem+'.kicad_pcb')).read_bytes()).hexdigest(),
             'original_outline_and_dsub_geometry':'PASS','harness_nets_and_pad_drills':'PASS',
-            'revision':'D','socket_pinout_and_reference_alignment':'PASS',
+            'revision':'D','c1_smd_footprint_and_polarity':'PASS','socket_pinout_and_reference_alignment':'PASS',
             'contact_strip_clearance':'PASS','adjustable_support_positions':'PASS',
             'module_underside_gap_mm_nominal':11,'c2_distance_to_supply_pins_mm':[round(d,3) for d in c2_distances],
             'c1_distance_to_supply_pin_mm':round(c1_distance,3),'routing':routing,

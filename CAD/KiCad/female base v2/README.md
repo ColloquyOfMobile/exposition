@@ -134,7 +134,7 @@ The socket's 8.5 mm body and nominal 2.5 mm header plastic put the module
 underside at 11 mm and its PCB top at 12.6 mm above the carrier. Pot height
 is approximately 28 mm; the shaft overhang is approximately 16 mm beyond
 the board's left edge. Confirm both against the installed body.
-Only low-profile divider/bypass parts sit under the module. The tall C1
+Only low-profile divider/bypass parts sit under the module. The SMD C1
 reservoir stays outside its envelope. All eleven socket pins are soldered;
 module male headers populate positions 1–3, 5–6 and 8–11 only.
 
@@ -161,6 +161,18 @@ Inspect the updated STEP, previews and 1:1 templates before the mandatory
 real-module fit, stack-height, ground-bond and output-polarity checks.
 
 ## Audio and power
+
+**C1 SMD update (2026-10-20).** C1 is now a polarized 220 µF / 10 V SMD
+aluminium electrolytic in `Capacitor_SMD:CP_Elec_6.3x5.8`, centred at
+(59.1, 66.5) mm. Pad 1 is positive / 5 V; pad 2 is GND. Its 6.3 × 5.8 mm
+case remains outside the amplifier envelope. Local routing and ground fill
+have been adjusted for the larger surface pads; the artwork outline and
+connector pin assignments are unchanged. C2 remains 100 nF in 0603.
+
+An example part with these nominal electrical/case specifications is
+[Panasonic EEEFN1A221UP](https://industrial.panasonic.com/ww/products/pt/aluminum-cap-smd/models/EEEFN1A221UP).
+Select a part matching the footprint and assembly process; the 220 µF sizing
+and amplifier transient/noise performance still require bench verification.
 
 The DSUB J7 retains its exact physical pinout, with this change in function:
 

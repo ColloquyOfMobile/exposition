@@ -39,6 +39,8 @@ def main():
             assert actual-connected <= unused, (stem,'unexpected nets',actual-connected)
             components={n.get('ref'):n.findtext('value') for n in ET.parse(target).findall('./components/comp')}
             assert components == {p['ref']:p['value'] for p in parts}
+            footprints={n.get('ref'):n.findtext('footprint') for n in ET.parse(target).findall('./components/comp')}
+            assert footprints == {p['ref']:p['footprint'] for p in parts}, (stem,'footprints differ')
             results.append(actual)
         assert results[0]==results[1], 'Source and reading copy differ'
     board=pcbnew.LoadBoard(str(HERE/(STEM+'.kicad_pcb')))

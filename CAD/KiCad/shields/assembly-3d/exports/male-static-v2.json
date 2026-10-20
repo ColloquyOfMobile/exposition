@@ -1,6 +1,6 @@
 {
   "source": "male static v2/male-static-v2.kicad_pcb",
-  "sha256": "e4923f711e8b0233549fd43cf6b9de5159f2515814c596a85696582bfd2c90ea",
+  "sha256": "8d3b9878fc3752befc43110e4b71f81f66ab0a37d006ecf7a33a09877516bba7",
   "outline_mm": [
     25.0,
     20.0,
@@ -184,21 +184,21 @@
     },
     "C1": {
       "xy": [
-        65.0,
+        68.2,
         71.0
       ],
       "angle": 0.0,
       "models": [
-        "${KIPRJMOD}/3dmodels/CP_Radial_D6.3mm_P2.50mm.step"
+        "${KIPRJMOD}/3dmodels/CP_Elec_6.3x5.8.step"
       ]
     }
   },
   "visual_export": {
     "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
     "source": "CAD/KiCad/male static v2/male-static-v2.kicad_pcb",
-    "source_sha256": "e4923f711e8b0233549fd43cf6b9de5159f2515814c596a85696582bfd2c90ea",
-    "visual_input_sha256": "e4923f711e8b0233549fd43cf6b9de5159f2515814c596a85696582bfd2c90ea",
-    "native_vrml_sha256": "4a71edee858074ff4837004cbec0f14b2dea89fc5fd1e2aca8fe18a944106087",
+    "source_sha256": "8d3b9878fc3752befc43110e4b71f81f66ab0a37d006ecf7a33a09877516bba7",
+    "visual_input_sha256": "8d3b9878fc3752befc43110e4b71f81f66ab0a37d006ecf7a33a09877516bba7",
+    "native_vrml_sha256": "c521e44c270e34fd0bccc0db98612969d9c18983900f7bceb26a101443903767",
     "models": [
       {
         "ref": "J8",
@@ -622,8 +622,8 @@
       },
       {
         "ref": "C1",
-        "file": "CAD/KiCad/male static v2/3dmodels/CP_Radial_D6.3mm_P2.50mm.step",
-        "sha256": "39dc7bf95fed00917ab20af81ff9e25a70f8d003bc07cffea11840489a11933e",
+        "file": "CAD/KiCad/male static v2/3dmodels/CP_Elec_6.3x5.8.step",
+        "sha256": "887e13de4f738fc711dad723623bb52ad8f0688a7e6c9319c5394b960618fff2",
         "offset_mm": [
           0.0,
           0.0,
@@ -645,10 +645,10 @@
     "mesh_counts": {
       "models": 22,
       "board_meshes": 8,
-      "vertices": 57453,
-      "faces": 44893,
-      "materials": 26
+      "vertices": 57200,
+      "faces": 44973,
+      "materials": 24
     },
-    "glb_sha256": "abc60fccecf98cbbd3137141adc418af27e168abbb3e05871407a195a8f50f65"
+    "glb_sha256": "e35f587d5179f0238c487997c44e25f1298cefb6fbe86373763d55ebc9f5d088"
   }
 }

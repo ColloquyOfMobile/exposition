@@ -131,8 +131,8 @@ def make(original_name, stem, positions, module_origin, clamps, extra):
             'Original harness pin order retained. J6 now carries the local amplifier output.')
     add('R1','22K','Resistor_SMD:R_0603_1608Metric',{1:'LINE_IN',2:'AMP_INPUT'})
     add('R2','3K3','Resistor_SMD:R_0603_1608Metric',{1:'AMP_INPUT',2:'AUDIO_RETURN'})
-    add('C1','220uF 10V / provisional','Capacitor_THT:CP_Radial_D6.3mm_P2.50mm',{1:'/5V',2:'GND'},
-        'Provisional local reservoir; verify actual amplifier transients and rail sag before release.')
+    add('C1','220uF 10V / provisional','Capacitor_SMD:CP_Elec_6.3x5.8',{1:'/5V',2:'GND'},
+        'SMD polarized aluminium electrolytic, 6.3x5.8mm; pin 1 positive. Provisional local reservoir; verify actual amplifier transients and rail sag before release.')
     add('C2','100nF','Capacitor_SMD:C_0603_1608Metric',{1:'/5V',2:'GND'})
     add('M1','GF1002 / 1x11 female socket','Body:GF1002_PlugIn_1x11',
         {1:'AMP_INPUT',2:'AUDIO_RETURN',3:None,4:None,5:'/5V',6:'GND',7:None,8:None,9:None,10:'AMP_OUT_P',11:'AMP_OUT_N'},
@@ -254,9 +254,9 @@ if __name__=='__main__':
     make('female base','female-base-v2',
         {'J7':(40.61,34.84,180),'J2':(62,47,0),'J4':(63,57.5,0),'J5':(63,74.5,0),'J3':(34,94,0),'J6':(64,88,-90)},
         (31,55),((28.5,74.5),(41.1,87.5)),
-        {'R1':(44,56.2,0),'R2':(45.8,58.74,0),'C1':(55.5,66.5,0),'C2':(45.7,67.63,0)})
+        {'R1':(44,56.2,0),'R2':(45.8,58.74,0),'C1':(59.1,66.5,0),'C2':(45.7,67.63,0)})
     make('male static','male-static-v2',
         {'J7':(40.305,34.84,180),'J3':(31,47,0),'J9':(30,74,90),'J8':(31,82,0),'J1':(31,92,0),'J4':(31,102,0),
          'J6':(67,90,-90),'J10':(66.5,47,0),'J11':(65,60,0),'J5':(65,98,0),'J2':(65,106,0)},
         (40,55),((37.5,74.5),(50.1,87.5)),
-        {'R1':(53,56.2,0),'R2':(54.8,58.74,0),'C1':(65,71,0),'C2':(54.7,67.63,0)})
+        {'R1':(53,56.2,0),'R2':(54.8,58.74,0),'C1':(68.2,71,0),'C2':(54.7,67.63,0)})
