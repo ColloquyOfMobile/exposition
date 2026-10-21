@@ -9,8 +9,11 @@ import hashlib
 import io
 import json
 import subprocess
+import sys
 import tempfile
+import time
 import zipfile
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -75,6 +78,21 @@ def run(*args):
 
 def digest(path):
     return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
+def write_file(path, content):
+    """Replace exports atomically while the running server may be reading them."""
+    assert path.resolve().is_relative_to(KICAD.resolve())
+    pending = path.with_name(path.name + ".new")
+    for attempt in range(4):
+        try:
+            pending.write_bytes(content)
+            pending.replace(path)
+            return
+        except OSError:
+            if attempt == 3:
+                raise
+            time.sleep(0.2)
 
 
 def build(entry, catalog):
@@ -194,6 +212,8 @@ https://jlcpcb.com/help/article/pick-place-file-for-pcb-assembly
 '''
         files["README-JLCPCB.md"] = notes.encode("utf-8")
         manifest = {"board": entry["id"], "source": entry["source"], "source_sha256": source_hash,
+            "exported_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "generator_sha256": digest(Path(__file__)),
             "parts_sha256": digest(PARTS_PATH), "smd_count": len(bom), "drc_errors": 0, "unconnected": 0,
             "files": {name: hashlib.sha256(data).hexdigest() for name, data in files.items()}}
         files["manifest.json"] = (json.dumps(manifest, indent=2) + "\n").encode()
@@ -202,7 +222,7 @@ https://jlcpcb.com/help/article/pick-place-file-for-pcb-assembly
         target = OUTPUT / entry["id"]
         target.mkdir(parents=True, exist_ok=True)
         for name in ("BOM.csv", "CPL.csv", "manual-and-DNP.csv", "README-JLCPCB.md", "manifest.json"):
-            (target / name).write_bytes(files[name])
+            write_file(target / name, files[name])
         archive = target / f'{entry["id"]}-manufacturing.zip'
         pending = stage / archive.name
         with zipfile.ZipFile(pending, "w", zipfile.ZIP_DEFLATED) as z:
@@ -213,14 +233,12 @@ https://jlcpcb.com/help/article/pick-place-file-for-pcb-assembly
         # Retain the existing per-project download location, now with assembly files.
         legacy = source.parent / "manufacturing" / archive.name
         legacy.parent.mkdir(exist_ok=True)
-        pending_legacy = legacy.with_suffix(".zip.new")
-        pending_legacy.write_bytes(archive.read_bytes())
         assert legacy.resolve().is_relative_to(KICAD.resolve())
-        pending_legacy.replace(legacy)
-        legacy.with_name("README.md").write_text(
+        write_file(legacy, archive.read_bytes())
+        write_file(legacy.with_name("README.md"), (
             f'# JLCPCB manufacturing package\n\nUnpack `{archive.name}`. Upload `gerbers.zip`, '
             '`BOM.csv` and `CPL.csv` separately as directed by `README-JLCPCB.md`.\n\n'
-            'Regenerate with KiCad Python and `export_jlcpcb.py` at the repository root.\n', encoding="utf-8")
+            'Regenerate with KiCad Python and `export_jlcpcb.py` at the repository root.\n').encode("utf-8"))
         # Keep the shields' existing ZIP checksum index accurate, preserving its other entries.
         index_path = KICAD / "shields/MANUFACTURING.json"
         index = json.loads(index_path.read_text())
@@ -230,7 +248,7 @@ https://jlcpcb.com/help/article/pick-place-file-for-pcb-assembly
                     assembly_policy="front_smd_only" if bom else "hand_assembled_bare_board",
                     files=len(files), smd_count=len(bom), drc_errors=0,
                     drc_warnings=len(drc["violations"]) - len(errors), unconnected=0)
-        index_path.write_text(json.dumps(index, indent=2) + "\n", encoding="utf-8")
+        write_file(index_path, (json.dumps(index, indent=2) + "\n").encode("utf-8"))
         print(f'{entry["id"]}: {len(bom)} SMD placements; {archive.relative_to(ROOT)}', flush=True)
 
 
@@ -238,6 +256,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--only", action="append")
     args = parser.parse_args()
+    gerber_args = [flag for name in args.only or () for flag in ("--only", name)]
+    subprocess.run([sys.executable, str(ROOT / "export_gerbers.py"), *gerber_args], check=True)
     catalog = json.loads(PARTS_PATH.read_text())
     boards = json.loads((KICAD / "production/manifest.json").read_text())["boards"]
     if args.only and set(args.only) - {b["id"] for b in boards}:
@@ -251,6 +271,7 @@ def main():
             for entry in boards:
                 name = f'{entry["id"]}-manufacturing.zip'
                 archive.write(OUTPUT / entry["id"] / name, name)
+    subprocess.run([sys.executable, str(ROOT / "export_pcb_web.py"), "--kicad-cli", str(CLI)], check=True)
 
 
 if __name__ == "__main__":

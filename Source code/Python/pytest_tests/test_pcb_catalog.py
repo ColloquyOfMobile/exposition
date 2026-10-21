@@ -70,3 +70,11 @@ def test_missing_export_does_not_take_down_server(monkeypatch, tmp_path):
     monkeypatch.setattr(catalog, "WEB_FOLDER", tmp_path)
     assert catalog.response(("backplane", "schematic"))[0] == "404 Not Found"
     assert "Shields backplane" in catalog.html()
+
+
+@pytest.mark.parametrize("kind", ["preview", "schematic"])
+def test_stale_drawings_are_refused(monkeypatch, kind):
+    monkeypatch.setattr(gerbers, "digest", lambda path: "changed source")
+    status, _, content = catalog.response(("backplane", kind))
+    assert status == "404 Not Found"
+    assert b"preview export is stale" in content

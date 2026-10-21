@@ -63,8 +63,8 @@
         "shields/teensy-adapter/bom.csv",
         "shields/teensy-adapter/positions.csv"
       ],
-      "source sha256": "9c7ecc5a368e313c2bfe28948a283443fec347e4a93f7a971b6522436f7362a3",
-      "exported at": "2026-10-13T12:44:22",
+      "source sha256": "f6c76bf019629902b27a141ebae31fb519644f20c6e04ea34496096d9290d937",
+      "exported at": "2026-10-21T11:35:25",
       "exported with": "KiCad 9.0.7",
       "copper layers": 4,
       "size mm": [

@@ -159,8 +159,8 @@ class MainPCB(Base):
             path,
             "downloads",
             "<p>The files the boards that replace this one are made from.</p>"
-            '<p><a href="/download/gerbers"><strong>the PCB production '
-            "Gerbers</strong></a> - for PCBWay or JLCPCB, a zip per board</p>"
+            '<p><a href="/pcb/all/fabrication"><strong>the PCB production '
+            "packages</strong></a> - current Gerbers, SMD BOM and CPL for JLCPCB</p>"
             '<p><a href="/download/kicad"><strong>the full KiCad projects'
             "</strong></a> - everything under CAD/KiCad</p>",
         )

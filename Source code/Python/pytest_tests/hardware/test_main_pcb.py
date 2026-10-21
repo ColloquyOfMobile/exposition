@@ -164,7 +164,7 @@ def test_the_files_for_its_replacement_are_offered_either_way():
 
     for mounted in (True, False):
         markup = make_pcb(mounted=mounted)._snapshot_if_opened(path)["downloads"]["html"]
-        assert 'href="/download/gerbers"' in markup
+        assert 'href="/pcb/all/fabrication"' in markup
         assert 'href="/download/kicad"' in markup
 
 

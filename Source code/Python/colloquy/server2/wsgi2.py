@@ -1272,15 +1272,15 @@ class WSGI2(Base):
         ]
 
     def _download_gerbers(self):
-        commit = self._commit()
-        content = gerbers.package_zip(gerbers.load(), commit)
-        name = f"colloquy-gerbers-{commit}.zip" if commit else "colloquy-gerbers.zip"
-        return "200 OK", self._attachment(name, len(content)), content
+        # Old bookmarks and pages must reach the same checked exports as the catalog.
+        gerbers.load()
+        status, headers, body = self._redirect("/pcb/all/fabrication")
+        return status, headers + [("Cache-Control", "no-store")], body
 
     def _download_board(self, board_id):
         board = gerbers.find(gerbers.load(), board_id)
-        content = gerbers.board_zip(board)
-        return "200 OK", self._attachment(board.zip_name, len(content)), content
+        status, headers, body = self._redirect(f"/pcb/{board.id}/fabrication")
+        return status, headers + [("Cache-Control", "no-store")], body
 
     def _download_kicad(self):
         listed = kicad_projects.files(self.colloquy.repository.git.tracked)

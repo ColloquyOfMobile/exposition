@@ -85,3 +85,18 @@ def test_a_stale_assembly_job_is_refused(monkeypatch):
     monkeypatch.setattr(gerbers, "digest", lambda path: "new board or part table")
     assert catalog.response(("backplane", "fabrication"))[0] == "404 Not Found"
     assert "assembly export is stale" in catalog.html()
+
+
+def test_download_is_uncached_and_identifies_the_exact_bytes():
+    status, headers, content = catalog.response(("backplane", "fabrication"))
+    assert status == "200 OK"
+    assert dict(headers)["Cache-Control"] == "no-store"
+    assert hashlib.sha256(content).hexdigest()[:10] in dict(headers)["Content-Disposition"]
+
+
+def test_catalog_shows_the_export_version():
+    with zipfile.ZipFile(io.BytesIO(catalog.production_bytes(gerbers.load()[0]))) as package:
+        recorded = json.loads(package.read("manifest.json"))
+    page = catalog.html()
+    assert recorded["exported_at"] in page
+    assert recorded["source_sha256"][:10] in page

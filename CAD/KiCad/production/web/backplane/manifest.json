@@ -1,0 +1,7 @@
+{
+  "board_sha256": "4d6d9193a190410fd24dc67c5d8170e5c112bde7662c5c2f7ee7b467aecef25d",
+  "generator_sha256": "4c9b272bd797da8cc12aced244f3e5268050e60d0f5449895d0beb3073ba5c02",
+  "schematics": {
+    "shields/backplane/wired/backplane-wired.kicad_sch": "6b5f1940b4af1ac275f08e19b3579cf9e2ab6632e0b79b0f9166f24aa33ecf2e"
+  }
+}

@@ -19,9 +19,7 @@ Installation-side only (the mock has no board to take out), and no live
 server: the methods are bound onto a double, `test_restart_link.py`'s
 arrangement.
 """
-import io
 import json
-import zipfile
 from contextlib import contextmanager
 from pathlib import Path
 from threading import Event
@@ -163,7 +161,7 @@ def test_with_the_board_out_the_front_page_is_the_three_options():
 
     assert status.startswith("200")
     assert "The main PCB is out" in page
-    assert 'href="/download/gerbers"' in page
+    assert 'href="/pcb/all/fabrication"' in page
     assert 'href="/download/kicad"' in page
     assert 'href="/mount-main-pcb"' in page
 
@@ -388,34 +386,30 @@ def test_unmounting_a_mounted_board_still_does():
 # --- the downloads -------------------------------------------------------
 
 
-def test_the_gerbers_come_as_one_attachment():
+def test_the_old_gerber_link_reaches_the_current_production_packages():
     status, headers, body = FakeWSGI().get("/download/gerbers")
 
-    assert status.startswith("200")
-    assert header(headers, "Content-Type") == "application/zip"
-    assert header(headers, "Content-Disposition") == (
-        'attachment; filename="colloquy-gerbers-abc1234.zip"'
-    )
-    assert header(headers, "Content-Length") == str(len(body))
-    package = zipfile.ZipFile(io.BytesIO(body))
-    assert "README.txt" in package.namelist()
-    assert "abc1234" in package.read("README.txt").decode("utf-8")
+    assert status.startswith("303")
+    assert header(headers, "Location") == "/pcb/all/fabrication"
+    assert header(headers, "Cache-Control") == "no-store"
+    assert body == b""
 
 
-def test_one_board_comes_as_the_zip_a_fab_takes():
+def test_an_old_board_download_reaches_its_current_assembly_package():
     board = gerbers.load()[0]
 
     status, headers, body = FakeWSGI().get(f"/download/gerbers/{board.id}")
 
-    assert status.startswith("200")
-    assert board.zip_name in header(headers, "Content-Disposition")
-    assert sorted(zipfile.ZipFile(io.BytesIO(body)).namelist()) == sorted(board.files)
+    assert status.startswith("303")
+    assert header(headers, "Location") == f"/pcb/{board.id}/fabrication"
+    assert header(headers, "Cache-Control") == "no-store"
+    assert body == b""
 
 
 def test_the_downloads_do_not_need_the_board_out():
     status, _headers, _body = FakeWSGI(mounted=True).get("/download/gerbers")
 
-    assert status.startswith("200")
+    assert status.startswith("303")
 
 
 @pytest.mark.parametrize(

@@ -4,7 +4,7 @@ Each of the seven production PCBs has a complete package in
 `production/assembly/<board>/<board>-manufacturing.zip`. The home page's
 **fabrication + SMD BOM/CPL** link serves this package. **Download all
 production packages** collects the seven packages. The separate bare-board
-Gerber download is for fabrication only.
+Gerber download addresses redirect to the same checked production packages.
 
 Unpack a board's manufacturing ZIP, then upload:
 
@@ -48,6 +48,11 @@ DRC, rejects unknown SMD parts, excludes DNP parts, verifies BOM/CPL identity,
 and records the PCB and part-table hashes. It leaves the source PCBs untouched.
 The server refuses stale assembly downloads. The older shields
 `scripts/manufacturing.py` entry point delegates to this exporter.
+The exporter also refreshes the legacy Gerber exports and renders the web
+previews directly from the PCB sources. Preview and schematic hashes prevent
+older drawings being served after a source edit. The page shows the export
+time, PCB revision hash and package hash; ZIP downloads are not browser-cached
+and their file names include the package hash.
 
 The identical per-project `manufacturing/<board>-manufacturing.zip` files are
 retained for existing users. `MANUFACTURING.json` in shields tracks those five

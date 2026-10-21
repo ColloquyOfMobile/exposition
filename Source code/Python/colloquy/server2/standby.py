@@ -89,20 +89,14 @@ def _gerbers(doc, tag, text):
             return
 
         with tag("p"):
-            with tag("a", klass="button", href="/download/gerbers"):
-                text(f"bare-board Gerbers only ({len(boards)} boards)")
+            with tag("a", klass="button", href="/pcb/all/fabrication"):
+                text(f"current production packages ({len(boards)} boards)")
 
         doc.asis(catalog.html())
 
-        plotted = sorted(board.exported_at for board in boards if board.exported_at)
-        if plotted:
-            with tag("p", klass="small"):
-                text(
-                    f"Plotted {plotted[-1][:10]} from the boards in this "
-                    "checkout, each after passing KiCad's design rule check. "
-                    "A plot is not a release: the README inside the download "
-                    "says which physical checks each design still lists as open."
-                )
+        with tag("p", klass="small"):
+            text("Each download is checked against the current PCB and assembly part table. "
+                 "A stale package is refused. Read its enclosed physical validation notes before ordering.")
 
 
 def _kicad(doc, tag, text, colloquy):

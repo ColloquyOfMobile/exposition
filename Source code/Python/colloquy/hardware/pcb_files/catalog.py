@@ -1,6 +1,7 @@
 """Read-only PCB previews and downloads, available without KiCad."""
 from html import escape
 import io
+import hashlib
 import json
 import re
 import zipfile
@@ -24,7 +25,8 @@ def production_bytes(board):
             raise gerbers.PackageError(f"{board.title}: assembly files are missing")
     if (recorded["board"] != board.id
             or recorded["source_sha256"] != gerbers.digest(board.source_path)
-            or recorded["parts_sha256"] != gerbers.digest(gerbers.KICAD_FOLDER / "assembly-parts.json")):
+            or recorded["parts_sha256"] != gerbers.digest(gerbers.KICAD_FOLDER / "assembly-parts.json")
+            or recorded.get("generator_sha256") != gerbers.digest(gerbers.REPO_FOLDER / "export_jlcpcb.py")):
         raise gerbers.PackageError(f"{board.title}: assembly export is stale; run export_jlcpcb.py")
     return content
 
@@ -37,9 +39,14 @@ def html():
             board_id = escape(board.id, quote=True)
             base = f"/pcb/{board_id}"
             try:
-                production_bytes(board)
+                content = production_bytes(board)
+                with zipfile.ZipFile(io.BytesIO(content)) as package:
+                    recorded = json.loads(package.read("manifest.json"))
+                revision = (f'Exported {recorded["exported_at"]}; '
+                            f'PCB {recorded["source_sha256"][:10]}; package {hashlib.sha256(content).hexdigest()[:10]}')
                 problems = ""
             except Exception as error:
+                revision = ""
                 problems = f"Production package unavailable: {error}"
             cards.append(
                 '<article style="border:1px solid #8886;padding:1rem;max-width:28rem">'
@@ -52,6 +59,7 @@ def html():
                 f'{board.quantity} needed</p>'
                 f'<p><a href="{base}/fabrication">fabrication + SMD BOM/CPL (.zip)</a></p>'
                 f'<p><a href="{base}/schematic">wired schematic (SVG)</a></p>'
+                f'<p>{escape(revision)}</p>'
                 f'<p>{escape(problems)}</p></article>'
             )
         return (
@@ -82,22 +90,29 @@ def response(parts):
                     archive.writestr(package.name, production_bytes(board))
             content = buffer.getvalue()
             return "200 OK", [("Content-Type", "application/zip"),
-                ("Content-Disposition", 'attachment; filename="colloquy-production.zip"'),
-                ("Cache-Control", "no-cache"), ("Content-Length", str(len(content)))], content
+                ("Content-Disposition", f'attachment; filename="colloquy-production-{hashlib.sha256(content).hexdigest()[:10]}.zip"'),
+                ("Cache-Control", "no-store"), ("Content-Length", str(len(content)))], content
         board = gerbers.find(gerbers.load(), board_id)
         headers = [("Cache-Control", "no-cache")]
         if kind == "fabrication":
-            package = fabrication(board)
             content = production_bytes(board)
             headers += [
                 ("Content-Type", "application/zip"),
-                ("Content-Disposition", f'attachment; filename="{board.id}-fabrication.zip"'),
+                ("Content-Disposition", f'attachment; filename="{board.id}-fabrication-{hashlib.sha256(content).hexdigest()[:10]}.zip"'),
             ]
+            headers[0] = ("Cache-Control", "no-store")
         elif kind in ("preview", "schematic"):
             path = WEB_FOLDER / board.id / f"{kind}.svg"
             # Do not permit a malformed manifest to point outside the export folder.
             if not path.resolve().is_relative_to(WEB_FOLDER.resolve()):
                 raise gerbers.PackageError("Invalid PCB file")
+            recorded = json.loads(path.with_name("manifest.json").read_text())
+            if (recorded["board_sha256"] != gerbers.digest(board.source_path)
+                    or recorded["generator_sha256"] != gerbers.digest(gerbers.REPO_FOLDER / "export_pcb_web.py")
+                    or (kind == "schematic" and any(
+                        gerbers.digest(gerbers.KICAD_FOLDER / name) != digest
+                        for name, digest in recorded["schematics"].items()))):
+                raise gerbers.PackageError(f"{board.title}: preview export is stale; run export_pcb_web.py")
             content = path.read_bytes()
             headers.append(("Content-Type", "image/svg+xml"))
         else:
