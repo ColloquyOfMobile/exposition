@@ -17,8 +17,8 @@ point or power source is required for this copy.
 | --- | --- | --- |
 | Continuous wires replace all electrical net labels | Follow a signal directly between the Teensy socket and backplane socket without finding matching labels on other pages. | Required by the requested reading format; no hardware change. |
 | JT1, JT2 and JM1 appear as several lettered units | Group contacts into outputs, sensors, microphones, power, spare GPIO and unused contacts. Pin numbers still identify the physical contacts. Each reference is ONE existing socket, regardless of its unit letter. | Optional for readability; no additional sockets. |
-| U1-U4 appear as four gate units and one supply unit each | Put each buffer channel directly in its signal path. The E unit shows the same chip's supply pins. | Optional for readability; still four chips total. |
-| Ground branch wires, junction dots and two ground trunks | Show each pulldown, shunt capacitor and output-enable connection explicitly. The two trunks are visibly joined below the microphone section. Crossings without dots remain separate. | Required to express the original shared ground using wires. No new grounding connection. |
+| U1-U4 each appear as one complete `3to5V_Shifter_1`-`3to5V_Shifter_4` block | Show all four channels, the four active-low enable pins, GND and the 5 V supply on the same physical chip. Each block states `3.3 V IN -> 5 V OUT`; its library basename is `3to5V_Shifter_U1` through `3to5V_Shifter_U4`. The physical U1-U4 references still match the PCB. | Requested drawing format; still four existing chips, with all 14 pins per chip. |
+| Ground branch wires, junction dots and shared ground trunks | Show each pulldown, shunt capacitor and output-enable connection explicitly. The digital ground trunks join below the fourth shifter; the analog ground trunk joins the power section below the microphones. Crossings without dots remain separate. | Required to express the original shared ground using wires. No new grounding connection. |
 | Signal captions, GPIO/ADC captions and section headings | Explain the purpose of each wire and group. These are ordinary text, with no electrical connectivity. | Optional reading aids. |
 | Unused contact units with X marks | Show the manifest's unused contacts in one place, including contacts not instantiated in the original's spare-contact drawing. | Optional completeness aid. These remain unconnected; no contacts or components are added to the PCB. |
 | Two PWR_FLAG diamonds | Retain the original `supplies.kicad_sch` declarations that GND and VIN_USB are supplied externally. They let KiCad check buffer power inputs without false missing-supply errors. | Needed for the same clean ERC declarations; no physical parts or power sources. Already present in the original. |
@@ -64,6 +64,8 @@ isolated NC records), checks that unused pins are not connected, compares all
 component values and footprints, and compares the manifest with PCB pad nets.
 PCB `{slash}` escaping is decoded for the comparison. It also checks that the
 copy contains zero electrical labels and has zero ERC violations.
+It also requires exactly one instance per shifter, a descriptive `3to5V_Shifter`
+symbol basename, and all 14 physical pin numbers within each single block.
 
 Result: **81 components, 276 connected pins, 71 nets, zero electrical labels,
 zero ERC violations**. See `validation.json` for source hashes and results.

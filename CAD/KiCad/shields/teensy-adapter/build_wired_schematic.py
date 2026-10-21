@@ -7,7 +7,6 @@ from pathlib import Path
 from collections import Counter
 import copy
 import json
-import re
 import sys
 from signal_names import gpio_signals, short_signal
 
@@ -36,6 +35,10 @@ placed = set()
 
 def text(value, x, y, size=1.5, bold=False):
     sheet.text(value, x, y, size, bold)
+
+
+def symbol_name(ref):
+    return '3to5V_Shifter_' + ref if ref.startswith('U') else ref.replace('#','_')
 
 
 def wire(*points):
@@ -80,12 +83,12 @@ def place_all():
             rx, ry = (x+4, y-1.5) if vertical else (x, y-5)
             just = 'left' if vertical else ''
             value_y = ry+3 if vertical else ry-3
-        elif ref.startswith('U') and number<5:
-            rx, ry, value_y, just = x+20.32, y-4, y-4, ''
+        elif ref.startswith('U'):
+            rx, ry, value_y, just = x, y-h+3.81, y+1.27, ''
         else:
             rx, ry, value_y, just = x, y-h+2.3, y-h+5.3, ''
         ident = p['uuid'] if number == 1 else s.uid(NAME+ref+str(number))
-        obj = [f'(symbol (lib_id {s.q("Colloquy:"+ref.replace("#","_"))}) (at {x} {y} 0) (unit {number}) '
+        obj = [f'(symbol (lib_id {s.q("Colloquy:"+symbol_name(ref))}) (at {x} {y} 0) (unit {number}) '
                f'(in_bom {"yes" if p.get("include_bom", True) else "no"}) (on_board yes) (uuid {s.q(ident)}))']
         # Append properties inside the instance, not after it.
         obj[0] = obj[0][:-1]
@@ -108,46 +111,63 @@ def place_all():
 def main():
     OUT.mkdir(exist_ok=True)
     text('TEENSY ADAPTER / CONTINUOUS WIRING', 20, 16, 4, True)
-    text('Same circuit and PCB pin numbers | One sheet, no electrical net labels | Review copy 20 Oct 2026', 20, 24, 1.8)
+    text('Same circuit and PCB pin numbers | One sheet, no electrical net labels | Review copy 21 Oct 2026', 20, 24, 1.8)
     text('Dots join wires. Crossings without dots do not join. Connector units are parts of the SAME physical socket.', 20, 31, 1.6)
     text('TEENSY 4.1 SOCKETS', 20, 41, 2, True)
     text('MEGA-PATTERN SOCKET / BACKPLANE', 493, 41, 2, True)
-    text('01  DIGITAL OUTPUTS  /  Teensy -> 5 V buffers -> backplane', 110, 48, 2, True)
+    text('01  DIGITAL OUTPUTS / 3.3 V GPIO -> 3to5V SHIFTERS -> 5 V backplane', 110, 44, 2, True)
     # Rails stay outside the signal section, with each ground branch explicitly wired.
     ground, vin, ioref, mega = 640.08, 650.24, 660.40, 670.56
     signal_ground = 558.80
-    text('GND',signal_ground-1,46,1.1)
+    text('GND',signal_ground+2,250.19,1.1)
     for caption, x in [('GND', ground), ('5 V USB', vin), ('3V3', ioref), ('MEGA 5V', mega)]:
         text(caption, x-1, 46, 1.1)
     jm_digital, jt_digital = [], []
-    for index in range(15):
-        y = 60.96 + index*12.7
-        u = 'U'+str(index//4+1)
-        gate = index%4
-        oe, inp, out = [('1','2','3'),('4','5','6'),('10','9','8'),('13','12','11')][gate]
-        net = parts[u]['pins'][inp]
-        jt_pin = next(pin for pin, n in parts['JT1']['pins'].items() if n == net)
-        jm_pin = next(pin for pin, n in parts['JM1']['pins'].items() if n == parts[u]['pins'][out])
-        jt_digital.append((jt_pin, y))
-        jm_digital.append((jm_pin, y))
-        unit(u, gate+1, [(inp, 254, y, 0), (out, 284.48, y, 180),
-                         (oe, 269.24, y+6.35, 90)], (269.24, y), (10.16, 3.81))
-        rd = 'RD'+net.split('/')[1]
-        passive(rd, 180.34, y+5.08, True)
-        wire((100.33,y),(254,y))
-        wire((284.48,y),(579.12,y))
-        wire((180.34,y+10.16),(signal_ground,y+10.16))
-        wire((269.24,y+6.35),(269.24,y+10.16))
-        text(short_signal(parts[u]['pins'][out]), 400, y-4.2, 1.6)
-        text('GPIO '+net.split('/')[1]+' | '+SIGNALS[net.split('/')[1]], 110, y-4.2, 1.5)
+    pull_ground, shifter_5v, shifter_ground = 220.98, 365.76, 375.92
+    wire((vin,50.8),(vin,49.53),(shifter_5v,49.53),(shifter_5v,210.82))
+    wire((shifter_ground,101.60),(shifter_ground,254),(signal_ground,254))
+    wire((pull_ground,66.04),(pull_ground,254),(shifter_ground,254))
+    text('5 V supply',shifter_5v-5,52,1.2)
+    text('GND',shifter_ground+2,247.65,1.2)
+    for index in range(4):
+        u = 'U'+str(index+1)
+        first = 60.96 + index*50.8
+        last = first+26.67
+        locs = []
+        for gate,(oe,inp,out) in enumerate([('1','2','3'),('4','5','6'),('10','9','8'),('13','12','11')]):
+            y=first+gate*8.89
+            locs.extend([(inp,254,y,0),(out,345.44,y,180),
+                         (oe,266.7+gate*15.24,last+11.43,90)])
+            wire((266.7+gate*15.24,last+11.43),(266.7+gate*15.24,last+13.97))
+            net=parts[u]['pins'][inp]
+            if net=='GND':
+                wire((pull_ground,y),(254,y))
+                text('Unused channel / input held at GND',400,y-4.2,1.3)
+                continue
+            jt_pin=next(pin for pin,n in parts['JT1']['pins'].items() if n==net)
+            jm_pin=next(pin for pin,n in parts['JM1']['pins'].items() if n==parts[u]['pins'][out])
+            jt_digital.append((jt_pin,y))
+            jm_digital.append((jm_pin,y))
+            rd='RD'+net.split('/')[1]
+            # Compact pulldowns leave a clear gap between adjacent channel rows.
+            unit(rd,1,[('1',180.34,y,270),('2',180.34,y+5.08,90)],
+                 (180.34,y+2.54),(1.016,1.27),'resistor')
+            wire((100.33,y),(254,y))
+            wire((345.44,y),(579.12,y))
+            wire((180.34,y+5.08),(pull_ground,y+5.08))
+            text(short_signal(parts[u]['pins'][out]),400,y-3.81,1.6)
+            text('GPIO '+net.split('/')[1]+' | '+SIGNALS[net.split('/')[1]],110,y-3.81,1.5)
+        locs.extend([('14',345.44,first-2.54,180),('7',327.66,last+11.43,90)])
+        unit(u,1,locs,(299.72,(first+last)/2),(40.64,19.685))
+        wire((345.44,first-2.54),(shifter_5v,first-2.54))
+        text('5 V',348,first-6.35,1.1)
+        wire((327.66,last+11.43),(327.66,last+13.97))
+        wire((266.7,last+13.97),(shifter_ground,last+13.97))
+        text('3to5V_Shifter_'+str(index+1),276.86,first+3.81,1.8,True)
+        text('SN74LV4T125PWR',276.86,first+8.89,1.2)
+        text('3.3 V IN -> 5 V OUT',276.86,first+13.97,1.2)
     connector('JT1',1,jt_digital,100.33,80.01,'right')
     connector('JM1',1,jm_digital,579.12,599.44,'left')
-    # Spare fourth gate of U4: input/OE grounded, output left unused, as original.
-    unit('U4',4,[('12',706.12,205.74,0),('11',736.60,205.74,180),('13',721.36,212.09,90)],
-         (721.36,205.74),(10.16,3.81))
-    wire((ground,215.90),(721.36,215.90),(721.36,212.09))
-    wire((706.12,205.74),(698.50,205.74),(698.50,215.90))
-    text('Unused buffer gate', 698, 195, 1.3)
 
     text('02  PHOTOSENSORS  /  backplane -> divider + filter -> Teensy ADC', 110, 255, 2, True)
     sensor_jt = {'JT1':[], 'JT2':[]}
@@ -222,10 +242,7 @@ def main():
         wire((x,y+5.08),(x,y+10.16),(ground,y+10.16))
     for i in range(1,5):
         x,y=721.36,269.24+(i-1)*22.86
-        u='U'+str(i)
-        unit(u,5,[('14',x-15.24,y,0),('7',x+15.24,y,180)],(x,y),(10.16,5.08))
-        wire((vin,y),(x-15.24,y))
-        wire((x+15.24,y),(x+17.78,y),(x+17.78,y+10.16),(ground,y+10.16))
+        text('U'+str(i)+' / shifter decoupling',702,y+3,1.3)
         passive('CB'+str(i),792.48,y+5.08,True)
         wire((vin,y-7.62),(792.48,y-7.62),(792.48,y))
         wire((792.48,y+10.16),(ground,y+10.16))
@@ -236,7 +253,7 @@ def main():
     unit('#FLG1',1,[('1',ground,60.96,90)],(ground,60.96),(1.27,2.54),'flag')
     unit('#FLG2',1,[('1',vin,50.8,90)],(vin,50.8),(1.27,2.54),'flag')
     wire((ground,60.96),(ground,502.92))
-    wire((signal_ground,71.12),(signal_ground,502.92),(ground,502.92))
+    wire((signal_ground,254),(signal_ground,502.92),(ground,502.92))
     wire((vin,50.8),(vin,363.22))
     wire((ioref,127),(ioref,373.38))
 
@@ -271,8 +288,13 @@ def main():
     def lib(p, external=False):
         raw=original_lib(p,external)
         if p['ref'].startswith('U'):
-            # OE enters the lower edge; its pin stops at the body boundary.
-            raw=re.sub(r'(\(pin input line \(at 0\.0 -6\.35 90\) \(length )5\.08',r'\g<1>2.54',raw)
+            # Descriptive library basename; physical U references remain unchanged.
+            raw=raw.replace('Colloquy:'+p['ref'],'Colloquy:'+symbol_name(p['ref']))
+            raw=raw.replace('"'+p['ref']+'_1_1"','"'+symbol_name(p['ref'])+'_1_1"')
+            if external:
+                raw=raw.replace('(symbol "'+p['ref']+'"','(symbol "'+symbol_name(p['ref'])+'"',1)
+        if p['ref'].startswith('RD'):
+            raw=raw.replace('(length 2.54)','(length 1.27)')
         if p['ref']=='D1':
             raw=raw.replace('(circle (center 0 0) (radius 1.016) (stroke (width 0.254) (type default)) (fill (type none)))',
                 '(polyline (pts (xy -2.54 -2.54) (xy 2.54 -2.54) (xy 0 2.54) (xy -2.54 -2.54)) (stroke (width 0.254) (type default)) (fill (type none)))\n'
@@ -302,7 +324,7 @@ def main():
     sheet.save()
     path=OUT/(NAME+'.kicad_sch')
     raw=path.read_text(encoding='utf-8').replace('(paper "A3")','(paper "A1")')
-    raw=raw.replace('(date "2026-10-05") (rev "A-prototype")','(date "2026-10-20") (rev "A wired copy")')
+    raw=raw.replace('(date "2026-10-05") (rev "A-prototype")','(date "2026-10-21") (rev "B shifters")')
     raw=raw.replace('Prototype: verify harness polarity and sensor values before connection','Reading copy: same circuit; original schematic and PCB retained')
     path.write_text(raw,encoding='utf-8')
     (OUT/'Colloquy.kicad_sym').write_text('(kicad_symbol_lib (version 20241209) (generator "kicad_symbol_editor")\n'

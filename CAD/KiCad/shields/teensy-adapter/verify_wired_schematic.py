@@ -12,6 +12,8 @@ import pcbnew
 HERE = Path(__file__).resolve().parent
 OUT = HERE/'wired'
 CLI = Path(sys.executable).resolve().parent/'kicad-cli.exe'
+sys.path.insert(0,str(HERE.parent/'scripts'))
+from schematic_support import children, one, parse
 
 
 def export(source, target):
@@ -60,10 +62,24 @@ def main():
     violations=[v for sheet in erc['sheets'] for v in sheet['violations']]
     text=(OUT/'teensy-adapter-wired.kicad_sch').read_text(encoding='utf-8')
     assert all('('+k+' ' not in text for k in ('global_label','label','hierarchical_label'))
+    drawing=parse(text)
+    symbols=children(drawing,'symbol')
+    embedded=children(drawing,'lib_symbols')[0]
+    for ref in ('U1','U2','U3','U4'):
+        instances=[symbol for symbol in symbols if any(
+            prop[1:3]==['Reference',ref] for prop in children(symbol,'property'))]
+        assert len(instances)==1 and one(instances[0],'unit')=='1', ref+' must have one complete block'
+        name='Colloquy:3to5V_Shifter_'+ref
+        assert one(instances[0],'lib_id')==name, ref+' must have a descriptive shifter basename'
+        definition=next(symbol for symbol in children(embedded,'symbol') if symbol[1]==name)
+        units=children(definition,'symbol')
+        assert len(units)==1
+        assert {one(pin,'number') for pin in children(units[0],'pin')}=={str(i) for i in range(1,15)}
     report=dict(components=len(original_parts),connected_pins=sum(map(len,expected.values())),
                 electrical_nets=len(expected),matches_original_schematic=True,
                 matches_original_components_values_footprints=True,matches_pcb=True,
-                matches_manifest=True,electrical_labels=0,erc_violations=len(violations),
+                matches_manifest=True,electrical_labels=0,shifter_blocks=4,
+                each_shifter_has_all_14_pins=True,erc_violations=len(violations),
                 erc_types=sorted({v['type'] for v in violations}),
                 sha256={str(p.relative_to(HERE)):hashlib.sha256(p.read_bytes()).hexdigest()
                         for p in [HERE/'circuit.json',HERE/'teensy-adapter.kicad_pcb',

@@ -2,14 +2,14 @@
 <export version="E">
   <design>
     <source>C:\workspace\workspace2\Colloquy\exposition\CAD\KiCad\shields\teensy-adapter\wired\teensy-adapter-wired.kicad_sch</source>
-    <date>2026-10-20T16:36:48+0200</date>
+    <date>2026-10-21T10:16:06+0200</date>
     <tool>Eeschema 9.0.7</tool>
     <sheet number="1" name="/" tstamps="/">
       <title_block>
         <title>Teensy adapter / continuous wiring / reading copy</title>
         <company>Colloquy of Mobiles</company>
-        <rev>A wired copy</rev>
-        <date>2026-10-20</date>
+        <rev>B shifters</rev>
+        <date>2026-10-21</date>
         <source>teensy-adapter-wired.kicad_sch</source>
         <comment number="1" value="Reading copy: same circuit; original schematic and PCB retained"/>
         <comment number="2" value=""/>
@@ -374,7 +374,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>8146062b-6bbb-5177-98f2-dbe37ea0abff 6fb64c37-e3aa-53fb-90b2-cab5d55ba9ab edfcd0d6-7440-5b4c-a427-c65bba3f4696 29592fbd-e3de-5cea-bf4b-f5ed6f5b16e2 c053fe72-3673-5671-be1d-46b3c4cc68e9 60a0ce08-8667-5233-aa50-39df57c1fdbd 04e75b2a-0163-577e-9a60-2b457f722405</tstamps>
+      <tstamps>c053fe72-3673-5671-be1d-46b3c4cc68e9 60a0ce08-8667-5233-aa50-39df57c1fdbd 8146062b-6bbb-5177-98f2-dbe37ea0abff edfcd0d6-7440-5b4c-a427-c65bba3f4696 29592fbd-e3de-5cea-bf4b-f5ed6f5b16e2 6fb64c37-e3aa-53fb-90b2-cab5d55ba9ab 04e75b2a-0163-577e-9a60-2b457f722405</tstamps>
     </comp>
     <comp ref="JT1">
       <value>Teensy 4.1 JT1</value>
@@ -389,7 +389,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>2d56d0c8-0b16-573c-b6bf-6c985a21abea 3c72ff4e-b273-5ea8-9598-1f22cb37ff74 64d30637-2606-54b3-b69b-90716a32c3fa 09b1698c-859d-5bd7-bb7d-a0b38fc25a34</tstamps>
+      <tstamps>64d30637-2606-54b3-b69b-90716a32c3fa 2d56d0c8-0b16-573c-b6bf-6c985a21abea 3c72ff4e-b273-5ea8-9598-1f22cb37ff74 09b1698c-859d-5bd7-bb7d-a0b38fc25a34</tstamps>
     </comp>
     <comp ref="JT2">
       <value>Teensy 4.1 JT2</value>
@@ -404,7 +404,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>874c7b0c-5df4-5460-8f97-8a054e75e5a2 dbf1bb38-90de-5744-a8a9-11d109e14e04 7abefeeb-a2b1-577b-b620-b64030ddd412 94f4419d-4333-556d-ae6f-8e4724431396 48942eaa-bdac-5da3-81ff-e8bede4621ed 12cff0f0-4ed0-58e0-b4d1-de4bbd391873</tstamps>
+      <tstamps>94f4419d-4333-556d-ae6f-8e4724431396 7abefeeb-a2b1-577b-b620-b64030ddd412 48942eaa-bdac-5da3-81ff-e8bede4621ed 874c7b0c-5df4-5460-8f97-8a054e75e5a2 dbf1bb38-90de-5744-a8a9-11d109e14e04 12cff0f0-4ed0-58e0-b4d1-de4bbd391873</tstamps>
     </comp>
     <comp ref="RA19">
       <value>100K</value>
@@ -1127,11 +1127,11 @@
         <field name="Datasheet"/>
         <field name="Description"/>
       </fields>
-      <libsource lib="Colloquy" part="U1" description=""/>
+      <libsource lib="Colloquy" part="3to5V_Shifter_U1" description=""/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>6a03bc49-f590-58b6-8e2f-93745f8effc1 aef8a21a-78df-5ab6-a25c-416b75757e7b b189b229-b56e-5be7-855a-3e8a8e40099f 5c5f5d82-1f1b-5ab9-bc28-89995dbdc10b 026171c1-f380-5e6f-b7e1-5d05c2a9227d</tstamps>
+      <tstamps>5c5f5d82-1f1b-5ab9-bc28-89995dbdc10b</tstamps>
     </comp>
     <comp ref="U2">
       <value>SN74LV4T125PWR</value>
@@ -1141,11 +1141,11 @@
         <field name="Datasheet"/>
         <field name="Description"/>
       </fields>
-      <libsource lib="Colloquy" part="U2" description=""/>
+      <libsource lib="Colloquy" part="3to5V_Shifter_U2" description=""/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>2def5145-b30d-5d52-a6e4-1dd00dde006b 7b15482c-af11-5926-b035-8ce7e4c11a98 15f47913-006f-5b52-9327-b6d197342da2 e75f35cb-d8de-53f0-888c-3f91f99e66da 0fcb127a-92d9-5df9-b97e-04eeb38f79af</tstamps>
+      <tstamps>15f47913-006f-5b52-9327-b6d197342da2</tstamps>
     </comp>
     <comp ref="U3">
       <value>SN74LV4T125PWR</value>
@@ -1155,11 +1155,11 @@
         <field name="Datasheet"/>
         <field name="Description"/>
       </fields>
-      <libsource lib="Colloquy" part="U3" description=""/>
+      <libsource lib="Colloquy" part="3to5V_Shifter_U3" description=""/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>3f0e2b14-0f00-5907-9c49-d4137da584a5 4278e0d5-b135-5f5e-8ba7-9891a8eec011 9e585812-8cfb-5d94-98e6-63e1a87361ec 88257b26-2384-5259-bee7-31309201445d 162b0f0b-86d6-5321-86d5-8b1aab78b85e</tstamps>
+      <tstamps>162b0f0b-86d6-5321-86d5-8b1aab78b85e</tstamps>
     </comp>
     <comp ref="U4">
       <value>SN74LV4T125PWR</value>
@@ -1169,14 +1169,118 @@
         <field name="Datasheet"/>
         <field name="Description"/>
       </fields>
-      <libsource lib="Colloquy" part="U4" description=""/>
+      <libsource lib="Colloquy" part="3to5V_Shifter_U4" description=""/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="teensy-adapter-wired.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>e5dd9ac4-72c0-5a32-8217-95a4756c7b23 d9f9db1c-1951-5050-b0ab-41e1d726d06f c86e6acd-4be4-515a-a629-3a28a0b093c1 b2cc9fcc-f4e5-574b-814c-f0ef78da6bef 68947e70-6332-5c35-93c2-2d383c74edbe</tstamps>
+      <tstamps>e5dd9ac4-72c0-5a32-8217-95a4756c7b23</tstamps>
     </comp>
   </components>
   <libparts>
+    <libpart lib="Colloquy" part="3to5V_Shifter_U1">
+      <docs>https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</docs>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">SN74LV4T125PWR</field>
+        <field name="Footprint">Shields:TSSOP-14_4.4x5mm_P0.65mm</field>
+        <field name="Datasheet">https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</field>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="OE1" type="input"/>
+        <pin num="2" name="A1" type="input"/>
+        <pin num="3" name="Y1" type="output"/>
+        <pin num="4" name="OE2" type="input"/>
+        <pin num="5" name="A2" type="input"/>
+        <pin num="6" name="Y2" type="output"/>
+        <pin num="7" name="GND" type="power_in"/>
+        <pin num="8" name="Y3" type="output"/>
+        <pin num="9" name="A3" type="input"/>
+        <pin num="10" name="OE3" type="input"/>
+        <pin num="11" name="Y4" type="output"/>
+        <pin num="12" name="A4" type="input"/>
+        <pin num="13" name="OE4" type="input"/>
+        <pin num="14" name="VCC" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="3to5V_Shifter_U2">
+      <docs>https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</docs>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">SN74LV4T125PWR</field>
+        <field name="Footprint">Shields:TSSOP-14_4.4x5mm_P0.65mm</field>
+        <field name="Datasheet">https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</field>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="OE1" type="input"/>
+        <pin num="2" name="A1" type="input"/>
+        <pin num="3" name="Y1" type="output"/>
+        <pin num="4" name="OE2" type="input"/>
+        <pin num="5" name="A2" type="input"/>
+        <pin num="6" name="Y2" type="output"/>
+        <pin num="7" name="GND" type="power_in"/>
+        <pin num="8" name="Y3" type="output"/>
+        <pin num="9" name="A3" type="input"/>
+        <pin num="10" name="OE3" type="input"/>
+        <pin num="11" name="Y4" type="output"/>
+        <pin num="12" name="A4" type="input"/>
+        <pin num="13" name="OE4" type="input"/>
+        <pin num="14" name="VCC" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="3to5V_Shifter_U3">
+      <docs>https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</docs>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">SN74LV4T125PWR</field>
+        <field name="Footprint">Shields:TSSOP-14_4.4x5mm_P0.65mm</field>
+        <field name="Datasheet">https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</field>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="OE1" type="input"/>
+        <pin num="2" name="A1" type="input"/>
+        <pin num="3" name="Y1" type="output"/>
+        <pin num="4" name="OE2" type="input"/>
+        <pin num="5" name="A2" type="input"/>
+        <pin num="6" name="Y2" type="output"/>
+        <pin num="7" name="GND" type="power_in"/>
+        <pin num="8" name="Y3" type="output"/>
+        <pin num="9" name="A3" type="input"/>
+        <pin num="10" name="OE3" type="input"/>
+        <pin num="11" name="Y4" type="output"/>
+        <pin num="12" name="A4" type="input"/>
+        <pin num="13" name="OE4" type="input"/>
+        <pin num="14" name="VCC" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="3to5V_Shifter_U4">
+      <docs>https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</docs>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">SN74LV4T125PWR</field>
+        <field name="Footprint">Shields:TSSOP-14_4.4x5mm_P0.65mm</field>
+        <field name="Datasheet">https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</field>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="OE1" type="input"/>
+        <pin num="2" name="A1" type="input"/>
+        <pin num="3" name="Y1" type="output"/>
+        <pin num="4" name="OE2" type="input"/>
+        <pin num="5" name="A2" type="input"/>
+        <pin num="6" name="Y2" type="output"/>
+        <pin num="7" name="GND" type="power_in"/>
+        <pin num="8" name="Y3" type="output"/>
+        <pin num="9" name="A3" type="input"/>
+        <pin num="10" name="OE3" type="input"/>
+        <pin num="11" name="Y4" type="output"/>
+        <pin num="12" name="A4" type="input"/>
+        <pin num="13" name="OE4" type="input"/>
+        <pin num="14" name="VCC" type="power_in"/>
+      </pins>
+    </libpart>
     <libpart lib="Colloquy" part="CA19">
       <fields>
         <field name="Reference">CA</field>
@@ -2299,110 +2403,6 @@
         <pin num="1" name="" type="passive"/>
       </pins>
     </libpart>
-    <libpart lib="Colloquy" part="U1">
-      <docs>https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</docs>
-      <fields>
-        <field name="Reference">U</field>
-        <field name="Value">SN74LV4T125PWR</field>
-        <field name="Footprint">Shields:TSSOP-14_4.4x5mm_P0.65mm</field>
-        <field name="Datasheet">https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</field>
-        <field name="Description"/>
-      </fields>
-      <pins>
-        <pin num="1" name="OE1" type="input"/>
-        <pin num="2" name="A1" type="input"/>
-        <pin num="3" name="Y1" type="output"/>
-        <pin num="4" name="OE2" type="input"/>
-        <pin num="5" name="A2" type="input"/>
-        <pin num="6" name="Y2" type="output"/>
-        <pin num="7" name="GND" type="power_in"/>
-        <pin num="8" name="Y3" type="output"/>
-        <pin num="9" name="A3" type="input"/>
-        <pin num="10" name="OE3" type="input"/>
-        <pin num="11" name="Y4" type="output"/>
-        <pin num="12" name="A4" type="input"/>
-        <pin num="13" name="OE4" type="input"/>
-        <pin num="14" name="VCC" type="power_in"/>
-      </pins>
-    </libpart>
-    <libpart lib="Colloquy" part="U2">
-      <docs>https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</docs>
-      <fields>
-        <field name="Reference">U</field>
-        <field name="Value">SN74LV4T125PWR</field>
-        <field name="Footprint">Shields:TSSOP-14_4.4x5mm_P0.65mm</field>
-        <field name="Datasheet">https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</field>
-        <field name="Description"/>
-      </fields>
-      <pins>
-        <pin num="1" name="OE1" type="input"/>
-        <pin num="2" name="A1" type="input"/>
-        <pin num="3" name="Y1" type="output"/>
-        <pin num="4" name="OE2" type="input"/>
-        <pin num="5" name="A2" type="input"/>
-        <pin num="6" name="Y2" type="output"/>
-        <pin num="7" name="GND" type="power_in"/>
-        <pin num="8" name="Y3" type="output"/>
-        <pin num="9" name="A3" type="input"/>
-        <pin num="10" name="OE3" type="input"/>
-        <pin num="11" name="Y4" type="output"/>
-        <pin num="12" name="A4" type="input"/>
-        <pin num="13" name="OE4" type="input"/>
-        <pin num="14" name="VCC" type="power_in"/>
-      </pins>
-    </libpart>
-    <libpart lib="Colloquy" part="U3">
-      <docs>https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</docs>
-      <fields>
-        <field name="Reference">U</field>
-        <field name="Value">SN74LV4T125PWR</field>
-        <field name="Footprint">Shields:TSSOP-14_4.4x5mm_P0.65mm</field>
-        <field name="Datasheet">https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</field>
-        <field name="Description"/>
-      </fields>
-      <pins>
-        <pin num="1" name="OE1" type="input"/>
-        <pin num="2" name="A1" type="input"/>
-        <pin num="3" name="Y1" type="output"/>
-        <pin num="4" name="OE2" type="input"/>
-        <pin num="5" name="A2" type="input"/>
-        <pin num="6" name="Y2" type="output"/>
-        <pin num="7" name="GND" type="power_in"/>
-        <pin num="8" name="Y3" type="output"/>
-        <pin num="9" name="A3" type="input"/>
-        <pin num="10" name="OE3" type="input"/>
-        <pin num="11" name="Y4" type="output"/>
-        <pin num="12" name="A4" type="input"/>
-        <pin num="13" name="OE4" type="input"/>
-        <pin num="14" name="VCC" type="power_in"/>
-      </pins>
-    </libpart>
-    <libpart lib="Colloquy" part="U4">
-      <docs>https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</docs>
-      <fields>
-        <field name="Reference">U</field>
-        <field name="Value">SN74LV4T125PWR</field>
-        <field name="Footprint">Shields:TSSOP-14_4.4x5mm_P0.65mm</field>
-        <field name="Datasheet">https://www.ti.com/lit/ds/symlink/sn74lv4t125.pdf</field>
-        <field name="Description"/>
-      </fields>
-      <pins>
-        <pin num="1" name="OE1" type="input"/>
-        <pin num="2" name="A1" type="input"/>
-        <pin num="3" name="Y1" type="output"/>
-        <pin num="4" name="OE2" type="input"/>
-        <pin num="5" name="A2" type="input"/>
-        <pin num="6" name="Y2" type="output"/>
-        <pin num="7" name="GND" type="power_in"/>
-        <pin num="8" name="Y3" type="output"/>
-        <pin num="9" name="A3" type="input"/>
-        <pin num="10" name="OE3" type="input"/>
-        <pin num="11" name="Y4" type="output"/>
-        <pin num="12" name="A4" type="input"/>
-        <pin num="13" name="OE4" type="input"/>
-        <pin num="14" name="VCC" type="power_in"/>
-      </pins>
-    </libpart>
   </libparts>
   <libraries>
     <library logical="Colloquy">
@@ -2768,63 +2768,63 @@
       <node ref="RA39" pin="2" pintype="passive"/>
       <node ref="RB39" pin="1" pintype="passive"/>
     </net>
-    <net code="57" name="Net-(U1A-Y1)" class="Default">
+    <net code="57" name="Net-(U1-Y1)" class="Default">
       <node ref="JM1" pin="D6" pinfunction="D6" pintype="passive"/>
       <node ref="U1" pin="3" pinfunction="Y1" pintype="output"/>
     </net>
-    <net code="58" name="Net-(U1B-Y2)" class="Default">
+    <net code="58" name="Net-(U1-Y2)" class="Default">
       <node ref="JM1" pin="D46" pinfunction="D46" pintype="passive"/>
       <node ref="U1" pin="6" pinfunction="Y2" pintype="output"/>
     </net>
-    <net code="59" name="Net-(U1C-Y3)" class="Default">
+    <net code="59" name="Net-(U1-Y3)" class="Default">
       <node ref="JM1" pin="D10" pinfunction="D10" pintype="passive"/>
       <node ref="U1" pin="8" pinfunction="Y3" pintype="output"/>
     </net>
-    <net code="60" name="Net-(U1D-Y4)" class="Default">
+    <net code="60" name="Net-(U1-Y4)" class="Default">
       <node ref="JM1" pin="D11" pinfunction="D11" pintype="passive"/>
       <node ref="U1" pin="11" pinfunction="Y4" pintype="output"/>
     </net>
-    <net code="61" name="Net-(U2A-Y1)" class="Default">
+    <net code="61" name="Net-(U2-Y1)" class="Default">
       <node ref="JM1" pin="D5" pinfunction="D5" pintype="passive"/>
       <node ref="U2" pin="3" pinfunction="Y1" pintype="output"/>
     </net>
-    <net code="62" name="Net-(U2B-Y2)" class="Default">
+    <net code="62" name="Net-(U2-Y2)" class="Default">
       <node ref="JM1" pin="D14" pinfunction="D14" pintype="passive"/>
       <node ref="U2" pin="6" pinfunction="Y2" pintype="output"/>
     </net>
-    <net code="63" name="Net-(U2C-Y3)" class="Default">
+    <net code="63" name="Net-(U2-Y3)" class="Default">
       <node ref="JM1" pin="D7" pinfunction="D7" pintype="passive"/>
       <node ref="U2" pin="8" pinfunction="Y3" pintype="output"/>
     </net>
-    <net code="64" name="Net-(U2D-Y4)" class="Default">
+    <net code="64" name="Net-(U2-Y4)" class="Default">
       <node ref="JM1" pin="D8" pinfunction="D8" pintype="passive"/>
       <node ref="U2" pin="11" pinfunction="Y4" pintype="output"/>
     </net>
-    <net code="65" name="Net-(U3A-Y1)" class="Default">
+    <net code="65" name="Net-(U3-Y1)" class="Default">
       <node ref="JM1" pin="D9" pinfunction="D9" pintype="passive"/>
       <node ref="U3" pin="3" pinfunction="Y1" pintype="output"/>
     </net>
-    <net code="66" name="Net-(U3B-Y2)" class="Default">
+    <net code="66" name="Net-(U3-Y2)" class="Default">
       <node ref="JM1" pin="D15" pinfunction="D15" pintype="passive"/>
       <node ref="U3" pin="6" pinfunction="Y2" pintype="output"/>
     </net>
-    <net code="67" name="Net-(U3C-Y3)" class="Default">
+    <net code="67" name="Net-(U3-Y3)" class="Default">
       <node ref="JM1" pin="D17" pinfunction="D17" pintype="passive"/>
       <node ref="U3" pin="8" pinfunction="Y3" pintype="output"/>
     </net>
-    <net code="68" name="Net-(U3D-Y4)" class="Default">
+    <net code="68" name="Net-(U3-Y4)" class="Default">
       <node ref="JM1" pin="D16" pinfunction="D16" pintype="passive"/>
       <node ref="U3" pin="11" pinfunction="Y4" pintype="output"/>
     </net>
-    <net code="69" name="Net-(U4A-Y1)" class="Default">
+    <net code="69" name="Net-(U4-Y1)" class="Default">
       <node ref="JM1" pin="D24" pinfunction="D24" pintype="passive"/>
       <node ref="U4" pin="3" pinfunction="Y1" pintype="output"/>
     </net>
-    <net code="70" name="Net-(U4B-Y2)" class="Default">
+    <net code="70" name="Net-(U4-Y2)" class="Default">
       <node ref="JM1" pin="D25" pinfunction="D25" pintype="passive"/>
       <node ref="U4" pin="6" pinfunction="Y2" pintype="output"/>
     </net>
-    <net code="71" name="Net-(U4C-Y3)" class="Default">
+    <net code="71" name="Net-(U4-Y3)" class="Default">
       <node ref="JM1" pin="D2" pinfunction="D2" pintype="passive"/>
       <node ref="U4" pin="8" pinfunction="Y3" pintype="output"/>
     </net>
@@ -2969,7 +2969,7 @@
     <net code="118" name="unconnected-(JT2E-13-Pad14)" class="Default">
       <node ref="JT2" pin="14" pinfunction="13" pintype="passive+no_connect"/>
     </net>
-    <net code="119" name="unconnected-(U4D-Y4-Pad11)" class="Default">
+    <net code="119" name="unconnected-(U4-Y4-Pad11)" class="Default">
       <node ref="U4" pin="11" pinfunction="Y4" pintype="output+no_connect"/>
     </net>
   </nets>
