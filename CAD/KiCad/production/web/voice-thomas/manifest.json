@@ -1,6 +1,6 @@
 {
   "board_sha256": "0ed2f0eb7e077d730d598f3af986fb3a863f60ce2aa2f30efa70d675e478c568",
-  "generator_sha256": "4c9b272bd797da8cc12aced244f3e5268050e60d0f5449895d0beb3073ba5c02",
+  "generator_sha256": "4120b90d4e6de9954f4517a5632645add46d553731b9abadb55191462dafea89",
   "schematics": {
     "shields/voice-thomas/wired/voice-thomas-wired.kicad_sch": "3aa194694badb455f4d36e46b775d4b2e13a30c8ed16de35fce028ce8e531fdb"
   }

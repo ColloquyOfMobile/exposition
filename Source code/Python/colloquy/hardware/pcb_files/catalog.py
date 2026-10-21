@@ -52,7 +52,7 @@ def html():
                 '<article style="border:1px solid #8886;padding:1rem;max-width:28rem">'
                 f'<h3>{escape(board.title)}</h3>'
                 f'<a href="{base}/preview"><img src="{base}/preview" '
-                f'alt="{escape(board.title, quote=True)} PCB preview" loading="lazy" '
+                f'alt="{escape(board.title, quote=True)} 3D model at 45 degrees" loading="lazy" '
                 'style="width:100%;height:180px;object-fit:contain"></a>'
                 f'<p>{escape(board.what)}</p>'
                 f'<p>{board.copper_layers} copper layers · {escape(board.size)} · '
@@ -102,7 +102,8 @@ def response(parts):
             ]
             headers[0] = ("Cache-Control", "no-store")
         elif kind in ("preview", "schematic"):
-            path = WEB_FOLDER / board.id / f"{kind}.svg"
+            suffix = ".png" if kind == "preview" else ".svg"
+            path = WEB_FOLDER / board.id / f"{kind}{suffix}"
             # Do not permit a malformed manifest to point outside the export folder.
             if not path.resolve().is_relative_to(WEB_FOLDER.resolve()):
                 raise gerbers.PackageError("Invalid PCB file")
@@ -114,7 +115,7 @@ def response(parts):
                         for name, digest in recorded["schematics"].items()))):
                 raise gerbers.PackageError(f"{board.title}: preview export is stale; run export_pcb_web.py")
             content = path.read_bytes()
-            headers.append(("Content-Type", "image/svg+xml"))
+            headers.append(("Content-Type", "image/png" if kind == "preview" else "image/svg+xml"))
         else:
             raise gerbers.PackageError("Unknown PCB file")
         headers.append(("Content-Length", str(len(content))))

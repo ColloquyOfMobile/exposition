@@ -1,6 +1,6 @@
 {
   "board_sha256": "176708f8665a2dfb5078a81dd422e2474577b1730f7a8941903f2f0b4568a6aa",
-  "generator_sha256": "4c9b272bd797da8cc12aced244f3e5268050e60d0f5449895d0beb3073ba5c02",
+  "generator_sha256": "4120b90d4e6de9954f4517a5632645add46d553731b9abadb55191462dafea89",
   "schematics": {
     "shields/microphone/interface.kicad_sch": "ba8b45ec264c28bbad124fa0ba973c4e073f5b5cfea532e562fff7971938cc93",
     "shields/microphone/mechanical.kicad_sch": "d60ab8bdfdd321d3108badac1ef72ad3326090ac07614f0b4207842667a62d25",

@@ -1,4 +1,4 @@
-"""Export the home page's PCB SVGs on a machine with KiCad; commit the results.
+"""Export 45-degree PCB 3D previews and schematic SVGs with KiCad; commit the results.
 
 The installation only reads these files. Run again after changing a PCB or
 its wired schematic. Existing design files and fabrication exports are untouched.
@@ -31,10 +31,10 @@ def main():
         source = KICAD / board["source"]
         target = WEB / name
         target.mkdir(parents=True, exist_ok=True)
-        # Render the PCB itself: report drawings can predate the last layout edit.
-        subprocess.run([args.kicad_cli, "pcb", "export", "svg", "--layers",
-            "F.Cu,F.Silkscreen,Edge.Cuts", "--page-size-mode", "2", "--exclude-drawing-sheet",
-            "-o", str(target / "preview.svg"), str(source)], check=True)
+        # KiCad's 3D model, viewed at 45 degrees, rather than a flat copper plot.
+        subprocess.run([args.kicad_cli, "pcb", "render", "--width", "1200", "--height", "900",
+            "--side", "top", "--background", "opaque", "--rotate", "315,0,45", "--zoom", "0.85",
+            "-o", str(target / "preview.png"), str(source)], check=True)
         schematic = source.parent / "wired" / f"{name}-wired.kicad_sch"
         if not schematic.is_file():
             schematic = source.with_suffix(".kicad_sch")

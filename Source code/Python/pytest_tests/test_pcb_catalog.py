@@ -6,6 +6,7 @@ from types import SimpleNamespace
 import xml.etree.ElementTree as ET
 
 import pytest
+from PIL import Image
 
 from colloquy.hardware.pcb_files import catalog, gerbers
 from colloquy.server2.wsgi2 import WSGI2
@@ -54,6 +55,13 @@ def test_every_link_returns_a_usable_file(board):
                 assert {"BOM.csv", "CPL.csv", "gerbers.zip"} <= set(archive.namelist())
                 with zipfile.ZipFile(io.BytesIO(archive.read("gerbers.zip"))) as plots:
                     assert any(name.endswith(".drl") for name in plots.namelist())
+        elif kind == "preview":
+            assert dict(headers)["Content-Type"] == "image/png"
+            with Image.open(io.BytesIO(body)) as preview:
+                # KiCad on Windows can subtract window borders from the requested size.
+                assert preview.width >= 1000 and preview.height >= 700
+                preview.verify()
+            assert "Content-Disposition" not in dict(headers)
         else:
             assert ET.fromstring(body).tag.endswith("svg")
             assert "Content-Disposition" not in dict(headers)
