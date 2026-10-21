@@ -12,14 +12,14 @@ the two frame slots remain. Current views follow the relocated socket rows
 and omit the older H3-H8 module-support posts and arms.
 
 Created 2026-10-08 from the current shield PCB files. Open
-[shield-configurations.blend](<shield-configurations.blend>) in Blender (5.2).
+[shield-configurations.blend](<../shield-configurations.blend>) in Blender (5.2).
 Use the **Scene selector at the top right** to switch between **Mega**,
 **Teensy**, **Female body** and **Male body**. Repeated rack geometry is shared; each scene keeps its own objects,
 placements, visibility and camera. The file opens on Mega.
 
 The 2026-10-15 **Rev C microphone** study adds `Female body - mic left/right`
 and `Male body - mic left/right`; the plain body scenes show the upward option.
-These use the [32 × 62 mm slotted three-orientation holder](<../microphone-flex/README.md>).
+These use the [32 × 62 mm slotted three-orientation holder](<../../../KiCad/proposed-solutions/shields/microphone-flex/README.md>).
 The 2026-10-20 flex update replaces fixed gain/A/R links with removable JP1/JP2
 selectors. Current orientation exports and body scenes include generic shunt
 proxies at JP1 2-3 (40dB) and JP2 1-2 (1:500). Earlier Rev B references retain
@@ -30,7 +30,7 @@ for its camera view. The prior edited body scenes are retained with
 `ARCHIVE - ... Rev B reference` in their names. These retain their historical
 geometry and must not be used to compare with current KiCad boards. The following original body-study description
 still documents their nominal frame assumptions; current microphone views use Rev C and body boards use Rev D.
-The [three-position preview](<microphone-positions-preview.png>) compares the
+The [three-position preview](<../previews/microphone-positions-preview.png>) compares the
 left, right and upward module choices on the same holder.
 
 The 2026-10-19 revision D updates the six current body scenes: M1 is an 11-pin socket with three male-header groups,
@@ -53,7 +53,7 @@ All current board instances in the combined, Mega and Teensy Blender files are
 refreshed in place. The two historical Rev B body scenes retain their geometry
 under explicit `ARCHIVE` names. Use **Female body**, **Male body**, or their
 left/right microphone variants for the current revision D boards.
-[visual-geometry-validation.json](<visual-geometry-validation.json>) supersedes
+[visual-geometry-validation.json](<../reports/visual-geometry-validation.json>) supersedes
 earlier Blender/export hashes. It records a comparison after saving and reopening:
 actual vertices, face topology, assigned material colours, board transforms,
 scene populations, PCB hashes and individual model dependency hashes. This
@@ -63,10 +63,10 @@ To refresh all current geometry while preserving assembly placements and edits,
 run from the repository root:
 
 ```powershell
-& 'C:/Program Files/KiCad/9.0/bin/python.exe' 'CAD/KiCad/proposed-solutions/shields/assembly-3d/export_boards.py'
-& 'C:/Program Files/KiCad/9.0/bin/python.exe' 'CAD/KiCad/proposed-solutions/shields/assembly-3d/export_body_boards.py'
+& 'C:/Program Files/KiCad/9.0/bin/python.exe' 'CAD/Blender/pcb-assemblies/scripts/export_boards.py'
+& 'C:/Program Files/KiCad/9.0/bin/python.exe' 'CAD/Blender/pcb-assemblies/scripts/export_body_boards.py'
 & 'C:/Program Files/KiCad/9.0/bin/python.exe' 'CAD/KiCad/proposed-solutions/shields/microphone-flex/export_variants.py'
-& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python-exit-code 1 --python 'CAD/KiCad/proposed-solutions/shields/assembly-3d/update_visual_geometry.py' -- --render
+& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python-exit-code 1 --python 'CAD/Blender/pcb-assemblies/scripts/update_visual_geometry.py' -- --render
 ```
 
 `visual_exports.py` prepares native visual data and fingerprints its dependencies;
@@ -84,7 +84,7 @@ GF1002 amplifier with an 11-pin socket and two adjustable insulating supports, a
 microphone holder assembly on a separate part of an aluminium profile.
 Components and reference hardware remain individually selectable. The
 original Mega and Teensy scenes and their object placements are preserved.
-Previews: [Female](<female-body-preview.png>), [Male](<male-body-preview.png>).
+Previews: [Female](<../previews/female-body-preview.png>), [Male](<../previews/male-body-preview.png>).
 
 **TJ's installed extrusion has not been identified.** Searches covered the
 repository CAD and text, its mechanical-document history, and the local TJ
@@ -112,7 +112,7 @@ These views do not validate vibration isolation or actual frame/fastener fit.
 Regenerate the two current body exports with KiCad Python:
 
 ```powershell
-& 'C:/Program Files/KiCad/9.0/bin/python.exe' 'CAD/KiCad/proposed-solutions/shields/assembly-3d/export_body_boards.py'
+& 'C:/Program Files/KiCad/9.0/bin/python.exe' 'CAD/Blender/pcb-assemblies/scripts/export_body_boards.py'
 ```
 
 Then run `add_body_scenes.py` with Blender's background Python. On a combined
@@ -131,8 +131,8 @@ The original individual files are also retained:
 
 | File | Fitted configuration |
 | --- | --- |
-| [mega-configuration.blend](<mega-configuration.blend>) | Backplane, upside-down Mega 2560, five Thomas voice cards, analyser carrier, five modified DFRobot modules |
-| [teensy-configuration.blend](<teensy-configuration.blend>) | Backplane, Teensy adapter, Teensy 4.1, five Thomas voice cards; analyser slot empty |
+| [mega-configuration.blend](<../mega-configuration.blend>) | Backplane, upside-down Mega 2560, five Thomas voice cards, analyser carrier, five modified DFRobot modules |
+| [teensy-configuration.blend](<../teensy-configuration.blend>) | Backplane, Teensy adapter, Teensy 4.1, five Thomas voice cards; analyser slot empty |
 
 Each board has a named collection and a parent Empty for moving the whole board.
 Components remain individually selectable. The files are self-contained and use
@@ -144,9 +144,9 @@ Enable their monitor icon in the Outliner to inspect them beside the rack.
 Their display positions are arbitrary: the specification does not define their
 body-mounted locations. This is not a proposed mechanical mounting arrangement.
 
-Previews: [Mega](<mega-preview.png>), [Teensy](<teensy-preview.png>).
+Previews: [Mega](<../previews/mega-preview.png>), [Teensy](<../previews/teensy-preview.png>).
 Individual solid STEP and coloured GLB exports for all eight board types are
-in [exports](<exports>). STEP files can be opened in FreeCAD. These individual
+in [exports](<../exports>). STEP files can be opened in FreeCAD. These individual
 exports use the PCB editor's absolute origin, with Cartesian Y inverted.
 
 ## Reference dimensions and limitations
@@ -168,14 +168,14 @@ exports use the PCB editor's absolute origin, with Cartesian Y inverted.
   Retained 3.2 mm mounting holes break
   through the narrower side edges; their copper rings were reduced to 3.6 mm.
   Small component placements and connector shape are approximate. See the
-  [module notes](<../../../provided-elements/dfrobot-module/README.md>).
+  [module notes](<../../../KiCad/provided-elements/dfrobot-module/README.md>).
 - Mega planar geometry comes from the original Arduino Rev3e Eagle PCB;
   component bodies/heights are partly simplified. Its unused reserved POWER
   contact 1 has no matching backplane contact. See the
-  [Mega notes](<../../../provided-elements/arduino-mega-reference/README.md>).
+  [Mega notes](<../../../KiCad/provided-elements/arduino-mega-reference/README.md>).
 - Teensy uses the previously imported community model, including an inserted
   microSD card and added standard pin headers. It may represent an older hardware
-  revision. See the [Teensy notes](<../../../provided-elements/teensy41-reference/README.md>).
+  revision. See the [Teensy notes](<../../../KiCad/provided-elements/teensy41-reference/README.md>).
 - **Amber blocks** on the backplane are estimated J2 DC-jack and J6 screw-bridge
   envelopes. Their exact housing dimensions are unknown. The U2D2 mount is empty;
   no U2D2 body geometry was available in the PCB project.
@@ -183,7 +183,7 @@ exports use the PCB editor's absolute origin, with Cartesian Y inverted.
   socket and insulating M2 supports in their STEP/GLB exports. Module planar
   geometry comes from the local reference; socket/spacer heights are nominal.
   No separate capsule or bare-chip proxy is added in Blender. See
-  [holder notes](<../../../old-reference/microphone-rev-b/README.md>) for physical-fit checks.
+  [holder notes](<../../../KiCad/old-reference/microphone-rev-b/README.md>) for physical-fit checks.
 - Standard 2×3/2×11 connector models visually include the keyed absent pin.
   PCB pad positions remain correct; the standard model is an envelope reference.
 - All five voice cards use the same physical geometry. Their collection names
@@ -198,7 +198,7 @@ not changed for these exports.
 The scripts check XY alignment of the mating contacts before saving. Validation
 reopens both saved Blender files, checks board transforms, computing mounting
 holes, overall scale, configuration populations and embedded assets. Results and
-source PCB hashes are in [validation.json](<validation.json>). Rendered previews
+source PCB hashes are in [validation.json](<../reports/validation.json>). Rendered previews
 were visually inspected. Contact alignment does not establish physical connector
 engagement, purchased-part tolerances or clearance for cabling.
 
@@ -217,18 +217,18 @@ bodies and resolves local KiCad model paths. It does not overwrite source PCBs.
 Assembly manifests record all instance transforms in millimetres.
 `combine_scenes.py` combines both files, shares identical meshes, and reopens
 the result to verify scene populations, transforms and cameras. Its original
-results are recorded in [combined-validation.json](<combined-validation.json>).
-After the DFRobot comment correction, [dfrobot-update-validation.json](<dfrobot-update-validation.json>)
+results are recorded in [combined-validation.json](<../reports/combined-validation.json>).
+After the DFRobot comment correction, [dfrobot-update-validation.json](<../reports/dfrobot-update-validation.json>)
 supersedes the earlier Blender file hashes and the earlier DFRobot alignment
 checks. `update_dfrobot_geometry.py` replaces only module geometry in both Mega
 and combined files, preserving user scene/placement edits. Do not rerun
 `combine_scenes.py` over a user-edited combined file unless discarding those
 scene edits is intended. The subsequent carrier correction is validated in
-[carrier-update-validation.json](<carrier-update-validation.json>), which supersedes
+[carrier-update-validation.json](<../reports/carrier-update-validation.json>), which supersedes
 the previous carrier mismatch and affected Blender hashes. Regenerate that
 geometry in edited Blender files with `update_carrier_geometry.py`.
 The 2026-10-13 front-SMD adapter update is recorded in
-[adapter-update-validation.json](<adapter-update-validation.json>). Its hashes
+[adapter-update-validation.json](<../reports/adapter-update-validation.json>). Its hashes
 supersede earlier hashes of the Teensy and combined Blender files.
 `update_adapter_geometry.py` replaces the adapter geometry while preserving
 assembly transforms and scene edits; the adapter STEP/GLB exports are refreshed.
@@ -237,8 +237,8 @@ licensing and attribution; see the linked reference-project notes and their
 retained source/license files.
 
 The 2026-10-21 backplane enclosure-mount update is recorded separately in
-[backplane-mounting-validation.json](<backplane-mounting-validation.json>).
+[backplane-mounting-validation.json](<../reports/backplane-mounting-validation.json>).
 It supersedes the backplane and assembly-file hashes in earlier audits for
 this change only. The three saved assemblies were reopened and their backplane
 meshes compared against the new export; other board meshes and placements
-were preserved. See the [recovered mounting dimensions](<../backplane/ENCLOSURE_MOUNTING.md>).
+were preserved. See the [recovered mounting dimensions](<../../../KiCad/proposed-solutions/shields/backplane/ENCLOSURE_MOUNTING.md>).

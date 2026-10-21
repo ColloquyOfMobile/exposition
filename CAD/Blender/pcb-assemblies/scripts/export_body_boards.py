@@ -7,8 +7,8 @@ import json
 import pcbnew as p
 from visual_exports import export_visual
 
-ROOT = Path(__file__).resolve().parent
-CAD = ROOT.parent.parent
+ROOT = Path(__file__).resolve().parents[1]
+CAD = ROOT.parents[2]/'CAD/KiCad/proposed-solutions'
 
 
 def main():

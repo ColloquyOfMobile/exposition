@@ -12,8 +12,8 @@ import sys
 
 import bpy
 
-ROOT = Path(__file__).resolve().parent
-WORK = ROOT.parents[4] / 'tmp' / 'model-audit' / 'backups'
+ROOT = Path(__file__).resolve().parents[1]
+WORK = ROOT.parents[2] / 'tmp' / 'model-audit' / 'backups'
 FILES = ('shield-configurations.blend', 'mega-configuration.blend', 'teensy-configuration.blend')
 
 
@@ -66,7 +66,7 @@ def main():
     only = next((arg.split('=', 1)[1].split(',') for arg in sys.argv if arg.startswith('--only=')), None)
     if only:
         assert set(only) <= set(FILES), only
-        existing = ROOT / 'visual-geometry-validation.json'
+        existing = ROOT / 'reports/visual-geometry-validation.json'
         if existing.exists():
             report = json.loads(existing.read_text())
     for metadata in sorted((ROOT / 'exports').glob('*.json')):
@@ -74,13 +74,13 @@ def main():
         if 'visual_export' in data:
             visual = data['visual_export']
             assert digest(metadata.with_suffix('.glb')) == visual['glb_sha256']
-            source = ROOT.parents[4] / visual['source']
+            source = ROOT.parents[2] / visual['source']
             assert digest(source) == visual['source_sha256'], source
             for model in visual['models']:
                 model_path = Path(model['file'].replace('${KICAD9_3DMODEL_DIR}',
                                   'C:/Program Files/KiCad/9.0/share/kicad/3dmodels'))
                 if not model_path.is_absolute():
-                    model_path = ROOT.parents[4] / model_path
+                    model_path = ROOT.parents[2] / model_path
                 assert digest(model_path) == model['sha256'], model_path
             report['exports'][metadata.stem] = visual
     for filename in FILES:
@@ -160,7 +160,7 @@ def main():
                            'meshes': actual})
         report['files'][filename] = {'sha256': digest(path), 'reopened': True,
                                     'placements_and_unrelated_objects_preserved': True, 'boards': boards}
-        (ROOT / 'visual-geometry-validation.json').write_text(json.dumps(report, indent=2) + '\n')
+        (ROOT / 'reports/visual-geometry-validation.json').write_text(json.dumps(report, indent=2) + '\n')
         print(filename, 'verified', len(boards), 'board instances', flush=True)
         if '--render' in sys.argv or ('--render-racks' in sys.argv and filename != FILES[0]):
             if filename == 'shield-configurations.blend':
@@ -172,14 +172,14 @@ def main():
                 scenes = [(bpy.context.scene, 'teensy-preview.png')]
             for scene, image in scenes:
                 bpy.context.window.scene = scene
-                scene.render.filepath = str(ROOT / image)
+                scene.render.filepath = str(ROOT / 'previews' / image)
                 bpy.ops.render.render(write_still=True)
-        (ROOT / 'visual-geometry-validation.json').write_text(json.dumps(report, indent=2) + '\n')
+        (ROOT / 'reports/visual-geometry-validation.json').write_text(json.dumps(report, indent=2) + '\n')
     assert all(name in report['files'] and report['files'][name]['sha256'] == digest(ROOT / name)
                for name in FILES), 'Run the remaining assembly audits before marking the whole set current'
     for filename in ('validation.json', 'combined-validation.json', 'dfrobot-update-validation.json',
                      'carrier-update-validation.json', 'adapter-update-validation.json', 'body-scenes-validation.json'):
-        path = ROOT / filename
+        path = ROOT / 'reports' / filename
         data = json.loads(path.read_text())
         data['superseded_by'] = 'visual-geometry-validation.json (current Blender/export hashes, saved geometry and materials)'
         path.write_text(json.dumps(data, indent=2) + '\n')

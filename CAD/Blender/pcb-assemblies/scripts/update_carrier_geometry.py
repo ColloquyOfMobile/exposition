@@ -5,8 +5,8 @@ import json
 import hashlib
 from mathutils import Matrix,Vector
 
-ROOT=Path(__file__).resolve().parent
-manifest=json.loads((ROOT/'mega-assembly.json').read_text())
+ROOT=Path(__file__).resolve().parents[1]
+manifest=json.loads((ROOT/'reports/mega-assembly.json').read_text())
 carrier=json.loads((ROOT/'exports/analyser-carrier.json').read_text())['footprints']
 module=json.loads((ROOT/'exports/dfrobot-module.json').read_text())['footprints']
 errors=[]
@@ -48,15 +48,15 @@ for filename in ('mega-configuration.blend','shield-configurations.blend'):
     assert next(o for o in bpy.data.objects if o.get('source_board')=='analyser-carrier').matrix_basis==matrix
     report['files'][filename]={'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'reopened':True,'placement_preserved':True}
     if filename=='mega-configuration.blend':
-        bpy.context.scene.render.filepath=str(ROOT/'mega-preview.png')
+        bpy.context.scene.render.filepath=str(ROOT/'previews/mega-preview.png')
         bpy.ops.render.render(write_still=True)
 for check in manifest['alignment_checks']:
     if 'DFRobot analyser' in check['name']:
         check.update(maximum_xy_error_mm=max(errors),aligned=True,note='Carrier sockets corrected to match J4.')
-(ROOT/'mega-assembly.json').write_text(json.dumps(manifest,indent=2)+'\n')
+(ROOT/'reports/mega-assembly.json').write_text(json.dumps(manifest,indent=2)+'\n')
 for filename in ('validation.json','combined-validation.json','dfrobot-update-validation.json'):
-    path=ROOT/filename;data=json.loads(path.read_text())
+    path=ROOT/'reports'/filename;data=json.loads(path.read_text())
     data['superseded_by']='carrier-update-validation.json (carrier alignment and affected Blender files)'
     path.write_text(json.dumps(data,indent=2)+'\n')
-(ROOT/'carrier-update-validation.json').write_text(json.dumps(report,indent=2)+'\n')
+(ROOT/'reports/carrier-update-validation.json').write_text(json.dumps(report,indent=2)+'\n')
 print(report)

@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 from mathutils import Matrix, Vector
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 CONFIG = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'mega'
 assert CONFIG in ('mega', 'teensy')
 GAP = 11.04  # 8.5 mm socket body + 2.54 mm male header body
@@ -172,7 +172,7 @@ if CONFIG == 'mega':
     for ref in ['HA1','HA2']:
         x,y = back_meta[ref]['xy']
         spacer('Analyser '+ref,x,-y,1.6,DECK)
-    mech = json.loads((ROOT.parent/'analyser-carrier'/'mechanical.json').read_text())
+    mech = json.loads((ROOT.parents[2]/'CAD/KiCad/proposed-solutions/shields/analyser-carrier'/'mechanical.json').read_text())
     for i,(x,y,angle) in enumerate(mech['module_origins_mm']):
         rot = Matrix.Rotation(math.radians(angle),3,'Z')
         trans = Vector((x+25,-y-215,DECK*2)) - rot @ Vector((54.34,-58,0))
@@ -246,9 +246,9 @@ scene['readme'] = 'See README.md. Nominal 11.04 mm mating gaps. Amber bodies are
 scene['configuration'] = CONFIG
 bpy.context.view_layer.update()
 manifest['visible_board_count'] = sum(not b['hidden'] for b in manifest['boards'])
-(ROOT/(CONFIG+'-assembly.json')).write_text(json.dumps(manifest,indent=2)+'\n')
+(ROOT / 'reports' / (CONFIG+'-assembly.json')).write_text(json.dumps(manifest,indent=2)+'\n')
 bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/(CONFIG+'-configuration.blend')),compress=True)
-scene.render.filepath = str(ROOT/(CONFIG+'-preview.png'))
+scene.render.filepath = str(ROOT/'previews'/(CONFIG+'-preview.png'))
 if '--no-render' not in sys.argv:
     bpy.ops.render.render(write_still=True)
 print('ASSEMBLY COMPLETE',CONFIG,manifest['alignment_checks'])

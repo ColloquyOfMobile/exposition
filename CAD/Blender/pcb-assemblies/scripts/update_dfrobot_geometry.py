@@ -8,8 +8,8 @@ import hashlib
 import json
 from mathutils import Vector
 
-ROOT = Path(__file__).resolve().parent
-grid=json.loads((ROOT.parent/'analyser-carrier/mechanical.json').read_text())['socket_grid_mm']
+ROOT = Path(__file__).resolve().parents[1]
+grid=json.loads((ROOT.parents[2]/'CAD/KiCad/proposed-solutions/shields/analyser-carrier/mechanical.json').read_text())['socket_grid_mm']
 mismatch=abs(grid[-2][1]-16.51)
 fit_note=('Control sockets align with corrected J4; physical fit not verified.' if mismatch<.001
           else f'Carrier control sockets differ by {mismatch:.2f} mm.')
@@ -63,17 +63,17 @@ for filename in ('mega-configuration.blend','shield-configurations.blend'):
     report['files'][filename] = {'updated_instances':len(roots),'preserved_root_transforms':True,
                                 'j1_bounds_xyz_mm':bbox,'sha256':hashlib.sha256(path.read_bytes()).hexdigest()}
     if filename == 'mega-configuration.blend':
-        bpy.context.scene.render.filepath = str(ROOT/'mega-preview.png')
+        bpy.context.scene.render.filepath = str(ROOT/'previews/mega-preview.png')
         bpy.ops.render.render(write_still=True)
-(ROOT/'dfrobot-update-validation.json').write_text(json.dumps(report,indent=2)+'\n')
-manifest_path = ROOT/'mega-assembly.json'
+(ROOT/'reports/dfrobot-update-validation.json').write_text(json.dumps(report,indent=2)+'\n')
+manifest_path = ROOT/'reports/mega-assembly.json'
 manifest = json.loads(manifest_path.read_text())
 for check in manifest['alignment_checks']:
     if 'DFRobot analyser' in check['name']:
         check.update(maximum_xy_error_mm=mismatch,aligned=mismatch<.001,note=fit_note)
 manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
 for filename in ('validation.json','combined-validation.json'):
-    path = ROOT/filename
+    path = ROOT/'reports'/filename
     historical = json.loads(path.read_text())
     historical['superseded_by'] = 'dfrobot-update-validation.json (DFRobot geometry, fit checks and affected Blender hashes)'
     path.write_text(json.dumps(historical,indent=2)+'\n')

@@ -3,6 +3,9 @@
 Updated for SHIELDS.md revision d076edc (2026-10-13) and MICROPHONE_BOARD.md.
 All current KiCad 9 projects and their shared library are in this folder.
 
+Blender assembly scenes, previews and export tools are in
+[CAD/Blender/pcb-assemblies](../../../Blender/pcb-assemblies/README.md).
+
 Matching functional pinouts show signal origins and destinations around a
 rectangle, with processor pins in its centre:
 [Arduino Mega](<../../../../Source code/Python/colloquy/server2/static/hardware/shields-mega-pinout.svg>)

@@ -4,8 +4,8 @@ import json, math, re, shutil, subprocess, sys
 import numpy as np
 import pcbnew as p
 from visual_exports import export_visual
-ROOT=Path(__file__).resolve().parent
-SHIELDS=ROOT.parent
+ROOT=Path(__file__).resolve().parents[1]
+SHIELDS=ROOT.parents[2]/'CAD/KiCad/proposed-solutions/shields'
 LIB=Path('C:/Program Files/KiCad/9.0/share/kicad')
 CLI=LIB.parents[1]/'bin/kicad-cli.exe'
 NAMES=['backplane','teensy-adapter','voice-thomas','microphone-flex','analyser-carrier','dfrobot-module','arduino-mega-reference','teensy41-reference']

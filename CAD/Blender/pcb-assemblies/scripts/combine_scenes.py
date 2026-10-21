@@ -5,7 +5,7 @@ import json
 import numpy as np
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'shield-configurations.blend'
 bpy.ops.wm.open_mainfile(filepath=str(ROOT / 'mega-configuration.blend'))
 mega = bpy.context.scene
@@ -83,7 +83,7 @@ for mat in list(bpy.data.materials):
 
 for scene in (mega, teensy):
     scene['scene_switching'] = 'Use the top-right Scene selector to switch Mega / Teensy.'
-    scene.render.filepath = '//'+scene.name.lower()+'-preview.png'
+    scene.render.filepath = '//previews/'+scene.name.lower()+'-preview.png'
 bpy.context.window.scene = mega
 bpy.ops.wm.save_as_mainfile(filepath=str(OUTPUT), compress=True)
 
@@ -103,7 +103,7 @@ for name, count in [('Mega', 13), ('Teensy', 8)]:
     assert scene.camera in list(scene.objects)
     assert scene.unit_settings.system == 'METRIC'
     assert not bpy.data.libraries
-    manifest = json.loads((ROOT / (name.lower()+'-assembly.json')).read_text())
+    manifest = json.loads((ROOT / 'reports' / (name.lower()+'-assembly.json')).read_text())
     for entry in manifest['boards']:
         # Appending can suffix object names; identify board roots by source and
         # their original stable prefix, then compare all saved transforms.
@@ -123,5 +123,5 @@ report['mesh_datablocks_shared_between_scenes'] = len(scene_meshes[0] & scene_me
 assert report['mesh_datablocks_shared_between_scenes'] > 0
 report['size_bytes'] = OUTPUT.stat().st_size
 report['sha256'] = hashlib.sha256(OUTPUT.read_bytes()).hexdigest()
-(ROOT / 'combined-validation.json').write_text(json.dumps(report, indent=2)+'\n')
+(ROOT / 'reports/combined-validation.json').write_text(json.dumps(report, indent=2)+'\n')
 print(json.dumps(report, indent=2))

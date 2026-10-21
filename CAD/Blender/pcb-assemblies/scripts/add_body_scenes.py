@@ -15,8 +15,8 @@ import bmesh
 from mathutils import Vector
 from mathutils.geometry import tessellate_polygon
 
-ROOT = Path(__file__).resolve().parent
-WORK = ROOT.parents[4] / 'tmp' / 'body-model'
+ROOT = Path(__file__).resolve().parents[1]
+WORK = ROOT.parents[2] / 'tmp' / 'body-model'
 WORK.mkdir(parents=True, exist_ok=True)
 OUTPUT = ROOT / 'shield-configurations.blend'
 SCENES = tuple(kind+' body'+('' if orientation=='up' else ' - mic '+orientation)
@@ -285,13 +285,13 @@ def main():
         report['source_sha256'][source+'.glb'] = sha(ROOT / 'exports' / (source+'.glb'))
     for source in ['female-base-v2', 'male-static-v2']:
         report['source_sha256'][source+'.kicad_pcb'] = json.loads((ROOT/'exports'/(source+'.json')).read_text())['sha256']
-    (ROOT/'body-scenes-validation.json').write_text(json.dumps(report,indent=2)+'\n')
+    (ROOT/'reports/body-scenes-validation.json').write_text(json.dumps(report,indent=2)+'\n')
     for kind in ('Female', 'Male'):
         for orientation in ('up','left','right'):
             scene = bpy.data.scenes[kind+' body'+('' if orientation=='up' else ' - mic '+orientation)]
             bpy.context.window.scene = scene
             suffix='' if orientation=='up' else '-'+orientation
-            scene.render.filepath = str(ROOT / (kind.lower()+'-body'+suffix+'-preview.png'))
+            scene.render.filepath = str(ROOT / 'previews' / (kind.lower()+'-body'+suffix+'-preview.png'))
             bpy.ops.render.render(write_still=True)
     print('BODY SCENES COMPLETE', json.dumps(report), flush=True)
 

@@ -8,8 +8,8 @@ import sys
 import pcbnew as p
 
 ROOT=Path(__file__).resolve().parent
-ASSEMBLY=ROOT.parent/'assembly-3d'
-sys.path.insert(0,str(ASSEMBLY))
+ASSEMBLY=ROOT.parents[4]/'CAD/Blender/pcb-assemblies'
+sys.path.insert(0,str(ASSEMBLY/'scripts'))
 from visual_exports import CLI, export_visual
 WORK=ROOT/'variants'
 WORK.mkdir(parents=True,exist_ok=True)
@@ -40,7 +40,7 @@ def preview():
         draw.text((600*i+30,105),orientation.upper()+(' / DOWN' if orientation!='up' else ''),font=heading,fill='black')
         hashes[orientation]=hashlib.sha256(image.read_bytes()).hexdigest()
     draw.text((30,865),'Generic header/shunt proxies. Physical dimensions and adjustment access require checking.',font=font,fill='black')
-    path=ASSEMBLY/'microphone-positions-preview.png'
+    path=ASSEMBLY/'previews/microphone-positions-preview.png'
     staged=path.with_name(path.stem+'-staged.png')
     canvas.save(staged)
     staged.replace(path)

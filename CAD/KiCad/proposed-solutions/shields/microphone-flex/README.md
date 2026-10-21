@@ -146,7 +146,7 @@ contains the three socket footprints and the two frame slots.
 `variants/up.kicad_pcb`, `left.kicad_pcb` and `right.kicad_pcb` are assembled
 viewing copies with identical copper and exactly one seated module. Their
 3D references resolve to local repository models. The shared combined Blender
-file in `../assembly-3d/` is self-contained and adds six body scenes:
+file in `../../../../Blender/pcb-assemblies/` is self-contained and adds six body scenes:
 
 - Female body / Male body: upward module.
 - Female body - mic left / Male body - mic left.
@@ -167,7 +167,7 @@ Run from the repository root:
 & 'C:/Program Files/KiCad/9.0/bin/python.exe' CAD/KiCad/proposed-solutions/shields/scripts/route.py --only microphone-flex --preserve-netclasses --jar tmp/shields-tools/freerouting-2.4.1.jar --work tmp/microphone-flex-route
 & 'C:/Program Files/KiCad/9.0/bin/python.exe' CAD/KiCad/proposed-solutions/shields/microphone-flex/check_layout.py
 & 'C:/Program Files/KiCad/9.0/bin/python.exe' CAD/KiCad/proposed-solutions/shields/microphone-flex/export_variants.py
-& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python-exit-code 1 --python CAD/KiCad/proposed-solutions/shields/assembly-3d/update_visual_geometry.py -- --only=shield-configurations.blend --render
+& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python-exit-code 1 --python CAD/Blender/pcb-assemblies/scripts/update_visual_geometry.py -- --only=shield-configurations.blend --render
 ```
 
 For a newly edited placement, rebuild the downward models before routing; the first command

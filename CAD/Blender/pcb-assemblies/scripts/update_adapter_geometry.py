@@ -7,7 +7,7 @@ import hashlib
 import json
 import bpy
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 report = {'revision': '2026-10-13 front SMD reservoirs', 'files': {}}
 for filename in ('teensy-configuration.blend', 'shield-configurations.blend'):
     path = ROOT / filename
@@ -39,7 +39,7 @@ for filename in ('teensy-configuration.blend', 'shield-configurations.blend'):
     assert next(obj for obj in bpy.data.objects if obj.get('source_board') == 'teensy-adapter').matrix_basis == matrix
     report['files'][filename] = {'sha256': hashlib.sha256(path.read_bytes()).hexdigest(), 'reopened': True, 'placement_preserved': True}
     if filename == 'teensy-configuration.blend':
-        bpy.context.scene.render.filepath = str(ROOT / 'teensy-preview.png')
+        bpy.context.scene.render.filepath = str(ROOT / 'previews/teensy-preview.png')
         bpy.ops.render.render(write_still=True)
-(ROOT / 'adapter-update-validation.json').write_text(json.dumps(report, indent=2) + '\n')
+(ROOT / 'reports/adapter-update-validation.json').write_text(json.dumps(report, indent=2) + '\n')
 print(report)

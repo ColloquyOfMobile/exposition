@@ -10,8 +10,8 @@ import subprocess
 
 import pcbnew as p
 
-ROOT = Path(__file__).resolve().parent
-REPO = ROOT.parents[4]
+ROOT = Path(__file__).resolve().parents[1]
+REPO = ROOT.parents[2]
 CAD = REPO / 'CAD' / 'KiCad'
 CLI = Path('C:/Program Files/KiCad/9.0/bin/kicad-cli.exe')
 BLENDER = Path('C:/Program Files/Blender Foundation/Blender 5.2/blender.exe')
@@ -70,7 +70,7 @@ def convert(entries):
     manifest = REPO / 'tmp' / 'kicad-visual-exports' / 'manifest.json'
     manifest.write_text(json.dumps(entries, indent=2) + '\n')
     subprocess.run([str(BLENDER), '--background', '--python-exit-code', '1', '--python',
-                    str(ROOT / 'kicad_vrml.py'), '--', str(manifest)], check=True)
+                    str(ROOT / 'scripts/kicad_vrml.py'), '--', str(manifest)], check=True)
     return json.loads(manifest.with_suffix('.results.json').read_text())
 
 

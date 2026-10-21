@@ -5,12 +5,12 @@ import json
 from pathlib import Path
 from mathutils import Matrix, Vector
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 results = {}
 for config in ('mega','teensy'):
     path = ROOT/(config+'-configuration.blend')
     bpy.ops.wm.open_mainfile(filepath=str(path))
-    manifest = json.loads((ROOT/(config+'-assembly.json')).read_text())
+    manifest = json.loads((ROOT / 'reports' / (config+'-assembly.json')).read_text())
     visible = [b for b in manifest['boards'] if not b['hidden']]
     assert len(visible) == (13 if config == 'mega' else 8)
     assert bpy.context.scene.unit_settings.system == 'METRIC'
@@ -51,6 +51,6 @@ for config in ('mega','teensy'):
                        'external_image_dependencies':external,'reopened_successfully':True,
                        'blend_sha256':hashlib.sha256(path.read_bytes()).hexdigest()}
 results['source_pcb_sha256'] = {p.parent.name:hashlib.sha256(p.read_bytes()).hexdigest()
-                               for p in ROOT.parent.glob('*/*.kicad_pcb')}
-(ROOT/'validation.json').write_text(json.dumps(results,indent=2)+'\n')
+                               for p in (ROOT.parents[2]/'CAD/KiCad/proposed-solutions/shields').glob('*/*.kicad_pcb')}
+(ROOT/'reports/validation.json').write_text(json.dumps(results,indent=2)+'\n')
 print(json.dumps(results,indent=2))

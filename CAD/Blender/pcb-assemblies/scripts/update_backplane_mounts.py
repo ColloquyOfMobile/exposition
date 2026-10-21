@@ -11,8 +11,8 @@ import sys
 
 import bpy
 
-ROOT = Path(__file__).resolve().parent
-sys.path.insert(0, str(ROOT))
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from update_visual_geometry import signature, transform
 
 
@@ -21,12 +21,12 @@ def digest(path):
 
 
 def main():
-    source = ROOT.parent/'backplane/backplane.kicad_pcb'
+    source = ROOT.parents[2]/'CAD/KiCad/proposed-solutions/shields/backplane/backplane.kicad_pcb'
     model = ROOT/'exports/backplane.glb'
     meta = json.loads(model.with_suffix('.json').read_text())['visual_export']
     assert digest(source) == meta['source_sha256']
     assert digest(model) == meta['glb_sha256']
-    backup = ROOT.parents[4]/'tmp/backplane-mounts/assembly-backups'
+    backup = ROOT.parents[2]/'tmp/backplane-mounts/assembly-backups'
     backup.mkdir(parents=True, exist_ok=True)
     report = dict(backplane_source_sha256=digest(source), model_sha256=digest(model),
         scope='Backplane only; all other board geometry and placements preserved', files={})
@@ -81,7 +81,7 @@ def main():
         report['files'][name] = dict(sha256=digest(path), reopened=True,
             backplane_geometry_matches_export=True, other_meshes_and_placements_preserved=True)
         print(name, 'backplane enclosure holes updated and verified', flush=True)
-    (ROOT/'backplane-mounting-validation.json').write_text(json.dumps(report, indent=2)+'\n')
+    (ROOT/'reports/backplane-mounting-validation.json').write_text(json.dumps(report, indent=2)+'\n')
 
 
 if __name__ == '__main__':
