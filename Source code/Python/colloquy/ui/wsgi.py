@@ -26,6 +26,7 @@ from yattag import Doc, indent
 from urllib.parse import quote, unquote, parse_qs
 from pathlib import Path
 from colloquy.base import Base
+from colloquy.hardware.pcb_files import catalog
 from colloquy.ui.tree import CommandFailed
 from wsgiref.simple_server import WSGIRequestHandler
 
@@ -117,6 +118,8 @@ class MockWSGI(Base):
             return self._parse_app()
 
         key, *leftovers = args
+        if key == "pcb":
+            return catalog.response(leftovers)
         if key == "shutdown":
             return self._parse_shutdown(*leftovers)
 
@@ -328,6 +331,9 @@ class MockWSGI(Base):
 
                 with tag("div", name="thread count"):
                     text(f"thread count: {len(self.all_threads)}")
+
+                if not args:
+                    doc.asis(catalog.html())
 
                 # Commands and simulated state, both on the page:
                 # watching what the installation does while driving it

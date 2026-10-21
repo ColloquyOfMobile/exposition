@@ -255,7 +255,9 @@ def test_the_page_lists_every_board_with_what_an_order_form_asks():
     for board in gerbers.load():
         assert board.title in page
         assert board.size in page
-        assert f'href="/download/gerbers/{board.id}"' in page
+        assert f'href="/pcb/{board.id}/fabrication"' in page
+        assert f'href="/pcb/{board.id}/schematic"' in page
+        assert f'src="/pcb/{board.id}/preview"' in page
 
 
 def test_the_page_draws_no_emergency_stop_and_no_way_into_the_tree():

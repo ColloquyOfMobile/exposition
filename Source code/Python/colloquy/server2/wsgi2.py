@@ -7,7 +7,7 @@ from colloquy.utils import (
 )
 from colloquy.base import Base
 from colloquy.drivers.arduino.errors import ArduinoError
-from colloquy.hardware.pcb_files import gerbers, kicad_projects
+from colloquy.hardware.pcb_files import catalog, gerbers, kicad_projects
 from colloquy.server2 import standby, updates
 from colloquy.server2.remedies import remedy_html
 from colloquy.ui.tree import CommandFailed
@@ -133,6 +133,8 @@ class WSGI2(Base):
             return self._parse_app()
 
         key, *leftovers = args
+        if key == "pcb":
+            return catalog.response(leftovers)
         if key == "emergency-stop":
             return self._parse_emergency_stop(*leftovers)
 
@@ -469,6 +471,9 @@ class WSGI2(Base):
 
                 with tag("div", name="thread count", style="display: flex;"):
                     text(f"thread count: {len(self.all_threads)}")
+
+                if not args:
+                    doc.asis(catalog.html())
 
                 # Commands on the left, simulated state on the right, side
                 # by side: watching what the installation does while

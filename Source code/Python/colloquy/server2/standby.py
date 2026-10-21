@@ -33,7 +33,7 @@ Installation-side only: the mock has no board to take out.
 """
 from yattag import Doc
 
-from colloquy.hardware.pcb_files import gerbers, kicad_projects
+from colloquy.hardware.pcb_files import catalog, gerbers, kicad_projects
 
 from . import updates
 
@@ -82,7 +82,6 @@ def _gerbers(doc, tag, text):
 
         try:
             boards = gerbers.load()
-            problems = {board.id: gerbers.problems(board) for board in boards}
         except Exception as error:  # noqa: BLE001 - this page must not raise
             said = str(error) if isinstance(error, gerbers.PackageError) else _sentence(error)
             with tag("p", klass="problem"):
@@ -93,35 +92,7 @@ def _gerbers(doc, tag, text):
             with tag("a", klass="button", href="/download/gerbers"):
                 text(f"download the Gerbers ({len(boards)} boards)")
 
-        with tag("table"):
-            with tag("tr"):
-                for heading in ("board", "layers", "size", "needed", ""):
-                    with tag("th"):
-                        text(heading)
-            group = None
-            for board in boards:
-                if board.group != group:
-                    group = board.group
-                    with tag("tr", klass="group"):
-                        with tag("td", colspan="5"):
-                            text(group)
-                with tag("tr"):
-                    with tag("td"):
-                        text(board.title)
-                        with tag("div", klass="what"):
-                            text(board.what)
-                        for problem in problems[board.id]:
-                            with tag("div", klass="problem"):
-                                text(problem)
-                    with tag("td"):
-                        text(str(board.copper_layers))
-                    with tag("td"):
-                        text(board.size)
-                    with tag("td"):
-                        text(str(board.quantity))
-                    with tag("td"):
-                        with tag("a", href=f"/download/gerbers/{board.id}"):
-                            text("this board only")
+        doc.asis(catalog.html())
 
         plotted = sorted(board.exported_at for board in boards if board.exported_at)
         if plotted:
