@@ -1,5 +1,5 @@
 {
-  "source_sha256": "c7ca5bc4b96a0eab96b20a8753cd67810e79fe79f584941ef767b8258400ae5d",
+  "source_sha256": "6656564a943d1ce98d110882f9fcc0f02f1be697096b2b91d963b67ef8d50796",
   "original_outline_and_dsub_geometry": "PASS",
   "harness_nets_and_pad_drills": "PASS",
   "all_connector_names_on_front_silkscreen": "PASS",
@@ -7,13 +7,19 @@
   "c1_smd_footprint_and_polarity": "PASS",
   "socket_pinout_and_reference_alignment": "PASS",
   "contact_strip_clearance": "PASS",
-  "adjustable_support_positions": "PASS",
+  "component_positions_match_manifest": "PASS",
+  "adjustable_support_positions": "REMOVED",
+  "layout_revision": "2026-10-21-user-placement",
+  "capacitor_proximity": {
+    "c2_within_previous_5mm_target": false,
+    "c1_within_previous_9mm_target": false
+  },
   "module_underside_gap_mm_nominal": 11,
   "c2_distance_to_supply_pins_mm": [
-    4.796,
-    3.327
+    14.743,
+    16.291
   ],
-  "c1_distance_to_supply_pin_mm": 6.851,
+  "c1_distance_to_supply_pin_mm": 23.314,
   "routing": {
     "output_lengths_mm": {
       "AMP_OUT_P": 18.153,
@@ -21,10 +27,11 @@
     },
     "output_copper_layer": "F.Cu",
     "output_minimum_width_mm": 0.8,
-    "amp_input_total_length_mm": 7.265,
-    "paired_incoming_line_return_overlap_mm": 19.324,
+    "amp_input_total_length_mm": 12.275,
+    "amp_input_length_limit_mm": 16,
+    "paired_incoming_line_return_overlap_mm": 25.316,
     "parallel_sensitive_runs_within_2p5mm": 0,
-    "minimum_parallel_sensitive_centre_spacing_mm": 17.241,
+    "minimum_parallel_sensitive_centre_spacing_mm": null,
     "sensitive_crossings": [],
     "ground_guard": "PASS"
   },

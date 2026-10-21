@@ -140,7 +140,7 @@ def make(original_name, stem, positions, module_origin, clamps, extra):
         'Plug-in module: 1x3, 1x2 and 1x4 downward male headers in an 11-pin female socket. Nominal underside gap 11mm. Pin 10=ROUT+, 11=ROUT- is provisional: verify module polarity before ordering.')
     parts['M1']['pin_names']={str(n):name for n,name in enumerate(
         ('R_IN','INPUT_G','L_IN_NC','GAP_NC','VDD','SUPPLY_GND','GAP_NC','LOUT_A_NC','LOUT_B_NC','ROUT_P_VERIFY','ROUT_N_VERIFY'),1)}
-    for i,side in enumerate(('Left','End'),1):
+    for i,side in enumerate(('Left','End') if clamps else (),1):
         add('H'+str(i),'M2 insulating support / 11mm','Body:GF1002_Support_'+side,{},
             'Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack.',False)
     # Use explicit global names without a leading slash (KiCad escapes slashes).
@@ -153,7 +153,8 @@ def make(original_name, stem, positions, module_origin, clamps, extra):
     sheet.text('REV D ENGINEERING PROTOTYPE / SOCKETED GF1002 / 11mm NOMINAL STACK',15,12,2,True)
     sheet.text('Harness speaker pair becomes LINE_IN / AUDIO_RETURN. Rack must be converted first.',15,20)
     sheet.text('M1: 1=R IN, 2=audio return, 5=5V, 6=GND, 10/11=ROUT+/-. Verify output polarity and ground bond on module.',15,26)
-    sheet.text('No output is grounded. Audio return and supply ground meet only on the module. Insulating adjustable supports.',15,32)
+    sheet.text('No output is grounded. Audio return and supply ground meet only on the module.'+
+               (' Insulating adjustable supports.' if clamps else ' H1/H2 mounting holes removed.'),15,32)
     # DSUB's 17 pins need a tall block; use separate columns for original branches.
     def place(ref,x,y):
         sheet.place(ref,round(x/1.27)*1.27,round(y/1.27)*1.27)
@@ -162,10 +163,12 @@ def make(original_name, stem, positions, module_origin, clamps, extra):
     for i,ref in enumerate(others):
         col=i//5; row=i%5
         place(ref,145+col*95,60+row*42)
-    place('M1',340,210); place('H1',240,275); place('H2',290,275)
+    place('M1',340,210)
+    if clamps:
+        place('H1',240,275); place('H2',290,275)
     sheet.save()
     sch=folder/(stem+'.kicad_sch')
-    sch.write_text(sch.read_text().replace('2026-10-05','2026-10-19').replace('A-prototype','D-plug-in'))
+    sch.write_text(sch.read_text().replace('2026-10-05','2026-10-19' if clamps else '2026-10-21').replace('A-prototype','D-plug-in'))
     (folder/'Colloquy.kicad_sym').write_text('(kicad_symbol_lib (version 20241209) (generator "kicad_symbol_editor")\n'+
         '\n'.join(s.lib_symbol(part,external=True) for part in parts.values())+'\n)\n')
     (folder/'sym-lib-table').write_text('(sym_lib_table (version 7) (lib (name "Colloquy")(type "KiCad")(uri "${KIPRJMOD}/Colloquy.kicad_sym")(options "")(descr "Body v2 harness and wire interface")))\n')
@@ -181,12 +184,14 @@ def make(original_name, stem, positions, module_origin, clamps, extra):
     for centre in ([(50,47),(50,90)] if original_name=='female base' else [(50,50),(50,100)]):
         keepout(board,centre,4.5)
     board.GetTitleBlock().SetTitle('Colloquy '+original_name+' / direct GF1002')
-    board.GetTitleBlock().SetRevision('D-prototype'); board.GetTitleBlock().SetDate('2026-10-19')
+    board.GetTitleBlock().SetRevision('D-prototype'); board.GetTitleBlock().SetDate('2026-10-19' if clamps else '2026-10-21')
     nets={}
     for name in sorted(set(pin_nets.values())):
         n=p.NETINFO_ITEM(board,name); board.Add(n); nets[name]=n
     positions=dict(positions); positions.update(extra)
-    positions.update(M1=(module_origin[0]+18.55,module_origin[1]+1.2,0),H1=(*clamps[0],0),H2=(*clamps[1],90))
+    positions.update(M1=(module_origin[0]+18.55,module_origin[1]+1.2,0))
+    if clamps:
+        positions.update(H1=(*clamps[0],0),H2=(*clamps[1],90))
     for ref,part in parts.items():
         lib,name=part['footprint'].split(':')
         fp=p.FootprintLoad(str(folder/'Body.pretty' if lib=='Body' else LIB/'footprints'/(lib+'.pretty')),name)
@@ -239,6 +244,10 @@ def make(original_name, stem, positions, module_origin, clamps, extra):
           'contact_strip_local_mm':[16.5,0,20.2,30],'module_pins_must_be_flush':False,
           'socket_pin1_mm':positions['M1'][:2],'support_adjustment_mm':.5,'stack_height_verified':False,
           'amplifier_input':'R','speaker_output':'ROUT','output_polarity_verified':False}
+    if not clamps:
+        data.update(layout_revision='2026-10-21-user-placement',
+                    removed_support_references=['H1','H2'],module_support_method_verified=False)
+        data.pop('support_adjustment_mm',None)
     (folder/'circuit.json').write_text(json.dumps(data,indent=2)+'\n')
     with (folder/'bom.csv').open('w',newline='') as stream:
         writer=csv.writer(stream); writer.writerow(['Reference','Value','Footprint','Description'])
@@ -250,8 +259,8 @@ def make(original_name, stem, positions, module_origin, clamps, extra):
 if __name__=='__main__':
     make('female base','female-base-v2',
         {'J7':(40.61,34.84,180),'J2':(62,47,0),'J4':(63,57.5,0),'J5':(63,74.5,0),'J3':(34,94,0),'J6':(64,88,-90)},
-        (31,55),((28.5,74.5),(41.1,87.5)),
-        {'R1':(44,56.2,0),'R2':(45.8,58.74,0),'C1':(59.1,66.5,0),'C2':(45.7,67.63,0)})
+        (31,55),(),
+        {'R1':(39.545,57.39,0),'R2':(41.345,59.93,0),'C1':(33.89,46.98,180),'C2':(34.085,67.61,180)})
     make('male static','male-static-v2',
         {'J7':(40.305,34.84,180),'J3':(31,47,0),'J9':(30,74,90),'J8':(31,82,0),'J1':(31,92,0),'J4':(31,102,0),
          'J6':(67,90,-90),'J10':(66.5,47,0),'J11':(65,60,0),'J5':(65,98,0),'J2':(65,106,0)},

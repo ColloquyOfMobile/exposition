@@ -40,6 +40,30 @@ def prepare(board, name):
         line_via=(44.5,53.5)
         line=[harness('LINE_IN'),(50.305,39),(43.5,45.805),(43.5,52.5),line_via]
     path('AMP_OUT_P',output_p,width=.8); path('AMP_OUT_N',output_n,width=.8)
+    if not male:
+        # User's 2026-10-21 placement: retain it and route the relocated parts.
+        line_via=(38.72,55.8)
+        path('LINE_IN',[harness('LINE_IN'),(50.305,39),(37,52.305),
+                        (37,55.8),line_via],p.B_Cu)
+        via('LINE_IN',line_via)
+        path('LINE_IN',[line_via,at('R1',1)])
+        rx,ry=harness('AUDIO_RETURN')
+        path('AUDIO_RETURN',[harness('AUDIO_RETURN'),(rx,38.4),
+                            (35.65,51.67),(35.65,58.74),at('M1',2)],p.B_Cu)
+        return_via=(42.17,61.2)
+        path('AUDIO_RETURN',[(42.17,58.74),return_via],p.B_Cu)
+        via('AUDIO_RETURN',return_via)
+        path('AUDIO_RETURN',[return_via,at('R2',2)])
+        path('AMP_INPUT',[at('R1',2),(41.56,56.2),at('M1',1)])
+        path('AMP_INPUT',[at('R2',1),(40.52,57.54),at('R1',2)])
+        path('5V',[at('M1',5),(36.13,66.36)],width=.8)
+        path('5V',[(36.13,66.36),at('C2',1)])
+        path('5V',[at('C1',1),(36.59,65.9),(36.13,66.36)],width=.8)
+        path('GND',[at('M1',6),(34.58,68.9)],width=.8)
+        path('GND',[(34.58,68.9),at('C2',2)])
+        path('GND',[at('M1',6),(sx-2.85,71.75),(sx-2.85,84.5)],width=.8)
+        board.BuildConnectivity()
+        return
     path('LINE_IN',line,p.B_Cu); via('LINE_IN',line_via)
     path('LINE_IN',[line_via,at('R1',1)] if male else [line_via,(43.2,54.8),at('R1',1)])
     rx,ry=harness('AUDIO_RETURN')

@@ -1,6 +1,6 @@
 {
   "source": "female base v2/female-base-v2.kicad_pcb",
-  "sha256": "c7ca5bc4b96a0eab96b20a8753cd67810e79fe79f584941ef767b8258400ae5d",
+  "sha256": "6656564a943d1ce98d110882f9fcc0f02f1be697096b2b91d963b67ef8d50796",
   "outline_mm": [
     25.0,
     20.0,
@@ -40,32 +40,22 @@
     },
     "C2": {
       "xy": [
-        45.7,
-        67.63
+        34.085,
+        67.61
       ],
-      "angle": 0.0,
+      "angle": 180.0,
       "models": [
         "${KIPRJMOD}/3dmodels/C_0603_1608Metric.step"
       ]
     },
     "R2": {
       "xy": [
-        45.8,
-        58.74
+        41.345,
+        59.93
       ],
       "angle": 0.0,
       "models": [
         "${KIPRJMOD}/3dmodels/R_0603_1608Metric.step"
-      ]
-    },
-    "H1": {
-      "xy": [
-        28.5,
-        74.5
-      ],
-      "angle": 0.0,
-      "models": [
-        "${KIPRJMOD}/3dmodels/support_left.step"
       ]
     },
     "J6": {
@@ -104,28 +94,18 @@
     },
     "C1": {
       "xy": [
-        59.1,
-        66.5
+        33.89,
+        46.98
       ],
-      "angle": 0.0,
+      "angle": 180.0,
       "models": [
         "${KIPRJMOD}/3dmodels/CP_Elec_6.3x5.8.step"
       ]
     },
-    "H2": {
-      "xy": [
-        41.1,
-        87.5
-      ],
-      "angle": 90.0,
-      "models": [
-        "${KIPRJMOD}/3dmodels/support_left.step"
-      ]
-    },
     "R1": {
       "xy": [
-        44.0,
-        56.2
+        39.545,
+        57.39
       ],
       "angle": 0.0,
       "models": [
@@ -146,9 +126,9 @@
   "visual_export": {
     "pipeline": "KiCad native VRML visual layers -> Blender GLB; no STEP substitution",
     "source": "CAD/KiCad/female base v2/female-base-v2.kicad_pcb",
-    "source_sha256": "c7ca5bc4b96a0eab96b20a8753cd67810e79fe79f584941ef767b8258400ae5d",
-    "visual_input_sha256": "c7ca5bc4b96a0eab96b20a8753cd67810e79fe79f584941ef767b8258400ae5d",
-    "native_vrml_sha256": "f80afbb6116af4c138f75c3425efd34c0f4af67049e4e238f0bd2b18d767eb57",
+    "source_sha256": "6656564a943d1ce98d110882f9fcc0f02f1be697096b2b91d963b67ef8d50796",
+    "visual_input_sha256": "6656564a943d1ce98d110882f9fcc0f02f1be697096b2b91d963b67ef8d50796",
+    "native_vrml_sha256": "2e0201e0af0f9cd7ab250e110becdf7500e5fdd6a3504b47dd9ed181424f4ed0",
     "models": [
       {
         "ref": "J4",
@@ -234,26 +214,6 @@
         "ref": "R2",
         "file": "CAD/KiCad/female base v2/3dmodels/R_0603_1608Metric.step",
         "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
-        "offset_mm": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "rotation_deg": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
-      },
-      {
-        "ref": "H1",
-        "file": "CAD/KiCad/female base v2/3dmodels/support_left.step",
-        "sha256": "2e03896112392166b3226a86780a11d0a78eb1d1a6ae89ba09eb70f09bc4c579",
         "offset_mm": [
           0.0,
           0.0,
@@ -431,26 +391,6 @@
         ]
       },
       {
-        "ref": "H2",
-        "file": "CAD/KiCad/female base v2/3dmodels/support_left.step",
-        "sha256": "2e03896112392166b3226a86780a11d0a78eb1d1a6ae89ba09eb70f09bc4c579",
-        "offset_mm": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "rotation_deg": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "scale": [
-          1.0,
-          1.0,
-          1.0
-        ]
-      },
-      {
         "ref": "R1",
         "file": "CAD/KiCad/female base v2/3dmodels/R_0603_1608Metric.step",
         "sha256": "1875571c326d0d9e96f36b4efeb8094068ef7619f0a449c781caf0b49c2e5861",
@@ -493,12 +433,12 @@
     ],
     "pcb_underside_z_mm": 0,
     "mesh_counts": {
-      "models": 17,
+      "models": 15,
       "board_meshes": 8,
-      "vertices": 53659,
-      "faces": 43335,
-      "materials": 24
+      "vertices": 51390,
+      "faces": 41622,
+      "materials": 23
     },
-    "glb_sha256": "c8c9cda21aa54512b876129c023cda759ca5b08ada6538244d733225cca5e49f"
+    "glb_sha256": "29b932112ba08a1b270e9e8b55105415dda00ca45c97bb292a4d6e15e3adabce"
   }
 }

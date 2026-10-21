@@ -323,115 +323,70 @@
       "datasheet": "",
       "uuid": "c21ea9ec-dc20-55da-85e6-9a4b91528e63",
       "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
-    },
-    {
-      "ref": "H1",
-      "value": "M2 insulating support / 11mm",
-      "footprint": "Body:GF1002_Support_Left",
-      "pins": {},
-      "description": "Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack.",
-      "pin_names": {},
-      "pin_types": {},
-      "include_bom": false,
-      "datasheet": "",
-      "uuid": "b9fc50fb-c234-5d2d-b5e0-b2b71a7a9cb3",
-      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
-    },
-    {
-      "ref": "H2",
-      "value": "M2 insulating support / 11mm",
-      "footprint": "Body:GF1002_Support_End",
-      "pins": {},
-      "description": "Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack.",
-      "pin_names": {},
-      "pin_types": {},
-      "include_bom": false,
-      "datasheet": "",
-      "uuid": "55bc3395-e8f4-57d9-8e3e-524fbe9c85ac",
-      "sheet_path": "/2eb87b19-012b-5f40-9b72-dc8fa5636c74"
     }
   ],
   "positions": {
+    "J4": [
+      63.0,
+      57.5,
+      0.0
+    ],
     "J7": [
       40.61,
       34.84,
-      180
+      180.0
     ],
     "J2": [
-      62,
-      47,
-      0
-    ],
-    "J4": [
-      63,
-      57.5,
-      0
-    ],
-    "J5": [
-      63,
-      74.5,
-      0
-    ],
-    "J3": [
-      34,
-      94,
-      0
-    ],
-    "J6": [
-      64,
-      88,
-      -90
-    ],
-    "R1": [
-      44,
-      56.2,
-      0
-    ],
-    "R2": [
-      45.8,
-      58.74,
-      0
-    ],
-    "C1": [
-      59.1,
-      66.5,
-      0
+      62.0,
+      47.0,
+      0.0
     ],
     "C2": [
-      45.7,
-      67.63,
-      0
+      34.085,
+      67.61,
+      180.0
+    ],
+    "R2": [
+      41.345,
+      59.93,
+      0.0
+    ],
+    "J6": [
+      64.0,
+      88.0,
+      -90.0
     ],
     "M1": [
       49.55,
       56.2,
-      0
+      0.0
     ],
-    "H1": [
-      28.5,
+    "J5": [
+      63.0,
       74.5,
-      0
+      0.0
     ],
-    "H2": [
-      41.1,
-      87.5,
-      90
+    "C1": [
+      33.89,
+      46.98,
+      180.0
+    ],
+    "R1": [
+      39.545,
+      57.39,
+      0.0
+    ],
+    "J3": [
+      34.0,
+      94.0,
+      0.0
     ]
   },
   "module_origin_mm": [
     31,
     55
   ],
-  "clamp_centres_mm": [
-    [
-      28.5,
-      74.5
-    ],
-    [
-      41.1,
-      87.5
-    ]
-  ],
+  "clamp_centres_mm": [],
   "revision": "D",
   "module_underside_gap_mm": 11,
   "module_dimensions_mm": [
@@ -451,9 +406,14 @@
     49.55,
     56.2
   ],
-  "support_adjustment_mm": 0.5,
   "stack_height_verified": false,
   "amplifier_input": "R",
   "speaker_output": "ROUT",
-  "output_polarity_verified": false
+  "output_polarity_verified": false,
+  "layout_revision": "2026-10-21-user-placement",
+  "removed_support_references": [
+    "H1",
+    "H2"
+  ],
+  "module_support_method_verified": false
 }

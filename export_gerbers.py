@@ -336,6 +336,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--all", action="store_true", help="plot every board again")
     parser.add_argument("--check", action="store_true", help="report, write nothing")
+    parser.add_argument("--only", action="append", choices=[b['id'] for b in BOARDS],
+                        help="limit exports/checks to this board; may be repeated")
     parser.add_argument(
         "--force", action="store_true",
         help="plot a board even if its design rule check fails",
@@ -345,13 +347,16 @@ def main():
     assert "colloquy" not in sys.modules, "the package ran - local/logs would be gone"
 
     recorded = read_manifest()
+    selected = set(options.only or (entry['id'] for entry in BOARDS))
     stale = [
         entry for entry in BOARDS
-        if options.all or not is_current(entry, recorded.get(entry["id"]))
+        if entry['id'] in selected and (options.all or not is_current(entry, recorded.get(entry["id"])))
     ]
 
     if options.check:
         for entry in BOARDS:
+            if entry['id'] not in selected:
+                continue
             state = "OUT OF DATE" if entry in stale else "current"
             print(f"{entry['id']:20} {state}")
         return 1 if stale else 0
@@ -361,8 +366,8 @@ def main():
     # dropped from "assembly" never reaches the manifest, since only a
     # changed board file makes a board stale.
     refreshed = {
-        entry["id"]: {**recorded[entry["id"]], **entry}
-        for entry in BOARDS if entry not in stale
+        entry["id"]: ({**recorded[entry["id"]], **entry} if entry['id'] in selected else recorded[entry['id']])
+        for entry in BOARDS if entry not in stale and entry['id'] in recorded
     }
     if not stale and list(refreshed.values()) == list(recorded.values()):
         print("every board's package is current - nothing to plot")
@@ -374,6 +379,10 @@ def main():
     failed = 0
     entries = []
     for entry in BOARDS:
+        if entry['id'] not in selected:
+            if entry['id'] in recorded:
+                entries.append(recorded[entry['id']])
+            continue
         if entry not in stale:
             entries.append(refreshed[entry["id"]])
             print(f"{entry['id']:20} current")
@@ -390,6 +399,7 @@ def main():
             continue
 
         folder = gerbers.PRODUCTION_FOLDER / entry["id"]
+        assert folder.resolve().parent == gerbers.PRODUCTION_FOLDER.resolve()
         shutil.rmtree(folder, ignore_errors=True)
         folder.parent.mkdir(parents=True, exist_ok=True)
         shutil.move(str(scratch), str(folder))

@@ -1,7 +1,9 @@
+param([ValidateSet('female-base-v2','male-static-v2')][string]$Only)
 $ErrorActionPreference = 'Stop'
 $cadRoot = Split-Path (Split-Path $PSScriptRoot)
 $kicadCli = 'C:/Program Files/KiCad/9.0/bin/kicad-cli.exe'
 foreach ($entry in @(@('female base v2','female-base-v2'), @('male static v2','male-static-v2'))) {
+    if ($Only -and $entry[1] -ne $Only) { continue }
     $folder = Join-Path $cadRoot $entry[0]
     $board = Join-Path $folder ($entry[1]+'.kicad_pcb')
     $schematic = Join-Path $folder ($entry[1]+'.kicad_sch')

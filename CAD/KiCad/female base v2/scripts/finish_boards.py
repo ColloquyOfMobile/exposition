@@ -1,9 +1,14 @@
 """Fill local supply-ground copper; audio return stays a separate net."""
 from pathlib import Path
+import argparse
 import pcbnew as p
 
 CAD=Path(__file__).resolve().parents[2]
+parser=argparse.ArgumentParser()
+parser.add_argument('--only',choices=('female-base-v2','male-static-v2'))
+args=parser.parse_args()
 for folder,stem,bottom in [('female base v2','female-base-v2',100),('male static v2','male-static-v2',110)]:
+    if args.only and stem!=args.only:continue
     path=CAD/folder/(stem+'.kicad_pcb'); board=p.LoadBoard(str(path))
     # Keep removed SWIG wrappers alive while adding the replacement zones.
     old_zones=list(board.Zones())

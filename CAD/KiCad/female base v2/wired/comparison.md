@@ -1,5 +1,9 @@
 # Female base v2: wired reading copy
 
+Layout update (2026-10-21): R1/R2/C1/C2 retain the user's edited PCB positions.
+H1/H2 and their mechanical symbols have been removed from both schematic
+copies and the PCB. Electrical pin assignments and values are unchanged.
+
 Open `female-base-v2-wired.kicad_pro` in KiCad 9, or read
 `female-base-v2-wired.pdf`. This is a second schematic for review, not a PCB
 revision. The original schematic and PCB are preserved.
@@ -22,9 +26,9 @@ No added parts, removed parts, changed values, or changed electrical connections
 relative to `../female-base-v2.kicad_sch` (revision D).
 The connector symbols are rearranged for reading. M1 is still the existing
 11-position socket and amplifier interface, not a new amplifier circuit.
-H1/H2 are mechanical supports with no electrical connections.
+H1/H2 were mechanical supports with no electrical connections; they are now absent.
 
-Independent KiCad netlist exports agree for all 13 components, including values,
+Independent KiCad netlist exports agree for all 11 components, including values,
 all 38 connected pins, and all 12 electrical nets. The PCB and circuit manifest
 also agree. KiCad ERC: zero violations. See `validation.json` and `erc.json`.
 These checks establish drawing equivalence; they do not qualify the hardware.
@@ -32,8 +36,9 @@ These checks establish drawing equivalence; they do not qualify the hardware.
 ## Added elements compared with the original female base
 
 The comparison here is with `../../female base/female base.kicad_sch`, which
-contains only J2-J7. All seven elements below were **already present in v2**;
-none was introduced by the wired copy.
+contains only J2-J7. The five electrical elements below were **already present
+in v2**; none was introduced by the wired copy. The former H1/H2 support holes
+were removed in the 2026-10-21 layout.
 
 | Element | Why v2 adds it | Is it necessary? |
 |---|---|---|
@@ -42,11 +47,14 @@ none was introduced by the wired copy.
 | R2: 3.3 kOhm | Divider return leg to AUDIO_RETURN. Together with R1 gives about 0.130 times the input voltage, ignoring module loading. | Required for that attenuation. R1 alone does not implement the specified divider. Exact sizing still depends on measured signal levels. |
 | C1: 220 uF, 10 V, polarized | Local energy reservoir across the 5 V supply for amplifier current transients and harness voltage drop. Pin 1 is positive. | Local bulk capacitance is prudent; the necessity of this additional capacitor and the exact 220 uF value remain provisional until supply sag/noise are measured with the real module and harness. |
 | C2: 100 nF | Local high-frequency supply bypass between 5 V and GND near M1. | Retain it in this prototype. Whether the module's own bypass could make it redundant has not been demonstrated. |
-| H1: insulating support at shaft edge | Supports the raised module and resists force from turning or pressing the knob, reducing leverage on the socket. | Mechanical support is needed for this mounting arrangement. This exact support shape is replaceable by an equivalent support; actual fit and stack height need measurement. |
-| H2: insulating support at short end | Holds the other end level and limits rocking of the plug-in module. | Retain for the proposed mounting. An alternative mechanical design could provide the same support. |
 
 The approximately 11 mm module underside height and 28 mm pot height are nominal,
-not measured acceptance dimensions. Supports must match the purchased socket/header stack.
+not measured acceptance dimensions. No H1/H2 support hardware is specified by
+this PCB revision; the final physical mounting arrangement remains to be checked.
+
+The moved capacitors no longer meet the previous proximity targets: C2 is about
+14.7/16.3 mm from the supply contacts, and C1 about 23.3 mm. Routing continuity
+is verified; amplifier noise and supply transient behaviour still need a bench check.
 
 ## Connections whose function changed from the original
 

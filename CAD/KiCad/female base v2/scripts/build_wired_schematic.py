@@ -134,9 +134,11 @@ def main():
     text('AUDIO_RETURN and GND stay separate on this PCB.',8,91,1.0)
     text('Confirm their expected bond inside the actual module.',8,94,1.0)
     for ref,x in [('H1',15),('H2',27)]:
-        place(ref,x,101)
-        text(ref,x-1,104,1.05)
-    text('Insulating module supports / nominal 11 mm',33,100,1.05)
+        if ref in parts:
+            place(ref,x,101)
+            text(ref,x-1,104,1.05)
+    if 'H1' in parts or 'H2' in parts:
+        text('Insulating module supports / nominal 11 mm',33,100,1.05)
     text('M1 unused: 3 = L input; 4/7 = gaps; 8/9 = L outputs.',72,103,1.0)
     text('Rack J7.12/J7.4 must supply line-level audio / return; disconnect the old remote speaker output first.',8,110,1.05,True)
     # Split only at existing endpoints. Interior/interior crossings do not connect.
@@ -158,6 +160,8 @@ def main():
     sheet.save()
     path=OUT/(NAME+'.kicad_sch')
     raw=path.read_text(encoding='utf-8').replace('(date "2026-10-05") (rev "A-prototype")','(date "2026-10-20") (rev "D wired")')
+    if 'H1' not in parts and 'H2' not in parts:
+        raw=raw.replace('(date "2026-10-20")','(date "2026-10-21")')
     raw=raw.replace('Prototype: verify harness polarity and sensor values before connection','Reading copy - existing circuit unchanged; see comparison.md')
     path.write_text(raw,encoding='utf-8')
     (OUT/'Colloquy.kicad_sym').write_text('(kicad_symbol_lib (version 20241209) (generator "kicad_symbol_editor")\n'+'\n'.join(s.lib_symbol(p,external=True) for p in parts.values())+')\n',encoding='utf-8')

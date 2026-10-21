@@ -7,7 +7,7 @@ def point(item,start=True):
     return tuple(p.ToMM(item.GetStart() if start else item.GetEnd()))
 
 
-def check(board):
+def check(board, *, amp_input_length_limit_mm=8):
     segments=[t for t in board.GetTracks() if not isinstance(t,p.PCB_VIA)]
     outputs=[t for t in segments if t.GetNetname() in ('AMP_OUT_P','AMP_OUT_N')]
     sensitive=[t for t in segments if t.GetNetname() in ('AMP_INPUT','LINE_IN','AUDIO_RETURN')
@@ -61,7 +61,7 @@ def check(board):
              for net in ('AMP_OUT_P','AMP_OUT_N')}
     assert max(lengths.values())<25,lengths
     amp_length=sum(p.ToMM(t.GetLength()) for t in segments if t.GetNetname()=='AMP_INPUT')
-    assert amp_length<8,amp_length
+    assert amp_length<amp_input_length_limit_mm,amp_length
     # An explicit grounded front guard runs left of the output pair; pours add
     # shielding around it on both layers. DRC establishes its net isolation.
     socket=next(f for f in board.GetFootprints() if f.GetReference()=='M1')
@@ -73,6 +73,7 @@ def check(board):
     return {'output_lengths_mm':{k:round(v,3) for k,v in lengths.items()},
             'output_copper_layer':'F.Cu','output_minimum_width_mm':.8,
             'amp_input_total_length_mm':round(amp_length,3),
+            'amp_input_length_limit_mm':amp_input_length_limit_mm,
             'paired_incoming_line_return_overlap_mm':round(paired_input,3),
             'parallel_sensitive_runs_within_2p5mm':0,
             'minimum_parallel_sensitive_centre_spacing_mm':round(min(parallel_distances),3) if parallel_distances else None,

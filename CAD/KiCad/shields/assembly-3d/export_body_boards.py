@@ -1,5 +1,6 @@
 """Export the existing v2 body assemblies with KiCad Python, without editing PCBs."""
 from pathlib import Path
+import argparse
 import hashlib
 import json
 
@@ -11,7 +12,12 @@ CAD = ROOT.parent.parent
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--only', choices=('female-base-v2', 'male-static-v2'))
+    args = parser.parse_args()
     for folder, name in [('female base v2', 'female-base-v2'), ('male static v2', 'male-static-v2')]:
+        if args.only and name != args.only:
+            continue
         source = CAD / folder / (name + '.kicad_pcb')
         board = p.LoadBoard(str(source))
         missing = []
@@ -39,7 +45,7 @@ def main():
         }
         data['visual_export'] = export_visual(source, ROOT / 'exports' / (name + '.glb'))
         (ROOT / 'exports' / (name + '.json')).write_text(json.dumps(data, indent=2) + '\n')
-        print(name, 'exported with existing amplifier and both clamps', flush=True)
+        print(name, 'exported with its current components', flush=True)
 
 
 if __name__ == '__main__':

@@ -161,24 +161,6 @@
 (pin passive line (at 20.32 -25.4 180) (length 5.08) (name "ROUT_N_VERIFY" (effects (font (size 1.016 1.016))  )) (number "11" (effects (font (size 0.889 0.889))  )))
 )
 )
-(symbol "H1" (pin_names (offset 1.27)) (exclude_from_sim no) (in_bom no) (on_board yes)
-(property "Reference" "H" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
-(property "Value" "M2 insulating support / 11mm" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
-(property "Footprint" "Body:GF1002_Support_Left" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
-(property "Datasheet" "" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
-(property "Description" "Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack." (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
-(symbol "H1_1_1"
-(rectangle (start -20.32 10.16) (end 20.32 -10.16) (stroke (width 0.254) (type default)) (fill (type background)))
-)
-)
-(symbol "H2" (pin_names (offset 1.27)) (exclude_from_sim no) (in_bom no) (on_board yes)
-(property "Reference" "H" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
-(property "Value" "M2 insulating support / 11mm" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
-(property "Footprint" "Body:GF1002_Support_End" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
-(property "Datasheet" "" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
-(property "Description" "Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack." (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
-(symbol "H2_1_1"
-(rectangle (start -20.32 10.16) (end 20.32 -10.16) (stroke (width 0.254) (type default)) (fill (type background)))
-)
-)
+
+
 )

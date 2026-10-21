@@ -2,14 +2,14 @@
 <export version="E">
   <design>
     <source>C:\workspace\workspace2\Colloquy\exposition\CAD\KiCad\female base v2\female-base-v2.kicad_sch</source>
-    <date>2026-10-20T12:41:19+0200</date>
+    <date>2026-10-21T10:38:04+0200</date>
     <tool>Eeschema 9.0.7</tool>
     <sheet number="1" name="/" tstamps="/">
       <title_block>
         <title>Colloquy female base — directly mounted GF1002</title>
         <company>Colloquy of Mobiles</company>
         <rev>D-plug-in</rev>
-        <date>2026-10-19</date>
+        <date>2026-10-21</date>
         <source>female-base-v2.kicad_sch</source>
         <comment number="1" value="Prototype: verify harness polarity and sensor values before connection"/>
         <comment number="2" value=""/>
@@ -52,38 +52,6 @@
       <property name="Sheetfile" value="female-base-v2.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamps>d9af44db-f758-5a07-b5f3-38dc8d1b8fec</tstamps>
-    </comp>
-    <comp ref="H1">
-      <value>M2 insulating support / 11mm</value>
-      <footprint>Body:GF1002_Support_Left</footprint>
-      <description>Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack.</description>
-      <fields>
-        <field name="Footprint">Body:GF1002_Support_Left</field>
-        <field name="Datasheet"/>
-        <field name="Description">Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack.</field>
-      </fields>
-      <libsource lib="Colloquy" part="H1" description="Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack."/>
-      <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="female-base-v2.kicad_sch"/>
-      <property name="exclude_from_bom"/>
-      <sheetpath names="/" tstamps="/"/>
-      <tstamps>b9fc50fb-c234-5d2d-b5e0-b2b71a7a9cb3</tstamps>
-    </comp>
-    <comp ref="H2">
-      <value>M2 insulating support / 11mm</value>
-      <footprint>Body:GF1002_Support_End</footprint>
-      <description>Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack.</description>
-      <fields>
-        <field name="Footprint">Body:GF1002_Support_End</field>
-        <field name="Datasheet"/>
-        <field name="Description">Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack.</field>
-      </fields>
-      <libsource lib="Colloquy" part="H2" description="Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack."/>
-      <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="female-base-v2.kicad_sch"/>
-      <property name="exclude_from_bom"/>
-      <sheetpath names="/" tstamps="/"/>
-      <tstamps>55bc3395-e8f4-57d9-8e3e-524fbe9c85ac</tstamps>
     </comp>
     <comp ref="J2">
       <value>dxl mirror</value>
@@ -246,26 +214,6 @@
         <pin num="1" name="" type="passive"/>
         <pin num="2" name="" type="passive"/>
       </pins>
-    </libpart>
-    <libpart lib="Colloquy" part="H1">
-      <description>Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack.</description>
-      <fields>
-        <field name="Reference">H</field>
-        <field name="Value">M2 insulating support / 11mm</field>
-        <field name="Footprint">Body:GF1002_Support_Left</field>
-        <field name="Datasheet"/>
-        <field name="Description">Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack.</field>
-      </fields>
-    </libpart>
-    <libpart lib="Colloquy" part="H2">
-      <description>Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack.</description>
-      <fields>
-        <field name="Reference">H</field>
-        <field name="Value">M2 insulating support / 11mm</field>
-        <field name="Footprint">Body:GF1002_Support_End</field>
-        <field name="Datasheet"/>
-        <field name="Description">Provisional 11mm seat; slotted support permits +/-0.5mm adjustment. Loosen lips to unplug module; measure purchased stack.</field>
-      </fields>
     </libpart>
     <libpart lib="Colloquy" part="J2">
       <description>Original harness pin order retained. J6 now carries the local amplifier output.</description>
