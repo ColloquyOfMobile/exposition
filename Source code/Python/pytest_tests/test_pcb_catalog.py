@@ -51,7 +51,9 @@ def test_every_link_returns_a_usable_file(board):
         if kind == "fabrication":
             with zipfile.ZipFile(io.BytesIO(body)) as archive:
                 assert archive.testzip() is None
-                assert any(name.endswith(".drl") for name in archive.namelist())
+                assert {"BOM.csv", "CPL.csv", "gerbers.zip"} <= set(archive.namelist())
+                with zipfile.ZipFile(io.BytesIO(archive.read("gerbers.zip"))) as plots:
+                    assert any(name.endswith(".drl") for name in plots.namelist())
         else:
             assert ET.fromstring(body).tag.endswith("svg")
             assert "Content-Disposition" not in dict(headers)

@@ -72,12 +72,12 @@ def _sentence(error):
 def _gerbers(doc, tag, text):
     with tag("div", name="gerbers", klass="option"):
         with tag("h2"):
-            text("1. Download the PCB production Gerbers")
+            text("1. PCB fabrication and SMD assembly")
         with tag("p"):
             text(
-                "For PCBWay or JLCPCB. One download holding a ready-to-upload "
-                "zip for each board, the layer count and size each order "
-                "form asks for, and what to read before ordering."
+                "The production packages below include Gerbers, an exact SMD "
+                "BOM and a matching CPL for JLCPCB assembly. Unpack each package "
+                "and upload its Gerbers, BOM and CPL at the corresponding order steps."
             )
 
         try:
@@ -90,7 +90,7 @@ def _gerbers(doc, tag, text):
 
         with tag("p"):
             with tag("a", klass="button", href="/download/gerbers"):
-                text(f"download the Gerbers ({len(boards)} boards)")
+                text(f"bare-board Gerbers only ({len(boards)} boards)")
 
         doc.asis(catalog.html())
 

@@ -147,5 +147,6 @@ The source KiCad PCB was not modified by packaging.
             'files':len(files)+1,'copper_layers':len(copper),'drc_errors':len(errors),'drc_warnings':len(drc['violations'])-len(errors),'unconnected':0}
 
 if __name__=='__main__':
-    reports=[build(name) for name in NAMES]
-    (ROOT/'MANUFACTURING.json').write_text(json.dumps(reports,indent=2)+'\n')
+    # The active exporter covers the body boards too and validates exact BOM/CPL parity.
+    import runpy
+    runpy.run_path(str(ROOT.parents[2]/'export_jlcpcb.py'),run_name='__main__')

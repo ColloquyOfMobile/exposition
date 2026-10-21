@@ -1,0 +1,5 @@
+﻿Comment,Designator,Footprint,Quantity,Manufacturer,Manufacturer Part Number,LCSC Part #,Specification
+220uF 10V / provisional,C1,CP_Elec_6.3x5.8,1,Panasonic,EEEFT1A221AP,C401764,"220uF 10V +/-20% polarized aluminium electrolytic, D6.3x5.8mm; pad 1 positive; circuit value remains provisional"
+100nF,C2,C_0603_1608Metric,1,Samsung Electro-Mechanics,CL10B104KB8NNNC,C1591,100nF 50V X7R +/-10% 0603
+22K,R1,R_0603_1608Metric,1,YAGEO,RC0603FR-0722KL,C114065,"22K 0603, +/-1%, 0.1W"
+3K3,R2,R_0603_1608Metric,1,YAGEO,RC0603FR-073K3L,C108078,"3K3 0603, +/-1%, 0.1W"

@@ -2,56 +2,61 @@
   {
     "project": "backplane",
     "zip": "backplane\\manufacturing\\backplane-manufacturing.zip",
-    "sha256": "bf449a2cfcb166ddc1997fc4c7a9cd2aded852196f6c331495d4115354f75570",
+    "sha256": "1d7ee7a6da13bce89b37227f8375ea12945f2313efe74dcce04f37c1bb65e591",
     "assembly_policy": "front_smd_only",
-    "files": 26,
+    "files": 18,
     "copper_layers": 4,
     "drc_errors": 0,
     "drc_warnings": 0,
-    "unconnected": 0
+    "unconnected": 0,
+    "smd_count": 72
   },
   {
     "project": "teensy-adapter",
     "zip": "teensy-adapter\\manufacturing\\teensy-adapter-manufacturing.zip",
-    "sha256": "8d4058111025e65c666858d4c3fbf540a7757d891f274a6dda17fd05914b4b4e",
+    "sha256": "601e7aa313b6cb8b1e14918e52290df0125832e5cae719104969f6f9ff4a2f76",
     "assembly_policy": "front_smd_only",
-    "files": 26,
+    "files": 15,
     "copper_layers": 4,
     "drc_errors": 0,
     "drc_warnings": 0,
-    "unconnected": 0
+    "unconnected": 0,
+    "smd_count": 65
   },
   {
     "project": "voice-thomas",
     "zip": "voice-thomas\\manufacturing\\voice-thomas-manufacturing.zip",
-    "sha256": "943db8bf2d9e8e22790d27fb6f0643fb37fb0b2d74b5c71b69961df83193b4e7",
-    "assembly_policy": "hand_assembled_bare_board",
-    "files": 58,
+    "sha256": "4181de017bffbf74d42b0c99c3413710f283465c2b50b56cc066c70598590266",
+    "assembly_policy": "front_smd_only",
+    "files": 33,
     "copper_layers": 2,
     "drc_errors": 0,
     "drc_warnings": 0,
-    "unconnected": 0
+    "unconnected": 0,
+    "smd_count": 1
   },
   {
     "project": "analyser-carrier",
     "zip": "analyser-carrier\\manufacturing\\analyser-carrier-manufacturing.zip",
-    "sha256": "0bf1489d2e39f6c8fc8adfd89efba2f0261c806d56a93df18282a857fc594de8",
+    "sha256": "6394442064338328541b85d13c7d7bf585d3e3c9ac674bf5b32ede7894e85276",
     "assembly_policy": "hand_assembled_bare_board",
-    "files": 25,
+    "files": 18,
     "copper_layers": 2,
     "drc_errors": 0,
     "drc_warnings": 0,
-    "unconnected": 0
+    "unconnected": 0,
+    "smd_count": 0
   },
   {
     "project": "microphone",
     "zip": "microphone\\manufacturing\\microphone-manufacturing.zip",
-    "sha256": "d40ccfadebe2ecefebf9c1f184af69af415dcd68f5c8488331791d3d4297e546",
+    "sha256": "a4a36f753ae08596d1ea6b18043e177beefbbcff25f7f428cdd3adaf79ff095a",
     "assembly_policy": "front_smd_only",
-    "files": 26,
+    "files": 17,
     "copper_layers": 2,
     "drc_errors": 0,
     "drc_warnings": 0,
-    "unconnected": 0
+    "unconnected": 0,
+    "smd_count": 8
   }
 ]

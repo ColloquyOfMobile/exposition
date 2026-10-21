@@ -1,0 +1,9 @@
+﻿reference,value,footprint,reason
+J1,GND / +5V / OUT,JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical,"Through-hole, plug-in module or mechanical item; hand fit"
+H3,M2 MODULE / INSULATING SPACER,MountingHole_2.2mm_M2_Keepout6,"Through-hole, plug-in module or mechanical item; hand fit"
+TP1,MICOUT,TestPin_1x01_P2.54mm,"Through-hole, plug-in module or mechanical item; hand fit"
+TP2,GND,TestPin_1x01_P2.54mm,"Through-hole, plug-in module or mechanical item; hand fit"
+M1,MAX9814 MODULE / 1x05 SOCKET,MAX9814_Module_Socket_1x05,"Through-hole, plug-in module or mechanical item; hand fit"
+H4,M2 MODULE / INSULATING SPACER,MountingHole_2.2mm_M2_Keepout6,"Through-hole, plug-in module or mechanical item; hand fit"
+H2,M5 / 12mm copper keepout,MountingHole_5.5mm_Keepout12,"Through-hole, plug-in module or mechanical item; hand fit"
+H1,M5 / 12mm copper keepout,MountingHole_5.5mm_Keepout12,"Through-hole, plug-in module or mechanical item; hand fit"

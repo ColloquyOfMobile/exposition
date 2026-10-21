@@ -1,0 +1,54 @@
+{
+  "checked_on": "2026-10-21",
+  "note": "Exact procurement choices for JLCPCB SMD assembly. Stock and assembly service availability must be checked at ordering. No automatic substitutions.",
+  "resistors_0603": {
+    "0R": ["RC0603JR-070RL", "C95177"],
+    "33R": ["RC0603FR-0733RL", "C108661"],
+    "330R": ["RC0603FR-07330RL", "C105881"],
+    "470R": ["RC0603FR-07470RL", "C114669"],
+    "1K5": ["RC0603FR-071K5L", "C114668"],
+    "2K2": ["RC0603FR-072K2L", "C114662"],
+    "3K3": ["RC0603FR-073K3L", "C108078"],
+    "4K7": ["RC0603FR-074K7L", "C99782"],
+    "10K": ["RC0603FR-0710KL", "C98220"],
+    "22K": ["RC0603FR-0722KL", "C114065"],
+    "100K": ["RC0603FR-07100KL", "C14675"],
+    "150K": ["RC0603FR-07150KL", "C114660"],
+    "1M": ["RC0603FR-071ML", "C105578"]
+  },
+  "resistors_0805": {
+    "0R": ["RC0805JR-070RL", "C96345"],
+    "100R": ["RC0805FR-07100RL", "C105577"]
+  },
+  "parts": [
+    {"footprint": "C_0603_1608Metric", "value": "100nF", "manufacturer": "Samsung Electro-Mechanics", "mpn": "CL10B104KB8NNNC", "lcsc": "C1591", "specification": "100nF 50V X7R +/-10% 0603"},
+    {"footprint": "C_0603_1608Metric", "value": "1nF C0G", "manufacturer": "TDK", "mpn": "CGA3E2C0G2A102JT0Y0N", "lcsc": "C342928", "specification": "1nF 100V C0G +/-5% 0603"},
+    {"footprint": "C_0603_1608Metric", "value": "10nF C0G", "manufacturer": "Murata", "mpn": "GRM1885C1H103JA01D", "lcsc": "C85973", "specification": "10nF 50V C0G +/-5% 0603"},
+    {"footprint": "C_0805_2012Metric", "value": "10uF X7R", "manufacturer": "Murata", "mpn": "GRM21BR71C106KE51L", "lcsc": "C408142", "specification": "10uF 16V X7R +/-10% 0805"},
+    {"footprint": "C_0805_2012Metric", "value": "22uF X5R 10V", "manufacturer": "Samsung Electro-Mechanics", "mpn": "CL21A226MPQNNNE", "lcsc": "C29277", "specification": "22uF 10V X5R +/-20% 0805"},
+    {"footprint": "CP_Elec_10x10.5", "value": "470uF 25V", "manufacturer": "Panasonic", "mpn": "EEEFK1E471P", "lcsc": "C248607", "specification": "470uF 25V +/-20% polarized aluminium electrolytic, D10mm, seated height <=10.5mm; pad 1 positive"},
+    {"footprint": "CP_Elec_6.3x5.8", "value": "220uF 10V / provisional", "manufacturer": "Panasonic", "mpn": "EEEFT1A221AP", "lcsc": "C401764", "specification": "220uF 10V +/-20% polarized aluminium electrolytic, D6.3x5.8mm; pad 1 positive; circuit value remains provisional"},
+    {"footprint": "LED_0603_1608Metric", "value": "GREEN LED", "manufacturer": "Lite-On", "mpn": "LTST-C190KGKT", "lcsc": "C125094", "specification": "Yellow-green indicator LED 0603; pad 1 cathode"},
+    {"footprint": "LED_0603_1608Metric", "value": "YELLOW LED", "manufacturer": "Lite-On", "mpn": "LTST-C190KSKT", "lcsc": "C125095", "specification": "Yellow indicator LED 0603; pad 1 cathode"},
+    {"footprint": "D_SOD-123", "value": "1N5819HW", "manufacturer": "Diodes Incorporated", "mpn": "1N5819HW-7-F", "lcsc": "C82544", "specification": "Schottky diode 1A 40V SOD-123; pad 1 cathode"},
+    {"footprint": "TSSOP-14_4.4x5mm_P0.65mm", "value": "SN74LV4T125PWR", "manufacturer": "Texas Instruments", "mpn": "SN74LV4T125PWR", "lcsc": "C90755", "specification": "SN74LV4T125, TSSOP-14 PW, 0.65mm pitch; preserve pin 1"}
+  ],
+  "manual_smd_footprints": {
+    "backplane": {
+      "J2": ["PJ-082BH_jack_10A", "DC power jack: hand fit, including mechanical retention"],
+      "J6": ["screw_brigde", "Screw bridge: hand fit hardware"],
+      "M1": ["u2d2_mounting", "Existing U2D2 module and mounting hardware: hand fit, not a discrete SMD component"]
+    }
+  },
+  "sources": {
+    "JLCPCB BOM": "https://jlcpcb.com/help/article/how-to-generate-bom-and-centroid-files-from-kicad-8",
+    "JLCPCB CPL": "https://jlcpcb.com/help/article/pick-place-file-for-pcb-assembly",
+    "Yageo exact resistor specifications": "https://yageogroup.com/component-documentation/download/specsheet/RC0603FR-0722KL",
+    "C108661": "https://www.lcsc.com/product-detail/C108661.html",
+    "C114065": "https://www.lcsc.com/product-detail/C114065.html",
+    "C85973": "https://www.lcsc.com/product-detail/C85973.html",
+    "C1591": "https://www.lcsc.com/product-detail/C1591.html",
+    "C29277": "https://www.lcsc.com/product-detail/C29277.html",
+    "Panasonic 220uF body dimensions": "https://industrial.panasonic.com/tw/products/pt/aluminum-cap-smd/models/EEEFT1A221AP"
+  }
+}

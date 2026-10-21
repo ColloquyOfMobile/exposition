@@ -1,0 +1,23 @@
+{
+  "board": "male-static-v2",
+  "source": "male static v2/male-static-v2.kicad_pcb",
+  "source_sha256": "54679c0808152b8f7bb86007bfc54a492216110ab05349565d3c06a81fd68858",
+  "parts_sha256": "4fae39aa514ea8fd73eef7a55657f31b46e8051028d6c8dfe2c5148865233411",
+  "smd_count": 4,
+  "drc_errors": 0,
+  "unconnected": 0,
+  "files": {
+    "BOM.csv": "f183f41c4aa8ba8d8849fab3f2046c040dd82b0fb3730e3fba049f8b29ab34f8",
+    "CPL.csv": "703508f2ffa7824ec737e00adab40ab587dba5a9b766fcb5b914cde319d66398",
+    "gerbers.zip": "99a2691b2c0891ee7d97532f2ad93ec874d7243ef19dc9815083038ab371c053",
+    "manual-and-DNP.csv": "7b69494f94aa6d130f26f3c24a480ed11009c48a3ed7ec6001e900b0308a47c2",
+    "reference/positions-all-kicad.csv": "28eafe678426fe3310fd452831a34a8a24e34df79491fff9c1b451dc2335cf3c",
+    "reference/assembly-top.svg": "ca3cc94f4d597640ad3fddd572a58c284a4d31df5ca98a6d6e196226a7e50ff6",
+    "checks/drc.json": "36982bfa434f687b672ea373b1fadb34d572c56e6210d9fd180f4ae16706989f",
+    "reference/assembly-parts.json": "4fae39aa514ea8fd73eef7a55657f31b46e8051028d6c8dfe2c5148865233411",
+    "reference/male static v2/README.md": "f6558726556659177899b24ef281905ed9596a06dfab6cc85db0a167338b09dc",
+    "reference/male static v2/bom.csv": "355a8968c5971bd5c5beb43a63e0a60cf84cddd8ad294f341ed92571a82767ed",
+    "reference/project/README.md": "f6558726556659177899b24ef281905ed9596a06dfab6cc85db0a167338b09dc",
+    "README-JLCPCB.md": "a3f99bc57706bf6431c12efa2913e5dc4c1fbaa68562bf495302e09c27e9a02c"
+  }
+}

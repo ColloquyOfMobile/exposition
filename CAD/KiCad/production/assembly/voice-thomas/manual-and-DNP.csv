@@ -1,0 +1,10 @@
+﻿reference,value,footprint,reason
+TP4,filter out,TestPin_1x01_P2.54mm,"Through-hole, plug-in module or mechanical item; hand fit"
+TP1,tone,TestPoint_Pad_D1.5mm,"Through-hole, plug-in module or mechanical item; hand fit"
+R1,1K2 1% 0.25W,R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal,"Through-hole, plug-in module or mechanical item; hand fit"
+H1,M3 retention,MountingHole_3.2mm_M3,"Through-hole, plug-in module or mechanical item; hand fit"
+C2,150nF film 5% >=50V,C_Rect_L7.0mm_W6.5mm_P5.00mm,"Through-hole, plug-in module or mechanical item; hand fit"
+R2,1K2 1% 0.25W,R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal,"Through-hole, plug-in module or mechanical item; hand fit"
+C1,150nF film 5% >=50V,C_Rect_L7.0mm_W6.5mm_P5.00mm,"Through-hole, plug-in module or mechanical item; hand fit"
+TP5,AGND,TestPin_1x01_P2.54mm,"Through-hole, plug-in module or mechanical item; hand fit"
+JV1,VOICE - KEY 6,Socket_2x03_Key6,"Through-hole, plug-in module or mechanical item; hand fit"

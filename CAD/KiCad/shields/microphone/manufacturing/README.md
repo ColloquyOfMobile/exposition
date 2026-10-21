@@ -1,7 +1,5 @@
-# Manufacturing package
+# JLCPCB manufacturing package
 
-Upload `microphone-manufacturing.zip` for this PCB. Read the enclosed
-`README-manufacturing.md` before ordering or requesting assembly.
+Unpack `microphone-manufacturing.zip`. Upload `gerbers.zip`, `BOM.csv` and `CPL.csv` separately as directed by `README-JLCPCB.md`.
 
-Regenerate all active projects using KiCad Python with
-`scripts/manufacturing.py` from the shields directory.
+Regenerate with KiCad Python and `export_jlcpcb.py` at the repository root.
