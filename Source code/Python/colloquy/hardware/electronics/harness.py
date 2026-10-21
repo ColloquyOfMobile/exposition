@@ -49,7 +49,7 @@ class Board:
 
     @property
     def path(self):
-        return KICAD / self.folder / f"{self.folder}.kicad_pcb"
+        return KICAD / "old-reference" / self.folder / f"{self.folder}.kicad_pcb"
 
     def __repr__(self):
         return f"Board({self.folder})"

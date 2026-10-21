@@ -135,7 +135,7 @@ def test_the_circuit_figures_are_the_computed_ones():
 
 
 def test_the_holder_uses_the_existing_module_and_preserves_its_harness():
-    folder = DOCUMENT.parents[5] / "CAD/KiCad/shields/microphone"
+    folder = DOCUMENT.parents[5] / "CAD/KiCad/old-reference/microphone-rev-b"
     parts = {part["ref"]: part for part in json.loads((folder / "circuit.json").read_text())["components"]}
     assert not {"U1", "MK1", "JP1", "JP2"}.intersection(parts)
     assert parts["M1"]["pins"] == {"1": "GND", "2": "VDD", "3": "GAIN", "4": "MICOUT", "5": "AR"}
@@ -173,7 +173,7 @@ def test_the_outline_adds_up():
 
     assert (width, length) == (20, 62)
     assert 2 * end + spacing == length
-    folder = DOCUMENT.parents[5] / "CAD/KiCad/shields/microphone"
+    folder = DOCUMENT.parents[5] / "CAD/KiCad/old-reference/microphone-rev-b"
     data = json.loads((folder / "mechanical.json").read_text())
     assert data["board_mm"] == [width, length]
     assert data["artwork_holes_mm"] == [[10, 6], [10, 56]]

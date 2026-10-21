@@ -3,7 +3,7 @@
 
 """The drawing of the shields backplane: its slots and its two steps.
 
-Every position in it is read out of `CAD/KiCad/shields/`, and the one
+Every position in it is read out of `CAD/KiCad/proposed-solutions/shields/`, and the one
 thing that is *worked out* rather than read - where each shield sits,
 from its connector meeting the slot's header - is checked here against
 the holes that would have to line up if it were right: a card's retention

@@ -47,7 +47,7 @@ try:
 except ImportError:  # loaded by path from export_mega_pinout.py
     import harness
 
-BOARD = harness.KICAD / "electronic box" / "electronic box.kicad_pcb"
+BOARD = harness.KICAD / "old-reference/electronic box" / "electronic box.kicad_pcb"
 FILE_NAME = "mega-pinout.svg"
 # electronics -> hardware -> colloquy
 STATIC = Path(__file__).resolve().parents[2] / "server2" / "static" / "hardware"

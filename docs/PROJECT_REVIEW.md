@@ -2,7 +2,7 @@
 
 Reviewed 2026-09-26 at commit `59c4af3` on `Refactor`.
 
-The [electronics follow-up review](ELECTRONICS_REVIEW.md), dated 2026-09-27, adds schematic/PCB checks, manufacturer-datasheet verification, and specific v2 fabrication blockers.
+The [electronics follow-up review](<ELECTRONICS_REVIEW.md>), dated 2026-09-27, adds schematic/PCB checks, manufacturer-datasheet verification, and specific v2 fabrication blockers.
 
 ## Assessment
 
@@ -44,7 +44,7 @@ Evidence: [motor removal](../Source%20code/Python/colloquy/hardware/motors/__ini
 
 `Arduino.open()` opens the port before checking the board greeting. A rejected greeting leaves the handle open. Later `__enter__()` calls check only `is_open`, allowing commands on the connection whose firmware validation failed. Startup deliberately keeps the UI running after such failures, making this a reachable sequence.
 
-Evidence: [Arduino connection lifecycle](../Source%20code/Python/colloquy/drivers/arduino/__init__.py), lines 106-113 and 298-308; [startup recovery](../main.py), around line 90. Extracted production methods with a fake port reproduced failed validation followed by a successful command write without another greeting check.
+Evidence: [Arduino connection lifecycle](../Source%20code/Python/colloquy/drivers/arduino/__init__.py), lines 106-113 and 298-308; [startup recovery](<../main.py>), around line 90. Extracted production methods with a fake port reproduced failed validation followed by a successful command write without another greeting check.
 
 **Next:** distinguish an open serial handle from a validated, ready device. Close and invalidate on failed handshakes, port changes, and connection loss. Keep diagnostics and firmware recovery available while refusing ordinary commands.
 
@@ -54,7 +54,7 @@ Evidence: [Arduino connection lifecycle](../Source%20code/Python/colloquy/driver
 
 The incident report records an amplifier destroyed by a supply choice based on an unsupported rating. The later PCB section reopens that decision, but the rework instructions and introductory PCB text still describe it as settled. These documents are exposed through the application's hardware pages.
 
-Evidence: [DIRTY_REWORK.md](../Source%20code/Python/colloquy/hardware/electronics/DIRTY_REWORK.md), lines 73-78 and 620-622; [NEXT_PCB.md](../Source%20code/Python/colloquy/hardware/electronics/NEXT_PCB.md), line 16 versus lines 371-393; [incident report](errors/2026-09-01-01.txt).
+Evidence: [DIRTY_REWORK.md](../Source%20code/Python/colloquy/hardware/electronics/DIRTY_REWORK.md), lines 73-78 and 620-622; [NEXT_PCB.md](../Source%20code/Python/colloquy/hardware/electronics/NEXT_PCB.md), line 16 versus lines 371-393; [incident report](<errors/2026-09-01-01.txt>).
 
 **Next:** reconcile all actionable instructions with the incident report immediately. Separate requirements for a future amplifier from verified properties of the modules already installed. Record component identity and authoritative rating evidence before choosing its supply or finalizing the corresponding PCB design. This review establishes no new electrical rating.
 

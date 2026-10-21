@@ -16,7 +16,7 @@ exporter = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(exporter)
 PARTS = json.loads(exporter.PARTS_PATH.read_text())
 COUNTS = {"backplane": 72, "teensy-adapter": 65, "voice-thomas": 1,
-          "analyser-carrier": 0, "microphone": 8, "female-base-v2": 4, "male-static-v2": 4}
+          "analyser-carrier": 0, "microphone-flex": 6, "female-base-v2": 4, "male-static-v2": 4}
 
 
 def rows(data):
@@ -47,6 +47,10 @@ def test_manufacturing_job_matches_its_board_and_has_complete_assembly_files(boa
             assert not {"M1", "J2", "J6"} & set(refs)
         if board.id == "voice-thomas":
             assert refs == ["R3"]
+        if board.id == "microphone-flex":
+            assert set(refs) == {"R4", "R5", "R6", "C6", "C7", "D1"}
+            assert {"JP1", "JP2"} <= {row["reference"] for row in manual}
+            assert "proposed-solutions/shields/microphone-flex/" in board.source
         manifest = json.loads(archive.read("manifest.json"))
         for filename, digest in manifest["files"].items():
             assert hashlib.sha256(archive.read(filename)).hexdigest() == digest

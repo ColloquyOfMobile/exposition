@@ -2,6 +2,6 @@
   "board_sha256": "eaef123db3b28f2ac098f2e9b077cf5631b98ef781c273948c8de1805891102b",
   "generator_sha256": "4120b90d4e6de9954f4517a5632645add46d553731b9abadb55191462dafea89",
   "schematics": {
-    "shields/analyser-carrier/wired/analyser-carrier-wired.kicad_sch": "a898a35c80d69733fd8951dec995ba0bd1021454a0058a04ebd368291abf67cf"
+    "proposed-solutions/shields/analyser-carrier/wired/analyser-carrier-wired.kicad_sch": "a898a35c80d69733fd8951dec995ba0bd1021454a0058a04ebd368291abf67cf"
   }
 }

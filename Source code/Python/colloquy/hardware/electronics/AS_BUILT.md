@@ -1,7 +1,7 @@
 # The electronics box, as built
 
 **What the board in the rack actually does.** Every line here is read out
-of `CAD/KiCad/electronic box/electronic box.kicad_pcb` — the netlist, not
+of `CAD/KiCad/old-reference/electronic box/electronic box.kicad_pcb` — the netlist, not
 the drawing and not anybody's memory. Where a net's name and its wiring
 disagree, this says so and believes the wiring.
 

@@ -25,7 +25,7 @@ exact part is specified, but this does not settle amplifier transient tests.
 Existing module-fit, connector-keying and enclosure checks still apply.
 This file supersedes older bare-board/hand-SMD advice in reference documents.
 
-Source: CAD/KiCad/shields/teensy-adapter/teensy-adapter.kicad_pcb
+Source: CAD/KiCad/proposed-solutions/shields/teensy-adapter/teensy-adapter.kicad_pcb
 Source SHA256 (LF normalized): f6c76bf019629902b27a141ebae31fb519644f20c6e04ea34496096d9290d937
 KiCad: 9.0.7. DRC: zero errors and zero unconnected items.
 JLCPCB formats: https://jlcpcb.com/help/article/how-to-generate-bom-and-centroid-files-from-kicad-8

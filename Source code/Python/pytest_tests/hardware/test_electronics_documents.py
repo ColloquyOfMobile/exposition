@@ -144,12 +144,12 @@ def test_a_generated_document_says_where_its_file_is():
         owner=None,
         document_name="x",
         source=lambda: "# x",
-        written_to="CAD/KiCad/electronic box v2/NETLIST.md",
+        written_to="CAD/KiCad/proposed-solutions/electronic box v2/NETLIST.md",
     )
 
     states = _snapshot(document)
 
-    assert states["file"]["value"] == "CAD/KiCad/electronic box v2/NETLIST.md"
+    assert states["file"]["value"] == "CAD/KiCad/proposed-solutions/electronic box v2/NETLIST.md"
 
 
 def test_the_generated_documents_actually_produce_their_content():

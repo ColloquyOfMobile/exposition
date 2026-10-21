@@ -20,7 +20,7 @@ have drifted does not exist.
 **It reads the connectors as they are.** The four DSUBs and the harness
 behind them are fixed by the supplier (`NEXT_PCB.md` section 5), so
 `_CONNECTORS` below is the existing pinout, transcribed from the netlist
-of `CAD/KiCad/electronic box/` - with exactly one substitution per body,
+of `CAD/KiCad/old-reference/electronic box/` - with exactly one substitution per body,
 the speaker pair becoming the line out and its return, since the
 amplifier now lives at the body.
 

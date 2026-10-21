@@ -6,15 +6,15 @@
       "what": "the main board: harness connectors, power entry and the shield slots",
       "group": "The main board and its shields",
       "quantity": 1,
-      "source": "shields/backplane/backplane.kicad_pcb",
+      "source": "proposed-solutions/shields/backplane/backplane.kicad_pcb",
       "read first": [
-        "shields/README.md",
-        "shields/REVIEW.md",
-        "shields/ASSEMBLY.md"
+        "proposed-solutions/shields/README.md",
+        "proposed-solutions/shields/REVIEW.md",
+        "proposed-solutions/shields/ASSEMBLY.md"
       ],
       "assembly": [
-        "shields/backplane/bom.csv",
-        "shields/backplane/positions.csv"
+        "proposed-solutions/shields/backplane/bom.csv",
+        "proposed-solutions/shields/backplane/positions.csv"
       ],
       "source sha256": "4d6d9193a190410fd24dc67c5d8170e5c112bde7662c5c2f7ee7b467aecef25d",
       "exported at": "2026-10-21T10:36:14",
@@ -53,15 +53,15 @@
       "what": "a Teensy 4.1 in the backplane's Mega slot",
       "group": "The main board and its shields",
       "quantity": 1,
-      "source": "shields/teensy-adapter/teensy-adapter.kicad_pcb",
+      "source": "proposed-solutions/shields/teensy-adapter/teensy-adapter.kicad_pcb",
       "read first": [
-        "shields/README.md",
-        "shields/REVIEW.md",
-        "shields/ASSEMBLY.md"
+        "proposed-solutions/shields/README.md",
+        "proposed-solutions/shields/REVIEW.md",
+        "proposed-solutions/shields/ASSEMBLY.md"
       ],
       "assembly": [
-        "shields/teensy-adapter/bom.csv",
-        "shields/teensy-adapter/positions.csv"
+        "proposed-solutions/shields/teensy-adapter/bom.csv",
+        "proposed-solutions/shields/teensy-adapter/positions.csv"
       ],
       "source sha256": "f6c76bf019629902b27a141ebae31fb519644f20c6e04ea34496096d9290d937",
       "exported at": "2026-10-21T11:35:25",
@@ -100,15 +100,15 @@
       "what": "Thomas's RC output filter, one per body",
       "group": "The main board and its shields",
       "quantity": 5,
-      "source": "shields/voice-thomas/voice-thomas.kicad_pcb",
+      "source": "proposed-solutions/shields/voice-thomas/voice-thomas.kicad_pcb",
       "read first": [
-        "shields/README.md",
-        "shields/REVIEW.md",
-        "shields/ASSEMBLY.md"
+        "proposed-solutions/shields/README.md",
+        "proposed-solutions/shields/REVIEW.md",
+        "proposed-solutions/shields/ASSEMBLY.md"
       ],
       "assembly": [
-        "shields/voice-thomas/bom.csv",
-        "shields/voice-thomas/variants.csv"
+        "proposed-solutions/shields/voice-thomas/bom.csv",
+        "proposed-solutions/shields/voice-thomas/variants.csv"
       ],
       "source sha256": "0ed2f0eb7e077d730d598f3af986fb3a863f60ce2aa2f30efa70d675e478c568",
       "exported at": "2026-10-11T21:15:14",
@@ -145,15 +145,15 @@
       "what": "carries the five DFRobot audio analyser modules",
       "group": "The main board and its shields",
       "quantity": 1,
-      "source": "shields/analyser-carrier/analyser-carrier.kicad_pcb",
+      "source": "proposed-solutions/shields/analyser-carrier/analyser-carrier.kicad_pcb",
       "read first": [
-        "shields/README.md",
-        "shields/REVIEW.md",
-        "shields/analyser-carrier/README.md"
+        "proposed-solutions/shields/README.md",
+        "proposed-solutions/shields/REVIEW.md",
+        "proposed-solutions/shields/analyser-carrier/README.md"
       ],
       "assembly": [
-        "shields/analyser-carrier/bom.csv",
-        "shields/analyser-carrier/socket-assembly.csv"
+        "proposed-solutions/shields/analyser-carrier/bom.csv",
+        "proposed-solutions/shields/analyser-carrier/socket-assembly.csv"
       ],
       "source sha256": "eaef123db3b28f2ac098f2e9b077cf5631b98ef781c273948c8de1805891102b",
       "exported at": "2026-10-19T13:18:54",
@@ -185,27 +185,28 @@
       ]
     },
     {
-      "id": "microphone",
-      "title": "Microphone holder",
+      "id": "microphone-flex",
+      "title": "Microphone flex holder (Rev C)",
       "what": "holds a MAX9814 module on a body's extrusion, one per body and a spare",
       "group": "The main board and its shields",
       "quantity": 6,
-      "source": "shields/microphone/microphone.kicad_pcb",
+      "source": "proposed-solutions/shields/microphone-flex/microphone-flex.kicad_pcb",
       "read first": [
-        "shields/README.md",
-        "shields/REVIEW.md",
-        "shields/ASSEMBLY.md"
+        "proposed-solutions/shields/microphone-flex/README.md",
+        "proposed-solutions/shields/README.md",
+        "proposed-solutions/shields/REVIEW.md",
+        "proposed-solutions/shields/ASSEMBLY.md"
       ],
       "assembly": [
-        "shields/microphone/bom.csv",
-        "shields/microphone/positions.csv"
+        "proposed-solutions/shields/microphone-flex/bom.csv"
       ],
-      "source sha256": "176708f8665a2dfb5078a81dd422e2474577b1730f7a8941903f2f0b4568a6aa",
-      "exported at": "2026-10-11T21:15:18",
+      "reference": "proposed-solutions/shields/microphone-flex/README.md",
+      "source sha256": "59fb1471c4c99bc4eeddf0c85c4637ca55fefc889be7ec12370574710be32e48",
+      "exported at": "2026-10-21T12:06:23",
       "exported with": "KiCad 9.0.7",
       "copper layers": 2,
       "size mm": [
-        20.0,
+        32.0,
         62.0
       ],
       "thickness mm": 1.6,
@@ -216,17 +217,17 @@
         "unconnected": 0
       },
       "files": [
-        "microphone-B_Cu.gbl",
-        "microphone-B_Mask.gbs",
-        "microphone-B_Paste.gbp",
-        "microphone-B_Silkscreen.gbo",
-        "microphone-Edge_Cuts.gm1",
-        "microphone-F_Cu.gtl",
-        "microphone-F_Mask.gts",
-        "microphone-F_Paste.gtp",
-        "microphone-F_Silkscreen.gto",
-        "microphone-NPTH.drl",
-        "microphone-PTH.drl"
+        "microphone-flex-B_Cu.gbl",
+        "microphone-flex-B_Mask.gbs",
+        "microphone-flex-B_Paste.gbp",
+        "microphone-flex-B_Silkscreen.gbo",
+        "microphone-flex-Edge_Cuts.gm1",
+        "microphone-flex-F_Cu.gtl",
+        "microphone-flex-F_Mask.gts",
+        "microphone-flex-F_Paste.gtp",
+        "microphone-flex-F_Silkscreen.gto",
+        "microphone-flex-NPTH.drl",
+        "microphone-flex-PTH.drl"
       ]
     },
     {
@@ -235,15 +236,15 @@
       "what": "inside each female, with her amplifier module mounted on it",
       "group": "The boards inside the bodies",
       "quantity": 3,
-      "source": "female base v2/female-base-v2.kicad_pcb",
+      "source": "proposed-solutions/female base v2/female-base-v2.kicad_pcb",
       "read first": [
-        "female base v2/README.md"
+        "proposed-solutions/female base v2/README.md"
       ],
       "assembly": [
-        "female base v2/bom.csv"
+        "proposed-solutions/female base v2/bom.csv"
       ],
       "source sha256": "aac945478795e6a2b5300081126ed72cc0824823b129bf04b28bea53e801e46f",
-      "exported at": "2026-10-21T10:41:43",
+      "exported at": "2026-10-21T12:06:25",
       "exported with": "KiCad 9.0.7",
       "copper layers": 2,
       "size mm": [
@@ -277,15 +278,15 @@
       "what": "inside each male, with his amplifier module mounted on it",
       "group": "The boards inside the bodies",
       "quantity": 2,
-      "source": "male static v2/male-static-v2.kicad_pcb",
+      "source": "proposed-solutions/male static v2/male-static-v2.kicad_pcb",
       "read first": [
-        "male static v2/README.md"
+        "proposed-solutions/male static v2/README.md"
       ],
       "assembly": [
-        "male static v2/bom.csv"
+        "proposed-solutions/male static v2/bom.csv"
       ],
       "source sha256": "54679c0808152b8f7bb86007bfc54a492216110ab05349565d3c06a81fd68858",
-      "exported at": "2026-10-20T13:34:20",
+      "exported at": "2026-10-21T12:06:27",
       "exported with": "KiCad 9.0.7",
       "copper layers": 2,
       "size mm": [

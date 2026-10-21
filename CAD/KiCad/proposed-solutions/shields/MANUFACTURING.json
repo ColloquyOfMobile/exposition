@@ -1,0 +1,62 @@
+[
+  {
+    "project": "backplane",
+    "zip": "backplane\\manufacturing\\backplane-manufacturing.zip",
+    "sha256": "62e84ef2bb4ee726d9e0bda1a2aec77bdaa3cce6798e3a1c651c5bcfbf4a30b4",
+    "assembly_policy": "front_smd_only",
+    "files": 18,
+    "copper_layers": 4,
+    "drc_errors": 0,
+    "drc_warnings": 0,
+    "unconnected": 0,
+    "smd_count": 72
+  },
+  {
+    "project": "teensy-adapter",
+    "zip": "teensy-adapter\\manufacturing\\teensy-adapter-manufacturing.zip",
+    "sha256": "8a9aee99e218b8f439bc2018174de82ef2bb3909154f665158e9978c66f073cb",
+    "assembly_policy": "front_smd_only",
+    "files": 15,
+    "copper_layers": 4,
+    "drc_errors": 0,
+    "drc_warnings": 0,
+    "unconnected": 0,
+    "smd_count": 65
+  },
+  {
+    "project": "voice-thomas",
+    "zip": "voice-thomas\\manufacturing\\voice-thomas-manufacturing.zip",
+    "sha256": "9184c29770b50eab313f1cd0734af82c9143ff5e3856e4fde2cf4ff8ece7b639",
+    "assembly_policy": "front_smd_only",
+    "files": 33,
+    "copper_layers": 2,
+    "drc_errors": 0,
+    "drc_warnings": 0,
+    "unconnected": 0,
+    "smd_count": 1
+  },
+  {
+    "project": "analyser-carrier",
+    "zip": "analyser-carrier\\manufacturing\\analyser-carrier-manufacturing.zip",
+    "sha256": "d78cf0f44e8fea2a1b4e030f576ed81d5a7f181c9faf9f47c5596c3c9b7f5522",
+    "assembly_policy": "hand_assembled_bare_board",
+    "files": 18,
+    "copper_layers": 2,
+    "drc_errors": 0,
+    "drc_warnings": 0,
+    "unconnected": 0,
+    "smd_count": 0
+  },
+  {
+    "project": "microphone-flex",
+    "zip": "microphone-flex/manufacturing/microphone-flex-manufacturing.zip",
+    "sha256": "5f9b19fdc30acee8d6cd3fb2f9e5b35a99b56c7720ee29a7af9340514d156ceb",
+    "assembly_policy": "front_smd_only",
+    "files": 17,
+    "copper_layers": 2,
+    "drc_errors": 0,
+    "drc_warnings": 0,
+    "unconnected": 0,
+    "smd_count": 6
+  }
+]

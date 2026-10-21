@@ -1,9 +1,9 @@
 {
   "board": "voice-thomas",
-  "source": "shields/voice-thomas/voice-thomas.kicad_pcb",
+  "source": "proposed-solutions/shields/voice-thomas/voice-thomas.kicad_pcb",
   "source_sha256": "0ed2f0eb7e077d730d598f3af986fb3a863f60ce2aa2f30efa70d675e478c568",
-  "exported_at": "2026-10-21T09:36:58+00:00",
-  "generator_sha256": "42df242d4a7a015219bf9390b3a5ea3bcc2ff60663be0ba5a231c14cb3c89405",
+  "exported_at": "2026-10-21T10:10:02+00:00",
+  "generator_sha256": "cebd0ad258f2a13e5ae3f0cb30073ef6758493f8b4b480a4f3b5af71f2bf5ac8",
   "parts_sha256": "4fae39aa514ea8fd73eef7a55657f31b46e8051028d6c8dfe2c5148865233411",
   "smd_count": 1,
   "drc_errors": 0,
@@ -11,17 +11,17 @@
   "files": {
     "BOM.csv": "b045a050886110ef7d384961ed7fbc1be857532cfff91acf3695ee598dc07b08",
     "CPL.csv": "ebc8a2a120c331f39e214466b2923f63955ce5e3f2bed20abc8ff7f2c8336e11",
-    "gerbers.zip": "f064fac4a6fa7510045420d1760966ce54711fd304e7515bc8c7fd927b417184",
+    "gerbers.zip": "ac89006275c4d66c062ed3b456cccb9cd689aac4677860dbe4ce34af64f488e6",
     "manual-and-DNP.csv": "026164d79c259e4bda50c4c739f1205db144acc4e2526f595e1351f6b5a9093f",
     "reference/positions-all-kicad.csv": "60b7bd17f422422a4e9366e0f18b0e88d3ef118952ca79203161d5bec0c03b73",
-    "reference/assembly-top.svg": "454c24b1e4c5495c1194d917c1af5d78d5ff486549aec4b211a1fe0bd605ed27",
-    "checks/drc.json": "4ca911513b7ba8ed1695b77b5d7c7f1c0fb22fdcb4762632b10129f98ad12624",
+    "reference/assembly-top.svg": "7b92ed6b51ed602a41a6d5b8a15abc31f0d9f1ff91a583832ef28dad56a680f6",
+    "checks/drc.json": "d5395dc4d277eb7457924dd19b16dec5d7aa9184b8c87e48ec3d34f0a83a1ebd",
     "reference/assembly-parts.json": "4fae39aa514ea8fd73eef7a55657f31b46e8051028d6c8dfe2c5148865233411",
-    "reference/shields/README.md": "10efb0fd37171d41d9a4c0de1e4c5d900f850f2ac1e3b95a6841a3e39bf69df2",
-    "reference/shields/REVIEW.md": "a84300bdced7025a1052024c1be0d673ede8e4522a4aaf474b2ecc7710161d3e",
-    "reference/shields/ASSEMBLY.md": "e1c17bd1f2b98755c0f80942f1880a319f65c202a8a8f02c229b07db11eb19ff",
-    "reference/shields/voice-thomas/bom.csv": "28793f37fd4c6549f28d9fd5a5b4473af6a83672f7c2f08b86dce7f2143b3b24",
-    "reference/shields/voice-thomas/variants.csv": "582305f8cb3c5512bbc11ad72d7d0325b324c5010656100a0bd4467ac84d4082",
+    "reference/proposed-solutions/shields/README.md": "afb524f503641249c1fea458fdc023360ecd69d20cfdcb0da3bf7338ffe714d5",
+    "reference/proposed-solutions/shields/REVIEW.md": "a84300bdced7025a1052024c1be0d673ede8e4522a4aaf474b2ecc7710161d3e",
+    "reference/proposed-solutions/shields/ASSEMBLY.md": "e1c17bd1f2b98755c0f80942f1880a319f65c202a8a8f02c229b07db11eb19ff",
+    "reference/proposed-solutions/shields/voice-thomas/bom.csv": "28793f37fd4c6549f28d9fd5a5b4473af6a83672f7c2f08b86dce7f2143b3b24",
+    "reference/proposed-solutions/shields/voice-thomas/variants.csv": "582305f8cb3c5512bbc11ad72d7d0325b324c5010656100a0bd4467ac84d4082",
     "reference/project/variants/female1/bom.csv": "c1b1adc1c38cdc16d591b9605dbe2295b162cfedba1ad030441a8e7049917d49",
     "reference/project/variants/female2/bom.csv": "ce3213c1992439e1365c3c219a80f219cad0770eb5dcdc83f34449fc424d223c",
     "reference/project/variants/female3/bom.csv": "871357c44818c533fdc3f78bbf5828630fb2935f52ae1cf2e9cc43a31365e1ae",
@@ -40,6 +40,6 @@
     "reference/project/variants/pitch-5657/bom.csv": "0aee11a59e13abc6fe71992b469fbb85a1fe0451d8a875c58b73d7a3b60ee144",
     "reference/project/variants/pitch-707/bom.csv": "fb00b06691811484dffe5bed6a282ba04038fee6de779676d41120cba03427bc",
     "reference/project/variants/pitch-8000/bom.csv": "871357c44818c533fdc3f78bbf5828630fb2935f52ae1cf2e9cc43a31365e1ae",
-    "README-JLCPCB.md": "73fe98a430026eaee1b038b689419e557c8b849823ea0621171b2f19c059359a"
+    "README-JLCPCB.md": "f55073211ec6f9bd36dae14d148ba097912d2d2d2852a4522b784179efee898c"
   }
 }

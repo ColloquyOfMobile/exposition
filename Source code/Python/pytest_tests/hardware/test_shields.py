@@ -33,7 +33,7 @@ from colloquy.hardware.electronics import Shields, shields
 from colloquy.hardware.electronics.harness import KICAD
 
 DOCUMENT = Shields.folder / Shields.file_name
-CIRCUIT = KICAD / "electronic box v2" / "colloquy-control-v2" / "circuit.json"
+CIRCUIT = KICAD / "proposed-solutions/electronic box v2" / "colloquy-control-v2" / "circuit.json"
 SKETCH = firmware.SKETCH_PATH
 
 # The footprint pins the backplane adds: the microphones, direct.

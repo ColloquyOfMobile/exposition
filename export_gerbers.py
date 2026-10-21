@@ -53,7 +53,7 @@ SHIELDS = "The main board and its shields"
 BODIES = "The boards inside the bodies"
 
 # The boards to make. Which ones is a decision and this table is where it
-# is taken: the shields set (`CAD/KiCad/shields/README.md` has the same
+# is taken: the shields set (`CAD/KiCad/proposed-solutions/shields/README.md` has the same
 # five, with the same quantities) and the two v2 body boards that carry
 # an amplifier. The boards already built - `electronic box`, `center`,
 # `female base`, `female static`, `male static` - are not here, and
@@ -67,9 +67,9 @@ BOARDS = (
         "what": "the main board: harness connectors, power entry and the shield slots",
         "group": SHIELDS,
         "quantity": 1,
-        "source": "shields/backplane/backplane.kicad_pcb",
-        "read first": ["shields/README.md", "shields/REVIEW.md", "shields/ASSEMBLY.md"],
-        "assembly": ["shields/backplane/bom.csv", "shields/backplane/positions.csv"],
+        "source": "proposed-solutions/shields/backplane/backplane.kicad_pcb",
+        "read first": ["proposed-solutions/shields/README.md", "proposed-solutions/shields/REVIEW.md", "proposed-solutions/shields/ASSEMBLY.md"],
+        "assembly": ["proposed-solutions/shields/backplane/bom.csv", "proposed-solutions/shields/backplane/positions.csv"],
     },
     {
         "id": "teensy-adapter",
@@ -77,11 +77,11 @@ BOARDS = (
         "what": "a Teensy 4.1 in the backplane's Mega slot",
         "group": SHIELDS,
         "quantity": 1,
-        "source": "shields/teensy-adapter/teensy-adapter.kicad_pcb",
-        "read first": ["shields/README.md", "shields/REVIEW.md", "shields/ASSEMBLY.md"],
+        "source": "proposed-solutions/shields/teensy-adapter/teensy-adapter.kicad_pcb",
+        "read first": ["proposed-solutions/shields/README.md", "proposed-solutions/shields/REVIEW.md", "proposed-solutions/shields/ASSEMBLY.md"],
         "assembly": [
-            "shields/teensy-adapter/bom.csv",
-            "shields/teensy-adapter/positions.csv",
+            "proposed-solutions/shields/teensy-adapter/bom.csv",
+            "proposed-solutions/shields/teensy-adapter/positions.csv",
         ],
     },
     {
@@ -90,14 +90,14 @@ BOARDS = (
         "what": "Thomas's RC output filter, one per body",
         "group": SHIELDS,
         "quantity": 5,
-        "source": "shields/voice-thomas/voice-thomas.kicad_pcb",
-        "read first": ["shields/README.md", "shields/REVIEW.md", "shields/ASSEMBLY.md"],
+        "source": "proposed-solutions/shields/voice-thomas/voice-thomas.kicad_pcb",
+        "read first": ["proposed-solutions/shields/README.md", "proposed-solutions/shields/REVIEW.md", "proposed-solutions/shields/ASSEMBLY.md"],
         # No positions.csv here or on the analyser carrier: both are
-        # ordered bare and built by hand (shields/ASSEMBLY.md), so there
+        # ordered bare and built by hand (proposed-solutions/shields/ASSEMBLY.md), so there
         # is nothing for a machine to place.
         "assembly": [
-            "shields/voice-thomas/bom.csv",
-            "shields/voice-thomas/variants.csv",
+            "proposed-solutions/shields/voice-thomas/bom.csv",
+            "proposed-solutions/shields/voice-thomas/variants.csv",
         ],
     },
     {
@@ -106,26 +106,26 @@ BOARDS = (
         "what": "carries the five DFRobot audio analyser modules",
         "group": SHIELDS,
         "quantity": 1,
-        "source": "shields/analyser-carrier/analyser-carrier.kicad_pcb",
+        "source": "proposed-solutions/shields/analyser-carrier/analyser-carrier.kicad_pcb",
         "read first": [
-            "shields/README.md",
-            "shields/REVIEW.md",
-            "shields/analyser-carrier/README.md",
+            "proposed-solutions/shields/README.md",
+            "proposed-solutions/shields/REVIEW.md",
+            "proposed-solutions/shields/analyser-carrier/README.md",
         ],
         "assembly": [
-            "shields/analyser-carrier/bom.csv",
-            "shields/analyser-carrier/socket-assembly.csv",
+            "proposed-solutions/shields/analyser-carrier/bom.csv",
+            "proposed-solutions/shields/analyser-carrier/socket-assembly.csv",
         ],
     },
     {
-        "id": "microphone",
-        "title": "Microphone holder",
+        "id": "microphone-flex",
+        "title": "Microphone flex holder (Rev C)",
         "what": "holds a MAX9814 module on a body's extrusion, one per body and a spare",
         "group": SHIELDS,
         "quantity": 6,
-        "source": "shields/microphone/microphone.kicad_pcb",
-        "read first": ["shields/README.md", "shields/REVIEW.md", "shields/ASSEMBLY.md"],
-        "assembly": ["shields/microphone/bom.csv", "shields/microphone/positions.csv"],
+        "source": "proposed-solutions/shields/microphone-flex/microphone-flex.kicad_pcb",
+        "read first": ["proposed-solutions/shields/microphone-flex/README.md", "proposed-solutions/shields/README.md", "proposed-solutions/shields/REVIEW.md", "proposed-solutions/shields/ASSEMBLY.md"],
+        "assembly": ["proposed-solutions/shields/microphone-flex/bom.csv"],
     },
     {
         "id": "female-base-v2",
@@ -133,9 +133,9 @@ BOARDS = (
         "what": "inside each female, with her amplifier module mounted on it",
         "group": BODIES,
         "quantity": 3,
-        "source": "female base v2/female-base-v2.kicad_pcb",
-        "read first": ["female base v2/README.md"],
-        "assembly": ["female base v2/bom.csv"],
+        "source": "proposed-solutions/female base v2/female-base-v2.kicad_pcb",
+        "read first": ["proposed-solutions/female base v2/README.md"],
+        "assembly": ["proposed-solutions/female base v2/bom.csv"],
     },
     {
         "id": "male-static-v2",
@@ -143,9 +143,9 @@ BOARDS = (
         "what": "inside each male, with his amplifier module mounted on it",
         "group": BODIES,
         "quantity": 2,
-        "source": "male static v2/male-static-v2.kicad_pcb",
-        "read first": ["male static v2/README.md"],
-        "assembly": ["male static v2/bom.csv"],
+        "source": "proposed-solutions/male static v2/male-static-v2.kicad_pcb",
+        "read first": ["proposed-solutions/male static v2/README.md"],
+        "assembly": ["proposed-solutions/male static v2/bom.csv"],
     },
 )
 

@@ -4,7 +4,7 @@
 """Where the next board's edges and its connectors have to be.
 
 **Read out of the board that exists, not remembered.** The enclosure was
-cut for `CAD/KiCad/electronic box/electronic box.kicad_pcb`, and a
+cut for `CAD/KiCad/old-reference/electronic box/electronic box.kicad_pcb`, and a
 replacement that is a millimetre out in any of these is a replacement that
 does not go in the rack. So this parses that file for the outline, the
 corner radius and the position of everything the panel has a hole for,
@@ -31,7 +31,7 @@ EXISTING_PCB = (
     Path(__file__).resolve().parents[5]
     / "CAD"
     / "KiCad"
-    / "electronic box"
+    / "old-reference/electronic box"
     / "electronic box.kicad_pcb"
 )
 

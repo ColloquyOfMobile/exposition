@@ -11,7 +11,7 @@ try:
 except ImportError:
     import harness
 
-ROOT = harness.KICAD / 'shields'
+ROOT = harness.KICAD / 'proposed-solutions/shields'
 STATIC = Path(__file__).resolve().parents[2] / 'server2/static/hardware'
 BODIES = ('female1', 'female2', 'female3', 'male1', 'male2')
 COLOURS = {'mic': '#b34478', 'photo': '#976410', 'tone': '#2864a2',

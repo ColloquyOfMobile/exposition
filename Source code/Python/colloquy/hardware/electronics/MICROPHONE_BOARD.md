@@ -6,7 +6,7 @@ module and screwing onto the body's aluminium extrusion.** Revision B,
 five-pin socket and two insulating M2 supports. No separate MAX9814 or
 electret is fitted to the holder. Build six holders, five and a spare.
 
-Open `CAD/KiCad/shields/microphone/microphone.kicad_pro`. Module dimensions
+Open `CAD/KiCad/old-reference/microphone-rev-b/microphone.kicad_pro`. Module dimensions
 come from Adafruit's original CAD, retained in `max9814-reference/source/`.
 Confirm the physical violet module's mounting/pin grid before fabrication.
 

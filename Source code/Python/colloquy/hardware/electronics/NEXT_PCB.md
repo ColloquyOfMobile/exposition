@@ -29,7 +29,7 @@ proved before this is committed to.
 
 **The wiring and the envelope are generated, not written here.**
 `py next_pcb.py` produces three files into
-`CAD/KiCad/electronic box v2/` — `NETLIST.md` (every part, every net,
+`CAD/KiCad/proposed-solutions/electronic box v2/` — `NETLIST.md` (every part, every net,
 every terminal), `BOM.md` (what to order) and `MECHANICAL.md` (where the
 edges and the connectors have to be). This document is the specification
 and the reasoning; those are what a schematic and a layout are drawn

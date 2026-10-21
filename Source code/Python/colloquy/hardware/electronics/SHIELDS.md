@@ -22,7 +22,7 @@ what a competent hand does anyway. **There is no shield identification in
 hardware: the silkscreen does that job** (section 6). It is the sixth
 solution, beside `next pcb`, `one board per body`, `opencm and pro
 minis`, `ad9833 dual mode` and `thomas or teensy`; the backplane is the
-v2 project (`CAD/KiCad/electronic box v2/colloquy-control-v2/`) with its
+v2 project (`CAD/KiCad/proposed-solutions/electronic box v2/colloquy-control-v2/`) with its
 audio parts moved into shields.
 
 > **The brief, 2026-10-03.** One main PCB that only routes signals and
@@ -42,7 +42,7 @@ microphone's output is the MAX9814 datasheet's (Maxim, electrical
 characteristics) and this repository's own measurement of it
 (`scope > diagnosing a microphone`, and `test goertzel ear` sampling it
 straight into a Mega's `A0`); the part choices were checked against their
-datasheets when the boards were drawn (`CAD/KiCad/shields/REVIEW.md`).
+datasheets when the boards were drawn (`CAD/KiCad/proposed-solutions/shields/REVIEW.md`).
 Every filter figure, frequency and voltage here is computed by
 `colloquy/hardware/electronics/shields.py`, and
 `pytest_tests/hardware/test_shields.py` holds the tables to it, to
@@ -66,7 +66,7 @@ if need be; nothing else is needed to open the exhibition.
 ![The backplane to scale, three times: its slots empty and named, step 1 with the Mega, step 2 with the Teensy, and what each slot can hold](/static/hardware/shields-configurations.svg)
 
 **Drawn from the boards**: `py export_shields_diagram.py` reads every
-slot, connector and hole out of `CAD/KiCad/shields/`, and the slots and
+slot, connector and hole out of `CAD/KiCad/proposed-solutions/shields/`, and the slots and
 their choices are the ones `hardware > main pcb > configuration` records.
 
 ---
@@ -1074,7 +1074,7 @@ the cards and the backplane are the same for both processors.
 - `next pcb` section 3's harness measurement and section 5's amplifier
   rail; nothing here depends on either.
 - The photosensor loads, still v2's provisional 10 K.
-- The backplane in `CAD/KiCad/shields/` was updated and re-routed on
+- The backplane in `CAD/KiCad/proposed-solutions/shields/` was updated and re-routed on
   2026-10-08: mirrored front computing slot and mounts, +12 V on outer
   copper at >=2 mm. The adapter is unchanged. Computing-slot hardware
   needs <=4 mm OD round spacers/posts on the front and screw heads on the

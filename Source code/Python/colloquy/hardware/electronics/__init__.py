@@ -244,7 +244,7 @@ class NextPCB(_ElectronicsDocument):
 # Imported inside the callables rather than at module scope: the mechanical
 # one parses a 1.7 MB board file, and nothing should pay for that at
 # startup on the chance somebody opens the node.
-_GENERATED_FOLDER = "CAD/KiCad/electronic box v2"
+_GENERATED_FOLDER = "CAD/KiCad/proposed-solutions/electronic box v2"
 
 
 def _netlist():

@@ -48,7 +48,7 @@ The repository contains different hardware that must not share an assumed rating
 - Thomas's prototype: GF1002 modules.
 - Proposed body-mounted amplifiers: a selection still to be made.
 
-The [incident report](errors/2026-09-01-01.txt) records a GF1002 destroyed when 12 V was applied. `NEXT_PCB.md` later reopens the supply decision, but its introduction and parts of `DIRTY_REWORK.md` still present 12 V as settled. The TPA2005D1 itself specifies a 2.5-5.5 V operating supply, with additional load-dependent restrictions; this is not evidence for a GF1002 module rating. [TI datasheet](https://www.ti.com/lit/ds/symlink/tpa2005d1.pdf).
+The [incident report](<errors/2026-09-01-01.txt>) records a GF1002 destroyed when 12 V was applied. `NEXT_PCB.md` later reopens the supply decision, but its introduction and parts of `DIRTY_REWORK.md` still present 12 V as settled. The TPA2005D1 itself specifies a 2.5-5.5 V operating supply, with additional load-dependent restrictions; this is not evidence for a GF1002 module rating. [TI datasheet](https://www.ti.com/lit/ds/symlink/tpa2005d1.pdf).
 
 **Next:** record the actual module/chip identity, supply limits, gain, input requirements, and speaker load. Reconcile all instructions. Recalculate the input divider and local decoupling for the selected module; the existing values are prototype choices, not automatically correct for a replacement amplifier. Check the signal channel implicated in the damaged-module incident before using it as a reference.
 
@@ -110,5 +110,5 @@ Steps 2-4 can progress alongside each other after the component/supply facts are
 
 ## Local Source PDFs
 
-- [Original schematic export](schematics.v1.pdf).
+- [Original schematic export](<schematics.v1.pdf>).
 - [Thomas Erforth, Colloquy - Pask Redesign, 23 June 2026](../Source%20code/Thomas/Colloquy%20-%20Pask%20Redesign.pdf).

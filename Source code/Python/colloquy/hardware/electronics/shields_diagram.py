@@ -54,7 +54,7 @@ from colloquy.hardware.main_pcb.configuration.table import (
     VOICE_SLOTS,
 )
 
-SHIELDS = KICAD / "shields"
+SHIELDS = KICAD / "proposed-solutions/shields"
 BACKPLANE = SHIELDS / "backplane" / "backplane.kicad_pcb"
 CARRIER = SHIELDS / "analyser-carrier" / "analyser-carrier.kicad_pcb"
 ADAPTER = SHIELDS / "teensy-adapter" / "teensy-adapter.kicad_pcb"

@@ -20,12 +20,12 @@ render it again into `server2/static/hardware/board-<name>.jpg`.
 
 | Board | Folder | How many in the piece | Size (mm) | Parts | Status | Pinouts and detail |
 |---|---|---|---|---|---|---|
-| electronic box | `CAD/KiCad/electronic box/` | 1, in the rack | 210 x 297 (A4) | 46 | in service, reworked by hand | `as built`, `dirty rework` |
-| center | `CAD/KiCad/center/` | 1, on the bar | 105 x 135.5 | 6 | in service | `harness` |
-| female static | `CAD/KiCad/female static/` | 3, one at each female's joint | 50 x 110 | 3 | in service | `harness` |
-| female base | `CAD/KiCad/female base/` | 3, one inside each female | 50 x 80 | 6 | in service | `harness` |
-| male static | `CAD/KiCad/male static/` | 2, one inside each male | 50 x 90 | 11 | in service | `harness` |
-| colloquy control v2 | `CAD/KiCad/electronic box v2/colloquy-control-v2/` | 1, would replace the electronic box | 210 x 297 (A4) | 132 | **being designed; not committed** | `next pcb`, and the project's own `README.md` |
+| electronic box | `CAD/KiCad/old-reference/electronic box/` | 1, in the rack | 210 x 297 (A4) | 46 | in service, reworked by hand | `as built`, `dirty rework` |
+| center | `CAD/KiCad/old-reference/center/` | 1, on the bar | 105 x 135.5 | 6 | in service | `harness` |
+| female static | `CAD/KiCad/old-reference/female static/` | 3, one at each female's joint | 50 x 110 | 3 | in service | `harness` |
+| female base | `CAD/KiCad/old-reference/female base/` | 3, one inside each female | 50 x 80 | 6 | in service | `harness` |
+| male static | `CAD/KiCad/old-reference/male static/` | 2, one inside each male | 50 x 90 | 11 | in service | `harness` |
+| colloquy control v2 | `CAD/KiCad/proposed-solutions/electronic box v2/colloquy-control-v2/` | 1, would replace the electronic box | 210 x 297 (A4) | 132 | **being designed; not committed** | `next pcb`, and the project's own `README.md` |
 | TPA2005D1 breakout | `CAD/Eagle/Mono Audio Amp (TPA2005D1) v10/` | 5, plugged onto the electronic box | 20.3 x 20.3 | 25 | third-party (SparkFun), in service | this document |
 
 Every board is **two copper layers on 1.6 mm FR-4**. The five KiCad
@@ -235,7 +235,7 @@ of them, and its footprint is on that board.
 The **S** pin is the amplifier's shutdown. On the electronic box it is
 tied permanently to +5 V, so no amplifier can be muted from software
 (`as built` section 4). The TPA2005D1 runs from 2.5 to 5.5 V (its
-datasheet, `CAD/KiCad/TPA2005D1_datasheet.pdf`), which is one reason
+datasheet, `CAD/KiCad/provided-elements/datasheets/TPA2005D1_datasheet.pdf`), which is one reason
 `next pcb` section 5 treats the amplifier rail as open.
 
 Files: the Eagle `.brd` and `.sch`, and a `.kicad_pro` from a KiCad

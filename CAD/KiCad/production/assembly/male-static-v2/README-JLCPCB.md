@@ -25,7 +25,7 @@ exact part is specified, but this does not settle amplifier transient tests.
 Existing module-fit, connector-keying and enclosure checks still apply.
 This file supersedes older bare-board/hand-SMD advice in reference documents.
 
-Source: CAD/KiCad/male static v2/male-static-v2.kicad_pcb
+Source: CAD/KiCad/proposed-solutions/male static v2/male-static-v2.kicad_pcb
 Source SHA256 (LF normalized): 54679c0808152b8f7bb86007bfc54a492216110ab05349565d3c06a81fd68858
 KiCad: 9.0.7. DRC: zero errors and zero unconnected items.
 JLCPCB formats: https://jlcpcb.com/help/article/how-to-generate-bom-and-centroid-files-from-kicad-8

@@ -240,7 +240,7 @@ https://jlcpcb.com/help/article/pick-place-file-for-pcb-assembly
             '`BOM.csv` and `CPL.csv` separately as directed by `README-JLCPCB.md`.\n\n'
             'Regenerate with KiCad Python and `export_jlcpcb.py` at the repository root.\n').encode("utf-8"))
         # Keep the shields' existing ZIP checksum index accurate, preserving its other entries.
-        index_path = KICAD / "shields/MANUFACTURING.json"
+        index_path = KICAD / "proposed-solutions/shields/MANUFACTURING.json"
         index = json.loads(index_path.read_text())
         for recorded in index:
             if recorded["project"] == entry["id"]:
@@ -267,10 +267,12 @@ def main():
             build(entry, catalog)
     if not args.only:
         # A directly shareable copy of the same collection served on the home page.
-        with zipfile.ZipFile(OUTPUT / "colloquy-production.zip", "w", zipfile.ZIP_STORED) as archive:
+        collection = io.BytesIO()
+        with zipfile.ZipFile(collection, "w", zipfile.ZIP_STORED) as archive:
             for entry in boards:
                 name = f'{entry["id"]}-manufacturing.zip'
                 archive.write(OUTPUT / entry["id"] / name, name)
+        write_file(OUTPUT / "colloquy-production.zip", collection.getvalue())
     subprocess.run([sys.executable, str(ROOT / "export_pcb_web.py"), "--kicad-cli", str(CLI)], check=True)
 
 

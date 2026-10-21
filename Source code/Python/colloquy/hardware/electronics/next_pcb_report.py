@@ -8,7 +8,7 @@ documents are separate from each other - one of these files says what the
 board *is* and this one says how to look at it, and mixing them means
 every change to a table's layout touches the design.
 
-Both outputs are generated into `CAD/KiCad/electronic box v2/` by
+Both outputs are generated into `CAD/KiCad/proposed-solutions/electronic box v2/` by
 `next_pcb.py` at the repo root, and both say so at the top: a generated
 file that does not announce itself gets edited by hand exactly once.
 """
@@ -302,7 +302,7 @@ def mechanical_markdown():
         "",
         _GENERATED,
         "",
-        "Read out of `CAD/KiCad/electronic box/electronic box.kicad_pcb`, not",
+        "Read out of `CAD/KiCad/old-reference/electronic box/electronic box.kicad_pcb`, not",
         "remembered. The enclosure was cut for that board; a replacement that",
         "is a millimetre out in section 1 does not go in the rack.",
         "",

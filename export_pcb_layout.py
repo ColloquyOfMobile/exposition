@@ -53,7 +53,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-BOARD = Path("CAD/KiCad/electronic box/electronic box.kicad_pcb")
+BOARD = Path("CAD/KiCad/old-reference/electronic box/electronic box.kicad_pcb")
 FOLDER = Path("Source code/Python/colloquy/server2/static/hardware")
 
 # Where KiCad puts kicad-cli on a Windows install, newest first. `which`

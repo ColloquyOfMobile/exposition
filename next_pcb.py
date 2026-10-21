@@ -5,7 +5,7 @@
 
     py next_pcb.py
 
-Writes into `CAD/KiCad/electronic box v2/`. The design itself is
+Writes into `CAD/KiCad/proposed-solutions/electronic box v2/`. The design itself is
 `Source code/Python/colloquy/hardware/electronics/next_pcb.py`; this only
 puts it on disk, in the folder the KiCad project will live in, so that the
 wiring sits beside the drawing rather than inside a Python package nobody

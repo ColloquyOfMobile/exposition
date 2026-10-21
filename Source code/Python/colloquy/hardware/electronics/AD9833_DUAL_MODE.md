@@ -374,7 +374,7 @@ this per band).
 ## 3. The rack board
 
 Start from the v2 KiCad project
-(`CAD/KiCad/electronic box v2/colloquy-control-v2/`, not yet committed on
+(`CAD/KiCad/proposed-solutions/electronic box v2/colloquy-control-v2/`, not yet committed on
 2026-09-30), which is `next pcb` drawn out in full. Three changes.
 
 ### 3a. Five voice channels replace the five filters

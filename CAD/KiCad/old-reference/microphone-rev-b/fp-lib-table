@@ -1,0 +1,1 @@
+(fp_lib_table (version 7) (lib (name "Shields") (type "KiCad") (uri "${KIPRJMOD}/../../proposed-solutions/shields/Shields.pretty") (options "") (descr "Local SHIELDS footprints")))

@@ -9,7 +9,7 @@ Writes `shields-configurations.svg` under `Source code/Python/colloquy/
 server2/static/hardware/`, which `SHIELDS.md` and `main pcb >
 configuration` show. The drawing itself is
 `colloquy/hardware/electronics/shields_diagram.py`; re-run this after any
-change to a board under `CAD/KiCad/shields/` or to the slots in
+change to a board under `CAD/KiCad/proposed-solutions/shields/` or to the slots in
 `main_pcb/configuration/table.py`.
 
 **Nothing here imports the `colloquy` package**, because importing it

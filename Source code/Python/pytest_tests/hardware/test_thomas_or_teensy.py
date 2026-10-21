@@ -24,7 +24,7 @@ from colloquy.hardware.electronics import ThomasOrTeensy
 from colloquy.hardware.electronics.harness import KICAD
 
 DOCUMENT = ThomasOrTeensy.folder / ThomasOrTeensy.file_name
-CIRCUIT = KICAD / "electronic box v2" / "colloquy-control-v2" / "circuit.json"
+CIRCUIT = KICAD / "proposed-solutions/electronic box v2" / "colloquy-control-v2" / "circuit.json"
 SKETCH = (
     KICAD.parents[1]
     / "Source code"

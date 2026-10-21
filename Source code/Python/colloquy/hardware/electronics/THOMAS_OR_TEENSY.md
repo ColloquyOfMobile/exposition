@@ -13,7 +13,7 @@ part that has an SMD version is SMD so the assembler places it.
 Written 2026-10-01. It is a solution beside `next pcb`, `one board per
 body`, `opencm and pro minis` and `ad9833 dual mode`, and it is built on
 two of them: Thomas mode **is** `next pcb` as the v2 project
-(`CAD/KiCad/electronic box v2/colloquy-control-v2/`) drew and routed it,
+(`CAD/KiCad/proposed-solutions/electronic box v2/colloquy-control-v2/`) drew and routed it,
 and Teensy mode is the Teensy column of `sound options` made into a
 circuit. Read those for anything this does not repeat. It does not
 include the AD9833: `sound options` already says why the hearing side

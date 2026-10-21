@@ -1,0 +1,11 @@
+﻿reference,value,footprint,reason
+H2,M5 SLOT 12x5.5 / TRANSVERSE,Flex_M5_Slot12x5.5_Keepout,"Through-hole, plug-in module or mechanical item; hand fit"
+J1,GND / +5V / OUT,JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical,"Through-hole, plug-in module or mechanical item; hand fit"
+J2,LEFT / DOWNWARD MODULE,Flex_Socket_Left_Overhang,"Through-hole, plug-in module or mechanical item; hand fit"
+TP1,MICOUT,TestPin_1x01_P2.54mm,"Through-hole, plug-in module or mechanical item; hand fit"
+H1,M5 SLOT 12x5.5 / TRANSVERSE,Flex_M5_Slot12x5.5_Keepout,"Through-hole, plug-in module or mechanical item; hand fit"
+JP2,AR SELECT / HEADER + SHUNT,Flex_AR_Selector,"Through-hole, plug-in module or mechanical item; hand fit"
+J3,RIGHT / DOWNWARD MODULE,Flex_Socket_Right_Overhang,"Through-hole, plug-in module or mechanical item; hand fit"
+JP1,GAIN SELECT / HEADER + SHUNT,Flex_Gain_Selector,"Through-hole, plug-in module or mechanical item; hand fit"
+M1,UP / ONE MODULE ONLY,Flex_Socket_Up,"Through-hole, plug-in module or mechanical item; hand fit"
+TP2,GND,TestPin_1x01_P2.54mm,"Through-hole, plug-in module or mechanical item; hand fit"
