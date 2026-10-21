@@ -1,95 +1,69 @@
-# Backplane: continuous-wire reading copy
+# Backplane connection blocks
 
-Open `backplane-wired.kicad_sch` in KiCad. Read `backplane-wired.pdf` for
-bookmarked sections, or `backplane-wired-master.pdf` for one uninterrupted
-sheet. The PDF has a guide, five channel views, and four lower-section views.
-The original `../backplane.kicad_sch`, its child sheets and PCB are unchanged.
+Open `backplane-wired.kicad_sch` in KiCad or `backplane-wired.pdf` for a
+single, continuous vector drawing. The master PDF contains the same sheet.
+This replaces the earlier contact-by-contact drawing.
 
-**There are no added, removed or changed electronic or mechanical parts.**
-The comparison baseline is the current original backplane schematic in this
-directory, not an older installation board or another revision.
+The broad arrangement follows the PCB's top view: U2D2 at upper left,
+Arduino/Teensy controller above centre, power entry at upper right, five
+voice-card sockets across the middle, and the analyser carrier below them.
+The four D-subs occupy the left, right and lower edges. Signal-conditioning
+parts stay near their associated functions. This is a logical schematic,
+not a physical pin-position or assembly drawing.
 
-All 94 nets are real, continuous wires. There are no local, global or
-hierarchical net labels making hidden connections. Blue names are ordinary
-text. Dots mean joined wires; crossings without dots are separate.
+## Blocks and signal names
 
-## Drawing changes: why, and necessary?
+- **U2D2 / Dynamixel:** M1 is the original U2D2 mounting representation;
+  it has no electrical PCB pads. J7 is the existing servo-bus connector.
+  The USB host lead is identified as external, without inventing PCB nets.
+- **Arduino Mega / Teensy adapter:** A1 is one complete Mega-pattern
+  connection block. A Teensy uses this interface through its existing
+  adapter. Actual backplane pin numbers and signal functions are retained.
+- **Audio analysers:** JA1 is one complete 21-contact carrier socket,
+  showing the five microphone inputs, five analyser outputs, shared
+  reset/strobe, supply and returns. Module internals remain off-board.
+- **Voices:** JV1-JV5 are complete socket symbols, each identified with its
+  mobile and its tone, audio, power and return connections. Original loads,
+  series resistors, return jumpers and activity indicators are retained.
+- **D-subs:** J1, J5, A-J3 and B-J4 use KiCad's stock
+  `Connector:DA15_Pins_MountingHoles`, including the original grounded
+  shield contact 0. Their standard artwork and pin numbering are unmodified.
 
-| Change | Why? | Necessary? |
+All electrical connections are actual wires. Blue captions and block titles
+are plain text and create no hidden connections. Dots join wires;
+crossings without dots remain separate. AGND and GND remain separate nets
+connected by the original JP1. Unused controller contacts carry NC crosses.
+
+## Changes and necessity
+
+| Drawing change | Why? | Necessary? |
 |---|---|---|
-| Wires replace electrical labels | Follow connections directly | Yes, for this requested version |
-| Five repeated channel sections | Read one mobile's signal paths together | Readability only |
-| Connector contacts shown as separate symbol units | Keep pin numbers close to their wires and avoid a large tangle | Readability only; repeated references are the same physical connector |
-| Logical contact positions, short reference captions and simplified pin-name display | Make the circuit easier to follow while retaining real pin numbers | Readability only; not a connector mating-face or assembly drawing |
-| Plain-text signal captions, junction dots, unused-pin crosses | Identify functions, joined wires and intentional unused contacts | Documentation/checking only; no added parts |
-| A single tall master sheet and cropped PDF reading pages | Preserve uninterrupted electrical wiring while allowing useful viewing sizes | Presentation only; shared rails continue across PDF crops |
+| One controller, one analyser and five voice socket blocks | Recognize complete interfaces and follow the PCB arrangement | Requested readability change only |
+| Standard complete D-sub symbols | Recognize the harness connectors and their real pin numbers | Requested; no physical connector change |
+| Four D-sub pin/function keys in the clear centre | Read every signal name without crowding the wires | Plain-text reference only |
+| Orthogonal continuous wires and explicit signal captions | Follow connections visually | Requested; no added circuitry |
+| Forty test points omitted from this copy | Remove diagnostic clutter | Requested; test points remain on the PCB and original schematic |
+| Component positions and logical controller pin grouping | Give wires space and keep functions together | Presentation only |
 
-Shared vertical rails, from left to right, are GND, AGND, +5V, MEGA_5V,
-+12V, dxl_data, analyser/strobe, analyser/reset and amp shutdown. Some
-control nets need only a local row; empty rail positions are not connections.
-Supply contacts are grouped under their actual supply wire in the lower section.
+No physical components, values, footprints, PCB routes or manufacturing
+files are changed by this schematic revision. The reading copy contains
+97 of the original 137 components; only the 40 `TP*` references are omitted.
+The original component-purpose notes remain in [COMPONENT_NOTES.md](COMPONENT_NOTES.md).
 
-## Existing components that can look like additions
+## Regeneration and validation
 
-Every reference below is already in the original. The purposes are inferred
-from their existing connections and values. “Optional” describes their role,
-not a validated recommendation to depopulate the existing PCB. This task
-does not redesign or prove which parts can safely be removed.
+Run `build_wired_schematic.py` with KiCad Python, then
+`verify_wired_schematic.py`. Run `export_wired_pdf.py` with Python containing
+`pypdf`. Existing wire routes are reused only after checking all symbol and
+pin positions, nets and blocked areas. `--reroute` forces routing from scratch;
+`--reuse-wires` refuses any layout mismatch during artwork-only adjustments.
 
-| Original elements | Why are they there? | Necessary? |
-|---|---|---|
-| A1 | Mega-pattern controller connection, including direct microphone contacts D26-D30 | Required for the existing controller interface |
-| J2, J6 | Existing +5V input and screw-bridge distribution | A supply path is required; these particular connector choices belong to the original design |
-| J7 | Ground, +12V and Dynamixel data interface | Required for that existing interface |
-| J5, J1, A-J3, B-J4 | Carry the mobile harness signals and supplies | Required for the present harness pinout |
-| JA1 | Analyser carrier socket | Required when using the analyser carrier |
-| JV1-JV5 | Tone input, audio output, ground and power for voice cards | Required when using those voice cards |
-| C1 (470uF), C2 (100nF) | Bulk and high-frequency bypass between +5V and GND | Supply conditioning retained from the original; removal needs a separate supply review |
-| JP1 (0R) | The existing explicit AGND-to-GND connection | Required to preserve the present ground topology; AGND and GND remain distinct nets joined through this part |
-| JP2-JP6 (0R) | Connect each harness audio return to AGND | Required for the existing audio-return path |
-| R103, R203, R303, R403, R503 (100R) | Series resistance from voice filter output to harness line output | Part of the existing audio interface; no removal assessment performed |
-| RL1-RL5 (100K) | Load/pulldown from filter output to AGND | Retain the existing output bias/load; actual need depends on the connected voice circuit |
-| RN1-RN7 (330R) | Series resistance on mobile and bar NeoPixel data | Existing signal conditioning; retain pending any separate signal-integrity review |
-| RND1-RND7 (100K) | Pull the driven NeoPixel data nodes to GND | Establish a low level when the controller does not drive; normal steady-state operation alone does not show whether they can be omitted |
-| RA1, RA2 (330R) | Series resistance on the two auxiliary outputs | Existing output conditioning; requirement depends on the attached load |
-| RP1-RP11 (10K provisional) | Photosensor load to AGND | Needed by the intended sensor readout; 10K is explicitly provisional and needs hardware confirmation |
-| RS1 (10K) | Pull amp-shutdown control toward MEGA_5V | Defines the control node when undriven; enabled/disabled behavior depends on the receiving circuitry |
-| RM1-RM5 (4K7) | Series resistance in the direct microphone branches to A1 | Part of the existing direct-input interface; this drawing makes no voltage-compatibility or protection guarantee |
-| RMD1-RMD5 (1M) | Weak direct-microphone-input pull to AGND | Defines that node when its source is absent; requirement depends on the attached input and microphone |
-| RLT1-RLT5 (1K5), DT1-DT5 (yellow LEDs) | Tone activity indication | Indicator function is optional; current-limiting resistors are required if their LEDs are fitted |
-| RLP5 (2K2), DP5; RLP12 (4K7), DP12; RLPUSB (2K2), DPUSB (green LEDs) | +5V, +12V and MEGA_5V presence indications | Indicator function is optional; each fitted LED needs its series resistor |
-| TP1-TP5, TPL1-TPL5 | Access to filter outputs (including existing duplicate probe access) | Optional for operation; useful for testing |
-| TPM1-TPM5, TPD1-TPD5, TPA1-TPA5, TPV1-TPV5 | Access to raw/direct microphone, analyser and tone signals | Optional for operation; useful for testing |
-| TP20, TP21, TP30 | Access to analyser strobe/reset and shutdown | Optional for operation; useful for testing |
-| TP31-TP34, TPUSB, TPVG, TPEG | Supply and ground probe access | Optional for operation; useful for testing |
-| Extra1, Extra2, Extra3 | Break out existing spare harness contacts | Optional unless those spare connections are used; spares stay electrically separate |
-| M1 | U2D2 mounting representation, with no electrical pins in this schematic | Needed for the existing mechanical arrangement, not a newly added circuit |
-| HV1-HV5, HA1, HA2 | Voice/analyser card mounting and retention | Mechanical function; not part of signal connectivity |
-| #FLG1 | Original GND supply declaration for KiCad ERC | Checking symbol only; no physical part or new ground connection |
-
-The voice and analyser circuits remain represented by their original socket
-interfaces. Their internal components are not newly inserted into the backplane.
-
-## Validation and regeneration
-
-Run from the repository root:
-
-```powershell
-& 'C:/Program Files/KiCad/9.0/bin/python.exe' 'CAD/KiCad/proposed-solutions/shields/backplane/build_wired_schematic.py'
-& 'C:/Program Files/KiCad/9.0/bin/python.exe' 'CAD/KiCad/proposed-solutions/shields/backplane/verify_wired_schematic.py'
-# Use a Python with pypdf and reportlab for the PDF export:
-& '<document-python>' 'CAD/KiCad/proposed-solutions/shields/backplane/export_wired_pdf.py'
-```
-
-The verifier independently exports both KiCad netlists, compares component
-references/values/footprints and all connected-pin groups, compares against
-`circuit.json` and PCB pads, checks unused pins and absence of electrical
-labels, and runs native KiCad ERC. Result: **137 components, 366 connected
-pins, 94 nets, zero ERC violations**. See `validation.json` and `erc.json`.
-KiCad also prints the original annotation warning for the pre-existing
-reference naming; the exported graph and ERC checks still pass.
-
-The PDF exporter normalizes KiCad 9's exponent-form numeric tokens for large
-page backgrounds into valid PDF decimal numbers, then crops reading pages
-without changing the drawing. All ten pages were rendered and visually checked.
-Drawing equivalence does not establish physical connector fit or hardware behavior.
+The verifier independently exports both native KiCad netlists, removes only
+the explicitly omitted test-point nodes from the baseline, and compares all
+remaining connected-pin groups, component values, footprints, unused pins,
+the circuit manifest and PCB pads. It also checks for absence of electrical
+net labels and runs native ERC. `validation.json` records the result and hashes.
+The 97 retained components, 326 connected pins and all 94 nets match the
+baseline after the requested test-point omission. ERC has zero violations.
+The stock D-sub artwork and single-instance interface blocks are also checked.
+Drawing equivalence does not establish physical hardware behavior.
