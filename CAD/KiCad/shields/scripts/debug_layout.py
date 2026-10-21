@@ -20,6 +20,7 @@ def positions(name):
                         f'TPD{i}':(98.3+(i-1)*10.16,322,0),f'TPA{i}':(100.84+(i-1)*10.16,322,0)})
         for i,ref in enumerate(['P5','P12','PUSB']):
             out[f'D{ref}']=(210+i*7,84,0);out[f'RL{ref}']=(210+i*7,87,0)
+        out['TPL3']=(141,206,0)  # Keep the original 8 mm enclosure hole clear.
         return out
     if name=='teensy-adapter':return {'TP0':(157.1,59.54,0),'TPV':(181,55,0),'TPI':(183.54,55,0),'TPG':(186.08,55,0)}
     if name.startswith('voice'):return {'TP4':(65,89,0),'TP5':(67.54,89,0),

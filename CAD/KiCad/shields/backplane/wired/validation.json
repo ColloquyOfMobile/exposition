@@ -11,7 +11,7 @@
   "erc_types": [],
   "sha256": {
     "circuit.json": "eefecf9dbcd249a62ab979f01eef6bc8c588ef3a76c8661039e2fa5b67d2bba6",
-    "backplane.kicad_pcb": "dfa82eff00736b68b1a14105f3119caa8dfe3119569cae0a3e01c3b76ab41c4d",
+    "backplane.kicad_pcb": "54ff123a142e6068da48811c72f2a6033857df0eb75a69a95bf0c8b10264e23a",
     "wired\\backplane-wired.kicad_sch": "b27e942bf55b7bfa66ab5abe39eb03616d2b123682053487d674c3a1f5428e03",
     "audio1.kicad_sch": "c69c5a82c5df1ddf24e5c179f8f9da0e8265611660ef7123ea0b52a0b5284e53",
     "audio2.kicad_sch": "c72c00363ad4faaefab403c5fb4b406b05cb0f93eb06151149a021f17552dde2",

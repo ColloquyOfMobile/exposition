@@ -76,3 +76,14 @@ module-to-carrier leads remain. Each module requires removal of its left-input
 male headers (since 2026-10-19: R3 and R instead, above). Read
 analyser-carrier/README.md before assembly. Socket positions
 are photo-derived; check all contacts against the updated 1:1 template.
+
+## Restored enclosure mounts — 2026-10-21
+
+The backplane now retains the four original 8 mm enclosure cutouts recovered
+from `CAD/KiCad/archive1/electronic box/`. Their centres are measured from the
+outside board envelope, preserving the original pattern exactly. TPL3 moved
+locally and affected tracks were rerouted to clear the centre and left holes.
+See [the dimensions and transfer notes](backplane/ENCLOSURE_MOUNTING.md) and
+[the mounting layout](backplane/enclosure-mounting-layout.svg).
+After regenerating a staging board, run `scripts/restore_enclosure_holes.py`
+before routing; rerun DRC and export fabrication files after any layout edit.

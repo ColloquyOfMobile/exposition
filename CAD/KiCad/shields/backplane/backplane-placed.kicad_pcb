@@ -6711,7 +6711,7 @@
 	(footprint "Shields:TestPin_1x01_P2.54mm"
 		(layer "F.Cu")
 		(uuid "483ba356-3cfa-43af-a266-63e6e7359daf")
-		(at 146.04 202)
+		(at 141 206)
 		(descr "Through hole straight pin header, 1x01, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x01 2.54mm single row")
 		(property "Reference" "TPL3"
@@ -23902,6 +23902,28 @@
 		(layer "Edge.Cuts")
 		(uuid "0f400bb6-3774-47ca-a3a5-0f54eb072d0e")
 	)
+	(gr_circle
+		(center 149 72.16)
+		(end 153 72.16)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "Edge.Cuts")
+		(uuid "30b19ed5-909f-4839-b4ac-4dbb300b86ca")
+	)
+	(gr_circle
+		(center 234 202.16)
+		(end 238 202.16)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "Edge.Cuts")
+		(uuid "41839901-20f5-42c4-9b23-1be41ade5d2c")
+	)
 	(gr_arc
 		(start 254 344.16)
 		(mid 252.535534 347.695534)
@@ -23935,6 +23957,17 @@
 		(layer "Edge.Cuts")
 		(uuid "9293d419-5bc1-4a18-b002-2074b77be782")
 	)
+	(gr_circle
+		(center 64 202.16)
+		(end 68 202.16)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "Edge.Cuts")
+		(uuid "c970b19e-5283-4dc5-94af-99026ecbbc83")
+	)
 	(gr_line
 		(start 49 349.16)
 		(end 249 349.16)
@@ -23954,6 +23987,17 @@
 		)
 		(layer "Edge.Cuts")
 		(uuid "ee74355a-93ad-43f0-b9ef-8016088463aa")
+	)
+	(gr_circle
+		(center 149 202.16)
+		(end 153 202.16)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "Edge.Cuts")
+		(uuid "f7ff2833-8dd7-49b6-a4b6-a826a99dd2b2")
 	)
 	(gr_text "USB"
 		(at 221.16 89.5 0)
@@ -24671,7 +24715,7 @@
 		)
 	)
 	(gr_text "T = TONE / L = LINE"
-		(at 151 199 0)
+		(at 145 187.8 0)
 		(layer "F.SilkS")
 		(uuid "9f119a8e-2794-4b35-abbe-fb5b83e9a55e")
 		(effects
@@ -24748,7 +24792,7 @@
 		)
 	)
 	(gr_text "L3"
-		(at 146.04 205.5 0)
+		(at 141 209.5 0)
 		(layer "F.SilkS")
 		(uuid "af5caadc-c525-477b-a04a-0080ad82128b")
 		(effects

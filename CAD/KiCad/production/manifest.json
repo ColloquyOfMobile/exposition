@@ -16,8 +16,8 @@
         "shields/backplane/bom.csv",
         "shields/backplane/positions.csv"
       ],
-      "source sha256": "ecc01205be4ff3fba7f385bc9f2744d947bda580f11cb73eeff2f0d3731a2723",
-      "exported at": "2026-10-11T21:15:10",
+      "source sha256": "4d6d9193a190410fd24dc67c5d8170e5c112bde7662c5c2f7ee7b467aecef25d",
+      "exported at": "2026-10-21T10:36:14",
       "exported with": "KiCad 9.0.7",
       "copper layers": 4,
       "size mm": [

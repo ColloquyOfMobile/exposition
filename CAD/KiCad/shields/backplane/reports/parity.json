@@ -7,7 +7,7 @@
   "drc_violations": 0,
   "unconnected_items": 0,
   "copper_layers": 4,
-  "tracks_and_vias": 1541,
+  "tracks_and_vias": 1758,
   "sha256": {
     "audio1.kicad_sch": "c69c5a82c5df1ddf24e5c179f8f9da0e8265611660ef7123ea0b52a0b5284e53",
     "audio2.kicad_sch": "c72c00363ad4faaefab403c5fb4b406b05cb0f93eb06151149a021f17552dde2",
@@ -15,7 +15,7 @@
     "audio4.kicad_sch": "4c596fc6b47c2cb9276c46f95426a2c2ceda1a4ec827b80a4fa4aadeb314eba7",
     "audio5.kicad_sch": "e06b983907dcfb340cdc47eaf38e6b0ccd2c02e25a25966d0b17be0fd447fe0a",
     "backplane.kicad_dru": "ee5385e928a86c74451de847b28148e46ac6b595f4c8c3acc3862596db4d6d28",
-    "backplane.kicad_pcb": "dfa82eff00736b68b1a14105f3119caa8dfe3119569cae0a3e01c3b76ab41c4d",
+    "backplane.kicad_pcb": "54ff123a142e6068da48811c72f2a6033857df0eb75a69a95bf0c8b10264e23a",
     "backplane.kicad_pro": "6f519c2e7ffb82f3fb1a18ba031c956a7592bc70de502d5043781dfa3fe11011",
     "backplane.kicad_sch": "79a98550441fab0a2d9d63f21aa3a09fdde4ba46317a3f0eeb3c2cffa4c7717b",
     "controller.kicad_sch": "df6e896b701cd810f76f2433b6d22cad3bca784c2cdee62f692707985ac95a32",

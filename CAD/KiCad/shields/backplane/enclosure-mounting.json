@@ -1,0 +1,123 @@
+{
+  "source": "archive1\\electronic box\\electronic box.kicad_pcb",
+  "source_sha256": "6254f5946a1e1c987e079de7eebc6a8595b57eb3c103a0b8f7051d4061be2bcf",
+  "original_outline_bounds_mm": [
+    0.0,
+    0.0,
+    210.0,
+    297.0
+  ],
+  "diameter_mm": 8,
+  "original_centers_mm": [
+    [
+      20.0,
+      150.0
+    ],
+    [
+      105.0,
+      20.0
+    ],
+    [
+      105.0,
+      150.0
+    ],
+    [
+      190.0,
+      150.0
+    ]
+  ],
+  "targets": {
+    "backplane.kicad_pcb": {
+      "outline_bounds_mm": [
+        44.0,
+        52.16,
+        254.0,
+        349.16
+      ],
+      "translation_mm": [
+        44.0,
+        52.16
+      ],
+      "centers_mm": [
+        [
+          64.0,
+          202.16
+        ],
+        [
+          149.0,
+          72.16
+        ],
+        [
+          149.0,
+          202.16
+        ],
+        [
+          234.0,
+          202.16
+        ]
+      ],
+      "relocated_test_point": {
+        "reference": "TPL3",
+        "center_mm": [
+          141,
+          206
+        ],
+        "reason": "Previous probe pad overlapped the centre enclosure hole"
+      },
+      "fabrication": "Four diameter-8 mm routed circular cutouts on Edge.Cuts",
+      "sha256": "54ff123a142e6068da48811c72f2a6033857df0eb75a69a95bf0c8b10264e23a"
+    },
+    "backplane-placed.kicad_pcb": {
+      "outline_bounds_mm": [
+        44.0,
+        52.16,
+        254.0,
+        349.16
+      ],
+      "translation_mm": [
+        44.0,
+        52.16
+      ],
+      "centers_mm": [
+        [
+          64.0,
+          202.16
+        ],
+        [
+          149.0,
+          72.16
+        ],
+        [
+          149.0,
+          202.16
+        ],
+        [
+          234.0,
+          202.16
+        ]
+      ],
+      "relocated_test_point": {
+        "reference": "TPL3",
+        "center_mm": [
+          141,
+          206
+        ],
+        "reason": "Previous probe pad overlapped the centre enclosure hole"
+      },
+      "fabrication": "Four diameter-8 mm routed circular cutouts on Edge.Cuts",
+      "sha256": "35efc5a2e2bc8e62398a4fb1c92d515578abe51058948a88fffd70e15b558f76"
+    }
+  },
+  "validation": {
+    "drc_violations": 0,
+    "unconnected_items": 0,
+    "unchanged_electrical_pad_assignments": true,
+    "only_relocated_pad": [
+      "TPL3",
+      "1"
+    ],
+    "all_other_pad_coordinates_unchanged": true,
+    "servo_12v_width_mm": 2,
+    "servo_12v_outer_layers_only": true
+  }
+}

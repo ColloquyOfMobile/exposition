@@ -235,3 +235,10 @@ assembly transforms and scene edits; the adapter STEP/GLB exports are refreshed.
 Imported Arduino, Teensy and KiCad component geometry retains its original
 licensing and attribution; see the linked reference-project notes and their
 retained source/license files.
+
+The 2026-10-21 backplane enclosure-mount update is recorded separately in
+[backplane-mounting-validation.json](backplane-mounting-validation.json).
+It supersedes the backplane and assembly-file hashes in earlier audits for
+this change only. The three saved assemblies were reopened and their backplane
+meshes compared against the new export; other board meshes and placements
+were preserved. See the [recovered mounting dimensions](../backplane/ENCLOSURE_MOUNTING.md).

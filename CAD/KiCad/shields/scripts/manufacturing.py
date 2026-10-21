@@ -66,7 +66,8 @@ def build(name):
         run(['pcb','export','svg','--layers',f'{side}.Fab,{side}.Silkscreen,Edge.Cuts',
              '--page-size-mode','2','--exclude-drawing-sheet','-o',assembly/f'{side}-assembly.svg',exported])
     shutil.copy2(folder/'bom.csv',assembly/'bom.csv')
-    for filename in ('README.md','mechanical.json','socket-assembly.csv','mounting-template.svg','variants.csv'):
+    for filename in ('README.md','mechanical.json','socket-assembly.csv','mounting-template.svg','variants.csv',
+                     'ENCLOSURE_MOUNTING.md','enclosure-mounting.json','enclosure-mounting-layout.svg'):
         if (folder/filename).exists():shutil.copy2(folder/filename,assembly/filename)
     if (folder/'variants').exists():shutil.copytree(folder/'variants',assembly/'variants')
     shutil.copy2(ROOT/'ASSEMBLY.md',assembly/'system-assembly.md')

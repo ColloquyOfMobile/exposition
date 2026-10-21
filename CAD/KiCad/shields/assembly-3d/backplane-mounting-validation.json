@@ -1,0 +1,25 @@
+{
+  "backplane_source_sha256": "54ff123a142e6068da48811c72f2a6033857df0eb75a69a95bf0c8b10264e23a",
+  "model_sha256": "4fc898cb1a0d67c8e5140b4895d25721eb1fb9a7bafdb14daac06bd7bd7e65ad",
+  "scope": "Backplane only; all other board geometry and placements preserved",
+  "files": {
+    "shield-configurations.blend": {
+      "sha256": "69bfa7538e0fc57160d05b85bac5964d829e8ea71097409726863287d05d825c",
+      "reopened": true,
+      "backplane_geometry_matches_export": true,
+      "other_meshes_and_placements_preserved": true
+    },
+    "mega-configuration.blend": {
+      "sha256": "21952808f1b71f9d1ae5d8a45825d9c340dee3aa13daf6d65a98f192a2468c1b",
+      "reopened": true,
+      "backplane_geometry_matches_export": true,
+      "other_meshes_and_placements_preserved": true
+    },
+    "teensy-configuration.blend": {
+      "sha256": "2b6fdb6cddb80d6ba16b953cac2da24af420b89165b4f0c7ce57546c85a5ee65",
+      "reopened": true,
+      "backplane_geometry_matches_export": true,
+      "other_meshes_and_placements_preserved": true
+    }
+  }
+}
