@@ -197,6 +197,83 @@ def test_slot_n_is_body_n_and_carries_v2s_nets():
         )
 
 
+# --- section 2e: the males' state lamps ------------------------------------
+
+BACKPLANE = KICAD / "proposed-solutions/shields/backplane/circuit.json"
+ADAPTER = KICAD / "proposed-solutions/shields/teensy-adapter/circuit.json"
+
+# Per male: its series resistor, its Mega pin, its B-J4 contact, and the
+# adapter's U4 output that drives the same net.
+LAMPS = {
+    "male1": ("RA1", "D24", "1", "3"),
+    "male2": ("RA2", "D25", "13", "6"),
+}
+
+
+def _board(path):
+    return {c["ref"]: c for c in json.loads(path.read_text(encoding="utf-8"))["components"]}
+
+
+def _on(board, net):
+    """Every (reference, pin) a net touches."""
+    return {
+        (ref, pin)
+        for ref, component in board.items()
+        for pin, connected in component["pins"].items()
+        if connected == net
+    }
+
+
+def test_ra_alone_is_in_series_with_each_lamp():
+    """`lamp_current()` assumes a driver, RA and the lamp, nothing else,
+    and both lamps on one port group or one U4."""
+    backplane, adapter = _board(BACKPLANE), _board(ADAPTER)
+    for body, (ref, pin, contact, output) in LAMPS.items():
+        assert backplane[ref]["value"] == f"{shields.LAMP_SERIES:.0f}R"
+        assert _on(backplane, f"{body}/aux driven") == {("A1", pin), (ref, "1")}
+        assert _on(backplane, f"{body}/aux") == {(ref, "2"), ("B-J4", contact)}
+        assert _on(adapter, f"{body}/aux driven") == {("JM1", pin), ("U4", output)}
+
+
+def test_the_lamp_table_is_the_computed_one():
+    _, rows = _table("Driven from")
+    drivers = [shields.MEGA_PIN, shields.TRANSLATOR]
+    assert len(rows) == len(drivers)
+    for row, driver in zip(rows, drivers):
+        current = shields.lamp_current(driver)
+        assert _numbers(row[1]) == [driver.high, round(driver.rated * 1000)], row
+        assert [_numbers(cell)[0] for cell in row[2:5]] == [
+            round(amps * 1000, 1) for amps in current
+        ], row
+        assert _numbers(row[5])[:2] == [
+            round(2 * current.highest * 1000), round(driver.shared * 1000)
+        ], row
+
+
+def test_every_corner_is_inside_every_rating():
+    least, most = shields.LAMP_RECOMMENDED
+    for driver in (shields.MEGA_PIN, shields.TRANSLATOR):
+        current = shields.lamp_current(driver)
+        assert least <= current.nominal <= most
+        assert current.highest <= min(driver.rated, most, shields.LAMP_ABSOLUTE)
+        assert 2 * current.highest <= driver.shared
+        assert current.lowest > 0
+
+
+def test_160_r_is_why_the_prose_says():
+    """330 R leaves the lamp short of its recommended current, 150 R takes
+    the translator past its guarantee, and 160 R is an E24 value."""
+    short = shields.lamp_current(shields.TRANSLATOR, 330.0)
+    over = shields.lamp_current(shields.TRANSLATOR, 150.0)
+    assert short.nominal < shields.LAMP_RECOMMENDED[0]
+    assert over.highest > shields.TRANSLATOR.rated
+    assert shields.e24(shields.LAMP_SERIES) == shields.LAMP_SERIES
+
+    flat = _flat()
+    assert f"330 R gives {round(short.nominal * 1000, 1)} mA" in flat
+    assert f"150 R reaches {round(over.highest * 1000, 1)} mA" in flat
+
+
 # --- section 3b: the Teensy adapter ----------------------------------------
 
 

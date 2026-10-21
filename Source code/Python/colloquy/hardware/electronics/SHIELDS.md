@@ -286,6 +286,7 @@ to `circuit.json` by its own test). The harness boards do not change.
 | **kept** | four DSUB-15s, `J2`, `J6`, `J7`, `Extra1`–`Extra3`, U2D2 mount `M1`, the Mega footprint `A1` (same place, **moved to the front**: 2b) | as v2 |
 | **kept** | NeoPixel series 330 R; photosensor loads 10 K provisional; line-out build-outs 100 R; amp-shutdown pull-up 10 K | `RN1`–`RN7`, `RP1`–`RP11`, `R103`–`R503`, `RS1` |
 | **kept** | one AGND–GND bond, one bond per body audio return; 470 µF bulk; test pads; mounting holes | `JP1`–`JP6` |
+| **changed** | aux series, to the males' state lamps: 330 R becomes 160 R (2e) | `RA1`, `RA2` |
 | **moved** to the voice cards, through-hole | the five passive filters | `R101`–`C502` |
 | **replaced** by Thomas's five DFRobot modules on the analyser carrier | the five MSGEQ7s and their networks | `U1`–`U5` and theirs |
 | **added** | analyser slot `JA1`: 2 × 11 header, 2.54 mm, last pin removed as key | THT |
@@ -341,8 +342,8 @@ today; keep it so.
 | `D15` | `male2/neopixel/driven` | `RN5` |
 | `D16` | `male1/bar neopixel/driven` | `RN6` |
 | `D17` | `male2/bar neopixel/driven` | `RN7` |
-| `D24` | `male1/aux driven` | |
-| `D25` | `male2/aux driven` | |
+| `D24` | `male1/aux driven` | `RA1`, male1's lamp (2e) |
+| `D25` | `male2/aux driven` | `RA2`, male2's lamp (2e) |
 | `D46` | `female2/tone` | to `JV2` |
 | `A0` | `female1/analyser out` | from `JA1` |
 | `A1` | `female2/analyser out` | from `JA1` |
@@ -431,6 +432,56 @@ One pinout for all five:
 identifies a body all the way round, as on every board so far. With
 Thomas cards fitted, the copper from tone pin to DSUB is v2's with two
 connector contacts in it.
+
+### 2e. The aux lines: the males' state lamps
+
+**Each aux line lights one of TJ's lamps**, the one his bar lit for the
+male with the higher drive, the male it would stop for. `D24` and `D25`
+(Teensy 30 and 31, through the adapter's `U4`) run through `RA1` / `RA2`
+and `B-J4` pins 1 and 13 to each male's `J10`: pin 2 the line, pin 1
+`GND`. The lamp is a Luckylight KWB-R8445W/1W, one white LED behind an
+84 x 45 mm diffuser, two leads, `+` to pin 2
+(`CAD/KiCad/provided-elements/datasheets/Backlight LED.pdf`). Nothing
+else is in series, so **`RA` alone sets its current**, and it is sized
+for the lamp: 160 R, where v2 has 330 R.
+
+| Driven from | Guaranteed high | Lowest | Nominal | Highest | Both lamps together |
+|---|---|---|---|---|---|
+| Mega `D24` / `D25` (`PA2` / `PA3`) | 4.2 V at 20 mA | 5.7 mA | 11.2 mA | 15.5 mA | 31 mA of the 200 mA ports J, G2 and A may source |
+| Teensy 30 / 31 through `U4`, an SN74LV4T125 on `VIN_USB` | 4.3 V at 16 mA | 5.6 mA | 11.2 mA | 15.5 mA | 31 mA of the 70 mA absolute through its `VCC` |
+
+- **Nominal**: 5.0 V, the 3.20 V the lamp's recommended current is
+  quoted at, 160 R: inside its recommended 10–20 mA.
+- **Highest**: the rail at 5.25 V, the least drop the lamp is allowed
+  (2.80 V), `RA` 1 % low, a driver with no resistance at all. Under the
+  translator's 16 mA, the Mega's 20 mA and the lamp's own 20 mA, and
+  allowed up to about 50 °C on its derating curve.
+- **Lowest**: the rail at 4.75 V, the most drop (3.60 V, given at
+  20 mA, more than it drops at a few), `RA` 1 % high, and the driver at
+  the most output resistance its guarantee allows (40 Ω for the Mega,
+  44 Ω for the translator). Lit but dimmer, and the real figure is
+  higher.
+
+**Why 160 R**: 330 R gives 5.5 mA nominal, half the lamp's
+recommended least; 150 R reaches 16.5 mA at the highest corner, over
+what the translator guarantees. 160 R is the E24 value that keeps every
+corner inside every rating.
+
+- **Active high, on or off.** A high lights the lamp, as TJ's
+  `digitalWrite(pin, I_hasPriority)` did; v2's driver (a BC557 per male)
+  was the other way round. Neither `D24` / `D25` nor Teensy 30 / 31 is
+  on a timer, so there is no dimming, and TJ never dimmed it.
+- **Dark until driven.** A Mega's pins are inputs from reset; the
+  adapter's 100 K pull-downs hold `U4`'s inputs low while the Teensy
+  boots, and with the Teensy absent `U4` is unpowered. The Teensy's
+  3.3 V clears the translator's 2 V threshold, as on every other
+  translated line.
+- **Nothing drives it yet**: firmware 4 never touches `D24` / `D25`.
+
+Sources are with the figures in `shields.py` (`lamp_current()`): the
+lamp's datasheet, Atmel-2549Q section 31, TI SCLS749C sections 6.1–6.5,
+USB 2.0 table 7-7 for the rail. The test recomputes the table and holds
+`RA1` / `RA2` and the lines' copper to it.
 
 ---
 

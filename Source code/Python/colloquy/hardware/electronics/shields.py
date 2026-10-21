@@ -308,3 +308,76 @@ LOGIC_HIGH: Final = 5.0
 
 def line_level_vpp(gain_db: float) -> float:
     return 4 / math.pi * LOGIC_HIGH * 10 ** (gain_db / 20)
+
+
+# --- The males' state lamps ------------------------------------------------
+#
+# Each aux line runs from the computing slot through RA1 / RA2 and B-J4 to
+# a male's J10 (pin 2; pin 1 is GND), where TJ's lamp plugs in: a
+# Luckylight KWB-R8445W/1W white backlight, one LED behind an 84 x 45 mm
+# diffuser (`CAD/KiCad/provided-elements/datasheets/Backlight LED.pdf`,
+# spec R8445 rev V.2, page 4). Nothing else is in series, so RA alone sets
+# its current.
+LAMP_DROP: Final = 3.20  # V, the forward voltage its recommended current is given at
+LAMP_DROP_RANGE: Final = (2.80, 3.60)  # V, least and most, at 20 mA
+LAMP_RECOMMENDED: Final = (10e-3, 20e-3)  # A
+LAMP_ABSOLUTE: Final = 25e-3  # A, at 25 C; derated above it (page 5)
+
+# RA1 and RA2: YAGEO RC0603FR-07160RL.
+LAMP_SERIES: Final = 160.0  # ohms
+LAMP_SERIES_TOLERANCE: Final = 0.01
+
+# Both drivers sit on a USB-class 5 V rail - the Mega on its own USB, the
+# translator on the Teensy's (`VIN_USB`) - which USB 2.0 (table 7-7) holds
+# between 4.75 V and 5.25 V.
+USB_LOWEST: Final = 4.75  # V
+USB_NOMINAL: Final = 5.0  # V
+USB_HIGHEST: Final = 5.25  # V
+
+
+class Driver(NamedTuple):
+    """What a lamp hangs off, by its datasheet."""
+
+    name: str
+    rated: float  # A, the most it sources with its high level guaranteed
+    high: float  # V, that guaranteed level, on a 5.0 V supply
+    absolute: float  # A, its absolute maximum per output
+    shared: float  # A, the most the outputs both lamps sit on may source together
+
+    def most_ohms(self) -> float:
+        """The most output resistance its guarantee allows: what it may
+        drop at its rated current, taken to drop in proportion below it."""
+        return (USB_NOMINAL - self.high) / self.rated
+
+
+# ATmega2560 (Atmel-2549Q-AVR-02/2014, section 31): VOH at least 4.2 V
+# sourcing 20 mA at VCC 5 V; 40 mA absolute per pin; note 4, ports J, G2
+# and A together at most 200 mA. D24 / D25 are PA2 / PA3, not on a timer
+# (`variants/mega/pins_arduino.h`, AVR core 1.8.8): on or off, no dimming.
+MEGA_PIN: Final = Driver("Mega D24 / D25", 20e-3, 4.2, 40e-3, 200e-3)
+
+# SN74LV4T125 (TI SCLS749C, June 2022): IOH up to 16 mA at VCC 5.0 V
+# (6.3), VOH at least 4.3 V there from -40 to 125 C (6.5); 35 mA absolute
+# per output, 70 mA through VCC or GND (6.1). Both lamps are on the
+# adapter's U4, Teensy pins 30 and 31, neither of which has a PWM unit
+# (`TEENSY41_TIMER`).
+TRANSLATOR: Final = Driver("SN74LV4T125", 16e-3, 4.3, 35e-3, 70e-3)
+
+
+class LampCurrent(NamedTuple):
+    """One lamp's current, in amps, at the corners of what varies."""
+
+    lowest: float  # rail at its bottom, the most drop, RA 1 % high, the driver at its weakest
+    nominal: float  # 5.0 V, the datasheet's 3.20 V, RA as marked, an ideal driver
+    highest: float  # rail at its top, the least drop, RA 1 % low, an ideal driver
+
+
+def lamp_current(driver: Driver, ohms: float = LAMP_SERIES) -> LampCurrent:
+    """The lowest corner takes the most drop the lamp is allowed at 20 mA,
+    more than it drops at a few: the real lowest is a little higher."""
+    least, most = LAMP_DROP_RANGE
+    return LampCurrent(
+        lowest=(USB_LOWEST - most) / (ohms * (1 + LAMP_SERIES_TOLERANCE) + driver.most_ohms()),
+        nominal=(USB_NOMINAL - LAMP_DROP) / ohms,
+        highest=(USB_HIGHEST - least) / (ohms * (1 - LAMP_SERIES_TOLERANCE)),
+    )
