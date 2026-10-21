@@ -24,7 +24,7 @@ does not redesign or prove which parts can safely be removed.
 | RL1-RL5 (100K) | Load/pulldown from filter output to AGND | Retain the existing output bias/load; actual need depends on the connected voice circuit |
 | RN1-RN7 (330R) | Series resistance on mobile and bar NeoPixel data | Existing signal conditioning; retain pending any separate signal-integrity review |
 | RND1-RND7 (100K) | Pull the driven NeoPixel data nodes to GND | Establish a low level when the controller does not drive; normal steady-state operation alone does not show whether they can be omitted |
-| RA1, RA2 (330R) | Series resistance on the two auxiliary outputs | Existing output conditioning; requirement depends on the attached load |
+| RA1, RA2 (160R) | Series resistance on the two auxiliary outputs, to the males' state lamps | Required if the lamps are fitted: the only thing setting their current (SHIELDS.md 2e); v2 had 330R |
 | RP1-RP11 (10K provisional) | Photosensor load to AGND | Needed by the intended sensor readout; 10K is explicitly provisional and needs hardware confirmation |
 | RS1 (10K) | Pull amp-shutdown control toward MEGA_5V | Defines the control node when undriven; enabled/disabled behavior depends on the receiving circuitry |
 | RM1-RM5 (4K7) | Series resistance in the direct microphone branches to A1 | Part of the existing direct-input interface; this drawing makes no voltage-compatibility or protection guarantee |

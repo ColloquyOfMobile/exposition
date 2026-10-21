@@ -88,6 +88,7 @@ def backplane():
         if ref.startswith('TP'): p['footprint']=TP
         if ref=='C2': p['footprint']=C
         if ref=='C1': p.update(footprint='Capacitor_SMD:CP_Elec_10x10.5',value='470uF 25V',mpn='EEE-FK1E471P')
+        if ref in ('RA1','RA2'): p['value']='160R'  # the state lamps' current, SHIELDS.md 2e; v2 has 330R
         if ref=='A1':p['footprint']='Shields:Mega_Front_Mirrored'
         d.parts[ref]=p
     for i,b in enumerate(BODY):

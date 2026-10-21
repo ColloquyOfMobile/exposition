@@ -1742,7 +1742,7 @@
     },
     {
       "ref": "RA1",
-      "value": "330R",
+      "value": "160R",
       "footprint": "Shields:R_0603_1608Metric",
       "description": "male1 aux conductor - state LED or mute",
       "pins": {
@@ -1767,7 +1767,7 @@
     },
     {
       "ref": "RA2",
-      "value": "330R",
+      "value": "160R",
       "footprint": "Shields:R_0603_1608Metric",
       "description": "male2 aux conductor - state LED or mute",
       "pins": {

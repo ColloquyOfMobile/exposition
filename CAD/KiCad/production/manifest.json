@@ -16,8 +16,8 @@
         "proposed-solutions/shields/backplane/bom.csv",
         "proposed-solutions/shields/backplane/positions.csv"
       ],
-      "source sha256": "4d6d9193a190410fd24dc67c5d8170e5c112bde7662c5c2f7ee7b467aecef25d",
-      "exported at": "2026-10-21T10:36:14",
+      "source sha256": "fa333803be6d82c61af4bf3f9c20d6895b927f60537890ae8d407c1a713dbf8a",
+      "exported at": "2026-10-21T21:14:31",
       "exported with": "KiCad 9.0.7",
       "copper layers": 4,
       "size mm": [

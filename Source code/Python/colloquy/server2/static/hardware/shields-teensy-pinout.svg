@@ -158,12 +158,12 @@
 <text x="1019" y="737" font-size="17" text-anchor="end" class="pin">30</text>
 <path d="M1040,730 H1420" fill="none" stroke="#6556a0" stroke-width="2" marker-end="url(#arrow)"/>
 <circle cx="1040" cy="730" r="4" fill="#6556a0"/>
-<text x="1230.0" y="721" font-size="17" text-anchor="middle" class="path" style="fill:#6556a0">3.3V → 5V translator · 330R series</text>
+<text x="1230.0" y="721" font-size="17" text-anchor="middle" class="path" style="fill:#6556a0">3.3V → 5V translator · 160R series</text>
 <text x="1440" y="776" font-size="17" text-anchor="start" class="signal" style="fill:#6556a0">male2/aux</text>
 <text x="1019" y="777" font-size="17" text-anchor="end" class="pin">31</text>
 <path d="M1040,770 H1420" fill="none" stroke="#6556a0" stroke-width="2" marker-end="url(#arrow)"/>
 <circle cx="1040" cy="770" r="4" fill="#6556a0"/>
-<text x="1230.0" y="761" font-size="17" text-anchor="middle" class="path" style="fill:#6556a0">3.3V → 5V translator · 330R series</text>
+<text x="1230.0" y="761" font-size="17" text-anchor="middle" class="path" style="fill:#6556a0">3.3V → 5V translator · 160R series</text>
 <text x="1440" y="816" font-size="17" text-anchor="start" class="signal" style="fill:#6556a0">amp shutdown</text>
 <text x="1019" y="817" font-size="17" text-anchor="end" class="pin">32</text>
 <path d="M1040,810 H1420" fill="none" stroke="#6556a0" stroke-width="2" marker-end="url(#arrow)"/>

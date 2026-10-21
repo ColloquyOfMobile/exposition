@@ -53,6 +53,15 @@ def connections():
         assert len(found) == 1, (net, found)
         return found[0]
 
+    backplane = json.loads((ROOT / 'backplane/circuit.json').read_text())['components']
+
+    def series(net):
+        """The backplane resistor between a driven net and its conductor."""
+        found = [c['value'] for c in backplane if c['ref'].startswith('R')
+                 and net in c['pins'].values() and 'GND' not in c['pins'].values()]
+        assert len(found) == 1, (net, found)
+        return found[0]
+
     def teensy_pin(net):
         found = [part['pin_names'][pin] for ref, part in parts.items() if ref in ('JT1', 'JT2')
                  for pin, value in part['pins'].items() if value == net]
@@ -87,7 +96,7 @@ def connections():
         channels = [c['pins'][a] for ref, c in parts.items() if ref in ('U1', 'U2', 'U3', 'U4')
                     for a, y in (('2', '3'), ('5', '6'), ('9', '8'), ('12', '11')) if c['pins'].get(y) == net]
         assert len(channels) == 1, net
-        path = 'RC voice card → body line out' if kind == 'tone' else '330R series' if net != 'amp shutdown' else 'reserved · 10K pull-up to USB 5V'
+        path = 'RC voice card → body line out' if kind == 'tone' else series(net) + ' series' if net != 'amp shutdown' else 'reserved · 10K pull-up to USB 5V'
         signal = net.replace('/driven', '').replace('/aux driven', '/aux')
         outputs.append(dict(signal=signal, kind=kind, mega=mega_pin(net),
                             teensy=teensy_pin(channels[0]), mega_path=path,

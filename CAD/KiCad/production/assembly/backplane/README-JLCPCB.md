@@ -26,7 +26,7 @@ Existing module-fit, connector-keying and enclosure checks still apply.
 This file supersedes older bare-board/hand-SMD advice in reference documents.
 
 Source: CAD/KiCad/proposed-solutions/shields/backplane/backplane.kicad_pcb
-Source SHA256 (LF normalized): 4d6d9193a190410fd24dc67c5d8170e5c112bde7662c5c2f7ee7b467aecef25d
+Source SHA256 (LF normalized): fa333803be6d82c61af4bf3f9c20d6895b927f60537890ae8d407c1a713dbf8a
 KiCad: 9.0.7. DRC: zero errors and zero unconnected items.
 JLCPCB formats: https://jlcpcb.com/help/article/how-to-generate-bom-and-centroid-files-from-kicad-8
 https://jlcpcb.com/help/article/pick-place-file-for-pcb-assembly

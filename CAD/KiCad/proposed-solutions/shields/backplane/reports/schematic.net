@@ -1,7 +1,7 @@
 (export (version "E")
   (design
-    (source "C:\\workspace\\workspace2\\Colloquy\\exposition\\CAD\\KiCad\\shields\\backplane\\backplane.kicad_sch")
-    (date "2026-10-08T11:42:20+0200")
+    (source "C:\\workspace\\workspace2\\Colloquy\\exposition\\CAD\\KiCad\\proposed-solutions\\shields\\backplane\\backplane.kicad_sch")
+    (date "2026-10-21T21:17:17+0200")
     (tool "Eeschema 9.0.7")
     (textvar (name "REVISION") "A-prototype")
     (sheet (number "1") (name "/") (tstamps "/")
@@ -1046,7 +1046,7 @@
       (sheetpath (names "/io/") (tstamps "/1ab8eff8-800d-5e1c-a071-13960f8b8229/"))
       (tstamps "63cb9e84-47e7-5b97-9c28-7f525c0c954b"))
     (comp (ref "RA1")
-      (value "330R")
+      (value "160R")
       (footprint "Shields:R_0603_1608Metric")
       (description "male1 aux conductor - state LED or mute")
       (fields
@@ -1059,7 +1059,7 @@
       (sheetpath (names "/io_2/") (tstamps "/1cb8b04e-6dee-5865-ab6f-2100c6242893/"))
       (tstamps "2f908558-a8ad-58e2-976d-ed66486b887b"))
     (comp (ref "RA2")
-      (value "330R")
+      (value "160R")
       (footprint "Shields:R_0603_1608Metric")
       (description "male2 aux conductor - state LED or mute")
       (fields
@@ -2776,7 +2776,7 @@
       (description "male1 aux conductor - state LED or mute")
       (fields
         (field (name "Reference") "RA")
-        (field (name "Value") "330R")
+        (field (name "Value") "160R")
         (field (name "Footprint") "Shields:R_0603_1608Metric")
         (field (name "Datasheet"))
         (field (name "Description") "male1 aux conductor - state LED or mute"))
@@ -2787,7 +2787,7 @@
       (description "male2 aux conductor - state LED or mute")
       (fields
         (field (name "Reference") "RA")
-        (field (name "Value") "330R")
+        (field (name "Value") "160R")
         (field (name "Footprint") "Shields:R_0603_1608Metric")
         (field (name "Datasheet"))
         (field (name "Description") "male2 aux conductor - state LED or mute"))
@@ -3700,7 +3700,7 @@
         (pin (num "1") (name "") (type "passive")))))
   (libraries
     (library (logical "Colloquy")
-      (uri "C:\\workspace\\workspace2\\Colloquy\\exposition\\CAD\\KiCad\\shields\\backplane/Colloquy.kicad_sym")))
+      (uri "C:\\workspace\\workspace2\\Colloquy\\exposition\\CAD\\KiCad\\proposed-solutions\\shields\\backplane/Colloquy.kicad_sym")))
   (nets
     (net (code "1") (name "+5V") (class "Default")
       (node (ref "A-J3") (pin "9") (pinfunction "9") (pintype "passive"))

@@ -1,7 +1,7 @@
 {
-  "board_sha256": "4d6d9193a190410fd24dc67c5d8170e5c112bde7662c5c2f7ee7b467aecef25d",
+  "board_sha256": "fa333803be6d82c61af4bf3f9c20d6895b927f60537890ae8d407c1a713dbf8a",
   "generator_sha256": "4120b90d4e6de9954f4517a5632645add46d553731b9abadb55191462dafea89",
   "schematics": {
-    "proposed-solutions/shields/backplane/wired/backplane-wired.kicad_sch": "6b5f1940b4af1ac275f08e19b3579cf9e2ab6632e0b79b0f9166f24aa33ecf2e"
+    "proposed-solutions/shields/backplane/wired/backplane-wired.kicad_sch": "99c74716bbaddd2ddef931fe5b61e25a4e12bd3ceab3139916e2a8603a6f102a"
   }
 }

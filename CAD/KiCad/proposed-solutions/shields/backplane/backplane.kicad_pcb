@@ -12050,7 +12050,7 @@
 				)
 			)
 		)
-		(property "Value" "330R"
+		(property "Value" "160R"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -20407,7 +20407,7 @@
 				)
 			)
 		)
-		(property "Value" "330R"
+		(property "Value" "160R"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(hide yes)
