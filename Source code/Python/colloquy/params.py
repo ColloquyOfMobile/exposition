@@ -48,6 +48,12 @@ DEFAULTS = {
     # _fill_missing(data, DEFAULTS), which recurses into nested dicts, so
     # an existing params.json grows the key on its next load.
     "motors": {"plugged in": True, "unplugged at": ""},
+    # Where each PCB of the fabrication manifest stands in a JLCPCB order:
+    # board id -> {"status": "waiting order" | "in the cart" | "ordered" |
+    # "error", "changed at", ...}. A board with no record is waiting.
+    # Written only by the order pages (hardware/pcb_files/orders.py); no
+    # version bump, for "main pcb"'s reason.
+    "pcb orders": {},
     # When the exposition runs itself. Empty and switched off by default,
     # which is exactly the behaviour this repo has always had: somebody
     # opens the page and presses start. See colloquy/exposition/schedule/,

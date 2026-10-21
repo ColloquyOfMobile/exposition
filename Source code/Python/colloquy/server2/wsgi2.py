@@ -7,7 +7,7 @@ from colloquy.utils import (
 )
 from colloquy.base import Base
 from colloquy.drivers.arduino.errors import ArduinoError
-from colloquy.hardware.pcb_files import catalog, gerbers, kicad_projects
+from colloquy.hardware.pcb_files import catalog, gerbers, kicad_projects, orders
 from colloquy.server2 import standby, updates
 from colloquy.server2.remedies import remedy_html
 from colloquy.ui.tree import CommandFailed
@@ -28,6 +28,9 @@ _STATIC_ROOTS = {
 # downloads. Under local/, like every other piece of working state: it is
 # a hundred megabytes that can be made again from the checkout.
 DOWNLOADS_FOLDER = Path("local/downloads")
+# The screenshots somebody attached to a PCB order step that went wrong
+# (`hardware/pcb_files/orders.py`). The records themselves are in params.
+PCB_ORDERS_FOLDER = Path("local/pcb orders")
 
 # The most that goes to the socket in one write. A connection has
 # `CONNECTION_TIMEOUT` (server2/__init__.py) for each write to leave, so
@@ -121,6 +124,17 @@ class WSGI2(Base):
         # the tree is answered as usual, which is what leaves the
         # downloads, the restart and the way back all reachable.
         board_is_out = self._board_is_out()
+
+        if args and args[0] == "pcb-order":
+            # Ahead of the gate below, which turns every POST away while
+            # the board is out: ordering its replacement is what that
+            # page is for, and the order's presses are forms.
+            return orders.response(
+                tuple(args[1:]),
+                self._environ,
+                orders.book_of(self.colloquy),
+                PCB_ORDERS_FOLDER,
+            )
 
         if self._environ.get("REQUEST_METHOD") == "POST":
             if board_is_out:
@@ -473,7 +487,7 @@ class WSGI2(Base):
                     text(f"thread count: {len(self.all_threads)}")
 
                 if not args:
-                    doc.asis(catalog.html())
+                    doc.asis(orders.catalog_html(orders.book_of(self.colloquy)))
 
                 # Commands on the left, simulated state on the right, side
                 # by side: watching what the installation does while

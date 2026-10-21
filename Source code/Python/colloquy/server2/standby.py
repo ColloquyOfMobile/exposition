@@ -33,7 +33,7 @@ Installation-side only: the mock has no board to take out.
 """
 from yattag import Doc
 
-from colloquy.hardware.pcb_files import catalog, gerbers, kicad_projects
+from colloquy.hardware.pcb_files import gerbers, kicad_projects, orders
 
 from . import updates
 
@@ -69,7 +69,7 @@ def _sentence(error):
     return f"{type(error).__name__}: {error}"
 
 
-def _gerbers(doc, tag, text):
+def _gerbers(doc, tag, text, colloquy):
     with tag("div", name="gerbers", klass="option"):
         with tag("h2"):
             text("1. PCB fabrication and SMD assembly")
@@ -92,7 +92,7 @@ def _gerbers(doc, tag, text):
             with tag("a", klass="button", href="/pcb/all/fabrication"):
                 text(f"current production packages ({len(boards)} boards)")
 
-        doc.asis(catalog.html())
+        doc.asis(orders.catalog_html(orders.book_of(colloquy)))
 
         with tag("p", klass="small"):
             text("Each download is checked against the current PCB and assembly part table. "
@@ -210,7 +210,7 @@ def page(colloquy):
                     "The usual page returns when a board is noted as mounted."
                 )
 
-            _gerbers(doc, tag, text)
+            _gerbers(doc, tag, text, colloquy)
             _kicad(doc, tag, text, colloquy)
             _mount(doc, tag, text)
             _software(doc, tag, text, colloquy)

@@ -10,6 +10,17 @@ from . import gerbers
 
 WEB_FOLDER = gerbers.PRODUCTION_FOLDER / "web"
 
+# What a JLCPCB order uploads one file at a time, taken out of the checked
+# package so it can never be an older file than the package itself:
+# kind -> (name in the package, content type, downloaded as an attachment).
+PACKAGE_FILES = {
+    "gerbers": ("gerbers.zip", "application/zip", True),
+    "bom": ("BOM.csv", "text/csv; charset=utf-8", True),
+    "cpl": ("CPL.csv", "text/csv; charset=utf-8", True),
+    "manual": ("manual-and-DNP.csv", "text/csv; charset=utf-8", True),
+    "assembly": ("reference/assembly-top.svg", "image/svg+xml", False),
+}
+
 
 def fabrication(board):
     return gerbers.PRODUCTION_FOLDER / "assembly" / board.id / f"{board.id}-manufacturing.zip"
@@ -31,8 +42,22 @@ def production_bytes(board):
     return content
 
 
-def html():
-    """Home-page furniture; a damaged export must never break the server."""
+def package_file(board, name):
+    """One file out of the checked production package, as bytes."""
+    with zipfile.ZipFile(io.BytesIO(production_bytes(board))) as archive:
+        try:
+            return archive.read(name)
+        except KeyError:
+            raise gerbers.PackageError(f"{board.title}: the package has no {name}") from None
+
+
+def html(card_extra=None, lead=""):
+    """Home-page furniture; a damaged export must never break the server.
+
+    `card_extra(board)` adds an HTML fragment to each board's card and
+    `lead` one above the cards - the order status and `order now`
+    (`orders.catalog_html`), which only the installation keeps.
+    """
     try:
         cards = []
         for board in gerbers.load():
@@ -48,6 +73,7 @@ def html():
             except Exception as error:
                 revision = ""
                 problems = f"Production package unavailable: {error}"
+            extra = card_extra(board) if card_extra else ""
             cards.append(
                 '<article style="border:1px solid #8886;padding:1rem;max-width:28rem">'
                 f'<h3>{escape(board.title)}</h3>'
@@ -60,10 +86,11 @@ def html():
                 f'<p><a href="{base}/fabrication">fabrication + SMD BOM/CPL (.zip)</a></p>'
                 f'<p><a href="{base}/schematic">wired schematic (SVG)</a></p>'
                 f'<p>{escape(revision)}</p>'
-                f'<p>{escape(problems)}</p></article>'
+                f'<p>{escape(problems)}</p>{extra}</article>'
             )
         return (
             '<section name="pcb catalog"><h2>PCBs</h2>'
+            + lead +
             '<p><a href="/pcb/all/fabrication">download all production packages '
             '(Gerbers, SMD BOM and CPL)</a></p>'
             '<p>Open a preview or schematic full page; use the browser Back button to return.</p>'
@@ -101,6 +128,14 @@ def response(parts):
                 ("Content-Disposition", f'attachment; filename="{board.id}-fabrication-{hashlib.sha256(content).hexdigest()[:10]}.zip"'),
             ]
             headers[0] = ("Cache-Control", "no-store")
+        elif kind in PACKAGE_FILES:
+            name, content_type, attached = PACKAGE_FILES[kind]
+            content = package_file(board, name)
+            headers = [("Cache-Control", "no-store"), ("Content-Type", content_type)]
+            if attached:
+                stem, _, suffix = name.rpartition(".")
+                headers.append(("Content-Disposition",
+                    f'attachment; filename="{board.id}-{stem}-{hashlib.sha256(content).hexdigest()[:10]}.{suffix}"'))
         elif kind in ("preview", "schematic"):
             suffix = ".png" if kind == "preview" else ".svg"
             path = WEB_FOLDER / board.id / f"{kind}{suffix}"

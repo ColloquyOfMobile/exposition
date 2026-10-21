@@ -67,6 +67,21 @@ def test_every_link_returns_a_usable_file(board):
             assert "Content-Disposition" not in dict(headers)
 
 
+@pytest.mark.parametrize("board", gerbers.load(), ids=lambda b: b.id)
+def test_each_upload_of_an_order_is_its_own_download(board):
+    """What JLC's form takes one file at a time, out of the checked package."""
+    with zipfile.ZipFile(io.BytesIO(catalog.production_bytes(board))) as package:
+        for kind, (name, content_type, attached) in catalog.PACKAGE_FILES.items():
+            status, headers, body = catalog.response((board.id, kind))
+            assert status == "200 OK", body
+            assert body == package.read(name)
+            assert dict(headers)["Content-Type"] == content_type
+            assert ("Content-Disposition" in dict(headers)) == attached
+    with zipfile.ZipFile(io.BytesIO(catalog.response((board.id, "gerbers"))[2])) as plots:
+        assert any(name.endswith(".drl") for name in plots.namelist())
+    assert catalog.response((board.id, "bom"))[2].decode("utf-8-sig").startswith("Comment,Designator")
+
+
 @pytest.mark.parametrize("parts", [(), ("backplane",), ("..", "preview"),
     ("backplane", "../schematic"), ("unknown", "preview"),
     ("backplane", "schematic", "extra"), ("C:\\", "preview")])
