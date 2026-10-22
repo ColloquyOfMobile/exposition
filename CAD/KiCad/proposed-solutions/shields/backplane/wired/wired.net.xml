@@ -1,0 +1,3442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="E">
+  <design>
+    <source>C:\workspace\workspace2\Colloquy\exposition\CAD\KiCad\proposed-solutions\shields\backplane\wired\backplane-wired.kicad_sch</source>
+    <date>2026-10-21T21:18:59+0200</date>
+    <tool>Eeschema 9.0.7</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title>Backplane / PCB-oriented connection blocks</title>
+        <company>Colloquy of Mobiles</company>
+        <rev>B connection blocks</rev>
+        <date>2026-10-21</date>
+        <source>backplane-wired.kicad_sch</source>
+        <comment number="1" value="Reading copy: test points omitted; original PCB retained"/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="A-J3">
+      <value>DSUB-15</value>
+      <footprint>Shields:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Connector" part="DA15_Pins_MountingHoles" description="15-pin D-SUB connector, pins (male) (low-density/2 columns), Mounting Hole"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <property name="ki_keywords" value="DSUB"/>
+      <property name="ki_fp_filters" value="DSUB*Pins*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>c8f811c5-d228-5e99-a9a2-a15b652c0a85</tstamps>
+    </comp>
+    <comp ref="A1">
+      <value>Arduino Mega 2560</value>
+      <footprint>Shields:Mega_Front_Mirrored</footprint>
+      <fields>
+        <field name="Footprint">Shields:Mega_Front_Mirrored</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="A1" description="carried as a shield, as now"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>d2d59b8b-89d8-5bb6-80f0-d1b435880ff5</tstamps>
+    </comp>
+    <comp ref="B-J4">
+      <value>DSUB-15</value>
+      <footprint>Shields:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Connector" part="DA15_Pins_MountingHoles" description="15-pin D-SUB connector, pins (male) (low-density/2 columns), Mounting Hole"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <property name="ki_keywords" value="DSUB"/>
+      <property name="ki_fp_filters" value="DSUB*Pins*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>0478b5c4-794a-546e-a250-9c8d53efe3ed</tstamps>
+    </comp>
+    <comp ref="C1">
+      <value>470uF 25V</value>
+      <footprint>Shields:CP_Elec_10x10.5</footprint>
+      <fields>
+        <field name="Footprint">Shields:CP_Elec_10x10.5</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="C1" description="bulk, on the board's own +5V"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>9f6a07b8-27c0-5a8f-8092-493c928b4d96</tstamps>
+    </comp>
+    <comp ref="C2">
+      <value>100nF</value>
+      <footprint>Shields:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="C2" description="decoupling, on the board's own +5V"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>45e8ae4c-2a86-5a7d-b12f-4e0b6ae4ec2a</tstamps>
+    </comp>
+    <comp ref="DP5">
+      <value>GREEN LED</value>
+      <footprint>Shields:LED_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:LED_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="DP5" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>edc8c3cd-3461-5034-8589-f921745b207e</tstamps>
+    </comp>
+    <comp ref="DP12">
+      <value>GREEN LED</value>
+      <footprint>Shields:LED_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:LED_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="DP12" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>fcb95ab7-4c44-569b-ac8b-d5a4a0a76a52</tstamps>
+    </comp>
+    <comp ref="DPUSB">
+      <value>GREEN LED</value>
+      <footprint>Shields:LED_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:LED_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="DPUSB" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>1f32da30-c032-5b7b-98a0-a738d2e87a0d</tstamps>
+    </comp>
+    <comp ref="DT1">
+      <value>YELLOW LED</value>
+      <footprint>Shields:LED_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:LED_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="DT1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>ae5a2dd5-650e-50da-9459-30de7a87cebe</tstamps>
+    </comp>
+    <comp ref="DT2">
+      <value>YELLOW LED</value>
+      <footprint>Shields:LED_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:LED_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="DT2" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>15a73469-a28a-54e4-a4ec-f08c6325de65</tstamps>
+    </comp>
+    <comp ref="DT3">
+      <value>YELLOW LED</value>
+      <footprint>Shields:LED_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:LED_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="DT3" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>7b1ceceb-1bc1-567b-84b3-2faf9bb28951</tstamps>
+    </comp>
+    <comp ref="DT4">
+      <value>YELLOW LED</value>
+      <footprint>Shields:LED_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:LED_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="DT4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>c2368843-0754-57ae-ada2-0614411da686</tstamps>
+    </comp>
+    <comp ref="DT5">
+      <value>YELLOW LED</value>
+      <footprint>Shields:LED_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:LED_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="DT5" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>a82391ff-c05f-5cd7-8f89-df211ed36d48</tstamps>
+    </comp>
+    <comp ref="Extra1">
+      <value>1x6 header</value>
+      <footprint>Shields:PinHeader_1x06_P2.54mm_Vertical</footprint>
+      <fields>
+        <field name="Footprint">Shields:PinHeader_1x06_P2.54mm_Vertical</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="Extra1" description="female2's six spare conductors"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>ce711bcb-0441-5f5c-b40c-18270b76dd9b</tstamps>
+    </comp>
+    <comp ref="Extra2">
+      <value>1x6 header</value>
+      <footprint>Shields:PinHeader_1x06_P2.54mm_Vertical</footprint>
+      <fields>
+        <field name="Footprint">Shields:PinHeader_1x06_P2.54mm_Vertical</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="Extra2" description="female1's six spare conductors"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>524a82f3-4df3-5826-9cae-ddf0859976d2</tstamps>
+    </comp>
+    <comp ref="Extra3">
+      <value>1x1 pad</value>
+      <footprint>Shields:PinHeader_1x01_P2.54mm_Vertical</footprint>
+      <fields>
+        <field name="Footprint">Shields:PinHeader_1x01_P2.54mm_Vertical</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="Extra3" description="B-J4's single spare conductor - the males have no others"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>a6a57957-dcef-59e5-8ff6-d59e59192c86</tstamps>
+    </comp>
+    <comp ref="HA1">
+      <value>M3 analyser retention</value>
+      <footprint>Shields:MountingHole_3.2mm_M3</footprint>
+      <fields>
+        <field name="Footprint">Shields:MountingHole_3.2mm_M3</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="HA1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>1b35c008-04d9-5164-b09d-ed47ae2cbf5e</tstamps>
+    </comp>
+    <comp ref="HA2">
+      <value>M3 analyser retention</value>
+      <footprint>Shields:MountingHole_3.2mm_M3</footprint>
+      <fields>
+        <field name="Footprint">Shields:MountingHole_3.2mm_M3</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="HA2" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>ba1c8103-3dff-57e7-a1df-1d1137303bfa</tstamps>
+    </comp>
+    <comp ref="HV1">
+      <value>M3 card retention</value>
+      <footprint>Shields:MountingHole_3.2mm_M3</footprint>
+      <fields>
+        <field name="Footprint">Shields:MountingHole_3.2mm_M3</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="HV1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b96f59ec-c56d-50df-9303-5a7298be53b7</tstamps>
+    </comp>
+    <comp ref="HV2">
+      <value>M3 card retention</value>
+      <footprint>Shields:MountingHole_3.2mm_M3</footprint>
+      <fields>
+        <field name="Footprint">Shields:MountingHole_3.2mm_M3</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="HV2" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>f8cb67db-fa1a-5b91-9333-b40371bb30b6</tstamps>
+    </comp>
+    <comp ref="HV3">
+      <value>M3 card retention</value>
+      <footprint>Shields:MountingHole_3.2mm_M3</footprint>
+      <fields>
+        <field name="Footprint">Shields:MountingHole_3.2mm_M3</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="HV3" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>a9987a73-db6a-5190-86e5-15d88cb8f5c3</tstamps>
+    </comp>
+    <comp ref="HV4">
+      <value>M3 card retention</value>
+      <footprint>Shields:MountingHole_3.2mm_M3</footprint>
+      <fields>
+        <field name="Footprint">Shields:MountingHole_3.2mm_M3</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="HV4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b0a17cb0-6624-508c-a5f0-5dafdc9a31b6</tstamps>
+    </comp>
+    <comp ref="HV5">
+      <value>M3 card retention</value>
+      <footprint>Shields:MountingHole_3.2mm_M3</footprint>
+      <fields>
+        <field name="Footprint">Shields:MountingHole_3.2mm_M3</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="HV5" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>84b1a90f-ded3-5cbd-90d5-460efa23cf26</tstamps>
+    </comp>
+    <comp ref="J1">
+      <value>DSUB-15</value>
+      <footprint>Shields:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Connector" part="DA15_Pins_MountingHoles" description="15-pin D-SUB connector, pins (male) (low-density/2 columns), Mounting Hole"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <property name="ki_keywords" value="DSUB"/>
+      <property name="ki_fp_filters" value="DSUB*Pins*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>0e244726-d3dc-5b63-8410-1bb97bca3f38</tstamps>
+    </comp>
+    <comp ref="J2">
+      <value>DC jack</value>
+      <footprint>Shields:PJ-082BH_jack_10A</footprint>
+      <fields>
+        <field name="Footprint">Shields:PJ-082BH_jack_10A</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="J2" description="supply in"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>421847b2-7182-5510-89dc-4923665a47ab</tstamps>
+    </comp>
+    <comp ref="J5">
+      <value>DSUB-15</value>
+      <footprint>Shields:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm</footprint>
+      <fields>
+        <field name="Footprint">Shields:DSUB-15_Pins_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset4.94mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Connector" part="DA15_Pins_MountingHoles" description="15-pin D-SUB connector, pins (male) (low-density/2 columns), Mounting Hole"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <property name="ki_keywords" value="DSUB"/>
+      <property name="ki_fp_filters" value="DSUB*Pins*"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>18867668-0b08-5786-b36a-4437cc98c3af</tstamps>
+    </comp>
+    <comp ref="J6">
+      <value>screw bridge</value>
+      <footprint>Shields:screw_brigde</footprint>
+      <fields>
+        <field name="Footprint">Shields:screw_brigde</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="J6" description="jack onto the board rail"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>19633fe4-c008-5cc2-8f05-17a7969f62aa</tstamps>
+    </comp>
+    <comp ref="J7">
+      <value>JST EH 3</value>
+      <footprint>Shields:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical</footprint>
+      <fields>
+        <field name="Footprint">Shields:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="J7" description="GND, +12V and the servo bus in"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>1f93541e-aa3d-5736-91e7-022ec57ae410</tstamps>
+    </comp>
+    <comp ref="JA1">
+      <value>ANALYSER - KEY 22</value>
+      <footprint>Shields:Header_2x11_Key22</footprint>
+      <fields>
+        <field name="Footprint">Shields:Header_2x11_Key22</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="JA1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>bbcb5656-dfa9-5002-a8d3-f0e3a73ad5ce</tstamps>
+    </comp>
+    <comp ref="JP1">
+      <value>0R</value>
+      <footprint>Shields:R_0805_2012Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="JP1" description="the single point where analogue ground meets power ground"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>45a8ffd2-a0b4-543a-8336-b529d1db5d4c</tstamps>
+    </comp>
+    <comp ref="JP2">
+      <value>0R</value>
+      <footprint>Shields:R_0805_2012Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="JP2" description="male1 audio return onto analogue ground"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b739d257-1ff2-5e22-9b59-b0cfc59a9d88</tstamps>
+    </comp>
+    <comp ref="JP3">
+      <value>0R</value>
+      <footprint>Shields:R_0805_2012Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="JP3" description="male2 audio return onto analogue ground"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>4c70ebab-b414-5371-95c0-3fd02546d5d9</tstamps>
+    </comp>
+    <comp ref="JP4">
+      <value>0R</value>
+      <footprint>Shields:R_0805_2012Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="JP4" description="female1 audio return onto analogue ground"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>32aee43f-2de5-53f3-957e-f303406ce8c7</tstamps>
+    </comp>
+    <comp ref="JP5">
+      <value>0R</value>
+      <footprint>Shields:R_0805_2012Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="JP5" description="female2 audio return onto analogue ground"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>0fc762a5-6e82-5743-9d06-c630ce6aef7d</tstamps>
+    </comp>
+    <comp ref="JP6">
+      <value>0R</value>
+      <footprint>Shields:R_0805_2012Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="JP6" description="female3 audio return onto analogue ground"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>3a2b7590-adf1-59e0-939f-3c4da6e9b077</tstamps>
+    </comp>
+    <comp ref="JV1">
+      <value>female1 - KEY 6</value>
+      <footprint>Shields:Header_2x03_Key6</footprint>
+      <fields>
+        <field name="Footprint">Shields:Header_2x03_Key6</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="JV1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>e8fed0da-08a0-548b-b527-c05b89f2956e</tstamps>
+    </comp>
+    <comp ref="JV2">
+      <value>female2 - KEY 6</value>
+      <footprint>Shields:Header_2x03_Key6</footprint>
+      <fields>
+        <field name="Footprint">Shields:Header_2x03_Key6</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="JV2" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>3e1f7248-90c5-5393-a529-7594741296d2</tstamps>
+    </comp>
+    <comp ref="JV3">
+      <value>female3 - KEY 6</value>
+      <footprint>Shields:Header_2x03_Key6</footprint>
+      <fields>
+        <field name="Footprint">Shields:Header_2x03_Key6</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="JV3" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>70d9a626-c62c-5b5c-bdad-1c24e86809c8</tstamps>
+    </comp>
+    <comp ref="JV4">
+      <value>male1 - KEY 6</value>
+      <footprint>Shields:Header_2x03_Key6</footprint>
+      <fields>
+        <field name="Footprint">Shields:Header_2x03_Key6</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="JV4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>461e5483-1359-54c2-824c-17baf3fb0dc8</tstamps>
+    </comp>
+    <comp ref="JV5">
+      <value>male2 - KEY 6</value>
+      <footprint>Shields:Header_2x03_Key6</footprint>
+      <fields>
+        <field name="Footprint">Shields:Header_2x03_Key6</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="JV5" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>9e0cd534-dc28-59ad-99ba-fcb5c62f805a</tstamps>
+    </comp>
+    <comp ref="M1">
+      <value>U2D2</value>
+      <footprint>Shields:u2d2_mounting</footprint>
+      <fields>
+        <field name="Footprint">Shields:u2d2_mounting</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="M1" description="on its own mount; only the Dynamixel data line touches it"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>cef6d322-cf62-5b42-8efa-9dc197f66ca0</tstamps>
+    </comp>
+    <comp ref="R103">
+      <value>100R</value>
+      <footprint>Shields:R_0805_2012Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="R103" description="male1 build-out into the harness"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>6c765c5c-d2ae-5b4b-bae5-b15677d14f2e</tstamps>
+    </comp>
+    <comp ref="R203">
+      <value>100R</value>
+      <footprint>Shields:R_0805_2012Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="R203" description="male2 build-out into the harness"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>682d3eab-0e95-5122-a201-04f12de064d0</tstamps>
+    </comp>
+    <comp ref="R303">
+      <value>100R</value>
+      <footprint>Shields:R_0805_2012Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="R303" description="female1 build-out into the harness"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>72a0bb75-9ead-5193-9d08-991620639485</tstamps>
+    </comp>
+    <comp ref="R403">
+      <value>100R</value>
+      <footprint>Shields:R_0805_2012Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="R403" description="female2 build-out into the harness"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>63c2db0f-114e-50de-899d-107ef39fdca4</tstamps>
+    </comp>
+    <comp ref="R503">
+      <value>100R</value>
+      <footprint>Shields:R_0805_2012Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="R503" description="female3 build-out into the harness"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>8bb9f468-cbda-56c5-b7f9-802507eb2a8b</tstamps>
+    </comp>
+    <comp ref="RA1">
+      <value>160R</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RA1" description="male1 aux conductor - state LED or mute"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>2f908558-a8ad-58e2-976d-ed66486b887b</tstamps>
+    </comp>
+    <comp ref="RA2">
+      <value>160R</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RA2" description="male2 aux conductor - state LED or mute"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>6580143f-1d5d-5dcd-ab7f-459d5ddf06f5</tstamps>
+    </comp>
+    <comp ref="RL1">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RL1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>11dc97ad-2a4b-599b-b460-66b08d7a7cd4</tstamps>
+    </comp>
+    <comp ref="RL2">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RL2" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>7e1e1f8c-b62b-5081-b849-a24fd444a180</tstamps>
+    </comp>
+    <comp ref="RL3">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RL3" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>55f48e69-efab-576b-af47-353e756946a0</tstamps>
+    </comp>
+    <comp ref="RL4">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RL4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>4284a385-bb07-51ec-a537-9b0832d7d99d</tstamps>
+    </comp>
+    <comp ref="RL5">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RL5" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>1ea9fadc-7e82-50aa-b06f-121cc9f090c0</tstamps>
+    </comp>
+    <comp ref="RLP5">
+      <value>2K2</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RLP5" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>fbfdaa2c-a885-5ff2-bed1-9b171e6859f1</tstamps>
+    </comp>
+    <comp ref="RLP12">
+      <value>4K7</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RLP12" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>03510c59-7619-54df-b92f-abe3ff358bbf</tstamps>
+    </comp>
+    <comp ref="RLPUSB">
+      <value>2K2</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RLPUSB" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>54db44ab-48e7-5b03-81f1-6f8e30f64a69</tstamps>
+    </comp>
+    <comp ref="RLT1">
+      <value>1K5</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RLT1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b6bcacfe-8903-5429-99f3-b07c88a0d0ce</tstamps>
+    </comp>
+    <comp ref="RLT2">
+      <value>1K5</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RLT2" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>d4fa9dbd-a104-53ff-9f24-87371fe29e18</tstamps>
+    </comp>
+    <comp ref="RLT3">
+      <value>1K5</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RLT3" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b64ba501-aa25-548b-83fb-c2a81d125c43</tstamps>
+    </comp>
+    <comp ref="RLT4">
+      <value>1K5</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RLT4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>133cada0-77a7-523f-ae8a-2dda97500cd1</tstamps>
+    </comp>
+    <comp ref="RLT5">
+      <value>1K5</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RLT5" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>594a5536-8536-5727-b582-1eee6c1a10bb</tstamps>
+    </comp>
+    <comp ref="RM1">
+      <value>4K7</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RM1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>a8ef2af8-97be-510f-b508-333caa6faa84</tstamps>
+    </comp>
+    <comp ref="RM2">
+      <value>4K7</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RM2" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>d6f0e88c-224f-5750-b666-114797c2de34</tstamps>
+    </comp>
+    <comp ref="RM3">
+      <value>4K7</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RM3" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>8329ae91-5204-5b6a-b30c-6461c361f484</tstamps>
+    </comp>
+    <comp ref="RM4">
+      <value>4K7</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RM4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>550d8725-6201-52d1-a055-8bb1881732dc</tstamps>
+    </comp>
+    <comp ref="RM5">
+      <value>4K7</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RM5" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>232232d6-4dc1-51b8-8005-3ef0ece5c587</tstamps>
+    </comp>
+    <comp ref="RMD1">
+      <value>1M</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RMD1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>959fe391-4f55-5a13-9f6b-d11a1d3826f9</tstamps>
+    </comp>
+    <comp ref="RMD2">
+      <value>1M</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RMD2" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>8558efdc-bb1f-5efa-ba82-95a11bd7a848</tstamps>
+    </comp>
+    <comp ref="RMD3">
+      <value>1M</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RMD3" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>e992805e-e0aa-552d-859d-1c23928e49fd</tstamps>
+    </comp>
+    <comp ref="RMD4">
+      <value>1M</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RMD4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>f96707aa-d46c-5b68-ae7f-ba090ce5dc1f</tstamps>
+    </comp>
+    <comp ref="RMD5">
+      <value>1M</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RMD5" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>17742303-ea2a-5236-a9ec-04fbf8b060e5</tstamps>
+    </comp>
+    <comp ref="RN1">
+      <value>330R</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RN1" description="series on female1/neopixel"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>d27afa99-240e-5771-8929-216c60a47c29</tstamps>
+    </comp>
+    <comp ref="RN2">
+      <value>330R</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RN2" description="series on female2/neopixel"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>7b3a60a0-1fee-5ca4-85df-95496d3000ea</tstamps>
+    </comp>
+    <comp ref="RN3">
+      <value>330R</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RN3" description="series on female3/neopixel"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>95f45085-66bf-5595-b962-e2b1ca908296</tstamps>
+    </comp>
+    <comp ref="RN4">
+      <value>330R</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RN4" description="series on male1/neopixel"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>cab22f24-8537-58fc-bf53-87cd19daf38c</tstamps>
+    </comp>
+    <comp ref="RN5">
+      <value>330R</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RN5" description="series on male2/neopixel"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>bd6e221b-16e1-5d1b-ac8f-a415688b9bce</tstamps>
+    </comp>
+    <comp ref="RN6">
+      <value>330R</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RN6" description="series on male1/bar neopixel"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>4626e73c-a32d-594f-b0ae-2a64e071ffe1</tstamps>
+    </comp>
+    <comp ref="RN7">
+      <value>330R</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RN7" description="series on male2/bar neopixel"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>c2670a10-dca4-52d9-b208-d17c51b4f9a6</tstamps>
+    </comp>
+    <comp ref="RND1">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RND1" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>6522372e-0bfb-528e-890b-e9315ae42239</tstamps>
+    </comp>
+    <comp ref="RND2">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RND2" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>c24fb113-e22e-5e44-9b3f-6ef5d12bb287</tstamps>
+    </comp>
+    <comp ref="RND3">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RND3" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>7f49ba70-d688-5e05-923d-80b1c56b560b</tstamps>
+    </comp>
+    <comp ref="RND4">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RND4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>748c4d50-d272-53d1-801a-a4b6043ce28a</tstamps>
+    </comp>
+    <comp ref="RND5">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RND5" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>94b4aa25-2bab-51e7-a76d-1f680fd06471</tstamps>
+    </comp>
+    <comp ref="RND6">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RND6" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>2aa10b52-ce64-56ed-91f8-4556bc5fa452</tstamps>
+    </comp>
+    <comp ref="RND7">
+      <value>100K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RND7" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>7ff3a6b4-1652-5c1a-af65-a3bc395156d8</tstamps>
+    </comp>
+    <comp ref="RP1">
+      <value>10K provisional</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RP1" description="Provisional photosensor shunt; replace with measured calibration value before deployment"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>ac0b3ac7-0484-55be-81b3-bcb7eb9452f4</tstamps>
+    </comp>
+    <comp ref="RP2">
+      <value>10K provisional</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RP2" description="Provisional photosensor shunt; replace with measured calibration value before deployment"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>5707b328-a3e2-5f88-9aa3-4fedb2c45c74</tstamps>
+    </comp>
+    <comp ref="RP3">
+      <value>10K provisional</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RP3" description="Provisional photosensor shunt; replace with measured calibration value before deployment"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>62cdb512-7a80-50bc-9a29-daf5e5337ae6</tstamps>
+    </comp>
+    <comp ref="RP4">
+      <value>10K provisional</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RP4" description="Provisional photosensor shunt; replace with measured calibration value before deployment"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>f84a08df-4e30-5b9b-acfd-e0cf3e9cb7dd</tstamps>
+    </comp>
+    <comp ref="RP5">
+      <value>10K provisional</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RP5" description="Provisional photosensor shunt; replace with measured calibration value before deployment"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>6bdf76dc-6332-598f-9e52-dce472561115</tstamps>
+    </comp>
+    <comp ref="RP6">
+      <value>10K provisional</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RP6" description="Provisional photosensor shunt; replace with measured calibration value before deployment"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>2e68a63f-b97c-5d88-9f70-cf3a95a9c34c</tstamps>
+    </comp>
+    <comp ref="RP7">
+      <value>10K provisional</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RP7" description="Provisional photosensor shunt; replace with measured calibration value before deployment"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>ab78b9fd-fa77-578d-a4f1-afbb6eee037a</tstamps>
+    </comp>
+    <comp ref="RP8">
+      <value>10K provisional</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RP8" description="Provisional photosensor shunt; replace with measured calibration value before deployment"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>5590a421-d36d-5935-b9d1-117ade0f48c8</tstamps>
+    </comp>
+    <comp ref="RP9">
+      <value>10K provisional</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RP9" description="Provisional photosensor shunt; replace with measured calibration value before deployment"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b6648046-3fad-5cb0-9f12-e9f139335ca7</tstamps>
+    </comp>
+    <comp ref="RP10">
+      <value>10K provisional</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RP10" description="Provisional photosensor shunt; replace with measured calibration value before deployment"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>91eac86e-5e88-57a4-99cf-455c1c20fa44</tstamps>
+    </comp>
+    <comp ref="RP11">
+      <value>10K provisional</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RP11" description="Provisional photosensor shunt; replace with measured calibration value before deployment"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>8cfa7bf7-0043-5813-b295-60a30514769a</tstamps>
+    </comp>
+    <comp ref="RS1">
+      <value>10K</value>
+      <footprint>Shields:R_0603_1608Metric</footprint>
+      <fields>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Colloquy" part="RS1" description="Reserved D2 pullup to logic rail; prevents external +5V back-powering Mega"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="backplane-wired.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>5842e3ec-8ce5-5ea4-a2a0-15af55aee3ab</tstamps>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="Colloquy" part="A1">
+      <description>carried as a shield, as now</description>
+      <fields>
+        <field name="Reference">A</field>
+        <field name="Value">Arduino Mega 2560</field>
+        <field name="Footprint">Shields:Mega_Front_Mirrored</field>
+        <field name="Datasheet"/>
+        <field name="Description">carried as a shield, as now</field>
+      </fields>
+      <pins>
+        <pin num="3V3" name="" type="passive"/>
+        <pin num="5V1" name="" type="power_out"/>
+        <pin num="5V2" name="" type="passive"/>
+        <pin num="5V3" name="" type="passive"/>
+        <pin num="5V4" name="" type="passive"/>
+        <pin num="A0" name="FEMALE_1_/_ANALYSER_OUT" type="input"/>
+        <pin num="A1" name="FEMALE_2_/_ANALYSER_OUT" type="input"/>
+        <pin num="A2" name="FEMALE_3_/_ANALYSER_OUT" type="input"/>
+        <pin num="A3" name="MALE_1_/_ANALYSER_OUT" type="input"/>
+        <pin num="A4" name="MALE_2_/_ANALYSER_OUT" type="input"/>
+        <pin num="A5" name="FEMALE_1_/_LIGHT_SENSOR" type="input"/>
+        <pin num="A6" name="FEMALE_2_/_LIGHT_SENSOR" type="input"/>
+        <pin num="A7" name="FEMALE_3_/_LIGHT_SENSOR" type="input"/>
+        <pin num="A8" name="MALE_1_/_LIGHT_SENSOR_/_A" type="input"/>
+        <pin num="A9" name="MALE_1_/_LIGHT_SENSOR_/_B" type="input"/>
+        <pin num="A10" name="MALE_1_/_LIGHT_SENSOR_/_C" type="input"/>
+        <pin num="A11" name="MALE_1_/_LIGHT_SENSOR_/_D" type="input"/>
+        <pin num="A12" name="MALE_2_/_LIGHT_SENSOR_/_A" type="input"/>
+        <pin num="A13" name="MALE_2_/_LIGHT_SENSOR_/_B" type="input"/>
+        <pin num="A14" name="MALE_2_/_LIGHT_SENSOR_/_C" type="input"/>
+        <pin num="A15" name="MALE_2_/_LIGHT_SENSOR_/_D" type="input"/>
+        <pin num="AREF" name="" type="passive"/>
+        <pin num="D0" name="" type="passive"/>
+        <pin num="D1" name="" type="passive"/>
+        <pin num="D2" name="AMP_SHUTDOWN" type="bidirectional"/>
+        <pin num="D3" name="ANALYSER_/_RESET" type="output"/>
+        <pin num="D4" name="ANALYSER_/_STROBE" type="output"/>
+        <pin num="D5" name="MALE_2_/_TONE" type="output"/>
+        <pin num="D6" name="FEMALE_1_/_TONE" type="output"/>
+        <pin num="D7" name="FEMALE_2_/_NEOPIXEL_DATA_/_DRIVEN" type="output"/>
+        <pin num="D8" name="FEMALE_3_/_NEOPIXEL_DATA_/_DRIVEN" type="output"/>
+        <pin num="D9" name="MALE_1_/_NEOPIXEL_DATA_/_DRIVEN" type="output"/>
+        <pin num="D10" name="FEMALE_3_/_TONE" type="output"/>
+        <pin num="D11" name="MALE_1_/_TONE" type="output"/>
+        <pin num="D12" name="" type="passive"/>
+        <pin num="D13" name="" type="passive"/>
+        <pin num="D14" name="FEMALE_1_/_NEOPIXEL_DATA_/_DRIVEN" type="output"/>
+        <pin num="D15" name="MALE_2_/_NEOPIXEL_DATA_/_DRIVEN" type="output"/>
+        <pin num="D16" name="MALE_1_/_BAR_NEOPIXEL_DATA_/_DRIVEN" type="output"/>
+        <pin num="D17" name="MALE_2_/_BAR_NEOPIXEL_DATA_/_DRIVEN" type="output"/>
+        <pin num="D18" name="" type="passive"/>
+        <pin num="D19" name="" type="passive"/>
+        <pin num="D20" name="" type="passive"/>
+        <pin num="D21" name="" type="passive"/>
+        <pin num="D22" name="" type="passive"/>
+        <pin num="D23" name="" type="passive"/>
+        <pin num="D24" name="MALE_1_/_AUX_DRIVEN" type="output"/>
+        <pin num="D25" name="MALE_2_/_AUX_DRIVEN" type="output"/>
+        <pin num="D26" name="FEMALE_1_/_MIC_DIRECT" type="passive"/>
+        <pin num="D27" name="FEMALE_2_/_MIC_DIRECT" type="passive"/>
+        <pin num="D28" name="FEMALE_3_/_MIC_DIRECT" type="passive"/>
+        <pin num="D29" name="MALE_1_/_MIC_DIRECT" type="passive"/>
+        <pin num="D30" name="MALE_2_/_MIC_DIRECT" type="passive"/>
+        <pin num="D31" name="" type="passive"/>
+        <pin num="D32" name="" type="passive"/>
+        <pin num="D33" name="" type="passive"/>
+        <pin num="D34" name="" type="passive"/>
+        <pin num="D35" name="" type="passive"/>
+        <pin num="D36" name="" type="passive"/>
+        <pin num="D37" name="" type="passive"/>
+        <pin num="D38" name="" type="passive"/>
+        <pin num="D39" name="" type="passive"/>
+        <pin num="D40" name="" type="passive"/>
+        <pin num="D41" name="" type="passive"/>
+        <pin num="D42" name="" type="passive"/>
+        <pin num="D43" name="" type="passive"/>
+        <pin num="D44" name="" type="passive"/>
+        <pin num="D45" name="" type="passive"/>
+        <pin num="D46" name="FEMALE_2_/_TONE" type="output"/>
+        <pin num="D47" name="" type="passive"/>
+        <pin num="D48" name="" type="passive"/>
+        <pin num="D49" name="" type="passive"/>
+        <pin num="D50" name="" type="passive"/>
+        <pin num="D51" name="" type="passive"/>
+        <pin num="D52" name="" type="passive"/>
+        <pin num="D53" name="" type="passive"/>
+        <pin num="GND1" name="" type="power_in"/>
+        <pin num="GND2" name="" type="power_in"/>
+        <pin num="GND3" name="" type="power_in"/>
+        <pin num="GND4" name="" type="power_in"/>
+        <pin num="GND5" name="" type="power_in"/>
+        <pin num="GND6" name="" type="power_in"/>
+        <pin num="IORF" name="" type="passive"/>
+        <pin num="MISO" name="" type="passive"/>
+        <pin num="MOSI" name="" type="passive"/>
+        <pin num="RST1" name="" type="passive"/>
+        <pin num="RST2" name="" type="passive"/>
+        <pin num="SCK" name="" type="passive"/>
+        <pin num="SCL" name="" type="passive"/>
+        <pin num="SDA" name="" type="passive"/>
+        <pin num="VIN" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="C1">
+      <description>bulk, on the board's own +5V</description>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">470uF 25V</field>
+        <field name="Footprint">Shields:CP_Elec_10x10.5</field>
+        <field name="Datasheet"/>
+        <field name="Description">bulk, on the board's own +5V</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="C2">
+      <description>decoupling, on the board's own +5V</description>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">100nF</field>
+        <field name="Footprint">Shields:C_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">decoupling, on the board's own +5V</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="DP12">
+      <fields>
+        <field name="Reference">DP</field>
+        <field name="Value">GREEN LED</field>
+        <field name="Footprint">Shields:LED_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="DP5">
+      <fields>
+        <field name="Reference">DP</field>
+        <field name="Value">GREEN LED</field>
+        <field name="Footprint">Shields:LED_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="DPUSB">
+      <fields>
+        <field name="Reference">DPUSB</field>
+        <field name="Value">GREEN LED</field>
+        <field name="Footprint">Shields:LED_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="DT1">
+      <fields>
+        <field name="Reference">DT</field>
+        <field name="Value">YELLOW LED</field>
+        <field name="Footprint">Shields:LED_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="DT2">
+      <fields>
+        <field name="Reference">DT</field>
+        <field name="Value">YELLOW LED</field>
+        <field name="Footprint">Shields:LED_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="DT3">
+      <fields>
+        <field name="Reference">DT</field>
+        <field name="Value">YELLOW LED</field>
+        <field name="Footprint">Shields:LED_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="DT4">
+      <fields>
+        <field name="Reference">DT</field>
+        <field name="Value">YELLOW LED</field>
+        <field name="Footprint">Shields:LED_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="DT5">
+      <fields>
+        <field name="Reference">DT</field>
+        <field name="Value">YELLOW LED</field>
+        <field name="Footprint">Shields:LED_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="Extra1">
+      <description>female2's six spare conductors</description>
+      <fields>
+        <field name="Reference">Extra</field>
+        <field name="Value">1x6 header</field>
+        <field name="Footprint">Shields:PinHeader_1x06_P2.54mm_Vertical</field>
+        <field name="Datasheet"/>
+        <field name="Description">female2's six spare conductors</field>
+      </fields>
+      <pins>
+        <pin num="1" name="FEMALE_2_/_SPARE1" type="passive"/>
+        <pin num="2" name="FEMALE_2_/_SPARE2" type="passive"/>
+        <pin num="3" name="FEMALE_2_/_SPARE3" type="passive"/>
+        <pin num="4" name="FEMALE_2_/_SPARE4" type="passive"/>
+        <pin num="5" name="FEMALE_2_/_SPARE5" type="passive"/>
+        <pin num="6" name="FEMALE_2_/_SPARE6" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="Extra2">
+      <description>female1's six spare conductors</description>
+      <fields>
+        <field name="Reference">Extra</field>
+        <field name="Value">1x6 header</field>
+        <field name="Footprint">Shields:PinHeader_1x06_P2.54mm_Vertical</field>
+        <field name="Datasheet"/>
+        <field name="Description">female1's six spare conductors</field>
+      </fields>
+      <pins>
+        <pin num="1" name="FEMALE_1_/_SPARE1" type="passive"/>
+        <pin num="2" name="FEMALE_1_/_SPARE2" type="passive"/>
+        <pin num="3" name="FEMALE_1_/_SPARE3" type="passive"/>
+        <pin num="4" name="FEMALE_1_/_SPARE4" type="passive"/>
+        <pin num="5" name="FEMALE_1_/_SPARE5" type="passive"/>
+        <pin num="6" name="FEMALE_1_/_SPARE6" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="Extra3">
+      <description>B-J4's single spare conductor - the males have no others</description>
+      <fields>
+        <field name="Reference">Extra</field>
+        <field name="Value">1x1 pad</field>
+        <field name="Footprint">Shields:PinHeader_1x01_P2.54mm_Vertical</field>
+        <field name="Datasheet"/>
+        <field name="Description">B-J4's single spare conductor - the males have no others</field>
+      </fields>
+      <pins>
+        <pin num="1" name="CENTRE_/_SPARE1" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="HA1">
+      <fields>
+        <field name="Reference">HA</field>
+        <field name="Value">M3 analyser retention</field>
+        <field name="Footprint">Shields:MountingHole_3.2mm_M3</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+    </libpart>
+    <libpart lib="Colloquy" part="HA2">
+      <fields>
+        <field name="Reference">HA</field>
+        <field name="Value">M3 analyser retention</field>
+        <field name="Footprint">Shields:MountingHole_3.2mm_M3</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+    </libpart>
+    <libpart lib="Colloquy" part="HV1">
+      <fields>
+        <field name="Reference">HV</field>
+        <field name="Value">M3 card retention</field>
+        <field name="Footprint">Shields:MountingHole_3.2mm_M3</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+    </libpart>
+    <libpart lib="Colloquy" part="HV2">
+      <fields>
+        <field name="Reference">HV</field>
+        <field name="Value">M3 card retention</field>
+        <field name="Footprint">Shields:MountingHole_3.2mm_M3</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+    </libpart>
+    <libpart lib="Colloquy" part="HV3">
+      <fields>
+        <field name="Reference">HV</field>
+        <field name="Value">M3 card retention</field>
+        <field name="Footprint">Shields:MountingHole_3.2mm_M3</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+    </libpart>
+    <libpart lib="Colloquy" part="HV4">
+      <fields>
+        <field name="Reference">HV</field>
+        <field name="Value">M3 card retention</field>
+        <field name="Footprint">Shields:MountingHole_3.2mm_M3</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+    </libpart>
+    <libpart lib="Colloquy" part="HV5">
+      <fields>
+        <field name="Reference">HV</field>
+        <field name="Value">M3 card retention</field>
+        <field name="Footprint">Shields:MountingHole_3.2mm_M3</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+    </libpart>
+    <libpart lib="Colloquy" part="J2">
+      <description>supply in</description>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">DC jack</field>
+        <field name="Footprint">Shields:PJ-082BH_jack_10A</field>
+        <field name="Datasheet"/>
+        <field name="Description">supply in</field>
+      </fields>
+      <pins>
+        <pin num="1" name="+5V" type="passive"/>
+        <pin num="2" name="GND" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="J6">
+      <description>jack onto the board rail</description>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">screw bridge</field>
+        <field name="Footprint">Shields:screw_brigde</field>
+        <field name="Datasheet"/>
+        <field name="Description">jack onto the board rail</field>
+      </fields>
+      <pins>
+        <pin num="1" name="GND" type="passive"/>
+        <pin num="2" name="GND" type="passive"/>
+        <pin num="3" name="+5V" type="passive"/>
+        <pin num="4" name="GND" type="passive"/>
+        <pin num="5" name="+5V" type="passive"/>
+        <pin num="6" name="+5V" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="J7">
+      <description>GND, +12V and the servo bus in</description>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">JST EH 3</field>
+        <field name="Footprint">Shields:JST_EH_B3B-EH-A_1x03_P2.50mm_Vertical</field>
+        <field name="Datasheet"/>
+        <field name="Description">GND, +12V and the servo bus in</field>
+      </fields>
+      <pins>
+        <pin num="1" name="GND" type="passive"/>
+        <pin num="2" name="+12V" type="passive"/>
+        <pin num="3" name="DYNAMIXEL_DATA" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="JA1">
+      <fields>
+        <field name="Reference">JA</field>
+        <field name="Value">ANALYSER - KEY 22</field>
+        <field name="Footprint">Shields:Header_2x11_Key22</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="FEMALE_1_/_MIC" type="passive"/>
+        <pin num="2" name="AGND" type="passive"/>
+        <pin num="3" name="FEMALE_2_/_MIC" type="passive"/>
+        <pin num="4" name="AGND" type="passive"/>
+        <pin num="5" name="FEMALE_3_/_MIC" type="passive"/>
+        <pin num="6" name="AGND" type="passive"/>
+        <pin num="7" name="MALE_1_/_MIC" type="passive"/>
+        <pin num="8" name="AGND" type="passive"/>
+        <pin num="9" name="MALE_2_/_MIC" type="passive"/>
+        <pin num="10" name="AGND" type="passive"/>
+        <pin num="11" name="FEMALE_1_/_ANALYSER_OUT" type="passive"/>
+        <pin num="12" name="FEMALE_2_/_ANALYSER_OUT" type="passive"/>
+        <pin num="13" name="FEMALE_3_/_ANALYSER_OUT" type="passive"/>
+        <pin num="14" name="MALE_1_/_ANALYSER_OUT" type="passive"/>
+        <pin num="15" name="MALE_2_/_ANALYSER_OUT" type="passive"/>
+        <pin num="16" name="AGND" type="passive"/>
+        <pin num="17" name="ANALYSER_/_STROBE" type="passive"/>
+        <pin num="18" name="ANALYSER_/_RESET" type="passive"/>
+        <pin num="19" name="MEGA_5V" type="passive"/>
+        <pin num="20" name="GND" type="passive"/>
+        <pin num="21" name="GND" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="JP1">
+      <description>the single point where analogue ground meets power ground</description>
+      <fields>
+        <field name="Reference">JP</field>
+        <field name="Value">0R</field>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">the single point where analogue ground meets power ground</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="JP2">
+      <description>male1 audio return onto analogue ground</description>
+      <fields>
+        <field name="Reference">JP</field>
+        <field name="Value">0R</field>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">male1 audio return onto analogue ground</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="JP3">
+      <description>male2 audio return onto analogue ground</description>
+      <fields>
+        <field name="Reference">JP</field>
+        <field name="Value">0R</field>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">male2 audio return onto analogue ground</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="JP4">
+      <description>female1 audio return onto analogue ground</description>
+      <fields>
+        <field name="Reference">JP</field>
+        <field name="Value">0R</field>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">female1 audio return onto analogue ground</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="JP5">
+      <description>female2 audio return onto analogue ground</description>
+      <fields>
+        <field name="Reference">JP</field>
+        <field name="Value">0R</field>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">female2 audio return onto analogue ground</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="JP6">
+      <description>female3 audio return onto analogue ground</description>
+      <fields>
+        <field name="Reference">JP</field>
+        <field name="Value">0R</field>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">female3 audio return onto analogue ground</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="JV1">
+      <fields>
+        <field name="Reference">JV</field>
+        <field name="Value">female1 - KEY 6</field>
+        <field name="Footprint">Shields:Header_2x03_Key6</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="TONE" type="passive"/>
+        <pin num="2" name="GND" type="passive"/>
+        <pin num="3" name="AUDIO_OUT" type="passive"/>
+        <pin num="4" name="AGND" type="passive"/>
+        <pin num="5" name="+5V" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="JV2">
+      <fields>
+        <field name="Reference">JV</field>
+        <field name="Value">female2 - KEY 6</field>
+        <field name="Footprint">Shields:Header_2x03_Key6</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="TONE" type="passive"/>
+        <pin num="2" name="GND" type="passive"/>
+        <pin num="3" name="AUDIO_OUT" type="passive"/>
+        <pin num="4" name="AGND" type="passive"/>
+        <pin num="5" name="+5V" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="JV3">
+      <fields>
+        <field name="Reference">JV</field>
+        <field name="Value">female3 - KEY 6</field>
+        <field name="Footprint">Shields:Header_2x03_Key6</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="TONE" type="passive"/>
+        <pin num="2" name="GND" type="passive"/>
+        <pin num="3" name="AUDIO_OUT" type="passive"/>
+        <pin num="4" name="AGND" type="passive"/>
+        <pin num="5" name="+5V" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="JV4">
+      <fields>
+        <field name="Reference">JV</field>
+        <field name="Value">male1 - KEY 6</field>
+        <field name="Footprint">Shields:Header_2x03_Key6</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="TONE" type="passive"/>
+        <pin num="2" name="GND" type="passive"/>
+        <pin num="3" name="AUDIO_OUT" type="passive"/>
+        <pin num="4" name="AGND" type="passive"/>
+        <pin num="5" name="+5V" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="JV5">
+      <fields>
+        <field name="Reference">JV</field>
+        <field name="Value">male2 - KEY 6</field>
+        <field name="Footprint">Shields:Header_2x03_Key6</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="TONE" type="passive"/>
+        <pin num="2" name="GND" type="passive"/>
+        <pin num="3" name="AUDIO_OUT" type="passive"/>
+        <pin num="4" name="AGND" type="passive"/>
+        <pin num="5" name="+5V" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="M1">
+      <description>on its own mount; only the Dynamixel data line touches it</description>
+      <fields>
+        <field name="Reference">M</field>
+        <field name="Value">U2D2</field>
+        <field name="Footprint">Shields:u2d2_mounting</field>
+        <field name="Datasheet"/>
+        <field name="Description">on its own mount; only the Dynamixel data line touches it</field>
+      </fields>
+    </libpart>
+    <libpart lib="Colloquy" part="R103">
+      <description>male1 build-out into the harness</description>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">100R</field>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">male1 build-out into the harness</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="R203">
+      <description>male2 build-out into the harness</description>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">100R</field>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">male2 build-out into the harness</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="R303">
+      <description>female1 build-out into the harness</description>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">100R</field>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">female1 build-out into the harness</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="R403">
+      <description>female2 build-out into the harness</description>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">100R</field>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">female2 build-out into the harness</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="R503">
+      <description>female3 build-out into the harness</description>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">100R</field>
+        <field name="Footprint">Shields:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">female3 build-out into the harness</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RA1">
+      <description>male1 aux conductor - state LED or mute</description>
+      <fields>
+        <field name="Reference">RA</field>
+        <field name="Value">160R</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">male1 aux conductor - state LED or mute</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RA2">
+      <description>male2 aux conductor - state LED or mute</description>
+      <fields>
+        <field name="Reference">RA</field>
+        <field name="Value">160R</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">male2 aux conductor - state LED or mute</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RL1">
+      <fields>
+        <field name="Reference">RL</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RL2">
+      <fields>
+        <field name="Reference">RL</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RL3">
+      <fields>
+        <field name="Reference">RL</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RL4">
+      <fields>
+        <field name="Reference">RL</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RL5">
+      <fields>
+        <field name="Reference">RL</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RLP12">
+      <fields>
+        <field name="Reference">RLP</field>
+        <field name="Value">4K7</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RLP5">
+      <fields>
+        <field name="Reference">RLP</field>
+        <field name="Value">2K2</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RLPUSB">
+      <fields>
+        <field name="Reference">RLPUSB</field>
+        <field name="Value">2K2</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RLT1">
+      <fields>
+        <field name="Reference">RLT</field>
+        <field name="Value">1K5</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RLT2">
+      <fields>
+        <field name="Reference">RLT</field>
+        <field name="Value">1K5</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RLT3">
+      <fields>
+        <field name="Reference">RLT</field>
+        <field name="Value">1K5</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RLT4">
+      <fields>
+        <field name="Reference">RLT</field>
+        <field name="Value">1K5</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RLT5">
+      <fields>
+        <field name="Reference">RLT</field>
+        <field name="Value">1K5</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RM1">
+      <fields>
+        <field name="Reference">RM</field>
+        <field name="Value">4K7</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RM2">
+      <fields>
+        <field name="Reference">RM</field>
+        <field name="Value">4K7</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RM3">
+      <fields>
+        <field name="Reference">RM</field>
+        <field name="Value">4K7</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RM4">
+      <fields>
+        <field name="Reference">RM</field>
+        <field name="Value">4K7</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RM5">
+      <fields>
+        <field name="Reference">RM</field>
+        <field name="Value">4K7</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RMD1">
+      <fields>
+        <field name="Reference">RMD</field>
+        <field name="Value">1M</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RMD2">
+      <fields>
+        <field name="Reference">RMD</field>
+        <field name="Value">1M</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RMD3">
+      <fields>
+        <field name="Reference">RMD</field>
+        <field name="Value">1M</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RMD4">
+      <fields>
+        <field name="Reference">RMD</field>
+        <field name="Value">1M</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RMD5">
+      <fields>
+        <field name="Reference">RMD</field>
+        <field name="Value">1M</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RN1">
+      <description>series on female1/neopixel</description>
+      <fields>
+        <field name="Reference">RN</field>
+        <field name="Value">330R</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">series on female1/neopixel</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RN2">
+      <description>series on female2/neopixel</description>
+      <fields>
+        <field name="Reference">RN</field>
+        <field name="Value">330R</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">series on female2/neopixel</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RN3">
+      <description>series on female3/neopixel</description>
+      <fields>
+        <field name="Reference">RN</field>
+        <field name="Value">330R</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">series on female3/neopixel</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RN4">
+      <description>series on male1/neopixel</description>
+      <fields>
+        <field name="Reference">RN</field>
+        <field name="Value">330R</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">series on male1/neopixel</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RN5">
+      <description>series on male2/neopixel</description>
+      <fields>
+        <field name="Reference">RN</field>
+        <field name="Value">330R</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">series on male2/neopixel</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RN6">
+      <description>series on male1/bar neopixel</description>
+      <fields>
+        <field name="Reference">RN</field>
+        <field name="Value">330R</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">series on male1/bar neopixel</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RN7">
+      <description>series on male2/bar neopixel</description>
+      <fields>
+        <field name="Reference">RN</field>
+        <field name="Value">330R</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">series on male2/bar neopixel</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RND1">
+      <fields>
+        <field name="Reference">RND</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RND2">
+      <fields>
+        <field name="Reference">RND</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RND3">
+      <fields>
+        <field name="Reference">RND</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RND4">
+      <fields>
+        <field name="Reference">RND</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RND5">
+      <fields>
+        <field name="Reference">RND</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RND6">
+      <fields>
+        <field name="Reference">RND</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RND7">
+      <fields>
+        <field name="Reference">RND</field>
+        <field name="Value">100K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RP1">
+      <description>Provisional photosensor shunt; replace with measured calibration value before deployment</description>
+      <fields>
+        <field name="Reference">RP</field>
+        <field name="Value">10K provisional</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional photosensor shunt; replace with measured calibration value before deployment</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RP10">
+      <description>Provisional photosensor shunt; replace with measured calibration value before deployment</description>
+      <fields>
+        <field name="Reference">RP</field>
+        <field name="Value">10K provisional</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional photosensor shunt; replace with measured calibration value before deployment</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RP11">
+      <description>Provisional photosensor shunt; replace with measured calibration value before deployment</description>
+      <fields>
+        <field name="Reference">RP</field>
+        <field name="Value">10K provisional</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional photosensor shunt; replace with measured calibration value before deployment</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RP2">
+      <description>Provisional photosensor shunt; replace with measured calibration value before deployment</description>
+      <fields>
+        <field name="Reference">RP</field>
+        <field name="Value">10K provisional</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional photosensor shunt; replace with measured calibration value before deployment</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RP3">
+      <description>Provisional photosensor shunt; replace with measured calibration value before deployment</description>
+      <fields>
+        <field name="Reference">RP</field>
+        <field name="Value">10K provisional</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional photosensor shunt; replace with measured calibration value before deployment</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RP4">
+      <description>Provisional photosensor shunt; replace with measured calibration value before deployment</description>
+      <fields>
+        <field name="Reference">RP</field>
+        <field name="Value">10K provisional</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional photosensor shunt; replace with measured calibration value before deployment</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RP5">
+      <description>Provisional photosensor shunt; replace with measured calibration value before deployment</description>
+      <fields>
+        <field name="Reference">RP</field>
+        <field name="Value">10K provisional</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional photosensor shunt; replace with measured calibration value before deployment</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RP6">
+      <description>Provisional photosensor shunt; replace with measured calibration value before deployment</description>
+      <fields>
+        <field name="Reference">RP</field>
+        <field name="Value">10K provisional</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional photosensor shunt; replace with measured calibration value before deployment</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RP7">
+      <description>Provisional photosensor shunt; replace with measured calibration value before deployment</description>
+      <fields>
+        <field name="Reference">RP</field>
+        <field name="Value">10K provisional</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional photosensor shunt; replace with measured calibration value before deployment</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RP8">
+      <description>Provisional photosensor shunt; replace with measured calibration value before deployment</description>
+      <fields>
+        <field name="Reference">RP</field>
+        <field name="Value">10K provisional</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional photosensor shunt; replace with measured calibration value before deployment</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RP9">
+      <description>Provisional photosensor shunt; replace with measured calibration value before deployment</description>
+      <fields>
+        <field name="Reference">RP</field>
+        <field name="Value">10K provisional</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Provisional photosensor shunt; replace with measured calibration value before deployment</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Colloquy" part="RS1">
+      <description>Reserved D2 pullup to logic rail; prevents external +5V back-powering Mega</description>
+      <fields>
+        <field name="Reference">RS</field>
+        <field name="Value">10K</field>
+        <field name="Footprint">Shields:R_0603_1608Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Reserved D2 pullup to logic rail; prevents external +5V back-powering Mega</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Connector" part="DA15_Pins_MountingHoles">
+      <description>15-pin D-SUB connector, pins (male) (low-density/2 columns), Mounting Hole</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>DSUB*Pins*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">DA15_Pins_MountingHoles</field>
+        <field name="Footprint"/>
+        <field name="Datasheet">~</field>
+        <field name="Description">15-pin D-SUB connector, pins (male) (low-density/2 columns), Mounting Hole</field>
+      </fields>
+      <pins>
+        <pin num="0" name="PAD" type="passive"/>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+        <pin num="4" name="4" type="passive"/>
+        <pin num="5" name="5" type="passive"/>
+        <pin num="6" name="6" type="passive"/>
+        <pin num="7" name="7" type="passive"/>
+        <pin num="8" name="8" type="passive"/>
+        <pin num="9" name="P9" type="passive"/>
+        <pin num="10" name="P10" type="passive"/>
+        <pin num="11" name="P111" type="passive"/>
+        <pin num="12" name="P12" type="passive"/>
+        <pin num="13" name="P13" type="passive"/>
+        <pin num="14" name="P14" type="passive"/>
+        <pin num="15" name="P15" type="passive"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="Colloquy">
+      <uri>C:\workspace\workspace2\Colloquy\exposition\CAD\KiCad\proposed-solutions\shields\backplane\wired/Colloquy.kicad_sym</uri>
+    </library>
+    <library logical="Connector">
+      <uri>C:\Program Files\KiCad\9.0\share\kicad\symbols\/Connector.kicad_sym</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="Net-(A-J3-P9)" class="Default">
+      <node ref="A-J3" pin="9" pinfunction="P9" pintype="passive"/>
+      <node ref="C1" pin="1" pintype="passive"/>
+      <node ref="C2" pin="1" pintype="passive"/>
+      <node ref="J1" pin="15" pinfunction="P15" pintype="passive"/>
+      <node ref="J2" pin="1" pinfunction="+5V" pintype="passive"/>
+      <node ref="J5" pin="15" pinfunction="P15" pintype="passive"/>
+      <node ref="J6" pin="3" pinfunction="+5V" pintype="passive"/>
+      <node ref="J6" pin="5" pinfunction="+5V" pintype="passive"/>
+      <node ref="J6" pin="6" pinfunction="+5V" pintype="passive"/>
+      <node ref="JV1" pin="5" pinfunction="+5V" pintype="passive"/>
+      <node ref="JV2" pin="5" pinfunction="+5V" pintype="passive"/>
+      <node ref="JV3" pin="5" pinfunction="+5V" pintype="passive"/>
+      <node ref="JV4" pin="5" pinfunction="+5V" pintype="passive"/>
+      <node ref="JV5" pin="5" pinfunction="+5V" pintype="passive"/>
+      <node ref="RLP5" pin="1" pintype="passive"/>
+    </net>
+    <net code="2" name="Net-(A-J3-P10)" class="Default">
+      <node ref="A-J3" pin="10" pinfunction="P10" pintype="passive"/>
+      <node ref="J1" pin="14" pinfunction="P14" pintype="passive"/>
+      <node ref="J5" pin="14" pinfunction="P14" pintype="passive"/>
+      <node ref="J7" pin="3" pinfunction="DYNAMIXEL_DATA" pintype="passive"/>
+    </net>
+    <net code="3" name="Net-(A-J3-P12)" class="Default">
+      <node ref="A-J3" pin="12" pinfunction="P12" pintype="passive"/>
+      <node ref="R503" pin="2" pintype="passive"/>
+    </net>
+    <net code="4" name="Net-(A-J3-P13)" class="Default">
+      <node ref="A-J3" pin="13" pinfunction="P13" pintype="passive"/>
+      <node ref="JA1" pin="7" pinfunction="MALE_1_/_MIC" pintype="passive"/>
+      <node ref="RM4" pin="1" pintype="passive"/>
+    </net>
+    <net code="5" name="Net-(A-J3-P14)" class="Default">
+      <node ref="A-J3" pin="14" pinfunction="P14" pintype="passive"/>
+      <node ref="A1" pin="A8" pinfunction="MALE_1_/_LIGHT_SENSOR_/_A" pintype="input"/>
+      <node ref="RP4" pin="1" pintype="passive"/>
+    </net>
+    <net code="6" name="Net-(A-J3-P15)" class="Default">
+      <node ref="A-J3" pin="15" pinfunction="P15" pintype="passive"/>
+      <node ref="A1" pin="A10" pinfunction="MALE_1_/_LIGHT_SENSOR_/_C" pintype="input"/>
+      <node ref="RP6" pin="1" pintype="passive"/>
+    </net>
+    <net code="7" name="Net-(A-J3-P111)" class="Default">
+      <node ref="A-J3" pin="11" pinfunction="P111" pintype="passive"/>
+      <node ref="RN3" pin="2" pintype="passive"/>
+    </net>
+    <net code="8" name="Net-(A-J3-PAD)" class="Default">
+      <node ref="A-J3" pin="0" pinfunction="PAD" pintype="passive"/>
+      <node ref="A-J3" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="A1" pin="GND1" pintype="power_in"/>
+      <node ref="A1" pin="GND2" pintype="power_in"/>
+      <node ref="A1" pin="GND3" pintype="power_in"/>
+      <node ref="A1" pin="GND4" pintype="power_in"/>
+      <node ref="A1" pin="GND5" pintype="power_in"/>
+      <node ref="A1" pin="GND6" pintype="power_in"/>
+      <node ref="B-J4" pin="0" pinfunction="PAD" pintype="passive"/>
+      <node ref="C1" pin="2" pintype="passive"/>
+      <node ref="C2" pin="2" pintype="passive"/>
+      <node ref="DP12" pin="1" pintype="passive"/>
+      <node ref="DP5" pin="1" pintype="passive"/>
+      <node ref="DPUSB" pin="1" pintype="passive"/>
+      <node ref="DT1" pin="1" pintype="passive"/>
+      <node ref="DT2" pin="1" pintype="passive"/>
+      <node ref="DT3" pin="1" pintype="passive"/>
+      <node ref="DT4" pin="1" pintype="passive"/>
+      <node ref="DT5" pin="1" pintype="passive"/>
+      <node ref="J1" pin="0" pinfunction="PAD" pintype="passive"/>
+      <node ref="J1" pin="8" pinfunction="8" pintype="passive"/>
+      <node ref="J2" pin="2" pinfunction="GND" pintype="passive"/>
+      <node ref="J5" pin="0" pinfunction="PAD" pintype="passive"/>
+      <node ref="J5" pin="8" pinfunction="8" pintype="passive"/>
+      <node ref="J6" pin="1" pinfunction="GND" pintype="passive"/>
+      <node ref="J6" pin="2" pinfunction="GND" pintype="passive"/>
+      <node ref="J6" pin="4" pinfunction="GND" pintype="passive"/>
+      <node ref="J7" pin="1" pinfunction="GND" pintype="passive"/>
+      <node ref="JA1" pin="20" pinfunction="GND" pintype="passive"/>
+      <node ref="JA1" pin="21" pinfunction="GND" pintype="passive"/>
+      <node ref="JP1" pin="2" pintype="passive"/>
+      <node ref="JV1" pin="2" pinfunction="GND" pintype="passive"/>
+      <node ref="JV2" pin="2" pinfunction="GND" pintype="passive"/>
+      <node ref="JV3" pin="2" pinfunction="GND" pintype="passive"/>
+      <node ref="JV4" pin="2" pinfunction="GND" pintype="passive"/>
+      <node ref="JV5" pin="2" pinfunction="GND" pintype="passive"/>
+      <node ref="RND1" pin="2" pintype="passive"/>
+      <node ref="RND2" pin="2" pintype="passive"/>
+      <node ref="RND3" pin="2" pintype="passive"/>
+      <node ref="RND4" pin="2" pintype="passive"/>
+      <node ref="RND5" pin="2" pintype="passive"/>
+      <node ref="RND6" pin="2" pintype="passive"/>
+      <node ref="RND7" pin="2" pintype="passive"/>
+    </net>
+    <net code="9" name="Net-(A-J3-Pad5)" class="Default">
+      <node ref="A-J3" pin="5" pinfunction="5" pintype="passive"/>
+      <node ref="JP6" pin="1" pintype="passive"/>
+    </net>
+    <net code="10" name="Net-(A-J3-Pad6)" class="Default">
+      <node ref="A-J3" pin="6" pinfunction="6" pintype="passive"/>
+      <node ref="RN4" pin="2" pintype="passive"/>
+    </net>
+    <net code="11" name="Net-(A1-AMP_SHUTDOWN)" class="Default">
+      <node ref="A1" pin="D2" pinfunction="AMP_SHUTDOWN" pintype="bidirectional"/>
+      <node ref="RS1" pin="1" pintype="passive"/>
+    </net>
+    <net code="12" name="Net-(A1-ANALYSER_{slash}_RESET)" class="Default">
+      <node ref="A1" pin="D3" pinfunction="ANALYSER_/_RESET" pintype="output"/>
+      <node ref="JA1" pin="18" pinfunction="ANALYSER_/_RESET" pintype="passive"/>
+    </net>
+    <net code="13" name="Net-(A1-ANALYSER_{slash}_STROBE)" class="Default">
+      <node ref="A1" pin="D4" pinfunction="ANALYSER_/_STROBE" pintype="output"/>
+      <node ref="JA1" pin="17" pinfunction="ANALYSER_/_STROBE" pintype="passive"/>
+    </net>
+    <net code="14" name="Net-(A1-FEMALE_1_{slash}_ANALYSER_OUT)" class="Default">
+      <node ref="A1" pin="A0" pinfunction="FEMALE_1_/_ANALYSER_OUT" pintype="input"/>
+      <node ref="JA1" pin="11" pinfunction="FEMALE_1_/_ANALYSER_OUT" pintype="passive"/>
+    </net>
+    <net code="15" name="Net-(A1-FEMALE_1_{slash}_LIGHT_SENSOR)" class="Default">
+      <node ref="A1" pin="A5" pinfunction="FEMALE_1_/_LIGHT_SENSOR" pintype="input"/>
+      <node ref="J5" pin="5" pinfunction="5" pintype="passive"/>
+      <node ref="RP1" pin="1" pintype="passive"/>
+    </net>
+    <net code="16" name="Net-(A1-FEMALE_1_{slash}_MIC_DIRECT)" class="Default">
+      <node ref="A1" pin="D26" pinfunction="FEMALE_1_/_MIC_DIRECT" pintype="passive"/>
+      <node ref="RM1" pin="2" pintype="passive"/>
+      <node ref="RMD1" pin="1" pintype="passive"/>
+    </net>
+    <net code="17" name="Net-(A1-FEMALE_1_{slash}_NEOPIXEL_DATA_{slash}_DRIVEN)" class="Default">
+      <node ref="A1" pin="D14" pinfunction="FEMALE_1_/_NEOPIXEL_DATA_/_DRIVEN" pintype="output"/>
+      <node ref="RN1" pin="1" pintype="passive"/>
+      <node ref="RND1" pin="1" pintype="passive"/>
+    </net>
+    <net code="18" name="Net-(A1-FEMALE_1_{slash}_TONE)" class="Default">
+      <node ref="A1" pin="D6" pinfunction="FEMALE_1_/_TONE" pintype="output"/>
+      <node ref="JV1" pin="1" pinfunction="TONE" pintype="passive"/>
+      <node ref="RLT1" pin="1" pintype="passive"/>
+    </net>
+    <net code="19" name="Net-(A1-FEMALE_2_{slash}_ANALYSER_OUT)" class="Default">
+      <node ref="A1" pin="A1" pinfunction="FEMALE_2_/_ANALYSER_OUT" pintype="input"/>
+      <node ref="JA1" pin="12" pinfunction="FEMALE_2_/_ANALYSER_OUT" pintype="passive"/>
+    </net>
+    <net code="20" name="Net-(A1-FEMALE_2_{slash}_LIGHT_SENSOR)" class="Default">
+      <node ref="A1" pin="A6" pinfunction="FEMALE_2_/_LIGHT_SENSOR" pintype="input"/>
+      <node ref="J1" pin="5" pinfunction="5" pintype="passive"/>
+      <node ref="RP2" pin="1" pintype="passive"/>
+    </net>
+    <net code="21" name="Net-(A1-FEMALE_2_{slash}_MIC_DIRECT)" class="Default">
+      <node ref="A1" pin="D27" pinfunction="FEMALE_2_/_MIC_DIRECT" pintype="passive"/>
+      <node ref="RM2" pin="2" pintype="passive"/>
+      <node ref="RMD2" pin="1" pintype="passive"/>
+    </net>
+    <net code="22" name="Net-(A1-FEMALE_2_{slash}_NEOPIXEL_DATA_{slash}_DRIVEN)" class="Default">
+      <node ref="A1" pin="D7" pinfunction="FEMALE_2_/_NEOPIXEL_DATA_/_DRIVEN" pintype="output"/>
+      <node ref="RN2" pin="1" pintype="passive"/>
+      <node ref="RND2" pin="1" pintype="passive"/>
+    </net>
+    <net code="23" name="Net-(A1-FEMALE_2_{slash}_TONE)" class="Default">
+      <node ref="A1" pin="D46" pinfunction="FEMALE_2_/_TONE" pintype="output"/>
+      <node ref="JV2" pin="1" pinfunction="TONE" pintype="passive"/>
+      <node ref="RLT2" pin="1" pintype="passive"/>
+    </net>
+    <net code="24" name="Net-(A1-FEMALE_3_{slash}_ANALYSER_OUT)" class="Default">
+      <node ref="A1" pin="A2" pinfunction="FEMALE_3_/_ANALYSER_OUT" pintype="input"/>
+      <node ref="JA1" pin="13" pinfunction="FEMALE_3_/_ANALYSER_OUT" pintype="passive"/>
+    </net>
+    <net code="25" name="Net-(A1-FEMALE_3_{slash}_LIGHT_SENSOR)" class="Default">
+      <node ref="A-J3" pin="4" pinfunction="4" pintype="passive"/>
+      <node ref="A1" pin="A7" pinfunction="FEMALE_3_/_LIGHT_SENSOR" pintype="input"/>
+      <node ref="RP3" pin="1" pintype="passive"/>
+    </net>
+    <net code="26" name="Net-(A1-FEMALE_3_{slash}_MIC_DIRECT)" class="Default">
+      <node ref="A1" pin="D28" pinfunction="FEMALE_3_/_MIC_DIRECT" pintype="passive"/>
+      <node ref="RM3" pin="2" pintype="passive"/>
+      <node ref="RMD3" pin="1" pintype="passive"/>
+    </net>
+    <net code="27" name="Net-(A1-FEMALE_3_{slash}_NEOPIXEL_DATA_{slash}_DRIVEN)" class="Default">
+      <node ref="A1" pin="D8" pinfunction="FEMALE_3_/_NEOPIXEL_DATA_/_DRIVEN" pintype="output"/>
+      <node ref="RN3" pin="1" pintype="passive"/>
+      <node ref="RND3" pin="1" pintype="passive"/>
+    </net>
+    <net code="28" name="Net-(A1-FEMALE_3_{slash}_TONE)" class="Default">
+      <node ref="A1" pin="D10" pinfunction="FEMALE_3_/_TONE" pintype="output"/>
+      <node ref="JV3" pin="1" pinfunction="TONE" pintype="passive"/>
+      <node ref="RLT3" pin="1" pintype="passive"/>
+    </net>
+    <net code="29" name="Net-(A1-MALE_1_{slash}_ANALYSER_OUT)" class="Default">
+      <node ref="A1" pin="A3" pinfunction="MALE_1_/_ANALYSER_OUT" pintype="input"/>
+      <node ref="JA1" pin="14" pinfunction="MALE_1_/_ANALYSER_OUT" pintype="passive"/>
+    </net>
+    <net code="30" name="Net-(A1-MALE_1_{slash}_AUX_DRIVEN)" class="Default">
+      <node ref="A1" pin="D24" pinfunction="MALE_1_/_AUX_DRIVEN" pintype="output"/>
+      <node ref="RA1" pin="1" pintype="passive"/>
+    </net>
+    <net code="31" name="Net-(A1-MALE_1_{slash}_BAR_NEOPIXEL_DATA_{slash}_DRIVEN)" class="Default">
+      <node ref="A1" pin="D16" pinfunction="MALE_1_/_BAR_NEOPIXEL_DATA_/_DRIVEN" pintype="output"/>
+      <node ref="RN6" pin="1" pintype="passive"/>
+      <node ref="RND6" pin="1" pintype="passive"/>
+    </net>
+    <net code="32" name="Net-(A1-MALE_1_{slash}_LIGHT_SENSOR_{slash}_B)" class="Default">
+      <node ref="A-J3" pin="7" pinfunction="7" pintype="passive"/>
+      <node ref="A1" pin="A9" pinfunction="MALE_1_/_LIGHT_SENSOR_/_B" pintype="input"/>
+      <node ref="RP5" pin="1" pintype="passive"/>
+    </net>
+    <net code="33" name="Net-(A1-MALE_1_{slash}_LIGHT_SENSOR_{slash}_D)" class="Default">
+      <node ref="A-J3" pin="8" pinfunction="8" pintype="passive"/>
+      <node ref="A1" pin="A11" pinfunction="MALE_1_/_LIGHT_SENSOR_/_D" pintype="input"/>
+      <node ref="RP7" pin="1" pintype="passive"/>
+    </net>
+    <net code="34" name="Net-(A1-MALE_1_{slash}_MIC_DIRECT)" class="Default">
+      <node ref="A1" pin="D29" pinfunction="MALE_1_/_MIC_DIRECT" pintype="passive"/>
+      <node ref="RM4" pin="2" pintype="passive"/>
+      <node ref="RMD4" pin="1" pintype="passive"/>
+    </net>
+    <net code="35" name="Net-(A1-MALE_1_{slash}_NEOPIXEL_DATA_{slash}_DRIVEN)" class="Default">
+      <node ref="A1" pin="D9" pinfunction="MALE_1_/_NEOPIXEL_DATA_/_DRIVEN" pintype="output"/>
+      <node ref="RN4" pin="1" pintype="passive"/>
+      <node ref="RND4" pin="1" pintype="passive"/>
+    </net>
+    <net code="36" name="Net-(A1-MALE_1_{slash}_TONE)" class="Default">
+      <node ref="A1" pin="D11" pinfunction="MALE_1_/_TONE" pintype="output"/>
+      <node ref="JV4" pin="1" pinfunction="TONE" pintype="passive"/>
+      <node ref="RLT4" pin="1" pintype="passive"/>
+    </net>
+    <net code="37" name="Net-(A1-MALE_2_{slash}_ANALYSER_OUT)" class="Default">
+      <node ref="A1" pin="A4" pinfunction="MALE_2_/_ANALYSER_OUT" pintype="input"/>
+      <node ref="JA1" pin="15" pinfunction="MALE_2_/_ANALYSER_OUT" pintype="passive"/>
+    </net>
+    <net code="38" name="Net-(A1-MALE_2_{slash}_AUX_DRIVEN)" class="Default">
+      <node ref="A1" pin="D25" pinfunction="MALE_2_/_AUX_DRIVEN" pintype="output"/>
+      <node ref="RA2" pin="1" pintype="passive"/>
+    </net>
+    <net code="39" name="Net-(A1-MALE_2_{slash}_BAR_NEOPIXEL_DATA_{slash}_DRIVEN)" class="Default">
+      <node ref="A1" pin="D17" pinfunction="MALE_2_/_BAR_NEOPIXEL_DATA_/_DRIVEN" pintype="output"/>
+      <node ref="RN7" pin="1" pintype="passive"/>
+      <node ref="RND7" pin="1" pintype="passive"/>
+    </net>
+    <net code="40" name="Net-(A1-MALE_2_{slash}_LIGHT_SENSOR_{slash}_A)" class="Default">
+      <node ref="A1" pin="A12" pinfunction="MALE_2_/_LIGHT_SENSOR_/_A" pintype="input"/>
+      <node ref="B-J4" pin="11" pinfunction="P111" pintype="passive"/>
+      <node ref="RP8" pin="1" pintype="passive"/>
+    </net>
+    <net code="41" name="Net-(A1-MALE_2_{slash}_LIGHT_SENSOR_{slash}_B)" class="Default">
+      <node ref="A1" pin="A13" pinfunction="MALE_2_/_LIGHT_SENSOR_/_B" pintype="input"/>
+      <node ref="B-J4" pin="4" pinfunction="4" pintype="passive"/>
+      <node ref="RP9" pin="1" pintype="passive"/>
+    </net>
+    <net code="42" name="Net-(A1-MALE_2_{slash}_LIGHT_SENSOR_{slash}_C)" class="Default">
+      <node ref="A1" pin="A14" pinfunction="MALE_2_/_LIGHT_SENSOR_/_C" pintype="input"/>
+      <node ref="B-J4" pin="12" pinfunction="P12" pintype="passive"/>
+      <node ref="RP10" pin="1" pintype="passive"/>
+    </net>
+    <net code="43" name="Net-(A1-MALE_2_{slash}_LIGHT_SENSOR_{slash}_D)" class="Default">
+      <node ref="A1" pin="A15" pinfunction="MALE_2_/_LIGHT_SENSOR_/_D" pintype="input"/>
+      <node ref="B-J4" pin="5" pinfunction="5" pintype="passive"/>
+      <node ref="RP11" pin="1" pintype="passive"/>
+    </net>
+    <net code="44" name="Net-(A1-MALE_2_{slash}_MIC_DIRECT)" class="Default">
+      <node ref="A1" pin="D30" pinfunction="MALE_2_/_MIC_DIRECT" pintype="passive"/>
+      <node ref="RM5" pin="2" pintype="passive"/>
+      <node ref="RMD5" pin="1" pintype="passive"/>
+    </net>
+    <net code="45" name="Net-(A1-MALE_2_{slash}_NEOPIXEL_DATA_{slash}_DRIVEN)" class="Default">
+      <node ref="A1" pin="D15" pinfunction="MALE_2_/_NEOPIXEL_DATA_/_DRIVEN" pintype="output"/>
+      <node ref="RN5" pin="1" pintype="passive"/>
+      <node ref="RND5" pin="1" pintype="passive"/>
+    </net>
+    <net code="46" name="Net-(A1-MALE_2_{slash}_TONE)" class="Default">
+      <node ref="A1" pin="D5" pinfunction="MALE_2_/_TONE" pintype="output"/>
+      <node ref="JV5" pin="1" pinfunction="TONE" pintype="passive"/>
+      <node ref="RLT5" pin="1" pintype="passive"/>
+    </net>
+    <net code="47" name="Net-(B-J4-P9)" class="Default">
+      <node ref="B-J4" pin="9" pinfunction="P9" pintype="passive"/>
+      <node ref="R103" pin="2" pintype="passive"/>
+    </net>
+    <net code="48" name="Net-(B-J4-P10)" class="Default">
+      <node ref="B-J4" pin="10" pinfunction="P10" pintype="passive"/>
+      <node ref="JA1" pin="9" pinfunction="MALE_2_/_MIC" pintype="passive"/>
+      <node ref="RM5" pin="1" pintype="passive"/>
+    </net>
+    <net code="49" name="Net-(B-J4-P13)" class="Default">
+      <node ref="B-J4" pin="13" pinfunction="P13" pintype="passive"/>
+      <node ref="RA2" pin="2" pintype="passive"/>
+    </net>
+    <net code="50" name="Net-(B-J4-P14)" class="Default">
+      <node ref="B-J4" pin="14" pinfunction="P14" pintype="passive"/>
+      <node ref="JP3" pin="1" pintype="passive"/>
+    </net>
+    <net code="51" name="Net-(B-J4-P15)" class="Default">
+      <node ref="B-J4" pin="15" pinfunction="P15" pintype="passive"/>
+      <node ref="RN6" pin="2" pintype="passive"/>
+    </net>
+    <net code="52" name="Net-(B-J4-Pad1)" class="Default">
+      <node ref="B-J4" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="RA1" pin="2" pintype="passive"/>
+    </net>
+    <net code="53" name="Net-(B-J4-Pad2)" class="Default">
+      <node ref="B-J4" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="JP2" pin="1" pintype="passive"/>
+    </net>
+    <net code="54" name="Net-(B-J4-Pad3)" class="Default">
+      <node ref="B-J4" pin="3" pinfunction="3" pintype="passive"/>
+      <node ref="RN5" pin="2" pintype="passive"/>
+    </net>
+    <net code="55" name="Net-(B-J4-Pad6)" class="Default">
+      <node ref="B-J4" pin="6" pinfunction="6" pintype="passive"/>
+      <node ref="R203" pin="2" pintype="passive"/>
+    </net>
+    <net code="56" name="Net-(B-J4-Pad8)" class="Default">
+      <node ref="B-J4" pin="8" pinfunction="8" pintype="passive"/>
+      <node ref="RN7" pin="2" pintype="passive"/>
+    </net>
+    <net code="57" name="Net-(DP5-Pad2)" class="Default">
+      <node ref="DP5" pin="2" pintype="passive"/>
+      <node ref="RLP5" pin="2" pintype="passive"/>
+    </net>
+    <net code="58" name="Net-(DP12-Pad2)" class="Default">
+      <node ref="DP12" pin="2" pintype="passive"/>
+      <node ref="RLP12" pin="2" pintype="passive"/>
+    </net>
+    <net code="59" name="Net-(DPUSB-Pad2)" class="Default">
+      <node ref="DPUSB" pin="2" pintype="passive"/>
+      <node ref="RLPUSB" pin="2" pintype="passive"/>
+    </net>
+    <net code="60" name="Net-(DT1-Pad2)" class="Default">
+      <node ref="DT1" pin="2" pintype="passive"/>
+      <node ref="RLT1" pin="2" pintype="passive"/>
+    </net>
+    <net code="61" name="Net-(DT2-Pad2)" class="Default">
+      <node ref="DT2" pin="2" pintype="passive"/>
+      <node ref="RLT2" pin="2" pintype="passive"/>
+    </net>
+    <net code="62" name="Net-(DT3-Pad2)" class="Default">
+      <node ref="DT3" pin="2" pintype="passive"/>
+      <node ref="RLT3" pin="2" pintype="passive"/>
+    </net>
+    <net code="63" name="Net-(DT4-Pad2)" class="Default">
+      <node ref="DT4" pin="2" pintype="passive"/>
+      <node ref="RLT4" pin="2" pintype="passive"/>
+    </net>
+    <net code="64" name="Net-(DT5-Pad2)" class="Default">
+      <node ref="DT5" pin="2" pintype="passive"/>
+      <node ref="RLT5" pin="2" pintype="passive"/>
+    </net>
+    <net code="65" name="Net-(Extra1-FEMALE_2_{slash}_SPARE1)" class="Default">
+      <node ref="Extra1" pin="1" pinfunction="FEMALE_2_/_SPARE1" pintype="passive"/>
+      <node ref="J1" pin="1" pinfunction="1" pintype="passive"/>
+    </net>
+    <net code="66" name="Net-(Extra1-FEMALE_2_{slash}_SPARE2)" class="Default">
+      <node ref="Extra1" pin="2" pinfunction="FEMALE_2_/_SPARE2" pintype="passive"/>
+      <node ref="J1" pin="2" pinfunction="2" pintype="passive"/>
+    </net>
+    <net code="67" name="Net-(Extra1-FEMALE_2_{slash}_SPARE3)" class="Default">
+      <node ref="Extra1" pin="3" pinfunction="FEMALE_2_/_SPARE3" pintype="passive"/>
+      <node ref="J1" pin="3" pinfunction="3" pintype="passive"/>
+    </net>
+    <net code="68" name="Net-(Extra1-FEMALE_2_{slash}_SPARE4)" class="Default">
+      <node ref="Extra1" pin="4" pinfunction="FEMALE_2_/_SPARE4" pintype="passive"/>
+      <node ref="J1" pin="9" pinfunction="P9" pintype="passive"/>
+    </net>
+    <net code="69" name="Net-(Extra1-FEMALE_2_{slash}_SPARE5)" class="Default">
+      <node ref="Extra1" pin="5" pinfunction="FEMALE_2_/_SPARE5" pintype="passive"/>
+      <node ref="J1" pin="10" pinfunction="P10" pintype="passive"/>
+    </net>
+    <net code="70" name="Net-(Extra1-FEMALE_2_{slash}_SPARE6)" class="Default">
+      <node ref="Extra1" pin="6" pinfunction="FEMALE_2_/_SPARE6" pintype="passive"/>
+      <node ref="J1" pin="11" pinfunction="P111" pintype="passive"/>
+    </net>
+    <net code="71" name="Net-(Extra2-FEMALE_1_{slash}_SPARE1)" class="Default">
+      <node ref="Extra2" pin="1" pinfunction="FEMALE_1_/_SPARE1" pintype="passive"/>
+      <node ref="J5" pin="1" pinfunction="1" pintype="passive"/>
+    </net>
+    <net code="72" name="Net-(Extra2-FEMALE_1_{slash}_SPARE2)" class="Default">
+      <node ref="Extra2" pin="2" pinfunction="FEMALE_1_/_SPARE2" pintype="passive"/>
+      <node ref="J5" pin="2" pinfunction="2" pintype="passive"/>
+    </net>
+    <net code="73" name="Net-(Extra2-FEMALE_1_{slash}_SPARE3)" class="Default">
+      <node ref="Extra2" pin="3" pinfunction="FEMALE_1_/_SPARE3" pintype="passive"/>
+      <node ref="J5" pin="3" pinfunction="3" pintype="passive"/>
+    </net>
+    <net code="74" name="Net-(Extra2-FEMALE_1_{slash}_SPARE4)" class="Default">
+      <node ref="Extra2" pin="4" pinfunction="FEMALE_1_/_SPARE4" pintype="passive"/>
+      <node ref="J5" pin="9" pinfunction="P9" pintype="passive"/>
+    </net>
+    <net code="75" name="Net-(Extra2-FEMALE_1_{slash}_SPARE5)" class="Default">
+      <node ref="Extra2" pin="5" pinfunction="FEMALE_1_/_SPARE5" pintype="passive"/>
+      <node ref="J5" pin="10" pinfunction="P10" pintype="passive"/>
+    </net>
+    <net code="76" name="Net-(Extra2-FEMALE_1_{slash}_SPARE6)" class="Default">
+      <node ref="Extra2" pin="6" pinfunction="FEMALE_1_/_SPARE6" pintype="passive"/>
+      <node ref="J5" pin="11" pinfunction="P111" pintype="passive"/>
+    </net>
+    <net code="77" name="Net-(Extra3-CENTRE_{slash}_SPARE1)" class="Default">
+      <node ref="B-J4" pin="7" pinfunction="7" pintype="passive"/>
+      <node ref="Extra3" pin="1" pinfunction="CENTRE_/_SPARE1" pintype="passive"/>
+    </net>
+    <net code="78" name="Net-(J1-P12)" class="Default">
+      <node ref="J1" pin="12" pinfunction="P12" pintype="passive"/>
+      <node ref="R403" pin="2" pintype="passive"/>
+    </net>
+    <net code="79" name="Net-(J1-P13)" class="Default">
+      <node ref="J1" pin="13" pinfunction="P13" pintype="passive"/>
+      <node ref="RN2" pin="2" pintype="passive"/>
+    </net>
+    <net code="80" name="Net-(J1-Pad4)" class="Default">
+      <node ref="J1" pin="4" pinfunction="4" pintype="passive"/>
+      <node ref="JP5" pin="1" pintype="passive"/>
+    </net>
+    <net code="81" name="Net-(J5-P12)" class="Default">
+      <node ref="J5" pin="12" pinfunction="P12" pintype="passive"/>
+      <node ref="R303" pin="2" pintype="passive"/>
+    </net>
+    <net code="82" name="Net-(J5-P13)" class="Default">
+      <node ref="J5" pin="13" pinfunction="P13" pintype="passive"/>
+      <node ref="RN1" pin="2" pintype="passive"/>
+    </net>
+    <net code="83" name="Net-(J5-Pad4)" class="Default">
+      <node ref="J5" pin="4" pinfunction="4" pintype="passive"/>
+      <node ref="JP4" pin="1" pintype="passive"/>
+    </net>
+    <net code="84" name="Net-(J7-+12V)" class="Default">
+      <node ref="A-J3" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="J1" pin="7" pinfunction="7" pintype="passive"/>
+      <node ref="J5" pin="7" pinfunction="7" pintype="passive"/>
+      <node ref="J7" pin="2" pinfunction="+12V" pintype="passive"/>
+      <node ref="RLP12" pin="1" pintype="passive"/>
+    </net>
+    <net code="85" name="Net-(JA1-FEMALE_1_{slash}_MIC)" class="Default">
+      <node ref="J5" pin="6" pinfunction="6" pintype="passive"/>
+      <node ref="JA1" pin="1" pinfunction="FEMALE_1_/_MIC" pintype="passive"/>
+      <node ref="RM1" pin="1" pintype="passive"/>
+    </net>
+    <net code="86" name="Net-(JA1-FEMALE_2_{slash}_MIC)" class="Default">
+      <node ref="J1" pin="6" pinfunction="6" pintype="passive"/>
+      <node ref="JA1" pin="3" pinfunction="FEMALE_2_/_MIC" pintype="passive"/>
+      <node ref="RM2" pin="1" pintype="passive"/>
+    </net>
+    <net code="87" name="Net-(JA1-FEMALE_3_{slash}_MIC)" class="Default">
+      <node ref="A-J3" pin="3" pinfunction="3" pintype="passive"/>
+      <node ref="JA1" pin="5" pinfunction="FEMALE_3_/_MIC" pintype="passive"/>
+      <node ref="RM3" pin="1" pintype="passive"/>
+    </net>
+    <net code="88" name="Net-(JA1-MEGA_5V)" class="Default">
+      <node ref="A1" pin="5V1" pintype="power_out"/>
+      <node ref="A1" pin="5V2" pintype="passive"/>
+      <node ref="A1" pin="5V3" pintype="passive"/>
+      <node ref="A1" pin="5V4" pintype="passive"/>
+      <node ref="JA1" pin="19" pinfunction="MEGA_5V" pintype="passive"/>
+      <node ref="RLPUSB" pin="1" pintype="passive"/>
+      <node ref="RS1" pin="2" pintype="passive"/>
+    </net>
+    <net code="89" name="Net-(JV1-AGND)" class="Default">
+      <node ref="JA1" pin="10" pinfunction="AGND" pintype="passive"/>
+      <node ref="JA1" pin="16" pinfunction="AGND" pintype="passive"/>
+      <node ref="JA1" pin="2" pinfunction="AGND" pintype="passive"/>
+      <node ref="JA1" pin="4" pinfunction="AGND" pintype="passive"/>
+      <node ref="JA1" pin="6" pinfunction="AGND" pintype="passive"/>
+      <node ref="JA1" pin="8" pinfunction="AGND" pintype="passive"/>
+      <node ref="JP1" pin="1" pintype="passive"/>
+      <node ref="JP2" pin="2" pintype="passive"/>
+      <node ref="JP3" pin="2" pintype="passive"/>
+      <node ref="JP4" pin="2" pintype="passive"/>
+      <node ref="JP5" pin="2" pintype="passive"/>
+      <node ref="JP6" pin="2" pintype="passive"/>
+      <node ref="JV1" pin="4" pinfunction="AGND" pintype="passive"/>
+      <node ref="JV2" pin="4" pinfunction="AGND" pintype="passive"/>
+      <node ref="JV3" pin="4" pinfunction="AGND" pintype="passive"/>
+      <node ref="JV4" pin="4" pinfunction="AGND" pintype="passive"/>
+      <node ref="JV5" pin="4" pinfunction="AGND" pintype="passive"/>
+      <node ref="RL1" pin="2" pintype="passive"/>
+      <node ref="RL2" pin="2" pintype="passive"/>
+      <node ref="RL3" pin="2" pintype="passive"/>
+      <node ref="RL4" pin="2" pintype="passive"/>
+      <node ref="RL5" pin="2" pintype="passive"/>
+      <node ref="RMD1" pin="2" pintype="passive"/>
+      <node ref="RMD2" pin="2" pintype="passive"/>
+      <node ref="RMD3" pin="2" pintype="passive"/>
+      <node ref="RMD4" pin="2" pintype="passive"/>
+      <node ref="RMD5" pin="2" pintype="passive"/>
+      <node ref="RP1" pin="2" pintype="passive"/>
+      <node ref="RP10" pin="2" pintype="passive"/>
+      <node ref="RP11" pin="2" pintype="passive"/>
+      <node ref="RP2" pin="2" pintype="passive"/>
+      <node ref="RP3" pin="2" pintype="passive"/>
+      <node ref="RP4" pin="2" pintype="passive"/>
+      <node ref="RP5" pin="2" pintype="passive"/>
+      <node ref="RP6" pin="2" pintype="passive"/>
+      <node ref="RP7" pin="2" pintype="passive"/>
+      <node ref="RP8" pin="2" pintype="passive"/>
+      <node ref="RP9" pin="2" pintype="passive"/>
+    </net>
+    <net code="90" name="Net-(JV1-AUDIO_OUT)" class="Default">
+      <node ref="JV1" pin="3" pinfunction="AUDIO_OUT" pintype="passive"/>
+      <node ref="R303" pin="1" pintype="passive"/>
+      <node ref="RL1" pin="1" pintype="passive"/>
+    </net>
+    <net code="91" name="Net-(JV2-AUDIO_OUT)" class="Default">
+      <node ref="JV2" pin="3" pinfunction="AUDIO_OUT" pintype="passive"/>
+      <node ref="R403" pin="1" pintype="passive"/>
+      <node ref="RL2" pin="1" pintype="passive"/>
+    </net>
+    <net code="92" name="Net-(JV3-AUDIO_OUT)" class="Default">
+      <node ref="JV3" pin="3" pinfunction="AUDIO_OUT" pintype="passive"/>
+      <node ref="R503" pin="1" pintype="passive"/>
+      <node ref="RL3" pin="1" pintype="passive"/>
+    </net>
+    <net code="93" name="Net-(JV4-AUDIO_OUT)" class="Default">
+      <node ref="JV4" pin="3" pinfunction="AUDIO_OUT" pintype="passive"/>
+      <node ref="R103" pin="1" pintype="passive"/>
+      <node ref="RL4" pin="1" pintype="passive"/>
+    </net>
+    <net code="94" name="Net-(JV5-AUDIO_OUT)" class="Default">
+      <node ref="JV5" pin="3" pinfunction="AUDIO_OUT" pintype="passive"/>
+      <node ref="R203" pin="1" pintype="passive"/>
+      <node ref="RL5" pin="1" pintype="passive"/>
+    </net>
+    <net code="95" name="unconnected-(A1-Pad3V3)" class="Default">
+      <node ref="A1" pin="3V3" pintype="passive+no_connect"/>
+    </net>
+    <net code="96" name="unconnected-(A1-PadAREF)" class="Default">
+      <node ref="A1" pin="AREF" pintype="passive+no_connect"/>
+    </net>
+    <net code="97" name="unconnected-(A1-PadD0)" class="Default">
+      <node ref="A1" pin="D0" pintype="passive+no_connect"/>
+    </net>
+    <net code="98" name="unconnected-(A1-PadD1)" class="Default">
+      <node ref="A1" pin="D1" pintype="passive+no_connect"/>
+    </net>
+    <net code="99" name="unconnected-(A1-PadD12)" class="Default">
+      <node ref="A1" pin="D12" pintype="passive+no_connect"/>
+    </net>
+    <net code="100" name="unconnected-(A1-PadD13)" class="Default">
+      <node ref="A1" pin="D13" pintype="passive+no_connect"/>
+    </net>
+    <net code="101" name="unconnected-(A1-PadD18)" class="Default">
+      <node ref="A1" pin="D18" pintype="passive+no_connect"/>
+    </net>
+    <net code="102" name="unconnected-(A1-PadD19)" class="Default">
+      <node ref="A1" pin="D19" pintype="passive+no_connect"/>
+    </net>
+    <net code="103" name="unconnected-(A1-PadD20)" class="Default">
+      <node ref="A1" pin="D20" pintype="passive+no_connect"/>
+    </net>
+    <net code="104" name="unconnected-(A1-PadD21)" class="Default">
+      <node ref="A1" pin="D21" pintype="passive+no_connect"/>
+    </net>
+    <net code="105" name="unconnected-(A1-PadD22)" class="Default">
+      <node ref="A1" pin="D22" pintype="passive+no_connect"/>
+    </net>
+    <net code="106" name="unconnected-(A1-PadD23)" class="Default">
+      <node ref="A1" pin="D23" pintype="passive+no_connect"/>
+    </net>
+    <net code="107" name="unconnected-(A1-PadD31)" class="Default">
+      <node ref="A1" pin="D31" pintype="passive+no_connect"/>
+    </net>
+    <net code="108" name="unconnected-(A1-PadD32)" class="Default">
+      <node ref="A1" pin="D32" pintype="passive+no_connect"/>
+    </net>
+    <net code="109" name="unconnected-(A1-PadD33)" class="Default">
+      <node ref="A1" pin="D33" pintype="passive+no_connect"/>
+    </net>
+    <net code="110" name="unconnected-(A1-PadD34)" class="Default">
+      <node ref="A1" pin="D34" pintype="passive+no_connect"/>
+    </net>
+    <net code="111" name="unconnected-(A1-PadD35)" class="Default">
+      <node ref="A1" pin="D35" pintype="passive+no_connect"/>
+    </net>
+    <net code="112" name="unconnected-(A1-PadD36)" class="Default">
+      <node ref="A1" pin="D36" pintype="passive+no_connect"/>
+    </net>
+    <net code="113" name="unconnected-(A1-PadD37)" class="Default">
+      <node ref="A1" pin="D37" pintype="passive+no_connect"/>
+    </net>
+    <net code="114" name="unconnected-(A1-PadD38)" class="Default">
+      <node ref="A1" pin="D38" pintype="passive+no_connect"/>
+    </net>
+    <net code="115" name="unconnected-(A1-PadD39)" class="Default">
+      <node ref="A1" pin="D39" pintype="passive+no_connect"/>
+    </net>
+    <net code="116" name="unconnected-(A1-PadD40)" class="Default">
+      <node ref="A1" pin="D40" pintype="passive+no_connect"/>
+    </net>
+    <net code="117" name="unconnected-(A1-PadD41)" class="Default">
+      <node ref="A1" pin="D41" pintype="passive+no_connect"/>
+    </net>
+    <net code="118" name="unconnected-(A1-PadD42)" class="Default">
+      <node ref="A1" pin="D42" pintype="passive+no_connect"/>
+    </net>
+    <net code="119" name="unconnected-(A1-PadD43)" class="Default">
+      <node ref="A1" pin="D43" pintype="passive+no_connect"/>
+    </net>
+    <net code="120" name="unconnected-(A1-PadD44)" class="Default">
+      <node ref="A1" pin="D44" pintype="passive+no_connect"/>
+    </net>
+    <net code="121" name="unconnected-(A1-PadD45)" class="Default">
+      <node ref="A1" pin="D45" pintype="passive+no_connect"/>
+    </net>
+    <net code="122" name="unconnected-(A1-PadD47)" class="Default">
+      <node ref="A1" pin="D47" pintype="passive+no_connect"/>
+    </net>
+    <net code="123" name="unconnected-(A1-PadD48)" class="Default">
+      <node ref="A1" pin="D48" pintype="passive+no_connect"/>
+    </net>
+    <net code="124" name="unconnected-(A1-PadD49)" class="Default">
+      <node ref="A1" pin="D49" pintype="passive+no_connect"/>
+    </net>
+    <net code="125" name="unconnected-(A1-PadD50)" class="Default">
+      <node ref="A1" pin="D50" pintype="passive+no_connect"/>
+    </net>
+    <net code="126" name="unconnected-(A1-PadD51)" class="Default">
+      <node ref="A1" pin="D51" pintype="passive+no_connect"/>
+    </net>
+    <net code="127" name="unconnected-(A1-PadD52)" class="Default">
+      <node ref="A1" pin="D52" pintype="passive+no_connect"/>
+    </net>
+    <net code="128" name="unconnected-(A1-PadD53)" class="Default">
+      <node ref="A1" pin="D53" pintype="passive+no_connect"/>
+    </net>
+    <net code="129" name="unconnected-(A1-PadIORF)" class="Default">
+      <node ref="A1" pin="IORF" pintype="passive+no_connect"/>
+    </net>
+    <net code="130" name="unconnected-(A1-PadMISO)" class="Default">
+      <node ref="A1" pin="MISO" pintype="passive+no_connect"/>
+    </net>
+    <net code="131" name="unconnected-(A1-PadMOSI)" class="Default">
+      <node ref="A1" pin="MOSI" pintype="passive+no_connect"/>
+    </net>
+    <net code="132" name="unconnected-(A1-PadRST1)" class="Default">
+      <node ref="A1" pin="RST1" pintype="passive+no_connect"/>
+    </net>
+    <net code="133" name="unconnected-(A1-PadRST2)" class="Default">
+      <node ref="A1" pin="RST2" pintype="passive+no_connect"/>
+    </net>
+    <net code="134" name="unconnected-(A1-PadSCK)" class="Default">
+      <node ref="A1" pin="SCK" pintype="passive+no_connect"/>
+    </net>
+    <net code="135" name="unconnected-(A1-PadSCL)" class="Default">
+      <node ref="A1" pin="SCL" pintype="passive+no_connect"/>
+    </net>
+    <net code="136" name="unconnected-(A1-PadSDA)" class="Default">
+      <node ref="A1" pin="SDA" pintype="passive+no_connect"/>
+    </net>
+    <net code="137" name="unconnected-(A1-PadVIN)" class="Default">
+      <node ref="A1" pin="VIN" pintype="passive+no_connect"/>
+    </net>
+  </nets>
+</export>
