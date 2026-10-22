@@ -175,6 +175,17 @@ cython_debug/
 *.MP4
 docs/~$questions.xlsx
 # KiCad writes an autosave zip on every save; the projects are tracked
-# and their backup folders are not.
-/CAD/KiCad/*/*-backups
+# and their backup folders are not, at any depth. Nor are its per-machine
+# view state and footprint cache (the few old ones already tracked stay).
+/CAD/KiCad/**/*-backups/
+/CAD/KiCad/**/*.kicad_prl
+/CAD/KiCad/**/fp-info-cache
 *.lck
+# The work folder the CAD scripts write into: staged boards, router runs,
+# previews, the freerouting jar.
+/tmp/
+# Attachments dropped by remote assistant sessions.
+/.codex-remote-attachments/
+# The unpacked copy of output/Colloquy-PCB-fit-check-1to1.zip.
+/output/pdf/pcb-fit-check/
+__MACOSX/
