@@ -11,6 +11,7 @@ orders"]` and `tmp_path` for the screenshot folder.
 """
 import io
 import re
+import zipfile
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -89,6 +90,7 @@ def test_the_walk_goes_on_past_a_board_that_went_wrong(tmp_path):
     assert location(post((first.id, "cart"), book, tmp_path)) == f"/pcb-order/{second.id}/1"
     assert book[first.id]["status"] == orders.IN_CART
     assert book[first.id]["pcb"] == first.source_sha256
+    assert book[first.id]["uploads"] == orders.uploads(first)
 
     answer = post((second.id, "error"), book, tmp_path,
                   {"step": "3", "note": "écran: BOM refusée"}, {"screenshot": ("shot.png", PNG)})
@@ -118,12 +120,14 @@ def test_a_walk_skips_what_is_in_the_cart_or_ordered():
 
 
 def test_ordered_marks_the_cart_and_only_the_cart(tmp_path):
-    book = {BOARDS[0].id: {"status": orders.IN_CART, "pcb": "abc", "changed at": "2026-10-21T10:00:00"},
+    book = {BOARDS[0].id: {"status": orders.IN_CART, "pcb": "abc", "uploads": {"cpl": "c"},
+                           "changed at": "2026-10-21T10:00:00"},
             BOARDS[1].id: {"status": orders.ERROR, "note": "refused"}}
     assert location(post(("ordered",), book, tmp_path, {"order number": " W2026102112 "})) == "/pcb-order/done"
     assert book[BOARDS[0].id]["status"] == orders.ORDERED
     assert book[BOARDS[0].id]["order number"] == "W2026102112"
     assert book[BOARDS[0].id]["pcb"] == "abc"
+    assert book[BOARDS[0].id]["uploads"] == {"cpl": "c"}
     assert book[BOARDS[0].id]["in the cart at"] == "2026-10-21T10:00:00"
     assert book[BOARDS[1].id] == {"status": orders.ERROR, "note": "refused"}
 
@@ -134,11 +138,45 @@ def test_reset_puts_a_board_back_to_waiting(tmp_path):
     assert orders.status_of(book, BOARDS[0].id) == orders.WAITING
 
 
-@pytest.mark.parametrize("action", ["cart", "error", "reset"])
+@pytest.mark.parametrize("action", ["cart", "error", "reset", "again"])
 def test_a_link_or_a_reload_to_a_press_changes_nothing(tmp_path, action):
     book = {}
     assert location(get((BOARDS[0].id, action), book, tmp_path)) == f"/pcb-order/{BOARDS[0].id}/1"
     assert book == {}
+
+
+def test_starting_again_puts_the_cart_back_in_the_walk_from_the_first_board(tmp_path):
+    book = {BOARDS[0].id: {"status": orders.ERROR, "note": "white refused"},
+            BOARDS[1].id: {"status": orders.ORDERED},
+            BOARDS[2].id: {"status": orders.IN_CART, "pcb": "abc"},
+            BOARDS[3].id: {"status": orders.IN_CART}}
+    assert location(post(("start-again",), book, tmp_path)) == f"/pcb-order/{BOARDS[0].id}/1"
+    # The error keeps what its next attempt starts from; the bought stays bought.
+    assert book[BOARDS[0].id] == {"status": orders.ERROR, "note": "white refused"}
+    assert book[BOARDS[1].id] == {"status": orders.ORDERED}
+    assert orders.status_of(book, BOARDS[2].id) == orders.WAITING
+    assert orders.status_of(book, BOARDS[3].id) == orders.WAITING
+    assert orders.next_url(BOARDS, book, BOARDS[0]) == f"/pcb-order/{BOARDS[2].id}/1"
+
+
+def test_a_link_to_start_again_changes_nothing(tmp_path):
+    book = {BOARDS[0].id: {"status": orders.IN_CART}}
+    assert location(get(("start-again",), book, tmp_path)) == "/pcb-order"
+    assert orders.status_of(book, BOARDS[0].id) == orders.IN_CART
+
+
+@pytest.mark.parametrize("page", [(), ("done",)])
+def test_start_again_is_offered_while_something_is_in_the_cart(page, tmp_path):
+    book = {BOARDS[2].id: {"status": orders.IN_CART}}
+    assert 'action="/pcb-order/start-again"' in get(page, book, tmp_path)[2].decode()
+    assert 'action="/pcb-order/start-again"' not in get(page, {}, tmp_path)[2].decode()
+
+
+def test_again_walks_one_board_from_its_first_step(tmp_path):
+    book = {BOARDS[2].id: {"status": orders.IN_CART}, BOARDS[3].id: {"status": orders.IN_CART}}
+    assert location(post((BOARDS[2].id, "again"), book, tmp_path)) == f"/pcb-order/{BOARDS[2].id}/1"
+    assert orders.status_of(book, BOARDS[2].id) == orders.WAITING
+    assert orders.status_of(book, BOARDS[3].id) == orders.IN_CART
 
 
 def test_without_records_a_press_is_refused_before_anything_is_kept(tmp_path):
@@ -146,6 +184,81 @@ def test_without_records_a_press_is_refused_before_anything_is_kept(tmp_path):
                            {"step": "1", "note": "x"}, {"screenshot": ("shot.png", PNG)})
     assert status == "409 Conflict" and b"no order records" in body
     assert list(tmp_path.iterdir()) == []
+
+
+# --- what went into the cart --------------------------------------------
+
+
+def a_package(plot=b"X0Y0D01*", cpl=b"Designator,Rotation\nR1,0\n", stamp="2026-10-22T10:00:00"):
+    """A package as `catalog.production_bytes` hands it over, with the
+    time of the export in the comments of both plots, as KiCad writes it."""
+    plots = io.BytesIO()
+    with zipfile.ZipFile(plots, "w") as archive:
+        archive.writestr("b-F_Cu.gtl", f"G04 #@! TF.CreationDate,{stamp}*\r\n%FSLAX46Y46*%\r\n".encode() + plot)
+        archive.writestr("b-PTH.drl", f"; DRILL file {{KiCad 9.0.7}} date {stamp}\nM48\n".encode())
+    package = io.BytesIO()
+    with zipfile.ZipFile(package, "w") as archive:
+        archive.writestr("gerbers.zip", plots.getvalue())
+        archive.writestr("BOM.csv", b"Comment,Designator\n100K,R1\n")
+        archive.writestr("CPL.csv", cpl)
+    return package.getvalue()
+
+
+def serve(monkeypatch, content):
+    monkeypatch.setattr(catalog, "production_bytes", lambda board: content)
+
+
+def test_a_re_export_of_an_unchanged_board_uploads_the_same_files(monkeypatch):
+    serve(monkeypatch, a_package())
+    before = orders.uploads(BOARDS[0])
+    serve(monkeypatch, a_package(stamp="2026-10-23T09:00:00"))
+    assert orders.uploads(BOARDS[0]) == before
+
+
+def test_each_upload_is_compared_on_its_own(monkeypatch):
+    serve(monkeypatch, a_package())
+    kept = {"status": orders.IN_CART, "uploads": orders.uploads(BOARDS[0])}
+    assert orders.changes_since_cart(kept, BOARDS[0]) == ()
+    serve(monkeypatch, a_package(cpl=b"Designator,Rotation\nR1,270\n"))
+    assert orders.changes_since_cart(kept, BOARDS[0]) == ("CPL",)
+    serve(monkeypatch, a_package(plot=b"X1Y0D01*", cpl=b"Designator,Rotation\nR1,270\n"))
+    assert orders.changes_since_cart(kept, BOARDS[0]) == ("Gerbers", "CPL")
+
+
+def test_the_cart_says_which_board_is_no_longer_what_the_package_holds(monkeypatch, tmp_path):
+    serve(monkeypatch, a_package())
+    book = {}
+    post((BOARDS[0].id, "cart"), book, tmp_path)
+    page = get(("done",), book, tmp_path)[2].decode()
+    assert "earlier revision" not in page and "order it again" not in page
+    assert "only its layout" not in page
+
+    serve(monkeypatch, a_package(cpl=b"Designator,Rotation\nR1,270\n"))
+    page = get(("done",), book, tmp_path)[2].decode()
+    assert "the CPL has changed since it went in the cart" in page
+    assert "1 of them may not be what the package holds now" in page
+    assert f'action="/pcb-order/{BOARDS[0].id}/again"' in page
+    assert "the CPL has changed" in orders.catalog_html(book)
+
+
+def test_a_cart_from_before_the_uploads_were_kept_says_what_it_compares():
+    book = {BOARDS[0].id: {"status": orders.IN_CART, "pcb": BOARDS[0].source_sha256}}
+    page = orders.catalog_html(book)
+    assert "only its layout is compared" in page and "earlier revision" not in page
+
+
+def test_a_package_that_cannot_be_read_is_said_not_raised(monkeypatch, tmp_path):
+    def refuse(board):
+        raise gerbers.PackageError("assembly export is stale")
+
+    monkeypatch.setattr(catalog, "production_bytes", refuse)
+    book = {BOARDS[0].id: {"status": orders.IN_CART, "uploads": {"gerbers": "abc"}}}
+    page = get(("done",), book, tmp_path)[2].decode()
+    assert "cannot be compared with what went in the cart: assembly export is stale" in page
+    # Nor is a press for it kept as in the cart.
+    status, _, body = post((BOARDS[1].id, "cart"), book, tmp_path)
+    assert status == "409 Conflict" and b"order it again once the package is back" in body
+    assert BOARDS[1].id not in book
 
 
 # --- screenshots --------------------------------------------------------

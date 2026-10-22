@@ -22,6 +22,20 @@ cannot be ordered is no reason to hold up the rest. The walk ends on the
 cart page, which marks everything in the cart as ordered at once: the
 cart is paid once, for all of it.
 
+`start again from the beginning` (on the overview and the cart) sets
+every board in the cart back to waiting and begins the walk at the first
+board: for when JLC's cart has been emptied, or the packages have moved
+on under it. Boards in error keep their note - it is what their next
+attempt starts from - and ordered ones stay ordered.
+
+A board put in the cart keeps a digest of each file it was given
+(`uploads`): the Gerbers, the BOM, the CPL. Wherever its status is drawn
+they are compared with the package as it is now, so a cart holding the
+previous export's CPL says so before it is paid for, and the cart page
+offers to order that board again. The Gerbers are compared without their
+comments, because KiCad stamps the time into every plot and a re-export
+of an unchanged board must not look like a new one.
+
 The statuses are notes in `params["pcb orders"]`, one record per board,
 written only by a press on these pages. That makes them this machine's:
 a board put in the cart from the bench machine is still waiting on the
@@ -48,6 +62,7 @@ from __future__ import annotations
 import csv
 import email.parser
 import email.policy
+import hashlib
 import io
 import json
 import re
@@ -80,6 +95,10 @@ STEPS = (
     "Anything else to check",
     "Put it in the cart",
 )
+
+# What JLC is given for a board in steps 1 and 3, by its download kind
+# (`catalog.PACKAGE_FILES`), and what each is called on a page.
+UPLOADS = {"gerbers": "Gerbers", "bom": "BOM", "cpl": "CPL"}
 
 QUOTE_PAGE = "https://cart.jlcpcb.com/quote"
 # Asked for with this order (2026-10-21); every board, the same.
@@ -203,6 +222,7 @@ STYLE = (
     ".source { opacity: 0.6; font-size: 0.85rem; } "
     "ul.checks { list-style: none; padding: 0; } "
     "ul.checks li { margin: 0.4rem 0; } "
+    "li form { display: inline; } "
     "a.button, button { display: inline-block; padding: 0.5rem 2ch; "
     "border: 2px solid currentColor; border-radius: 6px; font: inherit; "
     "font-weight: bold; text-decoration: none; margin: 0.4rem 1ch 0.4rem 0; "
@@ -333,6 +353,48 @@ def package(board: gerbers.Board) -> Package:
     )
 
 
+# --- what went into the cart ------------------------------------------
+
+
+def _without_comments(name: str, data: bytes) -> bytes:
+    """A plot as the fab reads it. KiCad writes the time of the export
+    into comments - `G04` lines in a Gerber, `;` lines in a drill file."""
+    mark = b";" if name.lower().endswith(".drl") else b"G04"
+    lines = data.replace(b"\r\n", b"\n").split(b"\n")
+    return b"\n".join(line for line in lines if not line.startswith(mark))
+
+
+def uploads(board: gerbers.Board) -> dict[str, str]:
+    """A digest of each file of `UPLOADS`, out of the checked package.
+
+    Raises `gerbers.PackageError` when the package cannot be offered.
+    """
+    with zipfile.ZipFile(io.BytesIO(catalog.production_bytes(board))) as archive:
+        files = {kind: archive.read(catalog.PACKAGE_FILES[kind][0]) for kind in UPLOADS}
+    with zipfile.ZipFile(io.BytesIO(files.pop("gerbers"))) as plots:
+        layers = {name: hashlib.sha256(_without_comments(name, plots.read(name))).hexdigest()
+                  for name in plots.namelist()}
+    found = {"gerbers": hashlib.sha256(json.dumps(layers, sort_keys=True).encode()).hexdigest()}
+    for kind, data in files.items():
+        found[kind] = hashlib.sha256(data.replace(b"\r\n", b"\n")).hexdigest()
+    return found
+
+
+def changes_since_cart(found: Mapping[str, Any], board: gerbers.Board) -> tuple[str, ...]:
+    """Which uploads the package now differs in from those that went into
+    the cart, by their page names; empty when none does.
+
+    A record from before the uploads were kept has only the layout's
+    digest to go on, and says "PCB" when that has moved. Raises
+    `gerbers.PackageError` when the package cannot be read.
+    """
+    kept = found.get("uploads")
+    if not isinstance(kept, Mapping):
+        return ("PCB",) if found.get("pcb") and found["pcb"] != board.source_sha256 else ()
+    now = uploads(board)
+    return tuple(name for kind, name in UPLOADS.items() if kept.get(kind) != now[kind])
+
+
 # --- pieces of page ---------------------------------------------------
 
 
@@ -350,9 +412,31 @@ def _status_words(found: Mapping[str, Any], board: gerbers.Board) -> str:
         words += f" since {escape(when)}"
     if found.get("order number"):
         words += f", JLC order {escape(str(found['order number']))}"
-    if status in (IN_CART, ORDERED) and found.get("pcb") and found["pcb"] != board.source_sha256:
-        words += " - <strong>for an earlier revision: the PCB has changed since</strong>"
+    if status in (IN_CART, ORDERED):
+        words += _cart_check(found, board)[1]
     return words
+
+
+def _listed(names: tuple[str, ...]) -> str:
+    return f"{', '.join(names[:-1])} and {names[-1]}" if len(names) > 1 else names[0]
+
+
+def _cart_check(found: Mapping[str, Any], board: gerbers.Board) -> tuple[bool, str]:
+    """Whether what went into the cart is in doubt, and the words to say
+    so after the status. Never raises: it is drawn on the home page."""
+    try:
+        changed = changes_since_cart(found, board)
+    except Exception as error:  # noqa: BLE001 - see the docstring
+        return True, (f' - <strong style="color:{_COLOURS[ERROR]}">cannot be compared with what '
+                      f"went in the cart: {escape(str(error))}</strong>")
+    if changed:
+        verb = "have" if len(changed) > 1 or changed == ("Gerbers",) else "has"
+        return True, (f' - <strong style="color:{_COLOURS[ERROR]}">for an earlier revision: the '
+                      f"{escape(_listed(changed))} {verb} changed since it went in the cart</strong>")
+    if found["status"] == IN_CART and not isinstance(found.get("uploads"), Mapping):
+        return False, (" (put in the cart before its uploads were kept: only its layout "
+                       "is compared, not its BOM and CPL)")
+    return False, ""
 
 
 def _error_details(found: Mapping[str, Any], picture: bool = False) -> str:
@@ -651,6 +735,27 @@ STEP_PAGES: tuple[Callable[[gerbers.Board, Package], str], ...] = (
 # --- the pages --------------------------------------------------------
 
 
+def _in_cart(boards: tuple[gerbers.Board, ...], book: Mapping[str, Any] | None) -> list[gerbers.Board]:
+    return [board for board in boards if status_of(book, board.id) == IN_CART]
+
+
+def _start_again(in_cart: list[gerbers.Board]) -> str:
+    """The press that puts the cart back into the walk. Only drawn with
+    something in the cart: otherwise the walk already begins at the
+    beginning."""
+    if not in_cart:
+        return ""
+    listed = ", ".join(board.title for board in in_cart)
+    return (
+        f'<form method="post" action="{ROUTE}/start-again" name="start again">'
+        f"<p>To start again from the first PCB, delete the {len(in_cart)} in the cart "
+        f"({escape(listed)}) from JLC's cart first: each goes back to <em>waiting order</em> "
+        "and is walked again. PCBs in error keep their note; ordered ones stay ordered.</p>"
+        "<p><label><input type=\"checkbox\" required> JLC's cart no longer holds them</label></p>"
+        '<button type="submit">start again from the beginning</button></form>'
+    )
+
+
 def _overview(boards: tuple[gerbers.Board, ...], book: Mapping[str, Any] | None) -> str:
     walk = _walk(boards, book)
     rows = "".join(
@@ -683,6 +788,7 @@ def _overview(boards: tuple[gerbers.Board, ...], book: Mapping[str, Any] | None)
         + begin
         + "<table><tr><th>PCB</th><th>needed</th><th>order</th><th></th></tr>"
         + rows + "</table>"
+        + _start_again(_in_cart(boards, book))
     )
 
 
@@ -724,15 +830,28 @@ def _step_page(boards: tuple[gerbers.Board, ...], book: Mapping[str, Any] | None
 
 
 def _done(boards: tuple[gerbers.Board, ...], book: Mapping[str, Any] | None) -> str:
-    in_cart = [board for board in boards if status_of(book, board.id) == IN_CART]
+    in_cart = _in_cart(boards, book)
     errors = [board for board in boards if status_of(book, board.id) == ERROR]
     walk = _walk(boards, book)
 
     if in_cart:
-        listed = "".join(f"<li>{escape(board.title)}</li>" for board in in_cart)
+        listed, doubtful = "", 0
+        for board in in_cart:
+            in_doubt, words = _cart_check(record(book, board.id), board)
+            listed += f"<li>{escape(board.title)}{words}"
+            if in_doubt:
+                doubtful += 1
+                listed += (f' <form method="post" action="{ROUTE}/{board.id}/again">'
+                           '<button type="submit" class="small">deleted from JLC\'s cart - '
+                           "order it again</button></form>")
+            listed += "</li>"
+        warning = (f'<p class="problem">{doubtful} of them may not be what the package holds '
+                   "now: delete those from JLC's cart and order them again before paying.</p>"
+                   if doubtful else "")
         pay = (
             f"<p>JLC's cart should hold exactly these {len(in_cart)}, each with the "
             f"quantities chosen in step 2:</p><ul>{listed}</ul>"
+            + warning +
             "<p>Pay for them there. Then:</p>"
             f'<form method="post" action="{ROUTE}/ordered">'
             "<p><label>JLC order number (optional) "
@@ -762,6 +881,7 @@ def _done(boards: tuple[gerbers.Board, ...], book: Mapping[str, Any] | None) -> 
         + (f"<h2>In error</h2>{trouble}" if errors else "")
         + again
         + "<h2>Every PCB</h2><table>" + rows + "</table>"
+        + _start_again(in_cart)
     )
 
 
@@ -895,9 +1015,16 @@ def _respond(parts: tuple[str, ...], environ: Mapping[str, Any],
         for board in boards:
             found = record(book, board.id)
             if found["status"] == IN_CART:
-                _write(book, board, ORDERED, pcb=found.get("pcb", ""),
+                kept = {"uploads": found["uploads"]} if "uploads" in found else {}
+                _write(book, board, ORDERED, pcb=found.get("pcb", ""), **kept,
                        **{"order number": number, "in the cart at": found.get("changed at", "")})
         return _redirect(f"{ROUTE}/done")
+    if parts == ("start-again",):
+        if not is_post:
+            return _redirect(ROUTE)
+        for board in _in_cart(boards, book):
+            _write(book, board, WAITING)
+        return _redirect(next_url(boards, book))
 
     if len(parts) != 2:
         raise gerbers.PackageError(f"there is no order page {'/'.join(parts)!r}")
@@ -907,18 +1034,28 @@ def _respond(parts: tuple[str, ...], environ: Mapping[str, Any],
     if action in {str(number) for number in range(1, len(STEPS) + 1)}:
         return _html("200 OK", f"{board.title} - step {action}",
                      _step_page(boards, book, board, int(action)))
-    if action not in ("cart", "error", "reset"):
+    if action not in ("cart", "error", "reset", "again"):
         raise gerbers.PackageError(f"there is no order page {'/'.join(parts)!r}")
     if not is_post:
         # A press is a form; a link or a reload that lands here does nothing.
         return _redirect(f"{ROUTE}/{board.id}/1")
 
     if action == "cart":
-        _write(book, board, IN_CART, pcb=board.source_sha256)
+        # Read again at the press, which follows the downloads by minutes.
+        try:
+            given = uploads(board)
+        except gerbers.PackageError as error:
+            raise OrderError(f"the package cannot be read now ({error}), so what went in the "
+                             "cart cannot be kept: delete it from JLC's cart and order it again "
+                             "once the package is back") from error
+        _write(book, board, IN_CART, pcb=board.source_sha256, uploads=given)
         return _redirect(next_url(boards, book, board))
     if action == "reset":
         _write(book, board, WAITING)
         return _redirect(f"{ROUTE}/done")
+    if action == "again":
+        _write(book, board, WAITING)
+        return _redirect(f"{ROUTE}/{board.id}/1")
 
     fields, files = read_form(environ)
     try:
