@@ -26,7 +26,7 @@
   {
     "project": "voice-thomas",
     "zip": "voice-thomas\\manufacturing\\voice-thomas-manufacturing.zip",
-    "sha256": "6af555a831b68456a4a97ad7763e46d510acf55cea0ac1dbc994966db8df04d2",
+    "sha256": "2906966679d97e5ea73c84d00c4f0d737c6ce4d5394c70fad537c3487e085265",
     "assembly_policy": "hand_assembled_bare_board",
     "files": 33,
     "copper_layers": 2,

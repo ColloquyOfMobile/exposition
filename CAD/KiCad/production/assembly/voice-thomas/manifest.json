@@ -1,8 +1,8 @@
 {
   "board": "voice-thomas",
   "source": "proposed-solutions/shields/voice-thomas/voice-thomas.kicad_pcb",
-  "source_sha256": "88be276f4390852b83a7869e69b1cc13638cc2ab74bf08e2652b147fc6833be7",
-  "exported_at": "2026-10-22T08:35:37+00:00",
+  "source_sha256": "80beb165f54a4131781e07938bf3d25e0bf40025cb8a4ca76eeea0c450c0cc75",
+  "exported_at": "2026-10-22T09:08:56+00:00",
   "generator_sha256": "47b132b749e5a0f2d1d79dcb660d0aedbab3fe436ff581532cd4254ad7d43fa1",
   "parts_sha256": "3375ee27a43c0e2aa7f048f93445941a43bf4c1317b986a4a722206d85696f18",
   "smd_count": 0,
@@ -11,11 +11,11 @@
   "files": {
     "BOM.csv": "e5eee47a36a8dffaf5ecd11f31094ec549fc53c82b0635b6331b7a3ce8cf09ec",
     "CPL.csv": "c3283d256a0bf8c1ce91fafff3bf24bc2141cc1ed6c27537cb18dc735f116cb5",
-    "gerbers.zip": "b248600f5bf1ad9a90b2053af8057caa338a459c106977bbc8bbfdcfd023f590",
+    "gerbers.zip": "1353f58f9975defc1da029308c78acbe7b510438a38695c7dbe7c7871071aecc",
     "manual-and-DNP.csv": "b05f9841234136b85f7c58bcf914478b23489501fcd2ac9f3b509fdc9b010e55",
     "reference/positions-all-kicad.csv": "459c7e40b1aea7e30b17fb52ad668ae262e2cb62833b83696db22efcf09878a7",
-    "reference/assembly-top.svg": "594a9f0e545c5e0d29ab2a9d5e0e953d86d59ca2b215d4fa88b8c62971de426d",
-    "checks/drc.json": "d774b573923e41736a1f44d3482d1630925d55df47aa5538e26983b2f8a62958",
+    "reference/assembly-top.svg": "641f3c17c6e5fcef8916480577a6492a01dff6f675c79ed952f2f071a9512a1a",
+    "checks/drc.json": "010ff38f8c28dc4e9ba13a9b3431917bfefab0f6c9ed46aa386b4b6d14c8d69b",
     "reference/assembly-parts.json": "3375ee27a43c0e2aa7f048f93445941a43bf4c1317b986a4a722206d85696f18",
     "reference/proposed-solutions/shields/README.md": "9954d53ef24d431c0edbed0cb005bfc5902d31b857ea62c92d3459d6b5eb0de5",
     "reference/proposed-solutions/shields/REVIEW.md": "a84300bdced7025a1052024c1be0d673ede8e4522a4aaf474b2ecc7710161d3e",
@@ -40,6 +40,6 @@
     "reference/project/variants/pitch-5657/bom.csv": "7d6bc00078aa75e0f8ea109e949cdb1060027a44bdec63978ddfcce2e3872b97",
     "reference/project/variants/pitch-707/bom.csv": "c5b6d0519469ba04677c95a9bebef5afe4f68eb30b416c2830653cbb8975ac2e",
     "reference/project/variants/pitch-8000/bom.csv": "a52865da6751fa0dfe6aee102dfa4a97a254c9339c54a26a129cdfb3d5d6d554",
-    "README-JLCPCB.md": "a5486b5fa35e6dc2ddfc79cbeee9c4605f48fef1e069dad7c4af22f4d9c3ca77"
+    "README-JLCPCB.md": "b367cdf97a5bbc73edd9cbc776ca7d05f2f2fcfffc6920527b5625e801bd8647"
   }
 }

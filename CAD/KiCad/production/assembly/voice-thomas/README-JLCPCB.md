@@ -29,7 +29,7 @@ Existing module-fit, connector-keying and enclosure checks still apply.
 This file supersedes older bare-board/hand-SMD advice in reference documents.
 
 Source: CAD/KiCad/proposed-solutions/shields/voice-thomas/voice-thomas.kicad_pcb
-Source SHA256 (LF normalized): 88be276f4390852b83a7869e69b1cc13638cc2ab74bf08e2652b147fc6833be7
+Source SHA256 (LF normalized): 80beb165f54a4131781e07938bf3d25e0bf40025cb8a4ca76eeea0c450c0cc75
 KiCad: 9.0.7. DRC: zero errors and zero unconnected items.
 JLCPCB formats: https://jlcpcb.com/help/article/how-to-generate-bom-and-centroid-files-from-kicad-8
 https://jlcpcb.com/help/article/pick-place-file-for-pcb-assembly

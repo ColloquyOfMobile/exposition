@@ -110,8 +110,8 @@
         "proposed-solutions/shields/voice-thomas/bom.csv",
         "proposed-solutions/shields/voice-thomas/variants.csv"
       ],
-      "source sha256": "88be276f4390852b83a7869e69b1cc13638cc2ab74bf08e2652b147fc6833be7",
-      "exported at": "2026-10-22T10:35:24",
+      "source sha256": "80beb165f54a4131781e07938bf3d25e0bf40025cb8a4ca76eeea0c450c0cc75",
+      "exported at": "2026-10-22T11:08:52",
       "exported with": "KiCad 9.0.7",
       "copper layers": 2,
       "size mm": [

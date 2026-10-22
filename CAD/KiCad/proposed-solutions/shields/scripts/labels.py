@@ -9,10 +9,10 @@ def label(board,value,x,y,size=.8,back=False):
     t=text(board,value,x,y,size,p.B_SilkS if back else p.F_SilkS)
     t.SetMirrored(back);return t
 
-def writebox(board,x,y,w,h):
+def writebox(board,x,y,w,h,filled=True):
     shape=p.PCB_SHAPE(board);shape.SetShape(p.SHAPE_T_RECT)
     shape.SetStart(xy(x,y));shape.SetEnd(xy(x+w,y+h));shape.SetLayer(p.F_SilkS)
-    shape.SetFilled(True);shape.SetWidth(mm(.1));board.Add(shape)
+    shape.SetFilled(filled);shape.SetWidth(mm(.1));board.Add(shape)
 
 def main(only=None):
     for folder in ROOT.iterdir():
@@ -86,8 +86,9 @@ def main(only=None):
             named.update(['TP1','TP2'])
         elif name=='voice-thomas':
             label(b,'VOICE CARD - THOMAS RC',65,51.5,.8)
-            label(b,'PITCH             Hz',65,81,.8);writebox(b,61,82,7,1.6)
-            label(b,'BODY',57,84.5,.8);writebox(b,60,84,8,1.6)
+            # Black silkscreen on white mask: leave the writing area clear.
+            label(b,'PITCH             Hz',65,81,.8);writebox(b,61,82,7,1.6,filled=False)
+            label(b,'BODY',57,84.5,.8);writebox(b,60,84,8,1.6,filled=False)
             label(b,'R1 R2 C1 C2\nSET THE PITCH',74,69,.8)
             at('TP1','TONE',0,-2);at('TP4','LINE',-1,2);at('TP5','AGND',6,2)
             at('JV1','1',-1,-2);at('JV1','KEY',5,5.08)
