@@ -1,7 +1,7 @@
 (export (version "E")
   (design
-    (source "C:\\workspace\\workspace2\\Colloquy\\exposition\\CAD\\KiCad\\shields\\voice-thomas\\voice-thomas.kicad_sch")
-    (date "2026-10-06T14:45:30+0200")
+    (source "C:\\workspace\\workspace2\\Colloquy\\exposition\\CAD\\KiCad\\proposed-solutions\\shields\\voice-thomas\\voice-thomas.kicad_sch")
+    (date "2026-10-22T10:34:57+0200")
     (tool "Eeschema 9.0.7")
     (sheet (number "1") (name "/") (tstamps "/")
       (title_block
@@ -127,9 +127,9 @@
       (tstamps "0c82aec4-7e4a-57f5-bfa1-657246426776"))
     (comp (ref "R3")
       (value "100K")
-      (footprint "Shields:R_0603_1608Metric")
+      (footprint "Shields:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
       (fields
-        (field (name "Footprint") "Shields:R_0603_1608Metric")
+        (field (name "Footprint") "Shields:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
         (field (name "Datasheet"))
         (field (name "Description")))
       (libsource (lib "Colloquy") (part "R3") (description ""))
@@ -241,7 +241,7 @@
       (fields
         (field (name "Reference") "R")
         (field (name "Value") "100K")
-        (field (name "Footprint") "Shields:R_0603_1608Metric")
+        (field (name "Footprint") "Shields:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
         (field (name "Datasheet"))
         (field (name "Description")))
       (pins
@@ -278,7 +278,7 @@
         (pin (num "1") (name "") (type "passive")))))
   (libraries
     (library (logical "Colloquy")
-      (uri "C:\\workspace\\workspace2\\Colloquy\\exposition\\CAD\\KiCad\\shields\\voice-thomas/Colloquy.kicad_sym")))
+      (uri "C:\\workspace\\workspace2\\Colloquy\\exposition\\CAD\\KiCad\\proposed-solutions\\shields\\voice-thomas/Colloquy.kicad_sym")))
   (nets
     (net (code "1") (name "AGND") (class "Default")
       (node (ref "C1") (pin "1") (pintype "passive"))

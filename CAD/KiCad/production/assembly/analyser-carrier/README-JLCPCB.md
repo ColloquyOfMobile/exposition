@@ -1,6 +1,6 @@
 # Analyser carrier: JLCPCB fabrication and SMD assembly
 
-Upload gerbers.zip for the PCB, then BOM.csv and CPL.csv for assembly.
+Upload gerbers.zip for the PCB. Turn PCB Assembly OFF; all components are hand fitted.
 Fit exactly the 0 Top-side SMD references in BOM.csv; Quantity is per PCB.
 Each row specifies the manufacturer, exact orderable MPN and LCSC part number.
 Do not substitute parts automatically. Check JLCPCB's current stock/assembly options.
@@ -8,16 +8,19 @@ There are no SMD components: order this PCB bare; the BOM and CPL contain header
 All through-hole parts, plug-in modules and mounting hardware are hand fitted.
 manual-and-DNP.csv lists every excluded reference and why. DNP means do not fit.
 The U2D2 and screw/power hardware are not machine-placed SMD parts even where
-their KiCad footprint attribute says SMD. The voice-card R3 IS machine placed;
-its pitch-dependent through-hole parts remain hand fitted according to variants.
+their KiCad footprint attribute says SMD. The voice card is entirely through-hole,
+including its 100K axial R3; all its parts are hand fitted according to variants.
 
 CPL coordinates are mm using the same absolute origin as Gerbers and drills.
 KiCad's exported Y convention is retained. Rotations are CCW degrees, 0 <= angle < 360.
 Do not mirror supplied coordinates. reference/assembly-top.svg shows the layout.
 Confirm the JLCPCB assembly preview before ordering: LEDs and Schottky diodes
 have pad 1 = cathode; electrolytics pad 1 = positive; IC pin 1 must match the drawing.
-The CPL contains footprint rotations; the assembler must verify its library's
-reel orientation. No unverified global rotation correction has been applied.
+The CPL applies only exact-part rotation corrections recorded in assembly-parts.json.
+On the Teensy adapter, C90755 (SN74LV4T125PWR) adds 270 degrees to KiCad's
+footprint rotation; U1-U4 are therefore 270 degrees. Confirm pin 1 at the upper-left pad in
+the top view (2.8625 mm left and 1.95 mm above each footprint center).
+Other parts retain their KiCad rotation. Verify the assembly preview before payment.
 
 Backplane RP1-RP11 remain the designed provisional 10K population for calibration.
 Body-board C1 remains the designed provisional 220uF/10V reservoir; the chosen

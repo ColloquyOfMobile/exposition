@@ -155,7 +155,7 @@
     {
       "ref": "R3",
       "value": "100K",
-      "footprint": "Shields:R_0603_1608Metric",
+      "footprint": "Shields:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal",
       "pins": {
         "1": "tone",
         "2": "GND"

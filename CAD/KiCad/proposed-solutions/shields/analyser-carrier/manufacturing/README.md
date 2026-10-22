@@ -1,5 +1,5 @@
 # JLCPCB manufacturing package
 
-Unpack `analyser-carrier-manufacturing.zip`. Upload `gerbers.zip`, `BOM.csv` and `CPL.csv` separately as directed by `README-JLCPCB.md`.
+Unpack `analyser-carrier-manufacturing.zip`. Upload `gerbers.zip`, order this PCB bare with PCB Assembly OFF. BOM/CPL contain headers only.
 
 Regenerate with KiCad Python and `export_jlcpcb.py` at the repository root.

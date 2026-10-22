@@ -15,7 +15,7 @@ SPEC = importlib.util.spec_from_file_location("export_jlcpcb", gerbers.REPO_FOLD
 exporter = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(exporter)
 PARTS = json.loads(exporter.PARTS_PATH.read_text())
-COUNTS = {"backplane": 72, "teensy-adapter": 65, "voice-thomas": 1,
+COUNTS = {"backplane": 72, "teensy-adapter": 65, "voice-thomas": 0,
           "analyser-carrier": 0, "microphone-flex": 6, "female-base-v2": 4, "male-static-v2": 4}
 
 
@@ -42,11 +42,14 @@ def test_manufacturing_job_matches_its_board_and_has_complete_assembly_files(boa
             original = native[row["Designator"]]
             assert float(row["Mid X"].removesuffix("mm")) == float(original["PosX"])
             assert float(row["Mid Y"].removesuffix("mm")) == float(original["PosY"])
-            assert float(row["Rotation"]) == float(original["Rot"]) % 360
+            correction = 270 if board.id == "teensy-adapter" and row["Designator"] in {"U1", "U2", "U3", "U4"} else 0
+            assert float(row["Rotation"]) == (float(original["Rot"]) + correction) % 360
         if board.id == "backplane":
             assert not {"M1", "J2", "J6"} & set(refs)
+            assert {row["LCSC Part #"] for row in bom if row["Designator"] in {"RA1", "RA2"}} == {"C22814"}
         if board.id == "voice-thomas":
-            assert refs == ["R3"]
+            assert refs == []
+            assert next(row for row in manual if row["reference"] == "R3")["footprint"] == "R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
         if board.id == "microphone-flex":
             assert set(refs) == {"R4", "R5", "R6", "C6", "C7", "D1"}
             assert {"JP1", "JP2"} <= {row["reference"] for row in manual}
@@ -90,6 +93,25 @@ def test_a_new_footprint_or_value_cannot_reuse_old_placement():
     position = {"Side": "top", "Val": "10K", "Package": "R_0603_1608Metric"}
     with pytest.raises(ValueError, match="disagree"):
         exporter.assembly_rows([component], {"R1": position}, PARTS)
+
+
+@pytest.mark.parametrize("angle,expected", [(0, 270), (90, 0), (180, 90), (270, 180)])
+def test_exact_ic_rotation_correction_wraps_without_moving_the_component(angle, expected):
+    component = {"reference": "U1", "value": "SN74LV4T125PWR", "footprint": "TSSOP-14_4.4x5mm_P0.65mm"}
+    position = {"Side": "top", "Val": component["value"], "Package": component["footprint"],
+                "PosX": "151", "PosY": "-78", "Rot": str(angle)}
+    _, cpl = exporter.assembly_rows([component], {"U1": position}, PARTS)
+    assert float(cpl[0]["Rotation"]) == expected
+    assert cpl[0]["Mid X"] == "151.000000mm"
+    assert cpl[0]["Mid Y"] == "-78.000000mm"
+
+
+@pytest.mark.parametrize("name", ["voice-thomas", "analyser-carrier"])
+def test_bare_boards_enforce_manufacturing_floors(name):
+    project = gerbers.KICAD_FOLDER / f"proposed-solutions/shields/{name}/{name}.kicad_pro"
+    rules = json.loads(project.read_text())["board"]["design_settings"]["rules"]
+    assert rules["min_clearance"] == .15
+    assert rules["min_track_width"] == .15
 
 
 def test_aggregate_download_includes_the_assembly_files_for_every_board():

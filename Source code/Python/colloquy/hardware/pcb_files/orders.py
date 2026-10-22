@@ -121,25 +121,24 @@ CHECKS: dict[str, tuple[tuple[str, str], ...]] = {
          "preview.", _SHIELDS_README),
     ),
     "voice-thomas": (
-        ("One SMD placement, R3 (100K 0603). Assembly has JLC place it; the older "
-         "advice was to order the cards bare and solder it by hand with the pitch "
-         "parts. Weigh the assembly setup cost against one 0603 per card.",
+        ("All components are through-hole, including R3 (100K axial, 7.62 mm pitch). "
+         "PCB Assembly off: order the cards bare and hand fit the parts.",
          "JLCPCB_ASSEMBLY.md; proposed-solutions/shields/MANUFACTURING.md"),
         ("Five are drawn, one per body; the review suggests spares and cards for "
          "new pitches.", f"{_REVIEW} 1"),
         ("R1/R2 at 7.62 mm pitch, C1/C2 at 5 mm: the envelope (7 x 6.5 mm) "
          "against the film capacitors you will actually buy, 470 nF included.",
          f"{_REVIEW} 2.3"),
-        ("Its board-setup track minimum is 0, so DRC checked netclass values, "
-         "not what the fab can make (F6, if still open).", f"{_REVIEW} 0"),
+        ("Board-setup track and clearance minimums are 0.15 mm (F6 resolved). "
+         "The regenerated package must pass DRC with these floors.", f"{_REVIEW} 0"),
     ),
     "analyser-carrier": (
         ("Print mounting-template.svg at 100 %, check its 50 mm scale bar, and "
          "lay one converted module on it: all eight pins and both holes. The "
          "socket positions are photo-derived.", f"{_REVIEW} 2.4"),
         ("No SMD part: PCB Assembly off, ordered bare.", "JLCPCB_ASSEMBLY.md"),
-        ("Its board-setup minimums (clearance, track) are 0, so DRC checked "
-         "netclass values only (F6, if still open).", f"{_REVIEW} 0"),
+        ("Board-setup track and clearance minimums are 0.15 mm (F6 resolved). "
+         "The regenerated package must pass DRC with these floors.", f"{_REVIEW} 0"),
     ),
     "microphone-flex": (
         ("The microphone holders belong to no step of the shields plan yet: "

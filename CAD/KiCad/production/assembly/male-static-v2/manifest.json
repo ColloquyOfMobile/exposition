@@ -2,24 +2,24 @@
   "board": "male-static-v2",
   "source": "proposed-solutions/male static v2/male-static-v2.kicad_pcb",
   "source_sha256": "333cf1feb71949577e2b0ae748bcffb6f45d903e86264ce0003b85ee0c6634b3",
-  "exported_at": "2026-10-22T07:56:23+00:00",
-  "generator_sha256": "c6e3cfe63cc537be35acb34822061aeb15cf327ae1e4c268d86cd8397a213960",
-  "parts_sha256": "ba90016ed61828f43bde63b23a3c1ae6ef6686841a02f89ce56048755e8d31f7",
+  "exported_at": "2026-10-22T08:35:49+00:00",
+  "generator_sha256": "47b132b749e5a0f2d1d79dcb660d0aedbab3fe436ff581532cd4254ad7d43fa1",
+  "parts_sha256": "3375ee27a43c0e2aa7f048f93445941a43bf4c1317b986a4a722206d85696f18",
   "smd_count": 4,
   "drc_errors": 0,
   "unconnected": 0,
   "files": {
     "BOM.csv": "f183f41c4aa8ba8d8849fab3f2046c040dd82b0fb3730e3fba049f8b29ab34f8",
     "CPL.csv": "703508f2ffa7824ec737e00adab40ab587dba5a9b766fcb5b914cde319d66398",
-    "gerbers.zip": "f404e3d3474ce5427276fde3f37b5ac2ce98dbba927b9208141b8065e48a0b88",
+    "gerbers.zip": "1c8dee959d3a3fc8b84056602470e3c95b261e173838bfc1c0a625f8632f35f7",
     "manual-and-DNP.csv": "7b69494f94aa6d130f26f3c24a480ed11009c48a3ed7ec6001e900b0308a47c2",
     "reference/positions-all-kicad.csv": "28eafe678426fe3310fd452831a34a8a24e34df79491fff9c1b451dc2335cf3c",
-    "reference/assembly-top.svg": "065a075edf19b768611da02415defb00d780bbc85bc7022f440731579c0b5e26",
-    "checks/drc.json": "d03bde68941e5550ee0967c4767ec731e4e39a49d74b46dedaae0be3c8b1edfb",
-    "reference/assembly-parts.json": "ba90016ed61828f43bde63b23a3c1ae6ef6686841a02f89ce56048755e8d31f7",
+    "reference/assembly-top.svg": "e2ba5ae2df5e802a6645701e0c336264f1500d703fb09f13f880dfe1c3731496",
+    "checks/drc.json": "072d5227a4132b82d2edb208d7b63116ff91689bcb700a6f7743bb0bd5471b68",
+    "reference/assembly-parts.json": "3375ee27a43c0e2aa7f048f93445941a43bf4c1317b986a4a722206d85696f18",
     "reference/proposed-solutions/male static v2/README.md": "0553d9dd2f4afa4cced251db55d51259029802b6b1f8e861f44123abe86a70b1",
     "reference/proposed-solutions/male static v2/bom.csv": "355a8968c5971bd5c5beb43a63e0a60cf84cddd8ad294f341ed92571a82767ed",
     "reference/project/README.md": "0553d9dd2f4afa4cced251db55d51259029802b6b1f8e861f44123abe86a70b1",
-    "README-JLCPCB.md": "745cd87d3a1727f4ec95d9909bfbd52ed067f35b79cb7a80cace0adf61ec1684"
+    "README-JLCPCB.md": "c67e949b186e6fd75587fa0213b9faa47037a96a3dc868bd99a25149967991e1"
   }
 }

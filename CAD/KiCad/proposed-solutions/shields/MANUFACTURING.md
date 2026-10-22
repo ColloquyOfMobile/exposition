@@ -21,8 +21,8 @@ Gerbers and drills use the same absolute origin. Board thickness is 1.6 mm.
 The board maker places front SMD only on the backplane, Teensy adapter and
 microphone holder. Their packages include front paste and front SMD placement
 files. Every through-hole part is fitted by hand. Order all Thomas voice
-cards bare and solder their single 100K 0603 by hand with the pitch parts;
-their packages omit stencil and machine-placement files. The analyser carrier
+cards bare and solder their 100K axial R3 by hand with the pitch parts;
+their assembly BOM/CPL files contain headers only. The analyser carrier
 also needs no machine assembly. All-component CSVs and BOMs are assembly
 references for manual fitting, not machine-placement orders.
 

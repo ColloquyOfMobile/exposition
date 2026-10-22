@@ -55,7 +55,7 @@
 (symbol "Colloquy:R3" (pin_names (offset 1.27)) (exclude_from_sim no) (in_bom yes) (on_board yes)
 (property "Reference" "R" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
 (property "Value" "100K" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  ))
-(property "Footprint" "Shields:R_0603_1608Metric" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
+(property "Footprint" "Shields:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Datasheet" "" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Description" "" (at 0.0000 0.0000 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (symbol "R3_1_1"
@@ -154,7 +154,7 @@
 (symbol (lib_id "Colloquy:R3") (at 195.5800 81.2800 0) (unit 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no) (uuid "03538c72-15dc-502c-9e59-e5cd008d43a4")
 (property "Reference" "R3" (at 195.5800 75.1840 0) (effects (font (size 1.016 1.016))  ))
 (property "Value" "100K" (at 195.5800 77.7240 0) (effects (font (size 1.016 1.016))  ))
-(property "Footprint" "Shields:R_0603_1608Metric" (at 195.5800 81.2800 0) (effects (font (size 1.27 1.27))  (hide yes)))
+(property "Footprint" "Shields:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 195.5800 81.2800 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Datasheet" "" (at 195.5800 81.2800 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (property "Description" "" (at 195.5800 81.2800 0) (effects (font (size 1.27 1.27))  (hide yes)))
 (pin "1" (uuid "16da76c4-dd97-556c-a6c2-8ebac28c7e9f"))

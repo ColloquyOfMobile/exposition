@@ -1,7 +1,7 @@
 {
-  "board_sha256": "0ed2f0eb7e077d730d598f3af986fb3a863f60ce2aa2f30efa70d675e478c568",
+  "board_sha256": "88be276f4390852b83a7869e69b1cc13638cc2ab74bf08e2652b147fc6833be7",
   "generator_sha256": "4120b90d4e6de9954f4517a5632645add46d553731b9abadb55191462dafea89",
   "schematics": {
-    "proposed-solutions/shields/voice-thomas/wired/voice-thomas-wired.kicad_sch": "3aa194694badb455f4d36e46b775d4b2e13a30c8ed16de35fce028ce8e531fdb"
+    "proposed-solutions/shields/voice-thomas/wired/voice-thomas-wired.kicad_sch": "af6a5a52f740cb7d40f9595f533de0f653ad851db803ae4f676b79fe50896a49"
   }
 }

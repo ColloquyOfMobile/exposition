@@ -129,7 +129,7 @@ def thomas():
     d.r('R1','1K2 1% 0.25W','tone','stage1',fp=resistor);d.r('R2','1K2 1% 0.25W','stage1','filter out',fp=resistor)
     for i,net in enumerate(['stage1','filter out'],1):
         d.c(f'C{i}','150nF film 5% >=50V','AGND',net,fp='Shields:C_Rect_L7.0mm_W6.5mm_P5.00mm')
-    d.r('R3','100K','tone','GND')
+    d.r('R3','100K','tone','GND',fp=resistor)
     d.tp('TP1','tone');d.testpin('TP4','filter out');d.testpin('TP5','AGND')
     return d
 

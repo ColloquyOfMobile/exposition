@@ -2,7 +2,7 @@
   {
     "project": "backplane",
     "zip": "backplane\\manufacturing\\backplane-manufacturing.zip",
-    "sha256": "3ab31d57b945be37eded016e311052f06559073642fc3f02ee5ee55f06b8ee45",
+    "sha256": "6034711b6a552e3797983320390701ce8fbb79555fa4a8ab1855c61a7b450ecd",
     "assembly_policy": "front_smd_only",
     "files": 18,
     "copper_layers": 4,
@@ -14,7 +14,7 @@
   {
     "project": "teensy-adapter",
     "zip": "teensy-adapter\\manufacturing\\teensy-adapter-manufacturing.zip",
-    "sha256": "deeb3475952172b6cc2dbd06eed23deb5a41f82e7bb20d724389fa8d284c1138",
+    "sha256": "9e1bea244514147a54bc324fadb96bc787293f66cb452a287be27cccde2c2099",
     "assembly_policy": "front_smd_only",
     "files": 15,
     "copper_layers": 4,
@@ -26,19 +26,19 @@
   {
     "project": "voice-thomas",
     "zip": "voice-thomas\\manufacturing\\voice-thomas-manufacturing.zip",
-    "sha256": "2399ff06ca424978f740d3f5716ee787f6a5244deb4e4a583ea8e68c0f580261",
-    "assembly_policy": "front_smd_only",
+    "sha256": "6af555a831b68456a4a97ad7763e46d510acf55cea0ac1dbc994966db8df04d2",
+    "assembly_policy": "hand_assembled_bare_board",
     "files": 33,
     "copper_layers": 2,
     "drc_errors": 0,
     "drc_warnings": 0,
     "unconnected": 0,
-    "smd_count": 1
+    "smd_count": 0
   },
   {
     "project": "analyser-carrier",
     "zip": "analyser-carrier\\manufacturing\\analyser-carrier-manufacturing.zip",
-    "sha256": "f7c5f326dcf5d8292f20f57963f9a005fad0fc306e612cde9e2b3944f7e9d2b8",
+    "sha256": "31dc1818cbe39a62026ce9ca172a4d6b82bc1a96fda3e7132f844f69cd13145e",
     "assembly_policy": "hand_assembled_bare_board",
     "files": 18,
     "copper_layers": 2,
@@ -50,7 +50,7 @@
   {
     "project": "microphone-flex",
     "zip": "microphone-flex/manufacturing/microphone-flex-manufacturing.zip",
-    "sha256": "52f4e1dfa2dcdf384bcee8d2941c658ed352330b9317502225e97d578221c906",
+    "sha256": "7745f23a9ce8339f3c24cc7afe6379ef4808070698367bbabd87f8f248742bff",
     "assembly_policy": "front_smd_only",
     "files": 17,
     "copper_layers": 2,

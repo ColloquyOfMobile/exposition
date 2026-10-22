@@ -12,10 +12,10 @@
   "erc_violations": 0,
   "electrical_labels": 0,
   "sha256": {
-    "voice-thomas.kicad_pcb": "deb23efa738ffa5fff2a142e3a83d8aa4ef8b525ef0f1dfa50cebf37fb3fab6f",
-    "circuit.json": "8851b307136041dcf7008a635b061ed63927d5f1a708d9e04f25c6ff414dbdd1",
-    "wired\\voice-thomas-wired.kicad_sch": "d26bd5854e3f838e5a8f47fdef4db1354a71513bdac2cf8e990c8f5fcb7bc128",
-    "circuit.kicad_sch": "1741969ce5bbef60b8c88c456d43812cda30457fa9cdfdedd04cc6a09e5e2920",
+    "voice-thomas.kicad_pcb": "81d6667a714198d6a806238753b45dd4d62ddd039f87838c58f5a970ebcaff78",
+    "circuit.json": "5b429e2eebb97108a9a68609af4a0ed68b6bb00320e5cc703b4ced50fbfd9780",
+    "wired\\voice-thomas-wired.kicad_sch": "716a60159bfc61d09d286d769db491d2bd895c67482cefd2cd51f21795882267",
+    "circuit.kicad_sch": "213ff8bf4e45f91dce23271a39e535524b279bc919bb273732c776b5bf3bc713",
     "interface.kicad_sch": "b08ab887f951c86935c4778feeef4ee44f01cc0d4998c6c49bb697c487f393b3",
     "voice-thomas.kicad_sch": "50d47093bf519b387707c39b030c6aafc6140650351ac1267f0a9ae26ec40bef"
   }

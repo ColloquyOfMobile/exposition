@@ -1,10 +1,10 @@
 {
-  "checked_on": "2026-10-21",
+  "checked_on": "2026-10-22",
   "note": "Exact procurement choices for JLCPCB SMD assembly. Stock and assembly service availability must be checked at ordering. No automatic substitutions.",
   "resistors_0603": {
     "0R": ["RC0603JR-070RL", "C95177"],
     "33R": ["RC0603FR-0733RL", "C108661"],
-    "160R": ["RC0603FR-07160RL", "C185369"],
+    "160R": ["UNI-ROYAL", "0603WAF1600T5E", "C22814"],
     "330R": ["RC0603FR-07330RL", "C105881"],
     "470R": ["RC0603FR-07470RL", "C114669"],
     "1K5": ["RC0603FR-071K5L", "C114668"],
@@ -32,7 +32,7 @@
     {"footprint": "LED_0603_1608Metric", "value": "GREEN LED", "manufacturer": "Lite-On", "mpn": "LTST-C190KGKT", "lcsc": "C125094", "specification": "Yellow-green indicator LED 0603; pad 1 cathode"},
     {"footprint": "LED_0603_1608Metric", "value": "YELLOW LED", "manufacturer": "Lite-On", "mpn": "LTST-C190KSKT", "lcsc": "C125095", "specification": "Yellow indicator LED 0603; pad 1 cathode"},
     {"footprint": "D_SOD-123", "value": "1N5819HW", "manufacturer": "Diodes Incorporated", "mpn": "1N5819HW-7-F", "lcsc": "C82544", "specification": "Schottky diode 1A 40V SOD-123; pad 1 cathode"},
-    {"footprint": "TSSOP-14_4.4x5mm_P0.65mm", "value": "SN74LV4T125PWR", "manufacturer": "Texas Instruments", "mpn": "SN74LV4T125PWR", "lcsc": "C90755", "specification": "SN74LV4T125, TSSOP-14 PW, 0.65mm pitch; preserve pin 1"}
+    {"footprint": "TSSOP-14_4.4x5mm_P0.65mm", "value": "SN74LV4T125PWR", "manufacturer": "Texas Instruments", "mpn": "SN74LV4T125PWR", "lcsc": "C90755", "rotation_ccw_degrees": 270, "rotation_basis": "KiBot JLCPCB TSSOP correction +270 degrees; board U1-U4 pin 1 is upper left, 2.8625 mm left and 1.95 mm above center. Confirm pin 1 in JLC preview.", "specification": "SN74LV4T125, TSSOP-14 PW, 0.65mm pitch; preserve pin 1"}
   ],
   "manual_smd_footprints": {
     "backplane": {
@@ -42,6 +42,8 @@
     }
   },
   "sources": {
+    "C22814 stock and specifications": "https://jlcpcb.com/partdetail/23541-0603WAF1600T5E/C22814",
+    "JLCPCB TSSOP rotation convention": "https://github.com/INTI-CMNB/KiBot/blob/master/kibot/misc.py",
     "JLCPCB BOM": "https://jlcpcb.com/help/article/how-to-generate-bom-and-centroid-files-from-kicad-8",
     "JLCPCB CPL": "https://jlcpcb.com/help/article/pick-place-file-for-pcb-assembly",
     "Yageo exact resistor specifications": "https://yageogroup.com/component-documentation/download/specsheet/RC0603FR-0722KL",
