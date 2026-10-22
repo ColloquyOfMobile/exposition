@@ -68,6 +68,23 @@ def test_unknown_parts_are_not_guessed():
         exporter.part_for("C_0805_2012Metric", "10nF C0G", PARTS)
 
 
+@pytest.mark.parametrize("selection,manufacturer", [
+    (["RC0603FR-07160RL", "C185369"], "YAGEO"),
+    (["UNI-ROYAL", "0603WAF1600T5E", "C22814"], "UNI-ROYAL"),
+])
+def test_lamp_resistor_selection_reaches_the_assembly_bom(selection, manufacturer):
+    catalog = {**PARTS, "resistors_0603": {**PARTS["resistors_0603"], "160R": selection}}
+    component = {"reference": "RA1", "value": "160R", "footprint": "R_0603_1608Metric"}
+    position = {"Side": "top", "Val": "160R", "Package": "R_0603_1608Metric",
+                "PosX": "204", "PosY": "-165", "Rot": "0"}
+    bom, cpl = exporter.assembly_rows([component], {"RA1": position}, catalog)
+    assert bom[0]["Manufacturer"] == manufacturer
+    assert bom[0]["Manufacturer Part Number"] == selection[-2]
+    assert bom[0]["LCSC Part #"] == selection[-1]
+    assert bom[0]["Specification"] == "160R 0603, +/-1%, 0.1W"
+    assert cpl[0]["Designator"] == "RA1"
+
+
 def test_a_new_footprint_or_value_cannot_reuse_old_placement():
     component = {"reference": "R1", "value": "100K", "footprint": "R_0603_1608Metric"}
     position = {"Side": "top", "Val": "10K", "Package": "R_0603_1608Metric"}

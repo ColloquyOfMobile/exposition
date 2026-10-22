@@ -39,8 +39,14 @@ def part_for(footprint, value, catalog):
         size = "0603" if "0603" in footprint else "0805"
         # These annotations describe the existing circuit's population, not another value.
         nominal = value.split(" / ")[0].removesuffix(" provisional")
-        mpn, lcsc = catalog[f"resistors_{size}"][nominal]
-        return {"manufacturer": "YAGEO", "mpn": mpn, "lcsc": lcsc,
+        selected = catalog[f"resistors_{size}"][nominal]
+        # Existing pairs are YAGEO; explicit triples permit reviewed alternatives.
+        if len(selected) == 2:
+            manufacturer = "YAGEO"
+            mpn, lcsc = selected
+        else:
+            manufacturer, mpn, lcsc = selected
+        return {"manufacturer": manufacturer, "mpn": mpn, "lcsc": lcsc,
                 "specification": f'{nominal} {size}, {"jumper" if nominal == "0R" else "+/-1%"}, {"0.1W" if size == "0603" else "0.125W"}'}
     for part in catalog["parts"]:
         if (part["footprint"], part["value"]) == (footprint, value):

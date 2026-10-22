@@ -20,7 +20,7 @@ by hand. `manual-and-DNP.csv` accounts for every excluded reference.
 The analyser carrier has no SMD parts: its BOM and CPL contain headers only;
 order that PCB bare.
 
-The backplane has 72 placements, adapter 65, voice card 1, microphone holder 8,
+The backplane has 72 placements, adapter 65, voice card 1, microphone-flex 6,
 female base 4 and male static 4, per board. Quantities of boards are separate
 order choices. Pitch-dependent voice-card components remain through-hole and
 are described by the enclosed variant BOMs.
@@ -36,6 +36,25 @@ order. Verify pin 1, diode/LED cathodes and electrolytic polarity against
 `reference/assembly-top.svg`. The CPL preserves KiCad rotations; no guessed
 library/reel rotation offsets are applied. If a selected part is unavailable,
 update the reviewed part table and regenerate; do not silently substitute.
+
+RA1 and RA2 on each backplane use two 160 ohm, 0603, 1%, 0.1 W resistors.
+The selected part is YAGEO RC0603FR-07160RL (C185369). The reported JLCPCB
+stock of nine parts covers at most four boards before assembly attrition;
+check the order's required quantity. UNI-ROYAL 0603WAF1600T5E
+([C22814](https://www.lcsc.com/product-detail/C22814.html)) matches those
+electrical/package specifications and is an alternative if stock requires it.
+Stock is not reserved or checked by the exporter.
+
+To select that alternative, replace the `resistors_0603` entry in
+`assembly-parts.json` with:
+
+```json
+"160R": ["UNI-ROYAL", "0603WAF1600T5E", "C22814"]
+```
+
+Two-element entries retain the existing YAGEO default; three-element entries
+specify manufacturer, MPN and LCSC number explicitly. Regenerate all packages
+after changing the part table, since its hash is recorded in every package.
 
 Regenerate from the repository root using KiCad 9 Python:
 
