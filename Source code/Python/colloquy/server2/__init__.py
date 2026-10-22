@@ -6,7 +6,7 @@ from threading import Event
 from wsgiref.simple_server import make_server, WSGIRequestHandler, WSGIServer
 
 # from .wsgi import WSGI
-from . import network
+from . import exclusive_port, network
 from .wsgi2 import WSGI2
 
 WSGIRequestHandler.log_message = lambda *args, **kwargs: None
@@ -81,11 +81,21 @@ class ThreadingWSGIServer(ThreadingMixIn, WSGIServer):
     `daemon_threads` False and `block_on_close` True mean `server_close()`
     joins whatever is still in flight, so /shutdown's goodbye finishes
     being written before the listening socket goes away.
+
+    Except one: `HTTPServer` asks for SO_REUSEADDR, which on Windows lets
+    a second server listen on this port beside the first. This binds
+    exclusively instead - see `exclusive_port.py`.
     """
+
+    allow_reuse_address = False
+
+    def server_bind(self):
+        exclusive_port.exclusive(self.socket)
+        super().server_bind()
 
 
 class Server2(Base):
-    DEFAULT_PORT = 8087
+    DEFAULT_PORT = exclusive_port.PORT
 
     # Every interface, so the page answers from another computer on the
     # same network and not only on this machine - which is what a laptop
@@ -98,16 +108,18 @@ class Server2(Base):
     # down, unmount its board, flash its Arduino. What stands between
     # that and the building is the network this machine is on and its
     # firewall, and neither is this program's to answer for.
-    BIND_ADDRESS = ""
+    BIND_ADDRESS = exclusive_port.ADDRESS
 
-    def __init__(self, colloquy, port=None):
+    def __init__(self, colloquy, port=None, claim=None):
+        """`claim` is the port as `main.py` has held it since it started
+        (`exclusive_port.claim`), let go of only to bind it here."""
         super().__init__(
             owner=None,
         )
         self._shutdown_event = Event()
         self._restart_event = Event()
         self._colloquy = colloquy
-        self.run(port=self.DEFAULT_PORT if port is None else port)
+        self.run(port=self.DEFAULT_PORT if port is None else port, claim=claim)
 
     @property
     def colloquy(self):
@@ -131,8 +143,21 @@ class Server2(Base):
             handler_class=RequestHandler,
         )
 
-    def run(self, port=DEFAULT_PORT):
-        with self.listen(port) as httpd:
+    def run(self, port=DEFAULT_PORT, claim=None):
+        if claim is not None:
+            claim.close()
+        try:
+            httpd = self.listen(port)
+        except OSError as error:
+            # Taken between the claim and here, or never claimed (started
+            # some other way than main.py). Say so and let this process
+            # go: its threads would otherwise keep it alive with no page.
+            # `shutdown` only asks them to stop - nothing here moves.
+            print(exclusive_port.refusal(port, error))
+            self.colloquy.shutdown()
+            return
+
+        with httpd:
             WSGIRequestHandler.log_message = lambda *args, **kwargs: None
             print(f"Accessible at http://localhost:{port}/")
             elsewhere = network.urls(port)

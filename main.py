@@ -1,3 +1,4 @@
+import importlib.util
 import sys
 from time import sleep
 from pathlib import Path
@@ -13,6 +14,30 @@ cwd = Path(__file__).parent
 # sys.path.append(str(server_code.resolve()))
 source_code = cwd / "Source code" / "Python"
 sys.path.append(str(source_code.resolve()))
+
+
+def claim_the_port():
+    """The server's port, held from the first line to the server's bind.
+
+    Before anything else, the colloquy import included: importing it
+    empties local/logs, and a second main.py must be turned away before it
+    has touched what the first one is running on - its logs, its serial
+    ports, its schedule. Loaded by path for that reason. See
+    colloquy/server2/exclusive_port.py.
+    """
+    path = source_code / "colloquy" / "server2" / "exclusive_port.py"
+    spec = importlib.util.spec_from_file_location("exclusive_port", path)
+    exclusive_port = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(exclusive_port)
+    try:
+        return exclusive_port.claim()
+    except exclusive_port.PortInUse as refusal:
+        print(refusal)
+        sys.exit(1)
+
+
+# Only when run: the tests import this file for open_the_hardware().
+PORT_CLAIM = claim_the_port() if __name__ == "__main__" else None
 
 from colloquy import Colloquy
 from colloquy.drivers.arduino.errors import FirmwareTooOld
@@ -168,7 +193,7 @@ def colloquy1(*args):
     if colloquy.exposition.schedule.start_if_enabled():
         print("The exposition schedule is enabled and is now watching the clock.")
 
-    Server2(colloquy=colloquy)
+    Server2(colloquy=colloquy, claim=PORT_CLAIM)
 
 
 if __name__ == "__main__":

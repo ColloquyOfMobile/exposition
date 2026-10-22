@@ -82,6 +82,11 @@ files = [
     # relative to CAD/KiCad reads exactly like one relative to the repo.
     # Stdlib only - nothing here imports the tree.
     "Source code/Python/colloquy/hardware/pcb_files",
+    # Which process may have the server's port. Stdlib only - main.py
+    # loads it by path before importing anything else - and a port, a PID
+    # read off netstat and a Windows error number are three numbers that
+    # read alike.
+    "Source code/Python/colloquy/server2/exclusive_port.py",
 ]
 mypy_path = "Source code/Python"
 
