@@ -1,8 +1,8 @@
 {
   "board": "teensy-adapter",
   "source": "proposed-solutions/shields/teensy-adapter/teensy-adapter.kicad_pcb",
-  "source_sha256": "f6c76bf019629902b27a141ebae31fb519644f20c6e04ea34496096d9290d937",
-  "exported_at": "2026-10-21T19:49:52+00:00",
+  "source_sha256": "6fa1deb85998cdcf631813ad82dd4f8db41f8a9bbd4fcdf5d460f114840d2ebc",
+  "exported_at": "2026-10-22T07:56:09+00:00",
   "generator_sha256": "c6e3cfe63cc537be35acb34822061aeb15cf327ae1e4c268d86cd8397a213960",
   "parts_sha256": "ba90016ed61828f43bde63b23a3c1ae6ef6686841a02f89ce56048755e8d31f7",
   "smd_count": 65,
@@ -11,17 +11,17 @@
   "files": {
     "BOM.csv": "9c8a01016a7f40f1f6afa22318690c999bdc620db0c0092172ad3ac258fe199e",
     "CPL.csv": "d6368c83ffd70dcb5f96d7728b05458f7f971210777843d2584410332d3557d7",
-    "gerbers.zip": "c07e0311da9037902e3623f202609b850c978cf2b5b8d74f2386f521601a7471",
+    "gerbers.zip": "c1dfb5e662234fb8752e35feaa38c4464970ab5d80140da195e55dbf489db83d",
     "manual-and-DNP.csv": "3a672812bace7e3eac81fff1379668e4ba151ffc92ce6cffe4e491cd0402776b",
     "reference/positions-all-kicad.csv": "9eaf6d786f45f553436fc3d93ff9cc28201de801eff843e9bda09ac6f4b08326",
-    "reference/assembly-top.svg": "30d0b0df7b5e46ce137db7ab8848a241fba4791408a137a3720af4ca7daa1fb0",
-    "checks/drc.json": "e770bbfea079e55c36082b1737d5d16fc65913767e754b4a00275315991b9840",
+    "reference/assembly-top.svg": "d9d7d2dcc35bd7a5f4fa5c39284bb35f0e26be4061223ab392f032395f4b5c26",
+    "checks/drc.json": "66c49df53365c7b2a1311b3641c339a8e2874ab24a0f3d321c15a712089fb20e",
     "reference/assembly-parts.json": "ba90016ed61828f43bde63b23a3c1ae6ef6686841a02f89ce56048755e8d31f7",
-    "reference/proposed-solutions/shields/README.md": "40a2b639bb7c09d925018f32188cbc2179caaac386f9a518fbf6a687a2cb6454",
+    "reference/proposed-solutions/shields/README.md": "9954d53ef24d431c0edbed0cb005bfc5902d31b857ea62c92d3459d6b5eb0de5",
     "reference/proposed-solutions/shields/REVIEW.md": "a84300bdced7025a1052024c1be0d673ede8e4522a4aaf474b2ecc7710161d3e",
     "reference/proposed-solutions/shields/ASSEMBLY.md": "e1c17bd1f2b98755c0f80942f1880a319f65c202a8a8f02c229b07db11eb19ff",
     "reference/proposed-solutions/shields/teensy-adapter/bom.csv": "11b4ae7085ab20f2920fa1008cea762ec7fad6fc740d494e9ea4b314fbc3fefc",
     "reference/proposed-solutions/shields/teensy-adapter/positions.csv": "9bb5e04f5876b2cd8d585f6b76fb436fe900686d9bcc7e6368dbe85c36c8706e",
-    "README-JLCPCB.md": "c3f9253f13992c0a90cc85e16f957daadcea49892e1f6e45ac91b9994e6d9aba"
+    "README-JLCPCB.md": "a7d5345d09338c21107f12b726fe2f39f9b57cb7d26d47a4bec9a2d678c7b248"
   }
 }

@@ -176,8 +176,8 @@ CHECKS: dict[str, tuple[tuple[str, str], ...]] = {
 COMMON_CHECKS = (
     ("In JLC's Gerber viewer rather than KiCad: every layer there, the outline "
      "closed, the drills in their pads, no silkscreen on a pad.", f"{_REVIEW} 2.1"),
-    ("Polarity marks (electrolytics, diodes, LEDs, pin 1) visible on the "
-     "silkscreen.", f"{_REVIEW} 2.1"),
+    ("Polarity marks visible on the silkscreen: + and - beside the pads of "
+     "every electrolytic, diode and LED, and pin 1.", f"{_REVIEW} 2.1"),
 )
 
 STYLE = (
@@ -603,7 +603,8 @@ def _upload_bom_cpl(board: gerbers.Board, found: Package) -> str:
         f'<a href="/pcb/{board.id}/manual">manual-and-DNP.csv</a> are hand fitted or not fitted, on purpose;</li>'
         "<li>in the placement preview, every part marked <em>check</em> sits as the "
         f'<a href="/pcb/{board.id}/assembly" target="_blank">assembly drawing</a> shows it: LEDs and '
-        "Schottky diodes pad 1 = cathode, electrolytics pad 1 = positive, IC pin 1 on its mark "
+        "Schottky diodes pad 1 = cathode (the silkscreen's -), electrolytics pad 1 = positive (+), "
+        "IC pin 1 on its mark "
         "(README-JLCPCB.md).</li>"
         "</ul>"
         "<table><tr><th>LCSC</th><th>part number</th><th>value</th><th>per board</th>"

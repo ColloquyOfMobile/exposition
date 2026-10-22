@@ -26,7 +26,7 @@ Existing module-fit, connector-keying and enclosure checks still apply.
 This file supersedes older bare-board/hand-SMD advice in reference documents.
 
 Source: CAD/KiCad/proposed-solutions/male static v2/male-static-v2.kicad_pcb
-Source SHA256 (LF normalized): 54679c0808152b8f7bb86007bfc54a492216110ab05349565d3c06a81fd68858
+Source SHA256 (LF normalized): 333cf1feb71949577e2b0ae748bcffb6f45d903e86264ce0003b85ee0c6634b3
 KiCad: 9.0.7. DRC: zero errors and zero unconnected items.
 JLCPCB formats: https://jlcpcb.com/help/article/how-to-generate-bom-and-centroid-files-from-kicad-8
 https://jlcpcb.com/help/article/pick-place-file-for-pcb-assembly

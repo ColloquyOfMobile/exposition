@@ -16,8 +16,8 @@
         "proposed-solutions/shields/backplane/bom.csv",
         "proposed-solutions/shields/backplane/positions.csv"
       ],
-      "source sha256": "fa333803be6d82c61af4bf3f9c20d6895b927f60537890ae8d407c1a713dbf8a",
-      "exported at": "2026-10-21T21:14:31",
+      "source sha256": "6761e8a29f5aeea09b760586d4aad759f78cdb131f029cef4bdc257749015ec1",
+      "exported at": "2026-10-22T09:53:45",
       "exported with": "KiCad 9.0.7",
       "copper layers": 4,
       "size mm": [
@@ -63,8 +63,8 @@
         "proposed-solutions/shields/teensy-adapter/bom.csv",
         "proposed-solutions/shields/teensy-adapter/positions.csv"
       ],
-      "source sha256": "f6c76bf019629902b27a141ebae31fb519644f20c6e04ea34496096d9290d937",
-      "exported at": "2026-10-21T11:35:25",
+      "source sha256": "6fa1deb85998cdcf631813ad82dd4f8db41f8a9bbd4fcdf5d460f114840d2ebc",
+      "exported at": "2026-10-22T09:53:48",
       "exported with": "KiCad 9.0.7",
       "copper layers": 4,
       "size mm": [
@@ -200,9 +200,8 @@
       "assembly": [
         "proposed-solutions/shields/microphone-flex/bom.csv"
       ],
-      "reference": "proposed-solutions/shields/microphone-flex/README.md",
-      "source sha256": "59fb1471c4c99bc4eeddf0c85c4637ca55fefc889be7ec12370574710be32e48",
-      "exported at": "2026-10-21T12:06:23",
+      "source sha256": "5d0338fb9a33e1a78500a999bf2d7ef972c46e39df3a78ff460eaa12c40715ac",
+      "exported at": "2026-10-22T09:53:49",
       "exported with": "KiCad 9.0.7",
       "copper layers": 2,
       "size mm": [
@@ -243,8 +242,8 @@
       "assembly": [
         "proposed-solutions/female base v2/bom.csv"
       ],
-      "source sha256": "aac945478795e6a2b5300081126ed72cc0824823b129bf04b28bea53e801e46f",
-      "exported at": "2026-10-21T12:06:25",
+      "source sha256": "c54d179aad6248724816b3b63dc4ca73a92b332b5a27279ab3a2f4dad5d3e996",
+      "exported at": "2026-10-22T09:53:51",
       "exported with": "KiCad 9.0.7",
       "copper layers": 2,
       "size mm": [
@@ -285,8 +284,8 @@
       "assembly": [
         "proposed-solutions/male static v2/bom.csv"
       ],
-      "source sha256": "54679c0808152b8f7bb86007bfc54a492216110ab05349565d3c06a81fd68858",
-      "exported at": "2026-10-21T12:06:27",
+      "source sha256": "333cf1feb71949577e2b0ae748bcffb6f45d903e86264ce0003b85ee0c6634b3",
+      "exported at": "2026-10-22T09:53:53",
       "exported with": "KiCad 9.0.7",
       "copper layers": 2,
       "size mm": [

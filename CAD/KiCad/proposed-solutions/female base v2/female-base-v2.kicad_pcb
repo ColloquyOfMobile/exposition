@@ -3261,6 +3261,28 @@
 			(layer "F.Fab")
 			(uuid "5d5efa2b-32c3-437b-bb45-d56eeb2013e2")
 		)
+		(fp_text user "+"
+			(at -5.199999 0 0)
+			(layer "F.SilkS")
+			(uuid "20202ebc-cffd-410e-a856-a1a5eb532b51")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(fp_text user "-"
+			(at 5.199999 0 0)
+			(layer "F.SilkS")
+			(uuid "5647fa44-65f7-49eb-8708-8a0128172efc")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
 		(fp_text user "${REFERENCE}"
 			(at 0 0 0)
 			(layer "F.Fab")

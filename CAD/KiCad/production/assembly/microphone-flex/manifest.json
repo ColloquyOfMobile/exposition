@@ -1,8 +1,8 @@
 {
   "board": "microphone-flex",
   "source": "proposed-solutions/shields/microphone-flex/microphone-flex.kicad_pcb",
-  "source_sha256": "59fb1471c4c99bc4eeddf0c85c4637ca55fefc889be7ec12370574710be32e48",
-  "exported_at": "2026-10-21T19:50:01+00:00",
+  "source_sha256": "5d0338fb9a33e1a78500a999bf2d7ef972c46e39df3a78ff460eaa12c40715ac",
+  "exported_at": "2026-10-22T07:56:18+00:00",
   "generator_sha256": "c6e3cfe63cc537be35acb34822061aeb15cf327ae1e4c268d86cd8397a213960",
   "parts_sha256": "ba90016ed61828f43bde63b23a3c1ae6ef6686841a02f89ce56048755e8d31f7",
   "smd_count": 6,
@@ -11,19 +11,19 @@
   "files": {
     "BOM.csv": "e8722365292d42f7c13b1c938fcac5b47e2c8ca496a3ea779143005c6f869a16",
     "CPL.csv": "0925fcec568d4e9f80c20b53a21ce226cbb1322ebe08797bc8fdef02f58811f1",
-    "gerbers.zip": "0d2b80fc35328e1c8f01f4621ee0b51c668b69a8c69e1dca524870c70c133b66",
+    "gerbers.zip": "257d9f5f0a875fff6c2bee80358d3e7e9368f29a50eecef25af74f7ff64e0ac8",
     "manual-and-DNP.csv": "e955e5dc11ab6b9465a9294b0758541715cbb597fa63c4331a64644a837812c1",
     "reference/positions-all-kicad.csv": "77841ab8eb82ab841d9a42bb2ccee4ec1e85878b447f11aa9d78d36ed7092ff4",
-    "reference/assembly-top.svg": "33634de5743e75e8e6ef9c0814726857340ae82c25ca56d21a84017fc5852f76",
-    "checks/drc.json": "fe2ef6fb2c83bcf82032b391e6524b5dcbdb6d61faf4035f5df7a8578ae383a7",
+    "reference/assembly-top.svg": "5100f6e88a0628e69ce5cffbc0f603303c1b8e2e7dbd355759e660ff54198092",
+    "checks/drc.json": "6322e6437460ce5c21a49c7c9e94c580cc932e77ec01a9bc9a2736d3e65cc662",
     "reference/assembly-parts.json": "ba90016ed61828f43bde63b23a3c1ae6ef6686841a02f89ce56048755e8d31f7",
     "reference/proposed-solutions/shields/microphone-flex/README.md": "8498f6d8f588353c7c104caeb2eb1b45812747a06a9c7d6f6372996c09ea3f67",
-    "reference/proposed-solutions/shields/README.md": "40a2b639bb7c09d925018f32188cbc2179caaac386f9a518fbf6a687a2cb6454",
+    "reference/proposed-solutions/shields/README.md": "9954d53ef24d431c0edbed0cb005bfc5902d31b857ea62c92d3459d6b5eb0de5",
     "reference/proposed-solutions/shields/REVIEW.md": "a84300bdced7025a1052024c1be0d673ede8e4522a4aaf474b2ecc7710161d3e",
     "reference/proposed-solutions/shields/ASSEMBLY.md": "e1c17bd1f2b98755c0f80942f1880a319f65c202a8a8f02c229b07db11eb19ff",
     "reference/proposed-solutions/shields/microphone-flex/bom.csv": "1acff4ee539fc066bc8c637971c1c6e399a679b269e75f9652c86008d8b1e598",
     "reference/project/README.md": "8498f6d8f588353c7c104caeb2eb1b45812747a06a9c7d6f6372996c09ea3f67",
     "reference/project/mechanical.json": "c69ef3b1fe4b60b89d94696957befec71e02dd0b10748a21734f7d4e7526bae9",
-    "README-JLCPCB.md": "dfdd6cafd24e2997429ad43600e2f4b03eccb8b434da4e43c3c8d0b911945dea"
+    "README-JLCPCB.md": "dc171104e753fa8786acf5f5e26b0f7e7234b8312a3332f7146397bf86d76cd6"
   }
 }

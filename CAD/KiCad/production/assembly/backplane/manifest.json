@@ -1,8 +1,8 @@
 {
   "board": "backplane",
   "source": "proposed-solutions/shields/backplane/backplane.kicad_pcb",
-  "source_sha256": "fa333803be6d82c61af4bf3f9c20d6895b927f60537890ae8d407c1a713dbf8a",
-  "exported_at": "2026-10-21T19:49:48+00:00",
+  "source_sha256": "6761e8a29f5aeea09b760586d4aad759f78cdb131f029cef4bdc257749015ec1",
+  "exported_at": "2026-10-22T07:56:06+00:00",
   "generator_sha256": "c6e3cfe63cc537be35acb34822061aeb15cf327ae1e4c268d86cd8397a213960",
   "parts_sha256": "ba90016ed61828f43bde63b23a3c1ae6ef6686841a02f89ce56048755e8d31f7",
   "smd_count": 72,
@@ -11,13 +11,13 @@
   "files": {
     "BOM.csv": "e1edb5e99837ad2ff820b94fab064a9a2f16ee70b0abd4dc0661e0b809b0f8a2",
     "CPL.csv": "dc7f513554eab9f0c2bf696658b0f151ba0c2172f72e875f149667745ce7f8b8",
-    "gerbers.zip": "07d69e3173e3c83971a255ee0b8f81fa823ed5dc9ff9d692ed5c4851712fb0b1",
+    "gerbers.zip": "74456f132e1583278a2efe8414582d0a1515f04bdb20a540b64c3c1b36c5e395",
     "manual-and-DNP.csv": "2c41f6858411b9ed35777be372d61981855f5cd68bb75175bae378c264361e46",
     "reference/positions-all-kicad.csv": "d6fc579d3c0ce5bcb28d4f625929534d985b189857da59e4e7971f1c7d5dfd4b",
-    "reference/assembly-top.svg": "9fc4960c538e4c6e1a4074726a51bcbdc22fdb7b58bf9db20c00ee40eee35f57",
-    "checks/drc.json": "4a5c80f0f27e9cbe44775968c0b7424d922e4b836cb31f4fdf46b8229b850019",
+    "reference/assembly-top.svg": "dcdd0f1f21725fc42321728dee9f786553623df905eea492dd76c2c6ec71bf81",
+    "checks/drc.json": "17400d5c6139cf24f08ea21d872169f1bcdaa4ea08bf74d6307238824b2ea42b",
     "reference/assembly-parts.json": "ba90016ed61828f43bde63b23a3c1ae6ef6686841a02f89ce56048755e8d31f7",
-    "reference/proposed-solutions/shields/README.md": "40a2b639bb7c09d925018f32188cbc2179caaac386f9a518fbf6a687a2cb6454",
+    "reference/proposed-solutions/shields/README.md": "9954d53ef24d431c0edbed0cb005bfc5902d31b857ea62c92d3459d6b5eb0de5",
     "reference/proposed-solutions/shields/REVIEW.md": "a84300bdced7025a1052024c1be0d673ede8e4522a4aaf474b2ecc7710161d3e",
     "reference/proposed-solutions/shields/ASSEMBLY.md": "e1c17bd1f2b98755c0f80942f1880a319f65c202a8a8f02c229b07db11eb19ff",
     "reference/proposed-solutions/shields/backplane/bom.csv": "f61687500a8655d809a8d9dffb1420db43c1410a0e162ae088445bdf94784709",
@@ -25,6 +25,6 @@
     "reference/project/ENCLOSURE_MOUNTING.md": "b062c80dd87e86d8aa3bfa2ba80f230494601da0a70802f09f61567c3763944e",
     "reference/project/enclosure-mounting.json": "96bea2876c658d9d29fad9e15830752d9550491453bb15841c703def3256b007",
     "reference/project/enclosure-mounting-layout.svg": "463407044d3fd73064212af73498bbdc7064247bdae3c6f250501ef07188bf65",
-    "README-JLCPCB.md": "6fae527268bca1b6b40e05f9529a8d885da6be604b4c24bc10d778977a8b18ae"
+    "README-JLCPCB.md": "263bf41a44790de994ea73fd5c350da04e1640c3fe3d0ec61d02337a71a5cc38"
   }
 }

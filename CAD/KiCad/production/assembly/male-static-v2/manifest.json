@@ -1,8 +1,8 @@
 {
   "board": "male-static-v2",
   "source": "proposed-solutions/male static v2/male-static-v2.kicad_pcb",
-  "source_sha256": "54679c0808152b8f7bb86007bfc54a492216110ab05349565d3c06a81fd68858",
-  "exported_at": "2026-10-21T19:50:08+00:00",
+  "source_sha256": "333cf1feb71949577e2b0ae748bcffb6f45d903e86264ce0003b85ee0c6634b3",
+  "exported_at": "2026-10-22T07:56:23+00:00",
   "generator_sha256": "c6e3cfe63cc537be35acb34822061aeb15cf327ae1e4c268d86cd8397a213960",
   "parts_sha256": "ba90016ed61828f43bde63b23a3c1ae6ef6686841a02f89ce56048755e8d31f7",
   "smd_count": 4,
@@ -11,15 +11,15 @@
   "files": {
     "BOM.csv": "f183f41c4aa8ba8d8849fab3f2046c040dd82b0fb3730e3fba049f8b29ab34f8",
     "CPL.csv": "703508f2ffa7824ec737e00adab40ab587dba5a9b766fcb5b914cde319d66398",
-    "gerbers.zip": "d4497950e4d0f503cd7cd1bc2f1cb30c8ffcbbc2236b0919f02d6b660b8a91f7",
+    "gerbers.zip": "f404e3d3474ce5427276fde3f37b5ac2ce98dbba927b9208141b8065e48a0b88",
     "manual-and-DNP.csv": "7b69494f94aa6d130f26f3c24a480ed11009c48a3ed7ec6001e900b0308a47c2",
     "reference/positions-all-kicad.csv": "28eafe678426fe3310fd452831a34a8a24e34df79491fff9c1b451dc2335cf3c",
-    "reference/assembly-top.svg": "26107c3d57d7f80fb6be56b2aa9b3ab2e28b8d16f2fb36ec20694979f92bb7b1",
-    "checks/drc.json": "39b71ba8b4c70b7fef979dd3f12fbe226698aa064f6c051509312c026618e285",
+    "reference/assembly-top.svg": "065a075edf19b768611da02415defb00d780bbc85bc7022f440731579c0b5e26",
+    "checks/drc.json": "d03bde68941e5550ee0967c4767ec731e4e39a49d74b46dedaae0be3c8b1edfb",
     "reference/assembly-parts.json": "ba90016ed61828f43bde63b23a3c1ae6ef6686841a02f89ce56048755e8d31f7",
     "reference/proposed-solutions/male static v2/README.md": "0553d9dd2f4afa4cced251db55d51259029802b6b1f8e861f44123abe86a70b1",
     "reference/proposed-solutions/male static v2/bom.csv": "355a8968c5971bd5c5beb43a63e0a60cf84cddd8ad294f341ed92571a82767ed",
     "reference/project/README.md": "0553d9dd2f4afa4cced251db55d51259029802b6b1f8e861f44123abe86a70b1",
-    "README-JLCPCB.md": "78b830262139bf6f001ad474a0104383298d7735ed95cc180029286fae9a3b2a"
+    "README-JLCPCB.md": "745cd87d3a1727f4ec95d9909bfbd52ed067f35b79cb7a80cace0adf61ec1684"
   }
 }

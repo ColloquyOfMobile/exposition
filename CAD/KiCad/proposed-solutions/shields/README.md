@@ -42,7 +42,8 @@ holder is microphone-flex/microphone-flex.kicad_pcb; its README documents the
 approved placement, routing and initial selector settings. The old holder generator
 is historical and must not replace the selected flex board.
 Routing: scripts/route.py with Freerouting 2.4.1. After routing, run labels.py,
-finish.py, planes.py, check.py and verify.py. Preserve mechanical holes and
+finish.py, planes.py, check.py and verify.py, then the repository root's
+mark_polarity.py (+ and - beside every polarized part). Preserve mechanical holes and
 validated connector positions when regenerating. Historical migration scripts
 are one-time tools, not general rebuild commands. Router files stay in tmp/.
 positions.csv contains front SMD placements for outsourced boards; fit THT parts manually from BOMs

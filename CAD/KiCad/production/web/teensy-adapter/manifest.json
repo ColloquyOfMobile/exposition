@@ -1,5 +1,5 @@
 {
-  "board_sha256": "f6c76bf019629902b27a141ebae31fb519644f20c6e04ea34496096d9290d937",
+  "board_sha256": "6fa1deb85998cdcf631813ad82dd4f8db41f8a9bbd4fcdf5d460f114840d2ebc",
   "generator_sha256": "4120b90d4e6de9954f4517a5632645add46d553731b9abadb55191462dafea89",
   "schematics": {
     "proposed-solutions/shields/teensy-adapter/wired/teensy-adapter-wired.kicad_sch": "2f3f8040d254fe4fe4f11c7bd479d34371d706d13e7dc40706d9e6781ea0fbb2"

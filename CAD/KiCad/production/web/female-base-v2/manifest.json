@@ -1,5 +1,5 @@
 {
-  "board_sha256": "aac945478795e6a2b5300081126ed72cc0824823b129bf04b28bea53e801e46f",
+  "board_sha256": "c54d179aad6248724816b3b63dc4ca73a92b332b5a27279ab3a2f4dad5d3e996",
   "generator_sha256": "4120b90d4e6de9954f4517a5632645add46d553731b9abadb55191462dafea89",
   "schematics": {
     "proposed-solutions/female base v2/wired/female-base-v2-wired.kicad_sch": "46e2aaa8b36737f015fd371d8b2cc7074b61f2900dcf008a1d4d5fb8a01d2d14"

@@ -33,7 +33,9 @@ exact MPNs does not establish their hardware performance.
 
 Check current JLCPCB availability and the assembly preview before placing an
 order. Verify pin 1, diode/LED cathodes and electrolytic polarity against
-`reference/assembly-top.svg`. The CPL preserves KiCad rotations; no guessed
+`reference/assembly-top.svg`. The silkscreen prints `+` and `-` beside the
+pads of every LED, diode and electrolytic (`mark_polarity.py`), so the preview
+and a fitted board can both be checked by eye. The CPL preserves KiCad rotations; no guessed
 library/reel rotation offsets are applied. If a selected part is unavailable,
 update the reviewed part table and regenerate; do not silently substitute.
 

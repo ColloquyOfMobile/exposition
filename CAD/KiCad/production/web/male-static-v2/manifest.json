@@ -1,5 +1,5 @@
 {
-  "board_sha256": "54679c0808152b8f7bb86007bfc54a492216110ab05349565d3c06a81fd68858",
+  "board_sha256": "333cf1feb71949577e2b0ae748bcffb6f45d903e86264ce0003b85ee0c6634b3",
   "generator_sha256": "4120b90d4e6de9954f4517a5632645add46d553731b9abadb55191462dafea89",
   "schematics": {
     "proposed-solutions/male static v2/wired/male-static-v2-wired.kicad_sch": "24cce215d5968364f06b609e1cf5392b81640154a6e08b1e45332f6c26b6dd04"

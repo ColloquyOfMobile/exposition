@@ -1,5 +1,5 @@
 {
-  "board_sha256": "59fb1471c4c99bc4eeddf0c85c4637ca55fefc889be7ec12370574710be32e48",
+  "board_sha256": "5d0338fb9a33e1a78500a999bf2d7ef972c46e39df3a78ff460eaa12c40715ac",
   "generator_sha256": "4120b90d4e6de9954f4517a5632645add46d553731b9abadb55191462dafea89",
   "schematics": {
     "proposed-solutions/shields/microphone-flex/wired/microphone-flex-wired.kicad_sch": "4e2ff5c8b119b617c9aa0c9f6bfffb382e1174d913974323f7f4d0aca4a17f99"
