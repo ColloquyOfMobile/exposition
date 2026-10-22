@@ -18,9 +18,6 @@ def position(pad):return tuple(p.ToMM(pad.GetPosition()))
 def main():
     loaded={};summary={}
     for folder in ROOT.iterdir():
-        # Rev C orientation study has its own layout/pin-order validation;
-        # it is not a current rack fabrication input.
-        if folder.name=='microphone-flex':continue
         if not (folder/'circuit.json').exists():continue
         name=folder.name;data=json.loads((folder/'circuit.json').read_text());board=p.LoadBoard(str(folder/(name+'.kicad_pcb')))
         loaded[name]=board;actual=pads(board)
@@ -105,7 +102,7 @@ def main():
         assert len(pins)==1
         net=plain(adapter[pins[0]].GetNetname())
         assert net==(BODY[i]+'/mic direct' if i<5 else f'adc/{gpio}')
-    assert set(loaded)=={'backplane','teensy-adapter','voice-thomas','microphone','analyser-carrier'}
+    assert set(loaded)=={'backplane','teensy-adapter','voice-thomas','microphone-flex','analyser-carrier'}
     backparts={c['ref']:c for c in backdata['components']}
     adparts={c['ref']:c for c in data['components']}
     for i,body in enumerate(BODY,1):
@@ -125,7 +122,7 @@ def main():
     for pin in [34,35]:assert plain(adapter[(f'TP{pin}','1')].GetNetname())==f'gpio/{pin}'
     for pin,net in [('19','MEGA_5V'),('20','GND'),('21','GND')]:
         assert plain(back[('JA1',pin)].GetNetname())==net
-    for name,count in [('backplane',26),('teensy-adapter',3),('voice-thomas',2),('microphone',2)]:
+    for name,count in [('backplane',26),('teensy-adapter',3),('voice-thomas',2),('microphone-flex',2)]:
         headers=[f for f in loaded[name].GetFootprints() if str(f.GetFPID().GetLibItemName())=='TestPin_1x01_P2.54mm']
         assert len(headers)==count,(name,len(headers))
     leds=[c for c in backparts.values() if c['ref'] in ['DP5','DP12','DPUSB','DT1','DT2','DT3','DT4','DT5']]
@@ -140,44 +137,39 @@ def main():
         pp=list(voiceparts[ref].Pads());assert all(x.GetAttribute()==p.PAD_ATTRIB_PTH for x in pp)
         a,b=[position(x) for x in pp];assert near(((a[0]-b[0])**2+(a[1]-b[1])**2)**.5,pitch)
     assert not pads(loaded['voice-thomas'])[('JV1','5')].GetNetname()
-    mic=loaded['microphone'];mf={f.GetReference():f for f in mic.GetFootprints()};mp=pads(mic)
-    mic_settings=json.loads((ROOT.parents[1]/'old-reference/microphone-rev-b/microphone.kicad_pro').read_text())['board']['design_settings']
+    # Rev C is the production microphone holder; Rev B's round mounting
+    # holes, fixed gain resistors and module support holes no longer apply.
+    mic=loaded['microphone-flex'];mf={f.GetReference():f for f in mic.GetFootprints()};mp=pads(mic)
+    mic_settings=json.loads((ROOT/'microphone-flex/microphone-flex.kicad_pro').read_text())['board']['design_settings']
     assert mic_settings['rules']['min_clearance']>=.15 and mic_settings['rules']['min_track_width']>=.15
     assert not mic_settings['drc_exclusions']
+    shape=p.SHAPE_POLY_SET();assert mic.GetBoardPolygonOutlines(shape)
+    box=shape.BBox()
+    assert near(p.ToMM(box.GetWidth()),32) and near(p.ToMM(box.GetHeight()),62)
     assert position(mf['H1'])==(60,56) and position(mf['H2'])==(60,106)
     for ref in ['H1','H2']:
         hp=next(iter(mf[ref].Pads()));assert hp.GetAttribute()==p.PAD_ATTRIB_NPTH
-        assert all(near(v,5.5) for v in p.ToMM(hp.GetDrillSize()))
+        assert tuple(round(v,3) for v in p.ToMM(hp.GetDrillSize()))==(12,5.5)
+        assert hp.GetDrillShape()==p.PAD_DRILL_SHAPE_OBLONG
+        assert len(list(mf[ref].Zones()))==2
+        # The 18.5 x 12 mm capsule keepout follows the entire slot travel.
         hx,hy=position(mf[ref])
         for f in mic.GetFootprints():
             if f.GetReference()==ref:continue
             for pad in f.Pads():
                 x,y=position(pad);sx,sy=p.ToMM(pad.GetSize())
-                assert ((x-hx)**2+(y-hy)**2)**.5-max(sx,sy)/2>=6,(ref,f.GetReference(),'keepout')
-        assert len(list(mf[ref].Zones()))==2
+                dx=max(abs(x-hx)-3.25,0)
+                assert (dx*dx+(y-hy)**2)**.5-max(sx,sy)/2>=6,(ref,f.GetReference(),'slot keepout')
     for f in mf.values():assert f.GetLayer()==p.F_Cu
-    assert 'U1' not in mf and 'MK1' not in mf and 'JP1' not in mf and 'JP2' not in mf
-    assert [plain(mp[('M1',str(i))].GetNetname()) for i in range(1,6)]==['GND','VDD','GAIN','MICOUT','AR']
+    assert not {'U1','MK1','R1','R2','H3','H4'} & set(mf)
+    for ref in ['M1','J2','J3']:
+        assert [plain(mp[(ref,str(i))].GetNetname()) for i in range(1,6)]==['GND','VDD','GAIN','MICOUT','AR']
     assert [plain(mp[('J1',str(i))].GetNetname()) for i in range(1,4)]==['GND','+5V','OUT']
-    for ref,expected in [('R1',['GAIN','VDD']),('R2',['AR','GND']),('R4',['+5V','VDD']),('R5',['MICOUT','OUT'])]:
+    for ref,signal in [('JP1','GAIN'),('JP2','AR')]:
+        assert [plain(mp[(ref,str(i))].GetNetname()) for i in range(1,4)]==['GND',signal,'VDD']
+        assert all(pad.GetAttribute()==p.PAD_ATTRIB_PTH for pad in mf[ref].Pads())
+    for ref,expected in [('R4',['+5V','VDD']),('R5',['MICOUT','OUT'])]:
         assert [plain(mp[(ref,str(i))].GetNetname()) for i in (1,2)]==expected
-    source=p.LoadBoard(str(ROOT.parents[1]/'provided-elements/max9814-reference/max9814-reference.kicad_pcb'))
-    sourcefp={f.GetReference():f for f in source.GetFootprints()}
-    for i in range(1,6):
-        original=next(a for a in sourcefp['J2'].Pads() if a.GetNumber()==str(i))
-        sx,sy=position(original);got=position(mp[('M1',str(i))])
-        assert near(got[0],67.0485-(sy-50)) and near(got[1],67+(sx-50))
-    for ref,source_ref in [('H3','U$4'),('H4','U$5')]:
-        original=next(iter(sourcefp[source_ref].Pads()));sx,sy=position(original)
-        got=next(iter(mf[ref].Pads()));gx,gy=position(got)
-        assert near(gx,67.0485-(sy-50)) and near(gy,67+(sx-50))
-        assert got.GetAttribute()==p.PAD_ATTRIB_NPTH and near(p.ToMM(got.GetDrillSize().x),2.2)
-        assert len(list(mf[ref].Zones()))==2
-        for f in mf.values():
-            if f.GetReference()==ref:continue
-            for pad in f.Pads():
-                x,y=position(pad);sx,sy=p.ToMM(pad.GetSize())
-                assert ((x-gx)**2+(y-gy)**2)**.5-max(sx,sy)/2>=3,(ref,f.GetReference(),'module spacer keepout')
     carrier=loaded['analyser-carrier'];cp=pads(carrier)
     silk=[t.GetText() for t in carrier.GetDrawings()
           if isinstance(t,p.PCB_TEXT) and t.GetLayer() in (p.F_SilkS,p.B_SilkS)]

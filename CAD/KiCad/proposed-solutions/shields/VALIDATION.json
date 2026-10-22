@@ -30,7 +30,7 @@
     "drc_violations": 0,
     "unconnected_items": 0,
     "copper_layers": 4,
-    "tracks_and_vias": 1541,
+    "tracks_and_vias": 1758,
     "sha256": {
       "audio1.kicad_sch": "c69c5a82c5df1ddf24e5c179f8f9da0e8265611660ef7123ea0b52a0b5284e53",
       "audio2.kicad_sch": "c72c00363ad4faaefab403c5fb4b406b05cb0f93eb06151149a021f17552dde2",
@@ -38,7 +38,7 @@
       "audio4.kicad_sch": "4c596fc6b47c2cb9276c46f95426a2c2ceda1a4ec827b80a4fa4aadeb314eba7",
       "audio5.kicad_sch": "e06b983907dcfb340cdc47eaf38e6b0ccd2c02e25a25966d0b17be0fd447fe0a",
       "backplane.kicad_dru": "ee5385e928a86c74451de847b28148e46ac6b595f4c8c3acc3862596db4d6d28",
-      "backplane.kicad_pcb": "dfa82eff00736b68b1a14105f3119caa8dfe3119569cae0a3e01c3b76ab41c4d",
+      "backplane.kicad_pcb": "709d5da17ba663b40cfef0de8d0f128fd71ecc85ba6a503f2f1616e7779b517e",
       "backplane.kicad_pro": "6f519c2e7ffb82f3fb1a18ba031c956a7592bc70de502d5043781dfa3fe11011",
       "backplane.kicad_sch": "79a98550441fab0a2d9d63f21aa3a09fdde4ba46317a3f0eeb3c2cffa4c7717b",
       "controller.kicad_sch": "df6e896b701cd810f76f2433b6d22cad3bca784c2cdee62f692707985ac95a32",
@@ -48,7 +48,7 @@
       "harness_3.kicad_sch": "93de504a6bf967511263dee2978761f5bd02fe45ba6b2f03771ef4a86d65e384",
       "indicators.kicad_sch": "8bc7eab8f60388fc376a4c784284ddbbd1b0b720cb9c3f2d1739eb7274c6e4b9",
       "io.kicad_sch": "b39e3fb348143f929abc7c46a48b28014a3d1de959a476383b5155f6ab96eac6",
-      "io_2.kicad_sch": "35c9c1b15bc456cf7797cc2be388325f72cc1563949ee04f2187a3df4b207921",
+      "io_2.kicad_sch": "cb10559c7bc51d9bbe9f06c7d58669ee079d6f26d5c790a3360d5fd814db79cb",
       "mechanical.kicad_sch": "52eab63d0e2895c8d11c430c7a48d717755e82f2b34b9252299e06acde280a71",
       "microphones.kicad_sch": "c52c4a49a16825f5d4463a3e8a12585c27a6cd4fd94bdc218775d48a57948eb4",
       "power.kicad_sch": "9aeaa8c0d7f65a4dbcce511b130395f9788f0961f46a9ec5ac23ffd37156b3e2",
@@ -61,25 +61,27 @@
       "test_pins_2.kicad_sch": "f0ab40bb44481bdcf4b81b48b19ccfa24031be1b7e3a7e06d99b2f655a63fe8a"
     }
   },
-  "microphone": {
-    "connected_pins": 26,
+  "microphone-flex": {
+    "connected_pins": 38,
     "parity_differences": [],
-    "front_smd_components": 8,
+    "front_smd_components": 6,
     "back_smd_components": 0,
     "erc_violations": 0,
     "drc_violations": 0,
     "unconnected_items": 0,
     "copper_layers": 2,
-    "tracks_and_vias": 64,
+    "tracks_and_vias": 111,
     "sha256": {
-      "interface.kicad_sch": "746aa7ba7698f17b07a5cd92e715d584af5ac7b1115bce3fbc6092236dda9b0d",
-      "mechanical.kicad_sch": "bebf6980a2b221187e06e8f9f811429aa4c65057689cfad940e397fb218ebd0b",
-      "microphone.kicad_pcb": "3572cfad4cf98438c48e279a718c8d333ddd6955cd79eec85277058fc94f0a01",
-      "microphone.kicad_pro": "15b256852896764e35c9e0f72a6874213564c63743eb43146705d4dc2e434760",
-      "microphone.kicad_sch": "348ae35500ad0e97f8f49d81a381a87234b42cb8cabcb421b8974a889de52c1b",
-      "module.kicad_sch": "1f7a42ab666edf89b1334049d6059bc2cfbcad85cba82fcbb8d817418d06a08e",
-      "power.kicad_sch": "bae34197d7e871a1f7fd30543deba04d5ec6e02c904abb5fe94c3305e1f79a39",
-      "supplies.kicad_sch": "3fe979f2bcab1542c1255fca547b04fa08e561c40b0c31458ed7b86484596f44"
+      "interface.kicad_sch": "fd3586b01b5d83378c9cc1c3c1f6daed1b3cad365d0a04f30d1754adba375c69",
+      "mechanical.kicad_sch": "533d42e07f964ad710b1325fc5886c475b30129e10a47a5a7a542376d85d4920",
+      "microphone-flex.kicad_pcb": "1f1834e30b6ea1867cdfcd4531bcb005f3cd29d0d1901de400f896368020f081",
+      "microphone-flex.kicad_pro": "09b16502c9ce480a4653651742bbafdccdcdfececdc2b61df96035f66f62a057",
+      "microphone-flex.kicad_sch": "8bb3c516ba6af29bffb818eb5a7595df8dca675434f0605ade29e236e3da29c3",
+      "module.kicad_sch": "1f60ed395aa18b40241940ae025c6d8323c501b88bd545da9e16ca8382acf817",
+      "module_2.kicad_sch": "f9a56754a39bd0e266e69a6d55020e77cd3118e9eb7e9877265c6ab63a3d0f77",
+      "module_3.kicad_sch": "c7c2f32d14a5ac46e10fbc00041db70d91e143b7dd36d392ba3228b055661705",
+      "power.kicad_sch": "eed362d589a5ab9820000e73b1e9d5e010ba7a9646fd1d291219d158771521e9",
+      "supplies.kicad_sch": "d864dbedd7a6e0734f377d7ac7dc0f18508bb960c1fe244edc42957216749977"
     }
   },
   "teensy-adapter": {
@@ -101,7 +103,7 @@
       "sensors.kicad_sch": "61ecfc0536cacaf0082629e0624b7e5819242655841afcc062e77fe595a00110",
       "sensors_2.kicad_sch": "3d105d02f0038a04bd3f3b57ae01d00154e3ca6e95b014173f94fcfd542ed842",
       "supplies.kicad_sch": "145b142b098c1cb18ef9f08e2d8b533abc6a4e1b67de097670d007c01846fc97",
-      "teensy-adapter.kicad_pcb": "7dad98de4cfb66d2dca20a79fc67ffa10a2d83c63662b470dc469362b0102207",
+      "teensy-adapter.kicad_pcb": "3f248cab536f22595e5483eb9294b1e2357d1cc543c4f615bb7aac9a11b59ce8",
       "teensy-adapter.kicad_pro": "38a5a3beb24d4dbab077c785e482e217b46b289111e0b7c8566d7755c9a8da6f",
       "teensy-adapter.kicad_sch": "c516a13d22d313cf6906dc90f4b1defca4af004802dee93fd593fe6e7e1fb20a",
       "teensy.kicad_sch": "9937dd0cbf6de3d41523c4afddfe06e55fd605822969e7d2b8cf4e6dba58a32a",
