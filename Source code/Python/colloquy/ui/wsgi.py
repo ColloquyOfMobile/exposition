@@ -68,7 +68,6 @@ class MockWSGI(ConsoleTree, Base):
         self._environ = environ
         self._start_response = start_response
         self._base_path = None
-        self._root = Path("app")
         self._status, self._headers, self._content = self._parse()
 
     def __iter__(self):
@@ -96,6 +95,7 @@ class MockWSGI(ConsoleTree, Base):
 
     def _parse(self):
         args = self._parse_path()
+        self._root = Path("app" if args[:1] == ("app",) else "home")
 
         if self._environ.get("REQUEST_METHOD") == "POST":
             return self._parse_post(*args)

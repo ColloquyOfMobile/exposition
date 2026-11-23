@@ -5,6 +5,7 @@ from urllib.parse import parse_qs, quote
 
 from yattag import Doc, indent
 from colloquy.ui.tree import CommandFailed
+from colloquy.ui.console import thread_monitor
 
 
 class ConsoleTree:
@@ -62,6 +63,11 @@ class ConsoleTree:
         doc, tag, text = Doc().tagtext()
 
         with tag("div", name=obj["name"], klass="tree-level"):
+            node_parts = tuple(obj["path"])
+            if node_parts == ("logs",):
+                doc.asis(thread_monitor())
+            elif node_parts[:1] == ("logs",) and Path(*node_parts) == self._base_path and "content" in obj:
+                doc.asis(thread_monitor("/".join(node_parts[1:])))
             for key, value in obj.items():
                 if key in (
                     "name",
@@ -136,9 +142,9 @@ class ConsoleTree:
                 if "pre" in value:
                     with tag("div", name=key):
                         if key == "content" and obj["path"][:1] == ("logs",):
-                            source = "/".join(obj["path"][1:])
-                            with tag("button", type="button", hidden="hidden", **{"data-follow-source": source}):
-                                text("Follow this thread")
+                            if Path(*node_parts) != self._base_path:
+                                with tag("a", href="/" + "/".join((self._root.name, *node_parts))):
+                                    text("Follow this thread")
                             with tag("details", klass="log-archive"):
                                 with tag("summary"):
                                     text("Full log at page load")

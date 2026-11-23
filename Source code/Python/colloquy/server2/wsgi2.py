@@ -80,7 +80,6 @@ class WSGI2(ConsoleTree, Base):
         self._environ = environ
         self._start_response = start_response
         self._base_path = None
-        self._root = Path("app")
         self._status, self._headers, self._content = self._parse()
 
     def __iter__(self):
@@ -119,6 +118,7 @@ class WSGI2(ConsoleTree, Base):
 
     def _parse(self):
         args = self._parse_path()
+        self._root = Path("app" if args[:1] == ("app",) else "home")
 
         # With the main PCB out of the rack the tree is not served at
         # all - see `_board_is_out`. Everything that does not go through

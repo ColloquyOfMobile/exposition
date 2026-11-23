@@ -39,13 +39,14 @@
     }, { passive: false });
 
     var dragging = false, lastX = 0, lastY = 0;
-    container.addEventListener("mousedown", function (evt) {
+    container.addEventListener("pointerdown", function (evt) {
+      container.setPointerCapture(evt.pointerId);
       dragging = true;
       lastX = evt.clientX;
       lastY = evt.clientY;
       container.style.cursor = "grabbing";
     });
-    window.addEventListener("mousemove", function (evt) {
+    container.addEventListener("pointermove", function (evt) {
       if (!dragging) return;
       var rect = svg.getBoundingClientRect();
       x -= (evt.clientX - lastX) * (w / rect.width);
@@ -54,7 +55,7 @@
       lastY = evt.clientY;
       apply();
     });
-    window.addEventListener("mouseup", function () {
+    container.addEventListener("lostpointercapture", function () {
       dragging = false;
       container.style.cursor = "grab";
     });
@@ -65,5 +66,12 @@
     });
   }
 
-  document.querySelectorAll("[data-svg-zoom]").forEach(initSvgZoom);
+  function bindGraphs() {
+    document.querySelectorAll("[data-svg-zoom]:not([data-zoom-ready])").forEach(container => {
+      container.dataset.zoomReady = "";
+      initSvgZoom(container);
+    });
+  }
+  document.addEventListener("tree-updated", bindGraphs);
+  bindGraphs();
 })();

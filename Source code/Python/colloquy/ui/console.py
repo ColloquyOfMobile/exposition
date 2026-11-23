@@ -9,8 +9,8 @@ ASSETS = Path(__file__).parent / "static" / "console"
 
 def page(request, state, *, installation):
     path = state["path"]
-    title = path[-1] if path else "Installation tree"
-    canonical = "/" + "/".join(("app", *path))
+    title = path[-1] if path else "Home"
+    canonical = "/" + "/".join((request._root.name, *path))
     doc, tag, text = Doc().tagtext()
     doc.asis("<!DOCTYPE html>")
     with tag("html", lang="en"):
@@ -22,7 +22,7 @@ def page(request, state, *, installation):
             doc.stag("link", rel="stylesheet", href="/console-assets/console.css")
         with tag("body", **{"data-canonical": canonical}):
             with tag("header", klass="masthead"):
-                with tag("a", klass="brand", href="/app"):
+                with tag("a", klass="brand", href="/home"):
                     with tag("span", klass="mobile-mark", **{"aria-hidden": "true"}):
                         doc.asis("<i></i><i></i><i></i>")
                     text("Colloquy of Mobiles")
@@ -42,10 +42,10 @@ def page(request, state, *, installation):
                 doc.asis(updates.banner_html(request.colloquy.repository, back=canonical))
             with tag("main"):
                 with tag("nav", klass="crumbs", **{"aria-label": "Breadcrumb"}):
-                    with tag("a", href="/app"):
-                        text("Console")
+                    with tag("a", href="/home"):
+                        text("Home")
                     for level, name in enumerate(path, 1):
-                        with tag("a", href="/" + "/".join(("app", *path[:level]))):
+                        with tag("a", href="/" + "/".join((request._root.name, *path[:level]))):
                             text(name)
                 with tag("div", klass="page-heading"):
                     with tag("h1"):
@@ -53,47 +53,46 @@ def page(request, state, *, installation):
                     with tag("span", klass="mode"):
                         text(("Simulated installation" if request.colloquy.is_simulated else "Installation")
                              if installation else "Mock preview")
-                with tag("div", klass="workspace"):
-                    with tag("nav", klass="view-switch", **{"aria-label": "Console view"}):
-                        for panel, label in (("explorer", "Object tree"), ("monitor", "Thread log")):
-                            with tag("button", type="button", **{"aria-controls": panel}):
-                                text(label)
-                    with tag("section", id="explorer", klass="explorer", **{"aria-label": "Object tree"}):
-                        with tag("div", klass="panel-heading"):
-                            with tag("h2"):
-                                text("Object tree")
-                            with tag("a", klass="reload", href=canonical, title="Refresh tree values"):
-                                text("Refresh values")
-                        with tag("div", name="commands", klass="controls"):
-                            doc.asis(request._html_recursion(obj=state))
-                    log_source = "/".join(path[1:]) if path[:1] == ("logs",) and "content" in state else ""
-                    with tag("section", id="monitor", klass="monitor", **{"aria-label": "Live thread log", "data-source": log_source}):
-                        with tag("div", klass="panel-heading"):
-                            with tag("h2"):
-                                text("Thread log")
-                            with tag("span", id="log-status", role="status"):
-                                text("Connecting")
-                        with tag("div", klass="log-toolbar"):
-                            with tag("select", id="source", **{"aria-label": "Log source"}):
-                                with tag("option", value=""):
-                                    text("Recent threads")
-                            with tag("button", id="pause", type="button"):
-                                text("Pause")
-                        with tag("div", id="log-feed", tabindex="0", **{"aria-label": "Recent log output"}):
-                            with tag("noscript"):
-                                text("Enable JavaScript for live output. ")
-                                if installation:
-                                    with tag("a", href="/app/logs"):
-                                        text("Browse log files")
-                        with tag("footer", klass="log-footer"):
-                            with tag("span", id="thread-count"):
-                                active = active_thread_count()
-                                text(f"{active} active thread" if active == 1 else f"{active} active threads")
-                            with tag("span", id="event-count"):
-                                pass
+                with tag("section", id="explorer", klass="explorer", **{"aria-label": "Object tree"}):
+                    with tag("div", klass="panel-heading"):
+                        with tag("h2"):
+                            text("Object tree")
+                        with tag("a", klass="reload", href=canonical, title="Refresh tree values"):
+                            text("Refresh values")
+                    with tag("div", id="command-result", role="status"):
+                        pass
+                    with tag("div", name="commands", klass="controls"):
+                        doc.asis(request._html_recursion(obj=state))
             for url in ("/static/svg_zoom.js", "/console-assets/console.js"):
                 with tag("script", src=url):
                     pass
             if installation:
                 doc.asis(updates.script_html(request.colloquy.repository))
     return "200 OK", [("Content-Type", "text/html; charset=utf-8"), ("Cache-Control", "no-store")], doc.getvalue().encode()
+
+
+def thread_monitor(log_source=""):
+    doc, tag, text = Doc().tagtext()
+    with tag("section", id="monitor", klass="monitor", **{"aria-label": "Live thread log", "data-source": log_source}):
+        with tag("div", klass="panel-heading"):
+            with tag("h2"):
+                text("Thread log")
+            with tag("span", id="log-status", role="status"):
+                text("Connecting")
+        with tag("div", klass="log-toolbar"):
+            with tag("select", id="source", **{"aria-label": "Log source"}):
+                with tag("option", value=""):
+                    text("Recent threads")
+            with tag("button", id="pause", type="button"):
+                text("Pause")
+        with tag("div", id="log-feed", tabindex="0", **{"aria-label": "Recent log output"}):
+            with tag("noscript"):
+                text("Enable JavaScript for live output. ")
+                text("Open a log file to read its saved output.")
+        with tag("footer", klass="log-footer"):
+            with tag("span", id="thread-count"):
+                active = active_thread_count()
+                text(f"{active} active thread" if active == 1 else f"{active} active threads")
+            with tag("span", id="event-count"):
+                pass
+    return doc.getvalue()

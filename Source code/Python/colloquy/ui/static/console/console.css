@@ -55,9 +55,6 @@ h1 { font-size: clamp(2rem, 3.9vw, 3.7rem); font-weight: 570; letter-spacing: -.
   overflow-wrap: anywhere; }
 h2 { font-size: 1.15rem; font-weight: 650; letter-spacing: -.028em; }
 .mode { color: var(--muted); font: .78rem var(--mono); }
-.workspace { display: grid; gap: clamp(.8rem, 2vw, 2rem);
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: start; }
-.view-switch { display: none; }
 .log-archive { margin: .6rem 0; }
 .explorer, .monitor { min-width: 0; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
 .explorer { background: #fff; }
@@ -103,8 +100,7 @@ h2 { font-size: 1.15rem; font-weight: 650; letter-spacing: -.028em; }
 .schedule-running .schedule-hours, .scenario-activity .scenario-marker { color: #24644e; }
 .scenario-event .scenario-marker, .schedule-exception .schedule-reason { color: #894775; }
 .schedule-problem, .scenario-problem { color: #9a263c; font-weight: bold; }
-.monitor { color: #e2eae2; background: #182421; border-color: #2a3c34;
-  position: sticky; top: 5.3rem; }
+.monitor { color: #e2eae2; background: #182421; border-color: #2a3c34; margin: .6rem 0; }
 .monitor .panel-heading { border-color: #384940; }
 #log-status { font: .76rem var(--mono); color: #c0cfc4; }
 #log-status::before { content: ""; display: inline-block; width: .5rem; height: .5rem; border-radius: 50%;
@@ -124,13 +120,6 @@ h2 { font-size: 1.15rem; font-weight: 650; letter-spacing: -.028em; }
 .empty-log, #log-feed a { color: #c0cdc2; }
 .log-footer { padding: .7rem 1rem; border-top: 1px solid #384940; color: #bdc9bf; font: .72rem var(--mono); }
 @media (max-width: 760px) {
-  .workspace { grid-template-columns: minmax(0, 1fr); }
-  .workspace[data-pane] .view-switch { display: flex; gap: .25rem; padding: .25rem; border-radius: 6px; background: #e0e6dc; }
-  .view-switch button { flex: 1; border: 0; border-radius: 4px; padding: .48rem;
-    background: transparent; color: var(--muted); font-size: .87rem; }
-  .view-switch button[aria-pressed=true] { background: white; color: var(--ink); font-weight: 650; }
-  .workspace[data-pane=explorer] .monitor, .workspace[data-pane=monitor] .explorer { display: none; }
-  .monitor { position: static; }
   .masthead { gap: .35rem; padding: .65rem .8rem; }
   .brand { font-size: .98rem; gap: .45rem; }
   .server-actions { gap: .25rem; }

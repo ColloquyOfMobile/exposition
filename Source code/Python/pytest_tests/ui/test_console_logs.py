@@ -9,6 +9,20 @@ from colloquy.server2.wsgi2 import WSGI2
 from colloquy.ui.mock import MockApp, OfflineServer, request
 
 
+def test_home_opens_the_console_as_a_tree_branch():
+    app = MockApp()
+    _, home = request("/home", app=app)
+    assert "<h1>Home</h1>" in home
+    assert 'href="/home/logs"' in home
+    assert 'id="monitor"' not in home
+    for route in ("/home/logs", "/home/call/logs/open"):
+        status, page = request(route, app=app)
+        assert status == "200 OK"
+        assert page.count('id="monitor"') == 1
+    _, closed = request("/home/call/logs/close", app=app)
+    assert 'id="monitor"' not in closed
+
+
 def test_live_feed_merges_elapsed_times_and_discovers_new_workers(tmp_path, monkeypatch):
     monkeypatch.setattr(Logger, "_log_folder", tmp_path)
     (tmp_path / "main.log").write_text("59.99s ready\n01:00.10s finished\n")

@@ -28,6 +28,7 @@ import io
 from threading import Event
 
 from colloquy.base import Base
+from colloquy.logs import Logs
 from colloquy.drivers.value_setter2 import ValueSetter2
 from colloquy.ui import leaves, tree
 
@@ -238,6 +239,7 @@ class MockApp(Base):
     def __init__(self, log_commands=False):
         super().__init__(owner=None)
         self._log_commands = log_commands
+        self._logs = Logs(self)
         self._readings = Readings(owner=self)
         self._buttons = Buttons(owner=self)
         self._documents = Documents(owner=self)
@@ -278,6 +280,7 @@ class MockApp(Base):
             self._pictures.name: self._pictures,
             self._graph.name: self._graph,
             self._deep.name: self._deep,
+            self._logs.name: self._logs,
         }
 
     def get_states(self, *args):
