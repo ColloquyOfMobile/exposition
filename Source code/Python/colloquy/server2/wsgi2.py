@@ -486,9 +486,6 @@ class WSGI2(Base):
                 with tag("div", name="thread count", style="display: flex;"):
                     text(f"thread count: {len(self.all_threads)}")
 
-                if not args:
-                    doc.asis(orders.catalog_html(orders.book_of(self.colloquy)))
-
                 # Commands on the left, simulated state on the right, side
                 # by side: watching what the installation does while
                 # driving it used to mean alternating between two pages.

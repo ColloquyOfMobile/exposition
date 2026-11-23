@@ -43,6 +43,7 @@ from colloquy.base import Base
 from .electronics import Electronics
 from .main_pcb import MainPCB
 from .motors import Motors
+from .pcbs import PCBs
 
 
 class Hardware(Base):
@@ -56,6 +57,8 @@ class Hardware(Base):
         self[self._motors.name] = self._motors
         self._electronics = Electronics(owner=self)
         self[self._electronics.name] = self._electronics
+        self._pcbs = PCBs(owner=self)
+        self[self._pcbs.name] = self._pcbs
 
     @property
     def name(self):
@@ -83,4 +86,5 @@ class Hardware(Base):
             self._main_pcb.name: self._main_pcb,
             self._motors.name: self._motors,
             self._electronics.name: self._electronics,
+            self._pcbs.name: self._pcbs,
         }

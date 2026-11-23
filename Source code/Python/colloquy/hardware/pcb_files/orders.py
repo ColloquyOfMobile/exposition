@@ -4,7 +4,7 @@
 """Ordering the PCBs at JLCPCB, one instruction page per step.
 
 Every board in the fabrication manifest has an order status, shown on its
-card on the home page:
+card under `hardware > pcbs` (and on the standby page):
 
 - **waiting order** - nobody has put it in a cart yet (the default);
 - **in the cart** - its five steps were walked and JLC's form saved it;
@@ -428,8 +428,8 @@ def changes_since_cart(found: Mapping[str, Any], board: gerbers.Board) -> tuple[
 # --- pieces of page ---------------------------------------------------
 
 
-# Inline rather than a class: the cards are drawn on the installation's
-# home page, which has no stylesheet of its own.
+# Inline rather than a class: the cards are drawn in the installation's
+# tree, which has no stylesheet of its own.
 _COLOURS = {IN_CART: "#08a", ORDERED: "#080", RECEIVED: "#080", SOLDERED: "#080", ERROR: "#d02"}
 
 
@@ -453,7 +453,7 @@ def _listed(names: tuple[str, ...]) -> str:
 
 def _cart_check(found: Mapping[str, Any], board: gerbers.Board) -> tuple[bool, str]:
     """Whether what went into the cart is in doubt, and the words to say
-    so after the status. Never raises: it is drawn on the home page."""
+    so after the status. Never raises: it is drawn in the tree."""
     try:
         changed = changes_since_cart(found, board)
     except Exception as error:  # noqa: BLE001 - see the docstring
@@ -490,7 +490,7 @@ def _error_details(found: Mapping[str, Any], picture: bool = False) -> str:
 
 
 def catalog_html(book: MutableMapping[str, Any] | None) -> str:
-    """The home page's PCB section, with each card's order status and the
+    """The `hardware > pcbs` section, with each card's order status and the
     `order now` that walks them. Without records, the plain catalog."""
     if book is None:
         return str(catalog.html())
@@ -500,7 +500,7 @@ def catalog_html(book: MutableMapping[str, Any] | None) -> str:
             found = record(book, board.id)
             return (f'<div name="order status"><p>order: {_status_words(found, board)}</p>'
                     f"{_error_details(found)}</div>")
-        except Exception as error:  # noqa: BLE001 - the home page must not raise
+        except Exception as error:  # noqa: BLE001 - a render must not raise
             return f'<p name="order status">order status unreadable: {escape(str(error))}</p>'
 
     lead = (
@@ -519,7 +519,7 @@ def _page(title: str, body: str) -> bytes:
         '<meta name="viewport" content="width=device-width, initial-scale=1">'
         f"<title>{escape(title)}</title><style>{STYLE}</style></head><body>"
         '<div name="server commands" class="furniture">'
-        '<a href="/">home</a>'
+        '<a href="/app/hardware/pcbs">PCBs</a>'
         f'<a href="{ROUTE}">order now</a>'
         f'<a href="{ROUTE}/done">the cart</a>'
         "</div>"

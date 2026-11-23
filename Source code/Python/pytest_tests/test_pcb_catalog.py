@@ -1,4 +1,4 @@
-"""PCB home-page files work on both servers, including with the board out."""
+"""PCB files work on both servers, including with the board out."""
 import io
 import zipfile
 from pathlib import Path
@@ -14,7 +14,8 @@ from colloquy.ui.wsgi import MockWSGI
 
 
 @pytest.mark.parametrize("renderer", [WSGI2, MockWSGI])
-def test_home_shows_catalog_but_node_pages_do_not(renderer):
+def test_the_home_page_is_the_tree_without_the_catalog(renderer):
+    """The PCBs live under `hardware > pcbs` since 2026-11-23."""
     app = SimpleNamespace(is_simulated=False, repository=SimpleNamespace(auto_update=False))
     request = SimpleNamespace(
         colloquy=app, _root=Path("app"), all_threads=(),
@@ -22,13 +23,18 @@ def test_home_shows_catalog_but_node_pages_do_not(renderer):
         _html_restart_link=lambda: "", _html_navigation=lambda **kwargs: "",
         _html_recursion=lambda **kwargs: "",
     )
-    home = renderer._parse_app(request)[2]
-    node = renderer._parse_app(request, "hardware")[2]
+    assert b'name="pcb catalog"' not in renderer._parse_app(request)[2]
+
+
+def test_the_pcbs_node_links_every_boards_files():
+    from colloquy.hardware.pcbs import PCBs
+
+    node = PCBs(owner=SimpleNamespace(colloquy=SimpleNamespace(), owners=[]))
+    page = node._snapshot_if_opened(("hardware", "pcbs"))["catalog"]["html"]
     for board in gerbers.load():
-        assert f'/pcb/{board.id}/fabrication'.encode() in home
-        assert f'/pcb/{board.id}/schematic'.encode() in home
-        assert f'/pcb/{board.id}/preview'.encode() in home
-    assert b'name="pcb catalog"' not in node
+        assert f'/pcb/{board.id}/fabrication' in page
+        assert f'/pcb/{board.id}/schematic' in page
+        assert f'/pcb/{board.id}/preview' in page
 
 
 @pytest.mark.parametrize("renderer", [WSGI2, MockWSGI])

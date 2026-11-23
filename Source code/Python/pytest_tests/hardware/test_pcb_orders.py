@@ -460,7 +460,7 @@ def test_nothing_raised_leaves_the_route(monkeypatch, tmp_path):
     assert status == "500 Internal Server Error" and b"merged badly" in body
 
 
-# --- on the home page, and through the server ---------------------------
+# --- under hardware > pcbs, and through the server ----------------------
 
 
 def test_each_card_carries_its_status_and_the_catalog_its_order_now():
@@ -474,16 +474,22 @@ def test_each_card_carries_its_status_and_the_catalog_its_order_now():
     assert 'href="/pcb-order"' not in orders.catalog_html(None)
 
 
-def test_the_home_page_offers_order_now():
+def test_the_pcbs_node_offers_order_now_and_the_home_page_does_not():
+    from colloquy.hardware.pcbs import PCBs
+
     app = SimpleNamespace(is_simulated=False, repository=SimpleNamespace(auto_update=False),
                           params={})
+    node = PCBs(owner=SimpleNamespace(colloquy=app, owners=[]))
+    states = node._snapshot_if_opened(("hardware", "pcbs"))
+    assert 'href="/pcb-order"' in states["catalog"]["html"]
+
     request = SimpleNamespace(
         colloquy=app, _root=Path("app"), all_threads=(),
         get_states=lambda *args: {"path": args},
         _html_restart_link=lambda: "", _html_navigation=lambda **kwargs: "",
         _html_recursion=lambda **kwargs: "",
     )
-    assert b'href="/pcb-order"' in WSGI2._parse_app(request)[2]
+    assert b'href="/pcb-order"' not in WSGI2._parse_app(request)[2]
 
 
 def test_the_order_bypasses_the_board_out_gate():

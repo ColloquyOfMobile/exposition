@@ -332,9 +332,6 @@ class MockWSGI(Base):
                 with tag("div", name="thread count"):
                     text(f"thread count: {len(self.all_threads)}")
 
-                if not args:
-                    doc.asis(catalog.html())
-
                 # Commands and simulated state, both on the page:
                 # watching what the installation does while driving it
                 # used to mean alternating between two of them. They sat
