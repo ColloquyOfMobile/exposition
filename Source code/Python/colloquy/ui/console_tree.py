@@ -62,13 +62,23 @@ class ConsoleTree:
     def _html_recursion(self, obj):
         doc, tag, text = Doc().tagtext()
 
-        with tag("div", name=obj["name"], klass="tree-level"):
+        reading = obj.get("current value")
+        is_picker = isinstance(reading, dict) and "value" in reading and "opened" not in reading
+        attributes = {"data-picker-path": "/".join(obj["path"])} if is_picker else {}
+        with tag("div", name=obj["name"], klass="tree-level", **attributes):
+            if is_picker:
+                with tag("div", klass="current-value"):
+                    text("Current value")
+                    with tag("output"):
+                        text(str(reading["value"]))
             node_parts = tuple(obj["path"])
             if node_parts == ("logs",):
                 doc.asis(thread_monitor())
             elif node_parts[:1] == ("logs",) and Path(*node_parts) == self._base_path and "content" in obj:
                 doc.asis(thread_monitor("/".join(node_parts[1:])))
             for key, value in obj.items():
+                if is_picker and key == "current value":
+                    continue
                 if key in (
                     "name",
                     "subject",

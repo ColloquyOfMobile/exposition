@@ -184,6 +184,8 @@
       const href = link?.href;
       const wasFocused = pressed.contains(document.activeElement);
       const action = pressed.form?.action;
+      const pickerOffsets = new Map(Array.from(controls.querySelectorAll("[data-picker-path]"),
+        picker => [picker.dataset.pickerPath, picker.scrollTop]));
       const forms = Array.from(fresh.querySelectorAll("form"));
       for (const old of controls.querySelectorAll("form")) {
         const match = forms.find(form => form.getAttribute("action") === old.getAttribute("action"));
@@ -193,6 +195,9 @@
       if (monitor && nextMonitor) nextMonitor.replaceWith(monitor);
       if (monitor && !nextMonitor) { stopMonitor(); monitor = null; }
       controls.replaceChildren(...fresh.childNodes);
+      for (const picker of controls.querySelectorAll("[data-picker-path]")) {
+        picker.scrollTop = pickerOffsets.get(picker.dataset.pickerPath) || 0;
+      }
       if (!monitor && nextMonitor) {
         monitor = nextMonitor;
         stopMonitor = connectMonitor(monitor);
