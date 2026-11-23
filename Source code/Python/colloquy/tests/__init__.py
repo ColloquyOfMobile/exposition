@@ -20,6 +20,7 @@ from .test_audio_at_12v import TestAudioAt12V
 from .test_audio_loop import TestAudioLoop
 from .test_audio_bringup import TestAudioBringup
 from .scope import Scope
+from .test_teensy import TestTeensy
 
 from .group import TestGroup
 
@@ -132,6 +133,9 @@ class Tests(Base):
         # of them can be answered from the one run that happens to be in
         # memory. It is also the only way a run leaves this machine.
         self.scope = Scope(owner=manual, result_folder=result_folder)
+        # The Teensy on its adapter plate, before anything else is
+        # mounted: flash it, ask it, and look at its LED.
+        self.test_teensy = TestTeensy(owner=manual)
 
         auto.fill(
             tests=(
@@ -163,6 +167,7 @@ class Tests(Base):
                 self.test_goertzel_ear,
                 self.test_audio_at_12v,
                 self.scope,
+                self.test_teensy,
             ),
             # Nothing bench-only here, and `test audio at 12v` is why it
             # stopped being so. The supply it measures is the piece's, so

@@ -64,7 +64,23 @@ KNOWN_DEVICES: dict[tuple[int, int], tuple[str, bool]] = {
     (0x0403, 0x6014): ("FTDI FT232H - the U2D2 is an FTDI device", False),
     (0x0403, 0x6015): ("FTDI FT-X - the U2D2 is an FTDI device", False),
     (0x10C4, 0xEA60): ("CP2102 USB-serial", False),
+    # Teensies. No bridge chip: the USB port is the processor's own, so
+    # what enumerates is the sketch - its "USB Type" menu choice picks the
+    # PID (PJRC, `cores/teensy4/usb_desc.h`). Only the types that carry a
+    # serial port are listed, since only those get a COM name. Not
+    # Arduinos: the installation's driver speaks the Mega firmware, which
+    # no Teensy runs. `test teensy` is what talks to these.
+    (0x16C0, 0x0483): ("Teensy (USB type Serial)", False),
+    (0x16C0, 0x0487): ("Teensy (USB type Serial + Keyboard + Mouse + Joystick)", False),
+    (0x16C0, 0x0489): ("Teensy (USB type Serial + MIDI)", False),
+    (0x16C0, 0x048A): ("Teensy (USB type Serial + MIDI + Audio)", False),
+    (0x16C0, 0x048B): ("Teensy (USB type Dual Serial)", False),
+    (0x16C0, 0x048C): ("Teensy (USB type Triple Serial)", False),
 }
+
+# The rows above that are a Teensy. 0x16C0 is a shared vendor id (V-USB
+# hobby devices use it too), so the PID is what makes it PJRC's.
+TEENSY_IDS = frozenset(key for key in KNOWN_DEVICES if key[0] == 0x16C0)
 
 
 class Board(NamedTuple):
@@ -90,6 +106,11 @@ class Board(NamedTuple):
         """How it reads on the page, and the key it is filed under: the
         COM name is what you have to choose, the rest is why."""
         return f"{self.device} - {self.name}"
+
+    @property
+    def is_teensy(self) -> bool:
+        """A PJRC Teensy with a serial port, by its USB ids."""
+        return (self.vid, self.pid) in TEENSY_IDS
 
 
 def identify(port):

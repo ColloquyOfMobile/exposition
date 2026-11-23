@@ -244,6 +244,14 @@ def explain(result: Result) -> str:
     """
     text = result.output.lower()
 
+    if "platform" in text and "not installed" in text and "teensy" in text:
+        return (
+            "the Teensy core is not installed for this arduino-cli. In the "
+            "Arduino IDE: File > Preferences, add "
+            "https://www.pjrc.com/teensy/package_teensy_index.json to "
+            "'Additional boards manager URLs', then Boards Manager, "
+            "'Teensy'. " + result.tail
+        )
     if "platform" in text and "not installed" in text:
         return (
             "the AVR core is not installed for this arduino-cli. In the "

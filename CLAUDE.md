@@ -216,7 +216,7 @@ Two unrelated things are called tests:
 Hardware tests are filed by **who does the perceiving** (`colloquy/tests/group.py`, `TestGroup`):
 
 - **`autotests`** reach and record their own answer: `test_light_sensor_values`, `test_read_pattern`, `test_reinforcement`, `test_search`, `test_female_search`, `test_movements`, `test_audio_subsystem`, `test_audio_loop`, `test_audio_bringup`.
-- **`manual tests`** need a person's eye, ear or hand: `test_drive_light_values`, `test_male_patterns`, `test_neopixels`, `test_sensors`, `test_microphone_signal`, `test_goertzel_ear`, `test_audio_at_12v`, `scope`.
+- **`manual tests`** need a person's eye, ear or hand: `test_drive_light_values`, `test_male_patterns`, `test_neopixels`, `test_sensors`, `test_microphone_signal`, `test_goertzel_ear`, `test_audio_at_12v`, `scope`, `test_teensy`.
 - The graph demos (`test graph`) sit directly under `tests`, in neither group. `TestGroup` forwards `colloquy`/`drivers`/`params`/`workspace` to its owner and holds the `is_simulated` gate (only `test_audio_subsystem`).
 
 Firmware on test pages (`pytest_tests/hardware_tests/test_colloquy_firmware.py` holds membership):
@@ -224,4 +224,5 @@ Firmware on test pages (`pytest_tests/hardware_tests/test_colloquy_firmware.py` 
 - The eleven that drive the piece get `flash firmware` + `in sync` from `NeedsColloquyFirmware` (`colloquy/tests/colloquy_firmware.py`), a view on the one shared flasher, hung via `_with_firmware()` in each test's own `snapshot_children`.
 - `test_goertzel_ear` and `scope` get a `SamplerFlasher` and `ask the board` (`colloquy/tests/sampler_board.py`), judging the version against what *that* test needs.
 - `test_microphone_signal` gets `flash the plotter sketch` (no handshake possible).
+- `test_teensy` gets a `TeensyFlasher` (`teensy:avr:teensy41`, PJRC's core via the IDE's Boards Manager) for `Source code/Arduino/teensy_check/`, checked by asking `?` (a Teensy does not reboot on port open, so nothing greets). Real leads only (`BenchComPort.offers_stand_in = False`); `boards.py` names Teensies by PID (`Board.is_teensy`, never `is_arduino`). The LED flicker is the person's half.
 - `test_movements`, `test_audio_subsystem`, `test_audio_at_12v` have none (no board, or Thomas's code, which isn't a sketch folder).

@@ -71,6 +71,7 @@ def flasher(monkeypatch):
     # not, and this one's is the main PCB - bound the same way, so the
     # test exercises the real override rather than a stand-in for it.
     fake._extra_refusals = lambda: Flasher._extra_refusals(fake)
+    fake._wrong_kind_of_board = lambda board: Flasher._wrong_kind_of_board(fake, board)
     fake._why_not_flash = lambda: Flasher._why_not_flash(fake)
     return fake
 

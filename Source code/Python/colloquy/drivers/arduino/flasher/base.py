@@ -111,9 +111,9 @@ class SketchFlasher(BaseThread):
     def fqbn(self):
         """What the board is, in arduino-cli's vocabulary.
 
-        Every board this repo flashes is a Mega 2560. The installation's
+        Every Arduino this repo flashes is a Mega 2560. The installation's
         is the one that is configurable, because it is the one somebody
-        might replace - see `Flasher`.
+        might replace - see `Flasher`. `TeensyFlasher` is the exception.
         """
         return toolchain.DEFAULT_FQBN
 
@@ -173,14 +173,9 @@ class SketchFlasher(BaseThread):
             available = ", ".join(sorted(found)) or "none, is the USB lead in?"
             return f"{port!r} is not a port on this machine - available: {available}"
 
-        board = found[port]
-        if not board.is_arduino:
-            # The one this exists for. The installation has at least two
-            # USB serial leads in it, and the other one is the servo bus.
-            return (
-                f"{port} is {board.name}, which is not a board to flash. "
-                "Check 'usb boards' and 'com port'."
-            )
+        wrong_kind = self._wrong_kind_of_board(found[port])
+        if wrong_kind is not None:
+            return wrong_kind
 
         busy = self._threads_in_the_way()
         if busy:
@@ -192,6 +187,18 @@ class SketchFlasher(BaseThread):
             )
 
         return None
+
+    def _wrong_kind_of_board(self, board):
+        """Why the board on the chosen port is not one this sketch is for,
+        or None. Mega sketches want an Arduino; `TeensyFlasher` a Teensy."""
+        if board.is_arduino:
+            return None
+        # The one this exists for. The installation has at least two USB
+        # serial leads in it, and the other one is the servo bus.
+        return (
+            f"{board.device} is {board.name}, which is not a board to flash. "
+            "Check 'usb boards' and 'com port'."
+        )
 
     def _threads_in_the_way(self):
         """Running threads that would notice the board going away."""

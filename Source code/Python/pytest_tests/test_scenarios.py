@@ -91,6 +91,7 @@ WITHOUT_SCENARIOS = {
     "colloquy.drivers.arduino.flasher.Flasher",
     "colloquy.tests.sampler_board.SamplerFlasher",
     "colloquy.tests.test_microphone_signal.plotter_flasher.PlotterFlasher",
+    "colloquy.tests.test_teensy.TeensyFlasher",
     # An instrument, not a behaviour. It listens to one ADC pin and
     # draws what it heard; nothing about the room changes while it
     # runs, so there is nothing to tell somebody standing in front of

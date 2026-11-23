@@ -43,6 +43,9 @@ class BenchComPort(ComPort):
 
     params_section = None
     stand_in = "simulated bench port"
+    # False for a board that has no stand-in on purpose (`test teensy`):
+    # a picker offering one would offer a run that can only refuse.
+    offers_stand_in = True
 
     def __init__(self, owner, value=None):
         super().__init__(owner=owner, value=None)
@@ -93,7 +96,7 @@ class BenchComPort(ComPort):
             self._dict.pop(label, None)
 
         self._devices = {board.label: board.device for board in boards.detect()}
-        if self.is_simulated:
+        if self.offers_stand_in and self.is_simulated:
             # Last, because on a machine with a board plugged into it the
             # board is the answer.
             self._devices[self.stand_in] = self.stand_in
