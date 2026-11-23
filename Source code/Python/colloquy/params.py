@@ -194,8 +194,10 @@ DEFAULTS = {
     # moved the other. Needs no version bump, for "main pcb"'s reason -
     # `migrate()` ends in `_fill_missing`, which recurses.
     "scope": {"baudrate": 1000000, "communication port": None},
-    # `test teensy`'s lead. No baud rate: USB serial ignores it.
-    "teensy": {"communication port": None},
+    # `test teensy`'s lead. No baud rate: USB serial ignores it. `first
+    # run done` is which setup steps were pressed done, and when (see
+    # tests/test_teensy/first_run.py) - per machine, like the IDE's core.
+    "teensy": {"communication port": None, "first run done": {}},
     # How much one round of reinforcement takes off the appetite a pair
     # shares, per body, on this port's 0-100 scale.
     #

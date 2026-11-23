@@ -44,7 +44,7 @@ from colloquy.drivers.arduino.flasher.base import SketchFlasher
 from colloquy.ui import leaves
 
 from ..bench_com_port import BenchComPort
-from . import checks, sketch
+from . import checks, first_run, sketch
 
 # USB serial ignores the rate, but pyserial wants one.
 BAUDRATE = 115200
@@ -54,6 +54,8 @@ REPLY_TIMEOUT = 1.0
 # After an upload the Teensy reboots and its COM port goes away and comes
 # back. How long to wait for it before asking.
 REENUMERATE_TIMEOUT = 15.0
+
+SHOW_STEPS_AGAIN = "show the first-run steps again"
 
 
 class TeensyComPort(BenchComPort):
@@ -138,8 +140,16 @@ class TestTeensy(BaseThread):
         }
         for key, command in self._commands.items():
             self[key] = command
+        # Before the first run: one `done` link per step, and one to bring
+        # them all back. See first_run.py.
+        self._done_links = {
+            first_run.done_link(key): self._mark_done(key) for key in first_run.KEYS
+        }
+        self._done_links[SHOW_STEPS_AGAIN] = self._show_steps_again
+        for key, command in self._done_links.items():
+            self[key] = command
 
-        self._status = None        # the last `?` reply, parsed
+        self._status = None       # the last `?` reply, parsed
         self._status_line = None   # and as it came
         self._checks = []          # the last run's `checks.Check`s
         self._outcome = None
@@ -225,6 +235,33 @@ class TestTeensy(BaseThread):
                 "running teensy_check. Press 'flash firmware'"
             )
         return self.board_verdict
+
+    # --- before the first run ---------------------------------------------
+
+    @property
+    def _first_run_done(self):
+        """params' record of the steps pressed done. Read defensively: a
+        hand-edited params must not break the render."""
+        section = self.params.get("teensy")
+        done = section.get("first run done") if isinstance(section, dict) else None
+        return done if isinstance(done, dict) else {}
+
+    def _mark_done(self, key):
+        def done(request=None):
+            section = self.params["teensy"]
+            if not isinstance(section.get("first run done"), dict):
+                section["first run done"] = {}
+            section["first run done"][key] = time()
+            return (
+                f"'{key}' done - it hides from this page in "
+                f"{first_run.HIDE_AFTER:.0f} seconds"
+            )
+
+        return done
+
+    def _show_steps_again(self, request=None):
+        self.params["teensy"]["first run done"] = {}
+        return "every first-run step is back on the page"
 
     # --- presses ----------------------------------------------------------
 
@@ -382,11 +419,28 @@ class TestTeensy(BaseThread):
         if self._blinked_at is not None:
             children["the LED blinked"] = self._commands["the LED blinked"]
             children["the LED did not blink"] = self._commands["the LED did not blink"]
+        # A step not yet done offers its `done`; one just pressed is still
+        # drawn (so the press visibly took) but has nothing left to press.
+        steps = first_run.visible(self._first_run_done, time())
+        for key, _, left in steps:
+            if left is None:
+                link = first_run.done_link(key)
+                children[link] = self._done_links[link]
+        if len(steps) < len(first_run.STEPS):
+            children[SHOW_STEPS_AGAIN] = self._done_links[SHOW_STEPS_AGAIN]
         return self._with_scenarios(children)
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
         leaf = leaves.into(states, path)
+
+        # First, because nothing below works until they are done.
+        for number, (key, text, left) in enumerate(
+            first_run.visible(self._first_run_done, time()), start=1
+        ):
+            if left is not None:
+                text = f"done - hides in {left:.0f}s"
+            leaf(f"before the first run {number}: {key}", text)
 
         leaf("port", self.com_port.chosen or "not set")
         leaf("sketch", "Source code/Arduino/teensy_check/")

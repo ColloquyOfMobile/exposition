@@ -203,7 +203,7 @@ def built_node(monkeypatch, ports=()):
     from pathlib import Path
 
     monkeypatch.setattr(boards, "detect", lambda ports_=None: list(ports))
-    params = {"teensy": {"communication port": None}, "arduino": {"arduino-cli": None}}
+    params = {"teensy": {"communication port": None, "first run done": {}}, "arduino": {"arduino-cli": None}}
     owner = SimpleNamespace(
         colloquy=SimpleNamespace(params=params),
         params=params,
@@ -235,3 +235,55 @@ def test_the_picker_offers_no_stand_in(monkeypatch):
 
     assert params["teensy"]["communication port"] == "COM5"
     assert node._why_not_open() is None
+
+
+# --- before the first run ------------------------------------------------
+
+from colloquy.tests.test_teensy import first_run  # noqa: E402
+
+
+def step_readings(node):
+    states = node._snapshot_if_opened(())
+    return {
+        key: value["value"]
+        for key, value in states.items()
+        if key.startswith("before the first run")
+    }
+
+
+def test_every_step_is_shown_with_its_done_link_until_pressed(monkeypatch):
+    node, _ = built_node(monkeypatch)
+
+    assert len(step_readings(node)) == len(first_run.STEPS)
+    for key in first_run.KEYS:
+        assert first_run.done_link(key) in node.snapshot_children
+    assert "show the first-run steps again" not in node.snapshot_children
+
+
+def test_a_step_marked_done_stays_a_moment_then_hides(monkeypatch):
+    node, params = built_node(monkeypatch)
+    key = first_run.KEYS[0]
+
+    node[first_run.done_link(key)]()
+
+    assert key in params["teensy"]["first run done"]
+    shown = step_readings(node)
+    assert any("hides in" in text for text in shown.values())
+    assert first_run.done_link(key) not in node.snapshot_children
+
+    # Pressed long enough ago: gone, and the way back is offered.
+    params["teensy"]["first run done"][key] -= first_run.HIDE_AFTER + 1
+    assert len(step_readings(node)) == len(first_run.STEPS) - 1
+    assert "show the first-run steps again" in node.snapshot_children
+
+    node["show the first-run steps again"]()
+    assert len(step_readings(node)) == len(first_run.STEPS)
+
+
+def test_hand_edited_nonsense_counts_as_not_done(monkeypatch):
+    node, params = built_node(monkeypatch)
+    params["teensy"]["first run done"] = {first_run.KEYS[0]: "yesterday"}
+
+    assert len(step_readings(node)) == len(first_run.STEPS)
+    params["teensy"]["first run done"] = "garbage"
+    assert len(step_readings(node)) == len(first_run.STEPS)
