@@ -132,6 +132,55 @@ def test_ordered_marks_the_cart_and_only_the_cart(tmp_path):
     assert book[BOARDS[1].id] == {"status": orders.ERROR, "note": "refused"}
 
 
+def test_received_moves_every_ordered_board_on_and_keeps_its_record(tmp_path):
+    book = {BOARDS[0].id: {"status": orders.ORDERED, "order number": "W1", "uploads": {"cpl": "c"},
+                           "changed at": "2026-10-23T09:00:00"},
+            BOARDS[1].id: {"status": orders.IN_CART}}
+    assert location(post(("received",), book, tmp_path)) == "/pcb-order/done"
+    found = book[BOARDS[0].id]
+    assert found["status"] == orders.RECEIVED
+    assert (found["order number"], found["uploads"]) == ("W1", {"cpl": "c"})
+    assert found["ordered at"] == "2026-10-23T09:00:00"
+    assert found["received at"] == found["changed at"]
+    assert book[BOARDS[1].id] == {"status": orders.IN_CART}
+
+
+def test_a_received_board_is_soldered_one_at_a_time(tmp_path):
+    book = {BOARDS[0].id: {"status": orders.RECEIVED, "received at": "2026-11-20T10:00:00",
+                           "changed at": "2026-11-20T10:00:00"}}
+    assert location(post((BOARDS[0].id, "soldered"), book, tmp_path)) == "/pcb-order/done"
+    found = book[BOARDS[0].id]
+    assert found["status"] == orders.SOLDERED
+    assert found["received at"] == "2026-11-20T10:00:00"
+    assert found["soldered at"] == found["changed at"]
+
+
+@pytest.mark.parametrize("status, press", [(orders.ORDERED, "soldered"), (orders.WAITING, "received"),
+                                           (orders.SOLDERED, "received")])
+def test_a_board_cannot_skip_or_go_back_a_step(tmp_path, status, press):
+    book = {BOARDS[0].id: {"status": status}}
+    answer = post((BOARDS[0].id, press), book, tmp_path)
+    assert answer[0] == "409 Conflict"
+    assert book[BOARDS[0].id] == {"status": status}
+
+
+def test_the_cart_offers_the_next_press_for_each_bought_board(tmp_path):
+    book = {BOARDS[0].id: {"status": orders.ORDERED}, BOARDS[1].id: {"status": orders.RECEIVED},
+            BOARDS[2].id: {"status": orders.SOLDERED}}
+    page = get(("done",), book, tmp_path)[2].decode()
+    assert 'action="/pcb-order/received"' in page
+    assert f'action="/pcb-order/{BOARDS[0].id}/received"' in page
+    assert f'action="/pcb-order/{BOARDS[1].id}/soldered"' in page
+    assert f"/pcb-order/{BOARDS[2].id}/received" not in page
+    assert f"/pcb-order/{BOARDS[2].id}/soldered" not in page
+
+
+def test_a_received_or_soldered_board_is_not_walked_again():
+    book = {board.id: {"status": orders.SOLDERED} for board in BOARDS}
+    book[BOARDS[0].id] = {"status": orders.RECEIVED}
+    assert orders.next_url(BOARDS, book) == "/pcb-order/done"
+
+
 def test_reset_puts_a_board_back_to_waiting(tmp_path):
     book = {BOARDS[0].id: {"status": orders.ORDERED}}
     assert location(post((BOARDS[0].id, "reset"), book, tmp_path)) == "/pcb-order/done"
@@ -143,6 +192,13 @@ def test_a_link_or_a_reload_to_a_press_changes_nothing(tmp_path, action):
     book = {}
     assert location(get((BOARDS[0].id, action), book, tmp_path)) == f"/pcb-order/{BOARDS[0].id}/1"
     assert book == {}
+
+
+@pytest.mark.parametrize("parts", [("received",), (BOARDS[0].id, "received"), (BOARDS[0].id, "soldered")])
+def test_a_link_to_received_or_soldered_changes_nothing(tmp_path, parts):
+    book = {BOARDS[0].id: {"status": orders.ORDERED}}
+    assert location(get(parts, book, tmp_path)) == "/pcb-order/done"
+    assert book == {BOARDS[0].id: {"status": orders.ORDERED}}
 
 
 def test_starting_again_puts_the_cart_back_in_the_walk_from_the_first_board(tmp_path):

@@ -9,6 +9,8 @@ card on the home page:
 - **waiting order** - nobody has put it in a cart yet (the default);
 - **in the cart** - its five steps were walked and JLC's form saved it;
 - **ordered** - the cart it was in has been paid for;
+- **received** - the bare boards are on the bench;
+- **soldered** - its parts are fitted;
 - **error** - a step went wrong, with the person's note and, if they gave
   one, a screenshot.
 
@@ -27,6 +29,12 @@ every board in the cart back to waiting and begins the walk at the first
 board: for when JLC's cart has been emptied, or the packages have moved
 on under it. Boards in error keep their note - it is what their next
 attempt starts from - and ordered ones stay ordered.
+
+After that the cart page moves a bought board on, one press at a time:
+`received` when the parcel is opened (every ordered board at once, or
+one), then `soldered` per board once its parts are on. Each press keeps
+the record it moves on - the uploads, the order number - and adds when
+it happened (`received at`, `soldered at`).
 
 A board put in the cart keeps a digest of each file it was given
 (`uploads`): the Gerbers, the BOM, the CPL. Wherever its status is drawn
@@ -83,10 +91,17 @@ ROUTE = "/pcb-order"
 WAITING = "waiting order"
 IN_CART = "in the cart"
 ORDERED = "ordered"
+RECEIVED = "received"
+SOLDERED = "soldered"
 ERROR = "error"
-STATUSES = (WAITING, IN_CART, ORDERED, ERROR)
+STATUSES = (WAITING, IN_CART, ORDERED, RECEIVED, SOLDERED, ERROR)
 # What `order now` walks: everything that is not in a cart or bought.
 TO_ORDER = (WAITING, ERROR)
+# A bought board's life after the cart, one press each: the status a
+# press moves it on to, from the one it must be in.
+AFTER = {RECEIVED: ORDERED, SOLDERED: RECEIVED}
+# Everything that has been put in a cart and not taken back out.
+BOUGHT = (IN_CART, ORDERED, RECEIVED, SOLDERED)
 
 STEPS = (
     "Upload the Gerbers",
@@ -304,6 +319,21 @@ def _write(book: MutableMapping[str, Any] | None, board: gerbers.Board, status: 
     }
 
 
+def advance(book: MutableMapping[str, Any] | None, board: gerbers.Board, status: str) -> None:
+    """Move a bought board on to `status` (a key of `AFTER`), keeping
+    what its record already says. Refuses a board not in the status
+    before it: a board cannot be soldered before it has arrived."""
+    found = record(book, board.id)
+    if found["status"] != AFTER[status]:
+        raise OrderError(f"the {board.title} is {found['status']}, not {AFTER[status]}: "
+                         f"it cannot be marked {status}")
+    kept = {key: value for key, value in found.items()
+            if key not in ("status", "changed at", "note")}
+    kept[f"{AFTER[status]} at"] = found.get("changed at", "")
+    kept[f"{status} at"] = _now().isoformat(timespec="seconds")
+    _write(book, board, status, **kept)
+
+
 def _walk(boards: tuple[gerbers.Board, ...], book: Mapping[str, Any] | None) -> list[gerbers.Board]:
     return [board for board in boards if status_of(book, board.id) in TO_ORDER]
 
@@ -400,7 +430,7 @@ def changes_since_cart(found: Mapping[str, Any], board: gerbers.Board) -> tuple[
 
 # Inline rather than a class: the cards are drawn on the installation's
 # home page, which has no stylesheet of its own.
-_COLOURS = {IN_CART: "#08a", ORDERED: "#080", ERROR: "#d02"}
+_COLOURS = {IN_CART: "#08a", ORDERED: "#080", RECEIVED: "#080", SOLDERED: "#080", ERROR: "#d02"}
 
 
 def _status_words(found: Mapping[str, Any], board: gerbers.Board) -> str:
@@ -412,7 +442,7 @@ def _status_words(found: Mapping[str, Any], board: gerbers.Board) -> str:
         words += f" since {escape(when)}"
     if found.get("order number"):
         words += f", JLC order {escape(str(found['order number']))}"
-    if status in (IN_CART, ORDERED):
+    if status in BOUGHT:
         words += _cart_check(found, board)[1]
     return words
 
@@ -813,7 +843,7 @@ def _step_page(boards: tuple[gerbers.Board, ...], book: Mapping[str, Any] | None
 
     status = status_of(book, board.id)
     already = ""
-    if status in (IN_CART, ORDERED):
+    if status in BOUGHT:
         already = (f'<p class="problem">This PCB is already {escape(status)}: putting it in '
                    "the cart again orders it twice.</p>")
     if problem:
@@ -860,6 +890,21 @@ def _done(boards: tuple[gerbers.Board, ...], book: Mapping[str, Any] | None) -> 
         )
     else:
         pay = "<p>Nothing is in the cart.</p>"
+    ordered = [board for board in boards if status_of(book, board.id) == ORDERED]
+    if ordered:
+        pay += (f'<form method="post" action="{ROUTE}/received" name="received">'
+                f"<p>When the parcel is opened: {escape(', '.join(b.title for b in ordered))}.</p>"
+                f'<button type="submit">mark the {len(ordered)} ordered PCBs as received</button>'
+                "</form>")
+
+    def onward(board: gerbers.Board) -> str:
+        """The press that moves a bought board on, where there is one."""
+        status = status_of(book, board.id)
+        for then, before in AFTER.items():
+            if status == before:
+                return (f'<form method="post" action="{ROUTE}/{board.id}/{then}">'
+                        f'<button type="submit" class="small">{escape(then)}</button></form>')
+        return ""
 
     trouble = "".join(
         f"<h3>{escape(board.title)}</h3>{_error_details(record(book, board.id), picture=True)}"
@@ -867,6 +912,7 @@ def _done(boards: tuple[gerbers.Board, ...], book: Mapping[str, Any] | None) -> 
     )
     rows = "".join(
         f"<tr><td>{escape(board.title)}</td><td>{_status_words(record(book, board.id), board)}</td><td>"
+        + onward(board)
         + ("" if status_of(book, board.id) == WAITING else
            f'<form method="post" action="{ROUTE}/{board.id}/reset">'
            '<button type="submit" class="small">set back to waiting order</button></form>')
@@ -1019,6 +1065,12 @@ def _respond(parts: tuple[str, ...], environ: Mapping[str, Any],
                 _write(book, board, ORDERED, pcb=found.get("pcb", ""), **kept,
                        **{"order number": number, "in the cart at": found.get("changed at", "")})
         return _redirect(f"{ROUTE}/done")
+    if parts == (RECEIVED,):
+        if is_post:
+            for board in boards:
+                if status_of(book, board.id) == ORDERED:
+                    advance(book, board, RECEIVED)
+        return _redirect(f"{ROUTE}/done")
     if parts == ("start-again",):
         if not is_post:
             return _redirect(ROUTE)
@@ -1034,11 +1086,15 @@ def _respond(parts: tuple[str, ...], environ: Mapping[str, Any],
     if action in {str(number) for number in range(1, len(STEPS) + 1)}:
         return _html("200 OK", f"{board.title} - step {action}",
                      _step_page(boards, book, board, int(action)))
-    if action not in ("cart", "error", "reset", "again"):
+    if action not in ("cart", "error", "reset", "again", *AFTER):
         raise gerbers.PackageError(f"there is no order page {'/'.join(parts)!r}")
     if not is_post:
         # A press is a form; a link or a reload that lands here does nothing.
-        return _redirect(f"{ROUTE}/{board.id}/1")
+        return _redirect(f"{ROUTE}/done" if action in AFTER else f"{ROUTE}/{board.id}/1")
+
+    if action in AFTER:
+        advance(book, board, action)
+        return _redirect(f"{ROUTE}/done")
 
     if action == "cart":
         # Read again at the press, which follows the downloads by minutes.
