@@ -1,30 +1,15 @@
 # -*- coding: utf-8 -*-
 # Source code/Python/colloquy/ui/wsgi.py
 
-"""The mock UI's renderer - the page as it is being rebuilt.
-
-A fork of `server2/wsgi2.py`, taken the day the styling came out of it.
-The two are deliberately independent for now: the installation's page
-(`server2/`) keeps the look it has always had and goes on working through
-the exhibition prep, while this one starts from bare markup and can be
-taken apart freely without anything on the floor changing.
-
-So expect the two to diverge, and expect a fix in one to need making
-twice until they are put back together. What is here is that same
-renderer minus its styling: structure, plus the hooks to hang CSS on -
-`name="..."` on every div (server commands, navigation, split, commands,
-title, open, name) and the classes the markdown and scenario renderers
-emit (md-content, scenario-row, scenario-time, ...). No stylesheet is
-linked at all: uPlot was retired on 2026-09-09 and its was the only one.
-
-It serves its own copy of static/, next to this file, so the scripts and
-styles this page loads can change without touching the installation's.
-"""
+"""Hardware-free preview of the installation console with its own lifecycle routes."""
 
 from email.utils import formatdate
-from yattag import Doc, indent
-from urllib.parse import quote, unquote, parse_qs
+from yattag import Doc
+from urllib.parse import quote, unquote
 from pathlib import Path
+from colloquy.ui import console
+from colloquy.logs import monitor
+from colloquy.ui.console_tree import ConsoleTree
 from colloquy.base import Base
 from colloquy.hardware.pcb_files import catalog
 from colloquy.ui.tree import CommandFailed
@@ -40,6 +25,7 @@ WSGIRequestHandler.log_message = lambda *args, **kwargs: None
 # vendored; the table is a dict so putting one back is one line.
 _STATIC_ROOTS = {
     "static": Path(__file__).parent / "static",
+    "console-assets": console.ASSETS,
 }
 _STATIC_CONTENT_TYPES = {
     ".js": "application/javascript; charset=utf-8",
@@ -73,7 +59,7 @@ def _if_none_match(environ):
     return tuple(tags)
 
 
-class MockWSGI(Base):
+class MockWSGI(ConsoleTree, Base):
     def __init__(self, server, environ, start_response, db_path=None):
         super().__init__(owner=server)
         self._server = server
@@ -118,6 +104,8 @@ class MockWSGI(Base):
             return self._parse_app()
 
         key, *leftovers = args
+        if key == "thread-log" and not leftovers:
+            return monitor.response(self._environ)
         if key == "pcb":
             return catalog.response(leftovers)
         if key == "shutdown":
@@ -139,49 +127,6 @@ class MockWSGI(Base):
         status = "404 Not found"
         headers = [("Content-Type", content_type)]
         return status, headers, b""
-
-    def _parse_virtual_panel(self, *args):
-        """Put the simulated-state column away, or bring it back.
-
-        The installation's own (`server2/wsgi2.py`) carries the reasoning:
-        the panel is page furniture drawn beside every node, so its
-        control cannot be a command on any one of them, and the answer is
-        a 303 back to the page it was pressed on.
-
-        Kept in step here although `ui/mock.py` answers `is_simulated`
-        False and so draws no panel at all - the fork carries the panel's
-        markup for the day something simulated is put behind it, and a
-        route missing from one of the two is exactly the drift the pair
-        are checked against.
-        """
-        if not self.colloquy.is_simulated:
-            return self._parse_not_found(
-                ("virtual-panel",) + args,
-                NotImplementedError("nothing is simulated here"),
-            )
-
-        if not args:
-            return self._parse_not_found(
-                ("virtual-panel",),
-                NotImplementedError("virtual-panel expects show or hide"),
-            )
-
-        action, *back = args
-        if action == "hide":
-            self.colloquy.virtual_drivers.close_panel()
-        elif action == "show":
-            self.colloquy.virtual_drivers.open_panel()
-        else:
-            return self._parse_not_found(
-                ("virtual-panel",) + args,
-                NotImplementedError(f"{action!r} is not show or hide"),
-            )
-
-        # Quoted, unlike the hrefs on the page: a node name with a
-        # space in it ("main pcb") is fine in a link the browser encodes
-        # for us and malformed in a header value.
-        location = quote("/" + "/".join(back or (self._root.name,)), safe="/")
-        return "303 See Other", [("Location", location)], b""
 
     def _parse_static(self, root, *parts):
         """Serve a file from a static asset root (static/) as a
@@ -231,49 +176,6 @@ class MockWSGI(Base):
         headers.insert(0, ("Content-Type", content_type))
         return "200 OK", headers, file_path.read_bytes()
 
-    def _parse_post(self, *args):
-        """Minimal POST support for text-editing UIs (see the "editor" leaf
-        kind in _html_recursion). The rest of this app is pure GET-link
-        navigation - path segments carry every argument, which works for
-        command names and short values (the "keyboard" UI) but can't carry
-        arbitrary multi-line text. This mirrors the existing GET
-        .../call/<command> convention (same tree walk via snapshot_children,
-        same "call" marker) but takes the command's one string argument
-        from the POST body's "content" field instead of further path
-        segments, and expects the resolved command to already be
-        registered on the node (e.g. self["save"] = self.save) exactly
-        like any other command in this tree.
-        """
-        not_found = lambda: self._parse_not_found(
-            args, NotImplementedError("POST expects app/.../call/<command>")
-        )
-
-        if len(args) < 3 or args[0] != self._root.name:
-            return not_found()
-
-        *node_keys, marker, command = args[1:]
-        if marker != "call":
-            return not_found()
-
-        obj = self.colloquy
-        try:
-            for key in node_keys:
-                obj = obj.snapshot_children[key]
-            handler = obj[command]
-        except KeyError:
-            return not_found()
-
-        content_length = int(self._environ.get("CONTENT_LENGTH") or 0)
-        raw_body = (
-            self._environ["wsgi.input"].read(content_length) if content_length else b""
-        )
-        content = parse_qs(raw_body.decode("utf-8")).get("content", [""])[0]
-
-        handler(content)
-
-        redirect_path = self._root.joinpath(*node_keys)
-        return "303 See Other", [("Location", f"/{redirect_path.as_posix()}")], b""
-
     def _parse_path(self):
         """Parse the path."""
         request_path = self._environ["PATH_INFO"]
@@ -291,143 +193,15 @@ class MockWSGI(Base):
             return self._parse_command_failed(args, error)
         self._base_path = Path(*to_render["path"])
 
-        # pprint4(obj=to_render)
-        content_type = "text/html; charset=utf-8"
-        status = "200 OK"
-        headers = [("Content-Type", content_type)]
-
-        doc, tag, text = Doc().tagtext()
-        doc.asis("<!DOCTYPE html>")
-        with tag("html"):
-            with tag("head"):
-                pass
-            with tag("body"):
-                with tag("div", name="server commands"):
-                    # No emergency stop: it cuts torque on nine servos and
-                    # signals every thread to give up, and there is
-                    # nothing here to do that to. shutdown and restart
-                    # stay - stopping and restarting this server is
-                    # exactly what is wanted while working on the page.
-                    with tag("div"):
-                        with tag("a", href="/shutdown"):
-                            text("shutdown")
-
-                    with tag("div"):
-                        doc.asis(self._html_restart_link())
-
-                    with tag("div"):
-                        path = self._root / self._base_path
-                        with tag("a", href=f"/{path.as_posix()}"):
-                            text("refresh")
-
-                    # Beside the other page furniture rather than on the
-                    # panel, because it has to be pressable when the
-                    # panel is not there to carry it.
-                    if self.colloquy.is_simulated:
-                        with tag("div"):
-                            doc.asis(self._html_virtual_panel_link())
-
-                doc.asis(self._html_navigation(to_render=to_render))
-
-                with tag("div", name="thread count"):
-                    text(f"thread count: {len(self.all_threads)}")
-
-                # Commands and simulated state, both on the page:
-                # watching what the installation does while driving it
-                # used to mean alternating between two of them. They sat
-                # side by side until the styling came out; the markup
-                # still names them, so it can again.
-                with tag("div", name="split"):
-                    with tag("div", name="commands"):
-                        doc.asis(self._html_recursion(obj=to_render))
-
-                    if (
-                        self.colloquy.is_simulated
-                        and self.colloquy.virtual_drivers.panel_is_open
-                    ):
-                        doc.asis(self._html_virtual_panel())
-
-                with tag("script", src="/static/svg_zoom.js"):
-                    pass
-
-        html = doc.getvalue()
-        html = indent(html)
-        content = html.encode()
-
-        return status, headers, content
-
-    def _html_virtual_state(self):
-        doc, tag, text = Doc().tagtext()
-
-        for name, node in self.colloquy.virtual_drivers.snapshot_children.items():
-            values = {
-                key: value["value"]
-                for key, value in node._snapshot_if_opened(path=()).items()
-                if isinstance(value, dict) and "value" in value
-            }
-            if not values:
-                continue
-
-            with tag("div"):
-                with tag("div"):
-                    text(name)
-                for key, value in values.items():
-                    with tag("div"):
-                        with tag("div"):
-                            text(key)
-                        with tag("div"):
-                            text(str(value))
-
-        return doc.getvalue()
-
-    def _html_virtual_panel_link(self):
-        """The one control: hide it, or bring it back.
-
-        The href carries the page it was pressed on, so it lands back
-        here. `_base_path` is the focus's own path rather than whatever
-        /call/... led here, exactly as `refresh` above, so putting the
-        panel away never re-runs a command.
-        """
-        doc, tag, text = Doc().tagtext()
-
-        is_open = self.colloquy.virtual_drivers.panel_is_open
-        action = "hide" if is_open else "show"
-        back = (self._root / self._base_path).as_posix()
-
-        with tag("a", href=f"/virtual-panel/{action}/{back}"):
-            text(f"{action} virtual drivers")
-
-        return doc.getvalue()
+        return console.page(self, to_render, installation=False)
 
     def _html_restart_link(self):
-        """`restart`, carrying the page it was pressed on, so the
-        `reload` the restart answers with comes back here - see
-        `_parse_restart`. `_base_path`, as `refresh` uses, so the reload
-        never re-runs a command.
-        """
+        """Restart, carrying the current node path for the reload link."""
         doc, tag, text = Doc().tagtext()
 
         back = (self._root / self._base_path).as_posix()
         with tag("a", href=f"/restart/{back}"):
             text("restart")
-
-        return doc.getvalue()
-
-    def _html_virtual_panel(self):
-        """The panel itself.
-
-        Rendered fresh with every page, so it shows the simulation as it
-        was when the page was served - the "refresh" link at the top is
-        the way to update it. That link points at the current node's own
-        path, not at whatever /call/... may have led here, so refreshing
-        never re-runs a command.
-        """
-        doc, tag, text = Doc().tagtext()
-
-        with tag("div", name="virtual drivers"):
-            with tag("div"):
-                text("VIRTUAL DRIVERS")
-            doc.asis(self._html_virtual_state())
 
         return doc.getvalue()
 
@@ -501,187 +275,6 @@ class MockWSGI(Base):
                     text("home")
 
         return status, headers, doc.getvalue().encode()
-
-    def _html_navigation(self, to_render):
-        doc, tag, text = Doc().tagtext()
-        with tag("div", name="navigation"):
-            with tag("div"):
-                with tag("a", href="/"):
-                    text("/home")
-            href = self._root
-            for name in to_render["path"]:
-                href = href / name
-                with tag("div"):
-                    with tag("a", href=f"/{href.as_posix()}"):
-                        text("/" + name)
-
-        html = doc.getvalue()
-        return indent(html)
-
-    def _html_recursion(self, obj):
-        doc, tag, text = Doc().tagtext()
-
-        with tag("div", name=obj["name"]):
-            for key, value in obj.items():
-                # print(f"{key=}")
-                if key in (
-                    "name",
-                    "subject",
-                    "id",
-                    "path",
-                    "focus",
-                    "func",
-                    "ref",
-                    "checked",
-                    "keyboard",
-                    "close",
-                    "open",
-                    "opened",
-                ):
-                    continue
-
-                if key == "value":
-                    # Two shapes reach here under the literal key "value":
-                    # a bare scalar (obj["value"] set directly), or the
-                    # wrapped {"path", "name", "value"} leaf dict used
-                    # everywhere else in this function (and by classes
-                    # like LightSensor, whose _snapshot_if_opened key
-                    # happens to also be "value") - unwrap the latter so
-                    # it doesn't print the dict's own repr.
-                    display_value = (
-                        value["value"]
-                        if isinstance(value, dict) and "value" in value
-                        else value
-                    )
-                    with tag("div"):
-                        text(f"value: {display_value}")
-                    continue
-
-                if not isinstance(value, dict):
-                    func_path = Path(*obj["path"]) / key
-                    call_path = func_path.relative_to(self._base_path)
-                    path = self._root / self._base_path / "call" / call_path
-
-                    with tag("div", name=key):
-                        with tag("a", href=f"/{path.as_posix()}"):
-                            text(f"{key}()")
-                    continue
-
-                if "editor" in value:
-                    node_path = Path(*value["path"][:-1])
-                    call_path = node_path.relative_to(self._base_path)
-                    save_path = (
-                        self._root / self._base_path / "call" / call_path / "save"
-                    )
-
-                    with tag("div", name=key):
-                        with tag(
-                            "form", method="post", action=f"/{save_path.as_posix()}"
-                        ):
-                            with tag("textarea", name="content"):
-                                text(value["editor"])
-                            with tag("div"):
-                                with tag("button", type="submit"):
-                                    text("save")
-                    continue
-
-                if "html" in value:
-                    with tag("div", name=key, klass="md-content"):
-                        doc.asis(value["html"])
-                    continue
-
-                if "pre" in value:
-                    with tag("div", name=key):
-                        with tag("pre"):
-                            text(value["pre"])
-                    continue
-
-                if "svg" in value:
-                    with tag("div", name=key):
-                        with tag("div"):
-                            text(
-                                "scroll to zoom - shift+scroll to zoom x-axis only - drag to pan - double-click to reset"
-                            )
-                        with tag("div", **{"data-svg-zoom": ""}):
-                            doc.asis(value["svg"])
-                    continue
-
-                # No zoom handle, so svg_zoom.js never binds anything to
-                # it - see leaves.image.
-                if "image" in value:
-                    with tag("div", name=key):
-                        doc.asis(value["image"])
-                    continue
-
-                # print(f"{value=}")
-                if value.get("opened", False):
-                    if value:
-                        doc.asis(self._html_if_opened(obj=value))
-                    continue
-
-                # Use the dict key rather than value["name"] for display:
-                # a parent can (and does, e.g. TestNeopixels/TestSensors)
-                # register the same kind of child multiple times under
-                # distinct keys precisely because the child's own .name is
-                # a fixed literal shared across every instance of that
-                # type ("light sensor", "head", ...) - showing value["name"]
-                # here made every such sibling display identical link text
-                # even though their hrefs (built from the key) already
-                # correctly pointed at different objects.
-                name = key
-
-                # Plain informational leaves (e.g. _snapshot_if_opened
-                # entries like "sender"/"matches"/"last match") aren't real
-                # openable nodes - they have no "open" handler, so drawing
-                # the open-arrow/call-link below would 404/crash on click.
-                if "value" in value:
-                    with tag("div", name="value"):
-                        text(f"{name}: {value['value']}")
-                    continue
-
-                value_path = Path(*value["path"])
-
-                with tag("div", name="title"):
-                    with tag("div", name="open"):
-                        call_path = value_path.relative_to(self._base_path)
-                        path = (
-                            self._root / self._base_path / "call" / call_path / "open"
-                        )
-
-                        with tag("a", href=f"/{path.as_posix()}"):
-                            text(">")
-
-                    # name = obj["name"]
-                    path = self._root / value_path
-                    with tag("div", name="name"):
-                        with tag("a", href=f"/{path.as_posix()}"):
-                            text(f"{name}")
-
-        html = doc.getvalue()
-        return indent(html)
-
-    def _html_if_opened(self, obj):
-        doc, tag, text = Doc().tagtext()
-        name = obj["name"]
-
-        with tag("div", name="opened"):
-            with tag("div", name="title"):
-                with tag("div", name="close"):
-                    call_path = Path(*obj["path"]).relative_to(self._base_path)
-                    path = self._root / self._base_path / "call" / call_path / "close"
-
-                    with tag("a", href=f"/{path.as_posix()}"):
-                        text("<")
-
-                with tag("div", name="name"):
-                    path = self._root / Path(*obj["path"])
-                    with tag("a", href=f"/{path.as_posix()}"):
-                        text(f"{name}:")
-
-            doc.asis(self._html_recursion(obj=obj))
-
-        html = doc.getvalue()
-        return indent(html)
 
     def _parse_shutdown(self):
         self.colloquy.shutdown()

@@ -17,10 +17,10 @@ def make_drivers(stub_factory, **owner_attrs):
     return VirtualDrivers(owner=stub_factory(**owner_attrs))
 
 
-def test_name_is_virtual_drivers(stub_factory):
+def test_tree_name_is_simulation(stub_factory):
     drivers = make_drivers(stub_factory)
 
-    assert drivers.name == "virtual drivers"
+    assert drivers.name == "simulation"
 
 
 def test_params_delegates_to_owner(stub_factory):

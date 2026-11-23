@@ -59,7 +59,7 @@ def test_the_match_is_exact_and_case_sensitive(monkeypatch):
 def _tabs(is_simulated):
     """Colloquy.snapshot_children against a double - the real object does
     filesystem I/O at construction (see conftest)."""
-    virtual = SimpleNamespace(name="virtual drivers")
+    virtual = SimpleNamespace(name="simulation")
     double = SimpleNamespace(
         # Colloquy's snapshot_children ends by handing its children to
         # BaseThread._with_scenarios; the double stands in for it, since
@@ -83,11 +83,11 @@ def _tabs(is_simulated):
 
 
 def test_the_virtual_drivers_tab_is_absent_on_the_installation():
-    assert "virtual drivers" not in _tabs(is_simulated=False)
+    assert "simulation" not in _tabs(is_simulated=False)
 
 
 def test_the_virtual_drivers_tab_is_present_when_simulated():
-    assert "virtual drivers" in _tabs(is_simulated=True)
+    assert "simulation" in _tabs(is_simulated=True)
 
 
 def test_the_code_documentation_is_on_the_front_page_off_the_installation():
@@ -129,7 +129,7 @@ def test_nothing_builds_the_simulation_when_not_simulated():
         @property
         def virtual_drivers(self):
             touched.append(True)
-            return SimpleNamespace(name="virtual drivers")
+            return SimpleNamespace(name="simulation")
 
     double = Double(
         _with_scenarios=lambda children: children,

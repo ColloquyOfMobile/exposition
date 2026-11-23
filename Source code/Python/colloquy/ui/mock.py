@@ -28,16 +28,21 @@ import io
 from threading import Event
 
 from colloquy.base import Base
+from colloquy.drivers.value_setter2 import ValueSetter2
 from colloquy.ui import leaves, tree
 
 
 class Readings(Base):
-    """Leaves that only show. The counter proves the page is drawn from
-    the tree each time rather than cached anywhere."""
+    """An in-memory value editable through the installation's digit tree."""
 
     def __init__(self, owner):
         super().__init__(owner=owner)
         self._draws = 0
+        self._number = 42
+        self._setter = ValueSetter2(self, 0, 100, self._set_number, lambda: self._number)
+
+    def _set_number(self, number):
+        self._number = number
 
     @property
     def name(self):
@@ -45,13 +50,13 @@ class Readings(Base):
 
     @property
     def snapshot_children(self):
-        return {}
+        return {self._setter.name: self._setter}
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
         self._draws += 1
         leaf = leaves.into(states, path)
-        leaf("a number", 42)
+        leaf("a number", self._number)
         leaf("with a unit", "29.3 deg")
         leaf("times drawn", self._draws)
         return states
@@ -230,8 +235,9 @@ class MockApp(Base):
     renderer neither offers it nor answers its route.
     """
 
-    def __init__(self):
+    def __init__(self, log_commands=False):
         super().__init__(owner=None)
+        self._log_commands = log_commands
         self._readings = Readings(owner=self)
         self._buttons = Buttons(owner=self)
         self._documents = Documents(owner=self)
@@ -275,6 +281,8 @@ class MockApp(Base):
         }
 
     def get_states(self, *args):
+        if self._log_commands and "call" in args:
+            self.log("/".join(args))
         return tree.get_states(self, *args)
 
     def _record(self, name):
@@ -342,12 +350,13 @@ def request(path, app=None, server=None, content=None):
 def serve(port=None):
     """Serve the mock at http://localhost:8088/app.
 
-    Its own server and its own renderer, not the installation's - see
-    ui/wsgi.py for why the two are forked while the page is rebuilt.
+    Uses the shared console with mock nodes and a separate log directory.
     """
     from colloquy.ui.server import MockServer
-
-    MockServer(colloquy=MockApp(), port=port)
+    from colloquy.logger import Logger
+    Logger.start_session(preview=True)
+    Logger()("Mock console started")
+    MockServer(colloquy=MockApp(log_commands=True), port=port)
 
 
 if __name__ == "__main__":

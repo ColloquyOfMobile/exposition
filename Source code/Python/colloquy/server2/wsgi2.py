@@ -1,10 +1,10 @@
 from email.utils import formatdate
-from yattag import Doc, indent
-from urllib.parse import quote, unquote, parse_qs
+from yattag import Doc
+from urllib.parse import quote, unquote
 from pathlib import Path
-from colloquy.utils import (
-    export_style,
-)
+from colloquy.ui import console
+from colloquy.logs import monitor
+from colloquy.ui.console_tree import ConsoleTree
 from colloquy.base import Base
 from colloquy.drivers.arduino.errors import ArduinoError
 from colloquy.hardware.pcb_files import catalog, gerbers, kicad_projects, orders
@@ -23,6 +23,7 @@ WSGIRequestHandler.log_message = lambda *args, **kwargs: None
 # vendored; the table is a dict so putting one back is one line.
 _STATIC_ROOTS = {
     "static": Path(__file__).parent / "static",
+    "console-assets": console.ASSETS,
 }
 # Where the zip of the KiCad projects is built and kept between
 # downloads. Under local/, like every other piece of working state: it is
@@ -70,7 +71,7 @@ def _if_none_match(environ):
     return tuple(tags)
 
 
-class WSGI2(Base):
+class WSGI2(ConsoleTree, Base):
     def __init__(self, server, environ, start_response, db_path=None):
         super().__init__(owner=server)
         self._server = server
@@ -147,6 +148,10 @@ class WSGI2(Base):
             return self._parse_app()
 
         key, *leftovers = args
+        if key == "thread-log" and not leftovers:
+            if board_is_out:
+                return self._redirect("/")
+            return monitor.response(self._environ)
         if key == "pcb":
             return catalog.response(leftovers)
         if key == "emergency-stop":
@@ -179,6 +184,8 @@ class WSGI2(Base):
                 # tab left open on a node lands here rather than on a 404
                 # about a tree that is deliberately not being served.
                 return self._redirect("/")
+            if leftovers[:1] == ["virtual drivers"] and self.colloquy.is_simulated:
+                return self._redirect(quote("/" + "/".join(("app", "simulation", *leftovers[1:]))))
             return self._parse_app(*leftovers)
 
         if key in _STATIC_ROOTS:
@@ -237,110 +244,6 @@ class WSGI2(Base):
         headers.insert(0, ("Content-Type", content_type))
         return "200 OK", headers, file_path.read_bytes()
 
-    def _parse_post(self, *args):
-        """Minimal POST support for text-editing UIs (see the "editor" leaf
-        kind in _html_recursion). The rest of this app is pure GET-link
-        navigation - path segments carry every argument, which works for
-        command names and short values (the "keyboard" UI) but can't carry
-        arbitrary multi-line text. This mirrors the existing GET
-        .../call/<command> convention (same tree walk via snapshot_children,
-        same "call" marker) but takes the command's one string argument
-        from the POST body's "content" field instead of further path
-        segments, and expects the resolved command to already be
-        registered on the node (e.g. self["save"] = self.save) exactly
-        like any other command in this tree.
-        """
-        not_found = lambda: self._parse_not_found(
-            args, NotImplementedError("POST expects app/.../call/<command>")
-        )
-
-        if len(args) < 3 or args[0] != self._root.name:
-            return not_found()
-
-        *node_keys, marker, command = args[1:]
-        if marker != "call":
-            return not_found()
-
-        obj = self.colloquy
-        try:
-            for key in node_keys:
-                obj = obj.snapshot_children[key]
-            handler = obj[command]
-        except KeyError:
-            return not_found()
-
-        content_length = int(self._environ.get("CONTENT_LENGTH") or 0)
-        raw_body = (
-            self._environ["wsgi.input"].read(content_length)
-            if content_length
-            else b""
-        )
-        content = parse_qs(raw_body.decode("utf-8")).get("content", [""])[0]
-
-        handler(content)
-
-        redirect_path = self._root.joinpath(*node_keys)
-        return "303 See Other", [("Location", f"/{redirect_path.as_posix()}")], b""
-
-    def _parse_virtual_panel(self, *args):
-        """Put the simulated-state column away, or bring it back.
-
-        A route rather than a command in the tree, and the reason is the
-        one thing this has to do: **come back to the page you pressed it
-        on**. The panel is drawn beside every page whatever node is being
-        looked at, so its control has to be too - and a tree command
-        answers with a re-render of the node it hangs on, which would
-        mean the only place the link could live was that one node's page.
-        The `open`/`close` links on a node do stay put (`_html_recursion`
-        builds them under the *current* focus), but there is no node the
-        panel belongs to; it is page furniture, like `refresh` and
-        `restart` beside it.
-
-        So the action is the first segment and the rest is where to go
-        back to, and the answer is a 303 there - the same shape
-        `_parse_post` already uses to land somewhere after doing
-        something. Two verbs rather than one toggle, so that what a link
-        does is in the link: pressing `hide` twice leaves the panel
-        hidden rather than flapping.
-
-        Gated on `is_simulated` for the same reason the panel is, and it
-        matters more here than on the drawing side: `Colloquy.virtual_drivers`
-        *builds* the simulation on first access, so an installation
-        answering this at all would construct nine fake servos to be told
-        about a column it never draws.
-        """
-        if not self.colloquy.is_simulated:
-            return self._parse_not_found(
-                ("virtual-panel",) + args,
-                NotImplementedError("nothing is simulated here"),
-            )
-
-        if not args:
-            return self._parse_not_found(
-                ("virtual-panel",),
-                NotImplementedError("virtual-panel expects show or hide"),
-            )
-
-        action, *back = args
-        if action == "hide":
-            self.colloquy.virtual_drivers.close_panel()
-        elif action == "show":
-            self.colloquy.virtual_drivers.open_panel()
-        else:
-            return self._parse_not_found(
-                ("virtual-panel",) + args,
-                NotImplementedError(f"{action!r} is not show or hide"),
-            )
-
-        # Back where it was pressed. The tail is the whole app path, so a
-        # link pressed three nodes deep comes back three nodes deep; with
-        # nothing on it, the front page.
-        # Quoted, unlike the hrefs on the page: a node name with a
-        # space in it ("main pcb") is fine in a link the browser encodes
-        # for us and malformed in a header value.
-        location = quote("/" + "/".join(back or (self._root.name,)), safe="/")
-        return "303 See Other", [("Location", location)], b""
-
     def _parse_path(self):
         """Parse the path."""
         request_path = self._environ["PATH_INFO"]
@@ -363,267 +266,15 @@ class WSGI2(Base):
             return self._parse_command_failed(args, CommandFailed((), error))
         self._base_path = Path(*to_render["path"])
 
-        # pprint4(obj=to_render)
-        content_type = "text/html; charset=utf-8"
-        status = "200 OK"
-        headers = [("Content-Type", content_type)]
-
-        css_style = {
-            "height": "100%",
-            "display": "flex",
-            "flex-direction": "column",
-            "font-size": "1rem",
-        }
-
-        doc, tag, text = Doc().tagtext()
-        doc.asis("<!DOCTYPE html>")
-        with tag("html", style=export_style(css_style)):
-            with tag("head"):
-                with tag("style"):
-                    doc.asis(
-                        ".md-content table { border-collapse: collapse; margin: 0.5rem 0; } "
-                        ".md-content th, .md-content td { border: 1px solid #8886; "
-                        "padding: 0.25rem 0.6rem; text-align: left; vertical-align: top; } "
-                        ".md-content code { background: #8882; padding: 0 0.3ch; border-radius: 3px; } "
-                        ".md-content pre { background: #8882; padding: 0.5rem; overflow: auto; } "
-                        ".md-content pre code { background: none; padding: 0; } "
-                        ".md-content del { opacity: 0.6; } "
-                        # The hardware setup document carries photographs
-                        # of boards, some of them wider than the column.
-                        ".md-content img { max-width: 100%; height: auto; "
-                        "display: block; margin: 0.5rem 0; "
-                        "border: 1px solid #8886; } "
-                        ".md-content blockquote { border-left: 3px solid #d02; "
-                        "margin: 0.5rem 0; padding: 0.1rem 0 0.1rem 1ch; } "
-                        ".scenario-title { margin: 0.25rem 0; opacity: 0.85; } "
-                        ".scenario { display: flex; flex-direction: column; } "
-                        ".scenario-row { display: flex; gap: 1ch; padding: 0.25rem 0; "
-                        "border-bottom: 1px solid #8883; align-items: baseline; } "
-                        ".scenario-time { flex: 0 0 6ch; opacity: 0.6; font-family: monospace; "
-                        "font-size: 0.8rem; } "
-                        ".scenario-marker { flex: 0 0 5ch; font-family: monospace; font-size: 0.8rem; } "
-                        ".scenario-event .scenario-marker { color: #d08; } "
-                        ".scenario-activity .scenario-marker { color: #08a; } "
-                        ".scenario-problem .scenario-marker, .scenario-problem .scenario-desc "
-                        "{ color: #d02; font-weight: bold; } "
-                        ".scenario-desc { flex: 1; } "
-                        # The solved exposition schedule: one row per date
-                        # of the run. Same shape as a scenario row, and the
-                        # colour says *why* a day reads as it does - an
-                        # exception is nearly always what somebody has
-                        # opened this page to check.
-                        ".schedule-summary { margin: 0.25rem 0; opacity: 0.85; } "
-                        ".schedule-empty { margin: 0.25rem 0; opacity: 0.7; } "
-                        ".schedule-problem { margin: 0.25rem 0; color: #d02; "
-                        "font-weight: bold; } "
-                        ".schedule { display: flex; flex-direction: column; } "
-                        ".schedule-row { display: flex; gap: 1ch; padding: 0.25rem 0; "
-                        "border-bottom: 1px solid #8883; align-items: baseline; } "
-                        ".schedule-date { flex: 0 0 11ch; font-family: monospace; "
-                        "font-size: 0.8rem; } "
-                        ".schedule-weekday { flex: 0 0 10ch; opacity: 0.6; "
-                        "font-size: 0.8rem; } "
-                        ".schedule-hours { flex: 0 0 26ch; font-family: monospace; "
-                        "font-size: 0.8rem; } "
-                        ".schedule-reason { flex: 1; opacity: 0.6; font-size: 0.8rem; } "
-                        ".schedule-standby .schedule-hours { opacity: 0.45; } "
-                        ".schedule-running .schedule-hours { color: #08a; } "
-                        ".schedule-exception .schedule-reason { color: #d08; "
-                        "opacity: 1; font-weight: bold; }"
-                    )
-
-            with tag(
-                "body",
-                style="flex:1; display: flex; flex-direction: column; overflow: auto;",
-            ):
-                with tag(
-                    "div", name="server commands", style="display: flex; gap: 1ch;"
-                ):
-                    with tag("div", style=""):
-                        with tag(
-                            "a",
-                            href="/emergency-stop",
-                            style="color: white; background: red; font-weight: bold; padding: 0 1ch;",
-                        ):
-                            text("EMERGENCY STOP")
-
-                    with tag("div", style=""):
-                        with tag("a", href="/shutdown"):
-                            text("shutdown")
-
-                    with tag("div", style=""):
-                        doc.asis(self._html_restart_link())
-
-                    with tag("div", style=""):
-                        path = self._root / self._base_path
-                        with tag("a", href=f"/{path.as_posix()}"):
-                            text("refresh")
-
-                    # Beside the other page furniture rather than on the
-                    # panel, because it has to be pressable when the
-                    # panel is not there to carry it. One link, labelled
-                    # with what it will do.
-                    if self.colloquy.is_simulated:
-                        with tag("div", style=""):
-                            doc.asis(self._html_virtual_panel_link())
-
-                # What an automatic update is doing, on every page - it
-                # is about to restart the server under all of them. Empty
-                # on a machine that does not update itself.
-                doc.asis(
-                    updates.banner_html(
-                        self.colloquy.repository,
-                        back=f"/{(self._root / self._base_path).as_posix()}",
-                    )
-                )
-
-                doc.asis(
-                    self._html_navigation(
-                        to_render=to_render,
-                    )
-                )
-
-                with tag("div", name="thread count", style="display: flex;"):
-                    text(f"thread count: {len(self.all_threads)}")
-
-                # Commands on the left, simulated state on the right, side
-                # by side: watching what the installation does while
-                # driving it used to mean alternating between two pages.
-                # min-height/min-width 0 keep the two columns scrolling
-                # inside themselves instead of stretching the page.
-                with tag(
-                    "div",
-                    name="split",
-                    style="flex: 1; display: flex; gap: 1ch; min-height: 0;",
-                ):
-                    with tag(
-                        "div",
-                        name="commands",
-                        style="flex: 1; min-width: 0; overflow: auto; display: flex;",
-                    ):
-                        doc.asis(
-                            self._html_recursion(
-                                obj=to_render,
-                            )
-                        )
-
-                    if (
-                        self.colloquy.is_simulated
-                        and self.colloquy.virtual_drivers.panel_is_open
-                    ):
-                        doc.asis(self._html_virtual_panel())
-
-                with tag("script", src="/static/svg_zoom.js"):
-                    pass
-
-                doc.asis(updates.script_html(self.colloquy.repository))
-
-        html = doc.getvalue()
-        html = indent(html)
-        content = html.encode()
-
-        return status, headers, content
-
-    def _html_virtual_state(self):
-        doc, tag, text = Doc().tagtext()
-
-        for name, node in self.colloquy.virtual_drivers.snapshot_children.items():
-            values = {
-                key: value["value"]
-                for key, value in node._snapshot_if_opened(path=()).items()
-                if isinstance(value, dict) and "value" in value
-            }
-            if not values:
-                continue
-
-            with tag("div", style="margin-bottom: 0.6rem;"):
-                with tag("div", style="font-weight: bold; opacity: 0.75;"):
-                    text(name)
-                for key, value in values.items():
-                    with tag(
-                        "div",
-                        style="display: flex; gap: 1ch; padding-left: 1ch;",
-                    ):
-                        # min-width:0 on both halves, or a long label (the
-                        # timing node has "bar full travel (10000 units)")
-                        # refuses to shrink below its text and pushes the
-                        # value off the edge of the panel.
-                        with tag(
-                            "div",
-                            style=(
-                                "flex: 0 0 13ch; min-width: 0; opacity: 0.6; "
-                                "overflow-wrap: anywhere;"
-                            ),
-                        ):
-                            text(key)
-                        with tag(
-                            "div",
-                            style="flex: 1; min-width: 0; overflow-wrap: anywhere;",
-                        ):
-                            text(str(value))
-
-        return doc.getvalue()
-
-    def _html_virtual_panel_link(self):
-        """The one control: hide it, or bring it back.
-
-        The href carries the page it was pressed on, so it lands back
-        here - see `_parse_virtual_panel`. `_base_path` is the focus's own
-        path rather than whatever /call/... led here, exactly as
-        `refresh` above, so putting the panel away never re-runs a
-        command.
-        """
-        doc, tag, text = Doc().tagtext()
-
-        is_open = self.colloquy.virtual_drivers.panel_is_open
-        action = "hide" if is_open else "show"
-        back = (self._root / self._base_path).as_posix()
-
-        with tag("a", href=f"/virtual-panel/{action}/{back}"):
-            text(f"{action} virtual drivers")
-
-        return doc.getvalue()
+        return console.page(self, to_render, installation=True)
 
     def _html_restart_link(self):
-        """`restart`, carrying the page it was pressed on.
-
-        Same shape as the virtual panel's link: the tail after `/restart/`
-        is this page's app path, so the `reload` the restart answers with
-        comes back here rather than to the front page - see
-        `_parse_restart`. `_base_path` rather than whatever /call/... led
-        here, as `refresh` does, so the reload never re-runs a command.
-        """
+        """Restart, carrying the current node path for the reload link."""
         doc, tag, text = Doc().tagtext()
 
         back = (self._root / self._base_path).as_posix()
         with tag("a", href=f"/restart/{back}"):
             text("restart")
-
-        return doc.getvalue()
-
-    def _html_virtual_panel(self):
-        """The panel itself.
-
-        Rendered fresh with every page, so it shows the simulation as it
-        was when the page was served - the "refresh" link at the top is
-        the way to update it. That link points at the current node's own
-        path, not at whatever /call/... may have led here, so refreshing
-        never re-runs a command.
-        """
-        doc, tag, text = Doc().tagtext()
-
-        style = {
-            "flex": "0 0 38ch",
-            "overflow": "auto",
-            "border-left": "1px gray solid",
-            "padding-left": "1ch",
-            "font-family": "monospace",
-            "font-size": "0.8rem",
-        }
-        with tag("div", name="virtual drivers", style=export_style(style)):
-            with tag("div", style="font-weight: bold; margin-bottom: 0.5rem;"):
-                text("VIRTUAL DRIVERS")
-            doc.asis(self._html_virtual_state())
 
         return doc.getvalue()
 
@@ -719,257 +370,6 @@ class WSGI2(Base):
                 text("home")
 
         return status, headers, doc.getvalue().encode()
-
-    def _html_navigation(self, to_render):
-        doc, tag, text = Doc().tagtext()
-        css_style = {
-            "display": "flex",
-            "overflow-x": "auto",
-            "text-wrap": "nowrap",
-        }
-        with tag("div", name="navigation", style=export_style(css_style)):
-            with tag("div"):
-                with tag("a", href="/"):
-                    text("/home")
-            href = self._root
-            for name in to_render["path"]:
-                href = href / name
-                with tag("div"):
-                    with tag("a", href=f"/{href.as_posix()}"):
-                        text("/" + name)
-
-        html = doc.getvalue()
-        return indent(html)
-
-    def _html_recursion(self, obj):
-        doc, tag, text = Doc().tagtext()
-
-        style = {
-            "margin-left": "1ch",
-            "padding-left": "0.5ch",
-            "border-left": "1px gray dashed",
-            "display": "flex",
-            "flex-direction": "column",
-            "flex": "1",
-            "overflow": "auto",
-            "min-height": "10rem",
-            "justify-content": "space-between",
-        }
-
-        with tag("div", name=obj["name"], style=export_style(style)):
-            for key, value in obj.items():
-                # print(f"{key=}")
-                if key in (
-                    "name",
-                    "subject",
-                    "id",
-                    "path",
-                    "focus",
-                    "func",
-                    "ref",
-                    "checked",
-                    "keyboard",
-                    "close",
-                    "open",
-                    "opened",
-                ):
-                    continue
-
-                if key == "value":
-                    # Two shapes reach here under the literal key "value":
-                    # a bare scalar (obj["value"] set directly), or the
-                    # wrapped {"path", "name", "value"} leaf dict used
-                    # everywhere else in this function (and by classes
-                    # like LightSensor, whose _snapshot_if_opened key
-                    # happens to also be "value") - unwrap the latter so
-                    # it doesn't print the dict's own repr.
-                    display_value = (
-                        value["value"]
-                        if isinstance(value, dict) and "value" in value
-                        else value
-                    )
-                    with tag("div"):
-                        text(f"value: {display_value}")
-                    continue
-
-                if not isinstance(value, dict):
-                    func_path = Path(*obj["path"]) / key
-                    call_path = func_path.relative_to(self._base_path)
-                    path = self._root / self._base_path / "call" / call_path
-
-                    style = {"flex": "1"}
-                    with tag("div", name=key, style=export_style(style)):
-                        with tag("a", href=f"/{path.as_posix()}"):
-                            text(f"{key}()")
-                    continue
-
-                if "editor" in value:
-                    node_path = Path(*value["path"][:-1])
-                    call_path = node_path.relative_to(self._base_path)
-                    save_path = self._root / self._base_path / "call" / call_path / "save"
-
-                    style = {
-                        "width": "100%",
-                        "min-height": "50vh",
-                        "box-sizing": "border-box",
-                        "font-family": "monospace",
-                        "font-size": "0.85rem",
-                    }
-                    with tag("div", name=key):
-                        with tag(
-                            "form",
-                            method="post",
-                            action=f"/{save_path.as_posix()}",
-                            style="display: flex; flex-direction: column; gap: 0.5ch;",
-                        ):
-                            with tag(
-                                "textarea", name="content", style=export_style(style)
-                            ):
-                                text(value["editor"])
-                            with tag("div"):
-                                with tag("button", type="submit"):
-                                    text("save")
-                    continue
-
-                if "html" in value:
-                    style = {
-                        "overflow": "auto",
-                        "max-height": "75vh",
-                        "border": "1px solid #8888",
-                        "padding": "0.5ch 1.5ch",
-                    }
-                    with tag("div", name=key, klass="md-content", style=export_style(style)):
-                        doc.asis(value["html"])
-                    continue
-
-                if "pre" in value:
-                    style = {
-                        "overflow": "auto",
-                        "max-height": "70vh",
-                        "border": "1px solid #8888",
-                        "padding": "0.5ch 1ch",
-                        "font-size": "0.85rem",
-                        "white-space": "pre-wrap",
-                    }
-                    with tag("div", name=key):
-                        with tag("pre", style=export_style(style)):
-                            text(value["pre"])
-                    continue
-
-                if "svg" in value:
-                    style = {
-                        "overflow": "hidden",
-                        "border": "1px solid #8888",
-                        "cursor": "grab",
-                        "touch-action": "none",
-                    }
-                    with tag("div", name=key):
-                        with tag(
-                            "div",
-                            style="font-size: 0.75rem; opacity: 0.7;",
-                        ):
-                            text(
-                                "scroll to zoom - shift+scroll to zoom x-axis only - drag to pan - double-click to reset"
-                            )
-                        with tag(
-                            "div", **{"data-svg-zoom": ""}, style=export_style(style)
-                        ):
-                            doc.asis(value["svg"])
-                    continue
-
-                # A picture and nothing else. No zoom handle, so
-                # svg_zoom.js never finds it and never binds a wheel, a
-                # drag or a double-click to it - which is the whole of
-                # what `image` means where `svg` above does not.
-                if "image" in value:
-                    with tag("div", name=key):
-                        with tag(
-                            "div",
-                            style=export_style({"border": "1px solid #8888"}),
-                        ):
-                            doc.asis(value["image"])
-                    continue
-
-                # print(f"{value=}")
-                if value.get("opened", False):
-                    if value:
-                        doc.asis(self._html_if_opened(obj=value))
-                    continue
-
-                # Use the dict key rather than value["name"] for display:
-                # a parent can (and does, e.g. TestNeopixels/TestSensors)
-                # register the same kind of child multiple times under
-                # distinct keys precisely because the child's own .name is
-                # a fixed literal shared across every instance of that
-                # type ("light sensor", "head", ...) - showing value["name"]
-                # here made every such sibling display identical link text
-                # even though their hrefs (built from the key) already
-                # correctly pointed at different objects.
-                name = key
-
-                # Plain informational leaves (e.g. _snapshot_if_opened
-                # entries like "sender"/"matches"/"last match") aren't real
-                # openable nodes - they have no "open" handler, so drawing
-                # the open-arrow/call-link below would 404/crash on click.
-                if "value" in value:
-                    with tag("div", name="value"):
-                        text(f"{name}: {value['value']}")
-                    continue
-
-                value_path = Path(*value["path"])
-
-                style = {"display": "flex", "gap": "1ch", "flex": "1"}
-
-                with tag("div", name="title", style=export_style(style)):
-                    with tag("div", name="open"):
-                        call_path = value_path.relative_to(self._base_path)
-                        path = (
-                            self._root / self._base_path / "call" / call_path / "open"
-                        )
-
-                        with tag("a", href=f"/{path.as_posix()}"):
-                            text(">")
-
-                    # name = obj["name"]
-                    path = self._root / value_path
-                    with tag("div", name="name"):
-                        with tag("a", href=f"/{path.as_posix()}"):
-                            text(f"{name}")
-
-        html = doc.getvalue()
-        return indent(html)
-
-    def _html_if_opened(self, obj):
-        doc, tag, text = Doc().tagtext()
-        name = obj["name"]
-
-        style = {
-            "margin-bottom": "0.5rem",
-            "flex": "1",
-            "overflow": "auto",
-            "min-height": "10rem",
-        }
-
-        with tag("div", name="opened", style=export_style(style)):
-            style = {"display": "flex", "gap": "1ch", "margin-bottom": "0.5rem"}
-
-            with tag("div", name="title", style=export_style(style)):
-                with tag("div", name="close"):
-                    call_path = Path(*obj["path"]).relative_to(self._base_path)
-                    path = self._root / self._base_path / "call" / call_path / "close"
-
-                    with tag("a", href=f"/{path.as_posix()}"):
-                        text("<")
-
-                with tag("div", name="name"):
-                    path = self._root / Path(*obj["path"])
-                    with tag("a", href=f"/{path.as_posix()}"):
-                        text(f"{name}:")
-
-            doc.asis(self._html_recursion(obj=obj))
-
-        html = doc.getvalue()
-        return indent(html)
 
     def _parse_emergency_stop(self):
         """Disable torque and signal every thread to stop right now - no

@@ -11,10 +11,7 @@ class VirtualDrivers(Base):
     """Root of the stand-ins the drivers talk to when `is_simulated`, plus
     a read-only view of what they currently hold.
 
-    Named for the half it stands in for. It is not itself a driver - it is
-    a fake serial port and nine fake servos - but it sits where the real
-    ones would and the page names it beside `drivers`, which is the pair
-    a reader is trying to tell apart.
+    Exposed as the simulation branch beside the real driver controls.
 
     A plain Base, not a BaseThread. Nothing here runs a loop - it used to
     extend BaseThread without implementing setup/loop/setdown, so anything
@@ -25,7 +22,6 @@ class VirtualDrivers(Base):
 
     def __init__(self, owner):
         super().__init__(owner)
-        self._panel_is_open = True
         self._arduino_serial_port = None
         self._audio_serial_port = None
         self._u2d2_packet_handler = None
@@ -42,43 +38,13 @@ class VirtualDrivers(Base):
     def params(self):
         return self.owner.params
 
-    # --- the panel beside every page --------------------------------------
-
-    @property
-    def panel_is_open(self):
-        """Is the simulated state drawn down the side of the page?
-
-        Deliberately **not** `Base._is_opened`, which is this node's own
-        listing in the tree. They are two different questions: the tree's
-        is "am I reading the stand-ins right now", the panel's is "do I
-        want them in the corner of my eye while I drive something else",
-        and the panel is the whole reason this state exists - it is drawn
-        on every page whatever is being looked at, so nothing about the
-        node being open or shut has any bearing on it. Conflating the two
-        would mean opening the node in the tree moved a column of the
-        page, and putting the column away would close a node somebody was
-        reading.
-
-        Open by default, which is what the page did before there was any
-        way to shut it. In memory rather than in `params.json`: it is a
-        view preference, and every other open and shut in this tree is
-        forgotten on restart too.
-        """
-        return self._panel_is_open
-
-    def open_panel(self):
-        self._panel_is_open = True
-
-    def close_panel(self):
-        self._panel_is_open = False
-
     @property
     def colloquy(self):
         return self.owner.colloquy
 
     @property
     def name(self):
-        return "virtual drivers"
+        return "simulation"
 
     @property
     def dxls(self):

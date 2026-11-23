@@ -8,12 +8,19 @@ from threading import Lock
 class Logger:
     _time_origin = time()
     _log_folder = Path("local/logs")
-    shutil.rmtree(_log_folder)
-    _log_folder.mkdir(parents=True, exist_ok=True)
+    _write_lock = Lock()
 
-    def __init__(self):
-        self._line_counts = {}
-        self._lock = Lock()
+    @classmethod
+    def start_session(cls, *, preview=False):
+        """Only the process starting a server owns its log directory."""
+        cls._log_folder = Path("local/mock logs" if preview else "local/logs")
+        if cls._log_folder.exists():
+            shutil.rmtree(cls._log_folder)
+        cls._log_folder.mkdir(parents=True)
+
+    @classmethod
+    def folder(cls):
+        return cls._log_folder
 
     def __call__(self, msg: str):
 
@@ -32,31 +39,12 @@ class Logger:
         thread_name = threading.current_thread().name
         file_path = (self._log_folder / thread_name).with_suffix(".log")
 
-        if not file_path.exists():
-            file_path.parent.mkdir(parents=True, exist_ok=True)
-            file_path.touch()
-
-        if file_path not in self._line_counts:
-            lines = file_path.read_text().splitlines()
-            self._line_counts[file_path] = len(lines)
-            # text = "\n".join(lines) + "\n"
-            # with self._lock:
-            # file_path.write_text(text)
-
-        self._line_counts[file_path] += len(msg.splitlines())
-
-        with self._lock:
-            with open(file_path, "a", encoding="utf-8") as f:
-                msg = msg + "\n"
-                f.write(msg)
-
-        if self._line_counts[file_path] > 2000:
-            lines = file_path.read_text().splitlines()
-            lines[-1000:]
-            self._line_counts[file_path] = len(lines)
-            text = "\n".join(lines)
-            with self._lock:
-                file_path.write_text(text)
+        # Keep the session history on disk. Only the live reader needs a
+        # bounded window; rewriting an active file can tear a log record.
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        with self._write_lock:
+            with file_path.open("a", encoding="utf-8") as stream:
+                stream.write(msg + "\n")
 
     def _format(self, msg):
         time_header = self._format_time()  # f"{round(time()-self._time_origin, 2)}:"

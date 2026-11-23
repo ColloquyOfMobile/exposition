@@ -48,7 +48,7 @@ Dispatch is the same everywhere: split the path, look up the first part in `self
 
 `Server2` serves `WSGI2` (`wsgi2.py`); `Colloquy.get_states` delegates to `ui/tree.py`, which walks the tree, calls a command if the path ends in one, and returns a nested dict rendered with `yattag`. It is a generic tree browser, not a dashboard: **new UI = new nodes/commands, not new routes.**
 
-**Concurrency is two halves; never change one alone.** `ThreadingWSGIServer` gives a thread per connection (so the EMERGENCY STOP stays reachable), and `get_states` holds `_command_lock` around the whole walk (so commands never overlap). Off the lock: `/emergency-stop`, `/shutdown`, `/restart/<app path>`, `/static/`, `/download/`, `/pcb/`, `/pcb-order/`, `/update-status`, `/mount-main-pcb`, `/unmount-main-pcb`, `/virtual-panel/<show|hide>/<app path>` (see `wsgi2._parse`).
+**Concurrency is two halves; never change one alone.** `ThreadingWSGIServer` gives a thread per connection (so the EMERGENCY STOP stays reachable), and `get_states` holds `_command_lock` around the whole walk (so commands never overlap). Off the lock: `/emergency-stop`, `/shutdown`, `/restart/<app path>`, `/static/`, `/console-assets/`, `/thread-log`, `/download/`, `/pcb/`, `/pcb-order/`, `/update-status`, `/mount-main-pcb`, `/unmount-main-pcb`, `/virtual-panel/<show|hide>/<app path>` (see `wsgi2._parse`).
 
 - `/shutdown` takes the lock via `Colloquy.hold_commands` (bounded at 10s, then proceeds and says so). `/emergency-stop` waits for nothing.
 - **One server per port** (`server2/exclusive_port.py`): `HTTPServer`'s SO_REUSEADDR lets a second Windows process listen on 8087 beside the first (two `main.py` split the page between them, 2026-10-22). The server binds with SO_EXCLUSIVEADDRUSE, and `main.py` claims the port (loading that module by path) before importing `colloquy`, so a second instance exits with who holds it, before wiping logs or touching ports. Restarts are unaffected (listener closed before the exec; measured). `pytest_tests/test_exclusive_port.py`.
@@ -59,18 +59,18 @@ Dispatch is the same everywhere: split the path, look up the first part in `self
 
 **Errors.** An exception inside a command becomes a `CommandFailed` page (`ui/tree.get_states`), with a next click from `server2/remedies.py` only when it is *known*. An exception anywhere else - the walk, a render, a parse - still emergency-stops the installation. So **a render must never raise**: read hand-editable params defensively. `NotImplementedError` stays the 404. `pytest_tests/test_command_failed_page.py`.
 
-**Tree commands cannot have a last word**: `ui/tree.update()` discards a command's return value and re-renders its node. Anything that must end on its own page or stop the server (unmounting, mounting, the panel toggle, downloads) is a route.
+**Tree commands cannot have a last word**: `ui/tree.update()` discards a command's return value and re-renders its node. Anything that must end on its own page or stop the server (unmounting, mounting, downloads) is a route.
 
 **`/emergency-stop` never homes; `/shutdown` does** (via `power_down()`); `/restart` re-execs without homing.
 
-### Two web UIs, deliberately independent
+### Operator console and hardware-free preview
 
-- **Installation** (`server2/`): runs the exhibition, keeps its old inline-styled look and the red EMERGENCY STOP. Leave it working.
-- **Mock** (`ui/wsgi.py`, `ui/server.py`): a styling-free fork (2026-08-19) where the page is being rebuilt from bare markup with `name="..."` hooks and renderer classes; no stylesheet, no emergency stop.
+- The installation and mock share the console in `ui/console.py`, `ui/console_tree.py`, and `ui/static/console/`. Each server retains its own lifecycle routes. Only the installation offers EMERGENCY STOP.
+- The thread log polls `/thread-log` independently of tree commands and editors. It merges elapsed timestamps from up to 12 recently written files, or follows one selected thread. The monitor shows up to 100 lines. Full files and nested workers are accessible under `logs`.
 
-A page change is made twice, or on the mock alone. They serve their own `static/`. They share the snapshot vocabulary in `ui/leaves.py` - `value`, `html`, `svg`, `image`, `pre`, `editor`, plus `into(states, path)`. Build leaves with those constructors; a kind not in `leaves.KINDS` is not drawn. `pytest_tests/ui/test_leaves.py` renders every kind through both.
+Both servers use the snapshot vocabulary in `ui/leaves.py`. Build leaves with `value`, `html`, `svg`, `image`, `pre`, `editor`, or `into(states, path)`. `pytest_tests/ui/test_leaves.py` renders every kind through both.
 
-- The root gates the `virtual drivers` panel and the `code documentation` node on `is_simulated`. The panel's show/hide is a route (`VirtualDrivers.panel_is_open`, separate from the node's own open state).
+- The root exposes `simulation` and `code documentation` on simulated machines. Browse simulated bodies, servos, faults, and timing through the tree.
 - Markdown documents (`colloquy/markdown_document.py`): `MarkdownDocument` = view/`edit`/`save`; `GeneratedDocument` has no `edit` and renders from its generator on every view.
 - **Charts: `ui/graph_view.py` only** - no JavaScript, server keeps the data and the view. Page size (samples in the window) vs points (drawn); y range from the whole run; `marks=` as `(seconds, label)` with a `marks` child node; `Columns` is a lazy view, so nothing is copied and only the page is read. Emit as `leaves.image`, never `leaves.svg` (that one gets browser-side zoom). `pytest_tests/ui/test_graph_view.py`.
 
@@ -84,7 +84,7 @@ A **scenario** is the artist's term for what the piece visibly does in the room,
 
 ## Drivers (`colloquy/drivers/`)
 
-Naming: **`drivers`** is the software layer that drives the piece (`/app/drivers`, sim twin `virtual drivers`); **`drives`** are a body's O/P appetite states (`drivers/drive/`); **`hardware`** is the physical equipment (`/app/hardware`).
+Naming: **`drivers`** is the software layer that drives the piece (`/app/drivers`, simulated state under `simulation`); **`drives`** are a body's O/P appetite states (`drivers/drive/`); **`hardware`** is the physical equipment (`/app/hardware`).
 
 - `Drivers` owns `Arduino`, `U2D2`, 3 `Female`, 2 `Male`, `Bar`, `AllNeopixels`, `Bodies`. Each body has its `DXL`, `Drives`, `Search`, `Neopixels`, `LightSensor`.
 - `U2D2` wraps `dynamixel_sdk` with nine `DXL`s (`female1-3`, `male1-2`, `bar`, three mirrors on ids 2/4/6). `DXL` registers are `RegisterHanlder` children; `handle_error` retries and logs. All servos run in **extended position mode**; positions read `signed=True`.
@@ -126,7 +126,7 @@ Belongs here if it would still be true with the software off. Not gated by `is_s
 - Generated, not written: `next_pcb.py` builds the next board from `drivers/audio.py` (placement and routing deliberately not generated); `shields.py` and `microphone_board.py` compute every figure in their documents. Tests hold each to the spec and to the copper.
 - Facts worth knowing before touching the board: `J4`/`J8`/`J10` are a 1:1 breakout of D0-D21 (every cut is one stroke); `J11`/`J12` are break points (body wire on the odd pin, ADC on the even). The shields backplane's former speaker pair is line out/audio return, and its DC jack is centre-positive.
 - **Amplifier rail**: the fitted module's rating is a recorded fact (`params["audio"]["amplifier module"]`, `"amplifier max supply volts"` = 5.0), and `test_audio_at_12v` refuses any pass above it. A GF1002 was destroyed on an unsourced "4.5-15 V". **A requirement on a part to buy is not a property of the part in hand; every hard number needs a source** (a `#define`, TJ's firmware, the copper, a datasheet).
-- **Importing the `colloquy` package wipes `local/logs`.** Export scripts and scratch scripts load the modules they need by file path.
+- The installation starts a fresh `local/logs` session after claiming its port. The preview uses `local/mock logs`. Importing the package preserves both.
 
 ## Light patterns (male identity signal)
 
