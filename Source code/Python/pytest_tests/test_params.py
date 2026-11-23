@@ -1,6 +1,7 @@
 import json
 
 from colloquy.params import PARAMS_VERSION, Params, DEFAULTS, migrate
+from colloquy.params import _V8_PCB_ORDERS, _to_v7
 
 
 def test_load_falls_back_to_defaults_when_file_missing(tmp_path):
@@ -354,11 +355,11 @@ def v6(**main_pcb):
 
 
 def test_the_installation_learns_its_board_is_out():
-    migrated = migrate(v6(), on_installation=True)
+    migrated = _to_v7(v6(), on_installation=True)
 
     assert migrated["main pcb"]["mounted"] is False
     assert migrated["main pcb"]["unmounted at"] == "2026-10-11"
-    assert migrated["params version"] == PARAMS_VERSION
+    assert migrated["params version"] == 7
 
 
 def test_no_other_machine_is_told_anything_about_its_board():
@@ -371,7 +372,7 @@ def test_no_other_machine_is_told_anything_about_its_board():
 
 def test_a_board_already_noted_as_out_keeps_its_own_date():
     """Somebody did press unmount, and when they did is a fact."""
-    migrated = migrate(
+    migrated = _to_v7(
         v6(mounted=False, **{"unmounted at": "2026-10-09T17:30:00"}),
         on_installation=True,
     )
@@ -383,7 +384,7 @@ def test_it_happens_once():
     """The press on the standby page writes mounted into a file that is
     already at this version. Deciding the board was out again at the next
     start would undo the one press that is allowed to say it is in."""
-    remounted = migrate(v6(), on_installation=True)
+    remounted = _to_v7(v6(), on_installation=True)
     remounted["main pcb"]["mounted"] = True
     remounted["main pcb"]["unmounted at"] = ""
 
@@ -392,11 +393,9 @@ def test_it_happens_once():
     assert again["main pcb"]["mounted"] is True
 
 
-def test_a_file_older_than_the_note_itself_gets_it_on_the_installation():
+def test_a_file_older_than_the_note_itself_still_gets_the_whole_entry():
     migrated = migrate(json.loads(json.dumps(V1)), on_installation=True)
 
-    assert migrated["main pcb"]["mounted"] is False
-    # And the rest of the entry is still filled in beside it.
     assert migrated["main pcb"]["configuration"]["board"] == "electronic box"
 
 
@@ -404,10 +403,10 @@ def test_which_machine_is_asked_of_the_hostname_unless_said(monkeypatch):
     from colloquy import machines
 
     monkeypatch.setattr(machines, "hostname", lambda: machines.INSTALLATION)
-    assert migrate(v6())["main pcb"]["mounted"] is False
+    assert migrate(v7_out())["main pcb"]["mounted"] is True
 
     monkeypatch.setattr(machines, "hostname", lambda: "somebodys-desk")
-    assert migrate(v6())["main pcb"]["mounted"] is True
+    assert migrate(v7_out())["main pcb"]["mounted"] is False
 
 
 def test_the_migration_does_not_write_into_the_defaults():
@@ -416,12 +415,90 @@ def test_the_migration_does_not_write_into_the_defaults():
     migrate(json.loads(json.dumps(V1)), on_installation=True)
 
     assert DEFAULTS["main pcb"]["mounted"] is True
+    assert DEFAULTS["pcb orders"] == {}
 
 
 def test_nothing_ever_decides_by_itself_that_a_board_is_in():
-    for on_installation in (True, False):
-        migrated = migrate(
-            v6(mounted=False, **{"unmounted at": "2026-10-09"}),
-            on_installation=on_installation,
-        )
-        assert migrated["main pcb"]["mounted"] is False
+    """Outside v8's one owner-given exception, on the installation only."""
+    migrated = migrate(
+        v6(mounted=False, **{"unmounted at": "2026-10-09"}),
+        on_installation=False,
+    )
+    assert migrated["main pcb"]["mounted"] is False
+
+    # And at the current version, not even there: an unmount pressed after
+    # v8 ran stays an unmount.
+    current = migrate(v7_out(), on_installation=True)
+    current["main pcb"]["mounted"] = False
+    again = migrate(json.loads(json.dumps(current)), on_installation=True)
+    assert again["main pcb"]["mounted"] is False
+
+
+# --- v8: on the installation, the new PCB is in, and the orders catch up --
+#
+# The owner's word, given from the bench on 2026-11-23 and carried to the
+# laptop by its own pull: the new main PCB is mounted, and the order notes
+# (per machine) take the bench's, never moving a board backwards.
+
+
+def v7_out(**orders):
+    return {
+        "params version": 7,
+        "main pcb": {"mounted": False, "unmounted at": "2026-10-11"},
+        "pcb orders": orders,
+    }
+
+
+def test_the_installation_is_told_its_new_board_is_in():
+    migrated = migrate(v7_out(), on_installation=True)
+
+    assert migrated["main pcb"]["mounted"] is True
+    assert migrated["main pcb"]["unmounted at"] == ""
+    assert migrated["params version"] == PARAMS_VERSION == 8
+
+
+def test_the_installation_gets_the_benchs_order_notes():
+    migrated = migrate(v7_out(), on_installation=True)
+
+    orders = migrated["pcb orders"]
+    assert orders["backplane"]["status"] == "soldered"
+    assert orders["voice-thomas"]["status"] == "received"
+    assert set(orders) == set(_V8_PCB_ORDERS)
+
+
+def test_every_order_note_is_one_the_order_pages_can_read():
+    from colloquy.hardware.pcb_files import gerbers, orders
+
+    boards = {board.id for board in gerbers.load()}
+    for board, record in _V8_PCB_ORDERS.items():
+        assert record["status"] in orders.STATUSES
+        assert board in boards
+
+
+def test_a_board_further_along_on_the_laptop_is_left_alone():
+    laptop = {"status": "soldered", "changed at": "2026-11-24T09:00:00"}
+    migrated = migrate(v7_out(**{"voice-thomas": laptop}), on_installation=True)
+
+    assert migrated["pcb orders"]["voice-thomas"] == laptop
+
+
+def test_an_error_on_the_laptop_takes_the_benchs_later_word():
+    migrated = migrate(
+        v7_out(**{"backplane": {"status": "error"}}), on_installation=True
+    )
+
+    assert migrated["pcb orders"]["backplane"]["status"] == "soldered"
+
+
+def test_no_other_machine_is_told_about_the_new_board_or_its_orders():
+    migrated = migrate(v7_out(), on_installation=False)
+
+    assert migrated["main pcb"]["mounted"] is False
+    assert migrated["pcb orders"] == {}
+
+
+def test_the_notes_are_copies_not_the_table():
+    first = migrate(v7_out(), on_installation=True)
+    first["pcb orders"]["backplane"]["status"] = "error"
+
+    assert _V8_PCB_ORDERS["backplane"]["status"] == "soldered"

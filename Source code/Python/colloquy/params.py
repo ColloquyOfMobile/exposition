@@ -5,7 +5,7 @@ from . import machines
 
 # Bumped whenever the shape or the units of this file change, so an older
 # file can be recognised and converted rather than misread. See migrate().
-PARAMS_VERSION = 7
+PARAMS_VERSION = 8
 
 DEFAULTS = {
     "params version": PARAMS_VERSION,
@@ -463,6 +463,81 @@ def _to_v7(data, on_installation):
     return data
 
 
+# The PCB order notes as they stood on the bench (DESKTOP-MRSLS88) on
+# 2026-11-23, when the laptop - which never saw those presses, the notes
+# being per machine - still showed every board waiting for an order.
+_V8_PCB_ORDERS = {
+    board: {
+        "status": status,
+        "changed at": "2026-11-23T11:52:36",
+        "pcb": pcb,
+        "order number": "",
+        "in the cart at": in_cart_at,
+        "ordered at": "2026-11-23T11:52:36",
+        "received at": "2026-11-23T11:52:36",
+        **({"soldered at": "2026-11-23T11:52:36"} if status == "soldered" else {}),
+    }
+    for board, status, pcb, in_cart_at in (
+        ("backplane", "soldered",
+         "6761e8a29f5aeea09b760586d4aad759f78cdb131f029cef4bdc257749015ec1",
+         "2026-10-22T10:51:58"),
+        ("teensy-adapter", "soldered",
+         "6fa1deb85998cdcf631813ad82dd4f8db41f8a9bbd4fcdf5d460f114840d2ebc",
+         "2026-10-22T10:57:27"),
+        ("voice-thomas", "received",
+         "88be276f4390852b83a7869e69b1cc13638cc2ab74bf08e2652b147fc6833be7",
+         "2026-10-22T11:01:16"),
+        ("analyser-carrier", "received",
+         "eaef123db3b28f2ac098f2e9b077cf5631b98ef781c273948c8de1805891102b",
+         "2026-10-22T11:25:33"),
+        ("microphone-flex", "soldered",
+         "5d0338fb9a33e1a78500a999bf2d7ef972c46e39df3a78ff460eaa12c40715ac",
+         "2026-10-22T10:02:16"),
+        ("female-base-v2", "soldered",
+         "c54d179aad6248724816b3b63dc4ca73a92b332b5a27279ab3a2f4dad5d3e996",
+         "2026-10-22T10:08:59"),
+        ("male-static-v2", "soldered",
+         "333cf1feb71949577e2b0ae748bcffb6f45d903e86264ce0003b85ee0c6634b3",
+         "2026-10-22T10:13:22"),
+    )
+}
+# How far along a record is, so v8 never moves a board backwards. An
+# error is below waiting: the bench's later word replaces it.
+_V8_PROGRESS = ("error", "waiting order", "in the cart", "ordered", "received", "soldered")
+
+
+def _to_v8(data, on_installation):
+    """On the installation, and only there: the new main PCB is in, and
+    the boards' order notes catch up with the bench's.
+
+    The one exception to "nothing decides by itself that a board is in"
+    (see `_to_v7`), and not the program's decision: the owner said so on
+    2026-11-23, from the bench, and asked for it to reach the laptop by a
+    pull rather than a press there. Once, by the version bump, like v7: a
+    later unmount press stays unmounted.
+
+    The order notes are per machine, so the laptop had none of the
+    bench's presses. Each board takes the bench's record unless the
+    laptop's own is as far along or further - a press made there is not
+    undone.
+    """
+    if on_installation:
+        main_pcb = data.setdefault("main pcb", {})
+        main_pcb["mounted"] = True
+        main_pcb["unmounted at"] = ""
+
+        orders = data.setdefault("pcb orders", {})
+        for board, record in _V8_PCB_ORDERS.items():
+            here = orders.get(board) or {}
+            status = here.get("status", "waiting order")
+            rank = _V8_PROGRESS.index(status) if status in _V8_PROGRESS else 0
+            if rank < _V8_PROGRESS.index(record["status"]):
+                orders[board] = json.loads(json.dumps(record))
+
+    data["params version"] = 8
+    return data
+
+
 def migrate(data, on_installation=None):
     """Bring a file read off disk up to the current shape.
 
@@ -484,6 +559,8 @@ def migrate(data, on_installation=None):
         data = _to_v6(data)
     if data["params version"] < 7:
         data = _to_v7(data, on_installation)
+    if data["params version"] < 8:
+        data = _to_v8(data, on_installation)
     return _fill_missing(data, DEFAULTS)
 
 
