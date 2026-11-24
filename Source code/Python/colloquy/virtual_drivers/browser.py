@@ -13,7 +13,10 @@ window onto the simulation, not another way to drive it.
 """
 from colloquy.base import Base
 
-from .dxl_ids import BODY_DXL_IDS
+from colloquy.drivers.angle.conversion import REDUCTIONS, as_signed, ticks_to_degrees
+
+from . import top_view
+from .dxl_ids import BAR_DXL_ID, BODY_DXL_IDS, FEMALE_DXL_IDS, MALE_DXL_IDS
 from .virtual_serial_port import OLD_57600_LATENCY, REALISTIC_LATENCY
 from colloquy.ui import leaves
 
@@ -182,6 +185,86 @@ class TimingNode(Base):
         if speed:
             leaf("body sweep (2000 units)", f"{2000 / speed:.1f}s")
             leaf("bar full travel (10000 units)", f"{10000 / speed:.1f}s")
+        return states
+
+
+class TopViewNode(Base):
+    """The simulated room from above, following the simulation as it runs.
+
+    Everything drawn is read here at render time, from the same stand-ins
+    the drivers talk to; `top_view.py` only draws. A scene the simulator
+    cannot give (a hand-edited param of the wrong shape, a servo list not
+    built yet) is said in one line instead of drawn - a render must never
+    raise.
+    """
+
+    @property
+    def name(self):
+        return "top view"
+
+    @property
+    def snapshot_children(self):
+        return {}
+
+    def _part(self, name, kind, dxl):
+        params = self.owner.params
+        reduction = REDUCTIONS[kind]
+        origin = params[name]["dxl origin"]
+        angle = ticks_to_degrees(as_signed(dxl.get("position")) - origin, reduction)
+        goal = ticks_to_degrees(as_signed(dxl.get("goal position")) - origin, reduction)
+        torque = bool(dxl.get("torque enabled"))
+        speed = ticks_to_degrees(dxl.speed, reduction) if torque else 0.0
+        return {
+            "angle": angle,
+            "goal": goal,
+            "next": top_view.travel(angle, goal, speed),
+            "torque": torque,
+        }
+
+    def scene(self):
+        params = self.owner.params
+        dxls = self.owner.dxls
+        states = self.owner.states
+        threshold = params["photosensor_threashold"]
+
+        females = {}
+        for name, dxl_id in FEMALE_DXL_IDS.items():
+            held = states[name]
+            sensor = held.get("light sensor")
+            females[name] = {
+                **self._part(name, "female", dxls[dxl_id]),
+                "pixels": {p: held.get(p, {}) for p in top_view.FEMALE_PIXELS},
+                "sensor": sensor,
+                "sees light": isinstance(sensor, (int, float)) and sensor > threshold,
+                "speaker": held.get("speaker", False),
+            }
+
+        males = {}
+        for name, dxl_id in MALE_DXL_IDS.items():
+            held = states[name]
+            males[name] = {
+                **self._part(name, "male", dxls[dxl_id]),
+                "pixels": {p: held.get(p, {}) for p in top_view.MALE_PIXELS},
+                "speaker": held.get("speaker", False),
+            }
+
+        return {
+            "params": params,
+            "bar": self._part("bar", "bar", dxls[BAR_DXL_ID]),
+            "females": females,
+            "males": males,
+        }
+
+    def _snapshot_if_opened(self, path):
+        states = super()._snapshot_if_opened(path)
+        try:
+            picture = top_view.draw(self.scene())
+        except Exception as error:  # a render must never raise
+            states["room"] = leaves.value(
+                path, "room", f"cannot be drawn: {type(error).__name__}: {error}"
+            )
+            return states
+        states["room"] = leaves.image(path, "room", picture)
         return states
 
 

@@ -1,5 +1,5 @@
 from colloquy.base import Base
-from .browser import BodyStateNode, FaultsNode, ServosNode, TimingNode
+from .browser import BodyStateNode, FaultsNode, ServosNode, TimingNode, TopViewNode
 from .dxl_ids import BODY_DXL_IDS
 from .virtual_audio_serial_port import VirtualAudioSerialPort
 from .virtual_serial_port import VirtualSerialPort
@@ -33,6 +33,7 @@ class VirtualDrivers(Base):
         self._servos_node = ServosNode(owner=self)
         self._faults_node = FaultsNode(owner=self)
         self._timing_node = TimingNode(owner=self)
+        self._top_view_node = TopViewNode(owner=self)
 
     @property
     def params(self):
@@ -88,7 +89,9 @@ class VirtualDrivers(Base):
 
     @property
     def snapshot_children(self):
-        children = dict(self._body_nodes)
+        # The picture first: it is what to open before any of the rows.
+        children = {self._top_view_node.name: self._top_view_node}
+        children.update(self._body_nodes)
         children[self._servos_node.name] = self._servos_node
         children[self._faults_node.name] = self._faults_node
         children[self._timing_node.name] = self._timing_node
