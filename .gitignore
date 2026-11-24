@@ -189,3 +189,9 @@ docs/~$questions.xlsx
 # The unpacked copy of output/Colloquy-PCB-fit-check-1to1.zip.
 /output/pdf/pcb-fit-check/
 __MACOSX/
+
+# Rhino models: too big for GitHub (182 MB), kept on the machines only.
+# .rhl is the lock Rhino holds while a model is open.
+CAD/Rhino/*.3dm
+CAD/Rhino/*.3dmbak
+CAD/Rhino/*.rhl
