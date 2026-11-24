@@ -206,46 +206,100 @@ class FakeShared:
 
 
 def node(writer=True):
+    from pathlib import Path
     from types import SimpleNamespace
 
-    owner = SimpleNamespace(owners=[], name="manual tests", is_simulated=True)
+    owner = SimpleNamespace(
+        owners=[], name="manual tests", is_simulated=True, path=Path("tests/manual tests")
+    )
     return InstallationSol2(owner=owner, shared=FakeShared(writer))
 
 
-def test_the_page_renders_and_points_at_the_first_step():
+FIRST = "01 check the present state"
+
+
+def where_you_left_off(guide):
+    return guide._snapshot_if_opened(())["where you left off"]["html"]
+
+
+def test_the_guide_opens_on_the_first_step_not_done():
     guide = node()
     states = guide._snapshot_if_opened(())
 
     assert states["progress"]["value"] == f"0 of {len(steps.KEYS)} steps done"
-    assert states["next step"]["value"] == "01 check the present state"
-    assert "01 check the present state" in guide.snapshot_children
+    assert FIRST in where_you_left_off(guide)
+    assert "done: next step" in guide.snapshot_children
+    # Read first, press after: the step is drawn above its button.
+    keys = list(states)
+    assert keys.index("where you left off") < keys.index("done: next step") < keys.index("steps")
 
 
-def test_a_step_is_ticked_noted_and_unticked():
+def test_done_goes_on_to_the_next_step_and_back_one_returns():
     guide = node()
-    step = guide["01 check the present state"]
+
+    guide.done_current()
+    assert guide.shared.record["check the present state"].done
+    assert "02 record the configuration" in where_you_left_off(guide)
+    table = guide._snapshot_if_opened(())["steps"]["html"]
+    assert "&#10003;</td><td><a href='/app/tests/manual%20tests/installation%20PCB%20solution%202/all%20steps/01%20check" in table
+    assert "&#8594;</td><td><a" in table and "<strong>02 record the configuration</strong>" in table
+
+    guide.back_one()
+    assert FIRST in where_you_left_off(guide)
+
+
+def test_the_note_box_writes_the_current_steps_note():
+    guide = node()
+    guide.save("Cable broken between the microphone and the female1 base\r\n")
+
+    assert guide.shared.record["check the present state"].note == (
+        "Cable broken between the microphone and the female1 base"
+    )
+
+
+def test_a_step_page_ticks_unticks_and_then_points_on():
+    guide = node()
+    step = guide["all steps"][FIRST]
 
     assert "done" in step.snapshot_children
     step.done()
-    assert guide.shared.record["check the present state"].done
     assert "not done after all" in step.snapshot_children
-    step.save("J5 cable: pin 7 open at the body end\r\n")
-    assert guide.shared.record["check the present state"].note == "J5 cable: pin 7 open at the body end"
+    go_on = step._snapshot_if_opened(())["go on"]["html"]
+    assert "02%20record%20the%20configuration" in go_on and "resume where you left off" in go_on
     step.undo()
     assert not guide.shared.record["check the present state"].done
-
-    states = guide._snapshot_if_opened(())
-    assert states["next step"]["value"] == "01 check the present state"
     assert "editor" in step._snapshot_if_opened(())["note"]
+
+
+def test_when_every_step_is_done_the_guide_says_so():
+    guide = node()
+    for key in steps.KEYS:
+        guide.shared.record = progress.mark(guide.shared.record, key, True, "2026-11-24T10:00:00")
+
+    assert "Every step is done" in where_you_left_off(guide)
+    assert "done: next step" not in guide.snapshot_children
+    assert guide.done_current() == "every step is done"
 
 
 def test_elsewhere_the_page_is_read_only():
     guide = node(writer=False)
-    step = guide["01 check the present state"]
+    step = guide["all steps"][FIRST]
 
     assert step.snapshot_children == {}
     assert "value" in step._snapshot_if_opened(())["note"]
+    assert "done: next step" not in guide.snapshot_children
     assert "fetch the record" in guide.snapshot_children
+
+
+def test_every_picture_is_well_formed_svg():
+    from xml.dom import minidom
+
+    from colloquy.tests.installation_sol2 import pictures
+
+    for key in pictures.PICTURES:
+        assert key in steps.KEYS, key
+        minidom.parseString("<r>" + pictures.picture(key) + "</r>")
+    assert pictures.picture("firmware 5") == ""
 
 
 def test_a_press_is_shown_at_once_and_pushed_by_the_worker(checkouts):

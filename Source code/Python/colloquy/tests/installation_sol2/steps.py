@@ -179,23 +179,6 @@ STEPS = (
         "A difference from before mounting is a header pushed out of line or "
         "a lead pinched by the enclosure.",
     ),
-    # --- the harness -----------------------------------------------------
-    Step(
-        "repair the broken cable",
-        "the harness",
-        "The cable named in the first step's note. After the repair, **both "
-        "ends unplugged**, meter it:\n\n"
-        "- every conductor end to end, the shell included;\n"
-        "- then each conductor against every other: **no connection**. Above "
-        "all the `+12V` conductor (pin 7 on female1's `J5` and female2's "
-        "`J1`, pin 2 on `A-J3`) and the `+5V` one (pin 15 on `J5`/`J1`, pin 9 "
-        "on `A-J3`) against everything else: 12 V on a signal or on the 5 V "
-        "conductor reaches a NeoPixel strip, an amplifier or the Teensy's "
-        "translators. `B-J4` carries no power.\n\n"
-        "The pin tables are in `thomas or teensy` section 2 (\"The four body "
-        "connectors\"). Write what was broken and how it was repaired in the "
-        "note.",
-    ),
     # --- the bodies, one at a time -------------------------------------
     *(
         Step(
@@ -246,6 +229,23 @@ STEPS = (
         f"later, use {MOTORS} `unplug the motors`, which homes first.",
     ),
     # --- the microphones ------------------------------------------------
+    Step(
+        "repair the broken cable",
+        "the microphones",
+        "Step 1's note: the cable between **female1's microphone and her "
+        "base** (the female base v2's `J3 MICROPHONE`). Three conductors: "
+        "`GND`, `+5V`, `OUT` - the holder's `J1` order, pin 1 to pin 1 with "
+        "the harness (RELEASE_REVIEW.md). After the repair, **both ends "
+        "unplugged**, meter it:\n\n"
+        "- each conductor end to end: it beeps;\n"
+        "- each against the other two, at one end: **silence**. Above all "
+        "`+5V` against `OUT`: 5 V on `OUT` reaches `MIC DIRECT 1` and, "
+        "through its 4.7 K, Teensy pin 14 (`shields` section 4a; the 4.7 K "
+        "limits the current, it does not make the pin 5 V tolerant). `+5V` "
+        "against `GND` would short the rack's 5 V rail.\n\n"
+        "Write what was broken and how it was repaired in the note. Its "
+        "powered check is the next step's `MIC DIRECT 1` reading.",
+    ),
     Step(
         "mount the microphones",
         "the microphones",
