@@ -31,7 +31,10 @@ STEPS = (
         "the Teensy, and flash once from the Arduino IDE (Tools > Board > "
         "Teensy 4.1, Tools > Port, a 'teensy' port, open "
         "Source code/Arduino/teensy_check/ and Upload). From then on it has "
-        "a COM port and this page does the rest.",
+        "a COM port and this page does the rest. If not even the 'teensy' "
+        "port appears, the computer is not hearing it at all: try a data "
+        "cable - a lit LED proves power, not data "
+        "(docs/errors/2026-11-24-01.txt).",
     ),
     (
         "expect the teensy loader",
