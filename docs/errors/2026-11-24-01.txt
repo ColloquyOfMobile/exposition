@@ -1,0 +1,67 @@
+# A new Teensy 4.1 was plugged in and Windows saw nothing at all.
+# The cable carried power, not data.
+
+WHAT HAPPENED
+
+First run of test teensy, on the bench (DESKTOP-MRSLS88). A fresh
+Teensy 4.1 was plugged into the Surface by USB. No COM port appeared,
+and nothing from PJRC (USB vendor id 16C0) was listed by
+Get-PnpDevice - not even among absent devices, so it had never
+enumerated on this computer, not once.
+
+Changing the cable fixed it. With a data cable the Teensy showed up at
+once as USB\VID_16C0&PID_0486 (two HID interfaces, no COM port).
+
+
+WHAT WAS WRONG
+
+The first cable was a charge-only cable: power and ground, no data
+pair. The board powers up and its LED runs, so it *looks* connected,
+but the computer never hears from it. No driver, port picker or flasher
+can see a board on such a lead, and no software fix helps.
+
+
+HOW TO TELL, IN ONE COMMAND
+
+  Get-PnpDevice | Where-Object { $_.InstanceId -match 'VID_16C0' }
+
+  - nothing at all, present or absent  -> no data on the lead:
+    change the cable (a phone's data cable), plug straight into the
+    computer, not a hub. Pressing the white button does not help here.
+  - PID_0486, HID only, no COM port    -> it is talking; it runs a
+    sketch built without USB Type "Serial" (the factory one). Go on to
+    the next step.
+  - PID_0483 with a COM port           -> ready for the page.
+
+The same check works for any board: the Mega's bridge and the U2D2's
+FTDI lead have their own ids in drivers/arduino/boards.py KNOWN_DEVICES.
+
+
+THE SECOND HURDLE, SAME DAY
+
+A Teensy's COM port belongs to the sketch, so the factory sketch gives
+none and the page's `com port` picker has nothing to offer. The first
+flash has to go over PJRC's own "teensy" port (teensy-discovery), not a
+COM port. Done from the command line with the IDE's arduino-cli
+(it also needed the Teensy core, teensy:avr 1.62.0, installed first):
+
+  arduino-cli --config-file ~/.arduinoIDE/arduino-cli.yaml board list
+      -> usb:0/140000/0/5  teensy  Teensy 4.1  teensy:avr:teensy41
+  arduino-cli --config-file ~/.arduinoIDE/arduino-cli.yaml compile
+      --upload --fqbn teensy:avr:teensy41 --port usb:0/140000/0/5
+      "Source code/Arduino/teensy_check"
+
+Afterwards COM4 appeared, and `?` answered:
+
+  teensy_check firmware=1 board=teensy41 f_cpu=600000000
+  uptime_ms=10671 temp_c=44.0 led=heartbeat
+
+From then on the page's own `flash firmware` can do it.
+
+
+THE DEFECT WORTH REMEMBERING
+
+"The LED is on" proves power, not a link. When a board is invisible to
+the computer, check whether the computer has *ever* seen it before
+suspecting drivers, ports or code - and keep the cables that carry data
+apart from the ones that only charge.
