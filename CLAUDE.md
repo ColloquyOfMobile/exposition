@@ -178,7 +178,8 @@ Audio tests, each answering a different question:
 - A schedule is a run (dates), a week (hours per weekday), exceptionally-running dates and exceptionally-standby dates. `rules.py` (format and params round trip), `solver.py` (one row per date with the rule that gave it; `MAX_DAYS` 800), `rendering.py`, `__init__.py` (node).
 - Edited as text through `leaves.editor`; the structure is what's stored in `params["exposition schedule"]`. `parse` names the bad line.
 - One switch: `enable`/`disable` (bare start/stop popped). `enable` refuses an unreadable schedule or one with no run; saving never enables. `main.py` calls `start_if_enabled()`.
-- It stops only what it started; it refuses to start against the main-PCB or motors notes (never blocks a stop). Naive local time. `CHECK_INTERVAL` 20s. `pytest_tests/exposition/`.
+- **An error in the piece stops the piece, not the process**: `Exposition.setdown` stops the drivers and says where (`stopped on an error`); it no longer latches the class-level `_shutdown`. `start` then refuses until a person presses `clear the errors and start again` (clears each failed thread's own `ThreadErrors`, found by walking the tree since `all_threads` forgets dead threads). It also refuses up front when the Arduino link is not open. `pytest_tests/exposition/test_exposition_start.py`.
+- It stops only what it started; it refuses to start against the main-PCB or motors notes, or while the exposition holds errors (never blocks a stop). Naive local time. `CHECK_INTERVAL` 20s. `pytest_tests/exposition/`.
 
 ## Parameters (`local/params.json`)
 

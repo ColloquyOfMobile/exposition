@@ -248,10 +248,10 @@ class ExpositionSchedule(BaseThread):
                 "the motors are noted as unplugged, so the servo bus was "
                 "never opened and nothing can move"
             )
-        if self.exposition.thread_errors:
+        if self.exposition.has_errors():
             return (
-                "the exposition stopped on an error - clear it under "
-                "'thread errors' before the schedule can start it again"
+                "the exposition stopped on an error - a person has to read "
+                "why and press 'clear the errors and start again' on its page"
             )
         return None
 

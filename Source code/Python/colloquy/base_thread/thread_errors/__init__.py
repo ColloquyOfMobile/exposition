@@ -42,6 +42,14 @@ class ThreadErrors(Base):
         self[thread_error.name] = thread_error
         self._errors.append(thread_error)
 
+    def clear(self):
+        """Forget this thread's own errors (not its children's). The
+        tracebacks stay in the logs; this only lets the thread start
+        again, which `BaseThread.start` refuses while any are held."""
+        for error in self._errors:
+            self._dict.pop(error.name, None)
+        self._errors = []
+
     @property
     def snapshot_children(self):
         return {}

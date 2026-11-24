@@ -71,6 +71,7 @@ def schedule(stub_factory):
         is_started=False,
         thread_errors=[],
         start=fake_start,
+        has_errors=lambda: bool(exposition.thread_errors),
         stop=fake_stop,
     )
     exposition.calls = exposition_calls
@@ -305,14 +306,16 @@ def test_it_will_not_start_the_piece_with_the_main_pcb_out(schedule):
 
 
 def test_it_will_not_restart_an_exposition_that_stopped_on_an_error(schedule):
-    """`BaseThread.start` raises on a thread carrying errors, so trying
-    would turn a stopped show into a failing schedule."""
+    """A piece that stopped on an error waits for a person to read why
+    and press `clear the errors and start again`; the schedule never
+    presses it for them."""
     enabled(schedule)
     schedule.exposition.thread_errors = ["something went wrong"]
 
     outcome = schedule.apply_now(OPEN_HOURS)
 
     assert "stopped on an error" in outcome
+    assert "clear the errors and start again" in outcome
     assert schedule.exposition.calls == []
 
 
