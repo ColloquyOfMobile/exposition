@@ -1,12 +1,14 @@
 """The simulated room from above (colloquy.virtual_drivers.top_view and
-browser.TopViewNode): where the drawing puts things, how a moving part
-is tweened, and that a render never raises."""
+browser.TopViewNode): what is drawn, how a moving part is tweened, and
+that a render never raises."""
 import xml.etree.ElementTree as ET
 
 from colloquy.params import DEFAULTS
-from colloquy.virtual_drivers import top_view
+from colloquy.virtual_drivers import room, top_view
 from colloquy.virtual_drivers.browser import TopViewNode
 from colloquy.virtual_drivers.virtual_dxl import VirtualDXL
+
+PLACE = room.place(DEFAULTS)
 
 
 def _body(angle=0.0, **extra):
@@ -15,34 +17,13 @@ def _body(angle=0.0, **extra):
 
 def _scene(**overrides):
     scene = {
-        "params": DEFAULTS,
         "bar": {"angle": 0.0, "goal": 0.0, "next": 0.0},
         "females": {f: _body() for f in top_view.FEMALES},
         "males": {m: _body() for m in top_view.MALES},
+        "mirrors": {f: _body() for f in top_view.FEMALES},
     }
     scene.update(overrides)
     return scene
-
-
-def test_females_sit_where_the_bar_brings_male1():
-    females, males = top_view.layout(DEFAULTS)
-    origins = DEFAULTS["bar"]["interaction_origins"]
-
-    assert females == origins["male1"]
-    assert males["male1"] == 0
-
-
-def test_male2_sits_at_the_other_end_of_the_bar():
-    _, males = top_view.layout(DEFAULTS)
-
-    # The mean of his meeting points minus hers: about half a turn back.
-    assert -185 < males["male2"] < -175
-
-
-def test_a_broken_layout_param_falls_back_instead_of_raising():
-    females, _ = top_view.layout({"bar": {"interaction_origins": "nonsense"}})
-
-    assert set(females) == set(top_view.FEMALES)
 
 
 def test_travel_stops_at_the_goal_and_is_capped_by_speed():
@@ -59,32 +40,59 @@ def test_white_adds_to_every_channel_and_dark_is_none():
 
 
 def test_the_drawing_is_well_formed_svg():
-    ET.fromstring(top_view.draw(_scene()))
+    ET.fromstring(top_view.draw(_scene(), PLACE))
 
 
 def test_a_still_scene_has_no_tween_and_draws_the_same_twice():
     # What lets the live stream skip resending an idle room.
-    assert "animateTransform" not in top_view.draw(_scene())
-    assert top_view.draw(_scene()) == top_view.draw(_scene())
+    assert "animateTransform" not in top_view.draw(_scene(), PLACE)
+    assert top_view.draw(_scene(), PLACE) == top_view.draw(_scene(), PLACE)
 
 
 def test_a_moving_bar_is_tweened_to_where_it_will_be():
     scene = _scene(bar={"angle": 10.0, "goal": 100.0, "next": 19.2})
 
-    svg = top_view.draw(scene)
+    svg = top_view.draw(scene, PLACE)
 
-    assert 'from="10 215 220" to="19.2 215 220"' in svg
+    centre = f"{top_view.CX} {top_view.CY}"
+    assert f'from="10 {centre}" to="19.2 {centre}"' in svg
+
+
+def test_the_bar_is_drawn_from_where_male1_faces_female1():
+    # The calibrated zero moved by 30 degrees: a bar at 30 is drawn where
+    # a bar at 0 used to be.
+    moved = room.place({"bar": {"interaction_origins": {"male1": {"female1": 30}}}})
+
+    svg = top_view.draw(_scene(bar={"angle": 30.0, "goal": 30.0, "next": 30.0}), moved)
+
+    assert f"rotate(30 {top_view.CX} {top_view.CY})" not in svg
+    assert f"rotate(0 {top_view.CX} {top_view.CY})" in svg
 
 
 def test_a_lit_ring_casts_a_beam_and_a_dark_one_does_not():
-    dark = top_view.draw(_scene())
+    dark = top_view.draw(_scene(), PLACE)
     lit = top_view.draw(
-        _scene(males={"male1": _body(pixels={"ring": {"r": 0, "g": 0, "b": 0, "w": 255}}),
-                      "male2": _body()})
+        _scene(
+            males={
+                "male1": _body(pixels={"ring": {"r": 0, "g": 0, "b": 0, "w": 255}}),
+                "male2": _body(),
+            }
+        ),
+        PLACE,
     )
 
-    assert 'fill-opacity="0.45"' not in dark
-    assert 'fill-opacity="0.45"' in lit
+    assert 'fill-opacity="0.4"' not in dark
+    assert 'fill-opacity="0.4"' in lit
+
+
+def test_a_tilted_mirror_is_drawn_deeper_than_a_level_one():
+    level = top_view.draw(_scene(), PLACE)
+    mirrors = {f: _body() for f in top_view.FEMALES}
+    mirrors["female1"] = _body(30.0)
+
+    tilted = top_view.draw(_scene(mirrors=mirrors), PLACE)
+
+    assert level != tilted
 
 
 def _dxl(position=0, goal=0, torque=1, velocity=20):
@@ -119,17 +127,28 @@ def test_the_scene_reads_angles_in_degrees_of_the_body(stub_factory):
     # 3072 servo units is three quarters of a servo turn: at 1:3, a
     # quarter turn of the bar.
     dxls[9] = _dxl(position=3072, goal=3072)
+    # A mirror turns one for one: 512 units is 45 degrees of tilt.
+    dxls[2] = _dxl(position=512, goal=512)
 
     scene = _node(stub_factory, dxls).scene()
 
     assert scene["bar"]["angle"] == 90
     assert scene["bar"]["next"] == 90
+    assert scene["mirrors"]["female1"]["angle"] == 45
 
 
 def test_the_node_draws_the_room_as_an_image(stub_factory):
     states = _node(stub_factory)._snapshot_if_opened(())
 
     assert "<svg" in states["room"]["image"]
+
+
+def test_the_node_says_which_calibrated_meetings_the_model_disagrees_with(stub_factory):
+    states = _node(stub_factory)._snapshot_if_opened(())
+
+    assert "agrees" in states["male1 meets female1"]["value"]
+    assert "male2 facing female2" in states["male1 meets female2"]["value"]
+    assert "4 of the 6" in states["female order"]["value"]
 
 
 def test_a_param_of_the_wrong_shape_is_said_not_raised(stub_factory):

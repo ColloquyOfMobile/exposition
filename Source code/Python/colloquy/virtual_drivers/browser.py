@@ -15,8 +15,14 @@ from colloquy.base import Base
 
 from colloquy.drivers.angle.conversion import REDUCTIONS, as_signed, ticks_to_degrees
 
-from . import top_view
-from .dxl_ids import BAR_DXL_ID, BODY_DXL_IDS, FEMALE_DXL_IDS, MALE_DXL_IDS
+from . import room, top_view
+from .dxl_ids import (
+    BAR_DXL_ID,
+    BODY_DXL_IDS,
+    FEMALE_DXL_IDS,
+    MALE_DXL_IDS,
+    MIRROR_DXL_IDS,
+)
 from .virtual_serial_port import OLD_57600_LATENCY, REALISTIC_LATENCY
 from colloquy.ui import leaves
 
@@ -189,13 +195,20 @@ class TimingNode(Base):
 
 
 class TopViewNode(Base):
-    """The simulated room from above, following the simulation as it runs.
+    """The simulated room from above, to scale, following the simulation
+    as it runs.
 
     Everything drawn is read here at render time, from the same stand-ins
-    the drivers talk to; `top_view.py` only draws. A scene the simulator
-    cannot give (a hand-edited param of the wrong shape, a servo list not
-    built yet) is said in one line instead of drawn - a render must never
-    raise.
+    the drivers talk to; `top_view.py` only draws, and `room.py` says where
+    TJ's model puts everything. A scene the simulator cannot give (a
+    hand-edited param of the wrong shape, a servo list not built yet) is
+    said in one line instead of drawn - a render must never raise.
+
+    Under the picture, each calibrated meeting (`interaction_origins`) is
+    held against the model: who it has face to face at that bar angle.
+    The simulator's own sensors follow the calibration, not the model, so
+    where the two disagree the picture shows a female lit by a male who is
+    not in front of her - which is the point of showing it.
     """
 
     @property
@@ -227,6 +240,13 @@ class TopViewNode(Base):
         states = self.owner.states
         threshold = params["photosensor_threashold"]
 
+        # A female's mirror tilts one for one with its servo. Nothing starts
+        # them; a mirror never initialised reads level.
+        mirrors = {}
+        for name, dxl_id in MIRROR_DXL_IDS.items():
+            female = name.replace("mirror", "female")
+            mirrors[female] = self._part(name, "mirror", dxls[dxl_id])
+
         females = {}
         for name, dxl_id in FEMALE_DXL_IDS.items():
             held = states[name]
@@ -249,22 +269,34 @@ class TopViewNode(Base):
             }
 
         return {
-            "params": params,
             "bar": self._part("bar", "bar", dxls[BAR_DXL_ID]),
             "females": females,
             "males": males,
+            "mirrors": mirrors,
         }
 
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
+        params = self.owner.params
         try:
-            picture = top_view.draw(self.scene())
+            place = room.place(params)
+            picture = top_view.draw(self.scene(), place)
         except Exception as error:  # a render must never raise
             states["room"] = leaves.value(
                 path, "room", f"cannot be drawn: {type(error).__name__}: {error}"
             )
             return states
         states["room"] = leaves.image(path, "room", picture)
+
+        leaf = leaves.into(states, path)
+        second = "female2" if place.at["female2"] < place.at["female3"] else "female3"
+        leaf(
+            "female order",
+            f"{second} is {place.at[second]:.0f}° clockwise of female1 "
+            f"(the order {place.agreeing} of the 6 calibrated meetings fit)",
+        )
+        for meeting in room.meetings(place, params):
+            leaf(f"{meeting.male} meets {meeting.female}", meeting.describe())
         return states
 
 

@@ -4,7 +4,7 @@ Guidance for Claude Code in this repository. This is the compact version; the lo
 
 ## What this is
 
-"Colloquy of Mobiles" is a kinetic art installation being prepared for exhibition at ZKM. Three "female" and two "male" mobiles plus a motorized bar, driven by Dynamixel servos (through a U2D2) and an Arduino Mega (NeoPixels, light sensors, voices, microphone analysers). The repo holds the Python control software (`Source code/Python`, where most work happens), Arduino sketches (`Source code/Arduino`), and CAD/electronics (`CAD/`: KiCad, Eagle, FreeCAD, Blender).
+"Colloquy of Mobiles" is a kinetic art installation being prepared for exhibition at ZKM. Three "female" and two "male" mobiles plus a motorized bar, driven by Dynamixel servos (through a U2D2) and an Arduino Mega (NeoPixels, light sensors, voices, microphone analysers). The repo holds the Python control software (`Source code/Python`, where most work happens), Arduino sketches (`Source code/Arduino`), and CAD/electronics (`CAD/`: KiCad, Eagle, FreeCAD, Blender; `CAD/Rhino/` holds TJ's 2020 model of the whole piece, git-ignored at 182 MB, so only on the machines it was handed to).
 
 ## Commands (from the repo root)
 
@@ -12,7 +12,7 @@ Guidance for Claude Code in this repository. This is the compact version; the lo
 - `py mock_ui.py` - the UI mock on port 8088 (localhost only), against `colloquy/ui/mock.py`; no hardware.
 - `py -m pytest "Source code/Python/pytest_tests"` - unit suite, ~2s. **Run it after changing anything under `colloquy/`.**
 - `py -m mypy` - scoped type check (see below).
-- Generators, rerun after changing their source: `export_gerbers.py` (needs KiCad), `next_pcb.py`, `export_mega_pinout.py`, `export_shields_diagram.py`, `export_backplane_front.py` (needs KiCad: the backplane's front plot and its parts' positions, which the sol2 guide rings), `extract_hardware_photos.py` (needs `pymupdf`). Most outputs are held to their source by a pytest test that fails when they go stale.
+- Generators, rerun after changing their source: `export_gerbers.py` (needs KiCad), `next_pcb.py`, `export_mega_pinout.py`, `export_shields_diagram.py`, `export_backplane_front.py` (needs KiCad: the backplane's front plot and its parts' positions, which the sol2 guide rings), `extract_hardware_photos.py` (needs `pymupdf`), `export_room.py` (needs `rhino3dm` and the Rhino model: the room's geometry for the simulation, `virtual_drivers/room.json`; its staleness test skips where the model is absent). Most outputs are held to their source by a pytest test that fails when they go stale.
 - `test_process.py` is a dev file-watcher that restarts `main.py` on save - not pytest. `process_csv.py` is a dev helper with hardcoded paths.
 - No build step. `requirements.txt` is incomplete (`pyserial`, `watchdog`, ... are imported but unpinned); check imports.
 
@@ -73,6 +73,7 @@ Dispatch is the same everywhere: split the path, look up the first part in `self
 Both servers use the snapshot vocabulary in `ui/leaves.py`. Build leaves with `value`, `html`, `svg`, `image`, `pre`, `editor`, or `into(states, path)`. `pytest_tests/ui/test_leaves.py` renders every kind through both.
 
 - The root exposes `simulation` and `code documentation` on simulated machines. Browse simulated bodies, servos, faults, and timing through the tree.
+- `simulation > top view` draws the room from above, to scale from TJ's model (`virtual_drivers/room.py` places it, `top_view.py` draws it), each moving part SMIL-tweened to where its servo will be at the next redraw. The model names no female: `room.place` orders them by best fit to `interaction_origins`, with the bar's positive turn drawn clockwise (a convention). Under the picture, every calibrated meeting is held against the model. Females sit 120° apart and the males 180°, so meetings come every 60° and the males alternate; the default table has male1 meeting all three females first, and its two female2 entries disagree with the model (males swapped).
 - Markdown documents (`colloquy/markdown_document.py`): `MarkdownDocument` = view/`edit`/`save`; `GeneratedDocument` has no `edit` and renders from its generator on every view.
 - **Charts: `ui/graph_view.py` only** - no JavaScript, server keeps the data and the view. Page size (samples in the window) vs points (drawn); y range from the whole run; `marks=` as `(seconds, label)` with a `marks` child node; `Columns` is a lazy view, so nothing is copied and only the page is read. Emit as `leaves.image`, never `leaves.svg` (that one gets browser-side zoom). `pytest_tests/ui/test_graph_view.py`.
 
@@ -139,7 +140,7 @@ Light tests (`colloquy/tests/`):
 - `test_light_sensor_values/*` log raw values and pulse durations, not pattern decoding. `test_for_false_positives` (all lights off, reading vs angle); `test_seeing_male1_as_the_bar_turns` (reading vs alignment offset, plus a 2-D map); `test_with_everything_moving` (rings steady ON). Results via the shared `results` node.
 - `test_read_pattern` stages a pair face to face (failure mode: wrong decode); `test_search` stages nothing (only it can produce a **miss**: two send cycles, `events.MISS_AFTER` = 8.7s). Drives are the tester's to set. One CSV row per episode, not per sample. **No commas in CSV event sentences.**
 - `test_reinforcement` stages the find and runs only the exchange; it also logs the real analysers beside the emulated ears.
-- **The simulator cannot settle geometry or produce a miss** - it models exactly the rule being tested. Only hardware answers those.
+- **The simulator cannot settle geometry or produce a miss** - its sensors model exactly the rule being tested (the calibration table), not the room. Only hardware answers those; the top view shows where the table and TJ's model part ways.
 
 ## The sound channel
 
