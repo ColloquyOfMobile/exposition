@@ -332,3 +332,44 @@ def test_its_group_page_renders_with_it_in():
     states = group._snapshot_if_opened(("tests", "manual tests"))
 
     assert "running now" not in states
+
+
+def test_the_board_plot_is_the_backplane_as_it_is_now():
+    """`export_backplane_front.py` writes the plot and its points with the
+    `.kicad_pcb`'s digest; a board changed since is a stale plot. Re-run
+    the generator (it needs KiCad)."""
+    import json
+
+    from colloquy.hardware.pcb_files.gerbers import REPO_FOLDER, digest
+    from colloquy.tests.installation_sol2 import pictures
+
+    record = json.loads((pictures.HARDWARE / "backplane-front.json").read_text(encoding="utf-8"))
+    assert (pictures.HARDWARE / "backplane-front.svg").is_file()
+    assert record["source sha256"] == digest(REPO_FOLDER / record["source"]), (
+        "backplane.kicad_pcb changed: run `py export_backplane_front.py`"
+    )
+
+
+def test_every_board_view_names_parts_that_are_on_the_board():
+    from colloquy.tests.installation_sol2 import pictures
+
+    parts = pictures._plot()["parts"]
+    for key, make in pictures.BOARD_VIEWS.items():
+        assert key in steps.KEYS, key
+        drawn = make()
+        assert pictures.PLOT_URL in drawn, key
+    for refs, _ in (
+        pictures.POWER_ROW_MARKS + pictures.POWER_LEDS + pictures.TONE_LEDS + pictures.NOT_HERE
+    ):
+        assert refs in parts, refs
+
+
+def test_the_power_row_is_where_the_silkscreen_says():
+    """The 2026-11-24 mix-up: MEGA 5V's test pin is TPUSB in the power row,
+    and TP32 is a bare pad beside JP1, the AGND-GND bond."""
+    from colloquy.tests.installation_sol2 import pictures
+
+    parts = pictures._plot()["parts"]
+    assert parts["TPUSB"]["pin"] and parts["TP34"]["pin"]
+    assert not parts["TP32"]["pin"]
+    assert "**`5V`, `12V`, `USB`, `GND`**" in steps.POWER_ROW

@@ -12,7 +12,7 @@ Guidance for Claude Code in this repository. This is the compact version; the lo
 - `py mock_ui.py` - the UI mock on port 8088 (localhost only), against `colloquy/ui/mock.py`; no hardware.
 - `py -m pytest "Source code/Python/pytest_tests"` - unit suite, ~2s. **Run it after changing anything under `colloquy/`.**
 - `py -m mypy` - scoped type check (see below).
-- Generators, rerun after changing their source: `export_gerbers.py` (needs KiCad), `next_pcb.py`, `export_mega_pinout.py`, `export_shields_diagram.py`, `extract_hardware_photos.py` (needs `pymupdf`). Most outputs are held to their source by a pytest test that fails when they go stale.
+- Generators, rerun after changing their source: `export_gerbers.py` (needs KiCad), `next_pcb.py`, `export_mega_pinout.py`, `export_shields_diagram.py`, `export_backplane_front.py` (needs KiCad: the backplane's front plot and its parts' positions, which the sol2 guide rings), `extract_hardware_photos.py` (needs `pymupdf`). Most outputs are held to their source by a pytest test that fails when they go stale.
 - `test_process.py` is a dev file-watcher that restarts `main.py` on save - not pytest. `process_csv.py` is a dev helper with hardcoded paths.
 - No build step. `requirements.txt` is incomplete (`pyserial`, `watchdog`, ... are imported but unpinned); check imports.
 

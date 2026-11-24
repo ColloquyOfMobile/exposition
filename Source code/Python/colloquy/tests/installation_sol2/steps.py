@@ -40,6 +40,19 @@ CONFIGURATION = page("hardware/main pcb/configuration", "hardware > main pcb > c
 MOTORS = page("hardware/motors", "hardware > motors")
 SHIELDS = page("hardware/electronics/shields", "shields")
 
+# The power row, as its silkscreen names it. `shields` 6b calls the third
+# pin `MEGA 5V`; the board prints `USB`, and prints "MEGA 5V (COMPUTING
+# USB)" in the middle of the board beside TP32, a bare pad next to JP1
+# (2026-11-24: probed there, it read as a short to GND).
+POWER_ROW = (
+    "The power test pins are the row top right, under the three green "
+    "LEDs, printed **`5V`, `12V`, `USB`, `GND`**: `USB` is MEGA 5V, the "
+    "computing shield's own 5 V. **Not** the `MEGA 5V (COMPUTING USB)` "
+    "label in the middle of the board: that names `TP32`, a bare pad, and "
+    "4 mm from it is `JP1`, the AGND-GND bond, which is GND - a probe on it "
+    "reads a short."
+)
+
 NEVER_12V_ON_J2 = (
     "**Never 12 V into `J2`.** The backplane's `+5V` feeds every NeoPixel, "
     "every body's amplifier and every microphone. The amplifier module is "
@@ -92,7 +105,7 @@ STEPS = (
         "time, in order**: that proves the five tone pins, the adapter's "
         "translators and the backplane's LEDs before anything is moved.\n\n"
         "On the backplane: green `MEGA 5V` lit (the Teensy's USB through the "
-        "adapter's Schottky), `+5V` and `+12V` dark (no rack supply).",
+        "adapter's Schottky), `BOARD 5V` and `12V` dark (no rack supply).",
     ),
     # --- the bare backplane ------------------------------------------
     Step(
@@ -106,13 +119,19 @@ STEPS = (
         "meter the bare backplane unpowered",
         "the bare backplane",
         "Meter on resistance / continuity, every supply off, nothing plugged "
-        "in. On the power test pins (`+5V`, `+12V`, `MEGA 5V`, `GND`):\n\n"
-        "- `+5V` to `GND`, `+12V` to `GND`, `MEGA 5V` to `GND`: **no short**. "
+        f"in. {POWER_ROW}\n\n"
+        "- `5V` to `GND`, `12V` to `GND`, `USB` to `GND`: **no short**. "
         "A reading that climbs as the 470 uF charges is normal; one that beeps "
         "and stays near 0 ohm is a short - stop here.\n"
-        "- `+12V` to `+5V` and `+5V` to `MEGA 5V`: **no connection at all**. "
+        "- `12V` to `5V` and `5V` to `USB`: **no connection at all**. "
         "The two 5 V rails are kept apart by design (the rack's and the "
         "computing shield's own).\n"
+        "- If `USB` to `GND` beeps here too, the short is real. On the copper "
+        "`MEGA_5V` reaches GND only through `RLPUSB` (2.2 K) and its LED, "
+        "which cannot beep, so look for a solder bridge where a `MEGA_5V` "
+        "joint sits one pitch from a GND one: `USB` and `GND` themselves "
+        "(2.54 mm apart), and `JA1` pin 19 between its pins 20 and 21 (the "
+        "empty analyser slot, lower left).\n"
         "- Every LED, diode and electrolytic against the `+` / `-` beside its "
         "pads (`mark_polarity.py` put them there).\n"
         "- The slot keys: the removed pin on each voice slot and on `JA1`, and "
@@ -127,13 +146,14 @@ STEPS = (
         "is **centre-positive**; the reading should be the rail's 4.75-5.25 V "
         "(the range `shields` section 2e works its corners at). Then plug it "
         "into `J2`, nothing else connected:\n\n"
-        "- LEDs: `+5V` lit, `+12V` dark (12 V comes in only through `J7`), "
-        "`MEGA 5V` dark, every `TONE` dark.\n"
-        "- `+5V` test pin: 4.75-5.25 V. `+12V`: 0 V. `MEGA 5V`: 0 V - if it "
-        "reads 5 V the two rails are bridged: unplug and stop.\n"
-        "- `LINE 1`-`LINE 5` and `MIC DIRECT 1`-`MIC DIRECT 5`: 0 V, held by "
-        "their pull-downs (`shields` section 10, step 1).\n\n"
-        "Write the `+5V` reading in the note, then unplug the supply.",
+        "- LEDs: `BOARD 5V` lit, `12V` dark (12 V comes in only through "
+        "`J7`), `MEGA 5V` dark, every `TONE` dark.\n"
+        "- Test pins, against `GND`: `5V` 4.75-5.25 V. `12V`: 0 V. `USB`: "
+        "0 V - if it reads 5 V the two rails are bridged: unplug and stop.\n"
+        "- `L1`-`L5` (line, beside each `TONE` LED) and `M1`-`M5` (mic direct, "
+        "bottom row): 0 V, held by their pull-downs (`shields` section 10, "
+        "step 1).\n\n"
+        "Write the `5V` reading in the note, then unplug the supply.",
     ),
     Step(
         "servo supply through J7",
@@ -143,9 +163,9 @@ STEPS = (
         "Before plugging its lead in, meter the lead with its supply on: 12 V "
         "between pins 2 and 1, and **nothing on pin 3**. Supply off, plug it "
         "in, supply on:\n\n"
-        "- `+12V` LED lit, `+12V` test pin about 12 V (write it in the note).\n"
-        "- `+5V` LED dark and `+5V` test pin at 0 V: 12 V has not found the 5 V "
-        "rail.\n\n"
+        "- `12V` LED lit, `12V` test pin about 12 V (write it in the note).\n"
+        "- `BOARD 5V` LED dark and `5V` test pin at 0 V: 12 V has not found the "
+        "5 V rail.\n\n"
         "Servo supply off again.",
     ),
     # --- mounting ------------------------------------------------------
@@ -173,8 +193,8 @@ STEPS = (
     Step(
         "power up the mounted rack",
         "mounting",
-        "Rack supply and Teensy USB on together. `+5V` and `MEGA 5V` lit, "
-        "`+12V` lit when the servo supply is on, every `TONE` dark. Then "
+        "Rack supply and Teensy USB on together. `BOARD 5V` and `MEGA 5V` "
+        "lit, `12V` lit when the servo supply is on, every `TONE` dark. Then "
         f"{TEST_TEENSY} `start` again: every check ok and TONE 1-5 in order. "
         "A difference from before mounting is a header pushed out of line or "
         "a lead pinched by the enclosure.",
@@ -189,7 +209,7 @@ STEPS = (
             "body board is the female base v2: the GF1002 amplifier sits in "
             "its socket on 5 V only, the servo on 12 V.\n\n"
             "Power up and, for the first minute:\n\n"
-            "- `+5V` test pin still 4.75-5.25 V (write it in the note: each body "
+            "- `5V` test pin still 4.75-5.25 V (write it in the note: each body "
             "adds load).\n"
             "- Nothing warm: touch the amplifier module and the servo after a "
             "minute. A smell or a hot part: everything off.\n"
@@ -210,7 +230,7 @@ STEPS = (
             f"{POWER_OFF}\n\n"
             f"Mount {body} (male static v2 board), then plug in its harness. "
             f"{body}'s conductors arrive on {connectors}. Then, as for the "
-            "females: `+5V` in range (note it), nothing warm after a minute, "
+            "females: `5V` in range (note it), nothing warm after a minute, "
             "its rings dark, its servo answering, its angle checked against "
             "the room before any move.",
         )
@@ -239,12 +259,12 @@ STEPS = (
         "unplugged**, meter it:\n\n"
         "- each conductor end to end: it beeps;\n"
         "- each against the other two, at one end: **silence**. Above all "
-        "`+5V` against `OUT`: 5 V on `OUT` reaches `MIC DIRECT 1` and, "
+        "`+5V` against `OUT`: 5 V on `OUT` reaches `M1` (mic direct 1) and, "
         "through its 4.7 K, Teensy pin 14 (`shields` section 4a; the 4.7 K "
         "limits the current, it does not make the pin 5 V tolerant). `+5V` "
         "against `GND` would short the rack's 5 V rail.\n\n"
         "Write what was broken and how it was repaired in the note. Its "
-        "powered check is the next step's `MIC DIRECT 1` reading.",
+        "powered check is the next step's `M1` reading.",
     ),
     Step(
         "mount the microphones",
@@ -255,8 +275,8 @@ STEPS = (
         "(1:500)**, and only ever moved with the power off "
         "(`microphone-flex/README.md`). Holder `J1` is GND / +5V / OUT, pin 1 "
         "to pin 1 with the harness.\n\n"
-        "Power up. On the backplane, `MIC DIRECT 1`-`MIC DIRECT 5` (one per "
-        "body, in body order): **about 1.23 V at rest**, 0 V when that "
+        "Power up. On the backplane's bottom row, `M1`-`M5` (mic direct, one "
+        "per body, in body order; `AGND` at the end of the row): **about 1.23 V at rest**, 0 V when that "
         "microphone is unplugged (`shields` section 6b). Write the five "
         "readings in the note. A pin at 5 V is a microphone wired to the "
         "supply: everything off.",
@@ -276,7 +296,7 @@ STEPS = (
         f"{POWER_OFF}\n\n"
         "Card N in `JVN` (slot N is body N, in body order). The key stops a "
         f"card going in reversed. Update {CONFIGURATION}. Power up: every "
-        "`TONE` still dark and every `LINE` pin at 0 V - nothing sings until "
+        "`TONE` still dark and every `L1`-`L5` pin at 0 V - nothing sings until "
         "a tone is sent.",
     ),
     # --- what has to wait -----------------------------------------------
