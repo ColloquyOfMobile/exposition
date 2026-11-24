@@ -46,6 +46,41 @@ def blink_fast_seconds():
     return int(_define("BLINK_FAST_MS")) / 1000
 
 
+def _seconds(name):
+    return int(_define(name)) / 1000
+
+
+def tone_step_seconds():
+    """How long `l` lights each TONE LED alone."""
+    return _seconds("TONE_STEP_MS")
+
+
+def tone_all_seconds():
+    """How long `l` then lights all five together."""
+    return _seconds("TONE_ALL_MS")
+
+
+def tone_hold_seconds():
+    """How long `l <n>` keeps one TONE LED lit."""
+    return _seconds("TONE_HOLD_MS")
+
+
+@lru_cache(maxsize=None)
+def tone_pins():
+    """The Teensy pin of each voice slot, slot 1 first, as the sketch
+    drives them (`TONE_PINS[] = {...}`)."""
+    text = SKETCH_PATH.read_text(encoding="utf-8")
+    match = re.search(r"TONE_PINS\[\]\s*=\s*\{([^}]*)\}", text)
+    if match is None:
+        raise RuntimeError(f"No TONE_PINS[] in {SKETCH_PATH}")
+    return tuple(int(pin) for pin in match.group(1).split(","))
+
+
+def chase_seconds():
+    """How long a whole `l` lasts: each slot alone, then all together."""
+    return tone_step_seconds() * len(tone_pins()) + tone_all_seconds()
+
+
 def describe():
     """One line for the page: what would be on the board if flashed now."""
     return f"teensy_check firmware {firmware_version()} for a Teensy 4.1"

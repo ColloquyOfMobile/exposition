@@ -18,9 +18,23 @@ from colloquy.tests.test_teensy import TestTeensy as TeensyTest
 
 def test_the_sketch_is_read_out_of_the_ino():
     assert sketch.SKETCH_PATH.is_file()
-    assert sketch.firmware_version() == 1
+    assert sketch.firmware_version() == 2
     assert sketch.board_name() == "teensy41"
     assert sketch.blink_fast_seconds() == 5
+    assert sketch.chase_seconds() == 7
+
+
+def test_the_tone_pins_are_the_adapters_copper():
+    """Slot n's pin in the sketch is the pin the adapter routes, through its
+    translator, to body n's tone net - and so to the backplane's TONE n LED."""
+    from colloquy.hardware.electronics import shields_pinout
+
+    _, outputs = shields_pinout.connections()
+    copper = {row["signal"]: int(row["teensy"]) for row in outputs if row["kind"] == "tone"}
+
+    assert sketch.tone_pins() == tuple(
+        copper[body + "/tone"] for body in shields_pinout.BODIES
+    )
 
 
 def test_a_status_line_is_parsed():
@@ -87,7 +101,7 @@ def test_an_unusual_clock_speed_is_noted_not_failed():
 class FakeTeensyPort:
     """Answers the way teensy_check does, a line per line."""
 
-    def __init__(self, firmware=1, corrupt_echo=False):
+    def __init__(self, firmware=2, corrupt_echo=False):
         self.firmware = firmware
         self.corrupt_echo = corrupt_echo
         self.replies = []
@@ -105,6 +119,8 @@ class FakeTeensyPort:
             self.replies.append(command + ("x" if self.corrupt_echo else ""))
         elif command == "b":
             self.replies.append("blink fast")
+        elif command == "l":
+            self.replies.append("tone leds")
 
     def readline(self):
         return (self.replies.pop(0) + "\r\n").encode() if self.replies else b""
@@ -119,6 +135,7 @@ def runner():
         _checks=[],
         _outcome=None,
         _blinked_at=None,
+        _tones_at=None,
     )
     fake._read_status = lambda handler: TeensyTest._read_status(fake, handler)
     return fake
@@ -138,8 +155,9 @@ def test_a_good_teensy_passes_and_is_left_blinking():
         "clock keeps time",
     ]
     assert all(check.passed for check in fake._checks), fake._checks
-    assert port.sent[-1] == "b"
+    assert port.sent[-2:] == ["b", "l"]
     assert fake._blinked_at is not None
+    assert fake._tones_at is not None
 
 
 def test_a_board_that_does_not_answer_stops_after_the_first_check():
@@ -151,6 +169,7 @@ def test_a_board_that_does_not_answer_stops_after_the_first_check():
     assert len(fake._checks) == 1
     assert fake._outcome.startswith("FAILED")
     assert "b" not in port.sent
+    assert "l" not in port.sent
 
 
 def test_a_corrupted_echo_is_caught():
@@ -222,8 +241,34 @@ def test_the_page_renders_with_nothing_plugged_in(monkeypatch):
 
     assert "no port chosen" in states["can talk"]["value"]
     assert states["led"]["value"] == "not checked yet"
+    assert states["tone leds"]["value"] == "not checked yet"
+    assert "MEGA 5V lit" in states["backplane power leds"]["value"]
     assert "the LED blinked" not in node.snapshot_children
+    assert "hold TONE 1" not in node.snapshot_children
     assert node.ask_the_board().startswith("refused")
+    assert node.light_the_tone_leds().startswith("refused")
+
+
+def test_after_the_chase_the_person_answers_and_can_hold_a_slot(monkeypatch):
+    node, _ = built_node(monkeypatch)
+    sent = []
+
+    def send(command, expected):
+        sent.append(command)
+        return None
+
+    node._send = send
+
+    assert "TONE 1 to TONE 5" in node.light_the_tone_leds()
+    children = node.snapshot_children
+    for key in ("the tone LEDs lit 1 to 5", "a tone LED stayed dark", "hold TONE 5"):
+        assert key in children
+
+    assert "U1 drives TONE 1-4" in node["a tone LED stayed dark"]()
+    assert "Teensy pin 28" in node["hold TONE 5"]()
+    assert sent == ["l", "l 5"]
+    states = node._snapshot_if_opened(())
+    assert "TONE 5 alone" in states["held"]["value"]
 
 
 def test_the_picker_offers_no_stand_in(monkeypatch):

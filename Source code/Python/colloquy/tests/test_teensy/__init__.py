@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Source code/Python/colloquy/tests/test_teensy/__init__.py
 
-"""Is the Teensy alive? Flash it, ask it, and look at its LED.
+"""Is the Teensy alive? Flash it, ask it, and look at its LEDs.
 
 The first test of the shields design's step 2: a Teensy 4.1 on the
 adapter plate, the plate on the backplane, and nothing else mounted or
@@ -20,9 +20,20 @@ wired. Its only lead is USB, so that is all this talks over.
 3. `start` - one pass of checks, a second or so: the status line, the
    version, the clock speed, the die temperature, a hundred echoes over
    USB, and whether the board's clock keeps time with this computer's.
-   Then it makes the LED flicker for five seconds, and **that is the half
-   a person does**: look, and press `the LED blinked` or `the LED did not
-   blink`. See `checks.py` for what each check can and cannot settle.
+   Then it makes the LED flicker for five seconds and walks the
+   backplane's yellow `TONE 1`-`TONE 5` LEDs, and **that is the half a
+   person does**: look, and say what lit. See `checks.py` for what each
+   check can and cannot settle.
+
+**The backplane's LEDs.** With only the Teensy's USB in, the green
+`MEGA 5V` LED is lit (the Teensy's 5 V through the adapter's Schottky)
+and `+5V` / `+12V` are dark (no rack supply). The five tone pins (2, 4,
+5, 6, 28) reach the yellow `TONE` LEDs through the adapter's translators,
+which the Teensy's own USB powers, so `light the tone LEDs` works with
+nothing else plugged in: each slot alone for a second, in order, then all
+five. A slot that stays dark can be held lit (`hold TONE n`) and its
+`TONE n` test pin metered: about 5 V there with the LED dark is the LED
+or its 1.5 K; 0 V is the adapter's side.
 
 **A Teensy does not reboot when its port opens** (no DTR reset, unlike a
 Mega), so nothing greets: the sketch is asked with `?` instead. And a
@@ -56,6 +67,19 @@ REPLY_TIMEOUT = 1.0
 REENUMERATE_TIMEOUT = 15.0
 
 SHOW_STEPS_AGAIN = "show the first-run steps again"
+
+# What the backplane's three green LEDs say with only the Teensy's USB in.
+# Nothing to press: no pin drives them.
+POWER_LEDS = (
+    "MEGA 5V lit: the Teensy's USB 5 V reaches the backplane through the "
+    "adapter's Schottky. +5V and +12V dark: no rack supply, as expected "
+    "with nothing else plugged in"
+)
+
+
+def hold_link(slot):
+    """The page link that keeps one TONE LED lit."""
+    return f"hold TONE {slot}"
 
 
 class TeensyComPort(BenchComPort):
@@ -137,7 +161,12 @@ class TestTeensy(BaseThread):
             "blink the led": self.blink_the_led,
             "the LED blinked": self._led_was(True),
             "the LED did not blink": self._led_was(False),
+            "light the tone LEDs": self.light_the_tone_leds,
+            "the tone LEDs lit 1 to 5": self._tones_were(True),
+            "a tone LED stayed dark": self._tones_were(False),
         }
+        for slot in range(1, len(sketch.tone_pins()) + 1):
+            self._commands[hold_link(slot)] = self._hold(slot)
         for key, command in self._commands.items():
             self[key] = command
         # Before the first run: one `done` link per step, and one to bring
@@ -156,6 +185,9 @@ class TestTeensy(BaseThread):
         self._ran_at = None
         self._blinked_at = None    # when `b` was last sent
         self._led_seen = None      # what the person said about it
+        self._tones_at = None      # when `l` was last sent
+        self._tones_seen = None    # what the person said about them
+        self._held = None          # the slot last held lit, and when
 
     @property
     def name(self):
@@ -299,6 +331,58 @@ class TestTeensy(BaseThread):
         self._led_seen = None
         return self._led_instruction()
 
+    def _send(self, command, expected):
+        """One command to the board; None if it took, else the page's line."""
+        refusal = self._refusal()
+        if refusal is not None:
+            return f"refused: {refusal}"
+        try:
+            handler = self._open()
+            try:
+                said = self._ask(handler, command)
+            finally:
+                handler.close()
+        except serial.SerialException as error:
+            return f"could not open the lead - {error}"
+        if said != expected:
+            return (
+                f"the board did not take the command - it said {said!r}. "
+                "If that lists no 'l', it runs an older teensy_check: press "
+                "'flash firmware'"
+            )
+        return None
+
+    def light_the_tone_leds(self, request=None):
+        failed = self._send("l", "tone leds")
+        if failed is not None:
+            return failed
+        self._tones_at = time()
+        self._tones_seen = None
+        self._held = None
+        return self._tones_instruction()
+
+    def _tones_were(self, seen):
+        def record(request=None):
+            if self._tones_at is None:
+                return (
+                    "the tone LEDs have not been lit yet - press 'light the "
+                    "tone LEDs' or 'start'"
+                )
+            self._tones_seen = seen
+            return self._tones_reading()
+
+        return record
+
+    def _hold(self, slot):
+        def hold(request=None):
+            failed = self._send(f"l {slot}", f"tone led {slot}")
+            if failed is not None:
+                return failed
+            self._held = (slot, time())
+            return self._held_reading()
+
+        return hold
+
     def _led_was(self, seen):
         def record(request=None):
             if self._blinked_at is None:
@@ -314,6 +398,47 @@ class TestTeensy(BaseThread):
             f"fast for {sketch.blink_fast_seconds():.0f} seconds, then go "
             "back to a slow blink. Then press 'the LED blinked' or 'the LED "
             "did not blink'"
+        )
+
+    def _tones_instruction(self):
+        return (
+            f"look at the backplane's yellow TONE LEDs now: TONE 1 to TONE 5 "
+            f"light one at a time, {sketch.tone_step_seconds():.0f} s each, "
+            f"then all five for {sketch.tone_all_seconds():.0f} s, then go "
+            "dark. Then press 'the tone LEDs lit 1 to 5' or 'a tone LED "
+            "stayed dark'"
+        )
+
+    def _tones_reading(self):
+        if self._tones_at is None:
+            return "not checked yet"
+        if self._tones_seen is None:
+            return self._tones_instruction()
+        if self._tones_seen:
+            return (
+                "seen, in order - the five tone pins, the adapter's "
+                "translators and the backplane's TONE LEDs work"
+            )
+        return (
+            "a slot stayed dark. With MEGA 5V lit: that slot's translator "
+            "channel on the adapter (U1 drives TONE 1-4, U2 TONE 5), its "
+            "solder joints, its 1.5 K or the LED. All five dark: the "
+            "translators' supply or the adapter's seating. Out of order: "
+            "a swapped line. Press 'hold TONE n' for a dark one and meter "
+            "its TONE n test pin to GND"
+        )
+
+    def _held_reading(self):
+        slot, at = self._held
+        left = sketch.tone_hold_seconds() - (time() - at)
+        if left <= 0:
+            return f"TONE {slot} was held; it is dark again"
+        return (
+            f"TONE {slot} alone, lit for {left:.0f} s more. Meter the "
+            f"'TONE {slot}' test pin to GND: about 5 V with the LED dark is "
+            "the LED or its 1.5 K; 0 V is the adapter's side (Teensy pin "
+            f"{sketch.tone_pins()[slot - 1]}, its translator, the slot's "
+            "header)"
         )
 
     def _led_reading(self):
@@ -338,6 +463,9 @@ class TestTeensy(BaseThread):
         self._ran_at = datetime.now()
         self._led_seen = None
         self._blinked_at = None
+        self._tones_seen = None
+        self._tones_at = None
+        self._held = None
 
         refusal = self._why_not_open()
         if refusal is not None:
@@ -395,6 +523,8 @@ class TestTeensy(BaseThread):
 
         if self._ask(handler, "b") == "blink fast":
             self._blinked_at = time()
+        if self._ask(handler, "l") == "tone leds":
+            self._tones_at = time()
 
         self._checks = found
         self._outcome = checks.overall(found)
@@ -419,6 +549,12 @@ class TestTeensy(BaseThread):
         if self._blinked_at is not None:
             children["the LED blinked"] = self._commands["the LED blinked"]
             children["the LED did not blink"] = self._commands["the LED did not blink"]
+        children["light the tone LEDs"] = self.light_the_tone_leds
+        if self._tones_at is not None:
+            for key in ("the tone LEDs lit 1 to 5", "a tone LED stayed dark"):
+                children[key] = self._commands[key]
+            for slot in range(1, len(sketch.tone_pins()) + 1):
+                children[hold_link(slot)] = self._commands[hold_link(slot)]
         # A step not yet done offers its `done`; one just pressed is still
         # drawn (so the press visibly took) but has nothing left to press.
         steps = first_run.visible(self._first_run_done, time())
@@ -459,6 +595,10 @@ class TestTeensy(BaseThread):
             mark = "ok" if check.passed else "FAILED"
             leaf(f"check: {check.name}", f"{mark} - {check.said}")
         leaf("led", self._led_reading())
+        leaf("backplane power leds", POWER_LEDS)
+        leaf("tone leds", self._tones_reading())
+        if self._held is not None:
+            leaf("held", self._held_reading())
         if self._outcome is not None:
             leaf("outcome", self._outcome)
         return states

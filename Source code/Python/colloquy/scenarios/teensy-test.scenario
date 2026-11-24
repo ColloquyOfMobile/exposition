@@ -1,15 +1,21 @@
 # Teensy test
-# A manual test, and the instrument is your eye. Nothing on the installation moves,
-# lights or sounds: a Teensy 4.1 on its adapter plate on the backplane, a USB lead, and
+# A manual test, and the instrument is your eye. Nothing on the installation moves
+# or sounds, and only the rack's own LEDs light: a Teensy 4.1 on its adapter plate on the backplane, a USB lead, and
 # nothing else mounted.
 # Sketch: Source code/Arduino/teensy_check/. Pick the Teensy under 'com port' and press
 # 'flash firmware' first; the run itself is one pass of about a second.
 
-0 Nothing on the piece moves, lights or sounds. No servo is commanded, no NeoPixel changes, no body sings.
+0 Nothing on the piece moves or sounds. No servo is commanded, no NeoPixel changes, no body sings. On the backplane the green MEGA 5V LED is lit by the Teensy's USB alone; +5V and +12V stay dark.
 0 The chosen lead is opened. A Teensy does not reboot when its port opens, so nothing greets: the board is asked for its status line instead, and the page shows it verbatim. If nothing answers, the run stops there and says to flash it.
 0 The status line is judged: the sketch's name and version, the board, the processor clock (600 MHz by default) and the die temperature from the processor's own sensor.
 0 A hundred lines are sent and echoed back over USB, each one random. Every one has to come back exactly, and the mean and worst round trip are shown.
 0 The status is asked again, and the board's uptime between the two answers is compared with this computer's clock. They have to agree to within a few hundredths.
 0 The Teensy's orange LED, which has been blinking slowly all along, flickers fast for five seconds.
-0 **Look at it.** That is the half no reading can do. Press 'the LED blinked' or 'the LED did not blink', and the page keeps what you said beside the checks.
-5 The LED goes back to its slow blink. The run is over; the port is closed and the Teensy keeps running the sketch.
+0 At the same moment the backplane's yellow TONE 1 lights alone, driven through the adapter's translator.
+0 **Look at both.** That is the half no reading can do. Press 'the LED blinked' or 'the LED did not blink', and the page keeps what you said beside the checks.
+1 TONE 2 alone.
+2 TONE 3 alone.
+3 TONE 4 alone.
+4 TONE 5 alone.
+5 All five TONE LEDs together. The Teensy's LED goes back to its slow blink.
+7 The TONE LEDs go dark. Press 'the tone LEDs lit 1 to 5' or 'a tone LED stayed dark'; a dark one can be held lit for thirty seconds with 'hold TONE n' and its test pin metered. The run is over; the port is closed and the Teensy keeps running the sketch.
