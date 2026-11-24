@@ -46,6 +46,19 @@ class LogBranch(Base):
         return states
 
 
+class ThreadConsole(Base):
+    """The live feed of what every thread is writing, opened like any node.
+    It has no children: the renderer draws the feed (ui/console.thread_monitor)
+    where this node is, and the page's script polls /thread-log for it.
+    """
+
+    name = "thread console"
+
+    @property
+    def snapshot_children(self):
+        return {}
+
+
 class Logs(LogBranch):
     """Browse the per-thread log files under local/logs/ from the web UI.
     The file list is rescanned on every request, so threads that start
@@ -54,10 +67,16 @@ class Logs(LogBranch):
 
     def __init__(self, owner):
         super().__init__(owner, Logger.folder())
+        self._console = ThreadConsole(owner=self)
 
     @property
     def name(self):
         return "logs"
+
+    @property
+    def snapshot_children(self):
+        # First, so the live feed sits above the files it reads.
+        return {ThreadConsole.name: self._console, **super().snapshot_children}
 
     def _snapshot_if_opened(self, path):
         return Base._snapshot_if_opened(self, path)

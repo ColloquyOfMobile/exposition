@@ -72,7 +72,7 @@ class ConsoleTree:
                     with tag("output"):
                         text(str(reading["value"]))
             node_parts = tuple(obj["path"])
-            if node_parts == ("logs",):
+            if node_parts == ("logs", "thread console"):
                 doc.asis(thread_monitor())
             elif node_parts[:1] == ("logs",) and Path(*node_parts) == self._base_path and "content" in obj:
                 doc.asis(thread_monitor("/".join(node_parts[1:])))

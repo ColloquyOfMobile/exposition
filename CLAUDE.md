@@ -66,7 +66,8 @@ Dispatch is the same everywhere: split the path, look up the first part in `self
 ### Operator console and hardware-free preview
 
 - The installation and mock share the console in `ui/console.py`, `ui/console_tree.py`, and `ui/static/console/`. Each server retains its own lifecycle routes. Only the installation offers EMERGENCY STOP.
-- The thread log polls `/thread-log` independently of tree commands and editors. It merges elapsed timestamps from up to 12 recently written files, or follows one selected thread. The monitor shows up to 100 lines. Full files and nested workers are accessible under `logs`.
+- The page title sits centred in the masthead; panels carry no headings of their own.
+- The live thread log is a node, `logs > thread console` (`logs.ThreadConsole`), drawn by `console.thread_monitor`; a focused log file gets one too. It polls `/thread-log` independently of tree commands and editors. It merges elapsed timestamps from up to 12 recently written files, or follows one selected thread. The monitor shows up to 100 lines. Full files and nested workers are accessible under `logs`.
 
 Both servers use the snapshot vocabulary in `ui/leaves.py`. Build leaves with `value`, `html`, `svg`, `image`, `pre`, `editor`, or `into(states, path)`. `pytest_tests/ui/test_leaves.py` renders every kind through both.
 

@@ -9,17 +9,28 @@ from colloquy.server2.wsgi2 import WSGI2
 from colloquy.ui.mock import MockApp, OfflineServer, request
 
 
-def test_home_opens_the_console_as_a_tree_branch():
+def test_the_title_sits_in_the_masthead_without_panel_headings():
+    _, home = request("/home", app=MockApp())
+    masthead = home.split('<header class="masthead">', 1)[1].split("</header>", 1)[0]
+    assert '<h1 class="page-title">Home</h1>' in masthead
+    assert home.count("<h1") == 1
+    assert "Object tree" not in home
+
+
+def test_the_thread_console_is_a_node_under_logs():
     app = MockApp()
     _, home = request("/home", app=app)
-    assert "<h1>Home</h1>" in home
     assert 'href="/home/logs"' in home
     assert 'id="monitor"' not in home
-    for route in ("/home/logs", "/home/call/logs/open"):
+    _, logs = request("/home/logs", app=app)
+    assert 'href="/home/logs/thread%20console"' in logs or 'href="/home/logs/thread console"' in logs
+    assert 'id="monitor"' not in logs
+    for route in ("/home/logs/thread console", "/home/logs/call/thread console/open"):
         status, page = request(route, app=app)
         assert status == "200 OK"
         assert page.count('id="monitor"') == 1
-    _, closed = request("/home/call/logs/close", app=app)
+        assert "Thread log" not in page
+    _, closed = request("/home/logs/call/thread console/close", app=app)
     assert 'id="monitor"' not in closed
 
 

@@ -26,6 +26,8 @@ def page(request, state, *, installation):
                     with tag("span", klass="mobile-mark", **{"aria-hidden": "true"}):
                         doc.asis("<i></i><i></i><i></i>")
                     text("Colloquy of Mobiles")
+                with tag("h1", klass="page-title"):
+                    text(title)
                 with tag("nav", klass="server-actions", **{"aria-label": "Server controls"}):
                     with tag("details", klass="server-menu"):
                         with tag("summary"):
@@ -41,24 +43,19 @@ def page(request, state, *, installation):
                 from colloquy.server2 import updates
                 doc.asis(updates.banner_html(request.colloquy.repository, back=canonical))
             with tag("main"):
-                with tag("nav", klass="crumbs", **{"aria-label": "Breadcrumb"}):
-                    with tag("a", href="/home"):
-                        text("Home")
-                    for level, name in enumerate(path, 1):
-                        with tag("a", href="/" + "/".join((request._root.name, *path[:level]))):
-                            text(name)
-                with tag("div", klass="page-heading"):
-                    with tag("h1"):
-                        text(title)
+                with tag("div", klass="page-bar"):
+                    with tag("nav", klass="crumbs", **{"aria-label": "Breadcrumb"}):
+                        with tag("a", href="/home"):
+                            text("Home")
+                        for level, name in enumerate(path, 1):
+                            with tag("a", href="/" + "/".join((request._root.name, *path[:level]))):
+                                text(name)
                     with tag("span", klass="mode"):
                         text(("Simulated installation" if request.colloquy.is_simulated else "Installation")
                              if installation else "Mock preview")
-                with tag("section", id="explorer", klass="explorer", **{"aria-label": "Object tree"}):
-                    with tag("div", klass="panel-heading"):
-                        with tag("h2"):
-                            text("Object tree")
-                        with tag("a", klass="reload", href=canonical, title="Refresh tree values"):
-                            text("Refresh values")
+                    with tag("a", klass="reload", href=canonical, title="Refresh tree values"):
+                        text("Refresh values")
+                with tag("section", id="explorer", klass="explorer", **{"aria-label": title}):
                     with tag("div", id="command-result", role="status"):
                         pass
                     with tag("div", name="commands", klass="controls"):
@@ -74,15 +71,12 @@ def page(request, state, *, installation):
 def thread_monitor(log_source=""):
     doc, tag, text = Doc().tagtext()
     with tag("section", id="monitor", klass="monitor", **{"aria-label": "Live thread log", "data-source": log_source}):
-        with tag("div", klass="panel-heading"):
-            with tag("h2"):
-                text("Thread log")
-            with tag("span", id="log-status", role="status"):
-                text("Connecting")
         with tag("div", klass="log-toolbar"):
             with tag("select", id="source", **{"aria-label": "Log source"}):
                 with tag("option", value=""):
                     text("Recent threads")
+            with tag("span", id="log-status", role="status"):
+                text("Connecting")
             with tag("button", id="pause", type="button"):
                 text("Pause")
         with tag("div", id="log-feed", tabindex="0", **{"aria-label": "Recent log output"}):
