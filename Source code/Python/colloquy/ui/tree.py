@@ -15,6 +15,7 @@ The "call" segment in a path is what separates navigation from doing
 something: everything before it names a node, everything after it names a
 command on that node and its arguments.
 """
+from colloquy.ui.in_flight import IN_FLIGHT
 
 
 class CommandFailed(Exception):
@@ -91,6 +92,9 @@ def get_states(root, *args):
     focus, leftovers = get_focus(root, *args)
 
     if leftovers:
+        # Inside the command lock by now (Colloquy.get_states), so every
+        # open page can turn this press's spinner from queued to running.
+        IN_FLIGHT.started()
         try:
             update(*leftovers, focus=focus)
         except NotImplementedError:

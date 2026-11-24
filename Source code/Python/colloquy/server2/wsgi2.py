@@ -113,9 +113,6 @@ class WSGI2(ConsoleTree, Base):
     def name(self):
         return "wsgi"
 
-    def get_states(self, *args):
-        return self.colloquy.get_states(*args)
-
     def _parse(self):
         args = self._parse_path()
         self._root = Path("app" if args[:1] == ("app",) else "home")
@@ -154,6 +151,9 @@ class WSGI2(ConsoleTree, Base):
             return monitor.response(self._environ)
         if key == "pcb":
             return catalog.response(leftovers)
+        if key == "live":
+            # Off the lock: it only ever *tries* it (ui/live.py).
+            return self._parse_live(*leftovers)
         if key == "emergency-stop":
             return self._parse_emergency_stop(*leftovers)
 

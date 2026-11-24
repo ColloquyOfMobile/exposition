@@ -72,7 +72,11 @@ class MockWSGI(ConsoleTree, Base):
 
     def __iter__(self):
         self._start_response(self._status, self._headers)
-        yield self._content
+        if isinstance(self._content, bytes):
+            yield self._content
+            return
+        # The live stream (ui/live.py) arrives as a generator of events.
+        yield from self._content
 
     @property
     def shutdown_event(self):
@@ -90,9 +94,6 @@ class MockWSGI(ConsoleTree, Base):
     def name(self):
         return "wsgi"
 
-    def get_states(self, *args):
-        return self.colloquy.get_states(*args)
-
     def _parse(self):
         args = self._parse_path()
         self._root = Path("app" if args[:1] == ("app",) else "home")
@@ -108,6 +109,8 @@ class MockWSGI(ConsoleTree, Base):
             return monitor.response(self._environ)
         if key == "pcb":
             return catalog.response(leftovers)
+        if key == "live":
+            return self._parse_live(*leftovers)
         if key == "shutdown":
             return self._parse_shutdown(*leftovers)
 

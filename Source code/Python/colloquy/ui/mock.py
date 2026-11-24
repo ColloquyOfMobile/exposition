@@ -25,6 +25,7 @@ belongs in `pytest_tests` against the real classes, or in a hardware
 test under `colloquy/tests/`.
 """
 import io
+import time
 from threading import Event
 
 from colloquy.base import Base
@@ -94,9 +95,17 @@ class Buttons(Base):
         """
         raise RuntimeError("this command always fails")
 
+    def take_five_seconds(self, request=None):
+        """A command that is still running when the page looks: what its
+        spinner looks like, here and on every other open page
+        (ui/in_flight.py). Press another meanwhile to see one queued."""
+        time.sleep(5)
+        self._said.append("five seconds later")
+
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
         states["say hello"] = self.say_hello
+        states["take five seconds"] = self.take_five_seconds
         states["forget"] = self.forget
         states["fail on purpose"] = self.fail_on_purpose
         states["said"] = leaves.value(path, "said", ", ".join(self._said) or "nothing")

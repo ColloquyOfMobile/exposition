@@ -52,7 +52,7 @@ main { max-width: 112rem; margin: 0 auto; padding: 1.6rem clamp(1rem, 4vw, 4.5re
 .crumbs { display: flex; flex-wrap: wrap; align-items: baseline; font: .8rem/1.7 var(--mono); }
 .crumbs a { color: var(--muted); text-decoration: none; overflow-wrap: anywhere; }
 .crumbs a + a::before { content: "/"; color: #89958d; padding: 0 .65em; }
-.crumbs a:hover, .reload:hover { text-decoration: underline; }
+.crumbs a:hover { text-decoration: underline; }
 .page-bar { margin: 0 0 .8rem; align-items: baseline; flex-wrap: wrap; }
 .page-bar .crumbs { flex: 1; }
 h2 { margin: 0; line-height: 1.12; }
@@ -63,7 +63,37 @@ h2 { font-size: 1.15rem; font-weight: 650; letter-spacing: -.028em; }
 .log-archive { margin: .6rem 0; }
 .explorer, .monitor { min-width: 0; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
 .explorer { background: #fff; }
-.reload { font-size: .8rem; text-decoration: none; font-weight: 600; }
+/* The page keeps itself current (ui/live.py); this says whether it is. */
+#live-status { font: .76rem var(--mono); color: var(--muted); white-space: nowrap; }
+#live-status::before { content: ""; display: inline-block; width: .5rem; height: .5rem; border-radius: 50%;
+  background: #c1b595; margin-right: .45rem; }
+#live-status[data-state=live]::before { background: #4f9b54; box-shadow: 0 0 0 0 #4f9b5466;
+  animation: live-beat 2.4s ease-out infinite; }
+#live-status[data-state=offline]::before { background: #c58a2e; }
+#live-status[data-state=trouble] { color: #9a263c; cursor: help; }
+#live-status[data-state=trouble]::before { background: #9a263c; }
+@keyframes live-beat { 0% { box-shadow: 0 0 0 0 #4f9b5466; } 70%, 100% { box-shadow: 0 0 0 .35rem #4f9b5400; } }
+/* A command in flight, on every page showing it: queued behind another
+   command, or running. The play arrow becomes a spinner. */
+.controls [data-command] { cursor: progress; }
+.command > a[data-command], .controls button[data-command] { background: #fff4d6; border-color: #e0c27a; color: #6b4b0c; }
+.command > a[data-command=running], .controls button[data-command=running] { background: #fde9b4; }
+.controls [data-command]::before { content: ""; display: inline-block; box-sizing: border-box;
+  width: .85em; height: .85em; margin-right: .6em; vertical-align: -.1em;
+  border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%;
+  animation: command-spin .75s linear infinite; }
+.controls [data-command=queued]::before { border-style: dotted; border-right-color: currentColor;
+  animation: command-spin 2.4s linear infinite; opacity: .7; }
+.controls [data-elapsed]::after { content: attr(data-elapsed); margin-left: .6em; font-weight: 400; opacity: .8; }
+.tree-level [name=open] a[data-command], .tree-level [name=close] a[data-command] { font-size: 0; background: none; }
+.tree-level [name=open] a[data-command]::before, .tree-level [name=close] a[data-command]::before {
+  width: .9rem; height: .9rem; margin: 0; }
+.tree-level [name=open] a[data-command]::after, .tree-level [name=close] a[data-command]::after { content: none; }
+@keyframes command-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .controls [data-command]::before { animation-duration: 3s; }
+  #live-status[data-state=live]::before { animation: none; }
+}
 .controls { padding: .6rem 1rem 1.2rem; overflow: auto; }
 .tree-level { min-width: 0; }
 .tree-level[data-picker-path] {

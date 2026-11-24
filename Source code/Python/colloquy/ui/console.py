@@ -3,6 +3,7 @@ from pathlib import Path
 
 from yattag import Doc
 from colloquy.logs.monitor import active_thread_count
+from colloquy.ui import live
 
 ASSETS = Path(__file__).parent / "static" / "console"
 
@@ -53,13 +54,18 @@ def page(request, state, *, installation):
                     with tag("span", klass="mode"):
                         text(("Simulated installation" if request.colloquy.is_simulated else "Installation")
                              if installation else "Mock preview")
-                    with tag("a", klass="reload", href=canonical, title="Refresh tree values"):
-                        text("Refresh values")
+                    # The page keeps itself current over `/live` (ui/live.py),
+                    # which is what replaced the "Refresh values" link.
+                    with tag("span", id="live-status", role="status", **{"data-state": "waiting"}):
+                        text("Connecting")
+                # Hashed exactly as ConsoleTree._controls hashes it for the stream.
+                controls = request._html_recursion(obj=state)
+                revision = live.revision_of(controls)
                 with tag("section", id="explorer", klass="explorer", **{"aria-label": title}):
                     with tag("div", id="command-result", role="status"):
                         pass
-                    with tag("div", name="commands", klass="controls"):
-                        doc.asis(request._html_recursion(obj=state))
+                    with tag("div", name="commands", klass="controls", **{"data-revision": revision}):
+                        doc.asis(controls)
             for url in ("/static/svg_zoom.js", "/console-assets/console.js"):
                 with tag("script", src=url):
                     pass

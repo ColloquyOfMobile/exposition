@@ -4,11 +4,70 @@ from pathlib import Path
 from urllib.parse import parse_qs, quote
 
 from yattag import Doc, indent
+from colloquy.ui import live, tree
+from colloquy.ui.in_flight import IN_FLIGHT, command_of
 from colloquy.ui.tree import CommandFailed
 from colloquy.ui.console import thread_monitor
 
 
 class ConsoleTree:
+    def get_states(self, *args):
+        """The walk, with a press announced to every open page while it
+        waits for the command lock and while it runs (`ui/in_flight.py`)."""
+        if "call" not in args:
+            return self.colloquy.get_states(*args)
+        with IN_FLIGHT.pressed(command_of(args)):
+            return self.colloquy.get_states(*args)
+
+    def _controls(self, state):
+        """The node's controls and their revision, for the page and the
+        live stream alike - one renderer, so one revision means one
+        page."""
+        self._base_path = Path(*state["path"])
+        html = self._html_recursion(obj=state)
+        return html, live.revision_of(html)
+
+    def _parse_live(self, *args):
+        """`/live/<root>/<node path>`: the page's server-sent events.
+        See `ui/live.py`. Navigation only - a `call` here would run a
+        command once a second."""
+        if not args or args[0] not in ("app", "home") or "call" in args or ".." in args:
+            return "404 Not Found", [("Content-Type", "text/plain")], b""
+        self._root = Path(args[0])
+        path = args[1:]
+        revision = self._environ.get("HTTP_LAST_EVENT_ID") or parse_qs(
+            self._environ.get("QUERY_STRING", "")
+        ).get("revision", [""])[0]
+        return "200 OK", list(live.HEADERS), live.stream(
+            lambda: self._live_render(path), self.shutdown_event, revision
+        )
+
+    def _live_render(self, path):
+        """One tick of the stream. Never raises, never waits for the lock."""
+        try:
+            board_is_out = getattr(self, "_board_is_out", None)
+            if board_is_out is not None and board_is_out():
+                return live.GONE
+            hold = getattr(self.colloquy, "hold_commands", None)
+            with (hold(timeout=0) if hold else nullcontext(True)) as held:
+                if not held:
+                    return live.BUSY
+                state, _ = tree.get_focus(self.colloquy, *path)
+            html, revision = self._controls(state)
+            self._live_trouble = None
+            return ("tree", html, revision)
+        except NotImplementedError:
+            return live.GONE
+        except Exception as error:  # noqa: BLE001 - a view must not stop anything
+            trouble = f"{type(error).__name__}: {error}"
+            if getattr(self, "_live_trouble", None) != trouble:
+                self._live_trouble = trouble
+                try:
+                    self.log(f"Live view of /{'/'.join(path)} failed: {trouble}")
+                except Exception:  # noqa: BLE001
+                    pass
+            return ("trouble", trouble)
+
     def _parse_virtual_panel(self, *args):
         """Bookmarks from the side-panel UI now open the simulation branch."""
         if not self.colloquy.is_simulated or not args or args[0] not in ("show", "hide"):
@@ -38,11 +97,16 @@ class ConsoleTree:
             content = parse_qs(body.decode("utf-8")).get("content", [""])[0]
         except (OSError, ValueError, OverflowError):
             return "400 Bad Request", [("Content-Type", "text/plain")], b"Could not read the editor form."
+        with IN_FLIGHT.pressed(command_of(args[1:])):
+            return self._save(args, focus, children, command, content)
+
+    def _save(self, args, focus, children, command, content):
         hold = getattr(self.colloquy, "hold_commands", None)
         lock = hold() if hold else nullcontext(True)
         with lock as acquired:
             if not acquired:
                 return "503 Service Unavailable", [("Content-Type", "text/plain")], b"Command busy. Try saving again."
+            IN_FLIGHT.started()
             node = self.colloquy
             try:
                 for key in children:
