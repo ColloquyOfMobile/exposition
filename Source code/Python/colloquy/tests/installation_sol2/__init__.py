@@ -115,6 +115,10 @@ class InstallationSol2(Base):
     def name(self):
         return "installation PCB solution 2"
 
+    # Its group lists which of its tests are running (`TestGroup`), and
+    # asks every one. A guide never runs: there is nothing to start.
+    is_started = False
+
     def push_now(self, request=None):
         return self.shared.push_now()
 

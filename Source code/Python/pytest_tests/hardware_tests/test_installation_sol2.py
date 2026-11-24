@@ -258,3 +258,23 @@ def test_a_press_is_shown_at_once_and_pushed_by_the_worker(checkouts):
 
     assert laptop.report.startswith("recorded and pushed"), laptop.report
     assert "as on origin" in laptop.where()
+
+
+def test_its_group_page_renders_with_it_in():
+    """The group asks every test whether it is running (2026-11-24: the
+    guide had no `is_started`, and opening `manual tests` stopped the
+    server)."""
+    from types import SimpleNamespace
+
+    from colloquy.tests.group import TestGroup
+
+    group = TestGroup(
+        owner=SimpleNamespace(owners=[], name="tests", is_simulated=True),
+        name="manual tests",
+        summary="...",
+    )
+    group.fill([InstallationSol2(owner=group, shared=FakeShared())])
+
+    states = group._snapshot_if_opened(("tests", "manual tests"))
+
+    assert "running now" not in states
