@@ -7,6 +7,12 @@
       "note": "Cable broken is between the microphone an the female1 base.\nThe U2D2 is not plugged.",
       "note at": "2026-11-24T13:52:24"
     },
+    "meter the bare backplane unpowered": {
+      "done": false,
+      "done at": "",
+      "note": "Where is Mega 5V, I tried TP32 but it shortcuts with the GND.\nPut a PCB image to show the measure points",
+      "note at": "2026-11-24T14:42:17"
+    },
     "record the configuration": {
       "done": true,
       "done at": "2026-11-24T13:53:38",
