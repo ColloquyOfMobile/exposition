@@ -2,8 +2,8 @@
   "format": 1,
   "steps": {
     "check the present state": {
-      "done": false,
-      "done at": "",
+      "done": true,
+      "done at": "2026-11-24T13:52:39",
       "note": "Cable broken is between the microphone an the female1 base.\nThe U2D2 is not plugged.",
       "note at": "2026-11-24T13:52:24"
     }
