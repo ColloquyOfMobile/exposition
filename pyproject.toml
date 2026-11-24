@@ -56,6 +56,10 @@ files = [
     # ordinary tree node.
     "Source code/Python/colloquy/exposition/schedule/rules.py",
     "Source code/Python/colloquy/exposition/schedule/solver.py",
+    # The sol2 installation record: two copies in, one out, each half the
+    # later word. A done time and a note time are both strings that sort,
+    # and merging one against the other is the mistake worth catching.
+    "Source code/Python/colloquy/tests/installation_sol2/progress.py",
     # The Goertzel: samples in, a level out. It moved off an AVR to here,
     # and this list is half of what that move bought - the arithmetic can
     # now be both checked and type-checked. Its confusions are the ones

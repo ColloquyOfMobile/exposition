@@ -21,6 +21,7 @@ from .test_audio_loop import TestAudioLoop
 from .test_audio_bringup import TestAudioBringup
 from .scope import Scope
 from .test_teensy import TestTeensy
+from .installation_sol2 import InstallationSol2
 
 from .group import TestGroup
 
@@ -136,6 +137,9 @@ class Tests(Base):
         # The Teensy on its adapter plate, before anything else is
         # mounted: flash it, ask it, and look at its LED.
         self.test_teensy = TestTeensy(owner=manual)
+        # Not a thread: a guide through putting PCB solution 2 in, its
+        # record shared through git. See installation_sol2/.
+        self.installation_sol2 = InstallationSol2(owner=manual)
 
         auto.fill(
             tests=(
@@ -168,6 +172,7 @@ class Tests(Base):
                 self.test_audio_at_12v,
                 self.scope,
                 self.test_teensy,
+                self.installation_sol2,
             ),
             # Nothing bench-only here, and `test audio at 12v` is why it
             # stopped being so. The supply it measures is the piece's, so
@@ -201,7 +206,9 @@ class Tests(Base):
         )
         self[self.test_graph.name] = self.test_graph
 
-        self._threaded_tests = set(auto.tests) | set(manual.tests)
+        self._threaded_tests = {
+            test for test in set(auto.tests) | set(manual.tests) if hasattr(test, "stop")
+        }
 
     @property
     def params(self):

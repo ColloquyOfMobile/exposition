@@ -123,19 +123,43 @@ class Git:
     def folder(self) -> Path:
         return self._folder
 
-    def run(self, *args: str, timeout: float = COMMAND_TIMEOUT) -> str:
+    def run(
+        self, *args: str, timeout: float = COMMAND_TIMEOUT, input: str | None = None
+    ) -> str:
         """One git command, its stdout stripped. Raises GitError for every
-        way it can fail, so no caller has to know about subprocess."""
+        way it can fail, so no caller has to know about subprocess.
+
+        `input` is fed to its stdin as UTF-8 bytes, for the plumbing that
+        reads it (`hash-object --stdin`, `mktree`). Bytes, because a text
+        pipe on Windows turns every `\\n` into `\\r\\n`, and `mktree` then
+        names the file `progress.json\\r`."""
         try:
-            completed = subprocess.run(
-                ("git",) + args,
-                cwd=self._folder,
-                capture_output=True,
-                text=True,
-                timeout=timeout,
-                env=environment(),
-                creationflags=_CREATION_FLAGS,
-            )
+            if input is None:
+                completed = subprocess.run(
+                    ("git",) + args,
+                    cwd=self._folder,
+                    capture_output=True,
+                    text=True,
+                    timeout=timeout,
+                    env=environment(),
+                    creationflags=_CREATION_FLAGS,
+                )
+            else:
+                raw = subprocess.run(
+                    ("git",) + args,
+                    cwd=self._folder,
+                    capture_output=True,
+                    input=input.encode("utf-8"),
+                    timeout=timeout,
+                    env=environment(),
+                    creationflags=_CREATION_FLAGS,
+                )
+                completed = subprocess.CompletedProcess(
+                    raw.args,
+                    raw.returncode,
+                    raw.stdout.decode("utf-8", "replace"),
+                    raw.stderr.decode("utf-8", "replace"),
+                )
         except FileNotFoundError as error:
             raise GitError(
                 "git is not installed, or not on this machine's PATH"
