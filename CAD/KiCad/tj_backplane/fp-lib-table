@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name "TJ")(type "KiCad")(uri "${KIPRJMOD}/../tj_library/TJ.pretty")(options "")(descr "Colloquy TJ boards"))
+)
