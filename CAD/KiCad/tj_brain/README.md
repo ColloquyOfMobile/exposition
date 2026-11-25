@@ -199,8 +199,10 @@ These values come from T. Erforth's "Pask redesign" (Table 2). The board default
 
 * The schematic was exported to a netlist with `kicad-cli` and compared net-by-net with
   the design description. Every net matches.
-* The PCB was checked with the KiCad DRC; see the "Status" section of
-  `../generator/README.md` for the last result.
+* KiCad DRC on the PCB (`fab/tj_brain-drc-report.txt`): **0 errors, 0 unconnected pads**.
+  52 silkscreen warnings remain (connector outlines past the board edge, a few overlapping
+  labels). They are cosmetic.
+* All 602 pads on the PCB were compared with the design description; every net matches.
 * Not checked: the custom footprints (Teensy 4.1 and SparkFun breakout) against real
   parts, the D-sub gender against the existing harness, and the Mini-Fit orientation in
   the enclosure. Check these on the first board before a full run.
@@ -213,8 +215,8 @@ python3 make_lib.py            # TJ symbol / footprint library
 python3 build_brain_sch.py     # schematic + netlist self-check
 python3 build_brain_pcb.py     # placement, power trunks, GND vias, pours, silkscreen
 python3 route_brain.py         # autorouter (A* grid router, router.py) + rip-up & reroute rounds
-python3 repair_brain.py        # optional: more rip-up rounds on the saved routes
-python3 finish_brain.py        # zone fill, DRC, project files and fab outputs
+python3 close_brain.py         # GND stitching, pour fill, links isolated pour islands, DRC, fab outputs
+# optional: TJ_DROP=net1,net2 python3 repair_brain.py   re-route given nets on the saved routes
 ```
 
 These scripts need KiCad 7+ (`pcbnew` Python module, `kicad-cli`) plus numpy and scipy.

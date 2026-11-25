@@ -15,7 +15,9 @@ generated schematic against that description.
 | `router.py` | two-layer grid autorouter (A* with clearance from distance transforms, 45° tracks, vias, rip-up and reroute) |
 | `route_board.py` | routing driver, repair pass, zone fill |
 | `export.py` | project file, library tables, DRC, Gerbers, drill, BOM, positions, PDF, renders |
-| `build_brain_sch.py`, `build_brain_pcb.py`, `route_brain.py`, `repair_brain.py`, `finish_brain.py` | TJ Brain pipeline |
+| `build_brain_sch.py`, `build_brain_pcb.py`, `route_brain.py`, `close_brain.py` (`finish_brain.py` + `islands_brain.py`), `repair_brain.py` | TJ Brain pipeline |
+| `astar_nb.py` | numba version of the A* inner loop (optional, ~50× faster) |
+| `zone_islands.py` | exact check for isolated pour islands on a filled board |
 | `build_backplane.py` | complete TJ Backplane pipeline |
 
 You need KiCad 7 or newer (`pcbnew` Python module and `kicad-cli`) and Python with numpy
@@ -23,7 +25,7 @@ and scipy. Intermediate files go to `_build/`, which git ignores.
 
 ```
 python3 make_lib.py
-python3 build_brain_sch.py && python3 build_brain_pcb.py && python3 route_brain.py && python3 finish_brain.py
+python3 build_brain_sch.py && python3 build_brain_pcb.py && python3 route_brain.py && python3 close_brain.py
 python3 build_backplane.py
 ```
 
@@ -36,3 +38,10 @@ grid margin, and one via size (0.8 / 0.4 mm). It cannot pass a track between 2.5
 pitch THT pins. Power trunks are drawn by hand in `build_*_pcb.py` and locked. GND is not
 routed: every SMD GND pad gets a via to the bottom plane, and both layers are poured. The
 KiCad DRC is the final check, so read the report printed by `finish_brain.py`.
+
+## Status (last run)
+
+| Board | Netlist check | DRC errors | Unconnected | Warnings |
+|-------|---------------|-----------:|------------:|----------|
+| TJ Brain | schematic = design, PCB pads = design (602) | 0 | 0 | 52 silkscreen (cosmetic) |
+| TJ Backplane | schematic = design | 0 | 0 | none |

@@ -352,7 +352,7 @@ class Router:
                 return True
         return False
 
-    def load_routes(self, routes):
+    def load_routes(self, routes, drop=()):
         """Replay saved routes; a net whose copper collides with anything now on the board
         (e.g. a footprint change) is dropped so that it gets routed again."""
         dropped = []
@@ -361,7 +361,7 @@ class Router:
             if net is None:
                 continue
             items = [tuple(i) for i in items]
-            if any(self._conflicts(net, it) for it in items):
+            if name in drop or any(self._conflicts(net, it) for it in items):
                 dropped.append(name)
                 continue
             for it in items:
@@ -372,8 +372,123 @@ class Router:
     def dump_routes(self):
         return {self.netname[n]: [list(i) for i in items] for n, items in self.routes.items()}
 
+    def fix_tjunctions(self):
+        """A route may end on the middle of another track of its net (T junction). KiCad only
+        connects such an end if it lies on that track's centre line, so move the end there
+        (short extra segment) and split the other track at that point."""
+        def segs(net, L):
+            return [i for i, it in enumerate(self.routes.get(net, [])) if it[0] == 'T' and it[1] == L]
+        for net, items in self.routes.items():
+            ends = {}
+            for it in items:
+                if it[0] == 'T':
+                    for p in ((it[2], it[3]), (it[4], it[5])):
+                        ends.setdefault((it[1], round(p[0], 4), round(p[1], 4)), 0)
+                        ends[(it[1], round(p[0], 4), round(p[1], 4))] += 1
+                else:
+                    for L in (0, 1):
+                        ends.setdefault((L, round(it[1], 4), round(it[2], 4)), 0)
+                        ends[(L, round(it[1], 4), round(it[2], 4))] += 2
+            changed = True
+            while changed:
+                changed = False
+                for (L, x, y), cnt in list(ends.items()):
+                    if cnt != 1:
+                        continue
+                    if self._on_pad(net, L, x, y):
+                        continue
+                    for i in segs(net, L):
+                        _, _, ax, ay, bx, by, w = items[i]
+                        dx, dy = bx - ax, by - ay
+                        LL = dx * dx + dy * dy
+                        if LL < 1e-12:
+                            continue
+                        t = ((x - ax) * dx + (y - ay) * dy) / LL
+                        if not (0.02 < t < 0.98):
+                            continue
+                        px, py = ax + t * dx, ay + t * dy
+                        if math.hypot(px - x, py - y) > w / 2 + 0.13:
+                            continue
+                        px, py = round(px, 4), round(py, 4)
+                        items[i] = ('T', L, ax, ay, px, py, w)
+                        items.append(('T', L, px, py, bx, by, w))
+                        wi = max(w, 0.25)
+                        if (px, py) != (x, y):
+                            items.append(('T', L, x, y, px, py, wi))
+                        ends[(L, x, y)] = 2
+                        ends[(L, px, py)] = ends.get((L, px, py), 0) + 3
+                        changed = True
+                        break
+
+    def _on_pad(self, net, L, x, y):
+        q = pcbnew.VECTOR2I(mm(x), mm(y))
+        lay = pcbnew.F_Cu if L == 0 else pcbnew.B_Cu
+        nm = self.netname[net]
+        if not hasattr(self, '_padcache'):
+            self._padcache = {}
+            for fp in self.b.GetFootprints():
+                for pad in fp.Pads():
+                    self._padcache.setdefault(pad.GetNetname(), []).append(pad)
+            self._trackcache = {}
+            for t in self.b.GetTracks():
+                self._trackcache.setdefault(t.GetNetname(), []).append(t)
+        for pad in self._padcache.get(nm, []):
+            if pad.IsOnLayer(lay) and pad.HitTest(q):
+                return True
+        for t in self._trackcache.get(nm, []):     # pre-routed copper already on the board
+            if isinstance(t, pcbnew.PCB_VIA) or t.GetLayer() == lay:
+                if t.HitTest(q):
+                    return True
+        return False
+
+    def merge_close_vias(self, gap=1.1):
+        """A new via closer than `gap` to a same-net via / THT hole breaks the hole-to-hole rule:
+        move it onto that hole (and drag the attached track ends along)."""
+        holes = {}
+        for t in self.b.GetTracks():
+            if isinstance(t, pcbnew.PCB_VIA):
+                q = t.GetPosition()
+                holes.setdefault(t.GetNetname(), []).append((tomm(q.x), tomm(q.y), True))
+        for fp in self.b.GetFootprints():
+            for pad in fp.Pads():
+                if pad.GetAttribute() == pcbnew.PAD_ATTRIB_PTH:
+                    q = pad.GetPosition()
+                    holes.setdefault(pad.GetNetname(), []).append((tomm(q.x), tomm(q.y), False))
+        for net, items in self.routes.items():
+            nm = self.netname[net]
+            known = list(holes.get(nm, []))
+            moves = {}
+            keep = []
+            for it in items:
+                if it[0] != 'V':
+                    continue
+                x, y = it[1], it[2]
+                near = [h for h in known if math.hypot(h[0] - x, h[1] - y) < gap]
+                if near:
+                    hx, hy, _ = min(near, key=lambda h: math.hypot(h[0] - x, h[1] - y))
+                    moves[(round(x, 4), round(y, 4))] = (hx, hy)
+                else:
+                    known.append((x, y, True))
+                    keep.append(it)
+            if not moves:
+                continue
+            new = []
+            for it in items:
+                if it[0] == 'V':
+                    if (round(it[1], 4), round(it[2], 4)) in moves:
+                        continue
+                    new.append(it)
+                else:
+                    _, L, ax, ay, bx, by, w = it
+                    ax, ay = moves.get((round(ax, 4), round(ay, 4)), (ax, ay))
+                    bx, by = moves.get((round(bx, 4), round(by, 4)), (bx, by))
+                    new.append(('T', L, ax, ay, bx, by, w))
+            self.routes[net] = new
+
     def apply(self):
         """Write all router-made copper into the KiCad board (call once at the end)."""
+        self.merge_close_vias()
+        self.fix_tjunctions()
         for net, items in self.routes.items():
             nm = self.netname[net]
             ni = self.b.FindNet(nm)
@@ -485,7 +600,7 @@ class Router:
                     mgc = mg / self.g
                     win = (int(max(0, min(xs_.min(), txs2.min()) - mgc)), int(max(0, min(ys_.min(), tys2.min()) - mgc)),
                            int(min(self.nx - 1, max(xs_.max(), txs2.max()) + mgc)), int(min(self.ny - 1, max(ys_.max(), tys2.max()) + mgc)))
-                    path = self.astar(comp, tree & passable, passable, via_ok, win)
+                    path = self._astar_spaced(comp, tree & passable, passable, via_ok, win)
                     if path:
                         vias += self.commit(net, path, w)
                         # recompute the tree as union (track cells now owned by net)
@@ -505,6 +620,35 @@ class Router:
             fails = len(failed)
         return False, fails
 
+
+    def _via_cells(self, path):
+        N, nx = self.N, self.nx
+        out = []
+        for a, b_ in zip(path, path[1:]):
+            if a // N != b_ // N:
+                rem = b_ % N
+                out.append((rem // nx, rem % nx))
+        return out
+
+    def _astar_spaced(self, src, dst, passable, via_ok, win, min_via_gap=1.2, tries=6, **kw):
+        """A* that refuses two vias closer than `min_via_gap` mm (hole-to-hole rule)."""
+        vok = via_ok
+        for _ in range(tries):
+            path = self.astar(src, dst, passable, vok, win, **kw)
+            if not path:
+                return path
+            vc = self._via_cells(path)
+            bad = None
+            for (y1, x1), (y2, x2) in zip(vc, vc[1:]):
+                if math.hypot(x1 - x2, y1 - y2) * self.g < min_via_gap:
+                    bad = (y2, x2)
+                    break
+            if bad is None:
+                return path
+            vok = vok.copy()
+            rr = int(math.ceil(min_via_gap / self.g))
+            vok[max(0, bad[0] - rr):bad[0] + rr + 1, max(0, bad[1] - rr):bad[1] + rr + 1] = False
+        return None
 
     # ----------------------------------------------------------------- rip-up & reroute
     def _soft_maps(self, net, width, pen_val):
@@ -564,8 +708,8 @@ class Router:
                 return math.hypot(max(x2.min() - xs_.max(), xs_.min() - x2.max(), 0),
                                   max(y2.min() - ys_.max(), ys_.min() - y2.max(), 0))
             comp = min(comps[1:], key=dist)
-            path = self.astar(comp, tree & passable, passable, via_ok, (0, 0, self.nx - 1, self.ny - 1),
-                              penalty=penalty, max_nodes=1_500_000, hw=1.4)
+            path = self._astar_spaced(comp, tree & passable, passable, via_ok, (0, 0, self.nx - 1, self.ny - 1),
+                                      penalty=penalty, max_nodes=1_500_000, hw=1.4)
             if not path:
                 return ripped, False
             bl = self.blockers(net, path, R, Rv)

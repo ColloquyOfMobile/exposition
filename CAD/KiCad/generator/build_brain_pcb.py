@@ -104,16 +104,16 @@ eq = grp('MSGEQ7 7-band analyser (optional, socketed)')  # U6 C15 C16 C17 R29 R3
 put(eq[1], 60, 30); put(eq[2], 60, 33.5); put(eq[3], 60, 37); put(eq[4], 65, 37); put(eq[5], 65, 30); put(eq[6], 65, 33.5)
 
 # Light sensors
-put('JP4', 66, 12.5)
+put('JP4', 64.8, 18.6)
 put('U7', 33, 33, 90); put('C19', 40, 33, 90)
 for n in range(4):
     j, rin, rpd, c, rv, rl, led = grp('Light sensor %d' % (n + 1))
     x0 = 10 + 14 * n
-    put(j, x0, 5)
+    put(j, x0 + (1 if n == 0 else 0), 5)      # LS1 shifted clear of mounting hole H1
     put(rin, x0 + 1.5, 12); put(rpd, x0 + 1.5, 15); put(c, x0 + 1.5, 18)
     put(rl, x0 + 8, 12); put(led, x0 + 8, 15)
     put(rv, x0 + 9.5, 24.5)
-    LABELS.append(('LIGHT%d' % (n + 1), x0 + 8, 17.3, 0.7))
+    LABELS.append(('LIGHT%d' % (n + 1), x0 + 8, 17.3, 0.8))
 a = grp('AUX analog input (D-sub pin 11)')  # R43 D18 C24 TP9
 put(a[0], 15, 38); put(a[1], 20.5, 38); put(a[2], 15, 35); put(a[3], 24.5, 35)
 
@@ -125,7 +125,7 @@ for n, bx in ((1, 88), (2, 110)):
     put(qn, bx, 15); put(rpu, bx + 5, 14.5)
     put(qp, bx, 19.5); put(rlim, bx + 6, 19.5)
     put(rl, bx, 24); put(led, bx + 5, 24)
-    LABELS.append(('STATE%d' % n, bx + 5, 26.3, 0.7))
+    LABELS.append(('STATE%d' % n, bx + 5, 26.3, 0.8))
 
 # Indicator panel
 put('U8', 79, 83.5, 90); put('U9', 128, 83.5, 90)
@@ -181,7 +181,9 @@ b.track([p12, (p12[0] + 3, p12[1] + 3), (c1[0], p12[1] + 3), c1], 1.5, pcbnew.B_
 f2b = b.pad_pos('F2', 2); d15 = b.pad_pos('J20', 15); d7 = b.pad_pos('J20', 7)
 b.track([f2b, (177.3, f2b[1]), (177.3, d15[1]), d15], 1.5, pcbnew.F_Cu, '+5V_BODY')
 f1b = b.pad_pos('F1', 2)
-b.track([f1b, (160.5, f1b[1]), (160.5, d7[1]), d7], 1.2, pcbnew.B_Cu, '+12V_BODY')
+# +12V_BODY comes down the right edge and enters pin 7 from above, so the lower
+# DA-15 pins stay reachable from the left on both layers
+b.track([f1b, (178.2, f1b[1]), (178.2, 44.0), (165.0, 44.0), (165.0, d7[1]), d7], 1.2, pcbnew.B_Cu, '+12V_BODY')
 
 nvias = b.gnd_fanout()
 print('GND fanout vias:', nvias)
@@ -206,8 +208,8 @@ for ref, fp in b.fps.items():
 b.text('TJ BRAIN  rev %s' % REV, 158, 8, 2.0, bold=True)
 b.text('Colloquy of Mobiles - one brain per unit', 158, 11.5, 1.0)
 b.text('Teensy 4.1 / USB to backplane hub', 158, 14, 1.0)
-b.text('UNIT ID: SW1 ON=1, sw1=bit0', 26, 77.3 + DY, 0.7)
-b.text('1 F1 2 F2 3 F3 4 M1 5 M2 6 BAR', 26, 78.6 + DY, 0.7)
+b.text('UNIT ID: SW1 ON=1, sw1=bit0', 26, 77.3 + DY, 0.8)
+b.text('1 F1 2 F2 3 F3 4 M1 5 M2 6 BAR', 26, 78.8 + DY, 0.8)
 b.text('USB', 1.5, 52.4, 1.2, bold=True, angle=90)
 b.text('12V 5V', 3.5, 98 + DY, 0.8, angle=90)
 dsub = ['BODY DA-15', '1 LS2   9 NP2', '2 LS3  10 STATE1', '3 LS4  11 AUX', '4 SPK- 12 SPK+',
