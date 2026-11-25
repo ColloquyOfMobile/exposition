@@ -1,0 +1,916 @@
+(kicad_sch (version 20230121) (generator eeschema)
+  (uuid 6755bf3c-1eab-410f-88a1-adbd48195458)
+  (paper "A3")
+  (title_block (title "Body connector (DA-15 male, female-harness compatible)") (date "2026-11-25") (rev "A") (company "Colloquy of Mobiles - ZKM") (comment 1 "TJ Brain - Teensy 4.1 unit controller"))
+  (lib_symbols
+    (symbol "Connector:DA15_Plug_MountingHoles"
+			(pin_names
+				(offset 1.016) hide
+			)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 24.13 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "DA15_Plug_MountingHoles"
+				(at 0 22.225 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					) hide
+				)
+			)
+			(property "Datasheet" " ~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					) hide
+				)
+			)
+			(property "ki_keywords" "male plug D-SUB connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					) hide
+				)
+			)
+			(property "ki_description" "15-pin male plug pin D-SUB connector (low-density/2 columns), Mounting Hole"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					) hide
+				)
+			)
+			(property "ki_fp_filters" "DSUB*Male*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					) hide
+				)
+			)
+			(symbol "DA15_Plug_MountingHoles_0_1"
+				(circle
+					(center -1.778 -17.78)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center -1.778 -12.7)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center -1.778 -7.62)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center -1.778 -2.54)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center -1.778 2.54)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center -1.778 7.62)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center -1.778 12.7)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center -1.778 17.78)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -17.78)
+						(xy -2.54 -17.78)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -15.24)
+						(xy 0.508 -15.24)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -12.7)
+						(xy -2.54 -12.7)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -10.16)
+						(xy 0.508 -10.16)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -7.62)
+						(xy -2.54 -7.62)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -5.08)
+						(xy 0.508 -5.08)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -2.54)
+						(xy -2.54 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 0)
+						(xy 0.508 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 2.54)
+						(xy -2.54 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 5.08)
+						(xy 0.508 5.08)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 7.62)
+						(xy -2.54 7.62)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 10.16)
+						(xy 0.508 10.16)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 12.7)
+						(xy -2.54 12.7)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 15.24)
+						(xy 0.508 15.24)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 17.78)
+						(xy -2.54 17.78)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -20.955)
+						(xy 3.175 -17.145)
+						(xy 3.175 17.145)
+						(xy -3.81 20.955)
+						(xy -3.81 -20.955)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(circle
+					(center 1.27 -15.24)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 1.27 -10.16)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 1.27 -5.08)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 1.27 0)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 1.27 5.08)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 1.27 10.16)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 1.27 15.24)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+			)
+			(symbol "DA15_Plug_MountingHoles_1_1"
+				(pin passive line
+					(at 0 -22.86 90)
+					(length 3.81)
+					(name "PAD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 -17.78 0)
+					(length 3.81)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 -10.16 0)
+					(length 3.81)
+					(name "P10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 -5.08 0)
+					(length 3.81)
+					(name "P111"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "11"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 0 0)
+					(length 3.81)
+					(name "P12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 5.08 0)
+					(length 3.81)
+					(name "P13"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "13"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 10.16 0)
+					(length 3.81)
+					(name "P14"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "14"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 15.24 0)
+					(length 3.81)
+					(name "P15"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "15"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 -12.7 0)
+					(length 3.81)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 -7.62 0)
+					(length 3.81)
+					(name "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 -2.54 0)
+					(length 3.81)
+					(name "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 2.54 0)
+					(length 3.81)
+					(name "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 7.62 0)
+					(length 3.81)
+					(name "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 12.7 0)
+					(length 3.81)
+					(name "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 17.78 0)
+					(length 3.81)
+					(name "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -7.62 -15.24 0)
+					(length 3.81)
+					(name "P9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+(symbol "power:GND"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					) hide
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					) hide
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					) hide
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					) hide
+				)
+			)
+			(property "ki_description" "Power symbol creates a global label with name \"GND\" , ground"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					) hide
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0)
+						(xy 0 -1.27)
+						(xy 1.27 -1.27)
+						(xy 0 -2.54)
+						(xy -1.27 -1.27)
+						(xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0) hide
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+  )
+  (text "Body connector (DA-15 male, female-harness compatible)" (at 15.24 22.48 0) (effects (font (size 2.5 2.5) bold) (justify left bottom)) (uuid 84ca4f86-f7b3-41e1-9328-ba98731e2f18))
+  (text "Pins 4,5,6,7,8,12,13,14,15 identical to the ZKM electronic box female D-subs (J1/J5), so existing female body harnesses plug in unchanged. Pins" (at 15.24 27.48 0) (effects (font (size 1.5 1.5)) (justify left bottom)) (uuid 2e04ae89-cf08-4ed6-961f-e05e6ac6c5f8))
+  (text "1,2,3,9,10,11 add the male extras." (at 15.24 29.88 0) (effects (font (size 1.5 1.5)) (justify left bottom)) (uuid d98f74b2-da7b-4c7b-a7a6-8a1cb51fec03))
+  (text "DA-15" (at 15.24 39.28 0) (effects (font (size 1.6 1.6) bold) (justify left bottom)) (uuid 5078ba2e-3071-4df1-b350-0c83785b1e81))
+  (polyline (pts (xy 13.24 39.98) (xy 46.459 39.98)) (stroke (width 0) (type dash)) (uuid a79c0274-2792-4261-96de-7c92f6bb56ed))
+  (polyline (pts (xy 46.459 39.98) (xy 46.459 96.835)) (stroke (width 0) (type dash)) (uuid 0d8b205b-8688-43e4-8e87-650fed75bfed))
+  (polyline (pts (xy 46.459 96.835) (xy 13.24 96.835)) (stroke (width 0) (type dash)) (uuid b61ec8a2-1d55-48c8-89fc-e46bd1136aa9))
+  (polyline (pts (xy 13.24 96.835) (xy 13.24 39.98)) (stroke (width 0) (type dash)) (uuid 12889751-4d1c-4382-85e8-e994fbef6a1c))
+  (symbol (lib_id "Connector:DA15_Plug_MountingHoles") (at 38.1 66.04 0) (unit 1)
+  (in_bom yes) (on_board yes) (dnp no)
+  (uuid a668924d-9b3a-42ae-ac2e-67aa939e7f7a)
+  (property "Reference" "J20" (at 35.8775 43.485 0) (effects (font (size 1.27 1.27))))
+  (property "Value" "BODY DA-15 male" (at 35.8775 90.5 0) (effects (font (size 1.27 1.27))))
+  (property "Footprint" "Connector_Dsub:DSUB-15_Male_Horizontal_P2.77x2.84mm_EdgePinOffset4.94mm_Housed_MountingHolesOffset7.48mm" (at 38.1 66.04 0) (effects (font (size 1.27 1.27)) hide))
+  (property "Datasheet" "" (at 38.1 66.04 0) (effects (font (size 1.27 1.27)) hide))
+  (pin "0" (uuid b70fc223-0eb5-45dc-9f07-bc68759c1b7d))
+  (pin "1" (uuid 54551f27-c209-4bc9-8481-df1a71b04d5e))
+  (pin "10" (uuid a91d4ad5-c18c-4271-b52b-317db3fc53dc))
+  (pin "11" (uuid ab6f6138-8fcc-43cc-a026-5e05217807c5))
+  (pin "12" (uuid 3664c515-b55d-4afd-b10c-b21ee3b3e577))
+  (pin "13" (uuid 0065c87d-3b79-4045-892f-49deb8c5f9c4))
+  (pin "14" (uuid 6cfdb711-ce7d-451c-a66f-fd3c4ed194b9))
+  (pin "15" (uuid a40c8fa3-4353-4443-98ec-d2d8eae2b65c))
+  (pin "2" (uuid 81a04125-5780-4c12-be8d-531ce134a420))
+  (pin "3" (uuid 876e44e3-bbb7-4127-b445-23842f7541a7))
+  (pin "4" (uuid 4540f960-1154-4789-8c2a-7b3c480596cc))
+  (pin "5" (uuid 6d64e6bc-76e5-41b1-985b-682dc4a763e1))
+  (pin "6" (uuid ea86348b-76f1-42ce-92b5-601c2f26b7a7))
+  (pin "7" (uuid 0d9a6d13-d4e3-46cd-938d-e56a2b1c8150))
+  (pin "8" (uuid 09302ff7-4622-46c5-a54d-b3737f382bde))
+  (pin "9" (uuid c63b17dc-963b-4dad-8136-36ca6ff0445f))
+  (instances (project "tj_brain" (path "/b36137d0-5cca-4a85-ba05-88d80d72c3f7/82724fff-af54-4e9c-b53b-11bb44411929" (reference "J20") (unit 1))))
+)
+  (wire (pts (xy 38.1 88.9) (xy 38.1 91.44)) (stroke (width 0) (type default)) (uuid 7eb1c7e0-697f-47d6-ba83-eb7e6139a6e4))
+  (symbol (lib_id "power:GND") (at 38.1 91.44 0) (unit 1)
+  (in_bom yes) (on_board yes) (dnp no)
+  (uuid 68cfdc9d-e805-4eb7-8ffc-c4db3441204f)
+  (property "Reference" "#PWR01001" (at 38.1 88.44 0) (effects (font (size 1.27 1.27)) hide))
+  (property "Value" "GND" (at 38.1 96.44 0) (effects (font (size 1.27 1.27))))
+  (property "Footprint" "" (at 38.1 91.44 0) (effects (font (size 1.27 1.27)) hide))
+  (property "Datasheet" "" (at 38.1 91.44 0) (effects (font (size 1.27 1.27)) hide))
+  (pin "1" (uuid 80675035-aa09-46f1-9061-6889bbcc1a9c))
+  (instances (project "tj_brain" (path "/b36137d0-5cca-4a85-ba05-88d80d72c3f7/82724fff-af54-4e9c-b53b-11bb44411929" (reference "#PWR01001") (unit 1))))
+)
+  (wire (pts (xy 30.48 83.82) (xy 27.94 83.82)) (stroke (width 0) (type default)) (uuid 719828a0-409a-4102-97a0-057b95ee5f3a))
+  (global_label "LS2_IN" (shape bidirectional) (at 27.94 83.82 180) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid c3aac64a-6961-4dc5-af76-f326db899997) (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 27.94 83.82 0) (effects (font (size 1 1)) hide)))
+  (wire (pts (xy 30.48 76.2) (xy 27.94 76.2)) (stroke (width 0) (type default)) (uuid ab33eb60-2134-45c5-8a5e-378e5ae8e15e))
+  (global_label "STATE1_OUT" (shape bidirectional) (at 27.94 76.2 180) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid bd69763d-7000-43b5-9df4-2a06750356df) (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 27.94 76.2 0) (effects (font (size 1 1)) hide)))
+  (wire (pts (xy 30.48 71.12) (xy 27.94 71.12)) (stroke (width 0) (type default)) (uuid f5e42983-4a78-45a0-8289-45ebc86f512e))
+  (global_label "AUX_IN" (shape bidirectional) (at 27.94 71.12 180) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid a88aee93-d6a9-4572-a880-08608e3458db) (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 27.94 71.12 0) (effects (font (size 1 1)) hide)))
+  (wire (pts (xy 30.48 66.04) (xy 27.94 66.04)) (stroke (width 0) (type default)) (uuid 1f2e79cd-58ae-4219-8a8b-e09a3a349e99))
+  (global_label "SPK+" (shape bidirectional) (at 27.94 66.04 180) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid c17c1da3-a90d-451f-9d5b-c67c5ae92e56) (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 27.94 66.04 0) (effects (font (size 1 1)) hide)))
+  (wire (pts (xy 30.48 60.96) (xy 27.94 60.96)) (stroke (width 0) (type default)) (uuid a487c4b6-61ca-4345-b682-709604b48391))
+  (global_label "NP1_OUT" (shape bidirectional) (at 27.94 60.96 180) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid ab9f98df-3e83-42b8-a589-7ae24e9453c1) (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 27.94 60.96 0) (effects (font (size 1 1)) hide)))
+  (wire (pts (xy 30.48 55.88) (xy 27.94 55.88)) (stroke (width 0) (type default)) (uuid 539365cc-282b-4430-a0de-00ea82e84f7f))
+  (global_label "DXL_DATA" (shape bidirectional) (at 27.94 55.88 180) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid 2522dacc-64df-419a-bbbf-626687ac6f38) (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 27.94 55.88 0) (effects (font (size 1 1)) hide)))
+  (wire (pts (xy 30.48 50.8) (xy 27.94 50.8)) (stroke (width 0) (type default)) (uuid 3fb0872e-0b7a-455d-a28c-47807cf765bd))
+  (global_label "+5V_BODY" (shape bidirectional) (at 27.94 50.8 180) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid 1ca22b15-f34f-4334-94aa-7b26a08abf83) (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 27.94 50.8 0) (effects (font (size 1 1)) hide)))
+  (wire (pts (xy 30.48 78.74) (xy 27.94 78.74)) (stroke (width 0) (type default)) (uuid 64e8bd39-2d2b-480d-aaf5-4ddbae537088))
+  (global_label "LS3_IN" (shape bidirectional) (at 27.94 78.74 180) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid 77c59605-06a4-491d-838c-2b6f5d3c8f96) (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 27.94 78.74 0) (effects (font (size 1 1)) hide)))
+  (wire (pts (xy 30.48 73.66) (xy 27.94 73.66)) (stroke (width 0) (type default)) (uuid 204808f4-8e09-4890-9747-ee1837f54941))
+  (global_label "LS4_IN" (shape bidirectional) (at 27.94 73.66 180) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid d70d7269-fd60-4c32-bac6-8a0694ecf077) (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 27.94 73.66 0) (effects (font (size 1 1)) hide)))
+  (wire (pts (xy 30.48 68.58) (xy 27.94 68.58)) (stroke (width 0) (type default)) (uuid bd8c4e59-9564-485f-8dee-35cbb096bd54))
+  (global_label "SPK-" (shape bidirectional) (at 27.94 68.58 180) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid dee9eaf0-c9f5-40ad-870b-488d76dab0f1) (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 27.94 68.58 0) (effects (font (size 1 1)) hide)))
+  (wire (pts (xy 30.48 63.5) (xy 27.94 63.5)) (stroke (width 0) (type default)) (uuid 22942677-8180-4c7f-adb7-10b43f73afe6))
+  (global_label "LS1_IN" (shape bidirectional) (at 27.94 63.5 180) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid e57b7b22-189c-4b57-b697-5bfefac1bada) (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 27.94 63.5 0) (effects (font (size 1 1)) hide)))
+  (wire (pts (xy 30.48 58.42) (xy 27.94 58.42)) (stroke (width 0) (type default)) (uuid e8bc133f-0cff-4c43-b9db-aa1ae9fa4cd8))
+  (global_label "MIC_IN" (shape bidirectional) (at 27.94 58.42 180) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid 85a7c73b-eb3b-447e-a676-9730768f7eb8) (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 27.94 58.42 0) (effects (font (size 1 1)) hide)))
+  (wire (pts (xy 30.48 53.34) (xy 27.94 53.34)) (stroke (width 0) (type default)) (uuid 5676a4dd-c324-4f78-ab50-0764fefbb8eb))
+  (global_label "+12V_BODY" (shape bidirectional) (at 27.94 53.34 180) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid d6f7eb56-bca3-4fe6-9c17-b45de9ee1b8b) (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 27.94 53.34 0) (effects (font (size 1 1)) hide)))
+  (wire (pts (xy 30.48 48.26) (xy 27.94 48.26)) (stroke (width 0) (type default)) (uuid 9e0a7726-dfa8-43ca-b9e5-ec8fde693788))
+  (symbol (lib_id "power:GND") (at 27.94 48.26 0) (unit 1)
+  (in_bom yes) (on_board yes) (dnp no)
+  (uuid 5bb16244-c290-4071-820a-dd711bd76076)
+  (property "Reference" "#PWR01002" (at 27.94 45.26 0) (effects (font (size 1.27 1.27)) hide))
+  (property "Value" "GND" (at 27.94 53.26 0) (effects (font (size 1.27 1.27))))
+  (property "Footprint" "" (at 27.94 48.26 0) (effects (font (size 1.27 1.27)) hide))
+  (property "Datasheet" "" (at 27.94 48.26 0) (effects (font (size 1.27 1.27)) hide))
+  (pin "1" (uuid 29300d30-6c09-45d4-b7ff-c999f9c97c71))
+  (instances (project "tj_brain" (path "/b36137d0-5cca-4a85-ba05-88d80d72c3f7/82724fff-af54-4e9c-b53b-11bb44411929" (reference "#PWR01002") (unit 1))))
+)
+  (wire (pts (xy 30.48 81.28) (xy 27.94 81.28)) (stroke (width 0) (type default)) (uuid ad6679a8-2c13-42f9-a6af-030abc2bd6db))
+  (global_label "NP2_OUT" (shape bidirectional) (at 27.94 81.28 180) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify right)) (uuid 2e84987f-15d0-450e-afbd-e62f3a9c6844) (property "Intersheetrefs" "${INTERSHEET_REFS}" (at 27.94 81.28 0) (effects (font (size 1 1)) hide)))
+)
