@@ -177,6 +177,39 @@ def centre_positive_jack():
     return _svg("".join(parts), "centre-positive jack")
 
 
+def screw_terminal_j6():
+    """J6's six holes as the front is seen, the power row on their left,
+    and the two ways a two-way terminal goes in: RED on +5V, BLACK on GND."""
+    from .steps import J6_ROWS
+
+    parts = [_text(W / 2, 20, "J6 seen from the front: no marking on the board", 12, weight="bold")]
+    # The power row's GND and USB pins, to the left, for orientation.
+    parts.append(f'<rect x="22" y="44" width="8" height="18" fill="#c8a24a" stroke="{INK}"/>')
+    parts.append(_text(26, 76, "GND", 9, MUTED))
+    parts.append(_text(26, 88, "test pin", 8, MUTED))
+    parts.append(f'<line x1="300" y1="30" x2="300" y2="160" stroke="{INK}" stroke-width="3"/>')
+    parts.append(_text(306, 60, "board", 9, MUTED, anchor="start"))
+    parts.append(_text(306, 72, "edge", 9, MUTED, anchor="start"))
+    xs = (90, 150, 210)
+    ys = (54, 124)
+    for i, x in enumerate(xs, 1):
+        parts.append(_text(x, 36, f"col {i}", 9, MUTED))
+    # The two ways in, each with its two wires:
+    # top row cols 2-3, bottom row cols 1-2.
+    for x_red, x_black, y in ((xs[1], xs[2], ys[0]), (xs[0], xs[1], ys[1])):
+        for x, colour, word in ((x_red, RED, "RED"), (x_black, INK, "BLACK")):
+            parts.append(f'<line x1="{x}" y1="{y}" x2="{x}" y2="{y + 34}" stroke="{colour}" stroke-width="4" stroke-linecap="round"/>')
+            parts.append(_text(x, y + 46, word, 10, colour, weight="bold"))
+    for row, y in zip(J6_ROWS, ys):
+        for net, x in zip(row, xs):
+            colour = RED if net == "+5V" else INK
+            parts.append(f'<circle cx="{x}" cy="{y}" r="8" fill="#c8a24a" stroke="{colour}" stroke-width="3"/>')
+            parts.append(f'<circle cx="{x}" cy="{y}" r="3.5" fill="{PAPER}"/>')
+            parts.append(_text(x + 12, y - 9, net, 9, colour, anchor="start", weight="bold"))
+    parts.append(_text(W / 2, 186, "top row cols 2-3, or bottom row cols 1-2: RED nearer the test pins", 10, MUTED))
+    return _svg("".join(parts), "where RED and BLACK go on J6")
+
+
 def jst_j7():
     parts = [_text(W / 2, 24, "J7  SERVO BUS · 12 V  (JST EH 3)", 12, weight="bold")]
     parts.append(f'<rect x="60" y="56" width="150" height="54" rx="4" fill="#ffffff" stroke="{INK}" stroke-width="2"/>')
@@ -317,6 +350,7 @@ PICTURES = {
     "unplug and take the adapter off": lambda: adapter(off=True),
     "meter the bare backplane unpowered": probes_on_test_pins,
     "power the bare backplane": lambda: centre_positive_jack() + leds({"BOARD 5V"}, False, "rack supply alone, no shield"),
+    "solder the screw terminal at J6": screw_terminal_j6,
     "servo supply through J7": lambda: jst_j7() + leds({"12V"}, False, "servo supply alone: BOARD 5V must stay dark"),
     "refit the adapter": lambda: adapter(off=False) + spacers(),
     "power up the mounted rack": lambda: leds({"BOARD 5V", "MEGA 5V", "12V"}, True, "mounted, all on, test teensy running"),
@@ -469,6 +503,33 @@ BOARD_VIEWS = {
         "JV1-JV5", tuple((f"JV{n}", f"JV{n}") for n in range(1, 6)), ((76, 200, 232, 230),)
     ),
 }
+
+
+J6_CORNER = (206, 84, 244, 115)
+
+
+def j6_holes():
+    """J6 and the power row on the real plot, every J6 hole labelled with
+    its net from the copper: the silkscreen says nothing there."""
+    drawn = board(
+        "J6, the screw terminal's holes",
+        (("J6", "J6 (no marking)"), ("TP31", "5V"), ("TP34", "GND")),
+        (J6_CORNER,),
+    )
+    labels = []
+    for x, y, net in _plot()["parts"]["J6"]["holes"]:
+        colour = "#ff5a4f" if net == "+5V" else "#ffffff"
+        labels.append(
+            f'<circle cx="{x}" cy="{y}" r="1.6" fill="none" stroke="{colour}" stroke-width="0.45"/>'
+            f'<text x="{x}" y="{y + 3.2}" font-size="1.2" text-anchor="middle" fill="{colour}" '
+            f'stroke="{PCB_GREEN}" stroke-width="0.3" paint-order="stroke" font-weight="bold">'
+            f'{net}</text>'
+        )
+    head, tail = drawn.rsplit("</svg>", 1)
+    return head + "".join(labels) + "</svg>" + tail
+
+
+BOARD_VIEWS["solder the screw terminal at J6"] = j6_holes
 
 
 def picture(key):

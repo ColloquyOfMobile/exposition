@@ -40,7 +40,10 @@ SVG = OUT / "backplane-front.svg"
 JSON = OUT / "backplane-front.json"
 
 # The parts the guide points at. A pattern per family.
-WANTED = re.compile(r"^(TP\w*|JP1|DP5|DP12|DPUSB|DT\d|J1|J2|J5|J7|A-J3|B-J4|JV\d|JA1|A1)$")
+WANTED = re.compile(r"^(TP\w*|JP1|DP5|DP12|DPUSB|DT\d|J1|J2|J5|J6|J7|A-J3|B-J4|JV\d|JA1|A1)$")
+# Parts whose holes the guide labels one by one, with each hole's net:
+# J6, the screw terminal's landing, has no silkscreen at all.
+HOLES_OF = {"J6"}
 
 
 def digest(path):
@@ -69,14 +72,20 @@ def pads(text):
         fx, fy, rot = float(at.group(1)), float(at.group(2)), float(at.group(3) or 0)
         angle = math.radians(-rot)
         centres = []
+        holes = []
         kinds = set()
-        for m in re.finditer(r'\(pad "[^"]*" (\w+) \w+\s*\(at ([-\d.]+) ([-\d.]+)', block):
+        matches = list(re.finditer(r'\(pad "[^"]*" (\w+) \w+\s*\(at ([-\d.]+) ([-\d.]+)', block))
+        for index, m in enumerate(matches):
             kinds.add(m.group(1))
             px, py = float(m.group(2)), float(m.group(3))
-            centres.append((
+            centre = (
                 round(fx + px * math.cos(angle) - py * math.sin(angle), 3),
                 round(fy + px * math.sin(angle) + py * math.cos(angle), 3),
-            ))
+            )
+            centres.append(centre)
+            end = matches[index + 1].start() if index + 1 < len(matches) else len(block)
+            net = re.search(r'\(net \d+ "([^"]+)"\)', block[m.end():end])
+            holes.append([*centre, net.group(1) if net else ""])
         if not centres:
             continue
         xs, ys = [c[0] for c in centres], [c[1] for c in centres]
@@ -85,6 +94,8 @@ def pads(text):
             "pads": len(centres),
             "pin": kinds == {"thru_hole"} and len(centres) == 1,
         }
+        if ref in HOLES_OF:
+            found[ref]["holes"] = holes
     return found
 
 

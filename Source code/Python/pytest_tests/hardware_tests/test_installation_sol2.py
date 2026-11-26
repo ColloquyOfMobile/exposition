@@ -373,3 +373,25 @@ def test_the_power_row_is_where_the_silkscreen_says():
     assert parts["TPUSB"]["pin"] and parts["TP34"]["pin"]
     assert not parts["TP32"]["pin"]
     assert "**`5V`, `12V`, `USB`, `GND`**" in steps.POWER_ROW
+
+
+def test_the_j6_holes_named_in_the_guide_are_the_copper_s():
+    """J6 has no silkscreen, so the guide's table is the only marking: rows
+    top then bottom as the front is seen, columns from the power row
+    towards the board's edge. 2026-11-26: the jack was not to hand, and a
+    screw terminal went in J6 with a RED and a BLACK wire."""
+    from colloquy.tests.installation_sol2 import pictures
+
+    holes = pictures._plot()["parts"]["J6"]["holes"]
+    rows = sorted({y for _, y, _ in holes})
+    columns = sorted({x for x, _, _ in holes})
+    power_row = pictures._plot()["parts"]["TP34"]["box"][0]
+    assert all(x > power_row for x in columns), "J6 is right of the power row"
+    by_place = {(x, y): net for x, y, net in holes}
+    assert tuple(tuple(by_place[x, y] for x in columns) for y in rows) == steps.J6_ROWS
+
+
+def test_the_screw_terminal_step_comes_before_the_first_power():
+    assert steps.KEYS.index("solder the screw terminal at J6") + 1 == steps.KEYS.index(
+        "power the bare backplane"
+    )

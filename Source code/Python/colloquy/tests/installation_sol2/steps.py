@@ -54,14 +54,25 @@ POWER_ROW = (
 )
 
 NEVER_12V_ON_J2 = (
-    "**Never 12 V into `J2`.** The backplane's `+5V` feeds every NeoPixel, "
+    "**Never 12 V into `J2` or `J6`.** The backplane's `+5V` feeds every NeoPixel, "
     "every body's amplifier and every microphone. The amplifier module is "
     "recorded at **5.0 V maximum** (`params[\"audio\"][\"amplifier max supply "
     "volts\"]`) and a GF1002 has already been destroyed by a supply above it."
 )
 
+# J6, the screw terminal's landing (`J2`'s twin, in parallel with it: the
+# board's only other way in for the rack's 5 V). It has no silkscreen at
+# all, so the guide names its holes: rows top then bottom as the front is
+# seen, columns from the power row's side to the board's right edge. Held
+# to the copper by a test (`backplane-front.json`'s `holes`).
+J6_ROWS = (
+    ("+5V", "+5V", "GND"),
+    ("+5V", "GND", "GND"),
+)
+
 POWER_OFF = (
-    "Everything unpowered first: the rack supply out of `J2`, the Teensy's "
+    "Everything unpowered first: the rack supply out of `J2` (or out of "
+    "the jack adapter on `J6`'s lead), the Teensy's "
     "USB lead out, the servo supply off. `shields` section 10: change "
     "anything only with both off, and power both back up together."
 )
@@ -139,13 +150,61 @@ STEPS = (
         "Write any surprise in the note.",
     ),
     Step(
+        "solder the screw terminal at J6",
+        "the bare backplane",
+        "Without the DC jack `J2`, the rack's 5 V comes in on a **screw "
+        "terminal soldered into `J6`**: the board's second power landing, "
+        "wired in parallel with `J2` (`+5V` and `GND` only, nothing else). "
+        "Skip this step if `J2` is fitted.\n\n"
+        "`J6` has **no marking on the silkscreen**. It is the six large holes "
+        "in two rows of three just **right of the power row's `GND` test "
+        "pin**, below `J2`. Seen from the front (the side where `5V 12V USB "
+        "GND` read the right way up), columns counted from the power row "
+        "towards the board's right edge:\n\n"
+        "| | column 1 (power-row side) | column 2 | column 3 (edge side) |\n"
+        "|---|---|---|---|\n"
+        f"| **top row** (level with the test pins) | {' | '.join(f'**{n}**' for n in J6_ROWS[0])} |\n"
+        f"| **bottom row** | {' | '.join(f'**{n}**' for n in J6_ROWS[1])} |\n\n"
+        "The `+5V` holes make an L at the top left, the `GND` holes an L at "
+        "the bottom right. **The rule: RED wire on the screw whose lug is in a "
+        "`+5V` hole, BLACK wire on the screw whose lug is in a `GND` hole.** "
+        "For a two-way terminal at 5 mm pitch that is either:\n\n"
+        "- **top row, columns 2 and 3**: RED on the column-2 screw (power-row "
+        "side), BLACK on the column-3 screw (edge side); or\n"
+        "- **bottom row, columns 1 and 2**: RED on the column-1 screw "
+        "(power-row side), BLACK on the column-2 screw.\n\n"
+        "Either way RED is the screw nearer the power row, BLACK the one "
+        "nearer the board's edge. **Not** top row columns 1-2 (both `+5V`) "
+        "or bottom row columns 2-3 (both `GND`): the terminal would carry "
+        "nothing. Terminal body on the front, wire entries facing out where "
+        "the lead can reach them, soldered on the back.\n\n"
+        "Then meter on continuity, every supply off, **nothing in the screws "
+        "yet**, against the power row's test pins just left of it:\n\n"
+        "- the RED screw to the `5V` test pin: **beeps**; the BLACK screw to "
+        "the `GND` test pin: **beeps**. Both silent the other way round "
+        "(RED to `GND`, BLACK to `5V`). If RED beeps to `GND`, the terminal "
+        "is in the wrong holes: stop before any power.\n"
+        "- RED screw to BLACK screw: **no short** (a reading that climbs as "
+        "the 470 uF charges is normal).\n\n"
+        "The lead: with the rack supply plugged into the screw jack adapter "
+        "and switched on, the bare RED and BLACK ends apart, meter **red "
+        "probe on the RED wire, black probe on the BLACK wire: +4.75 to "
+        "+5.25 V**. A minus sign means the adapter is wired the other way "
+        "round: supply off and swap the wires in the adapter, not on `J6`. "
+        "Supply off and unplugged, then RED into the RED screw, BLACK into "
+        "the BLACK screw, tighten, tug each wire.\n\n"
+        "Write in the note which holes the terminal went in.",
+    ),
+    Step(
         "power the bare backplane",
         "the bare backplane",
         f"{NEVER_12V_ON_J2}\n\n"
         "Before plugging the rack supply in: meter its plug unloaded. The jack "
         "is **centre-positive**; the reading should be the rail's 4.75-5.25 V "
         "(the range `shields` section 2e works its corners at). Then plug it "
-        "into `J2`, nothing else connected:\n\n"
+        "into `J2` - or, with the screw terminal, into the jack adapter whose "
+        "RED and BLACK wires are in `J6` (previous step) - nothing else "
+        "connected:\n\n"
         "- LEDs: `BOARD 5V` lit, `12V` dark (12 V comes in only through "
         "`J7`), `MEGA 5V` dark, every `TONE` dark.\n"
         "- Test pins, against `GND`: `5V` 4.75-5.25 V. `12V`: 0 V. `USB`: "
@@ -187,7 +246,8 @@ STEPS = (
         "pattern, `backplane/ENCLOSURE_MOUNTING.md`). Check nothing on the "
         "back touches metal, and that the test pins and the eight LEDs can "
         "still be reached and seen. Then the leads: the Teensy's USB and the "
-        "U2D2's USB to the laptop, the rack supply to `J2`, the servo supply "
+        "U2D2's USB to the laptop, the rack supply to `J2` (or to the jack "
+        "adapter on `J6`'s RED and BLACK lead), the servo supply "
         "to `J7` - all still switched off.",
     ),
     Step(
