@@ -336,6 +336,92 @@ def test_a_press_is_shown_at_once_and_pushed_by_the_worker(checkouts):
     assert "as on origin" in laptop.where()
 
 
+class FakeTeensy:
+    """`test teensy` as the guide sees it: presses and readings."""
+
+    def __init__(self):
+        self.pressed = []
+
+    def offered_presses(self):
+        return ("start", "ask the board")
+
+    def press(self, name):
+        self.pressed.append(name)
+
+    def readings(self):
+        return [("can talk", "yes"), ("check: answers", "ok - teensy_check 1")]
+
+
+def guide_beside(teensy, writer=True):
+    """A guide whose group holds a `test teensy`, at the mounted-rack step."""
+    from pathlib import Path
+
+    class Group(dict):
+        owners = []
+        name = "manual tests"
+        is_simulated = True
+        path = Path("tests/manual tests")
+
+    guide = InstallationSol2(owner=Group({"test teensy": teensy}), shared=FakeShared(writer))
+    at = "2026-11-27T10:00:00"
+    record = {}
+    for key in steps.KEYS[: steps.KEYS.index("power up the mounted rack")]:
+        record = progress.mark(record, key, True, at)
+    guide.shared.record = record
+    return guide
+
+
+def test_the_mounted_rack_step_carries_the_teensy_check():
+    """2026-11-27, the note on 'power up the mounted rack': the step said
+    to run the Teensy test and only linked to it. Its presses and
+    readings are on the step now, and on the guide while it is current."""
+    teensy = FakeTeensy()
+    guide = guide_beside(teensy)
+
+    children = guide.snapshot_children
+    assert "test teensy: start" in children
+    assert "test teensy: ask the board" in children
+    # Offered only when the test offers them.
+    assert "test teensy: the tone LEDs lit 1 to 5" not in children
+    states = guide._snapshot_if_opened(())
+    assert states["test teensy: can talk"]["value"] == "yes"
+
+    guide["test teensy: start"]()
+    assert teensy.pressed == ["start"]
+
+    step = next(n for n in guide._nodes if n.key == "power up the mounted rack")
+    assert "test teensy: start" in step.snapshot_children
+    assert "test teensy: check: answers" in step._snapshot_if_opened(())
+    step["test teensy: ask the board"]()
+    assert teensy.pressed == ["start", "ask the board"]
+
+
+def test_a_step_without_its_tool_beside_it_still_renders():
+    guide = node()
+    step = next(n for n in guide._nodes if n.key == "power up the mounted rack")
+
+    assert "test teensy: start" not in step.snapshot_children
+    assert step._snapshot_if_opened(())["what to do"]
+    assert step["test teensy: start"]().startswith("refused")
+
+
+def test_every_tool_named_by_a_step_has_its_presses_listed():
+    from colloquy.tests.installation_sol2 import TOOL_PRESSES
+
+    for step in steps.STEPS:
+        if step.tool:
+            assert step.tool in TOOL_PRESSES, step.key
+
+
+def test_the_teensy_refuses_a_press_it_does_not_offer_a_guide():
+    from types import SimpleNamespace
+
+    from colloquy.tests.test_teensy import TestTeensy
+
+    fake = SimpleNamespace(GUIDE_PRESSES=TestTeensy.GUIDE_PRESSES)
+    assert TestTeensy.press(fake, "flash firmware").startswith("refused")
+
+
 def test_its_group_page_renders_with_it_in():
     """The group asks every test whether it is running (2026-11-24: the
     guide had no `is_started`, and opening `manual tests` stopped the

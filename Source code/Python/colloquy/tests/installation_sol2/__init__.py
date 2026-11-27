@@ -33,8 +33,18 @@ from colloquy.base import Base
 from colloquy.markdown_document import render_markdown
 from colloquy.ui import leaves
 
+from ..test_teensy import TestTeensy
 from . import pictures, progress, steps
 from .shared import SharedRecord, now
+
+# What a step's `tool` may offer, by the test's name. Fixed here because a
+# node's dispatch is filled in `__init__`, before the tests beside the
+# guide are in their group.
+TOOL_PRESSES = {"test teensy": TestTeensy.GUIDE_PRESSES}
+
+
+def _press_name(tool, press):
+    return f"{tool}: {press}"
 
 
 def _when(at):
@@ -75,10 +85,64 @@ class StepNode(Base):
         self["done"] = self.done
         self["not done after all"] = self.undo
         self["save"] = self.save
+        self.tool_commands = {
+            _press_name(step.tool, press): self._forward(press)
+            for press in TOOL_PRESSES.get(step.tool, ())
+        }
+        for name, command in self.tool_commands.items():
+            self[name] = command
 
     @property
     def name(self):
         return f"{self._number:02d} {self._step.key}"
+
+    # --- the test the step carries ------------------------------------
+
+    def _tool(self):
+        """The test named by the step's `tool`, or None."""
+        if not self._step.tool:
+            return None
+        try:
+            return self._guide.owner[self._step.tool]
+        except Exception:  # noqa: BLE001 - a render must not raise
+            return None
+
+    def _forward(self, press):
+        def command(request=None):
+            tool = self._tool()
+            if tool is None:
+                return f"refused: {self._step.tool} is not beside this guide"
+            return tool.press(press)
+
+        return command
+
+    def tool_children(self):
+        """The tool's presses that make sense now, under this step's names."""
+        tool = self._tool()
+        if tool is None:
+            return {}
+        try:
+            offered = tool.offered_presses()
+        except Exception:  # noqa: BLE001 - a render must not raise
+            return {}
+        return {
+            name: command
+            for name, command in self.tool_commands.items()
+            if name.split(": ", 1)[1] in offered
+        }
+
+    def tool_readings(self, states, path):
+        """The tool's readings, each prefixed by its name."""
+        tool = self._tool()
+        if tool is None:
+            return
+        leaf = leaves.into(states, path)
+        try:
+            found = tool.readings()
+        except Exception as error:  # noqa: BLE001 - a render must not raise
+            found = [("readings", f"could not be read - {error}")]
+        for label, text in found:
+            leaf(_press_name(self._step.tool, label), text)
 
     @property
     def key(self):
@@ -114,11 +178,15 @@ class StepNode(Base):
 
     @property
     def snapshot_children(self):
+        # The tool's presses run a test, not the record: offered everywhere.
+        children = self.tool_children()
         if not self._shared.is_writer:
-            return {}
+            return children
         if self._entry().done:
-            return {"not done after all": self.undo}
-        return {"done": self.done}
+            children["not done after all"] = self.undo
+        else:
+            children["done"] = self.done
+        return children
 
     def _snapshot_if_opened(self, path):
         # Read first, buttons after: the children (`done`) are drawn in
@@ -129,6 +197,7 @@ class StepNode(Base):
         states["what to do"] = leaves.html(
             path, "what to do", _step_html(self._number, self._step, entry)
         )
+        self.tool_readings(states, path)
         if self._shared.is_writer:
             states["note"] = leaves.editor(path, "note", entry.note)
         else:
@@ -181,6 +250,12 @@ class InstallationSol2(Base):
         self["save"] = self.save
         self["push the record now"] = self.push_now
         self["fetch the record"] = self.fetch
+        # The current step's tool presses, pressed from "where you left
+        # off": each forwards to the step that carries it.
+        for node in self._nodes:
+            for name, command in node.tool_commands.items():
+                if name not in self:
+                    self[name] = command
 
     @property
     def name(self):
@@ -280,8 +355,10 @@ class InstallationSol2(Base):
     @property
     def snapshot_children(self):
         children = {}
+        current = self._current()
+        if current is not None:
+            children.update(current.tool_children())
         if self.shared.is_writer:
-            current = self._current()
             if current is not None:
                 children["done: next step"] = self.done_current
             children["back one step"] = self.back_one
@@ -313,6 +390,7 @@ class InstallationSol2(Base):
             states["where you left off"] = leaves.html(
                 path, "where you left off", _step_html(current.number, current.step, entry)
             )
+            current.tool_readings(states, path)
             if self.shared.is_writer:
                 states["note"] = leaves.editor(path, "note", entry.note)
             elif entry.note:

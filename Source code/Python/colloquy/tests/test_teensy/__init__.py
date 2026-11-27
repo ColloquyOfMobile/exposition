@@ -566,6 +566,56 @@ class TestTeensy(BaseThread):
             children[SHOW_STEPS_AGAIN] = self._done_links[SHOW_STEPS_AGAIN]
         return self._with_scenarios(children)
 
+    # --- from a guide's step ---------------------------------------------
+    # `installation PCB solution 2` re-runs this check after mounting, from
+    # its own step page: these presses, and `readings()`. The port picker
+    # and the flasher stay here.
+
+    GUIDE_PRESSES = (
+        "start",
+        "ask the board",
+        "the tone LEDs lit 1 to 5",
+        "a tone LED stayed dark",
+    )
+
+    def offered_presses(self):
+        """Which of GUIDE_PRESSES make sense now, as this page offers them."""
+        if self.is_started:
+            return ()
+        offered = ["start", "ask the board"]
+        if self._tones_at is not None:
+            offered += ["the tone LEDs lit 1 to 5", "a tone LED stayed dark"]
+        return tuple(offered)
+
+    def press(self, name):
+        if name not in self.GUIDE_PRESSES:
+            return f"refused: {name!r} is not offered to a guide"
+        if name == "start":
+            return self.start_command()
+        return self[name]()
+
+    def readings(self):
+        """The check's state and its last run, as (label, text): drawn on
+        this page and on a guide's step."""
+        found = []
+        refusal = self._why_not_open()
+        found.append(("can talk", "yes" if refusal is None else f"no - {refusal}"))
+        found.append(("firmware", self.board_verdict))
+        if self.is_started:
+            found.append(("running", "checking - refresh in a moment"))
+        if self._ran_at is not None:
+            found.append(("last run", self._ran_at.strftime("%Y-%m-%d %H:%M:%S")))
+        for check in self._checks:
+            mark = "ok" if check.passed else "FAILED"
+            found.append((f"check: {check.name}", f"{mark} - {check.said}"))
+        found.append(("led", self._led_reading()))
+        found.append(("tone leds", self._tones_reading()))
+        if self._held is not None:
+            found.append(("held", self._held_reading()))
+        if self._outcome is not None:
+            found.append(("outcome", self._outcome))
+        return found
+
     def _snapshot_if_opened(self, path):
         states = super()._snapshot_if_opened(path)
         leaf = leaves.into(states, path)
@@ -582,23 +632,7 @@ class TestTeensy(BaseThread):
         leaf("sketch", "Source code/Arduino/teensy_check/")
         if self._status_line:
             leaf("board says", self._status_line)
-        leaf("firmware", self.board_verdict)
-
-        refusal = self._why_not_open()
-        leaf("can talk", "yes" if refusal is None else f"no - {refusal}")
-
-        if self.is_started:
-            leaf("running", "checking - refresh in a moment")
-        if self._ran_at is not None:
-            leaf("last run", self._ran_at.strftime("%Y-%m-%d %H:%M:%S"))
-        for check in self._checks:
-            mark = "ok" if check.passed else "FAILED"
-            leaf(f"check: {check.name}", f"{mark} - {check.said}")
-        leaf("led", self._led_reading())
+        for label, text in self.readings():
+            leaf(label, text)
         leaf("backplane power leds", POWER_LEDS)
-        leaf("tone leds", self._tones_reading())
-        if self._held is not None:
-            leaf("held", self._held_reading())
-        if self._outcome is not None:
-            leaf("outcome", self._outcome)
         return states

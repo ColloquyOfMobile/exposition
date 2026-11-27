@@ -29,6 +29,10 @@ class Step(NamedTuple):
     phase: str
     text: str  # markdown
     before_picture: str = ""
+    # A test beside the guide (by its name in `manual tests`) whose
+    # presses and readings the step's page carries, so the check it asks
+    # for is done from the step itself.
+    tool: str = ""
 
 
 def page(path, text=None):
@@ -272,10 +276,16 @@ STEPS = (
         "power up the mounted rack",
         "mounting",
         "Rack supply and Teensy USB on together. `BOARD 5V` and `MEGA 5V` "
-        "lit, `12V` lit when the servo supply is on, every `TONE` dark. Then "
-        f"{TEST_TEENSY} `start` again: every check ok and TONE 1-5 in order. "
+        "lit, `12V` lit when the servo supply is on, every `TONE` dark.\n\n"
+        "Then the Teensy check again, from here: press **`test teensy: "
+        "start`** below. Every `test teensy: check` reads ok, then watch "
+        "the yellow `TONE` LEDs walk 1 to 5 and press `test teensy: the tone "
+        "LEDs lit 1 to 5` or `test teensy: a tone LED stayed dark`. If it "
+        f"cannot talk (port, firmware), its own page {TEST_TEENSY} has the "
+        "port picker and `flash firmware`.\n\n"
         "A difference from before mounting is a header pushed out of line or "
         "a lead pinched by the enclosure.",
+        tool="test teensy",
     ),
     # --- the bodies, one at a time -------------------------------------
     *(
