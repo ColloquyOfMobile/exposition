@@ -48,3 +48,22 @@ Validation: native KiCad DRC has zero violations and zero disconnected items.
 Independent netlist/PCB comparison retains all 137 components and all 94 nets.
 All numbered pads retain their original dimensions and assignments; TPL3 is
 the only relocated pad. The +12V routes retain their 2 mm width on outer copper.
+
+## U2D2 mounting at M1
+
+On 2026-11-27 the installer found that the U2D2 assembly did not fit M1
+on the Solution 2 Rev A backplane. The installation photo shows the
+clear-cased USB module already attached to the blue ROBOTIS Power Hub Board.
+The hub's four outer standoffs are the fixings that meet the backplane.
+
+| Hole centres | Across the hub's 48 mm width | Along its 57 mm length |
+| --- | ---: | ---: |
+| Rev A backplane M1, four Ø4.5 mm holes | 42.00 mm | 42.00 mm |
+| ROBOTIS Power Hub Board, four outer holes | 42.07 mm | 48.04 mm |
+
+With one end aligned, the opposite pair is 6.04 mm off along the hub's length.
+The four 8 mm enclosure mounts described above serve a separate purpose.
+For a future M1 revision or adapter, check the standoff centres against the
+physical hub and check plug clearance in the enclosure before fabrication.
+[Rev A production drill file](../../../production/backplane/backplane-NPTH.drl) ·
+[ROBOTIS U2D2 PHB dimensioned drawing, 2020-03-13](https://en.robotis.com/service/download.php?no=1914).
