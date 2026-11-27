@@ -30,9 +30,20 @@ def test_every_body_is_plugged_in_by_a_step_of_its_own():
         assert f"mount and plug in {body}" in steps.KEYS
 
 
-def test_every_power_step_warns_against_12v_on_the_5v_jack():
-    text = dict((s.key, s.text) for s in steps.STEPS)["power the bare backplane"]
-    assert "Never 12 V into `J2`" in text
+def test_first_power_offers_both_inputs_before_the_shared_checks():
+    guide = node()
+    while guide._current().key != "power the bare backplane":
+        guide.done_current()
+    step_html = guide._current()._snapshot_if_opened(())["what to do"]["html"]
+    assert where_you_left_off(guide) == step_html
+    warning = step_html.index("Never 12 V into")
+    screw = step_html.index('<details name="rack-input" open>')
+    jack = step_html.index('<details name="rack-input">')
+    checks = step_html.index("With the bare backplane powered")
+    assert warning < screw < jack < checks
+    assert "J6 screw terminal" in step_html[screw:jack]
+    assert "J2 board-mounted DC jack" in step_html[jack:checks]
+    assert "4.75-5.25 V" in step_html[checks:]
 
 
 def test_the_j7_lead_is_metered_with_the_u2d2_unpowered():

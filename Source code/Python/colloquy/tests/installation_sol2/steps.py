@@ -28,6 +28,7 @@ class Step(NamedTuple):
     key: str
     phase: str
     text: str  # markdown
+    before_picture: str = ""
 
 
 def page(path, text=None):
@@ -198,13 +199,7 @@ STEPS = (
     Step(
         "power the bare backplane",
         "the bare backplane",
-        f"{NEVER_12V_ON_J2}\n\n"
-        "Before plugging the rack supply in: meter its plug unloaded. The jack "
-        "is **centre-positive**; the reading should be the rail's 4.75-5.25 V "
-        "(the range `shields` section 2e works its corners at). Then plug it "
-        "into `J2` - or, with the screw terminal, into the jack adapter whose "
-        "RED and BLACK wires are in `J6` (previous step) - nothing else "
-        "connected:\n\n"
+        "With the bare backplane powered from the chosen input, check:\n\n"
         "- LEDs: `BOARD 5V` lit, `12V` dark (12 V comes in only through "
         "`J7`), `MEGA 5V` dark, every `TONE` dark.\n"
         "- Test pins, against `GND`: `5V` 4.75-5.25 V. `12V`: 0 V. `USB`: "
@@ -213,6 +208,22 @@ STEPS = (
         "bottom row): 0 V, held by their pull-downs (`shields` section 10, "
         "step 1).\n\n"
         "Write the `5V` reading in the note, then unplug the supply.",
+        before_picture=(
+            f"{NEVER_12V_ON_J2}\n\n"
+            "Leave all other leads and shields disconnected. Meter the rack supply's "
+            "unloaded plug with the red probe on the centre and black on the sleeve. "
+            "Continue only if it reads **+4.75 to +5.25 V**. Switch the supply off. "
+            "Choose the one input you fitted. J6 and J2 share the same rail.\n\n"
+            '<details name="rack-input" open><summary><strong>J6 screw terminal '
+            '(external jack adapter)</strong></summary>'
+            "<p>Use the lead checked in the previous step. Its RED wire goes to "
+            "+5V at J6 and BLACK to GND. Plug the rack supply into the external "
+            "jack adapter, then switch it on. J2 can be empty.</p></details>\n\n"
+            '<details name="rack-input"><summary><strong>J2 board-mounted DC jack'
+            "</strong></summary><p>Use this input if the jack is soldered at J2. "
+            "Plug the checked centre-positive rack supply directly into J2, "
+            "then switch it on.</p></details>"
+        ),
     ),
     Step(
         "servo supply through J7",

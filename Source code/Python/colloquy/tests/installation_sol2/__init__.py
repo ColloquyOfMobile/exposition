@@ -59,6 +59,7 @@ def _step_html(number, step, entry):
     status = "&#10003; " + escape(_status(entry)) if entry.done else escape(step.phase)
     return (
         f"<h3>{title}</h3><p><em>{status}</em></p>"
+        f"{render_markdown(step.before_picture) if step.before_picture else ''}"
         f"{pictures.picture(step.key)}"
         f"{render_markdown(step.text)}"
     )

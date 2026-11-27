@@ -162,7 +162,7 @@ def mic_direct_pins():
 
 def centre_positive_jack():
     parts = [
-        _text(W / 2, 24, "the rack supply into J2: 5 V, centre-positive", 12, weight="bold"),
+        _text(W / 2, 24, "5 V rack plug for the J6 adapter or J2 jack", 12, weight="bold"),
         # The usual polarity symbol: - ( C ) - (o) - +
         _text(70, 98, "&#8722;", 28),
         f'<line x1="84" y1="90" x2="118" y2="90" stroke="{INK}" stroke-width="2"/>',
@@ -475,11 +475,11 @@ BOARD_VIEWS = {
         NOT_HERE,
     ),
     "power the bare backplane": lambda: board(
-        "J2, the power row and the pins that read 0 V",
-        (("J2", "J2"),) + POWER_ROW_MARKS + POWER_LEDS
+        "J6 or J2, the power row and the pins that read 0 V",
+        (("J6", "J6"), ("J2", "J2")) + POWER_ROW_MARKS + POWER_LEDS
         + tuple((f"TPL{n}", f"L{n}") for n in range(1, 6))
         + tuple((f"TPD{n}", f"M{n}") for n in range(1, 6)),
-        ((234, 52, 256, 78), POWER_CORNER, FIRST_SLOT, MIC_ROW),
+        (J6_CORNER, (234, 52, 256, 78), POWER_CORNER, FIRST_SLOT, MIC_ROW),
     ),
     "servo supply through J7": lambda: board(
         "J7 and the 12V pin", (("J7", "J7 SERVO BUS"), ("TP33", "12V"), ("DP12", "12V LED")),
