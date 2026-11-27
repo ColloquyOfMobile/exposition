@@ -36,8 +36,6 @@ import subprocess
 import time
 
 PORT = 8087
-# Every interface - see `Server2.BIND_ADDRESS`, which is this.
-ADDRESS = ""
 
 # A restart's old process, or one the dev watcher (test_process.py) has
 # just killed, may still be letting go of the port.
@@ -59,7 +57,7 @@ def exclusive(sock: socket.socket) -> None:
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
 
 
-def claim(address: str = ADDRESS, port: int = PORT,
+def claim(address: str, port: int = PORT,
           patience: float = CLAIM_PATIENCE) -> socket.socket:
     """Bind the port as the server will, and hold it until the server binds.
 

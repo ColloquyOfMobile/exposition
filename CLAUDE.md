@@ -8,7 +8,7 @@ Guidance for Claude Code in this repository. This is the compact version; the lo
 
 ## Commands (from the repo root)
 
-- `py main.py` - the installation. Builds `Colloquy`, opens the U2D2 (`COM4`) and the Arduino, blinks every NeoPixel once, starts `Server2` on port 8087 **on every interface** (both URLs printed at startup).
+- `py main.py` - the installation. Builds `Colloquy`, opens the U2D2 (`COM4`) and the Arduino, blinks every NeoPixel once, and starts `Server2` on port 8087. Only `Colloquy-Laptop` listens on every interface and prints network URLs. All other machines listen on `127.0.0.1`.
 - `py mock_ui.py` - the UI mock on port 8088 (localhost only), against `colloquy/ui/mock.py`; no hardware.
 - `py -m pytest "Source code/Python/pytest_tests"` - unit suite, ~2s. **Run it after changing anything under `colloquy/`.**
 - `py -m mypy` - scoped type check (see below).

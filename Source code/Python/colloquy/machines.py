@@ -39,6 +39,16 @@ def is_installation():
     return hostname() == INSTALLATION
 
 
+def server_bind_address():
+    """Only the installation laptop serves the controls over the network."""
+    try:
+        if is_installation():
+            return ""
+    except (OSError, UnicodeError):
+        pass
+    return "127.0.0.1"
+
+
 def is_bench():
     """The machine Thomas's audio subsystem is wired to."""
     return hostname() == BENCH

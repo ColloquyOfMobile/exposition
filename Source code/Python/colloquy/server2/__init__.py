@@ -1,5 +1,6 @@
 from traceback import format_exc
 import sys, os
+from colloquy import machines
 from colloquy.base import Base
 from socketserver import ThreadingMixIn
 from threading import Event
@@ -97,19 +98,6 @@ class ThreadingWSGIServer(ThreadingMixIn, WSGIServer):
 class Server2(Base):
     DEFAULT_PORT = exclusive_port.PORT
 
-    # Every interface, so the page answers from another computer on the
-    # same network and not only on this machine - which is what a laptop
-    # handing out Gerbers is for, and how the piece is looked after from
-    # somewhere other than the chair in front of it. It was "localhost".
-    #
-    # **Nothing on the page asks who is asking.** There is no login, and
-    # every link is a GET that does what it says, so whoever can reach
-    # this port can do everything the page can: shut the installation
-    # down, unmount its board, flash its Arduino. What stands between
-    # that and the building is the network this machine is on and its
-    # firewall, and neither is this program's to answer for.
-    BIND_ADDRESS = exclusive_port.ADDRESS
-
     def __init__(self, colloquy, port=None, claim=None):
         """`claim` is the port as `main.py` has held it since it started
         (`exclusive_port.claim`), let go of only to bind it here."""
@@ -136,7 +124,7 @@ class Server2(Base):
     def listen(self, port):
         """The listening server, bound and not yet serving."""
         return make_server(
-            self.BIND_ADDRESS,
+            machines.server_bind_address(),
             port,
             self.wsgi,
             server_class=ThreadingWSGIServer,
@@ -160,7 +148,7 @@ class Server2(Base):
         with httpd:
             WSGIRequestHandler.log_message = lambda *args, **kwargs: None
             print(f"Accessible at http://localhost:{port}/")
-            elsewhere = network.urls(port)
+            elsewhere = network.urls(port) if httpd.server_address[0] == "0.0.0.0" else ()
             if elsewhere:
                 print(
                     "From another computer on this network: "

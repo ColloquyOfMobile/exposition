@@ -2,7 +2,7 @@
 
 It listened on localhost alone until 2026-10-12. Three things are pinned:
 
-1. it is bound to every interface, with the handler that goes with it;
+1. only the installation laptop binds every interface;
 2. a connection that goes quiet cannot hold up a shutdown - which was
    harmless on localhost, where a dead browser takes its sockets with it,
    and across a network is a restart that never finishes;
@@ -19,6 +19,8 @@ from time import monotonic
 from types import SimpleNamespace
 from wsgiref.simple_server import make_server
 
+import pytest
+
 from colloquy import server2
 from colloquy.server2 import (
     CONNECTION_TIMEOUT,
@@ -32,20 +34,32 @@ from colloquy.server2 import (
 # --- the bind -------------------------------------------------------------
 
 
-def test_the_server_listens_on_every_interface(monkeypatch):
+@pytest.mark.parametrize(("hostname", "expected"), [
+    ("Colloquy-Laptop", ""),
+    ("DESKTOP-MRSLS88", "127.0.0.1"),
+    ("Colloquy-Laptop-dev", "127.0.0.1"),
+])
+def test_the_early_claim_and_listener_use_the_same_address(monkeypatch, hostname, expected):
+    import main
+
     asked = {}
 
     def record(host, port, app, **kwargs):
         asked.update(host=host, port=port, app=app, **kwargs)
         return "the server"
 
+    monkeypatch.setattr(socket, "gethostname", lambda: hostname)
+    claims = []
+    monkeypatch.setattr(socket.socket, "bind", lambda sock, address: claims.append(address))
+    main.claim_the_port().close()
+    assert claims == [(expected, 8087)]
+
     monkeypatch.setattr(server2, "make_server", record)
-    fake = SimpleNamespace(BIND_ADDRESS=Server2.BIND_ADDRESS, wsgi="the application")
+    fake = SimpleNamespace(wsgi="the application")
 
     assert Server2.listen(fake, 8087) == "the server"
 
-    # The empty string is every interface; "localhost" is what it was.
-    assert asked["host"] == ""
+    assert asked["host"] == expected
     assert asked["port"] == 8087
     assert asked["app"] == "the application"
     assert asked["server_class"] is ThreadingWSGIServer
@@ -233,3 +247,4 @@ def test_no_lookup_that_fails_reaches_the_caller(monkeypatch):
     assert network.addresses() == ()
     assert network.name() == ""
     assert network.urls(8087) == ()
+    assert server2.machines.server_bind_address() == "127.0.0.1"

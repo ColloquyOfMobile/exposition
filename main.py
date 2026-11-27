@@ -16,6 +16,13 @@ source_code = cwd / "Source code" / "Python"
 sys.path.append(str(source_code.resolve()))
 
 
+def load_before_colloquy(name, path):
+    spec = importlib.util.spec_from_file_location(name, source_code / "colloquy" / path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def claim_the_port():
     """The server's port, held from the first line to the server's bind.
 
@@ -23,12 +30,10 @@ def claim_the_port():
     touching the running session's logs, serial ports, or schedule. See
     colloquy/server2/exclusive_port.py.
     """
-    path = source_code / "colloquy" / "server2" / "exclusive_port.py"
-    spec = importlib.util.spec_from_file_location("exclusive_port", path)
-    exclusive_port = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(exclusive_port)
+    machines = load_before_colloquy("machines", "machines.py")
+    exclusive_port = load_before_colloquy("exclusive_port", "server2/exclusive_port.py")
     try:
-        return exclusive_port.claim()
+        return exclusive_port.claim(machines.server_bind_address())
     except exclusive_port.PortInUse as refusal:
         print(refusal)
         sys.exit(1)

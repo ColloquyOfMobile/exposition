@@ -3,7 +3,7 @@
 
 """Where another computer on the network finds this server.
 
-The server listens on every interface (`Server2.BIND_ADDRESS`), and the
+The installation laptop listens on every interface, and the
 one thing somebody at the other computer then needs is what to type. That
 is this machine's name, which is stable, and its addresses, which are not
 - a DHCP lease moves - so both are said, at every start.
