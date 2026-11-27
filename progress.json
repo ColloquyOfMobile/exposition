@@ -13,6 +13,12 @@
       "note": "",
       "note at": "2026-11-24T15:01:41"
     },
+    "power the bare backplane": {
+      "done": false,
+      "done at": "",
+      "note": "I screw the jack according to last step, I didn't solder the on PCB jack. It should appear here a option (user can choose the screw on or the plug or even might be considered depending if the plug is soldered)",
+      "note at": "2026-11-27T09:04:22"
+    },
     "record the configuration": {
       "done": true,
       "done at": "2026-11-24T13:53:38",
