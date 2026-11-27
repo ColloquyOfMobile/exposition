@@ -35,6 +35,17 @@ def test_every_power_step_warns_against_12v_on_the_5v_jack():
     assert "Never 12 V into `J2`" in text
 
 
+def test_the_j7_lead_is_metered_with_the_u2d2_unpowered():
+    """Pin 3 is the U2D2's data line: with its USB in it may sit at a logic
+    level nobody has documented, so "nothing on pin 3" would read as a
+    fault. What the step looks for is the servo supply on the data line
+    (2026-11-27)."""
+    text = dict((s.key, s.text) for s in steps.STEPS)["servo supply through J7"]
+    assert "**the U2D2's USB out**" in text
+    assert "pin 3 to pin 1: **not 12 V**" in text
+    assert "nothing on pin 3" not in text
+
+
 def test_the_amplifier_limit_quoted_is_the_recorded_one():
     from colloquy.params import DEFAULTS
 

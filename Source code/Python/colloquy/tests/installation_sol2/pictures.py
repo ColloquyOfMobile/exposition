@@ -220,7 +220,7 @@ def jst_j7():
         parts.append(_text(x, 128, net, 11, RED if net == "+12V" else INK, weight="bold"))
     parts.append(_meter(250, 50, "12 V"))
     parts.append(_text(296, 128, "between 2 and 1", 10, MUTED))
-    parts.append(_text(W / 2, 160, "pin 3 must read nothing", 11, MUTED))
+    parts.append(_text(W / 2, 160, "U2D2's USB out: pin 3 to 1 must not read 12 V", 11, MUTED))
     return _svg("".join(parts), "J7 pins")
 
 
