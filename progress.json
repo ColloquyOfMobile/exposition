@@ -28,8 +28,8 @@
     "power up the mounted rack": {
       "done": false,
       "done at": "",
-      "note": "You should show the command to test the teensy here.",
-      "note at": "2026-11-27T10:42:29"
+      "note": "",
+      "note at": "2026-11-27T11:15:25"
     },
     "record the configuration": {
       "done": true,
