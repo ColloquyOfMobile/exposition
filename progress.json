@@ -26,8 +26,8 @@
       "note at": ""
     },
     "servo supply through J7": {
-      "done": false,
-      "done at": "",
+      "done": true,
+      "done at": "2026-11-27T10:35:30",
       "note": "The backplane mounting hole should be revise (there are cutout but they should be component to avoid impacting the elements)",
       "note at": "2026-11-27T10:35:02"
     },
