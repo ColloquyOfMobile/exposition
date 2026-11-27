@@ -19,6 +19,12 @@
       "note": "",
       "note at": ""
     },
+    "solder the screw terminal at J6": {
+      "done": true,
+      "done at": "2026-11-27T09:01:55",
+      "note": "",
+      "note at": ""
+    },
     "test teensy passes": {
       "done": true,
       "done at": "2026-11-24T13:55:19",
