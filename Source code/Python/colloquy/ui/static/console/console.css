@@ -40,6 +40,8 @@ button, summary, select { cursor: pointer; }
   display: flex; align-items: center; justify-content: space-between; gap: .8rem;
 }
 .server-actions { font-size: .84rem; }
+.server-actions .update-link { color: inherit; text-align: center; padding: .25rem; }
+.update-link small { display: block; font-size: .72rem; color: #d3dfd0; white-space: nowrap; }
 .server-menu { position: relative; }
 .server-menu summary { padding: .5rem .65rem; }
 .server-menu > div { position: absolute; right: 0; top: 100%; min-width: 10rem; padding: .4rem;
@@ -172,6 +174,11 @@ h2 { font-size: 1.15rem; font-weight: 650; letter-spacing: -.028em; }
   main { padding-top: 1rem; }
   .page-title { font-size: .95rem; }
   .controls { padding: .45rem .55rem .8rem; }
+}
+@media (max-width: 600px) {
+  .masthead:has(.update-link) { grid-template-columns: auto minmax(0, 1fr); }
+  .masthead:has(.update-link) .page-title { text-align: right; }
+  .masthead:has(.update-link) .server-actions { grid-column: 1 / -1; }
 }
 @media (max-width: 390px) {
   .mobile-mark { display: none; }

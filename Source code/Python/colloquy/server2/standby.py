@@ -169,7 +169,7 @@ def _software(doc, tag, text, colloquy):
     except Exception as error:  # noqa: BLE001 - this page must not raise
         said = f"could not be read ({_sentence(error)})"
 
-    with tag("div", name="software", klass="software"):
+    with tag("div", id="software", name="software", klass="software"):
         text(f"Software: {said}.")
 
 
@@ -193,6 +193,7 @@ def page(colloquy):
                     text("shutdown")
                 with tag("a", href="/restart"):
                     text("restart")
+                doc.asis(updates.link_html(colloquy.repository, "#software"))
                 with tag("a", href="/"):
                     text("refresh")
 

@@ -18,6 +18,7 @@
   "use strict";
 
   var box = document.getElementById("update-notice");
+  var label = document.getElementById("update-label");
   if (!box || !window.fetch) {
     return;
   }
@@ -37,7 +38,10 @@
   var BUSY = 2000; // an update is under way
   var DOWN = 1000; // waiting for the server to come back
 
-  function show(phase, text) {
+  function show(phase, text, shortText) {
+    if (label && shortText && label.textContent !== shortText) {
+      label.textContent = shortText;
+    }
     box.setAttribute("data-phase", phase);
     box.textContent = text;
     box.hidden = !phase;
@@ -51,7 +55,8 @@
       show(
         "updated",
         "The server has been restarted. Save what you are writing, " +
-          "then reload this page."
+          "then reload this page.",
+        "Restarted"
       );
       return;
     }
@@ -73,7 +78,7 @@
           return;
         }
         announced = said.phase === "restarting";
-        show(said.phase, said.text);
+        show(said.phase, said.text, said.label);
         window.setTimeout(ask, said.phase ? BUSY : QUIET);
       })
       .catch(function () {
@@ -83,7 +88,8 @@
             announced
               ? "Restarting to run the update. This page comes back by itself."
               : "The server is not answering. This page comes back by " +
-                  "itself when it does."
+                  "itself when it does.",
+            announced ? "Restarting" : "Offline"
           );
         }
         window.setTimeout(ask, DOWN);

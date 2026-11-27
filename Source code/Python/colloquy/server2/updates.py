@@ -55,16 +55,47 @@ STYLE = (
 )
 
 
+def _label(repository, phase):
+    if phase:
+        return {
+            "pulling": "Pulling", "restarting": "Restarting", "waiting": "Waiting",
+            "blocked": "Blocked", "stopped": "Restart paused", "updated": "Updated",
+        }.get(phase, phase.capitalize())
+    if repository.error:
+        return "Check failed"
+    reading = repository.status
+    if reading is None:
+        return "Not checked yet"
+    if repository.needs_restart:
+        return "Restart pending"
+    if reading.is_behind:
+        return "Available"
+    return "Ahead of origin" if reading.ahead else "Up to date"
+
+
 def status(repository):
     """What the banner says right now, as the script is told it."""
     notice = repository.notice
-    if notice is None:
-        return {"boot": BOOT, "phase": "", "text": ""}
-
-    text = notice.text
-    if notice.restart_in is not None and notice.restart_in > 0:
+    phase = notice.phase if notice else ""
+    text = notice.text if notice else ""
+    if notice and notice.restart_in is not None and notice.restart_in > 0:
         text = f"{text} Restarting in {ceil(notice.restart_in)} s."
-    return {"boot": BOOT, "phase": notice.phase, "text": text}
+    result = {"boot": BOOT, "phase": phase, "text": text}
+    if repository.auto_update:
+        result["label"] = _label(repository, phase)
+    return result
+
+
+def link_html(repository, href):
+    """Open the update details. Only the installation laptop watches for a restart."""
+    doc, tag, text = Doc().tagtext()
+    with tag("a", klass="update-link", href=href):
+        text("Update")
+        if repository.auto_update:
+            text(" ")
+            with tag("small", id="update-label", role="status"):
+                text(status(repository)["label"])
+    return doc.getvalue()
 
 
 def status_json(repository):

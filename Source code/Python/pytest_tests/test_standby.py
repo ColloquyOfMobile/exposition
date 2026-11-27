@@ -50,6 +50,10 @@ class FakeMainPCB:
 
 
 class FakeRepository:
+    error = None
+    status = None
+    needs_restart = False
+
     def __init__(self, auto_update=False, notice=None, running="abc1234 a commit"):
         self.auto_update = auto_update
         self.notice = notice
@@ -311,10 +315,14 @@ def test_nothing_else_on_the_page_can_take_it_down_either(monkeypatch):
 
 
 def test_the_page_says_whether_this_machine_updates_itself():
-    assert "automatic updates are off" in page_of()
+    manual = page_of()
+    assert "automatic updates are off" in manual
+    assert 'href="#software">Update</a>' in manual and 'id="software"' in manual
 
     updating = FakeColloquy(repository=FakeRepository(auto_update=True))
-    assert "restarts onto it by itself" in page_of(updating)
+    page = page_of(updating)
+    assert "restarts onto it by itself" in page
+    assert 'id="update-label"' in page and "Not checked yet" in page
 
 
 # --- saying the board is back --------------------------------------------
@@ -473,6 +481,22 @@ def test_a_response_in_pieces_is_sent_in_pieces():
 # --- the update banner ---------------------------------------------------
 
 
+@pytest.mark.parametrize("auto", [False, True])
+def test_the_console_links_to_updates_beside_server(auto):
+    request = SimpleNamespace(
+        colloquy=SimpleNamespace(is_simulated=not auto, repository=FakeRepository(auto)),
+        _root=Path("app"), get_states=lambda *path: {"path": path},
+        _html_restart_link=lambda: '<a href="/restart/app/tests">restart</a>',
+        _html_recursion=lambda **kwargs: "",
+    )
+    page = WSGI2._parse_app(request, "tests")[2].decode()
+    controls = page.split('aria-label="Server controls">')[1].split("</nav>")[0]
+    assert controls.index(">Server<") < controls.index('href="/app/repository">Update')
+    assert 'href="/restart/app/tests"' in controls
+    assert ('id="update-label"' in controls) == auto
+    assert ("update_watch.js" in page) == auto
+
+
 def test_a_machine_that_does_not_update_itself_draws_no_banner():
     repository = FakeRepository(auto_update=False)
 
@@ -520,7 +544,18 @@ def test_update_status_is_what_the_script_is_told():
         "boot": updates.BOOT,
         "phase": "pulling",
         "text": "Updating: pulling 3 commits.",
+        "label": "Pulling",
     }
+
+
+def test_the_laptops_idle_update_label_follows_the_last_check():
+    repo = FakeRepository(auto_update=True)
+    repo.status = SimpleNamespace(is_behind=False, ahead=0)
+    assert updates.status(repo)["label"] == "Up to date"
+    repo.needs_restart = True
+    assert updates.status(repo)["label"] == "Restart pending"
+    repo.error = "origin is unreachable"
+    assert updates.status(repo)["label"] == "Check failed"
 
 
 def test_update_status_answers_with_nothing_going_on():

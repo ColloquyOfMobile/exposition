@@ -38,10 +38,11 @@ def page(request, state, *, installation):
                             with tag("a", href="/shutdown"):
                                 text("shutdown")
                     if installation:
+                        from colloquy.server2 import updates
+                        doc.asis(updates.link_html(request.colloquy.repository, "/app/repository"))
                         with tag("a", klass="stop", href="/emergency-stop"):
                             text("EMERGENCY STOP")
             if installation:
-                from colloquy.server2 import updates
                 doc.asis(updates.banner_html(request.colloquy.repository, back=canonical))
             with tag("main"):
                 with tag("div", klass="page-bar"):
